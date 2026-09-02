@@ -139,16 +139,38 @@ export function starterDashboardWidgets(datasetId: string, model: SemanticModel 
 }
 
 export function remapQueryToModel(
-  query: { measures?: string[]; dimensions?: string[]; dataset_id?: string; limit?: number; filters?: any[] } | undefined,
+  query: {
+    measures?: string[];
+    dimensions?: string[];
+    dataset_id?: string;
+    limit?: number;
+    filters?: any[];
+    joins?: { dataset_id?: string; from_column?: string; to_column?: string; match?: string }[];
+  } | undefined,
   type: string,
   model: SemanticModel | null | undefined,
 ) {
   const next = widgetFieldDefaults(type, model);
-  const measures = (query?.measures || []).map((m) => resolveMeasureName(model, m)).filter(Boolean);
-  const dimensions = (query?.dimensions || []).map((d) => resolveDimensionName(model, d)).filter(Boolean);
+  const hasJoin = (query?.joins || []).some((j) => j?.dataset_id);
+  const split = (names: string[] | undefined, resolve: (n: string) => string) => {
+    const local: string[] = [];
+    const joined: string[] = [];
+    for (const n of names || []) {
+      if (n.startsWith("join.")) {
+        if (hasJoin) joined.push(n);
+      } else {
+        const r = resolve(n);
+        if (r) local.push(r);
+      }
+    }
+    return { local, joined };
+  };
+  const measures = split(query?.measures, (n) => resolveMeasureName(model, n));
+  const dimensions = split(query?.dimensions, (n) => resolveDimensionName(model, n));
   const kpiNoDims = type === "kpi" || type === "kpi_goal" || type === "metric_group" || type === "gauge";
   const filters = (query?.filters || [])
     .map((f) => {
+      if (typeof f?.dimension === "string" && f.dimension.startsWith("join.")) return hasJoin ? f : null;
       const dimension = resolveDimensionName(model, f.dimension);
       return dimension ? { ...f, dimension } : null;
     })
@@ -156,9 +178,10 @@ export function remapQueryToModel(
   return {
     ...query,
     dataset_id: query?.dataset_id,
-    measures: measures.length ? measures : next.measures,
-    dimensions: kpiNoDims ? [] : dimensions.length ? dimensions : next.dimensions,
+    measures: (measures.local.length ? measures.local : next.measures).concat(measures.joined),
+    dimensions: kpiNoDims ? [] : (dimensions.local.length ? dimensions.local : next.dimensions).concat(dimensions.joined),
     filters: filters.length ? filters : undefined,
+    joins: hasJoin ? query?.joins : undefined,
   };
 }
 

@@ -2,7 +2,8 @@
 
 import type { WidgetConfig } from "@/components/WidgetView";
 import type { DatasetListItem, SemanticModel } from "@/lib/semantic";
-import { modelForDataset, remapQueryToModel } from "@/lib/semantic";
+import { dimensionKey, measureKey, modelForDataset, remapQueryToModel } from "@/lib/semantic";
+import { asJoinField } from "@/lib/widget-errors";
 import {
   BRAND_PALETTE,
   inspectorCaps,
@@ -14,7 +15,7 @@ import {
 import { Badge, FieldLabel, Input, Select, Textarea, Toggle, Button, cn } from "@/components/ui";
 import { ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useState, type ReactNode } from "react";
-import type { Widget, WidgetType } from "@/components/WidgetView";
+import type { Widget, WidgetType, QueryJoin } from "@/components/WidgetView";
 
 type CatalogItem = { type: WidgetType; label: string };
 
@@ -453,6 +454,104 @@ export function WidgetInspector({
   );
 }
 
+function modelColumns(model: SemanticModel | null | undefined) {
+  const seen = new Set<string>();
+  const out: { key: string; label: string }[] = [];
+  const add = (key: string, label?: string) => {
+    const k = (key || "").trim();
+    if (!k || seen.has(k)) return;
+    seen.add(k);
+    out.push({ key: k, label: (label || k).trim() || k });
+  };
+  for (const d of model?.dimensions || []) add(dimensionKey(d), d.name || d.column);
+  if (model?.time_column) add(model.time_column);
+  for (const m of model?.measures || []) {
+    if (m.column && m.column !== "*") add(m.column, measureKey(m));
+  }
+  return out;
+}
+
+function MeasureOptions({
+  model,
+  joinModel,
+  joinName,
+}: {
+  model: SemanticModel | null;
+  joinModel: SemanticModel | null;
+  joinName?: string;
+}) {
+  return (
+    <>
+      <optgroup label="Este conjunto">
+        {(model?.measures || []).map((m) => (
+          <option key={measureKey(m)} value={measureKey(m)}>
+            {measureKey(m)}
+          </option>
+        ))}
+      </optgroup>
+      {joinModel && (
+        <optgroup label={joinName || "Conjunto cruzado"}>
+          {(joinModel.measures || []).map((m) => (
+            <option key={asJoinField(measureKey(m))} value={asJoinField(measureKey(m))}>
+              {measureKey(m)}
+            </option>
+          ))}
+        </optgroup>
+      )}
+    </>
+  );
+}
+
+function DimensionOptions({
+  model,
+  joinModel,
+  joinName,
+}: {
+  model: SemanticModel | null;
+  joinModel: SemanticModel | null;
+  joinName?: string;
+}) {
+  return (
+    <>
+      <optgroup label="Este conjunto">
+        {(model?.dimensions || []).map((d) => (
+          <option key={dimensionKey(d)} value={dimensionKey(d)}>
+            {d.name || d.column}
+          </option>
+        ))}
+      </optgroup>
+      {joinModel && (
+        <optgroup label={joinName || "Conjunto cruzado"}>
+          {(joinModel.dimensions || []).map((d) => (
+            <option key={asJoinField(dimensionKey(d))} value={asJoinField(dimensionKey(d))}>
+              {d.name || d.column}
+            </option>
+          ))}
+        </optgroup>
+      )}
+    </>
+  );
+}
+
+function patchJoin(onUpdate: (fn: (w: Widget) => Widget) => void, partial: Partial<QueryJoin> | null) {
+  onUpdate((w) => {
+    if (partial === null) {
+      return {
+        ...w,
+        query: {
+          ...w.query,
+          joins: undefined,
+          measures: (w.query?.measures || []).filter((m) => !m.startsWith("join.")),
+          dimensions: (w.query?.dimensions || []).filter((d) => !d.startsWith("join.")),
+        },
+      };
+    }
+    const prev: QueryJoin = w.query?.joins?.[0] || { dataset_id: "", from_column: "", to_column: "", match: "both" };
+    const next: QueryJoin = { ...prev, ...partial };
+    return { ...w, query: { ...w.query, joins: next.dataset_id ? [next] : undefined } };
+  });
+}
+
 function QueryFields({
   widget,
   model,
@@ -490,6 +589,16 @@ function QueryFields({
         : widget.type === "sparkline"
           ? "Dimensão temporal"
           : "Dimensão";
+  const join = widget.query?.joins?.[0];
+  const joinModel = join?.dataset_id ? modelForDataset(semanticModels, join.dataset_id) : null;
+  const joinName = visibleDatasets.find((d) => d.id === join?.dataset_id)?.name;
+  const relatedDatasets = visibleDatasets.filter((d) => d.id && d.id !== widget.query?.dataset_id);
+  const extraStart = widget.type === "heatmap" ? 2 : 1;
+  const canBreak = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer"].includes(widget.type);
+  const extraDims = (widget.query?.dimensions || []).slice(extraStart);
+  const primaryCols = modelColumns(model);
+  const joinCols = modelColumns(joinModel);
+  const setJoin = (partial: Partial<QueryJoin> | null) => patchJoin(onUpdate, partial);
 
   return (
     <>
@@ -512,7 +621,20 @@ function QueryFields({
             const nextId = e.target.value;
             onPreferredDataset(nextId);
             const nextModel = modelForDataset(semanticModels, nextId);
-            onUpdate((w) => ({ ...w, query: remapQueryToModel({ ...w.query, dataset_id: nextId }, w.type, nextModel) }));
+            onUpdate((w) => ({
+              ...w,
+              query: remapQueryToModel(
+                {
+                  ...w.query,
+                  dataset_id: nextId,
+                  joins: undefined,
+                  measures: (w.query?.measures || []).filter((m) => !m.startsWith("join.")),
+                  dimensions: (w.query?.dimensions || []).filter((d) => !d.startsWith("join.")),
+                },
+                w.type,
+                nextModel,
+              ),
+            }));
           }}
         >
           <option value="">—</option>
@@ -524,6 +646,75 @@ function QueryFields({
           ))}
         </Select>
       </FieldLabel>
+      {widget.query?.dataset_id && relatedDatasets.length === 0 && (
+        <p className="text-[11px] leading-snug text-mute">
+          Para cruzar com outro conjunto, importe um segundo conjunto neste espaço de trabalho.
+        </p>
+      )}
+      {widget.query?.dataset_id && relatedDatasets.length > 0 && (
+        <div className="space-y-2 rounded-xl border border-line bg-surface-2/60 p-2.5">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <div className="text-[13px] font-medium text-ink">Cruzar com outro conjunto</div>
+              <div className="text-[11px] text-mute">Use campos do conjunto relacionado nas métricas e nas quebras.</div>
+            </div>
+            {join?.dataset_id && (
+              <button type="button" className="shrink-0 text-[11px] text-danger" onClick={() => setJoin(null)}>
+                Remover
+              </button>
+            )}
+          </div>
+          <FieldLabel label="Conjunto relacionado">
+            <Select
+              value={join?.dataset_id || ""}
+              onChange={(e) =>
+                setJoin(e.target.value ? { dataset_id: e.target.value, from_column: "", to_column: "" } : null)
+              }
+            >
+              <option value="">Nenhum</option>
+              {relatedDatasets.map((ds) => (
+                <option key={ds.id} value={ds.id}>
+                  {ds.name}
+                  {ds.source_name ? ` · ${ds.source_name}` : ""}
+                </option>
+              ))}
+            </Select>
+          </FieldLabel>
+          {join?.dataset_id && (
+            <>
+              <FieldLabel label="Coluna deste conjunto" hint="A chave à esquerda, por exemplo empresa">
+                <Select value={join.from_column || ""} onChange={(e) => setJoin({ from_column: e.target.value })}>
+                  <option value="">—</option>
+                  {primaryCols.map((c) => (
+                    <option key={c.key} value={c.key}>
+                      {c.label}
+                    </option>
+                  ))}
+                </Select>
+              </FieldLabel>
+              <FieldLabel label="Coluna do conjunto cruzado" hint="A mesma chave no outro conjunto">
+                <Select value={join.to_column || ""} onChange={(e) => setJoin({ to_column: e.target.value })}>
+                  <option value="">—</option>
+                  {joinCols.map((c) => (
+                    <option key={c.key} value={c.key}>
+                      {c.label}
+                    </option>
+                  ))}
+                </Select>
+              </FieldLabel>
+              <FieldLabel label="Como cruzar">
+                <Select
+                  value={join.match || "both"}
+                  onChange={(e) => setJoin({ match: e.target.value as QueryJoin["match"] })}
+                >
+                  <option value="both">Só linhas que existem nos dois</option>
+                  <option value="all_left">Manter todas as linhas deste conjunto</option>
+                </Select>
+              </FieldLabel>
+            </>
+          )}
+        </div>
+      )}
       {widget.type !== "slicer" && widget.type !== "metric_group" && (
         <FieldLabel label={measureLabel}>
           <Select
@@ -551,11 +742,7 @@ function QueryFields({
             }}
           >
             <option value="">—</option>
-            {(model?.measures || []).map((m) => (
-              <option key={m.name} value={m.name}>
-                {m.name}
-              </option>
-            ))}
+            <MeasureOptions model={model} joinModel={joinModel} joinName={joinName} />
           </Select>
         </FieldLabel>
       )}
@@ -573,11 +760,7 @@ function QueryFields({
             }}
           >
             <option value="">—</option>
-            {(model?.measures || []).map((m) => (
-              <option key={m.name} value={m.name}>
-                {m.name}
-              </option>
-            ))}
+            <MeasureOptions model={model} joinModel={joinModel} joinName={joinName} />
           </Select>
         </FieldLabel>
       )}
@@ -585,19 +768,38 @@ function QueryFields({
         <FieldLabel label="Métricas do grupo">
           <div className="grid grid-cols-1 gap-1.5">
             {(model?.measures || []).map((m) => {
-              const checked = widget.query?.measures?.includes(m.name) || false;
+              const name = measureKey(m);
+              const checked = widget.query?.measures?.includes(name) || false;
               return (
-                <label key={m.name} className="flex items-center gap-2 text-[12px] text-ink">
+                <label key={name} className="flex items-center gap-2 text-[12px] text-ink">
                   <input
                     type="checkbox"
                     checked={checked}
                     onChange={() => {
                       const ms = widget.query?.measures || [];
-                      const next = checked ? ms.filter((x) => x !== m.name) : [...ms, m.name];
+                      const next = checked ? ms.filter((x) => x !== name) : [...ms, name];
                       onUpdate((w) => ({ ...w, query: { ...w.query, measures: next } }));
                     }}
                   />
-                  {m.name}
+                  {name}
+                </label>
+              );
+            })}
+            {(joinModel?.measures || []).map((m) => {
+              const name = asJoinField(measureKey(m));
+              const checked = widget.query?.measures?.includes(name) || false;
+              return (
+                <label key={name} className="flex items-center gap-2 text-[12px] text-ink">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => {
+                      const ms = widget.query?.measures || [];
+                      const next = checked ? ms.filter((x) => x !== name) : [...ms, name];
+                      onUpdate((w) => ({ ...w, query: { ...w.query, measures: next } }));
+                    }}
+                  />
+                  {joinName ? `${measureKey(m)} · ${joinName}` : measureKey(m)}
                 </label>
               );
             })}
@@ -618,11 +820,7 @@ function QueryFields({
           }
         >
           <option value="">Nenhuma</option>
-          {(model?.dimensions || []).map((d) => (
-            <option key={d.column || d.name} value={d.column || d.name}>
-              {d.name || d.column}
-            </option>
-          ))}
+          <DimensionOptions model={model} joinModel={joinModel} joinName={joinName} />
         </Select>
       </FieldLabel>
       {widget.type === "heatmap" && (
@@ -638,13 +836,69 @@ function QueryFields({
             }}
           >
             <option value="">Nenhuma</option>
-            {(model?.dimensions || []).map((d) => (
-              <option key={d.column || d.name} value={d.column || d.name}>
-                {d.name || d.column}
-              </option>
-            ))}
+            <DimensionOptions model={model} joinModel={joinModel} joinName={joinName} />
           </Select>
         </FieldLabel>
+      )}
+      {canBreak &&
+        extraDims.map((dim, i) => {
+          const idx = extraStart + i;
+          return (
+            <FieldLabel
+              key={`break-${idx}`}
+              label={i === 0 ? "Quebrar também por" : `Quebra ${i + 2}`}
+              hint={i === 0 ? "No gráfico de barras ou linhas, esta dimensão vira séries." : undefined}
+            >
+              <div className="flex items-center gap-1.5">
+                <Select
+                  className="flex-1"
+                  value={dim}
+                  onChange={(e) =>
+                    onUpdate((w) => {
+                      const dims = [...(w.query?.dimensions || [])];
+                      dims[idx] = e.target.value;
+                      return { ...w, query: { ...w.query, dimensions: dims.filter(Boolean) } };
+                    })
+                  }
+                >
+                  <option value="">Nenhuma</option>
+                  <DimensionOptions model={model} joinModel={joinModel} joinName={joinName} />
+                </Select>
+                <button
+                  type="button"
+                  className="rounded-lg p-1.5 text-mute hover:bg-surface-2 hover:text-danger"
+                  title="Remover quebra"
+                  onClick={() =>
+                    onUpdate((w) => {
+                      const dims = [...(w.query?.dimensions || [])];
+                      dims.splice(idx, 1);
+                      return { ...w, query: { ...w.query, dimensions: dims } };
+                    })
+                  }
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </FieldLabel>
+          );
+        })}
+      {canBreak && (widget.query?.dimensions?.length || 0) >= extraStart && (widget.query?.dimensions?.length || 0) < extraStart + 3 && (
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
+          onClick={() => {
+            const used = new Set(widget.query?.dimensions || []);
+            const local = (model?.dimensions || []).map(dimensionKey).find((k) => k && !used.has(k));
+            const related = (joinModel?.dimensions || [])
+              .map((d) => asJoinField(dimensionKey(d)))
+              .find((k) => k && !used.has(k));
+            const next = local || related;
+            if (!next) return;
+            onUpdate((w) => ({ ...w, query: { ...w.query, dimensions: [...(w.query?.dimensions || []), next] } }));
+          }}
+        >
+          <Plus size={14} /> Adicionar quebra
+        </button>
       )}
       {!["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer"].includes(widget.type) && (
         <FieldLabel

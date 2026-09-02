@@ -7,7 +7,8 @@ import { AdvancedChart, Sparkline, KpiGoal, MetricGroup, DecompositionTree, Ifra
 import { api } from "@/lib/api";
 import { cn } from "@/lib/cn";
 import { titleAlignClass } from "@/lib/widget-config";
-import { Image as ImageIcon } from "lucide-react";
+import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
+import { AlertCircle, Image as ImageIcon } from "lucide-react";
 
 export type Widget = {
   id: string;
@@ -51,6 +52,14 @@ export type QuerySpec = {
   filters?: FilterSpec[];
   limit?: number;
   time_range?: { start?: string; end?: string };
+  joins?: QueryJoin[];
+};
+
+export type QueryJoin = {
+  dataset_id: string;
+  from_column: string;
+  to_column: string;
+  match?: "both" | "all_left";
 };
 
 export type FilterSpec = { dimension: string; op: "eq" | "in" | "neq"; value: any };
@@ -154,6 +163,14 @@ export function WidgetView({
     if (KPI_TYPES.includes(w.type)) {
       b.dimensions = [];
     }
+    const joins = (b.joins || []).filter((j) => j.dataset_id && j.from_column && j.to_column);
+    if (joins.length) {
+      b.joins = joins;
+    } else {
+      delete b.joins;
+      b.measures = (b.measures || []).filter((m) => !m.startsWith("join."));
+      b.dimensions = (b.dimensions || []).filter((d) => !d.startsWith("join."));
+    }
     if (filters.length > 0) b.filters = filters;
     else delete b.filters;
     return b;
@@ -174,7 +191,15 @@ export function WidgetView({
   const rows = q.data?.rows || [];
   const columns = q.data?.columns || [];
   const showTitle = cfg.showTitle !== false;
-  const titleCls = titleAlignClass(cfg.titleAlign);
+  const issue = !NO_QUERY.includes(w.type) && !q.isLoading && !q.isError
+    ? diagnoseQueryValue({
+        rows,
+        columns,
+        measures: w.query?.measures,
+        dimensions: w.query?.dimensions,
+        kind: KPI_TYPES.includes(w.type) ? "kpi" : w.type === "table" || w.type === "slicer" ? "table" : "chart",
+      })
+    : null;
 
   if (w.type === "text") {
     return <div className="h-full overflow-auto rounded-2xl border border-line bg-surface p-4 text-sm text-ink shadow-sm">{w.text || w.title}</div>;
@@ -230,41 +255,61 @@ export function WidgetView({
   }
 
   if (w.type === "kpi") {
-    const val = rows[0] ? Number(Object.values(rows[0])[0] ?? 0) : 0;
-    const formatted = formatNumber(val, cfg);
+    const picked = firstNumericEntry(rows[0], w.query?.measures);
+    const val = isFiniteNumber(picked.value) ? Number(picked.value) : NaN;
+    const formatted = issue ? "—" : formatNumber(val, cfg);
     const goal = cfg.goal != null ? Number(cfg.goal) : undefined;
-    const progress = goal && goal > 0 ? (val / goal) * 100 : undefined;
+    const progress = goal && goal > 0 && Number.isFinite(val) ? (val / goal) * 100 : undefined;
     return (
-      <Kpi
-        label={w.title}
-        value={formatted}
-        delta={cfg.showTrend && cfg.variance != null ? Number(cfg.variance) : undefined}
-        comparisonLabel={cfg.comparisonLabel}
-        align={cfg.kpiAlign}
-        fontSize={cfg.fontSize}
-        showTitle={showTitle}
-        color={cfg.color}
-        goalLabel={goal != null ? `Meta: ${formatNumber(goal, cfg)}` : undefined}
-        progress={progress}
-      />
+      <div className="relative h-full">
+        <Kpi
+          label={w.title}
+          value={formatted}
+          delta={!issue && cfg.showTrend && cfg.variance != null ? Number(cfg.variance) : undefined}
+          comparisonLabel={cfg.comparisonLabel}
+          align={cfg.kpiAlign}
+          fontSize={cfg.fontSize}
+          showTitle={showTitle}
+          color={cfg.color}
+          goalLabel={!issue && goal != null ? `Meta: ${formatNumber(goal, cfg)}` : undefined}
+          progress={!issue ? progress : undefined}
+        />
+        {issue && <IssueHint issue={issue} />}
+      </div>
     );
   }
   if (w.type === "table") {
-    return <TableView w={w} rows={rows} columns={columns} onDrill={onDrill} />;
+    return (
+      <div className="relative h-full">
+        <TableView w={w} rows={rows} columns={columns} onDrill={onDrill} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
   }
 
   if (w.type === "kpi_goal") {
-    const val = rows[0] ? Number(Object.values(rows[0])[0] ?? 0) : 0;
-    return <KpiGoal label={w.title} value={val} goal={cfg.goal} variance={cfg.variance} config={cfg} />;
+    const picked = firstNumericEntry(rows[0], w.query?.measures);
+    const val = isFiniteNumber(picked.value) ? Number(picked.value) : 0;
+    return (
+      <div className="relative h-full">
+        <KpiGoal label={w.title} value={issue ? null : val} goal={cfg.goal} variance={cfg.variance} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
   }
 
   if (w.type === "metric_group") {
-    return <MetricGroup label={w.title} rows={rows} columns={columns} config={cfg} />;
+    return (
+      <div className="relative h-full">
+        <MetricGroup label={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
   }
 
   if (w.type === "sparkline") {
     return (
-      <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)}>
+      <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)} issue={issue}>
         <Sparkline rows={rows} columns={columns} height={Math.max(40, (w.layout.h || 2) * 70 - 40)} config={cfg} />
       </ChartCard>
     );
@@ -272,20 +317,23 @@ export function WidgetView({
 
   if (w.type === "decomposition_tree") {
     return (
-      <DecompositionTree
-        rows={rows}
-        columns={columns}
-        hierarchy={w.hierarchy || []}
-        drillPath={w.drillPath || []}
-        onDrill={(value) => onDrill(w.id, value)}
-        config={cfg}
-      />
+      <div className="relative h-full">
+        <DecompositionTree
+          rows={rows}
+          columns={columns}
+          hierarchy={w.hierarchy || []}
+          drillPath={w.drillPath || []}
+          onDrill={(value) => onDrill(w.id, value)}
+          config={cfg}
+        />
+        {issue && <IssueHint issue={issue} />}
+      </div>
     );
   }
 
   if (["gauge", "waterfall", "funnel", "scatter", "treemap", "heatmap"].includes(w.type)) {
     return (
-      <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)}>
+      <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)} issue={issue}>
         <AdvancedChart
           type={w.type as any}
           title={w.title}
@@ -299,7 +347,7 @@ export function WidgetView({
   }
 
   return (
-    <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)}>
+    <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)} issue={issue}>
       <Chart
         type={w.type === "line" || w.type === "area" ? w.type : w.type === "pie" ? "pie" : "bar"}
         columns={columns}
@@ -320,16 +368,18 @@ function ChartCard({
   showTitle,
   align,
   drill,
+  issue,
   children,
 }: {
   title: string;
   showTitle: boolean;
   align?: "left" | "center" | "right";
   drill?: ReactNode;
+  issue?: { code: string; message: string } | null;
   children: ReactNode;
 }) {
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-line bg-surface p-3 shadow-sm">
+    <div className="relative flex h-full flex-col rounded-2xl border border-line bg-surface p-3 shadow-sm">
       {showTitle && (
         <div className={cn("mb-1 flex items-center justify-between text-[13px] text-mute", titleAlignClass(align))}>
           <span className="font-medium">{title}</span>
@@ -337,8 +387,23 @@ function ChartCard({
         </div>
       )}
       <div className="min-h-0 flex-1">{children}</div>
+      {issue && <IssueHint issue={issue} />}
     </div>
   );
+}
+
+function IssueHint({ issue }: { issue: { message: string } }) {
+  return (
+    <div className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex items-start gap-1.5 rounded-xl border border-amber-200 bg-amber-50/95 px-2.5 py-2 text-[11px] leading-snug text-amber-950 shadow-sm">
+      <AlertCircle size={14} className="mt-0.5 shrink-0 text-amber-700" />
+      <span>{issue.message}</span>
+    </div>
+  );
+}
+
+function isFiniteNumber(v: unknown) {
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n);
 }
 
 function drillChrome(w: Widget, onDrill: (id: string, value: string) => void) {

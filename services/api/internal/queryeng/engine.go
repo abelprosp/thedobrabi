@@ -30,16 +30,24 @@ func New(pg *pgxpool.Pool, ch driver.Conn, rdb *redis.Client, cfg config.Config)
 }
 
 type Request struct {
-	DatasetID     string     `json:"dataset_id"`
-	Measures      []string   `json:"measures"`
-	Dimensions    []string   `json:"dimensions"`
-	Filters       []Filter   `json:"filters,omitempty"`
-	TimeRange     *TimeRange `json:"time_range,omitempty"`
-	OrderBy       []Order    `json:"order_by,omitempty"`
-	Limit         int        `json:"limit,omitempty"`
-	Compare       *TimeRange `json:"compare,omitempty"`
-	GlobalFilters []Filter   `json:"global_filters,omitempty"`
-	DrillPath     []string   `json:"drill_path,omitempty"`
+	DatasetID     string        `json:"dataset_id"`
+	Measures      []string      `json:"measures"`
+	Dimensions    []string      `json:"dimensions"`
+	Filters       []Filter      `json:"filters,omitempty"`
+	TimeRange     *TimeRange    `json:"time_range,omitempty"`
+	OrderBy       []Order       `json:"order_by,omitempty"`
+	Limit         int           `json:"limit,omitempty"`
+	Compare       *TimeRange    `json:"compare,omitempty"`
+	GlobalFilters []Filter      `json:"global_filters,omitempty"`
+	DrillPath     []string      `json:"drill_path,omitempty"`
+	Joins         []DatasetJoin `json:"joins,omitempty"`
+}
+
+type DatasetJoin struct {
+	DatasetID  string `json:"dataset_id"`
+	FromColumn string `json:"from_column"`
+	ToColumn   string `json:"to_column"`
+	Match      string `json:"match,omitempty"` // both | all_left
 }
 
 type Filter struct {
@@ -97,7 +105,8 @@ func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, rol
 
 	start := time.Now()
 	var out Result
-	if plan.SourceType == "duckdb" && meta.RowCount > 0 && meta.RowCount < 1000 {
+	useDuck := plan.SourceType == "duckdb" && meta.RowCount > 0 && meta.RowCount < 1000 && len(req.Joins) == 0
+	if useDuck {
 		out, err = e.executeDuckDB(ctx, meta, plan, req, orgID, userID, role)
 		if err != nil {
 			return Result{}, err
@@ -312,7 +321,7 @@ func (e *Engine) runRaw(ctx context.Context, orgID, wsID, userID uuid.UUID, sql 
 
 func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req Request, orgID, userID uuid.UUID, role string) (string, Evidence, error) {
 	if len(req.Measures) == 0 && len(req.Dimensions) == 0 {
-		return "", Evidence{}, fmt.Errorf("select at least one measure or dimension")
+		return "", Evidence{}, fmt.Errorf("escolha pelo menos uma medida ou dimensão")
 	}
 	model := meta.Model
 	selects := make([]string, 0)
@@ -323,51 +332,115 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		target = meta.Table
 	}
 
+	var joinMeta *datasetInfo
+	var join DatasetJoin
+	if len(req.Joins) > 0 {
+		join = req.Joins[0]
+		if join.DatasetID == "" || join.FromColumn == "" || join.ToColumn == "" {
+			return "", ev, fmt.Errorf("cruzamento incompleto: indique o conjunto e as colunas que se ligam")
+		}
+		if !identOK(join.FromColumn) || !identOK(join.ToColumn) {
+			return "", ev, fmt.Errorf("coluna de cruzamento inválida")
+		}
+		loaded, err := e.planner.loadDataset(ctx, orgID, meta.WorkspaceID, join.DatasetID)
+		if err != nil {
+			return "", ev, fmt.Errorf("não encontrei o conjunto do cruzamento")
+		}
+		if !columnExists(model, join.FromColumn) {
+			return "", ev, fmt.Errorf("a coluna %q não existe neste conjunto", join.FromColumn)
+		}
+		if !columnExists(loaded.Model, join.ToColumn) {
+			return "", ev, fmt.Errorf("a coluna %q não existe no conjunto cruzado", join.ToColumn)
+		}
+		joinMeta = &loaded
+		ev.Dataset = meta.Name + " + " + loaded.Name
+	}
+
+	qualify := func(joinField bool, col string) string {
+		if joinMeta == nil {
+			return "`" + col + "`"
+		}
+		if joinField {
+			return "b.`" + col + "`"
+		}
+		return "a.`" + col + "`"
+	}
+
 	for _, dname := range req.Dimensions {
-		d, ok := semantic.ResolveDimension(model, dname)
+		joinField := strings.HasPrefix(dname, "join.")
+		raw := strings.TrimPrefix(dname, "join.")
+		src := model
+		if joinField {
+			if joinMeta == nil {
+				return "", ev, fmt.Errorf("dimensão %q pede cruzamento, mas nenhum conjunto extra foi ligado", dname)
+			}
+			src = joinMeta.Model
+		}
+		d, ok := semantic.ResolveDimension(src, raw)
 		if !ok {
-			if identOK(dname) && columnExists(model, dname) {
-				d = semantic.Dimension{Name: dname, Column: dname}
+			if identOK(raw) && columnExists(src, raw) {
+				d = semantic.Dimension{Name: raw, Column: raw}
 			} else {
-				return "", ev, fmt.Errorf("unknown dimension %q", dname)
+				return "", ev, fmt.Errorf("dimensão desconhecida %q", dname)
 			}
 		}
 		if !identOK(d.Column) {
-			return "", ev, fmt.Errorf("invalid dimension column")
+			return "", ev, fmt.Errorf("coluna de dimensão inválida")
 		}
-		selects = append(selects, fmt.Sprintf("`%s` AS `%s`", d.Column, alias(d.Name)))
-		groups = append(groups, "`"+d.Column+"`")
+		colSQL := qualify(joinField, d.Column)
+		selects = append(selects, fmt.Sprintf("%s AS `%s`", colSQL, sqlOutAlias(dname, d.Name)))
+		groups = append(groups, colSQL)
 	}
 
 	if len(req.Measures) == 0 {
 		req.Measures = defaultMeasures(model)
 	}
 	for _, mname := range req.Measures {
-		m, ok := semantic.ResolveMeasure(model, mname)
-		if !ok {
-			return "", ev, fmt.Errorf("unknown measure %q — I will not invent a metric definition", mname)
+		joinField := strings.HasPrefix(mname, "join.")
+		raw := strings.TrimPrefix(mname, "join.")
+		src := model
+		if joinField {
+			if joinMeta == nil {
+				return "", ev, fmt.Errorf("medida %q pede cruzamento, mas nenhum conjunto extra foi ligado", mname)
+			}
+			src = joinMeta.Model
 		}
-		expr, err := measureSQL(m, &model)
+		m, ok := semantic.ResolveMeasure(src, raw)
+		if !ok {
+			return "", ev, fmt.Errorf("medida desconhecida %q — não invento a definição da métrica", mname)
+		}
+		expr, err := measureSQL(m, &src)
 		if err != nil {
 			return "", ev, err
 		}
-		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, alias(m.Name)))
+		if joinMeta != nil {
+			aliasTbl := "a"
+			if joinField {
+				aliasTbl = "b"
+			}
+			expr = qualifyIdentExpr(expr, aliasTbl)
+		}
+		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, sqlOutAlias(mname, m.Name)))
 		ev.Metrics = append(ev.Metrics, m.Name+" = "+m.Expression)
 	}
 
 	var where []string
-	where = append(where, fmt.Sprintf("_tenant = '%s'", orgID.String()))
+	if joinMeta != nil {
+		where = append(where, fmt.Sprintf("a._tenant = '%s'", orgID.String()))
+	} else {
+		where = append(where, fmt.Sprintf("_tenant = '%s'", orgID.String()))
+	}
 	if req.TimeRange != nil && model.TimeColumn != "" && identOK(model.TimeColumn) {
 		if req.TimeRange.Start != "" {
-			where = append(where, fmt.Sprintf("`%s` >= parseDateTimeBestEffort('%s')", model.TimeColumn, sanitizeLiteral(req.TimeRange.Start)))
+			where = append(where, fmt.Sprintf("%s >= parseDateTimeBestEffort('%s')", qualify(false, model.TimeColumn), sanitizeLiteral(req.TimeRange.Start)))
 		}
 		if req.TimeRange.End != "" {
-			where = append(where, fmt.Sprintf("`%s` < parseDateTimeBestEffort('%s')", model.TimeColumn, sanitizeLiteral(req.TimeRange.End)))
+			where = append(where, fmt.Sprintf("%s < parseDateTimeBestEffort('%s')", qualify(false, model.TimeColumn), sanitizeLiteral(req.TimeRange.End)))
 		}
 		ev.Period = req.TimeRange.Start + " → " + req.TimeRange.End
 	}
 	for _, f := range req.Filters {
-		clause, err := filterClause(model, f)
+		clause, err := filterClauseQualified(model, joinMeta, f, qualify)
 		if err != nil {
 			return "", ev, err
 		}
@@ -376,7 +449,7 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		}
 	}
 	for _, f := range req.GlobalFilters {
-		clause, err := filterClause(model, f)
+		clause, err := filterClauseQualified(model, joinMeta, f, qualify)
 		if err != nil {
 			return "", ev, err
 		}
@@ -387,7 +460,10 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	if len(req.DrillPath) > 0 {
 		for i, d := range req.DrillPath {
 			if i < len(req.Dimensions) {
-				where = append(where, fmt.Sprintf("`%s` = %s", req.Dimensions[i], literal(d)))
+				dname := req.Dimensions[i]
+				joinField := strings.HasPrefix(dname, "join.")
+				raw := strings.TrimPrefix(dname, "join.")
+				where = append(where, fmt.Sprintf("%s = %s", qualify(joinField, raw), literal(d)))
 			}
 		}
 	}
@@ -395,12 +471,35 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	if userID != uuid.Nil {
 		rlsPreds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
 		if err == nil {
+			if joinMeta != nil {
+				for i, p := range rlsPreds {
+					if strings.Contains(p, "`") {
+						rlsPreds[i] = qualifyIdentExpr(p, "a")
+					}
+				}
+			}
 			where = append(where, rlsPreds...)
 		}
 	}
 
 	var b strings.Builder
-	fmt.Fprintf(&b, "SELECT %s FROM %s.`%s`", strings.Join(selects, ", "), e.cfg.ClickHouseDB, target)
+	if joinMeta != nil {
+		joinPlan := e.planner.choosePlan(*joinMeta, Request{})
+		joinTable := joinPlan.TargetTable
+		if joinTable == "" {
+			joinTable = joinMeta.Table
+		}
+		kind := "INNER JOIN"
+		if strings.EqualFold(join.Match, "all_left") {
+			kind = "LEFT JOIN"
+		}
+		fmt.Fprintf(&b, "SELECT %s FROM %s.`%s` AS a %s %s.`%s` AS b ON a.`%s` = b.`%s` AND b._tenant = '%s'",
+			strings.Join(selects, ", "),
+			e.cfg.ClickHouseDB, target, kind, e.cfg.ClickHouseDB, joinTable,
+			join.FromColumn, join.ToColumn, orgID.String())
+	} else {
+		fmt.Fprintf(&b, "SELECT %s FROM %s.`%s`", strings.Join(selects, ", "), e.cfg.ClickHouseDB, target)
+	}
 	b.WriteString(" WHERE ")
 	b.WriteString(strings.Join(where, " AND "))
 	if len(groups) > 0 {
@@ -410,7 +509,7 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	if len(req.OrderBy) > 0 {
 		ords := make([]string, 0, len(req.OrderBy))
 		for _, o := range req.OrderBy {
-			field := alias(o.Field)
+			field := sqlOutAlias(o.Field, o.Field)
 			if !identOK(field) {
 				continue
 			}
@@ -425,7 +524,7 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 			b.WriteString(strings.Join(ords, ", "))
 		}
 	} else if len(req.Measures) > 0 {
-		b.WriteString(" ORDER BY  " + fmt.Sprintf("`%s` DESC", alias(req.Measures[0])))
+		b.WriteString(" ORDER BY " + fmt.Sprintf("`%s` DESC", sqlOutAlias(req.Measures[0], req.Measures[0])))
 	}
 	lim := req.Limit
 	if lim <= 0 {
@@ -433,6 +532,61 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	}
 	fmt.Fprintf(&b, " LIMIT %d", lim)
 	return b.String(), ev, nil
+}
+
+func sqlOutAlias(requested, fallback string) string {
+	name := requested
+	if name == "" {
+		name = fallback
+	}
+	plain := strings.TrimPrefix(name, "join.")
+	if strings.HasPrefix(requested, "join.") {
+		return "join_" + alias(plain)
+	}
+	return alias(plain)
+}
+
+func qualifyIdentExpr(expr, tableAlias string) string {
+	var b strings.Builder
+	inIdent := false
+	for i := 0; i < len(expr); i++ {
+		if expr[i] == '`' {
+			if !inIdent {
+				b.WriteString(tableAlias)
+				b.WriteByte('.')
+				b.WriteByte('`')
+				inIdent = true
+			} else {
+				b.WriteByte('`')
+				inIdent = false
+			}
+			continue
+		}
+		b.WriteByte(expr[i])
+	}
+	return b.String()
+}
+
+func filterClauseQualified(model semantic.Model, joinMeta *datasetInfo, f Filter, qualify func(bool, string) string) (string, error) {
+	joinField := strings.HasPrefix(f.Dimension, "join.")
+	raw := strings.TrimPrefix(f.Dimension, "join.")
+	src := model
+	if joinField {
+		if joinMeta == nil {
+			return "", nil
+		}
+		src = joinMeta.Model
+	}
+	clause, err := filterClause(src, Filter{Dimension: raw, Op: f.Op, Value: f.Value})
+	if err != nil || clause == "" || joinMeta == nil {
+		return clause, err
+	}
+	d, ok := semantic.ResolveDimension(src, raw)
+	col := raw
+	if ok {
+		col = d.Column
+	}
+	return strings.Replace(clause, "`"+col+"`", qualify(joinField, col), 1), nil
 }
 
 func filterClause(model semantic.Model, f Filter) (string, error) {

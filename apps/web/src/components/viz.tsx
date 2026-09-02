@@ -36,15 +36,52 @@ function formatCategory(v: unknown) {
   return d.toLocaleDateString("pt-BR", hasTime ? { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
+function pivotSeries(
+  rows: Record<string, any>[],
+  catCol: string,
+  seriesCol: string,
+  valueCol: string,
+) {
+  const cats: string[] = [];
+  const catSeen = new Set<string>();
+  const series: string[] = [];
+  const seriesSeen = new Set<string>();
+  const map = new Map<string, number>();
+  for (const r of rows) {
+    const cat = String(r[catCol] ?? "");
+    const ser = String(r[seriesCol] ?? "");
+    if (!catSeen.has(cat)) {
+      catSeen.add(cat);
+      cats.push(cat);
+    }
+    if (!seriesSeen.has(ser)) {
+      seriesSeen.add(ser);
+      series.push(ser);
+    }
+    map.set(`${cat}\0${ser}`, Number(r[valueCol] ?? 0));
+  }
+  return {
+    rawCats: cats,
+    cats,
+    series,
+    values: series.map((s) => cats.map((c) => map.get(`${c}\0${s}`) ?? 0)),
+  };
+}
+
 export function Chart({ type = "bar", title, columns = [], rows = [], height = 280, onClick, config = {} }: ChartProps) {
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
-  const rawCats = rows.map((r) => String(r[dim] ?? ""));
-  const cats = rows.map((r) => formatCategory(r[dim]));
+  const rawCatsAll = rows.map((r) => String(r[dim] ?? ""));
   const numericCols = columns.filter((c) => c !== dim && typeof rows[0]?.[c] === "number");
   const measCols = numericCols.length ? numericCols : [columns.find((c) => c !== dim) || columns[1] || columns[0]].filter(Boolean);
+  const seriesDim = type === "pie" ? undefined : columns.find((c) => c !== dim && !measCols.includes(c));
+  const pivoted = seriesDim && measCols[0] ? pivotSeries(rows, dim, seriesDim, measCols[0]) : null;
+  const rawCats = pivoted ? pivoted.rawCats : rawCatsAll;
+  const cats = (pivoted ? pivoted.cats : rawCatsAll).map((s) => formatCategory(s));
+  const seriesNames = pivoted ? pivoted.series : measCols;
+  const seriesValues = pivoted ? pivoted.values : measCols.map((m) => rows.map((r) => Number(r[m] ?? 0)));
   const palette = chartPalette(config.color);
   const color = config.color || PRIMARY;
-  const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || measCols.length > 1;
+  const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1;
   const showLabels = type === "pie" ? config.showDataLabels !== false : !!config.showDataLabels;
   const showTooltip = config.showTooltip !== false;
   const showGrid = config.showGrid !== false;
@@ -109,12 +146,12 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
             splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } },
             axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt },
           };
-          const series = measCols.map((m, i) => {
+          const series = seriesNames.map((m, i) => {
             const c = palette[i % palette.length];
             return {
               name: m,
               type: type === "area" ? "line" : type,
-              data: rows.map((r) => Number(r[m] ?? 0)),
+              data: seriesValues[i] || [],
               stack: stacked ? "total" : undefined,
               smooth,
               barMaxWidth: 36,
