@@ -9,7 +9,7 @@ const items = [
   { href: "/store", label: "Loja de painéis" },
   { href: "/apps", label: "Apps" },
   { href: "/ask", label: "Perguntar à TheDobra" },
-  { href: "/data", label: "Dados" },
+  { href: "/data", label: "Conjuntos" },
   { href: "/connectors", label: "Conectores" },
   { href: "/flows", label: "Flows" },
   { href: "/metrics", label: "Métricas" },

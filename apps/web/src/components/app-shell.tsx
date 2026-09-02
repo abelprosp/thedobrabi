@@ -25,8 +25,9 @@ import {
   Plug,
   PanelLeftClose,
   PanelLeftOpen,
+  ChevronDown,
 } from "lucide-react";
-import { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { useEffect, useMemo, useRef, useState, lazy, Suspense, type ComponentType } from "react";
 import { api, setTokens, clearTokens, getAccess } from "@/lib/api";
 import { CommandPalette } from "@/components/command-palette";
 import { Logo } from "@/components/brand";
@@ -35,22 +36,55 @@ const OnboardingModal = lazy(() => import("@/components/onboarding").then((m) =>
 const OnboardingSpotlight = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingSpotlight })));
 
 const SIDEBAR_COLLAPSED_KEY = "thedobra.sidebar-collapsed";
+const NAV_GROUPS_KEY = "thedobra.nav-groups";
 
-const nav = [
+type NavItem = { href: string; label: string; icon: ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }> };
+type NavGroup = { id: string; label: string; items: NavItem[] };
+
+const pinnedNav: NavItem[] = [
   { href: "/overview", label: "Visão geral", icon: Sparkles },
-  { href: "/dashboards", label: "Dashboards", icon: LayoutDashboard },
-  { href: "/store", label: "Loja", icon: Store },
-  { href: "/apps", label: "Apps", icon: Box },
-  { href: "/ask", label: "Perguntar à TheDobra", icon: MessageSquare },
-  { href: "/data", label: "Dados", icon: Database },
-  { href: "/connectors", label: "Conectores", icon: Plug },
-  { href: "/flows", label: "Flows", icon: Workflow },
-  { href: "/metrics", label: "Métricas", icon: BarChart3 },
-  { href: "/insights", label: "Insights", icon: LineChart },
-  { href: "/lineage", label: "Linha de origem", icon: GitBranch },
-  { href: "/reports", label: "Relatórios", icon: FileText },
-  { href: "/alerts", label: "Alertas", icon: AlertTriangle },
+  { href: "/ask", label: "Perguntar", icon: MessageSquare },
 ];
+
+const navGroups: NavGroup[] = [
+  {
+    id: "analise",
+    label: "Análise",
+    items: [
+      { href: "/dashboards", label: "Dashboards", icon: LayoutDashboard },
+      { href: "/store", label: "Loja", icon: Store },
+      { href: "/reports", label: "Relatórios", icon: FileText },
+      { href: "/apps", label: "Apps", icon: Box },
+    ],
+  },
+  {
+    id: "dados",
+    label: "Dados",
+    items: [
+      { href: "/data", label: "Conjuntos", icon: Database },
+      { href: "/connectors", label: "Conectores", icon: Plug },
+      { href: "/flows", label: "Flows", icon: Workflow },
+      { href: "/lineage", label: "Linha de origem", icon: GitBranch },
+    ],
+  },
+  {
+    id: "monitor",
+    label: "Monitorização",
+    items: [
+      { href: "/metrics", label: "Métricas", icon: BarChart3 },
+      { href: "/insights", label: "Insights", icon: LineChart },
+      { href: "/alerts", label: "Alertas", icon: AlertTriangle },
+    ],
+  },
+];
+
+function pathMatches(path: string, href: string) {
+  return path === href || path.startsWith(href + "/");
+}
+
+function groupIdForPath(path: string) {
+  return navGroups.find((g) => g.items.some((i) => pathMatches(path, i.href)))?.id;
+}
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -62,7 +96,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [mobile, setMobile] = useState(false);
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [openGroups, setOpenGroups] = useState<string[]>(["analise"]);
   const menuRef = useRef<HTMLDivElement>(null);
+  const prevPathRef = useRef<string | null>(null);
+  const activeGroupId = useMemo(() => groupIdForPath(path), [path]);
 
   useEffect(() => {
     if (!getAccess()) {
@@ -106,10 +143,46 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     try {
       setCollapsed(localStorage.getItem(SIDEBAR_COLLAPSED_KEY) === "true");
+      const raw = localStorage.getItem(NAV_GROUPS_KEY);
+      let saved: string[] | null = null;
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.every((x) => typeof x === "string")) saved = parsed;
+      }
+      const current = groupIdForPath(path);
+      if (saved) {
+        setOpenGroups(current && !saved.includes(current) ? [...saved, current] : saved);
+      } else if (current) {
+        setOpenGroups([current]);
+      }
     } catch {
       /* ignore */
     }
   }, []);
+
+  useEffect(() => {
+    if (prevPathRef.current === null) {
+      prevPathRef.current = path;
+      return;
+    }
+    if (prevPathRef.current === path) return;
+    prevPathRef.current = path;
+    if (!activeGroupId) return;
+    setOpenGroups((prev) => (prev.includes(activeGroupId) ? prev : [...prev, activeGroupId]));
+  }, [path, activeGroupId]);
+
+  const persistGroups = (next: string[]) => {
+    setOpenGroups(next);
+    try {
+      localStorage.setItem(NAV_GROUPS_KEY, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const toggleGroup = (id: string) => {
+    persistGroups(openGroups.includes(id) ? openGroups.filter((g) => g !== id) : [...openGroups, id]);
+  };
 
   const toggleCollapsed = () => {
     setCollapsed((prev) => {
@@ -136,8 +209,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       iconOnly ? "justify-center px-2" : "gap-2.5 px-3"
     } ${active ? "bg-primary/10 font-medium text-primary-600" : "text-mute hover:bg-surface-2 hover:text-ink"}`;
 
-  const navItem = (item: (typeof nav)[number], iconOnly: boolean) => {
-    const active = path === item.href || path.startsWith(item.href + "/");
+  const navItem = (item: NavItem, iconOnly: boolean) => {
+    const active = pathMatches(path, item.href);
     const Icon = item.icon;
     return (
       <Link
@@ -185,10 +258,44 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           )}
         </div>
-        <nav className={`flex-1 space-y-0.5 ${iconOnly ? "px-2" : "px-3"}`} aria-label="Principal">
-          {nav.map((item) => navItem(item, iconOnly))}
+        <nav className={`min-h-0 flex-1 overflow-y-auto ${iconOnly ? "space-y-0.5 px-2" : "space-y-3 px-3"}`} aria-label="Principal">
+          <div className="space-y-0.5">
+            {pinnedNav.map((item) => navItem(item, iconOnly))}
+          </div>
+          {navGroups.map((group) => {
+            const groupActive = group.items.some((i) => pathMatches(path, i.href));
+            const expanded = iconOnly || openGroups.includes(group.id);
+            return (
+              <div key={group.id} className="space-y-0.5">
+                {iconOnly ? (
+                  <div className="mx-2 my-1.5 h-px bg-line" aria-hidden />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => toggleGroup(group.id)}
+                    aria-expanded={expanded}
+                    className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${
+                      groupActive ? "text-primary-600" : "text-mute hover:text-ink"
+                    }`}
+                  >
+                    {group.label}
+                    <ChevronDown
+                      size={14}
+                      className={`shrink-0 transition-transform ${expanded ? "" : "-rotate-90"}`}
+                      aria-hidden
+                    />
+                  </button>
+                )}
+                {expanded && (
+                  <div className={iconOnly ? "space-y-0.5" : "ml-1.5 space-y-0.5 border-l border-line pl-1.5"}>
+                    {group.items.map((item) => navItem(item, iconOnly))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
-        <div className={`space-y-0.5 pb-4 ${iconOnly ? "px-2" : "px-3"}`}>
+        <div className={`shrink-0 space-y-0.5 border-t border-line pb-4 pt-2 ${iconOnly ? "px-2" : "px-3"}`}>
           <Link
             href="/settings"
             title={iconOnly ? "Definições" : undefined}
@@ -217,7 +324,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-bg">
       <aside
-        className={`hidden flex-col overflow-x-hidden border-r border-line bg-white print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
+        className={`hidden min-h-0 flex-col overflow-hidden border-r border-line bg-white print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
           collapsed ? "w-[72px]" : "w-60"
         }`}
       >
@@ -226,7 +333,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {mobile && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-ink/30" onClick={() => setMobile(false)} />
-          <aside className="relative z-10 flex h-full w-64 flex-col bg-white shadow-xl">
+          <aside className="relative z-10 flex h-full min-h-0 w-64 flex-col overflow-hidden bg-white shadow-xl">
             <button
               className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2"
               onClick={() => setMobile(false)}
