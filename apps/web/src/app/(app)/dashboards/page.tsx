@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
 import { LayoutDashboard, Sparkles, Wand2, X, AlertCircle, Loader2 } from "lucide-react";
 import { Button, Card, EmptyState, ErrorState, PageHeader, PageSkeleton, Input, Select, Textarea, Skeleton, cn } from "@/components/ui";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { starterDashboardWidgets, type DatasetListItem } from "@/lib/semantic";
 
 type Dash = { id: string; name: string; description: string; updated_at: string };
@@ -15,6 +15,14 @@ type Dash = { id: string; name: string; description: string; updated_at: string 
 const STEPS = ["A analisar dados…", "A escolher visualizações…", "A montar dashboard…"];
 
 export default function DashboardsPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <DashboardsPageInner />
+    </Suspense>
+  );
+}
+
+function DashboardsPageInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const seedDatasetId = searchParams.get("dataset_id") || "";

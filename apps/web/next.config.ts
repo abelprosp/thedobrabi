@@ -1,7 +1,10 @@
+import path from "node:path";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Evita o Next tratar o lockfile vazio da raiz do monorepo como workspace root.
+  outputFileTracingRoot: path.join(__dirname),
   async rewrites() {
     return [
       {

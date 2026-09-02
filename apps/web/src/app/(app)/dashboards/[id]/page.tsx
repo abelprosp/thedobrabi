@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import { useParams, useSearchParams } from "next/navigation";
@@ -175,6 +175,14 @@ const Grid = WidthProvider(GridLayout);
 
 
 export default function DashboardEditorPage() {
+  return (
+    <Suspense fallback={<PageSkeleton />}>
+      <DashboardEditorInner />
+    </Suspense>
+  );
+}
+
+function DashboardEditorInner() {
   const { id } = useParams<{ id: string }>();
   const searchParams = useSearchParams();
   const qc = useQueryClient();
