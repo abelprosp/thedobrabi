@@ -52,6 +52,8 @@ export default function DataPage() {
     onSuccess: () => {
       toast.success("Conjunto excluído");
       qc.invalidateQueries({ queryKey: ["datasets"] });
+      qc.invalidateQueries({ queryKey: ["lake"] });
+      qc.invalidateQueries({ queryKey: ["lineage"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -227,7 +229,10 @@ export default function DataPage() {
 
       {lakeList.length > 0 && (
         <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
-          <h2 className="mb-3 text-[13px] text-mute">Lake (bronze / silver / gold)</h2>
+          <h2 className="mb-1 text-[13px] text-mute">Cópias do conjunto actual</h2>
+          <p className="mb-3 text-[12px] text-mute">
+            Conjuntos excluídos são apagados do lake e do motor. Estas cópias são só do que está activo.
+          </p>
           <div className="space-y-1 text-[12px] text-mute">
             {lakeList.map((o) => (
               <div key={o.id} className="flex justify-between font-mono">

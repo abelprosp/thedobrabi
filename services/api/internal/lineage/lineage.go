@@ -13,11 +13,11 @@ type Service struct{ pg *pgxpool.Pool }
 func New(pg *pgxpool.Pool) *Service { return &Service{pg: pg} }
 
 type Node struct {
-	ID     uuid.UUID      `json:"id"`
-	Kind   string         `json:"kind"`
-	RefID  *uuid.UUID     `json:"ref_id,omitempty"`
-	Name   string         `json:"name"`
-	Meta   map[string]any `json:"meta"`
+	ID    uuid.UUID      `json:"id"`
+	Kind  string         `json:"kind"`
+	RefID *uuid.UUID     `json:"ref_id,omitempty"`
+	Name  string         `json:"name"`
+	Meta  map[string]any `json:"meta"`
 }
 
 type Edge struct {
@@ -88,6 +88,31 @@ func (s *Service) RecordReport(ctx context.Context, orgID, wsID, reportID, dashI
 		d, _ := s.Ensure(ctx, orgID, wsID, "dashboard", dashID, "dashboard", nil)
 		s.Link(ctx, orgID, wsID, d, r, "reporta")
 	}
+}
+
+func (s *Service) DeleteForDataset(ctx context.Context, orgID, wsID, datasetID uuid.UUID) {
+	_, _ = s.pg.Exec(ctx, `
+		DELETE FROM lineage_nodes
+		WHERE org_id=$1 AND workspace_id=$2
+		  AND (
+		    ref_id = $3
+		    OR (
+		      kind = 'dataset'
+		      AND (
+		        ref_id IS NULL
+		        OR ref_id NOT IN (SELECT id FROM datasets WHERE org_id=$1 AND workspace_id=$2)
+		      )
+		    )
+		  )
+	`, orgID, wsID, datasetID)
+	_, _ = s.pg.Exec(ctx, `
+		DELETE FROM lineage_edges
+		WHERE org_id=$1 AND workspace_id=$2
+		  AND (
+		    NOT EXISTS (SELECT 1 FROM lineage_nodes n WHERE n.id = from_id)
+		    OR NOT EXISTS (SELECT 1 FROM lineage_nodes n WHERE n.id = to_id)
+		  )
+	`, orgID, wsID)
 }
 
 func (s *Service) Graph(ctx context.Context, orgID, wsID uuid.UUID) (Graph, error) {

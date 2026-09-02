@@ -18,10 +18,10 @@ import (
 )
 
 type Engine struct {
-	pg  *pgxpool.Pool
-	ch  driver.Conn
-	rdb *redis.Client
-	cfg config.Config
+	pg      *pgxpool.Pool
+	ch      driver.Conn
+	rdb     *redis.Client
+	cfg     config.Config
 	planner *Planner
 }
 
@@ -30,16 +30,16 @@ func New(pg *pgxpool.Pool, ch driver.Conn, rdb *redis.Client, cfg config.Config)
 }
 
 type Request struct {
-	DatasetID  string            `json:"dataset_id"`
-	Measures   []string          `json:"measures"`
-	Dimensions []string          `json:"dimensions"`
-	Filters    []Filter          `json:"filters,omitempty"`
-	TimeRange  *TimeRange        `json:"time_range,omitempty"`
-	OrderBy    []Order           `json:"order_by,omitempty"`
-	Limit      int               `json:"limit,omitempty"`
-	Compare    *TimeRange        `json:"compare,omitempty"`
-	GlobalFilters []Filter       `json:"global_filters,omitempty"`
-	DrillPath     []string       `json:"drill_path,omitempty"`
+	DatasetID     string     `json:"dataset_id"`
+	Measures      []string   `json:"measures"`
+	Dimensions    []string   `json:"dimensions"`
+	Filters       []Filter   `json:"filters,omitempty"`
+	TimeRange     *TimeRange `json:"time_range,omitempty"`
+	OrderBy       []Order    `json:"order_by,omitempty"`
+	Limit         int        `json:"limit,omitempty"`
+	Compare       *TimeRange `json:"compare,omitempty"`
+	GlobalFilters []Filter   `json:"global_filters,omitempty"`
+	DrillPath     []string   `json:"drill_path,omitempty"`
 }
 
 type Filter struct {
@@ -371,14 +371,18 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		if err != nil {
 			return "", ev, err
 		}
-		where = append(where, clause)
+		if clause != "" {
+			where = append(where, clause)
+		}
 	}
 	for _, f := range req.GlobalFilters {
 		clause, err := filterClause(model, f)
 		if err != nil {
 			return "", ev, err
 		}
-		where = append(where, clause)
+		if clause != "" {
+			where = append(where, clause)
+		}
 	}
 	if len(req.DrillPath) > 0 {
 		for i, d := range req.DrillPath {
@@ -433,12 +437,15 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 
 func filterClause(model semantic.Model, f Filter) (string, error) {
 	d, ok := semantic.ResolveDimension(model, f.Dimension)
+	if !ok && !columnExists(model, f.Dimension) {
+		return "", nil
+	}
 	col := f.Dimension
 	if ok {
 		col = d.Column
 	}
 	if !identOK(col) || !columnExists(model, col) {
-		return "", fmt.Errorf("invalid filter dimension")
+		return "", nil
 	}
 	return filterSQL(col, f.Op, f.Value)
 }

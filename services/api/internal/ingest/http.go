@@ -169,7 +169,7 @@ func (e *Engine) SyncHTTP(ctx context.Context, orgID, wsID, userID, sourceID uui
 		return Result{}, err
 	}
 	e.LinkDataset(ctx, orgID, sourceID, res.DatasetID)
-	_ = e.writeLake(ctx, orgID, wsID, res.DatasetID, name, headers, rows)
+	_ = e.writeLake(ctx, orgID, wsID, res.DatasetID, headers, rows)
 	return res, nil
 }
 

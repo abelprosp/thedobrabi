@@ -138,10 +138,11 @@ export function remapQueryToModel(
   const next = widgetFieldDefaults(type, model);
   const measures = (query?.measures || []).map((m) => resolveMeasureName(model, m)).filter(Boolean);
   const dimensions = (query?.dimensions || []).map((d) => resolveDimensionName(model, d)).filter(Boolean);
+  const kpiNoDims = type === "kpi" || type === "kpi_goal" || type === "metric_group" || type === "gauge";
   return {
     ...query,
     measures: measures.length ? measures : next.measures,
-    dimensions: type === "kpi" || type === "kpi_goal" || type === "metric_group" || type === "gauge" ? dimensions : dimensions.length ? dimensions : next.dimensions,
+    dimensions: kpiNoDims ? [] : dimensions.length ? dimensions : next.dimensions,
   };
 }
 

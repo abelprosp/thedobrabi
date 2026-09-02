@@ -300,6 +300,7 @@ func (s *Server) deleteDataset(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "delete_failed", err.Error())
 		return
 	}
+	s.lineage.DeleteForDataset(r.Context(), org, ws, id)
 	s.sched.DeleteForTarget(r.Context(), "dataset", id)
 	s.audit(r, "DATASET_DELETED", "dataset", id, nil)
 	httpx.JSON(w, 200, map[string]any{"ok": true})

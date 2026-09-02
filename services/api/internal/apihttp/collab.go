@@ -253,9 +253,13 @@ func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) lakeObjects(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
+	_ = s.ingest.PurgeOrphanClickHouseTables(r.Context())
 	rows, err := s.deps.PG.Query(r.Context(), `
-		SELECT id, dataset_id, stage, object_key, bytes, created_at
-		FROM lake_objects WHERE org_id=$1 AND workspace_id=$2 ORDER BY created_at DESC LIMIT 50
+		SELECT o.id, o.dataset_id, o.stage, o.object_key, o.bytes, o.created_at
+		FROM lake_objects o
+		JOIN datasets d ON d.id = o.dataset_id
+		WHERE o.org_id=$1 AND o.workspace_id=$2
+		ORDER BY o.created_at DESC LIMIT 50
 	`, org, ws)
 	if err != nil {
 		httpx.Error(w, 500, "query_failed", err.Error())

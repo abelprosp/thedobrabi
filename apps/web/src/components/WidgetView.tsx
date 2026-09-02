@@ -105,9 +105,10 @@ export type WidgetConfig = {
   slicerStyle?: "list" | "dropdown" | "buttons";
 };
 
-export type DashboardFilter = { dimension: string; op: "eq" | "in"; value: any };
+export type DashboardFilter = { dimension: string; op: "eq" | "in"; value: any; dataset_id?: string };
 
 const NO_QUERY = ["text", "image", "markdown", "iframe"];
+const KPI_TYPES = ["kpi", "kpi_goal", "gauge", "metric_group"];
 
 export function WidgetView({
   w,
@@ -120,12 +121,17 @@ export function WidgetView({
   w: Widget;
   globalFilters: DashboardFilter[];
   timeRange?: { start?: string; end?: string };
-  onFilter: (dim: string, value: any, op?: "eq" | "in") => void;
+  onFilter: (dim: string, value: any, op?: "eq" | "in", datasetId?: string) => void;
   onDrill: (widgetId: string, value: string) => void;
   isPreview?: boolean;
 }) {
   void isPreview;
   const cfg = w.config || {};
+  const emitFilter = (dim: string, value: any, op?: "eq" | "in") => onFilter(dim, value, op, w.query?.dataset_id);
+  const scopedFilters = useMemo(
+    () => globalFilters.filter((f) => !f.dataset_id || f.dataset_id === w.query?.dataset_id),
+    [globalFilters, w.query?.dataset_id],
+  );
   const body = useMemo(() => {
     const b: QuerySpec = { ...w.query };
     if (timeRange?.start || timeRange?.end) {
@@ -133,7 +139,7 @@ export function WidgetView({
     } else {
       delete b.time_range;
     }
-    let filters = [...(b.filters || []), ...globalFilters];
+    let filters = [...(b.filters || []), ...scopedFilters];
     if (w.type === "slicer") {
       const own = w.query?.dimensions?.[0];
       if (own) filters = filters.filter((f) => f.dimension !== own);
@@ -145,15 +151,18 @@ export function WidgetView({
         filters.push({ dimension: w.hierarchy[i], op: "eq", value: w.drillPath[i] });
       }
     }
+    if (KPI_TYPES.includes(w.type)) {
+      b.dimensions = [];
+    }
     if (filters.length > 0) b.filters = filters;
     else delete b.filters;
     return b;
-  }, [w, globalFilters, timeRange]);
+  }, [w, scopedFilters, timeRange]);
 
   const q = useQuery({
     queryKey: ["widget", w.id, body],
     queryFn: () => api<any>("/api/v1/queries", { method: "POST", body: JSON.stringify(body) }),
-    enabled: !!w.query && !NO_QUERY.includes(w.type),
+    enabled: !!w.query?.dataset_id && !NO_QUERY.includes(w.type),
   });
 
   const rows = q.data?.rows || [];
@@ -189,15 +198,25 @@ export function WidgetView({
     return <IframeWidget url={cfg.url} title={w.title} />;
   }
 
+  if (w.query && !w.query.dataset_id) {
+    return (
+      <div className="flex h-full items-center rounded-2xl border border-line bg-surface p-4 text-xs text-mute shadow-sm">
+        Este visual não tem conjunto. Escolha um conjunto no inspector.
+      </div>
+    );
+  }
+
   if (q.isLoading) {
     return <div className="flex h-full items-center justify-center rounded-2xl border border-line bg-surface p-4 shadow-sm text-xs text-mute">A carregar…</div>;
   }
   if (q.isError) {
-    return <div className="flex h-full items-center rounded-2xl border border-line bg-surface p-4 text-xs text-danger shadow-sm">{(q.error as Error).message}</div>;
+    const msg = (q.error as Error).message || "";
+    const friendly = /dataset not found/i.test(msg) ? "O conjunto deste visual foi excluído." : msg;
+    return <div className="flex h-full items-center rounded-2xl border border-line bg-surface p-4 text-xs text-danger shadow-sm">{friendly}</div>;
   }
 
   if (w.type === "slicer") {
-    return <SlicerView w={w} rows={rows} columns={columns} globalFilters={globalFilters} onFilter={onFilter} />;
+    return <SlicerView w={w} rows={rows} columns={columns} globalFilters={scopedFilters} onFilter={emitFilter} />;
   }
 
   if (w.type === "kpi") {
@@ -279,7 +298,7 @@ export function WidgetView({
         config={cfg}
         onClick={({ value, dimension }) => {
           if (w.hierarchy) onDrill(w.id, value);
-          else if (dimension) onFilter(dimension, value);
+          else if (dimension) emitFilter(dimension, value);
         }}
       />
     </ChartCard>
@@ -406,7 +425,7 @@ function SlicerView({
     rows.forEach((r) => { if (r[dim] != null) set.add(String(r[dim])); });
     return Array.from(set).slice(0, 200).sort((a, b) => a.localeCompare(b, "pt"));
   }, [rows, dim]);
-  const current = globalFilters.find((f) => f.dimension === dim);
+  const current = globalFilters.find((f) => f.dimension === dim && (!f.dataset_id || f.dataset_id === w.query?.dataset_id));
   const selected = useMemo(() => {
     if (!current) return [] as string[];
     return Array.isArray(current.value) ? current.value.map(String) : [String(current.value)];

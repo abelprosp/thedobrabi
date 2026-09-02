@@ -572,7 +572,7 @@ func (e *Engine) finishSync(ctx context.Context, orgID, wsID, userID, sourceID u
 		return Result{}, err
 	}
 	e.LinkDataset(ctx, orgID, sourceID, res.DatasetID)
-	_ = e.writeLake(ctx, orgID, wsID, res.DatasetID, name, headers, rows)
+	_ = e.writeLake(ctx, orgID, wsID, res.DatasetID, headers, rows)
 	return res, nil
 }
 
@@ -601,7 +601,7 @@ func (e *Engine) SyncSQL(ctx context.Context, orgID, wsID, userID, sourceID uuid
 	}
 	_, _ = e.pg.Exec(ctx, `UPDATE datasets SET data_source_id=$2 WHERE id=$1`, res.DatasetID, sourceID)
 	_, _ = e.pg.Exec(ctx, `UPDATE data_sources SET last_sync_at=now(), status='synced' WHERE id=$1`, sourceID)
-	_ = e.writeLake(ctx, orgID, wsID, res.DatasetID, name, headers, rows)
+	_ = e.writeLake(ctx, orgID, wsID, res.DatasetID, headers, rows)
 	return res, nil
 }
 
@@ -969,30 +969,6 @@ func (e *Engine) DeleteDataSource(ctx context.Context, orgID, wsID, id uuid.UUID
 	}
 	if tag.RowsAffected() == 0 {
 		return fmt.Errorf("fonte não encontrada")
-	}
-	return nil
-}
-
-func (e *Engine) DeleteDataset(ctx context.Context, orgID, wsID, id uuid.UUID) error {
-	var table string
-	err := e.pg.QueryRow(ctx, `
-		SELECT COALESCE(clickhouse_table, '') FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3
-	`, id, orgID, wsID).Scan(&table)
-	if err != nil {
-		if err == pgx.ErrNoRows {
-			return fmt.Errorf("conjunto não encontrado")
-		}
-		return err
-	}
-	tag, err := e.pg.Exec(ctx, `DELETE FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, orgID, wsID)
-	if err != nil {
-		return err
-	}
-	if tag.RowsAffected() == 0 {
-		return fmt.Errorf("conjunto não encontrado")
-	}
-	if e.ch != nil && table != "" && identOK(table) && identOK(e.cfg.ClickHouseDB) {
-		_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, table))
 	}
 	return nil
 }

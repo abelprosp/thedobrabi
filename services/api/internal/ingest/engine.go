@@ -137,7 +137,7 @@ func (e *Engine) IngestFile(ctx context.Context, orgID, wsID, userID uuid.UUID, 
 		Payload:        map[string]any{"dataset_id": dsID.String(), "kind": kind},
 	})
 
-	rawKey := path.Join("bronze", "company_id="+orgID.String(), "dataset="+slug, now.Format("year=2006/month=01/day=02"), filename)
+	rawKey := path.Join("bronze", "company_id="+orgID.String(), "dataset_id="+dsID.String(), now.Format("20060102T150405"), filename)
 	if e.minio != nil {
 		_, _ = e.minio.PutObject(ctx, e.cfg.MinioBucket, rawKey, bytes.NewReader(raw), int64(len(raw)), minio.PutObjectOptions{
 			ContentType: "application/octet-stream",
@@ -183,7 +183,7 @@ func (e *Engine) IngestFile(ctx context.Context, orgID, wsID, userID uuid.UUID, 
 		Payload: map[string]any{"dataset_id": dsID.String()},
 	})
 
-	_ = e.writeLake(ctx, orgID, wsID, dsID, slug, names, rows)
+	_ = e.writeLake(ctx, orgID, wsID, dsID, names, rows)
 
 	_ = userID
 	return Result{
@@ -453,11 +453,11 @@ func (e *Engine) ReplaceDataset(ctx context.Context, orgID, wsID, datasetID uuid
 	return n, nil
 }
 
-func (e *Engine) writeLake(ctx context.Context, orgID, wsID, datasetID uuid.UUID, slug string, headers []string, rows [][]string) error {
+func (e *Engine) writeLake(ctx context.Context, orgID, wsID, datasetID uuid.UUID, headers []string, rows [][]string) error {
 	if e.minio == nil {
 		return nil
 	}
-	prefix := path.Join("company_id="+orgID.String(), "dataset="+schemax.SanitizeIdent(slug))
+	prefix := path.Join("company_id="+orgID.String(), "dataset_id="+datasetID.String())
 	silver := e.csvBytes(headers, rows[:min(len(rows), 200000)])
 	gold := e.csvBytes(headers, rows[:min(len(rows), 50000)])
 	now := time.Now().UTC().Format("20060102T150405")

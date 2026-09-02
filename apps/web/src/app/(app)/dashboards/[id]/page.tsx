@@ -405,17 +405,18 @@ function DashboardEditorInner() {
     add({ ...w, id: crypto.randomUUID(), layout: { ...w.layout, x: (w.layout.x + 2) % 12, y: w.layout.y } });
   };
 
-  const applyFilter = useCallback((dim: string, value: any, op?: "eq" | "in") => {
+  const applyFilter = useCallback((dim: string, value: any, op?: "eq" | "in", datasetId?: string) => {
     setGlobalFilters((prev) => {
+      const same = (f: DashboardFilter) => f.dimension === dim && (f.dataset_id || "") === (datasetId || "");
       if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) {
-        return prev.filter((f) => f.dimension !== dim);
+        return prev.filter((f) => !same(f));
       }
       const nextOp = op || (Array.isArray(value) ? "in" : "eq");
-      const existing = prev.find((f) => f.dimension === dim);
+      const existing = prev.find(same);
       if (existing) {
-        return prev.map((f) => (f.dimension === dim ? { ...f, value, op: nextOp } : f));
+        return prev.map((f) => (same(f) ? { ...f, value, op: nextOp, dataset_id: datasetId } : f));
       }
-      return [...prev, { dimension: dim, op: nextOp, value }];
+      return [...prev, { dimension: dim, op: nextOp, value, dataset_id: datasetId }];
     });
   }, []);
 
@@ -592,9 +593,9 @@ function DashboardEditorInner() {
             {globalFilters.length > 0 && (
               <div className="flex flex-wrap gap-1">
                 {globalFilters.map((f) => (
-                  <span key={f.dimension} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] text-primary-600">
+                  <span key={`${f.dataset_id || ""}:${f.dimension}`} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] text-primary-600">
                     {f.dimension} = {Array.isArray(f.value) ? f.value.join(", ") : String(f.value)}
-                    <button className="text-primary-700" onClick={() => setGlobalFilters(globalFilters.filter((x) => x.dimension !== f.dimension))}>×</button>
+                    <button className="text-primary-700" onClick={() => setGlobalFilters(globalFilters.filter((x) => !(x.dimension === f.dimension && (x.dataset_id || "") === (f.dataset_id || ""))))}>×</button>
                   </span>
                 ))}
                 <button className="text-[11px] text-mute hover:text-ink" onClick={() => setGlobalFilters([])}>Limpar filtros</button>
@@ -660,7 +661,7 @@ function DashboardEditorInner() {
                       </button>
                     </div>
                   )}
-                  <WidgetView w={w} globalFilters={globalFilters} timeRange={timeRange} onFilter={applyFilter} onDrill={drill} />
+                  <WidgetView w={w} globalFilters={globalFilters} timeRange={timeRange} onFilter={(dim, value, op) => applyFilter(dim, value, op, w.query?.dataset_id)} onDrill={drill} />
                 </div>
               ))}
             </Grid>

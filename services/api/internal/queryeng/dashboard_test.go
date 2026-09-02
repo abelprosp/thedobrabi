@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"testing"
+
+	"github.com/thedobra/thedobra/services/api/internal/semantic"
 )
 
 func TestDashboardSlicerFilter(t *testing.T) {
@@ -107,5 +109,35 @@ func TestCrossFilterSimulation(t *testing.T) {
 	}
 	if total != 250.0 {
 		t.Fatalf("expected total sales 250 after cross-filter, got %f", total)
+	}
+}
+
+func TestFilterClauseSkipsUnknownDimension(t *testing.T) {
+	model := semantic.Model{
+		Dimensions: []semantic.Dimension{{Name: "Categoria", Column: "categoria"}},
+		Measures:   []semantic.Measure{{Name: "Valor", Column: "valor"}},
+	}
+	clause, err := filterClause(model, Filter{Dimension: "mes", Op: "eq", Value: "2024-01"})
+	if err != nil {
+		t.Fatalf("expected skip not error, got %v", err)
+	}
+	if clause != "" {
+		t.Fatalf("expected empty clause for foreign dimension, got %q", clause)
+	}
+}
+
+func TestFilterClauseAppliesKnownDimension(t *testing.T) {
+	model := semantic.Model{
+		Dimensions: []semantic.Dimension{{Name: "Categoria", Column: "categoria"}},
+	}
+	clause, err := filterClause(model, Filter{Dimension: "categoria", Op: "eq", Value: "ops"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if clause == "" {
+		t.Fatal("expected SQL clause for known dimension")
+	}
+	if clause != "`categoria` = 'ops'" {
+		t.Fatalf("unexpected clause %q", clause)
 	}
 }
