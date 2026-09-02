@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 const items = [
   { href: "/overview", label: "Visão geral" },
   { href: "/dashboards", label: "Dashboards" },
+  { href: "/store", label: "Loja de painéis" },
   { href: "/apps", label: "Apps" },
   { href: "/ask", label: "Perguntar à TheDobra" },
   { href: "/data", label: "Dados" },

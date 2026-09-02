@@ -72,9 +72,9 @@ import {
   type DatasetListItem,
   modelForDataset,
   rebindQueryToLiveDataset,
-  remapQueryToModel,
   widgetFieldDefaults,
 } from "@/lib/semantic";
+import { DASHBOARD_TEMPLATES, instantiateTemplate } from "@/lib/dashboard-templates";
 const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description: string; defaultW: number; defaultH: number }[] = [
   { type: "kpi", label: "KPI", icon: Monitor, description: "Métrica principal", defaultW: 3, defaultH: 2 },
   { type: "kpi_goal", label: "KPI com meta", icon: Target, description: "Valor, meta e progresso", defaultW: 4, defaultH: 3 },
@@ -97,41 +97,6 @@ const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description:
   { type: "image", label: "Imagem", icon: ImageIcon, description: "Logótipo ou ilustração", defaultW: 4, defaultH: 3 },
   { type: "markdown", label: "Markdown", icon: Type, description: "Texto formatado", defaultW: 4, defaultH: 3 },
   { type: "iframe", label: "Iframe", icon: AppWindow, description: "Embed de URL", defaultW: 6, defaultH: 4 },
-];
-
-const TEMPLATES = [
-  {
-    id: "executive",
-    name: "Executivo",
-    widgets: (): Widget[] => [
-      { id: crypto.randomUUID(), type: "kpi", title: "Receita", layout: { x: 0, y: 0, w: 3, h: 2 }, query: { measures: ["revenue"] } },
-      { id: crypto.randomUUID(), type: "kpi", title: "Margem", layout: { x: 3, y: 0, w: 3, h: 2 }, query: { measures: ["margin"] } },
-      { id: crypto.randomUUID(), type: "kpi", title: "Clientes", layout: { x: 6, y: 0, w: 3, h: 2 }, query: { measures: ["customers"] } },
-      { id: crypto.randomUUID(), type: "kpi", title: "Pedidos", layout: { x: 9, y: 0, w: 3, h: 2 }, query: { measures: ["orders"] } },
-      { id: crypto.randomUUID(), type: "line", title: "Receita ao longo do tempo", layout: { x: 0, y: 2, w: 8, h: 5 }, query: { measures: ["revenue"], dimensions: ["date"], limit: 90 } },
-      { id: crypto.randomUUID(), type: "bar", title: "Receita por região", layout: { x: 8, y: 2, w: 4, h: 5 }, query: { measures: ["revenue"], dimensions: ["region"], limit: 20 } },
-    ],
-  },
-  {
-    id: "sales",
-    name: "Vendas",
-    widgets: (): Widget[] => [
-      { id: crypto.randomUUID(), type: "kpi", title: "Total de vendas", layout: { x: 0, y: 0, w: 4, h: 2 }, query: { measures: ["revenue"] } },
-      { id: crypto.randomUUID(), type: "slicer", title: "Região", layout: { x: 4, y: 0, w: 4, h: 2 }, query: { dimensions: ["region"], measures: [] } },
-      { id: crypto.randomUUID(), type: "bar", title: "Vendas por vendedor", layout: { x: 0, y: 2, w: 6, h: 5 }, query: { measures: ["revenue"], dimensions: ["sales_rep"], limit: 20 } },
-      { id: crypto.randomUUID(), type: "pie", title: "Mix de produtos", layout: { x: 6, y: 2, w: 6, h: 5 }, query: { measures: ["revenue"], dimensions: ["product"], limit: 10 } },
-    ],
-  },
-  {
-    id: "operations",
-    name: "Operações",
-    widgets: (): Widget[] => [
-      { id: crypto.randomUUID(), type: "kpi", title: "Pedidos hoje", layout: { x: 0, y: 0, w: 3, h: 2 }, query: { measures: ["orders"] } },
-      { id: crypto.randomUUID(), type: "kpi", title: "Tempo médio", layout: { x: 3, y: 0, w: 3, h: 2 }, query: { measures: ["avg_time"] } },
-      { id: crypto.randomUUID(), type: "table", title: "Status dos pedidos", layout: { x: 0, y: 2, w: 6, h: 5 }, query: { measures: ["orders"], dimensions: ["status"], limit: 20 } },
-      { id: crypto.randomUUID(), type: "area", title: "Volume por hora", layout: { x: 6, y: 2, w: 6, h: 5 }, query: { measures: ["orders"], dimensions: ["hour"], limit: 24 } },
-    ],
-  },
 ];
 
 function useDashboardHistory(initial: Widget[]) {
@@ -370,7 +335,7 @@ function DashboardEditorInner() {
   }, [history, widgets]);
 
   const applyTemplate = (templateId: string) => {
-    const tpl = TEMPLATES.find((t) => t.id === templateId);
+    const tpl = DASHBOARD_TEMPLATES.find((t) => t.id === templateId);
     if (!tpl) return;
     const ds = preferredDatasetId || visibleDatasets[0]?.id || datasetList[0]?.id;
     if (!ds) {
@@ -378,14 +343,9 @@ function DashboardEditorInner() {
       return;
     }
     const mdl = modelForDataset(semanticModels, ds);
-    const newWidgets = tpl.widgets().map((w) => ({
-      ...w,
-      id: crypto.randomUUID(),
-      query: { ...remapQueryToModel(w.query, w.type, mdl), dataset_id: ds },
-    }));
-    history.push(newWidgets);
+    history.push(instantiateTemplate(tpl, ds, mdl));
     setSelected(null);
-    toast.success(`Template ${tpl.name} aplicado`);
+    toast.success(`Painel «${tpl.name}» aplicado`);
   };
 
   const layout = useMemo<Layout[]>(() => widgets.map((w) => ({ i: w.id, x: w.layout.x, y: w.layout.y, w: w.layout.w, h: w.layout.h, minW: 2, minH: 2 })), [widgets]);
@@ -502,9 +462,12 @@ function DashboardEditorInner() {
             })}
           </div>
           <div className="mt-2 border-t border-line pt-3">
-            <span className="text-[12px] font-semibold uppercase text-mute">Templates</span>
+            <span className="text-[12px] font-semibold uppercase text-mute">Loja</span>
+            <Link href="/store" className="mt-1 mb-2 block text-[11px] text-primary hover:underline">
+              Ver todos os painéis prontos
+            </Link>
             <div className="mt-2 space-y-1">
-              {TEMPLATES.map((t) => (
+              {DASHBOARD_TEMPLATES.map((t) => (
                 <button
                   key={t.id}
                   onClick={() => applyTemplate(t.id)}

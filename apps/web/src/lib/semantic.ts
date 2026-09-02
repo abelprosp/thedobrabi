@@ -147,11 +147,18 @@ export function remapQueryToModel(
   const measures = (query?.measures || []).map((m) => resolveMeasureName(model, m)).filter(Boolean);
   const dimensions = (query?.dimensions || []).map((d) => resolveDimensionName(model, d)).filter(Boolean);
   const kpiNoDims = type === "kpi" || type === "kpi_goal" || type === "metric_group" || type === "gauge";
+  const filters = (query?.filters || [])
+    .map((f) => {
+      const dimension = resolveDimensionName(model, f.dimension);
+      return dimension ? { ...f, dimension } : null;
+    })
+    .filter((f): f is NonNullable<typeof f> => f != null);
   return {
     ...query,
     dataset_id: query?.dataset_id,
     measures: measures.length ? measures : next.measures,
     dimensions: kpiNoDims ? [] : dimensions.length ? dimensions : next.dimensions,
+    filters: filters.length ? filters : undefined,
   };
 }
 
@@ -183,17 +190,87 @@ export function rebindQueryToLiveDataset(
 }
 
 function norm(s: string) {
-  return s.toLowerCase().trim().replace(/\s+/g, "_");
+  return s
+    .toLowerCase()
+    .trim()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "_");
 }
 
-function resolveMeasureName(model: SemanticModel | null | undefined, name: string): string {
+const MEASURE_ALIASES: string[][] = [
+  ["revenue", "receita", "sales", "vendas", "amount", "valor", "faturamento", "gmv", "billing", "turnover", "net_sales", "total"],
+  ["cost", "custo", "despesa", "expense", "custos", "despesas", "valor", "amount"],
+  ["margin", "margem", "lucro", "profit", "resultado", "ebitda", "result"],
+  ["orders", "pedidos", "order_count", "qty", "quantidade", "volume", "units", "unidades"],
+  ["customers", "clientes", "users", "usuarios", "accounts", "contas"],
+  ["headcount", "funcionarios", "employees", "colaboradores", "fte", "pessoas"],
+  ["salary", "salario", "folha", "payroll", "remuneracao"],
+  ["sessions", "sessoes", "visits", "visitas", "traffic", "trafego"],
+  ["conversion", "conversao", "cvr"],
+  ["churn", "cancelamentos", "churn_rate"],
+  ["mrr", "arr", "recorrencia", "recurring"],
+  ["inventory", "estoque", "stock", "on_hand"],
+  ["freight", "frete", "shipping", "logistica"],
+];
+
+const DIMENSION_ALIASES: string[][] = [
+  ["date", "data", "dia", "period", "periodo", "month", "mes", "year", "ano", "week", "semana", "ordem_mes"],
+  ["region", "regiao", "uf", "estado", "cidade", "city", "country", "pais", "territorio"],
+  ["product", "produto", "sku", "item", "item_name"],
+  ["category", "categoria", "linha", "rubrica", "classificacao", "segmento", "segment"],
+  ["customer", "cliente", "account", "conta"],
+  ["sales_rep", "vendedor", "seller", "representante", "owner", "agente"],
+  ["channel", "canal", "origem", "source", "utm"],
+  ["status", "situacao", "etapa", "stage", "pipeline"],
+  ["natureza", "tipo", "type", "kind"],
+  ["company", "empresa", "filial", "loja", "store", "unidade", "branch"],
+  ["department", "departamento", "area", "cargo", "role", "funcao", "team", "time"],
+  ["campaign", "campanha", "adset", "ad"],
+  ["warehouse", "deposito", "armazem", "cd"],
+  ["supplier", "fornecedor", "vendor"],
+];
+
+function aliasGroup(groups: string[][], name: string): string[] | undefined {
+  const n = norm(name);
+  return groups.find((g) => g.some((a) => norm(a) === n));
+}
+
+function keysMatch(candidate: string, wanted: string, group?: string[]) {
+  const c = norm(candidate);
+  const w = norm(wanted);
+  if (!c) return false;
+  if (c === w) return true;
+  if (group?.some((a) => norm(a) === c)) return true;
+  if (c.includes(w) || (w.includes(c) && c.length >= 3)) return true;
+  if (group?.some((a) => {
+    const an = norm(a);
+    return an.length >= 3 && (c.includes(an) || an.includes(c));
+  })) return true;
+  return false;
+}
+
+export function resolveMeasureName(model: SemanticModel | null | undefined, name: string): string {
   if (!name || !model?.measures?.length) return "";
-  const hit = model.measures.find((m) => norm(measureKey(m)) === norm(name) || norm(m.column || "") === norm(name));
+  const n = norm(name);
+  const exact = model.measures.find((m) => norm(measureKey(m)) === n || norm(m.column || "") === n);
+  if (exact) return measureKey(exact);
+  const group = aliasGroup(MEASURE_ALIASES, name);
+  const ranked = [...model.measures].sort((a, b) => Number(isRowCountMeasure(model, measureKey(a))) - Number(isRowCountMeasure(model, measureKey(b))));
+  const hit = ranked.find((m) => keysMatch(measureKey(m), name, group) || keysMatch(m.column || "", name, group));
   return hit ? measureKey(hit) : "";
 }
 
-function resolveDimensionName(model: SemanticModel | null | undefined, name: string): string {
+export function resolveDimensionName(model: SemanticModel | null | undefined, name: string): string {
   if (!name || !model?.dimensions?.length) return "";
-  const hit = model.dimensions.find((d) => norm(dimensionKey(d)) === norm(name) || norm(d.name || "") === norm(name));
+  const n = norm(name);
+  const exact = model.dimensions.find((d) => norm(dimensionKey(d)) === n || norm(d.name || "") === n);
+  if (exact) return dimensionKey(exact);
+  if (aliasGroup(DIMENSION_ALIASES, name)?.includes("date") || ["date", "data", "mes", "month"].includes(n)) {
+    const time = timeDimension(model);
+    if (time) return time;
+  }
+  const group = aliasGroup(DIMENSION_ALIASES, name);
+  const hit = model.dimensions.find((d) => keysMatch(dimensionKey(d), name, group) || keysMatch(d.name || "", name, group));
   return hit ? dimensionKey(hit) : "";
 }

@@ -6,6 +6,8 @@ import { Kpi } from "@/components/viz";
 import { toast } from "sonner";
 import { Button, Card, CardTitle, ErrorState, PageSkeleton } from "@/components/ui";
 import { OnboardingChecklist } from "@/components/onboarding";
+import Link from "next/link";
+import { Store } from "lucide-react";
 
 type Brief = {
   headline: string;
@@ -65,6 +67,17 @@ export default function OverviewPage() {
         </div>
       </section>
       <OnboardingChecklist />
+      <Link href="/store" className="block">
+        <Card className="flex items-center justify-between gap-4 transition hover:border-primary/30">
+          <div>
+            <div className="mb-1 text-[13px] font-medium text-mute">Loja de painéis</div>
+            <p className="text-sm text-ink">Financeiro, comercial, RH, e-commerce e mais — ative um painel pronto e só ligue o conjunto.</p>
+          </div>
+          <span className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-line bg-white px-4 py-2 text-sm font-medium text-ink">
+            <Store size={14} /> Abrir loja
+          </span>
+        </Card>
+      </Link>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Kpi label="Mudanças principais" value={String(brief?.major_changes?.length ?? 0)} />
         <Kpi label="Riscos" value={String(brief?.risks?.length ?? 0)} />

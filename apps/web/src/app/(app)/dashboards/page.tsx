@@ -5,7 +5,7 @@ import { api, normalizeArray } from "@/lib/api";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LayoutDashboard, Sparkles, Trash2, Wand2, X, AlertCircle, Loader2 } from "lucide-react";
+import { LayoutDashboard, Sparkles, Store, Trash2, Wand2, X, AlertCircle, Loader2 } from "lucide-react";
 import { Button, Card, EmptyState, ErrorState, PageHeader, PageSkeleton, Input, Select, Textarea, Skeleton, cn } from "@/components/ui";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { starterDashboardWidgets, type DatasetListItem } from "@/lib/semantic";
@@ -120,6 +120,11 @@ function DashboardsPageInner() {
         description="Visualize o negócio em painéis que usa todos os dias."
         actions={
           <>
+            <Link href="/store">
+              <Button variant="secondary">
+                <Store size={16} /> Loja de painéis
+              </Button>
+            </Link>
             <Button variant="secondary" onClick={() => ai.mutate()} busy={ai.isPending} className="text-accent">
               Construir com IA
             </Button>
@@ -142,6 +147,11 @@ function DashboardsPageInner() {
             description="Depois de ter dados e métricas, crie um painel executivo. Use a IA para gerar automaticamente KPIs, gráficos e tabelas."
             action={
               <div className="flex flex-wrap gap-2">
+                <Link href="/store">
+                  <Button variant="secondary">
+                    <Store size={16} /> Ativar painel pronto
+                  </Button>
+                </Link>
                 <Button data-onboarding="new-dashboard" onClick={() => create.mutate()} busy={create.isPending}>
                   Criar primeiro dashboard
                 </Button>

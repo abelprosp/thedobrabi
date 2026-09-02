@@ -7,6 +7,7 @@ import {
   Box,
   CreditCard,
   LayoutDashboard,
+  Store,
   LineChart,
   MessageSquare,
   Search,
@@ -38,6 +39,7 @@ const SIDEBAR_COLLAPSED_KEY = "thedobra.sidebar-collapsed";
 const nav = [
   { href: "/overview", label: "Visão geral", icon: Sparkles },
   { href: "/dashboards", label: "Dashboards", icon: LayoutDashboard },
+  { href: "/store", label: "Loja", icon: Store },
   { href: "/apps", label: "Apps", icon: Box },
   { href: "/ask", label: "Perguntar à TheDobra", icon: MessageSquare },
   { href: "/data", label: "Dados", icon: Database },
