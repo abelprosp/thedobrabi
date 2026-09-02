@@ -138,6 +138,38 @@ export function starterDashboardWidgets(datasetId: string, model: SemanticModel 
   ];
 }
 
+export type QueryJoinSpec = {
+  dataset_id: string;
+  from_column: string;
+  to_column: string;
+  match?: "both" | "all_left";
+};
+
+export type RemappedQuery = {
+  dataset_id?: string;
+  measures: string[];
+  dimensions: string[];
+  filters?: any[];
+  joins?: QueryJoinSpec[];
+  limit?: number;
+  time_range?: { start?: string; end?: string };
+};
+
+function normalizeJoins(
+  joins: { dataset_id?: string; from_column?: string; to_column?: string; match?: string }[] | undefined,
+): QueryJoinSpec[] {
+  return (joins || [])
+    .filter((j): j is { dataset_id: string; from_column?: string; to_column?: string; match?: string } =>
+      typeof j?.dataset_id === "string" && j.dataset_id.length > 0,
+    )
+    .map((j) => ({
+      dataset_id: j.dataset_id,
+      from_column: j.from_column || "",
+      to_column: j.to_column || "",
+      match: j.match === "all_left" ? "all_left" : j.match === "both" ? "both" : undefined,
+    }));
+}
+
 export function remapQueryToModel(
   query: {
     measures?: string[];
@@ -145,13 +177,15 @@ export function remapQueryToModel(
     dataset_id?: string;
     limit?: number;
     filters?: any[];
+    time_range?: { start?: string; end?: string };
     joins?: { dataset_id?: string; from_column?: string; to_column?: string; match?: string }[];
   } | undefined,
   type: string,
   model: SemanticModel | null | undefined,
-) {
+): RemappedQuery {
   const next = widgetFieldDefaults(type, model);
-  const hasJoin = (query?.joins || []).some((j) => j?.dataset_id);
+  const joins = normalizeJoins(query?.joins);
+  const hasJoin = joins.length > 0;
   const split = (names: string[] | undefined, resolve: (n: string) => string) => {
     const local: string[] = [];
     const joined: string[] = [];
@@ -176,12 +210,13 @@ export function remapQueryToModel(
     })
     .filter((f): f is NonNullable<typeof f> => f != null);
   return {
-    ...query,
     dataset_id: query?.dataset_id,
     measures: (measures.local.length ? measures.local : next.measures).concat(measures.joined),
     dimensions: kpiNoDims ? [] : (dimensions.local.length ? dimensions.local : next.dimensions).concat(dimensions.joined),
     filters: filters.length ? filters : undefined,
-    joins: hasJoin ? query?.joins : undefined,
+    joins: hasJoin ? joins : undefined,
+    limit: query?.limit,
+    time_range: query?.time_range,
   };
 }
 
