@@ -1,0 +1,281 @@
+data,mes,ano,vendedor,regiao,produto,cliente,canal,quantidade,valor,customer_count,empresa
+2026-06-23,Junho,2026,Fábio Nunes,Centro-Oeste,Onboarding,Sul Minas,Orgânico,2,5058.73,1,Redorai
+2026-03-03,Março,2026,Bruno Lima,Sudeste,Add-on SSO,Maré Energia,Orgânico,1,297.55,1,Redorai
+2026-07-01,Julho,2026,Diego Alves,Sul,Plano Pro,Delta Log,Orgânico,1,1329.95,1,Redorai
+2026-07-24,Julho,2026,Carla Souza,Nordeste,Plano Start,Pampa Alimentos,Indicação,1,510.44,1,Redorai
+2026-05-17,Maio,2026,Fábio Nunes,Sul,Onboarding,Pulse Varejo,Google Ads,3,7184.23,1,Redorai
+2026-08-12,Agosto,2026,Fábio Nunes,Sul,Onboarding,Rio Branco,Parceiro,3,7810.93,1,Redorai
+2026-04-30,Abril,2026,Diego Alves,Nordeste,Add-on SSO,Atlas Ltda,Indicação,1,301.64,1,Redorai
+2026-06-24,Junho,2026,Ana Costa,Centro-Oeste,Plano Scale,Pampa Alimentos,Parceiro,1,3419.90,1,Redorai
+2026-04-20,Abril,2026,Diego Alves,Nordeste,Add-on SSO,Lumen Tech,Indicação,1,300.25,1,Redorai
+2026-01-29,Janeiro,2026,Diego Alves,Norte,Add-on API,Pampa Alimentos,Parceiro,1,343.84,1,Redorai
+2026-06-30,Junho,2026,Ana Costa,Centro-Oeste,Add-on SSO,Costa Farma,Orgânico,1,291.91,1,Redorai
+2026-06-26,Junho,2026,Eva Martins,Centro-Oeste,Plano Start,Delta Log,Google Ads,1,495.25,1,Redorai
+2026-04-02,Abril,2026,Fábio Nunes,Sul,Add-on API,Terra Nova,Meta Ads,1,396.93,1,Redorai
+2026-07-05,Julho,2026,Fábio Nunes,Sudeste,Plano Scale,Nimbus SA,Meta Ads,1,3877.98,1,Redorai
+2026-01-10,Janeiro,2026,Bruno Lima,Sudeste,Consultoria,Delta Log,Meta Ads,3,24624.70,1,Redorai
+2026-02-15,Fevereiro,2026,Bruno Lima,Norte,Add-on API,Pampa Alimentos,Parceiro,1,351.06,1,Redorai
+2026-03-12,Março,2026,Carla Souza,Centro-Oeste,Plano Scale,Delta Log,Direto,1,3619.27,1,Redorai
+2026-07-26,Julho,2026,Diego Alves,Sudeste,Plano Pro,Orbit Educação,Google Ads,1,1443.37,1,Redorai
+2026-07-06,Julho,2026,Carla Souza,Sudeste,Onboarding,Serra Café,Orgânico,3,7909.21,1,Redorai
+2026-02-02,Fevereiro,2026,Fábio Nunes,Nordeste,Suporte Premium,Boa Vista,Indicação,2,1467.85,1,Redorai
+2026-04-07,Abril,2026,Fábio Nunes,Sul,Plano Pro,Rio Branco,Orgânico,1,1305.42,1,Redorai
+2026-05-25,Maio,2026,Bruno Lima,Sudeste,Consultoria,Céu Soft,Direto,3,26171.85,1,Redorai
+2026-04-16,Abril,2026,Bruno Lima,Sudeste,Plano Pro,Nimbus SA,Meta Ads,1,1353.97,1,Redorai
+2026-01-31,Janeiro,2026,Bruno Lima,Norte,Plano Pro,Orbit Educação,Indicação,1,1155.62,1,Redorai
+2026-06-22,Junho,2026,Fábio Nunes,Sul,Onboarding,Maré Energia,Direto,3,7199.27,1,Redorai
+2026-05-07,Maio,2026,Ana Costa,Nordeste,Onboarding,Lumen Tech,Indicação,2,4972.35,1,Redorai
+2026-03-03,Março,2026,Fábio Nunes,Nordeste,Consultoria,Sul Minas,Direto,1,8774.22,1,Redorai
+2026-04-13,Abril,2026,Bruno Lima,Sudeste,Add-on SSO,Céu Soft,Orgânico,1,294.72,1,Redorai
+2026-06-15,Junho,2026,Ana Costa,Nordeste,Plano Start,Verde Agro,Google Ads,1,504.06,1,Redorai
+2026-02-23,Fevereiro,2026,Eva Martins,Sul,Plano Pro,Boa Vista,Google Ads,1,1197.35,1,Redorai
+2026-03-02,Março,2026,Eva Martins,Sudeste,Consultoria,Costa Farma,Google Ads,1,9333.90,1,Redorai
+2026-05-20,Maio,2026,Bruno Lima,Sudeste,Add-on SSO,Atlas Ltda,Google Ads,1,275.93,1,Redorai
+2026-07-23,Julho,2026,Eva Martins,Nordeste,Add-on API,Atlas Ltda,Google Ads,1,411.32,1,Redorai
+2026-02-03,Fevereiro,2026,Ana Costa,Sudeste,Onboarding,Rio Branco,Indicação,3,6937.66,1,Redorai
+2026-05-13,Maio,2026,Diego Alves,Norte,Plano Pro,Verde Agro,Parceiro,1,1231.09,1,Redorai
+2026-07-21,Julho,2026,Diego Alves,Sudeste,Add-on SSO,Nimbus SA,Indicação,1,324.08,1,Redorai
+2026-04-21,Abril,2026,Diego Alves,Centro-Oeste,Plano Pro,Forge Engenharia,Orgânico,1,1267.05,1,Redorai
+2026-02-08,Fevereiro,2026,Bruno Lima,Nordeste,Plano Pro,Terra Nova,Direto,1,1170.91,1,Redorai
+2026-07-03,Julho,2026,Eva Martins,Norte,Consultoria,Delta Log,Indicação,2,19234.67,1,Redorai
+2026-04-22,Abril,2026,Fábio Nunes,Sudeste,Plano Pro,Sul Minas,Direto,1,1337.15,1,Redorai
+2026-04-22,Abril,2026,Diego Alves,Nordeste,Suporte Premium,Céu Soft,Indicação,1,783.36,1,Redorai
+2026-01-26,Janeiro,2026,Carla Souza,Nordeste,Consultoria,Pampa Alimentos,Google Ads,2,16319.29,1,Redorai
+2026-05-03,Maio,2026,Ana Costa,Sudeste,Plano Pro,Forge Engenharia,Indicação,1,1237.96,1,Redorai
+2026-07-10,Julho,2026,Eva Martins,Sudeste,Consultoria,Boa Vista,Parceiro,1,9671.29,1,Redorai
+2026-06-22,Junho,2026,Diego Alves,Nordeste,Plano Pro,Maré Energia,Direto,1,1232.14,1,Redorai
+2026-03-16,Março,2026,Carla Souza,Sudeste,Add-on SSO,Boa Vista,Parceiro,1,281.67,1,Redorai
+2026-06-19,Junho,2026,Ana Costa,Nordeste,Suporte Premium,Sul Minas,Meta Ads,1,759.58,1,Redorai
+2026-03-14,Março,2026,Diego Alves,Norte,Add-on API,Terra Nova,Parceiro,1,396.82,1,Redorai
+2026-05-24,Maio,2026,Eva Martins,Nordeste,Plano Start,Atlas Ltda,Google Ads,1,478.89,1,Redorai
+2026-07-16,Julho,2026,Carla Souza,Nordeste,Add-on SSO,Atlas Ltda,Google Ads,1,324.78,1,Redorai
+2026-05-26,Maio,2026,Bruno Lima,Sudeste,Onboarding,Forge Engenharia,Direto,1,2507.62,1,Redorai
+2026-04-08,Abril,2026,Carla Souza,Sul,Onboarding,Pampa Alimentos,Meta Ads,2,5110.80,1,Redorai
+2026-07-19,Julho,2026,Ana Costa,Sul,Plano Pro,Pulse Varejo,Parceiro,1,1330.47,1,Redorai
+2026-01-22,Janeiro,2026,Diego Alves,Centro-Oeste,Add-on SSO,Rio Branco,Parceiro,1,259.49,1,Redorai
+2026-03-12,Março,2026,Eva Martins,Sudeste,Add-on API,Pampa Alimentos,Indicação,1,374.82,1,Redorai
+2026-06-24,Junho,2026,Fábio Nunes,Nordeste,Suporte Premium,Nimbus SA,Google Ads,3,2345.18,1,Redorai
+2026-06-04,Junho,2026,Ana Costa,Sul,Plano Start,Delta Log,Google Ads,1,503.10,1,Redorai
+2026-07-16,Julho,2026,Carla Souza,Nordeste,Add-on SSO,Helix Saúde,Orgânico,1,313.12,1,Redorai
+2026-04-22,Abril,2026,Bruno Lima,Centro-Oeste,Plano Scale,Sul Minas,Direto,1,3395.81,1,Redorai
+2026-05-25,Maio,2026,Diego Alves,Sudeste,Consultoria,Maré Energia,Orgânico,1,8864.18,1,Redorai
+2026-01-21,Janeiro,2026,Diego Alves,Norte,Consultoria,Serra Café,Direto,3,24366.76,1,Redorai
+2026-03-17,Março,2026,Diego Alves,Sudeste,Plano Pro,Aurora Moda,Google Ads,1,1328.87,1,Redorai
+2026-06-09,Junho,2026,Carla Souza,Sudeste,Suporte Premium,Maré Energia,Orgânico,3,2309.17,1,Redorai
+2026-06-01,Junho,2026,Ana Costa,Centro-Oeste,Onboarding,Delta Log,Direto,3,7379.63,1,Redorai
+2026-03-28,Março,2026,Ana Costa,Norte,Plano Scale,Helix Saúde,Parceiro,1,3493.47,1,Redorai
+2026-08-21,Agosto,2026,Fábio Nunes,Sul,Consultoria,Verde Agro,Orgânico,2,18544.32,1,Redorai
+2026-02-21,Fevereiro,2026,Eva Martins,Sul,Plano Scale,Forge Engenharia,Google Ads,1,3282.75,1,Redorai
+2026-06-11,Junho,2026,Eva Martins,Norte,Suporte Premium,Céu Soft,Direto,2,1647.02,1,Redorai
+2026-05-26,Maio,2026,Carla Souza,Sul,Consultoria,Céu Soft,Orgânico,3,26617.02,1,Redorai
+2026-06-12,Junho,2026,Carla Souza,Norte,Add-on SSO,Nimbus SA,Meta Ads,1,290.21,1,Redorai
+2026-03-22,Março,2026,Ana Costa,Sudeste,Suporte Premium,Pampa Alimentos,Meta Ads,2,1513.12,1,Redorai
+2026-08-11,Agosto,2026,Eva Martins,Norte,Plano Pro,Casa Norte,Indicação,1,1388.00,1,Redorai
+2026-05-23,Maio,2026,Diego Alves,Norte,Plano Start,Lumen Tech,Meta Ads,1,495.15,1,Redorai
+2026-05-10,Maio,2026,Ana Costa,Centro-Oeste,Plano Scale,Helix Saúde,Meta Ads,1,3658.35,1,Redorai
+2026-01-23,Janeiro,2026,Ana Costa,Sul,Plano Scale,Céu Soft,Indicação,1,3148.56,1,Redorai
+2026-06-07,Junho,2026,Carla Souza,Nordeste,Plano Scale,Delta Log,Indicação,1,3458.16,1,Redorai
+2026-03-29,Março,2026,Fábio Nunes,Nordeste,Plano Start,Forge Engenharia,Meta Ads,1,470.13,1,Redorai
+2026-06-24,Junho,2026,Carla Souza,Norte,Onboarding,Orbit Educação,Meta Ads,2,4790.75,1,Redorai
+2026-06-20,Junho,2026,Carla Souza,Nordeste,Plano Scale,Serra Café,Google Ads,1,3523.17,1,Redorai
+2026-01-23,Janeiro,2026,Eva Martins,Centro-Oeste,Add-on SSO,Aurora Moda,Google Ads,1,265.44,1,Redorai
+2026-08-02,Agosto,2026,Fábio Nunes,Centro-Oeste,Plano Pro,Casa Norte,Meta Ads,1,1326.08,1,Redorai
+2026-03-22,Março,2026,Bruno Lima,Nordeste,Plano Scale,Rio Branco,Google Ads,1,3394.56,1,Redorai
+2026-02-06,Fevereiro,2026,Ana Costa,Nordeste,Plano Scale,Helix Saúde,Parceiro,1,3226.08,1,Redorai
+2026-08-03,Agosto,2026,Fábio Nunes,Nordeste,Plano Start,Terra Nova,Google Ads,1,534.35,1,Redorai
+2026-02-10,Fevereiro,2026,Bruno Lima,Norte,Plano Scale,Pulse Varejo,Direto,1,3121.42,1,Redorai
+2026-04-17,Abril,2026,Fábio Nunes,Sul,Consultoria,Céu Soft,Parceiro,3,26125.76,1,Redorai
+2026-07-12,Julho,2026,Eva Martins,Sul,Suporte Premium,Delta Log,Indicação,1,887.67,1,Redorai
+2026-02-20,Fevereiro,2026,Eva Martins,Centro-Oeste,Consultoria,Céu Soft,Meta Ads,3,24698.33,1,Redorai
+2026-05-10,Maio,2026,Bruno Lima,Norte,Onboarding,Orbit Educação,Meta Ads,1,2388.04,1,Redorai
+2026-05-05,Maio,2026,Ana Costa,Norte,Consultoria,Helix Saúde,Meta Ads,3,25588.95,1,Redorai
+2026-02-12,Fevereiro,2026,Diego Alves,Norte,Add-on SSO,Orbit Educação,Indicação,1,250.34,1,Redorai
+2026-08-23,Agosto,2026,Diego Alves,Nordeste,Add-on API,Atlas Ltda,Indicação,1,402.38,1,Redorai
+2026-05-10,Maio,2026,Diego Alves,Sudeste,Consultoria,Pampa Alimentos,Google Ads,1,8480.09,1,Redorai
+2026-08-28,Agosto,2026,Fábio Nunes,Nordeste,Plano Pro,Orbit Educação,Google Ads,1,1328.88,1,Redorai
+2026-08-24,Agosto,2026,Bruno Lima,Centro-Oeste,Suporte Premium,Céu Soft,Parceiro,3,2432.96,1,Redorai
+2026-01-22,Janeiro,2026,Carla Souza,Sul,Plano Start,Orbit Educação,Parceiro,1,460.41,1,Redorai
+2026-06-06,Junho,2026,Carla Souza,Sul,Onboarding,Delta Log,Orgânico,1,2386.94,1,Redorai
+2026-04-19,Abril,2026,Ana Costa,Centro-Oeste,Suporte Premium,Terra Nova,Parceiro,1,751.80,1,Redorai
+2026-05-13,Maio,2026,Fábio Nunes,Sul,Add-on API,Delta Log,Indicação,1,370.56,1,Redorai
+2026-04-02,Abril,2026,Eva Martins,Centro-Oeste,Add-on API,Pulse Varejo,Direto,1,396.56,1,Redorai
+2026-05-16,Maio,2026,Eva Martins,Norte,Consultoria,Casa Norte,Parceiro,1,8948.20,1,Redorai
+2026-04-11,Abril,2026,Fábio Nunes,Centro-Oeste,Suporte Premium,Pampa Alimentos,Meta Ads,1,809.54,1,Redorai
+2026-04-03,Abril,2026,Carla Souza,Sul,Plano Pro,Helix Saúde,Parceiro,1,1320.34,1,Redorai
+2026-03-28,Março,2026,Ana Costa,Nordeste,Plano Scale,Sul Minas,Meta Ads,1,3599.41,1,Redorai
+2026-02-15,Fevereiro,2026,Diego Alves,Sul,Suporte Premium,Orbit Educação,Orgânico,3,2179.08,1,Redorai
+2026-04-29,Abril,2026,Carla Souza,Sul,Plano Start,Nimbus SA,Google Ads,1,508.90,1,Redorai
+2026-03-23,Março,2026,Eva Martins,Centro-Oeste,Add-on SSO,Sul Minas,Indicação,1,282.85,1,Redorai
+2026-07-13,Julho,2026,Carla Souza,Nordeste,Add-on API,Nimbus SA,Direto,1,414.12,1,Redorai
+2026-02-02,Fevereiro,2026,Diego Alves,Centro-Oeste,Consultoria,Serra Café,Meta Ads,2,16778.91,1,Redorai
+2026-05-09,Maio,2026,Eva Martins,Nordeste,Suporte Premium,Forge Engenharia,Direto,2,1568.07,1,Redorai
+2026-04-22,Abril,2026,Eva Martins,Nordeste,Plano Scale,Aurora Moda,Orgânico,1,3343.44,1,Redorai
+2026-06-20,Junho,2026,Carla Souza,Centro-Oeste,Add-on SSO,Terra Nova,Direto,1,287.86,1,Redorai
+2026-06-27,Junho,2026,Diego Alves,Sudeste,Suporte Premium,Pampa Alimentos,Parceiro,2,1658.71,1,Redorai
+2026-03-13,Março,2026,Ana Costa,Centro-Oeste,Plano Start,Pampa Alimentos,Parceiro,1,504.75,1,Redorai
+2026-06-24,Junho,2026,Ana Costa,Sul,Plano Scale,Terra Nova,Direto,1,3588.18,1,Redorai
+2026-01-10,Janeiro,2026,Ana Costa,Sul,Plano Scale,Pampa Alimentos,Meta Ads,1,3104.20,1,Redorai
+2026-05-27,Maio,2026,Eva Martins,Sul,Plano Start,Céu Soft,Meta Ads,1,483.73,1,Redorai
+2026-07-16,Julho,2026,Eva Martins,Sul,Plano Pro,Casa Norte,Meta Ads,1,1378.99,1,Redorai
+2026-06-17,Junho,2026,Bruno Lima,Sudeste,Add-on SSO,Atlas Ltda,Direto,1,280.90,1,Redorai
+2026-05-14,Maio,2026,Ana Costa,Nordeste,Onboarding,Costa Farma,Direto,3,7459.70,1,Redorai
+2026-06-07,Junho,2026,Fábio Nunes,Centro-Oeste,Add-on SSO,Lumen Tech,Orgânico,1,279.44,1,Redorai
+2026-01-20,Janeiro,2026,Fábio Nunes,Centro-Oeste,Suporte Premium,Forge Engenharia,Direto,1,744.24,1,Redorai
+2026-03-24,Março,2026,Ana Costa,Norte,Consultoria,Sul Minas,Meta Ads,3,27744.86,1,Redorai
+2026-08-07,Agosto,2026,Fábio Nunes,Sul,Plano Scale,Pampa Alimentos,Parceiro,1,3665.26,1,Redorai
+2026-02-22,Fevereiro,2026,Bruno Lima,Centro-Oeste,Plano Scale,Atlas Ltda,Meta Ads,1,3157.97,1,Redorai
+2026-04-06,Abril,2026,Bruno Lima,Norte,Suporte Premium,Forge Engenharia,Orgânico,3,2324.80,1,Redorai
+2026-07-04,Julho,2026,Diego Alves,Centro-Oeste,Suporte Premium,Boa Vista,Orgânico,3,2463.70,1,Redorai
+2026-03-24,Março,2026,Diego Alves,Centro-Oeste,Plano Pro,Casa Norte,Meta Ads,1,1242.06,1,Redorai
+2026-08-02,Agosto,2026,Bruno Lima,Centro-Oeste,Plano Scale,Casa Norte,Orgânico,1,3894.11,1,Redorai
+2026-05-14,Maio,2026,Carla Souza,Sul,Plano Scale,Pulse Varejo,Meta Ads,1,3641.72,1,Redorai
+2026-02-28,Fevereiro,2026,Carla Souza,Sudeste,Consultoria,Costa Farma,Google Ads,3,24354.54,1,Redorai
+2026-05-23,Maio,2026,Bruno Lima,Nordeste,Add-on SSO,Terra Nova,Parceiro,1,278.21,1,Redorai
+2026-06-15,Junho,2026,Eva Martins,Norte,Plano Scale,Orbit Educação,Google Ads,1,3545.40,1,Redorai
+2026-07-05,Julho,2026,Ana Costa,Sudeste,Consultoria,Forge Engenharia,Orgânico,3,30129.43,1,Redorai
+2026-07-18,Julho,2026,Fábio Nunes,Sul,Add-on SSO,Boa Vista,Indicação,1,316.90,1,Redorai
+2026-01-09,Janeiro,2026,Eva Martins,Nordeste,Suporte Premium,Delta Log,Indicação,3,2078.58,1,Redorai
+2026-07-27,Julho,2026,Diego Alves,Sudeste,Onboarding,Nimbus SA,Google Ads,2,5367.39,1,Redorai
+2026-05-05,Maio,2026,Carla Souza,Norte,Suporte Premium,Orbit Educação,Meta Ads,1,818.56,1,Redorai
+2026-03-24,Março,2026,Bruno Lima,Nordeste,Consultoria,Casa Norte,Parceiro,2,17099.01,1,Redorai
+2026-03-04,Março,2026,Carla Souza,Centro-Oeste,Suporte Premium,Verde Agro,Google Ads,1,758.15,1,Redorai
+2026-03-17,Março,2026,Diego Alves,Sul,Onboarding,Pulse Varejo,Meta Ads,3,7825.31,1,Redorai
+2026-07-05,Julho,2026,Bruno Lima,Centro-Oeste,Consultoria,Casa Norte,Indicação,1,9610.81,1,Redorai
+2026-03-21,Março,2026,Ana Costa,Centro-Oeste,Suporte Premium,Casa Norte,Indicação,1,826.87,1,Redorai
+2026-02-26,Fevereiro,2026,Ana Costa,Nordeste,Consultoria,Rio Branco,Parceiro,1,8316.25,1,Redorai
+2026-06-18,Junho,2026,Eva Martins,Sudeste,Suporte Premium,Helix Saúde,Indicação,2,1522.16,1,Redorai
+2026-03-10,Março,2026,Carla Souza,Sudeste,Consultoria,Serra Café,Orgânico,2,17925.10,1,Redorai
+2026-02-20,Fevereiro,2026,Carla Souza,Sudeste,Consultoria,Serra Café,Parceiro,3,23910.70,1,Redorai
+2026-05-22,Maio,2026,Eva Martins,Norte,Add-on SSO,Helix Saúde,Google Ads,1,303.78,1,Redorai
+2026-04-12,Abril,2026,Eva Martins,Nordeste,Consultoria,Orbit Educação,Google Ads,2,17982.38,1,Redorai
+2026-04-14,Abril,2026,Ana Costa,Sudeste,Plano Start,Orbit Educação,Direto,1,481.82,1,Redorai
+2026-05-03,Maio,2026,Eva Martins,Norte,Suporte Premium,Orbit Educação,Meta Ads,1,824.08,1,Redorai
+2026-03-24,Março,2026,Diego Alves,Norte,Plano Scale,Delta Log,Parceiro,1,3432.89,1,Redorai
+2026-08-02,Agosto,2026,Eva Martins,Nordeste,Suporte Premium,Rio Branco,Orgânico,3,2525.90,1,Redorai
+2026-06-23,Junho,2026,Diego Alves,Norte,Plano Pro,Delta Log,Direto,1,1338.00,1,Redorai
+2026-06-12,Junho,2026,Eva Martins,Centro-Oeste,Plano Start,Costa Farma,Direto,1,503.86,1,Redorai
+2026-07-19,Julho,2026,Fábio Nunes,Sudeste,Add-on API,Boa Vista,Indicação,1,407.32,1,Redorai
+2026-06-12,Junho,2026,Fábio Nunes,Sul,Onboarding,Nimbus SA,Parceiro,1,2612.05,1,Redorai
+2026-01-30,Janeiro,2026,Ana Costa,Centro-Oeste,Add-on API,Aurora Moda,Indicação,1,338.77,1,Redorai
+2026-06-27,Junho,2026,Diego Alves,Norte,Add-on API,Terra Nova,Indicação,1,404.54,1,Redorai
+2026-07-09,Julho,2026,Fábio Nunes,Sul,Plano Start,Casa Norte,Google Ads,1,532.42,1,Redorai
+2026-06-20,Junho,2026,Diego Alves,Nordeste,Suporte Premium,Pulse Varejo,Indicação,3,2467.67,1,Redorai
+2026-03-30,Março,2026,Fábio Nunes,Nordeste,Consultoria,Terra Nova,Indicação,3,25878.35,1,Redorai
+2026-03-06,Março,2026,Eva Martins,Nordeste,Add-on SSO,Verde Agro,Meta Ads,1,297.86,1,Redorai
+2026-07-01,Julho,2026,Fábio Nunes,Centro-Oeste,Add-on API,Aurora Moda,Indicação,1,414.83,1,Redorai
+2026-07-24,Julho,2026,Carla Souza,Sudeste,Add-on SSO,Boa Vista,Direto,1,314.55,1,Redorai
+2026-08-19,Agosto,2026,Bruno Lima,Nordeste,Onboarding,Nimbus SA,Meta Ads,2,5645.87,1,Redorai
+2026-01-22,Janeiro,2026,Fábio Nunes,Nordeste,Consultoria,Rio Branco,Google Ads,2,15542.71,1,Redorai
+2026-05-19,Maio,2026,Eva Martins,Nordeste,Add-on SSO,Orbit Educação,Orgânico,1,293.35,1,Redorai
+2026-06-01,Junho,2026,Bruno Lima,Sudeste,Add-on API,Casa Norte,Google Ads,1,395.38,1,Redorai
+2026-01-15,Janeiro,2026,Diego Alves,Nordeste,Plano Pro,Rio Branco,Orgânico,1,1182.04,1,Redorai
+2026-02-06,Fevereiro,2026,Eva Martins,Sul,Plano Start,Maré Energia,Direto,1,460.18,1,Redorai
+2026-08-14,Agosto,2026,Fábio Nunes,Sul,Suporte Premium,Delta Log,Meta Ads,2,1669.78,1,Redorai
+2026-01-17,Janeiro,2026,Fábio Nunes,Norte,Plano Pro,Verde Agro,Parceiro,1,1188.71,1,Redorai
+2026-08-07,Agosto,2026,Bruno Lima,Centro-Oeste,Plano Start,Pulse Varejo,Orgânico,1,555.51,1,Redorai
+2026-04-13,Abril,2026,Fábio Nunes,Nordeste,Suporte Premium,Nimbus SA,Orgânico,1,774.07,1,Redorai
+2026-06-05,Junho,2026,Carla Souza,Nordeste,Plano Pro,Céu Soft,Direto,1,1295.59,1,Redorai
+2026-05-08,Maio,2026,Eva Martins,Centro-Oeste,Plano Scale,Costa Farma,Google Ads,1,3597.78,1,Redorai
+2026-03-27,Março,2026,Fábio Nunes,Centro-Oeste,Plano Scale,Costa Farma,Direto,1,3380.48,1,Redorai
+2026-07-09,Julho,2026,Eva Martins,Sul,Consultoria,Pulse Varejo,Parceiro,2,19908.66,1,Redorai
+2026-08-19,Agosto,2026,Eva Martins,Nordeste,Onboarding,Forge Engenharia,Indicação,2,5491.40,1,Redorai
+2026-02-18,Fevereiro,2026,Diego Alves,Nordeste,Plano Scale,Verde Agro,Orgânico,1,3065.86,1,Redorai
+2026-03-03,Março,2026,Carla Souza,Nordeste,Suporte Premium,Boa Vista,Direto,2,1591.51,1,Redorai
+2026-03-09,Março,2026,Bruno Lima,Sudeste,Consultoria,Helix Saúde,Indicação,3,26184.17,1,Redorai
+2026-04-15,Abril,2026,Fábio Nunes,Sudeste,Add-on SSO,Delta Log,Meta Ads,1,293.32,1,Redorai
+2026-02-27,Fevereiro,2026,Diego Alves,Sul,Plano Scale,Céu Soft,Direto,1,3294.54,1,Redorai
+2026-04-07,Abril,2026,Eva Martins,Centro-Oeste,Onboarding,Sul Minas,Direto,3,7744.20,1,Redorai
+2026-07-16,Julho,2026,Fábio Nunes,Norte,Add-on API,Forge Engenharia,Parceiro,1,418.96,1,Redorai
+2026-07-01,Julho,2026,Eva Martins,Sudeste,Consultoria,Nimbus SA,Parceiro,1,9999.26,1,Redorai
+2026-02-22,Fevereiro,2026,Bruno Lima,Nordeste,Plano Scale,Casa Norte,Indicação,1,3020.46,1,Redorai
+2026-02-23,Fevereiro,2026,Eva Martins,Centro-Oeste,Suporte Premium,Nimbus SA,Indicação,1,684.83,1,Redorai
+2026-04-18,Abril,2026,Ana Costa,Norte,Suporte Premium,Céu Soft,Direto,3,2442.74,1,Redorai
+2026-07-06,Julho,2026,Diego Alves,Nordeste,Plano Start,Atlas Ltda,Direto,1,514.27,1,Redorai
+2026-01-20,Janeiro,2026,Diego Alves,Nordeste,Plano Start,Forge Engenharia,Parceiro,1,462.79,1,Redorai
+2026-08-18,Agosto,2026,Diego Alves,Sudeste,Plano Pro,Delta Log,Indicação,1,1348.61,1,Redorai
+2026-02-05,Fevereiro,2026,Diego Alves,Centro-Oeste,Onboarding,Serra Café,Indicação,2,4311.11,1,Redorai
+2026-06-20,Junho,2026,Fábio Nunes,Nordeste,Plano Scale,Helix Saúde,Google Ads,1,3662.00,1,Redorai
+2026-04-12,Abril,2026,Fábio Nunes,Sul,Plano Scale,Atlas Ltda,Orgânico,1,3656.99,1,Redorai
+2026-04-30,Abril,2026,Diego Alves,Sul,Onboarding,Verde Agro,Indicação,3,7384.62,1,Redorai
+2026-03-13,Março,2026,Fábio Nunes,Sudeste,Add-on API,Nimbus SA,Direto,1,386.85,1,Redorai
+2026-07-17,Julho,2026,Bruno Lima,Sul,Plano Start,Forge Engenharia,Orgânico,1,534.17,1,Redorai
+2026-04-26,Abril,2026,Bruno Lima,Sudeste,Plano Start,Serra Café,Indicação,1,476.98,1,Redorai
+2026-02-26,Fevereiro,2026,Bruno Lima,Norte,Plano Start,Delta Log,Google Ads,1,454.93,1,Redorai
+2026-07-08,Julho,2026,Eva Martins,Nordeste,Consultoria,Verde Agro,Meta Ads,3,29920.98,1,Redorai
+2026-06-20,Junho,2026,Diego Alves,Nordeste,Add-on API,Costa Farma,Orgânico,1,392.21,1,Redorai
+2026-06-02,Junho,2026,Fábio Nunes,Centro-Oeste,Plano Scale,Sul Minas,Indicação,1,3331.86,1,Redorai
+2026-03-31,Março,2026,Carla Souza,Centro-Oeste,Onboarding,Maré Energia,Google Ads,3,7349.92,1,Redorai
+2026-02-18,Fevereiro,2026,Bruno Lima,Nordeste,Suporte Premium,Orbit Educação,Indicação,1,740.49,1,Redorai
+2026-05-25,Maio,2026,Eva Martins,Norte,Onboarding,Orbit Educação,Indicação,2,4871.43,1,Redorai
+2026-02-23,Fevereiro,2026,Ana Costa,Centro-Oeste,Consultoria,Pampa Alimentos,Orgânico,3,24115.63,1,Redorai
+2026-08-02,Agosto,2026,Ana Costa,Nordeste,Add-on API,Serra Café,Direto,1,425.62,1,Redorai
+2026-01-12,Janeiro,2026,Bruno Lima,Norte,Plano Pro,Sul Minas,Google Ads,1,1158.61,1,Redorai
+2026-08-12,Agosto,2026,Ana Costa,Sul,Consultoria,Lumen Tech,Direto,2,18488.33,1,Redorai
+2026-07-14,Julho,2026,Fábio Nunes,Norte,Suporte Premium,Lumen Tech,Indicação,1,888.62,1,Redorai
+2026-05-23,Maio,2026,Diego Alves,Centro-Oeste,Consultoria,Sul Minas,Direto,2,17549.48,1,Redorai
+2026-03-09,Março,2026,Diego Alves,Centro-Oeste,Consultoria,Helix Saúde,Direto,3,26618.54,1,Redorai
+2026-08-04,Agosto,2026,Carla Souza,Nordeste,Consultoria,Maré Energia,Orgânico,1,9672.10,1,Redorai
+2026-02-27,Fevereiro,2026,Ana Costa,Nordeste,Plano Scale,Sul Minas,Parceiro,1,3165.86,1,Redorai
+2026-04-18,Abril,2026,Bruno Lima,Sul,Add-on SSO,Aurora Moda,Google Ads,1,286.52,1,Redorai
+2026-08-03,Agosto,2026,Diego Alves,Norte,Add-on API,Aurora Moda,Meta Ads,1,432.29,1,Redorai
+2026-05-07,Maio,2026,Bruno Lima,Nordeste,Suporte Premium,Pulse Varejo,Google Ads,2,1614.81,1,Redorai
+2026-05-07,Maio,2026,Eva Martins,Sudeste,Plano Scale,Casa Norte,Orgânico,1,3608.33,1,Redorai
+2026-01-21,Janeiro,2026,Ana Costa,Centro-Oeste,Plano Start,Orbit Educação,Direto,1,429.16,1,Redorai
+2026-07-02,Julho,2026,Ana Costa,Sul,Plano Scale,Casa Norte,Indicação,1,3721.41,1,Redorai
+2026-06-09,Junho,2026,Diego Alves,Sudeste,Suporte Premium,Atlas Ltda,Parceiro,3,2382.24,1,Redorai
+2026-01-05,Janeiro,2026,Eva Martins,Nordeste,Plano Start,Sul Minas,Meta Ads,1,419.71,1,Redorai
+2026-07-29,Julho,2026,Ana Costa,Sudeste,Onboarding,Casa Norte,Google Ads,1,2630.06,1,Redorai
+2026-06-09,Junho,2026,Carla Souza,Nordeste,Add-on SSO,Serra Café,Orgânico,1,286.32,1,Redorai
+2026-04-15,Abril,2026,Bruno Lima,Sul,Suporte Premium,Delta Log,Direto,3,2447.75,1,Redorai
+2026-01-22,Janeiro,2026,Ana Costa,Centro-Oeste,Plano Start,Serra Café,Indicação,1,443.32,1,Redorai
+2026-01-16,Janeiro,2026,Fábio Nunes,Sul,Plano Start,Forge Engenharia,Indicação,1,456.23,1,Redorai
+2026-06-16,Junho,2026,Ana Costa,Norte,Consultoria,Nimbus SA,Google Ads,3,25929.48,1,Redorai
+2026-08-12,Agosto,2026,Ana Costa,Sudeste,Suporte Premium,Costa Farma,Parceiro,2,1717.24,1,Redorai
+2026-01-10,Janeiro,2026,Carla Souza,Sudeste,Plano Scale,Lumen Tech,Parceiro,1,3029.24,1,Redorai
+2026-07-31,Julho,2026,Carla Souza,Sul,Onboarding,Boa Vista,Google Ads,1,2718.01,1,Redorai
+2026-08-07,Agosto,2026,Eva Martins,Nordeste,Onboarding,Serra Café,Direto,3,7808.36,1,Redorai
+2026-06-27,Junho,2026,Eva Martins,Nordeste,Plano Pro,Nimbus SA,Orgânico,1,1281.88,1,Redorai
+2026-08-04,Agosto,2026,Carla Souza,Norte,Plano Pro,Terra Nova,Parceiro,1,1378.81,1,Redorai
+2026-07-19,Julho,2026,Fábio Nunes,Nordeste,Consultoria,Céu Soft,Indicação,1,9350.69,1,Redorai
+2026-05-23,Maio,2026,Bruno Lima,Norte,Onboarding,Serra Café,Orgânico,2,5136.08,1,Redorai
+2026-03-18,Março,2026,Fábio Nunes,Sudeste,Add-on API,Forge Engenharia,Meta Ads,1,376.51,1,Redorai
+2026-07-03,Julho,2026,Fábio Nunes,Centro-Oeste,Plano Scale,Aurora Moda,Meta Ads,1,3620.90,1,Redorai
+2026-01-03,Janeiro,2026,Diego Alves,Nordeste,Add-on SSO,Costa Farma,Orgânico,1,251.41,1,Redorai
+2026-02-18,Fevereiro,2026,Eva Martins,Norte,Onboarding,Casa Norte,Indicação,2,4321.48,1,Redorai
+2026-01-24,Janeiro,2026,Ana Costa,Norte,Consultoria,Terra Nova,Meta Ads,3,24904.01,1,Redorai
+2026-01-05,Janeiro,2026,Diego Alves,Centro-Oeste,Add-on SSO,Forge Engenharia,Direto,1,271.47,1,Redorai
+2026-08-21,Agosto,2026,Eva Martins,Norte,Add-on API,Pulse Varejo,Direto,1,416.18,1,Redorai
+2026-02-06,Fevereiro,2026,Carla Souza,Nordeste,Add-on SSO,Rio Branco,Google Ads,1,249.60,1,Redorai
+2026-04-23,Abril,2026,Diego Alves,Nordeste,Add-on SSO,Rio Branco,Orgânico,1,285.97,1,Redorai
+2026-03-06,Março,2026,Eva Martins,Sul,Suporte Premium,Céu Soft,Orgânico,3,2283.61,1,Redorai
+2026-01-03,Janeiro,2026,Eva Martins,Centro-Oeste,Onboarding,Aurora Moda,Indicação,2,4425.63,1,Redorai
+2026-07-29,Julho,2026,Carla Souza,Nordeste,Plano Scale,Terra Nova,Direto,1,3656.44,1,Redorai
+2026-03-23,Março,2026,Diego Alves,Nordeste,Plano Scale,Delta Log,Direto,1,3558.04,1,Redorai
+2026-05-07,Maio,2026,Carla Souza,Centro-Oeste,Add-on API,Costa Farma,Indicação,1,384.74,1,Redorai
+2026-08-28,Agosto,2026,Eva Martins,Norte,Add-on API,Pulse Varejo,Direto,1,432.47,1,Redorai
+2026-01-08,Janeiro,2026,Bruno Lima,Centro-Oeste,Suporte Premium,Delta Log,Direto,3,2041.10,1,Redorai
+2026-08-07,Agosto,2026,Diego Alves,Sul,Onboarding,Delta Log,Google Ads,3,7899.67,1,Redorai
+2026-02-10,Fevereiro,2026,Ana Costa,Centro-Oeste,Onboarding,Terra Nova,Indicação,2,4537.01,1,Redorai
+2026-05-18,Maio,2026,Ana Costa,Nordeste,Onboarding,Sul Minas,Parceiro,3,7603.64,1,Redorai
+2026-01-23,Janeiro,2026,Bruno Lima,Nordeste,Plano Pro,Pulse Varejo,Direto,1,1174.08,1,Redorai
+2026-05-26,Maio,2026,Diego Alves,Sudeste,Onboarding,Atlas Ltda,Orgânico,2,4879.37,1,Redorai
+2026-05-12,Maio,2026,Diego Alves,Nordeste,Add-on API,Serra Café,Indicação,1,400.62,1,Redorai
+2026-06-01,Junho,2026,Carla Souza,Sudeste,Plano Scale,Rio Branco,Orgânico,1,3418.61,1,Redorai
+2026-08-25,Agosto,2026,Ana Costa,Sul,Plano Pro,Pampa Alimentos,Meta Ads,1,1371.34,1,Redorai
+2026-07-21,Julho,2026,Eva Martins,Centro-Oeste,Add-on API,Pampa Alimentos,Indicação,1,404.25,1,Redorai
+2026-07-05,Julho,2026,Ana Costa,Nordeste,Suporte Premium,Nimbus SA,Direto,2,1640.72,1,Redorai
+2026-08-07,Agosto,2026,Ana Costa,Sul,Consultoria,Verde Agro,Parceiro,3,27897.25,1,Redorai
+2026-02-11,Fevereiro,2026,Diego Alves,Centro-Oeste,Consultoria,Verde Agro,Indicação,3,24341.81,1,Redorai
+2026-02-18,Fevereiro,2026,Ana Costa,Norte,Onboarding,Lumen Tech,Indicação,2,4541.49,1,Redorai
+2026-04-11,Abril,2026,Fábio Nunes,Sul,Plano Start,Lumen Tech,Meta Ads,1,502.36,1,Redorai
+2026-07-28,Julho,2026,Eva Martins,Sudeste,Plano Pro,Sul Minas,Google Ads,1,1374.50,1,Redorai
+2026-02-21,Fevereiro,2026,Carla Souza,Centro-Oeste,Suporte Premium,Casa Norte,Direto,1,697.73,1,Redorai
+2026-04-11,Abril,2026,Ana Costa,Nordeste,Onboarding,Pampa Alimentos,Indicação,3,7588.02,1,Redorai
+2026-07-29,Julho,2026,Eva Martins,Norte,Add-on SSO,Forge Engenharia,Direto,1,301.74,1,Redorai
+2026-02-01,Fevereiro,2026,Carla Souza,Sudeste,Add-on API,Pulse Varejo,Meta Ads,1,357.79,1,Redorai
+2026-05-12,Maio,2026,Eva Martins,Sul,Onboarding,Boa Vista,Indicação,2,4961.52,1,Redorai
+2026-05-06,Maio,2026,Eva Martins,Sul,Plano Scale,Rio Branco,Meta Ads,1,3364.46,1,Redorai
+2026-03-23,Março,2026,Ana Costa,Nordeste,Suporte Premium,Atlas Ltda,Indicação,3,2283.86,1,Redorai
+2026-07-29,Julho,2026,Eva Martins,Centro-Oeste,Onboarding,Maré Energia,Direto,3,8093.30,1,Redorai
+2026-07-02,Julho,2026,Bruno Lima,Sudeste,Suporte Premium,Boa Vista,Orgânico,2,1756.89,1,Redorai
+2026-02-27,Fevereiro,2026,Ana Costa,Nordeste,Add-on SSO,Verde Agro,Parceiro,1,255.48,1,Redorai

@@ -1,0 +1,97 @@
+data,mes,ano,categoria,linha,natureza,valor,orcado,empresa
+2025-09-01,Setembro,2025,Receita,Receita bruta,Receita,75512.99,85020.00,Redorai
+2025-09-01,Setembro,2025,Receita,Receita serviços,Receita,24610.48,26160.00,Redorai
+2025-09-01,Setembro,2025,Pessoal,Folha CLT,Despesa,30312.84,33790.00,Redorai
+2025-09-01,Setembro,2025,Pessoal,Benefícios,Despesa,5068.83,4578.00,Redorai
+2025-09-01,Setembro,2025,Operação,Infra e cloud,Despesa,6691.04,5886.00,Redorai
+2025-09-01,Setembro,2025,Operação,Aluguel,Despesa,5880.65,5232.00,Redorai
+2025-09-01,Setembro,2025,Aquisição,Mídia paga,Despesa,8440.21,9810.00,Redorai
+2025-09-01,Setembro,2025,Aquisição,Eventos,Despesa,2233.14,1962.00,Redorai
+2025-10-01,Outubro,2025,Receita,Receita bruta,Receita,86472.02,85800.00,Redorai
+2025-10-01,Outubro,2025,Receita,Receita serviços,Receita,23161.92,26400.00,Redorai
+2025-10-01,Outubro,2025,Pessoal,Folha CLT,Despesa,34983.21,34100.00,Redorai
+2025-10-01,Outubro,2025,Pessoal,Benefícios,Despesa,4893.70,4620.00,Redorai
+2025-10-01,Outubro,2025,Operação,Infra e cloud,Despesa,6055.94,5940.00,Redorai
+2025-10-01,Outubro,2025,Operação,Aluguel,Despesa,5287.67,5280.00,Redorai
+2025-10-01,Outubro,2025,Aquisição,Mídia paga,Despesa,8677.51,9900.00,Redorai
+2025-10-01,Outubro,2025,Aquisição,Eventos,Despesa,1872.01,1980.00,Redorai
+2025-11-01,Novembro,2025,Receita,Receita bruta,Receita,78088.60,86580.00,Redorai
+2025-11-01,Novembro,2025,Receita,Receita serviços,Receita,25365.79,26640.00,Redorai
+2025-11-01,Novembro,2025,Pessoal,Folha CLT,Despesa,39291.78,34410.00,Redorai
+2025-11-01,Novembro,2025,Pessoal,Benefícios,Despesa,4732.43,4662.00,Redorai
+2025-11-01,Novembro,2025,Operação,Infra e cloud,Despesa,5210.21,5994.00,Redorai
+2025-11-01,Novembro,2025,Operação,Aluguel,Despesa,5656.24,5328.00,Redorai
+2025-11-01,Novembro,2025,Aquisição,Mídia paga,Despesa,11146.65,9990.00,Redorai
+2025-11-01,Novembro,2025,Aquisição,Eventos,Despesa,2172.09,1998.00,Redorai
+2025-12-01,Dezembro,2025,Receita,Receita bruta,Receita,83816.68,87360.00,Redorai
+2025-12-01,Dezembro,2025,Receita,Receita serviços,Receita,23234.42,26880.00,Redorai
+2025-12-01,Dezembro,2025,Pessoal,Folha CLT,Despesa,34392.14,34720.00,Redorai
+2025-12-01,Dezembro,2025,Pessoal,Benefícios,Despesa,4383.68,4704.00,Redorai
+2025-12-01,Dezembro,2025,Operação,Infra e cloud,Despesa,6829.70,6048.00,Redorai
+2025-12-01,Dezembro,2025,Operação,Aluguel,Despesa,4818.55,5376.00,Redorai
+2025-12-01,Dezembro,2025,Aquisição,Mídia paga,Despesa,11723.64,10080.00,Redorai
+2025-12-01,Dezembro,2025,Aquisição,Eventos,Despesa,2151.61,2016.00,Redorai
+2026-01-01,Janeiro,2026,Receita,Receita bruta,Receita,63036.47,78780.00,Redorai
+2026-01-01,Janeiro,2026,Receita,Receita serviços,Receita,24711.11,24240.00,Redorai
+2026-01-01,Janeiro,2026,Pessoal,Folha CLT,Despesa,29850.82,31310.00,Redorai
+2026-01-01,Janeiro,2026,Pessoal,Benefícios,Despesa,4605.67,4242.00,Redorai
+2026-01-01,Janeiro,2026,Operação,Infra e cloud,Despesa,5415.59,5454.00,Redorai
+2026-01-01,Janeiro,2026,Operação,Aluguel,Despesa,4917.81,4848.00,Redorai
+2026-01-01,Janeiro,2026,Aquisição,Mídia paga,Despesa,9190.99,9090.00,Redorai
+2026-01-01,Janeiro,2026,Aquisição,Eventos,Despesa,1829.22,1818.00,Redorai
+2026-02-01,Fevereiro,2026,Receita,Receita bruta,Receita,63451.58,79560.00,Redorai
+2026-02-01,Fevereiro,2026,Receita,Receita serviços,Receita,19840.45,24480.00,Redorai
+2026-02-01,Fevereiro,2026,Pessoal,Folha CLT,Despesa,33257.94,31620.00,Redorai
+2026-02-01,Fevereiro,2026,Pessoal,Benefícios,Despesa,4707.32,4284.00,Redorai
+2026-02-01,Fevereiro,2026,Operação,Infra e cloud,Despesa,4977.48,5508.00,Redorai
+2026-02-01,Fevereiro,2026,Operação,Aluguel,Despesa,4319.93,4896.00,Redorai
+2026-02-01,Fevereiro,2026,Aquisição,Mídia paga,Despesa,10164.61,9180.00,Redorai
+2026-02-01,Fevereiro,2026,Aquisição,Eventos,Despesa,2080.94,1836.00,Redorai
+2026-03-01,Março,2026,Receita,Receita bruta,Receita,77830.18,80340.00,Redorai
+2026-03-01,Março,2026,Receita,Receita serviços,Receita,27490.36,24720.00,Redorai
+2026-03-01,Março,2026,Pessoal,Folha CLT,Despesa,30189.66,31930.00,Redorai
+2026-03-01,Março,2026,Pessoal,Benefícios,Despesa,3723.91,4326.00,Redorai
+2026-03-01,Março,2026,Operação,Infra e cloud,Despesa,6075.57,5562.00,Redorai
+2026-03-01,Março,2026,Operação,Aluguel,Despesa,5576.79,4944.00,Redorai
+2026-03-01,Março,2026,Aquisição,Mídia paga,Despesa,9692.48,9270.00,Redorai
+2026-03-01,Março,2026,Aquisição,Eventos,Despesa,1985.97,1854.00,Redorai
+2026-04-01,Abril,2026,Receita,Receita bruta,Receita,92223.98,81120.00,Redorai
+2026-04-01,Abril,2026,Receita,Receita serviços,Receita,25032.26,24960.00,Redorai
+2026-04-01,Abril,2026,Pessoal,Folha CLT,Despesa,32723.25,32240.00,Redorai
+2026-04-01,Abril,2026,Pessoal,Benefícios,Despesa,4221.15,4368.00,Redorai
+2026-04-01,Abril,2026,Operação,Infra e cloud,Despesa,6200.73,5616.00,Redorai
+2026-04-01,Abril,2026,Operação,Aluguel,Despesa,4895.69,4992.00,Redorai
+2026-04-01,Abril,2026,Aquisição,Mídia paga,Despesa,10843.68,9360.00,Redorai
+2026-04-01,Abril,2026,Aquisição,Eventos,Despesa,2130.85,1872.00,Redorai
+2026-05-01,Maio,2026,Receita,Receita bruta,Receita,96138.14,81900.00,Redorai
+2026-05-01,Maio,2026,Receita,Receita serviços,Receita,23597.73,25200.00,Redorai
+2026-05-01,Maio,2026,Pessoal,Folha CLT,Despesa,31982.02,32550.00,Redorai
+2026-05-01,Maio,2026,Pessoal,Benefícios,Despesa,5000.61,4410.00,Redorai
+2026-05-01,Maio,2026,Operação,Infra e cloud,Despesa,5621.51,5670.00,Redorai
+2026-05-01,Maio,2026,Operação,Aluguel,Despesa,4847.55,5040.00,Redorai
+2026-05-01,Maio,2026,Aquisição,Mídia paga,Despesa,9557.28,9450.00,Redorai
+2026-05-01,Maio,2026,Aquisição,Eventos,Despesa,2177.84,1890.00,Redorai
+2026-06-01,Junho,2026,Receita,Receita bruta,Receita,81191.26,82680.00,Redorai
+2026-06-01,Junho,2026,Receita,Receita serviços,Receita,29924.88,25440.00,Redorai
+2026-06-01,Junho,2026,Pessoal,Folha CLT,Despesa,36591.78,32860.00,Redorai
+2026-06-01,Junho,2026,Pessoal,Benefícios,Despesa,4757.61,4452.00,Redorai
+2026-06-01,Junho,2026,Operação,Infra e cloud,Despesa,5201.25,5724.00,Redorai
+2026-06-01,Junho,2026,Operação,Aluguel,Despesa,5946.57,5088.00,Redorai
+2026-06-01,Junho,2026,Aquisição,Mídia paga,Despesa,8589.80,9540.00,Redorai
+2026-06-01,Junho,2026,Aquisição,Eventos,Despesa,2230.29,1908.00,Redorai
+2026-07-01,Julho,2026,Receita,Receita bruta,Receita,80642.25,83460.00,Redorai
+2026-07-01,Julho,2026,Receita,Receita serviços,Receita,22909.56,25680.00,Redorai
+2026-07-01,Julho,2026,Pessoal,Folha CLT,Despesa,37495.79,33170.00,Redorai
+2026-07-01,Julho,2026,Pessoal,Benefícios,Despesa,4008.23,4494.00,Redorai
+2026-07-01,Julho,2026,Operação,Infra e cloud,Despesa,6652.45,5778.00,Redorai
+2026-07-01,Julho,2026,Operação,Aluguel,Despesa,4442.18,5136.00,Redorai
+2026-07-01,Julho,2026,Aquisição,Mídia paga,Despesa,8726.03,9630.00,Redorai
+2026-07-01,Julho,2026,Aquisição,Eventos,Despesa,2193.13,1926.00,Redorai
+2026-08-01,Agosto,2026,Receita,Receita bruta,Receita,98593.33,84240.00,Redorai
+2026-08-01,Agosto,2026,Receita,Receita serviços,Receita,22911.86,25920.00,Redorai
+2026-08-01,Agosto,2026,Pessoal,Folha CLT,Despesa,37165.75,33480.00,Redorai
+2026-08-01,Agosto,2026,Pessoal,Benefícios,Despesa,4285.65,4536.00,Redorai
+2026-08-01,Agosto,2026,Operação,Infra e cloud,Despesa,6178.67,5832.00,Redorai
+2026-08-01,Agosto,2026,Operação,Aluguel,Despesa,5117.62,5184.00,Redorai
+2026-08-01,Agosto,2026,Aquisição,Mídia paga,Despesa,8609.01,9720.00,Redorai
+2026-08-01,Agosto,2026,Aquisição,Eventos,Despesa,1876.23,1944.00,Redorai

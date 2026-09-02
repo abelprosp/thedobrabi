@@ -1,0 +1,834 @@
+data,mes,ano,canal,status,cliente,quantidade,valor,customer_count,empresa
+2026-05-01,Maio,2026,Portal,Resolvido,Helix Saúde,1,163.13,1,Redorai
+2026-05-01,Maio,2026,WhatsApp,Resolvido,Terra Nova,1,127.93,1,Redorai
+2026-05-01,Maio,2026,Chat,Resolvido,Aurora Moda,1,70.10,1,Redorai
+2026-05-01,Maio,2026,Telefone,Resolvido,Orbit Educação,1,106.44,1,Redorai
+2026-05-02,Maio,2026,Telefone,Em andamento,Forge Engenharia,1,116.67,1,Redorai
+2026-05-02,Maio,2026,Chat,Resolvido,Lumen Tech,1,131.78,1,Redorai
+2026-05-02,Maio,2026,Chat,Escalado,Delta Log,1,19.31,1,Redorai
+2026-05-02,Maio,2026,Chat,Pendente,Serra Café,1,155.91,1,Redorai
+2026-05-03,Maio,2026,E-mail,Aberto,Maré Energia,1,65.28,1,Redorai
+2026-05-03,Maio,2026,Telefone,Resolvido,Helix Saúde,1,163.48,1,Redorai
+2026-05-04,Maio,2026,E-mail,Resolvido,Terra Nova,1,35.44,1,Redorai
+2026-05-04,Maio,2026,E-mail,Em andamento,Atlas Ltda,1,171.51,1,Redorai
+2026-05-04,Maio,2026,E-mail,Resolvido,Orbit Educação,1,65.91,1,Redorai
+2026-05-04,Maio,2026,Chat,Aberto,Terra Nova,1,17.77,1,Redorai
+2026-05-04,Maio,2026,E-mail,Escalado,Sul Minas,1,165.91,1,Redorai
+2026-05-04,Maio,2026,E-mail,Em andamento,Lumen Tech,1,43.54,1,Redorai
+2026-05-05,Maio,2026,Chat,Resolvido,Delta Log,1,83.01,1,Redorai
+2026-05-05,Maio,2026,E-mail,Pendente,Sul Minas,1,156.87,1,Redorai
+2026-05-05,Maio,2026,E-mail,Resolvido,Atlas Ltda,1,184.11,1,Redorai
+2026-05-05,Maio,2026,WhatsApp,Aberto,Helix Saúde,1,119.87,1,Redorai
+2026-05-05,Maio,2026,Chat,Resolvido,Atlas Ltda,1,201.99,1,Redorai
+2026-05-05,Maio,2026,Telefone,Aberto,Serra Café,1,45.21,1,Redorai
+2026-05-05,Maio,2026,Chat,Resolvido,Serra Café,1,155.79,1,Redorai
+2026-05-05,Maio,2026,E-mail,Resolvido,Rio Branco,1,49.76,1,Redorai
+2026-05-05,Maio,2026,E-mail,Aberto,Delta Log,1,88.25,1,Redorai
+2026-05-05,Maio,2026,E-mail,Resolvido,Pampa Alimentos,1,204.28,1,Redorai
+2026-05-05,Maio,2026,E-mail,Resolvido,Terra Nova,1,45.98,1,Redorai
+2026-05-05,Maio,2026,WhatsApp,Resolvido,Terra Nova,1,52.18,1,Redorai
+2026-05-05,Maio,2026,WhatsApp,Resolvido,Terra Nova,1,182.60,1,Redorai
+2026-05-06,Maio,2026,WhatsApp,Resolvido,Rio Branco,1,150.66,1,Redorai
+2026-05-06,Maio,2026,E-mail,Escalado,Atlas Ltda,1,191.65,1,Redorai
+2026-05-06,Maio,2026,Chat,Escalado,Aurora Moda,1,45.29,1,Redorai
+2026-05-06,Maio,2026,Telefone,Resolvido,Forge Engenharia,1,38.20,1,Redorai
+2026-05-06,Maio,2026,WhatsApp,Resolvido,Orbit Educação,1,33.54,1,Redorai
+2026-05-06,Maio,2026,Chat,Escalado,Serra Café,1,87.28,1,Redorai
+2026-05-06,Maio,2026,Telefone,Resolvido,Maré Energia,1,138.36,1,Redorai
+2026-05-06,Maio,2026,Chat,Resolvido,Verde Agro,1,93.55,1,Redorai
+2026-05-06,Maio,2026,Portal,Resolvido,Sul Minas,1,115.98,1,Redorai
+2026-05-07,Maio,2026,Telefone,Resolvido,Forge Engenharia,1,134.10,1,Redorai
+2026-05-07,Maio,2026,Portal,Resolvido,Verde Agro,1,159.13,1,Redorai
+2026-05-07,Maio,2026,E-mail,Em andamento,Lumen Tech,1,218.75,1,Redorai
+2026-05-07,Maio,2026,Portal,Aberto,Rio Branco,1,211.31,1,Redorai
+2026-05-07,Maio,2026,E-mail,Escalado,Pampa Alimentos,1,88.98,1,Redorai
+2026-05-07,Maio,2026,Chat,Resolvido,Delta Log,1,109.38,1,Redorai
+2026-05-07,Maio,2026,Portal,Resolvido,Maré Energia,1,64.71,1,Redorai
+2026-05-07,Maio,2026,E-mail,Resolvido,Orbit Educação,1,39.03,1,Redorai
+2026-05-07,Maio,2026,Chat,Resolvido,Serra Café,1,165.28,1,Redorai
+2026-05-07,Maio,2026,Telefone,Resolvido,Pampa Alimentos,1,26.09,1,Redorai
+2026-05-07,Maio,2026,Portal,Aberto,Forge Engenharia,1,112.75,1,Redorai
+2026-05-07,Maio,2026,Chat,Resolvido,Atlas Ltda,1,45.11,1,Redorai
+2026-05-08,Maio,2026,E-mail,Aberto,Atlas Ltda,1,131.68,1,Redorai
+2026-05-08,Maio,2026,Chat,Resolvido,Pulse Varejo,1,111.30,1,Redorai
+2026-05-08,Maio,2026,Portal,Pendente,Delta Log,1,111.39,1,Redorai
+2026-05-08,Maio,2026,Telefone,Resolvido,Atlas Ltda,1,73.79,1,Redorai
+2026-05-08,Maio,2026,E-mail,Pendente,Terra Nova,1,168.98,1,Redorai
+2026-05-08,Maio,2026,E-mail,Resolvido,Serra Café,1,185.70,1,Redorai
+2026-05-09,Maio,2026,WhatsApp,Resolvido,Boa Vista,1,117.88,1,Redorai
+2026-05-09,Maio,2026,Telefone,Resolvido,Pulse Varejo,1,70.72,1,Redorai
+2026-05-09,Maio,2026,Telefone,Aberto,Orbit Educação,1,167.34,1,Redorai
+2026-05-09,Maio,2026,E-mail,Resolvido,Verde Agro,1,95.42,1,Redorai
+2026-05-10,Maio,2026,Telefone,Resolvido,Rio Branco,1,79.20,1,Redorai
+2026-05-11,Maio,2026,Telefone,Resolvido,Pulse Varejo,1,26.21,1,Redorai
+2026-05-11,Maio,2026,Telefone,Em andamento,Lumen Tech,1,70.33,1,Redorai
+2026-05-11,Maio,2026,WhatsApp,Aberto,Terra Nova,1,174.65,1,Redorai
+2026-05-11,Maio,2026,Chat,Em andamento,Delta Log,1,48.37,1,Redorai
+2026-05-11,Maio,2026,Chat,Aberto,Terra Nova,1,17.25,1,Redorai
+2026-05-11,Maio,2026,Chat,Resolvido,Sul Minas,1,56.35,1,Redorai
+2026-05-11,Maio,2026,Chat,Escalado,Costa Farma,1,32.43,1,Redorai
+2026-05-11,Maio,2026,E-mail,Resolvido,Boa Vista,1,217.23,1,Redorai
+2026-05-11,Maio,2026,E-mail,Resolvido,Aurora Moda,1,34.11,1,Redorai
+2026-05-11,Maio,2026,WhatsApp,Em andamento,Delta Log,1,211.54,1,Redorai
+2026-05-11,Maio,2026,WhatsApp,Resolvido,Serra Café,1,163.77,1,Redorai
+2026-05-11,Maio,2026,E-mail,Escalado,Aurora Moda,1,98.49,1,Redorai
+2026-05-11,Maio,2026,E-mail,Resolvido,Casa Norte,1,180.54,1,Redorai
+2026-05-11,Maio,2026,Portal,Pendente,Serra Café,1,112.78,1,Redorai
+2026-05-12,Maio,2026,Chat,Em andamento,Céu Soft,1,31.14,1,Redorai
+2026-05-12,Maio,2026,Chat,Resolvido,Lumen Tech,1,180.53,1,Redorai
+2026-05-12,Maio,2026,Chat,Resolvido,Casa Norte,1,120.84,1,Redorai
+2026-05-12,Maio,2026,Portal,Resolvido,Aurora Moda,1,106.73,1,Redorai
+2026-05-13,Maio,2026,WhatsApp,Em andamento,Terra Nova,1,190.47,1,Redorai
+2026-05-13,Maio,2026,Telefone,Resolvido,Verde Agro,1,57.81,1,Redorai
+2026-05-13,Maio,2026,E-mail,Resolvido,Orbit Educação,1,131.21,1,Redorai
+2026-05-13,Maio,2026,E-mail,Escalado,Atlas Ltda,1,44.24,1,Redorai
+2026-05-13,Maio,2026,Portal,Resolvido,Forge Engenharia,1,117.28,1,Redorai
+2026-05-13,Maio,2026,Chat,Resolvido,Delta Log,1,48.10,1,Redorai
+2026-05-14,Maio,2026,WhatsApp,Resolvido,Forge Engenharia,1,29.58,1,Redorai
+2026-05-14,Maio,2026,Telefone,Resolvido,Costa Farma,1,217.16,1,Redorai
+2026-05-14,Maio,2026,Telefone,Escalado,Orbit Educação,1,207.67,1,Redorai
+2026-05-14,Maio,2026,Telefone,Escalado,Nimbus SA,1,89.51,1,Redorai
+2026-05-14,Maio,2026,Telefone,Em andamento,Terra Nova,1,203.01,1,Redorai
+2026-05-14,Maio,2026,WhatsApp,Pendente,Casa Norte,1,188.19,1,Redorai
+2026-05-14,Maio,2026,WhatsApp,Escalado,Forge Engenharia,1,154.85,1,Redorai
+2026-05-14,Maio,2026,WhatsApp,Resolvido,Nimbus SA,1,142.23,1,Redorai
+2026-05-15,Maio,2026,Chat,Aberto,Sul Minas,1,16.63,1,Redorai
+2026-05-15,Maio,2026,WhatsApp,Resolvido,Serra Café,1,47.43,1,Redorai
+2026-05-15,Maio,2026,E-mail,Em andamento,Verde Agro,1,94.59,1,Redorai
+2026-05-15,Maio,2026,E-mail,Resolvido,Pampa Alimentos,1,110.50,1,Redorai
+2026-05-15,Maio,2026,Telefone,Resolvido,Helix Saúde,1,32.59,1,Redorai
+2026-05-15,Maio,2026,Telefone,Resolvido,Maré Energia,1,55.89,1,Redorai
+2026-05-15,Maio,2026,WhatsApp,Em andamento,Aurora Moda,1,219.27,1,Redorai
+2026-05-15,Maio,2026,Telefone,Resolvido,Helix Saúde,1,72.07,1,Redorai
+2026-05-15,Maio,2026,Chat,Aberto,Rio Branco,1,44.83,1,Redorai
+2026-05-15,Maio,2026,Portal,Pendente,Nimbus SA,1,217.50,1,Redorai
+2026-05-15,Maio,2026,E-mail,Resolvido,Pampa Alimentos,1,176.86,1,Redorai
+2026-05-15,Maio,2026,Chat,Escalado,Nimbus SA,1,58.36,1,Redorai
+2026-05-15,Maio,2026,Telefone,Aberto,Costa Farma,1,66.67,1,Redorai
+2026-05-15,Maio,2026,Chat,Pendente,Forge Engenharia,1,71.15,1,Redorai
+2026-05-16,Maio,2026,Telefone,Em andamento,Maré Energia,1,122.58,1,Redorai
+2026-05-17,Maio,2026,E-mail,Pendente,Forge Engenharia,1,198.47,1,Redorai
+2026-05-17,Maio,2026,WhatsApp,Resolvido,Pulse Varejo,1,55.71,1,Redorai
+2026-05-17,Maio,2026,Telefone,Escalado,Rio Branco,1,124.78,1,Redorai
+2026-05-18,Maio,2026,Telefone,Escalado,Pampa Alimentos,1,202.08,1,Redorai
+2026-05-18,Maio,2026,E-mail,Resolvido,Sul Minas,1,175.53,1,Redorai
+2026-05-18,Maio,2026,E-mail,Resolvido,Boa Vista,1,141.39,1,Redorai
+2026-05-18,Maio,2026,WhatsApp,Em andamento,Atlas Ltda,1,45.85,1,Redorai
+2026-05-18,Maio,2026,Chat,Resolvido,Rio Branco,1,192.18,1,Redorai
+2026-05-18,Maio,2026,Telefone,Aberto,Costa Farma,1,121.74,1,Redorai
+2026-05-19,Maio,2026,Chat,Escalado,Céu Soft,1,145.98,1,Redorai
+2026-05-19,Maio,2026,E-mail,Resolvido,Lumen Tech,1,167.87,1,Redorai
+2026-05-19,Maio,2026,Portal,Pendente,Pulse Varejo,1,138.19,1,Redorai
+2026-05-19,Maio,2026,Chat,Pendente,Lumen Tech,1,214.21,1,Redorai
+2026-05-20,Maio,2026,WhatsApp,Escalado,Pampa Alimentos,1,18.32,1,Redorai
+2026-05-20,Maio,2026,Portal,Resolvido,Helix Saúde,1,158.36,1,Redorai
+2026-05-20,Maio,2026,Telefone,Resolvido,Maré Energia,1,99.13,1,Redorai
+2026-05-20,Maio,2026,Portal,Em andamento,Maré Energia,1,122.25,1,Redorai
+2026-05-20,Maio,2026,E-mail,Resolvido,Pulse Varejo,1,109.06,1,Redorai
+2026-05-20,Maio,2026,Portal,Em andamento,Terra Nova,1,48.34,1,Redorai
+2026-05-20,Maio,2026,WhatsApp,Resolvido,Maré Energia,1,144.99,1,Redorai
+2026-05-20,Maio,2026,E-mail,Resolvido,Forge Engenharia,1,180.22,1,Redorai
+2026-05-20,Maio,2026,E-mail,Aberto,Terra Nova,1,206.16,1,Redorai
+2026-05-20,Maio,2026,Portal,Aberto,Sul Minas,1,35.44,1,Redorai
+2026-05-20,Maio,2026,Portal,Resolvido,Nimbus SA,1,151.88,1,Redorai
+2026-05-20,Maio,2026,Chat,Resolvido,Verde Agro,1,174.26,1,Redorai
+2026-05-20,Maio,2026,E-mail,Resolvido,Lumen Tech,1,190.55,1,Redorai
+2026-05-21,Maio,2026,Telefone,Em andamento,Maré Energia,1,201.14,1,Redorai
+2026-05-21,Maio,2026,Telefone,Resolvido,Atlas Ltda,1,207.62,1,Redorai
+2026-05-21,Maio,2026,Portal,Resolvido,Delta Log,1,69.86,1,Redorai
+2026-05-21,Maio,2026,WhatsApp,Resolvido,Maré Energia,1,153.03,1,Redorai
+2026-05-21,Maio,2026,Telefone,Aberto,Nimbus SA,1,18.18,1,Redorai
+2026-05-22,Maio,2026,Portal,Resolvido,Terra Nova,1,80.08,1,Redorai
+2026-05-22,Maio,2026,Portal,Pendente,Maré Energia,1,64.58,1,Redorai
+2026-05-22,Maio,2026,Chat,Escalado,Terra Nova,1,147.11,1,Redorai
+2026-05-22,Maio,2026,Portal,Resolvido,Maré Energia,1,41.42,1,Redorai
+2026-05-22,Maio,2026,Chat,Resolvido,Serra Café,1,200.36,1,Redorai
+2026-05-22,Maio,2026,Telefone,Resolvido,Verde Agro,1,35.41,1,Redorai
+2026-05-23,Maio,2026,Portal,Resolvido,Serra Café,1,187.82,1,Redorai
+2026-05-23,Maio,2026,WhatsApp,Resolvido,Sul Minas,1,47.61,1,Redorai
+2026-05-24,Maio,2026,E-mail,Pendente,Atlas Ltda,1,104.67,1,Redorai
+2026-05-24,Maio,2026,Portal,Resolvido,Orbit Educação,1,20.70,1,Redorai
+2026-05-24,Maio,2026,E-mail,Resolvido,Boa Vista,1,93.39,1,Redorai
+2026-05-25,Maio,2026,WhatsApp,Escalado,Pulse Varejo,1,64.14,1,Redorai
+2026-05-25,Maio,2026,WhatsApp,Resolvido,Lumen Tech,1,124.76,1,Redorai
+2026-05-25,Maio,2026,Telefone,Em andamento,Costa Farma,1,150.15,1,Redorai
+2026-05-25,Maio,2026,Chat,Em andamento,Atlas Ltda,1,145.87,1,Redorai
+2026-05-25,Maio,2026,E-mail,Resolvido,Helix Saúde,1,109.12,1,Redorai
+2026-05-25,Maio,2026,E-mail,Resolvido,Orbit Educação,1,72.90,1,Redorai
+2026-05-26,Maio,2026,Telefone,Aberto,Pampa Alimentos,1,202.11,1,Redorai
+2026-05-26,Maio,2026,E-mail,Pendente,Rio Branco,1,178.07,1,Redorai
+2026-05-26,Maio,2026,Telefone,Resolvido,Forge Engenharia,1,58.11,1,Redorai
+2026-05-26,Maio,2026,WhatsApp,Resolvido,Céu Soft,1,180.75,1,Redorai
+2026-05-26,Maio,2026,E-mail,Pendente,Pulse Varejo,1,150.23,1,Redorai
+2026-05-26,Maio,2026,E-mail,Resolvido,Helix Saúde,1,215.06,1,Redorai
+2026-05-27,Maio,2026,Portal,Resolvido,Terra Nova,1,127.03,1,Redorai
+2026-05-27,Maio,2026,WhatsApp,Pendente,Helix Saúde,1,54.53,1,Redorai
+2026-05-27,Maio,2026,E-mail,Aberto,Casa Norte,1,119.91,1,Redorai
+2026-05-27,Maio,2026,WhatsApp,Pendente,Helix Saúde,1,199.21,1,Redorai
+2026-05-27,Maio,2026,Chat,Aberto,Verde Agro,1,32.11,1,Redorai
+2026-05-27,Maio,2026,Chat,Resolvido,Costa Farma,1,71.10,1,Redorai
+2026-05-27,Maio,2026,E-mail,Pendente,Pampa Alimentos,1,160.16,1,Redorai
+2026-05-27,Maio,2026,Telefone,Resolvido,Rio Branco,1,104.39,1,Redorai
+2026-05-27,Maio,2026,Chat,Escalado,Costa Farma,1,50.46,1,Redorai
+2026-05-28,Maio,2026,WhatsApp,Resolvido,Serra Café,1,36.09,1,Redorai
+2026-05-28,Maio,2026,Portal,Resolvido,Delta Log,1,48.96,1,Redorai
+2026-05-28,Maio,2026,Telefone,Pendente,Maré Energia,1,195.99,1,Redorai
+2026-05-28,Maio,2026,WhatsApp,Resolvido,Aurora Moda,1,142.70,1,Redorai
+2026-05-28,Maio,2026,Telefone,Resolvido,Lumen Tech,1,131.26,1,Redorai
+2026-05-28,Maio,2026,E-mail,Em andamento,Céu Soft,1,49.29,1,Redorai
+2026-05-28,Maio,2026,Portal,Aberto,Costa Farma,1,135.31,1,Redorai
+2026-05-28,Maio,2026,Portal,Em andamento,Pampa Alimentos,1,96.65,1,Redorai
+2026-05-28,Maio,2026,WhatsApp,Aberto,Maré Energia,1,177.13,1,Redorai
+2026-05-28,Maio,2026,E-mail,Em andamento,Lumen Tech,1,149.68,1,Redorai
+2026-05-28,Maio,2026,WhatsApp,Em andamento,Helix Saúde,1,16.97,1,Redorai
+2026-05-28,Maio,2026,WhatsApp,Resolvido,Lumen Tech,1,110.40,1,Redorai
+2026-05-28,Maio,2026,Chat,Resolvido,Sul Minas,1,28.58,1,Redorai
+2026-05-28,Maio,2026,Chat,Em andamento,Casa Norte,1,59.58,1,Redorai
+2026-05-29,Maio,2026,Portal,Em andamento,Forge Engenharia,1,132.66,1,Redorai
+2026-05-29,Maio,2026,Telefone,Resolvido,Aurora Moda,1,181.75,1,Redorai
+2026-05-29,Maio,2026,E-mail,Pendente,Rio Branco,1,117.22,1,Redorai
+2026-05-29,Maio,2026,Telefone,Escalado,Helix Saúde,1,40.44,1,Redorai
+2026-05-29,Maio,2026,WhatsApp,Pendente,Boa Vista,1,93.49,1,Redorai
+2026-05-29,Maio,2026,WhatsApp,Resolvido,Atlas Ltda,1,146.95,1,Redorai
+2026-05-29,Maio,2026,E-mail,Resolvido,Céu Soft,1,73.29,1,Redorai
+2026-05-29,Maio,2026,Telefone,Resolvido,Nimbus SA,1,198.65,1,Redorai
+2026-05-29,Maio,2026,E-mail,Resolvido,Aurora Moda,1,147.18,1,Redorai
+2026-05-29,Maio,2026,E-mail,Aberto,Maré Energia,1,163.27,1,Redorai
+2026-05-29,Maio,2026,WhatsApp,Em andamento,Serra Café,1,31.35,1,Redorai
+2026-05-29,Maio,2026,Telefone,Resolvido,Terra Nova,1,24.65,1,Redorai
+2026-05-30,Maio,2026,Telefone,Resolvido,Rio Branco,1,188.98,1,Redorai
+2026-05-30,Maio,2026,E-mail,Escalado,Pampa Alimentos,1,207.23,1,Redorai
+2026-05-30,Maio,2026,Chat,Aberto,Nimbus SA,1,184.22,1,Redorai
+2026-05-31,Maio,2026,WhatsApp,Aberto,Maré Energia,1,61.40,1,Redorai
+2026-05-31,Maio,2026,WhatsApp,Aberto,Sul Minas,1,217.86,1,Redorai
+2026-06-01,Junho,2026,E-mail,Em andamento,Helix Saúde,1,24.84,1,Redorai
+2026-06-01,Junho,2026,WhatsApp,Em andamento,Aurora Moda,1,156.02,1,Redorai
+2026-06-01,Junho,2026,Telefone,Resolvido,Costa Farma,1,158.23,1,Redorai
+2026-06-01,Junho,2026,Portal,Escalado,Céu Soft,1,39.58,1,Redorai
+2026-06-02,Junho,2026,Portal,Resolvido,Maré Energia,1,145.57,1,Redorai
+2026-06-02,Junho,2026,Portal,Resolvido,Casa Norte,1,64.31,1,Redorai
+2026-06-02,Junho,2026,Telefone,Resolvido,Costa Farma,1,80.99,1,Redorai
+2026-06-02,Junho,2026,Chat,Resolvido,Forge Engenharia,1,69.08,1,Redorai
+2026-06-02,Junho,2026,E-mail,Em andamento,Pampa Alimentos,1,129.50,1,Redorai
+2026-06-02,Junho,2026,Chat,Resolvido,Forge Engenharia,1,30.40,1,Redorai
+2026-06-02,Junho,2026,Chat,Resolvido,Atlas Ltda,1,152.45,1,Redorai
+2026-06-02,Junho,2026,Telefone,Resolvido,Lumen Tech,1,114.97,1,Redorai
+2026-06-02,Junho,2026,Portal,Em andamento,Casa Norte,1,120.36,1,Redorai
+2026-06-03,Junho,2026,WhatsApp,Resolvido,Céu Soft,1,149.33,1,Redorai
+2026-06-03,Junho,2026,E-mail,Resolvido,Orbit Educação,1,59.85,1,Redorai
+2026-06-03,Junho,2026,Telefone,Em andamento,Terra Nova,1,120.26,1,Redorai
+2026-06-03,Junho,2026,Chat,Resolvido,Forge Engenharia,1,71.96,1,Redorai
+2026-06-03,Junho,2026,WhatsApp,Pendente,Boa Vista,1,147.92,1,Redorai
+2026-06-03,Junho,2026,E-mail,Pendente,Helix Saúde,1,64.32,1,Redorai
+2026-06-03,Junho,2026,Chat,Resolvido,Costa Farma,1,20.86,1,Redorai
+2026-06-03,Junho,2026,Telefone,Resolvido,Pampa Alimentos,1,69.44,1,Redorai
+2026-06-03,Junho,2026,E-mail,Escalado,Pampa Alimentos,1,103.45,1,Redorai
+2026-06-04,Junho,2026,Telefone,Em andamento,Casa Norte,1,83.42,1,Redorai
+2026-06-04,Junho,2026,WhatsApp,Resolvido,Helix Saúde,1,25.07,1,Redorai
+2026-06-04,Junho,2026,Telefone,Em andamento,Lumen Tech,1,75.27,1,Redorai
+2026-06-04,Junho,2026,Portal,Resolvido,Costa Farma,1,123.56,1,Redorai
+2026-06-04,Junho,2026,Telefone,Resolvido,Helix Saúde,1,154.64,1,Redorai
+2026-06-04,Junho,2026,E-mail,Resolvido,Verde Agro,1,38.61,1,Redorai
+2026-06-05,Junho,2026,Chat,Resolvido,Forge Engenharia,1,124.09,1,Redorai
+2026-06-05,Junho,2026,Portal,Em andamento,Serra Café,1,95.34,1,Redorai
+2026-06-05,Junho,2026,WhatsApp,Aberto,Rio Branco,1,57.17,1,Redorai
+2026-06-05,Junho,2026,WhatsApp,Resolvido,Delta Log,1,159.70,1,Redorai
+2026-06-06,Junho,2026,E-mail,Resolvido,Pulse Varejo,1,118.16,1,Redorai
+2026-06-06,Junho,2026,Telefone,Resolvido,Delta Log,1,189.78,1,Redorai
+2026-06-06,Junho,2026,Chat,Resolvido,Aurora Moda,1,154.70,1,Redorai
+2026-06-07,Junho,2026,Telefone,Pendente,Orbit Educação,1,212.26,1,Redorai
+2026-06-07,Junho,2026,Telefone,Resolvido,Aurora Moda,1,19.27,1,Redorai
+2026-06-08,Junho,2026,Chat,Resolvido,Atlas Ltda,1,136.77,1,Redorai
+2026-06-08,Junho,2026,Portal,Escalado,Atlas Ltda,1,115.10,1,Redorai
+2026-06-08,Junho,2026,E-mail,Em andamento,Nimbus SA,1,182.88,1,Redorai
+2026-06-08,Junho,2026,WhatsApp,Resolvido,Verde Agro,1,122.68,1,Redorai
+2026-06-08,Junho,2026,Chat,Pendente,Helix Saúde,1,35.50,1,Redorai
+2026-06-08,Junho,2026,WhatsApp,Resolvido,Céu Soft,1,115.59,1,Redorai
+2026-06-08,Junho,2026,Portal,Em andamento,Costa Farma,1,151.00,1,Redorai
+2026-06-08,Junho,2026,Telefone,Em andamento,Atlas Ltda,1,184.69,1,Redorai
+2026-06-09,Junho,2026,Portal,Resolvido,Terra Nova,1,114.29,1,Redorai
+2026-06-09,Junho,2026,Portal,Em andamento,Atlas Ltda,1,45.32,1,Redorai
+2026-06-09,Junho,2026,Chat,Resolvido,Orbit Educação,1,88.22,1,Redorai
+2026-06-09,Junho,2026,Portal,Aberto,Maré Energia,1,88.68,1,Redorai
+2026-06-09,Junho,2026,Chat,Resolvido,Serra Café,1,145.94,1,Redorai
+2026-06-09,Junho,2026,Portal,Escalado,Céu Soft,1,217.40,1,Redorai
+2026-06-09,Junho,2026,Chat,Resolvido,Costa Farma,1,201.62,1,Redorai
+2026-06-09,Junho,2026,WhatsApp,Em andamento,Serra Café,1,135.78,1,Redorai
+2026-06-10,Junho,2026,E-mail,Em andamento,Boa Vista,1,121.62,1,Redorai
+2026-06-10,Junho,2026,Portal,Em andamento,Helix Saúde,1,103.86,1,Redorai
+2026-06-10,Junho,2026,WhatsApp,Resolvido,Delta Log,1,37.59,1,Redorai
+2026-06-10,Junho,2026,Chat,Aberto,Céu Soft,1,154.59,1,Redorai
+2026-06-10,Junho,2026,WhatsApp,Resolvido,Terra Nova,1,129.42,1,Redorai
+2026-06-10,Junho,2026,Telefone,Pendente,Delta Log,1,28.25,1,Redorai
+2026-06-10,Junho,2026,Telefone,Em andamento,Nimbus SA,1,59.55,1,Redorai
+2026-06-10,Junho,2026,E-mail,Resolvido,Nimbus SA,1,115.12,1,Redorai
+2026-06-11,Junho,2026,E-mail,Resolvido,Nimbus SA,1,66.54,1,Redorai
+2026-06-11,Junho,2026,WhatsApp,Em andamento,Casa Norte,1,151.39,1,Redorai
+2026-06-11,Junho,2026,Chat,Resolvido,Forge Engenharia,1,161.21,1,Redorai
+2026-06-11,Junho,2026,Chat,Pendente,Maré Energia,1,134.97,1,Redorai
+2026-06-12,Junho,2026,E-mail,Em andamento,Rio Branco,1,206.25,1,Redorai
+2026-06-12,Junho,2026,Telefone,Em andamento,Maré Energia,1,96.82,1,Redorai
+2026-06-12,Junho,2026,WhatsApp,Resolvido,Delta Log,1,137.39,1,Redorai
+2026-06-12,Junho,2026,Telefone,Pendente,Aurora Moda,1,179.90,1,Redorai
+2026-06-12,Junho,2026,Chat,Pendente,Costa Farma,1,42.82,1,Redorai
+2026-06-13,Junho,2026,E-mail,Em andamento,Delta Log,1,131.17,1,Redorai
+2026-06-13,Junho,2026,Portal,Resolvido,Pulse Varejo,1,92.07,1,Redorai
+2026-06-14,Junho,2026,Portal,Aberto,Céu Soft,1,157.30,1,Redorai
+2026-06-14,Junho,2026,WhatsApp,Resolvido,Céu Soft,1,87.61,1,Redorai
+2026-06-14,Junho,2026,Telefone,Resolvido,Céu Soft,1,20.67,1,Redorai
+2026-06-14,Junho,2026,Telefone,Resolvido,Forge Engenharia,1,169.95,1,Redorai
+2026-06-15,Junho,2026,Chat,Resolvido,Boa Vista,1,120.00,1,Redorai
+2026-06-15,Junho,2026,Portal,Pendente,Boa Vista,1,194.95,1,Redorai
+2026-06-15,Junho,2026,Telefone,Aberto,Orbit Educação,1,97.60,1,Redorai
+2026-06-15,Junho,2026,Portal,Aberto,Céu Soft,1,187.04,1,Redorai
+2026-06-15,Junho,2026,WhatsApp,Aberto,Helix Saúde,1,83.36,1,Redorai
+2026-06-15,Junho,2026,WhatsApp,Aberto,Boa Vista,1,113.70,1,Redorai
+2026-06-15,Junho,2026,E-mail,Em andamento,Helix Saúde,1,166.80,1,Redorai
+2026-06-15,Junho,2026,E-mail,Resolvido,Lumen Tech,1,120.83,1,Redorai
+2026-06-15,Junho,2026,Telefone,Resolvido,Orbit Educação,1,60.83,1,Redorai
+2026-06-15,Junho,2026,Chat,Resolvido,Delta Log,1,143.79,1,Redorai
+2026-06-15,Junho,2026,E-mail,Resolvido,Rio Branco,1,142.85,1,Redorai
+2026-06-15,Junho,2026,E-mail,Pendente,Atlas Ltda,1,46.37,1,Redorai
+2026-06-15,Junho,2026,Portal,Resolvido,Helix Saúde,1,65.68,1,Redorai
+2026-06-16,Junho,2026,Portal,Resolvido,Céu Soft,1,95.10,1,Redorai
+2026-06-16,Junho,2026,WhatsApp,Escalado,Serra Café,1,114.16,1,Redorai
+2026-06-16,Junho,2026,Chat,Pendente,Sul Minas,1,68.36,1,Redorai
+2026-06-16,Junho,2026,Telefone,Resolvido,Terra Nova,1,40.26,1,Redorai
+2026-06-16,Junho,2026,E-mail,Pendente,Pulse Varejo,1,44.05,1,Redorai
+2026-06-17,Junho,2026,Portal,Em andamento,Sul Minas,1,56.07,1,Redorai
+2026-06-17,Junho,2026,WhatsApp,Resolvido,Helix Saúde,1,211.61,1,Redorai
+2026-06-17,Junho,2026,WhatsApp,Resolvido,Serra Café,1,94.09,1,Redorai
+2026-06-17,Junho,2026,Telefone,Resolvido,Maré Energia,1,181.77,1,Redorai
+2026-06-17,Junho,2026,WhatsApp,Pendente,Céu Soft,1,39.63,1,Redorai
+2026-06-17,Junho,2026,Portal,Em andamento,Delta Log,1,21.99,1,Redorai
+2026-06-17,Junho,2026,Portal,Resolvido,Céu Soft,1,23.74,1,Redorai
+2026-06-17,Junho,2026,Chat,Resolvido,Céu Soft,1,195.90,1,Redorai
+2026-06-17,Junho,2026,E-mail,Resolvido,Pulse Varejo,1,88.34,1,Redorai
+2026-06-17,Junho,2026,Portal,Resolvido,Lumen Tech,1,86.51,1,Redorai
+2026-06-17,Junho,2026,Telefone,Resolvido,Casa Norte,1,27.87,1,Redorai
+2026-06-17,Junho,2026,WhatsApp,Resolvido,Boa Vista,1,84.55,1,Redorai
+2026-06-17,Junho,2026,Chat,Resolvido,Costa Farma,1,175.92,1,Redorai
+2026-06-17,Junho,2026,Telefone,Resolvido,Forge Engenharia,1,202.81,1,Redorai
+2026-06-18,Junho,2026,Telefone,Resolvido,Terra Nova,1,150.09,1,Redorai
+2026-06-18,Junho,2026,Portal,Resolvido,Casa Norte,1,68.14,1,Redorai
+2026-06-18,Junho,2026,Portal,Resolvido,Boa Vista,1,86.36,1,Redorai
+2026-06-18,Junho,2026,Telefone,Resolvido,Forge Engenharia,1,24.21,1,Redorai
+2026-06-18,Junho,2026,Chat,Resolvido,Verde Agro,1,34.79,1,Redorai
+2026-06-18,Junho,2026,Telefone,Aberto,Aurora Moda,1,170.78,1,Redorai
+2026-06-18,Junho,2026,Chat,Escalado,Helix Saúde,1,199.46,1,Redorai
+2026-06-18,Junho,2026,Telefone,Pendente,Maré Energia,1,204.09,1,Redorai
+2026-06-18,Junho,2026,WhatsApp,Aberto,Helix Saúde,1,22.67,1,Redorai
+2026-06-18,Junho,2026,Telefone,Resolvido,Pampa Alimentos,1,139.34,1,Redorai
+2026-06-18,Junho,2026,Chat,Resolvido,Aurora Moda,1,37.07,1,Redorai
+2026-06-18,Junho,2026,Chat,Resolvido,Boa Vista,1,129.08,1,Redorai
+2026-06-18,Junho,2026,Telefone,Pendente,Céu Soft,1,154.16,1,Redorai
+2026-06-18,Junho,2026,Chat,Em andamento,Maré Energia,1,181.84,1,Redorai
+2026-06-19,Junho,2026,E-mail,Aberto,Helix Saúde,1,56.73,1,Redorai
+2026-06-19,Junho,2026,E-mail,Resolvido,Pampa Alimentos,1,173.75,1,Redorai
+2026-06-19,Junho,2026,E-mail,Resolvido,Aurora Moda,1,52.99,1,Redorai
+2026-06-19,Junho,2026,Portal,Resolvido,Rio Branco,1,53.98,1,Redorai
+2026-06-19,Junho,2026,Telefone,Pendente,Casa Norte,1,87.18,1,Redorai
+2026-06-19,Junho,2026,Portal,Resolvido,Orbit Educação,1,179.33,1,Redorai
+2026-06-19,Junho,2026,Telefone,Resolvido,Forge Engenharia,1,131.68,1,Redorai
+2026-06-20,Junho,2026,WhatsApp,Resolvido,Helix Saúde,1,39.18,1,Redorai
+2026-06-20,Junho,2026,Portal,Em andamento,Sul Minas,1,82.84,1,Redorai
+2026-06-21,Junho,2026,WhatsApp,Resolvido,Costa Farma,1,95.04,1,Redorai
+2026-06-21,Junho,2026,Chat,Em andamento,Delta Log,1,30.33,1,Redorai
+2026-06-22,Junho,2026,Portal,Em andamento,Terra Nova,1,117.51,1,Redorai
+2026-06-22,Junho,2026,E-mail,Em andamento,Sul Minas,1,157.99,1,Redorai
+2026-06-22,Junho,2026,Telefone,Aberto,Costa Farma,1,148.91,1,Redorai
+2026-06-22,Junho,2026,Telefone,Aberto,Costa Farma,1,56.10,1,Redorai
+2026-06-22,Junho,2026,E-mail,Resolvido,Orbit Educação,1,56.87,1,Redorai
+2026-06-22,Junho,2026,WhatsApp,Resolvido,Nimbus SA,1,63.30,1,Redorai
+2026-06-22,Junho,2026,Portal,Aberto,Terra Nova,1,159.13,1,Redorai
+2026-06-22,Junho,2026,E-mail,Resolvido,Pampa Alimentos,1,216.12,1,Redorai
+2026-06-22,Junho,2026,Portal,Escalado,Terra Nova,1,205.52,1,Redorai
+2026-06-22,Junho,2026,Telefone,Resolvido,Orbit Educação,1,70.45,1,Redorai
+2026-06-22,Junho,2026,E-mail,Aberto,Rio Branco,1,119.06,1,Redorai
+2026-06-22,Junho,2026,Telefone,Resolvido,Rio Branco,1,77.20,1,Redorai
+2026-06-22,Junho,2026,Chat,Resolvido,Atlas Ltda,1,205.91,1,Redorai
+2026-06-23,Junho,2026,Chat,Resolvido,Sul Minas,1,139.67,1,Redorai
+2026-06-23,Junho,2026,E-mail,Em andamento,Sul Minas,1,113.85,1,Redorai
+2026-06-23,Junho,2026,Telefone,Em andamento,Orbit Educação,1,103.09,1,Redorai
+2026-06-23,Junho,2026,Chat,Resolvido,Helix Saúde,1,104.78,1,Redorai
+2026-06-24,Junho,2026,WhatsApp,Escalado,Pampa Alimentos,1,54.70,1,Redorai
+2026-06-24,Junho,2026,E-mail,Resolvido,Verde Agro,1,62.57,1,Redorai
+2026-06-24,Junho,2026,Chat,Resolvido,Maré Energia,1,168.23,1,Redorai
+2026-06-24,Junho,2026,Portal,Resolvido,Boa Vista,1,24.38,1,Redorai
+2026-06-24,Junho,2026,Chat,Resolvido,Nimbus SA,1,30.71,1,Redorai
+2026-06-24,Junho,2026,Chat,Pendente,Delta Log,1,23.96,1,Redorai
+2026-06-24,Junho,2026,Chat,Em andamento,Delta Log,1,41.59,1,Redorai
+2026-06-24,Junho,2026,E-mail,Em andamento,Forge Engenharia,1,30.66,1,Redorai
+2026-06-24,Junho,2026,Chat,Escalado,Rio Branco,1,159.58,1,Redorai
+2026-06-24,Junho,2026,Chat,Resolvido,Céu Soft,1,161.19,1,Redorai
+2026-06-24,Junho,2026,Portal,Escalado,Delta Log,1,193.14,1,Redorai
+2026-06-24,Junho,2026,WhatsApp,Em andamento,Aurora Moda,1,158.04,1,Redorai
+2026-06-24,Junho,2026,E-mail,Resolvido,Pampa Alimentos,1,199.59,1,Redorai
+2026-06-25,Junho,2026,E-mail,Resolvido,Lumen Tech,1,201.97,1,Redorai
+2026-06-25,Junho,2026,Portal,Resolvido,Verde Agro,1,77.51,1,Redorai
+2026-06-25,Junho,2026,E-mail,Resolvido,Pampa Alimentos,1,163.61,1,Redorai
+2026-06-25,Junho,2026,E-mail,Resolvido,Verde Agro,1,158.16,1,Redorai
+2026-06-25,Junho,2026,Telefone,Resolvido,Helix Saúde,1,19.36,1,Redorai
+2026-06-25,Junho,2026,WhatsApp,Resolvido,Costa Farma,1,135.59,1,Redorai
+2026-06-25,Junho,2026,E-mail,Em andamento,Nimbus SA,1,72.21,1,Redorai
+2026-06-25,Junho,2026,Telefone,Resolvido,Atlas Ltda,1,191.87,1,Redorai
+2026-06-25,Junho,2026,E-mail,Em andamento,Verde Agro,1,57.17,1,Redorai
+2026-06-25,Junho,2026,Telefone,Pendente,Sul Minas,1,25.71,1,Redorai
+2026-06-25,Junho,2026,Portal,Em andamento,Pampa Alimentos,1,207.13,1,Redorai
+2026-06-25,Junho,2026,WhatsApp,Resolvido,Costa Farma,1,181.10,1,Redorai
+2026-06-25,Junho,2026,E-mail,Resolvido,Aurora Moda,1,163.79,1,Redorai
+2026-06-26,Junho,2026,Telefone,Resolvido,Nimbus SA,1,180.52,1,Redorai
+2026-06-26,Junho,2026,WhatsApp,Resolvido,Sul Minas,1,110.02,1,Redorai
+2026-06-26,Junho,2026,Portal,Resolvido,Casa Norte,1,68.32,1,Redorai
+2026-06-26,Junho,2026,Telefone,Escalado,Verde Agro,1,42.03,1,Redorai
+2026-06-26,Junho,2026,WhatsApp,Aberto,Forge Engenharia,1,219.76,1,Redorai
+2026-06-26,Junho,2026,WhatsApp,Resolvido,Aurora Moda,1,132.07,1,Redorai
+2026-06-26,Junho,2026,WhatsApp,Aberto,Pampa Alimentos,1,70.09,1,Redorai
+2026-06-26,Junho,2026,Portal,Em andamento,Atlas Ltda,1,40.48,1,Redorai
+2026-06-26,Junho,2026,WhatsApp,Resolvido,Costa Farma,1,188.76,1,Redorai
+2026-06-26,Junho,2026,E-mail,Resolvido,Céu Soft,1,16.82,1,Redorai
+2026-06-26,Junho,2026,WhatsApp,Aberto,Rio Branco,1,145.74,1,Redorai
+2026-06-26,Junho,2026,Telefone,Resolvido,Nimbus SA,1,133.81,1,Redorai
+2026-06-26,Junho,2026,Portal,Aberto,Sul Minas,1,79.38,1,Redorai
+2026-06-27,Junho,2026,WhatsApp,Resolvido,Costa Farma,1,68.21,1,Redorai
+2026-06-28,Junho,2026,Chat,Pendente,Orbit Educação,1,193.60,1,Redorai
+2026-06-28,Junho,2026,Chat,Resolvido,Helix Saúde,1,149.19,1,Redorai
+2026-06-28,Junho,2026,Portal,Pendente,Céu Soft,1,133.88,1,Redorai
+2026-06-28,Junho,2026,Chat,Aberto,Nimbus SA,1,210.10,1,Redorai
+2026-06-29,Junho,2026,E-mail,Escalado,Pampa Alimentos,1,125.79,1,Redorai
+2026-06-29,Junho,2026,Chat,Aberto,Pampa Alimentos,1,37.38,1,Redorai
+2026-06-29,Junho,2026,E-mail,Resolvido,Casa Norte,1,30.88,1,Redorai
+2026-06-29,Junho,2026,Portal,Pendente,Pampa Alimentos,1,184.97,1,Redorai
+2026-06-29,Junho,2026,E-mail,Resolvido,Maré Energia,1,194.55,1,Redorai
+2026-06-29,Junho,2026,WhatsApp,Pendente,Terra Nova,1,176.57,1,Redorai
+2026-06-29,Junho,2026,Telefone,Em andamento,Pampa Alimentos,1,111.49,1,Redorai
+2026-06-29,Junho,2026,Portal,Escalado,Atlas Ltda,1,47.86,1,Redorai
+2026-06-30,Junho,2026,Chat,Em andamento,Boa Vista,1,20.23,1,Redorai
+2026-06-30,Junho,2026,WhatsApp,Resolvido,Casa Norte,1,161.73,1,Redorai
+2026-06-30,Junho,2026,Portal,Resolvido,Pampa Alimentos,1,207.69,1,Redorai
+2026-06-30,Junho,2026,Portal,Em andamento,Nimbus SA,1,149.70,1,Redorai
+2026-07-01,Julho,2026,E-mail,Em andamento,Forge Engenharia,1,211.52,1,Redorai
+2026-07-01,Julho,2026,Portal,Escalado,Casa Norte,1,219.55,1,Redorai
+2026-07-01,Julho,2026,Telefone,Resolvido,Sul Minas,1,165.27,1,Redorai
+2026-07-01,Julho,2026,Portal,Resolvido,Nimbus SA,1,139.46,1,Redorai
+2026-07-01,Julho,2026,Portal,Resolvido,Céu Soft,1,79.97,1,Redorai
+2026-07-01,Julho,2026,Portal,Pendente,Delta Log,1,201.77,1,Redorai
+2026-07-02,Julho,2026,WhatsApp,Em andamento,Verde Agro,1,108.44,1,Redorai
+2026-07-02,Julho,2026,E-mail,Resolvido,Verde Agro,1,106.23,1,Redorai
+2026-07-02,Julho,2026,Telefone,Escalado,Pampa Alimentos,1,31.34,1,Redorai
+2026-07-02,Julho,2026,E-mail,Resolvido,Pampa Alimentos,1,148.93,1,Redorai
+2026-07-02,Julho,2026,Telefone,Resolvido,Maré Energia,1,62.10,1,Redorai
+2026-07-02,Julho,2026,Chat,Resolvido,Sul Minas,1,65.21,1,Redorai
+2026-07-02,Julho,2026,Portal,Resolvido,Orbit Educação,1,139.14,1,Redorai
+2026-07-02,Julho,2026,WhatsApp,Resolvido,Aurora Moda,1,39.18,1,Redorai
+2026-07-02,Julho,2026,Portal,Resolvido,Orbit Educação,1,133.08,1,Redorai
+2026-07-03,Julho,2026,Chat,Resolvido,Pulse Varejo,1,194.66,1,Redorai
+2026-07-03,Julho,2026,E-mail,Aberto,Maré Energia,1,68.99,1,Redorai
+2026-07-03,Julho,2026,Telefone,Resolvido,Helix Saúde,1,40.91,1,Redorai
+2026-07-03,Julho,2026,Telefone,Aberto,Atlas Ltda,1,156.46,1,Redorai
+2026-07-03,Julho,2026,Chat,Escalado,Casa Norte,1,192.71,1,Redorai
+2026-07-03,Julho,2026,Telefone,Resolvido,Pampa Alimentos,1,41.13,1,Redorai
+2026-07-03,Julho,2026,Chat,Resolvido,Delta Log,1,39.40,1,Redorai
+2026-07-03,Julho,2026,WhatsApp,Resolvido,Boa Vista,1,139.80,1,Redorai
+2026-07-03,Julho,2026,E-mail,Aberto,Forge Engenharia,1,166.44,1,Redorai
+2026-07-03,Julho,2026,Telefone,Em andamento,Maré Energia,1,144.32,1,Redorai
+2026-07-03,Julho,2026,Telefone,Resolvido,Delta Log,1,170.32,1,Redorai
+2026-07-03,Julho,2026,Chat,Resolvido,Boa Vista,1,202.85,1,Redorai
+2026-07-03,Julho,2026,E-mail,Escalado,Orbit Educação,1,198.60,1,Redorai
+2026-07-03,Julho,2026,WhatsApp,Resolvido,Céu Soft,1,92.77,1,Redorai
+2026-07-04,Julho,2026,Portal,Pendente,Costa Farma,1,208.68,1,Redorai
+2026-07-04,Julho,2026,WhatsApp,Aberto,Rio Branco,1,84.93,1,Redorai
+2026-07-04,Julho,2026,Portal,Resolvido,Boa Vista,1,119.19,1,Redorai
+2026-07-04,Julho,2026,WhatsApp,Escalado,Aurora Moda,1,93.73,1,Redorai
+2026-07-05,Julho,2026,E-mail,Escalado,Lumen Tech,1,103.26,1,Redorai
+2026-07-05,Julho,2026,Portal,Em andamento,Aurora Moda,1,35.39,1,Redorai
+2026-07-06,Julho,2026,WhatsApp,Pendente,Costa Farma,1,114.76,1,Redorai
+2026-07-06,Julho,2026,Chat,Em andamento,Delta Log,1,207.54,1,Redorai
+2026-07-06,Julho,2026,Portal,Em andamento,Helix Saúde,1,204.53,1,Redorai
+2026-07-06,Julho,2026,Chat,Resolvido,Helix Saúde,1,57.40,1,Redorai
+2026-07-06,Julho,2026,Chat,Resolvido,Atlas Ltda,1,137.67,1,Redorai
+2026-07-06,Julho,2026,Portal,Aberto,Sul Minas,1,178.79,1,Redorai
+2026-07-06,Julho,2026,E-mail,Aberto,Pampa Alimentos,1,56.64,1,Redorai
+2026-07-06,Julho,2026,Portal,Escalado,Maré Energia,1,165.08,1,Redorai
+2026-07-07,Julho,2026,Telefone,Pendente,Delta Log,1,203.19,1,Redorai
+2026-07-07,Julho,2026,E-mail,Resolvido,Céu Soft,1,197.22,1,Redorai
+2026-07-07,Julho,2026,E-mail,Resolvido,Orbit Educação,1,218.58,1,Redorai
+2026-07-07,Julho,2026,E-mail,Resolvido,Pampa Alimentos,1,179.75,1,Redorai
+2026-07-07,Julho,2026,Chat,Resolvido,Forge Engenharia,1,82.06,1,Redorai
+2026-07-07,Julho,2026,WhatsApp,Resolvido,Céu Soft,1,144.28,1,Redorai
+2026-07-07,Julho,2026,E-mail,Resolvido,Aurora Moda,1,197.92,1,Redorai
+2026-07-07,Julho,2026,E-mail,Aberto,Casa Norte,1,80.09,1,Redorai
+2026-07-07,Julho,2026,E-mail,Resolvido,Atlas Ltda,1,65.41,1,Redorai
+2026-07-07,Julho,2026,Chat,Resolvido,Lumen Tech,1,69.38,1,Redorai
+2026-07-07,Julho,2026,Chat,Pendente,Rio Branco,1,72.93,1,Redorai
+2026-07-07,Julho,2026,E-mail,Pendente,Casa Norte,1,190.72,1,Redorai
+2026-07-08,Julho,2026,E-mail,Aberto,Rio Branco,1,129.34,1,Redorai
+2026-07-08,Julho,2026,Chat,Pendente,Nimbus SA,1,100.72,1,Redorai
+2026-07-08,Julho,2026,Telefone,Em andamento,Boa Vista,1,63.12,1,Redorai
+2026-07-08,Julho,2026,Portal,Em andamento,Pulse Varejo,1,194.97,1,Redorai
+2026-07-08,Julho,2026,WhatsApp,Resolvido,Rio Branco,1,115.50,1,Redorai
+2026-07-08,Julho,2026,Portal,Resolvido,Pampa Alimentos,1,126.40,1,Redorai
+2026-07-08,Julho,2026,Chat,Em andamento,Helix Saúde,1,212.40,1,Redorai
+2026-07-09,Julho,2026,Telefone,Resolvido,Aurora Moda,1,65.72,1,Redorai
+2026-07-09,Julho,2026,Chat,Resolvido,Céu Soft,1,211.04,1,Redorai
+2026-07-09,Julho,2026,WhatsApp,Resolvido,Serra Café,1,159.49,1,Redorai
+2026-07-09,Julho,2026,Telefone,Resolvido,Rio Branco,1,138.22,1,Redorai
+2026-07-09,Julho,2026,E-mail,Resolvido,Delta Log,1,69.92,1,Redorai
+2026-07-09,Julho,2026,Telefone,Pendente,Nimbus SA,1,130.26,1,Redorai
+2026-07-09,Julho,2026,WhatsApp,Em andamento,Maré Energia,1,95.23,1,Redorai
+2026-07-09,Julho,2026,Telefone,Resolvido,Costa Farma,1,202.04,1,Redorai
+2026-07-10,Julho,2026,Chat,Resolvido,Aurora Moda,1,145.43,1,Redorai
+2026-07-10,Julho,2026,Telefone,Aberto,Maré Energia,1,60.37,1,Redorai
+2026-07-10,Julho,2026,Portal,Resolvido,Lumen Tech,1,174.81,1,Redorai
+2026-07-10,Julho,2026,Portal,Aberto,Terra Nova,1,82.59,1,Redorai
+2026-07-10,Julho,2026,E-mail,Resolvido,Atlas Ltda,1,179.49,1,Redorai
+2026-07-10,Julho,2026,WhatsApp,Aberto,Pampa Alimentos,1,172.20,1,Redorai
+2026-07-10,Julho,2026,E-mail,Resolvido,Casa Norte,1,58.14,1,Redorai
+2026-07-10,Julho,2026,Chat,Resolvido,Sul Minas,1,96.08,1,Redorai
+2026-07-11,Julho,2026,Chat,Em andamento,Pampa Alimentos,1,82.96,1,Redorai
+2026-07-11,Julho,2026,Chat,Pendente,Atlas Ltda,1,22.40,1,Redorai
+2026-07-12,Julho,2026,Portal,Resolvido,Helix Saúde,1,117.81,1,Redorai
+2026-07-13,Julho,2026,WhatsApp,Aberto,Delta Log,1,19.97,1,Redorai
+2026-07-13,Julho,2026,Chat,Resolvido,Nimbus SA,1,70.85,1,Redorai
+2026-07-13,Julho,2026,Telefone,Pendente,Serra Café,1,41.89,1,Redorai
+2026-07-13,Julho,2026,WhatsApp,Resolvido,Forge Engenharia,1,30.69,1,Redorai
+2026-07-13,Julho,2026,Telefone,Resolvido,Atlas Ltda,1,18.02,1,Redorai
+2026-07-13,Julho,2026,Portal,Resolvido,Orbit Educação,1,34.59,1,Redorai
+2026-07-13,Julho,2026,Telefone,Resolvido,Lumen Tech,1,185.45,1,Redorai
+2026-07-13,Julho,2026,WhatsApp,Resolvido,Maré Energia,1,120.03,1,Redorai
+2026-07-13,Julho,2026,WhatsApp,Aberto,Céu Soft,1,56.55,1,Redorai
+2026-07-13,Julho,2026,Portal,Em andamento,Rio Branco,1,92.20,1,Redorai
+2026-07-13,Julho,2026,Chat,Resolvido,Maré Energia,1,130.00,1,Redorai
+2026-07-14,Julho,2026,Portal,Em andamento,Casa Norte,1,65.15,1,Redorai
+2026-07-14,Julho,2026,Telefone,Aberto,Serra Café,1,210.05,1,Redorai
+2026-07-14,Julho,2026,E-mail,Resolvido,Céu Soft,1,60.93,1,Redorai
+2026-07-14,Julho,2026,Telefone,Escalado,Verde Agro,1,106.65,1,Redorai
+2026-07-14,Julho,2026,E-mail,Resolvido,Delta Log,1,83.15,1,Redorai
+2026-07-14,Julho,2026,E-mail,Resolvido,Helix Saúde,1,129.98,1,Redorai
+2026-07-14,Julho,2026,Telefone,Pendente,Boa Vista,1,66.24,1,Redorai
+2026-07-14,Julho,2026,Portal,Pendente,Rio Branco,1,122.30,1,Redorai
+2026-07-14,Julho,2026,Chat,Resolvido,Nimbus SA,1,172.32,1,Redorai
+2026-07-14,Julho,2026,WhatsApp,Em andamento,Aurora Moda,1,186.04,1,Redorai
+2026-07-14,Julho,2026,Portal,Aberto,Terra Nova,1,98.34,1,Redorai
+2026-07-15,Julho,2026,Chat,Em andamento,Sul Minas,1,177.91,1,Redorai
+2026-07-15,Julho,2026,WhatsApp,Resolvido,Verde Agro,1,80.98,1,Redorai
+2026-07-15,Julho,2026,Portal,Resolvido,Sul Minas,1,191.02,1,Redorai
+2026-07-15,Julho,2026,E-mail,Escalado,Helix Saúde,1,102.27,1,Redorai
+2026-07-16,Julho,2026,E-mail,Em andamento,Pulse Varejo,1,121.59,1,Redorai
+2026-07-16,Julho,2026,Chat,Pendente,Céu Soft,1,193.30,1,Redorai
+2026-07-16,Julho,2026,Telefone,Aberto,Rio Branco,1,50.00,1,Redorai
+2026-07-16,Julho,2026,Telefone,Resolvido,Orbit Educação,1,168.54,1,Redorai
+2026-07-16,Julho,2026,Telefone,Resolvido,Atlas Ltda,1,75.83,1,Redorai
+2026-07-17,Julho,2026,WhatsApp,Escalado,Casa Norte,1,81.09,1,Redorai
+2026-07-17,Julho,2026,Portal,Resolvido,Pulse Varejo,1,44.01,1,Redorai
+2026-07-17,Julho,2026,Chat,Resolvido,Terra Nova,1,210.16,1,Redorai
+2026-07-17,Julho,2026,Portal,Em andamento,Costa Farma,1,111.78,1,Redorai
+2026-07-17,Julho,2026,WhatsApp,Pendente,Orbit Educação,1,48.67,1,Redorai
+2026-07-17,Julho,2026,Telefone,Resolvido,Atlas Ltda,1,80.13,1,Redorai
+2026-07-17,Julho,2026,Telefone,Pendente,Forge Engenharia,1,218.63,1,Redorai
+2026-07-17,Julho,2026,Chat,Aberto,Lumen Tech,1,157.28,1,Redorai
+2026-07-17,Julho,2026,WhatsApp,Resolvido,Helix Saúde,1,27.53,1,Redorai
+2026-07-17,Julho,2026,Chat,Resolvido,Forge Engenharia,1,86.84,1,Redorai
+2026-07-18,Julho,2026,E-mail,Em andamento,Lumen Tech,1,71.29,1,Redorai
+2026-07-18,Julho,2026,Telefone,Resolvido,Boa Vista,1,164.51,1,Redorai
+2026-07-19,Julho,2026,Telefone,Resolvido,Costa Farma,1,130.03,1,Redorai
+2026-07-19,Julho,2026,Chat,Resolvido,Forge Engenharia,1,136.49,1,Redorai
+2026-07-19,Julho,2026,Chat,Aberto,Costa Farma,1,51.56,1,Redorai
+2026-07-20,Julho,2026,Portal,Aberto,Boa Vista,1,147.19,1,Redorai
+2026-07-20,Julho,2026,Portal,Em andamento,Boa Vista,1,138.98,1,Redorai
+2026-07-20,Julho,2026,Portal,Escalado,Rio Branco,1,57.91,1,Redorai
+2026-07-20,Julho,2026,Chat,Aberto,Lumen Tech,1,33.72,1,Redorai
+2026-07-20,Julho,2026,Chat,Resolvido,Orbit Educação,1,48.79,1,Redorai
+2026-07-20,Julho,2026,WhatsApp,Resolvido,Forge Engenharia,1,198.67,1,Redorai
+2026-07-20,Julho,2026,Portal,Aberto,Céu Soft,1,102.21,1,Redorai
+2026-07-20,Julho,2026,WhatsApp,Resolvido,Casa Norte,1,170.80,1,Redorai
+2026-07-20,Julho,2026,Telefone,Em andamento,Serra Café,1,173.65,1,Redorai
+2026-07-20,Julho,2026,WhatsApp,Resolvido,Delta Log,1,186.92,1,Redorai
+2026-07-20,Julho,2026,E-mail,Em andamento,Terra Nova,1,187.65,1,Redorai
+2026-07-20,Julho,2026,WhatsApp,Escalado,Orbit Educação,1,187.17,1,Redorai
+2026-07-20,Julho,2026,Telefone,Resolvido,Costa Farma,1,155.50,1,Redorai
+2026-07-21,Julho,2026,WhatsApp,Resolvido,Pulse Varejo,1,20.19,1,Redorai
+2026-07-21,Julho,2026,Telefone,Em andamento,Pampa Alimentos,1,164.34,1,Redorai
+2026-07-21,Julho,2026,Portal,Pendente,Lumen Tech,1,93.40,1,Redorai
+2026-07-21,Julho,2026,E-mail,Pendente,Lumen Tech,1,105.63,1,Redorai
+2026-07-21,Julho,2026,E-mail,Resolvido,Boa Vista,1,78.63,1,Redorai
+2026-07-21,Julho,2026,WhatsApp,Aberto,Costa Farma,1,118.07,1,Redorai
+2026-07-21,Julho,2026,WhatsApp,Aberto,Nimbus SA,1,147.68,1,Redorai
+2026-07-21,Julho,2026,Telefone,Resolvido,Nimbus SA,1,219.13,1,Redorai
+2026-07-21,Julho,2026,WhatsApp,Resolvido,Nimbus SA,1,214.08,1,Redorai
+2026-07-21,Julho,2026,Telefone,Resolvido,Terra Nova,1,144.61,1,Redorai
+2026-07-21,Julho,2026,Telefone,Resolvido,Sul Minas,1,180.52,1,Redorai
+2026-07-21,Julho,2026,E-mail,Aberto,Terra Nova,1,198.32,1,Redorai
+2026-07-22,Julho,2026,Chat,Resolvido,Orbit Educação,1,31.98,1,Redorai
+2026-07-22,Julho,2026,E-mail,Resolvido,Nimbus SA,1,105.89,1,Redorai
+2026-07-22,Julho,2026,WhatsApp,Resolvido,Helix Saúde,1,190.87,1,Redorai
+2026-07-22,Julho,2026,Chat,Em andamento,Terra Nova,1,166.18,1,Redorai
+2026-07-22,Julho,2026,WhatsApp,Em andamento,Pulse Varejo,1,200.67,1,Redorai
+2026-07-22,Julho,2026,WhatsApp,Resolvido,Casa Norte,1,17.91,1,Redorai
+2026-07-23,Julho,2026,E-mail,Resolvido,Forge Engenharia,1,54.55,1,Redorai
+2026-07-23,Julho,2026,Chat,Resolvido,Costa Farma,1,32.21,1,Redorai
+2026-07-23,Julho,2026,WhatsApp,Resolvido,Terra Nova,1,55.73,1,Redorai
+2026-07-23,Julho,2026,Chat,Resolvido,Atlas Ltda,1,78.79,1,Redorai
+2026-07-23,Julho,2026,E-mail,Resolvido,Aurora Moda,1,110.58,1,Redorai
+2026-07-23,Julho,2026,E-mail,Resolvido,Boa Vista,1,205.71,1,Redorai
+2026-07-23,Julho,2026,E-mail,Aberto,Pulse Varejo,1,164.56,1,Redorai
+2026-07-23,Julho,2026,Portal,Pendente,Atlas Ltda,1,172.18,1,Redorai
+2026-07-23,Julho,2026,Chat,Resolvido,Pampa Alimentos,1,109.37,1,Redorai
+2026-07-23,Julho,2026,Chat,Resolvido,Delta Log,1,186.65,1,Redorai
+2026-07-23,Julho,2026,Chat,Resolvido,Orbit Educação,1,78.65,1,Redorai
+2026-07-23,Julho,2026,WhatsApp,Em andamento,Pulse Varejo,1,72.19,1,Redorai
+2026-07-23,Julho,2026,Telefone,Resolvido,Verde Agro,1,186.23,1,Redorai
+2026-07-23,Julho,2026,Chat,Em andamento,Pulse Varejo,1,215.75,1,Redorai
+2026-07-24,Julho,2026,WhatsApp,Resolvido,Forge Engenharia,1,115.43,1,Redorai
+2026-07-24,Julho,2026,WhatsApp,Resolvido,Casa Norte,1,107.18,1,Redorai
+2026-07-24,Julho,2026,Chat,Resolvido,Nimbus SA,1,209.68,1,Redorai
+2026-07-24,Julho,2026,Chat,Resolvido,Sul Minas,1,131.59,1,Redorai
+2026-07-24,Julho,2026,Telefone,Escalado,Pampa Alimentos,1,147.43,1,Redorai
+2026-07-24,Julho,2026,WhatsApp,Resolvido,Lumen Tech,1,85.15,1,Redorai
+2026-07-24,Julho,2026,Portal,Escalado,Costa Farma,1,33.61,1,Redorai
+2026-07-24,Julho,2026,WhatsApp,Resolvido,Lumen Tech,1,110.88,1,Redorai
+2026-07-25,Julho,2026,Portal,Escalado,Pulse Varejo,1,112.42,1,Redorai
+2026-07-26,Julho,2026,WhatsApp,Resolvido,Boa Vista,1,92.47,1,Redorai
+2026-07-26,Julho,2026,E-mail,Resolvido,Aurora Moda,1,158.76,1,Redorai
+2026-07-26,Julho,2026,E-mail,Resolvido,Pulse Varejo,1,101.39,1,Redorai
+2026-07-26,Julho,2026,E-mail,Em andamento,Pulse Varejo,1,202.20,1,Redorai
+2026-07-27,Julho,2026,Portal,Pendente,Pulse Varejo,1,169.17,1,Redorai
+2026-07-27,Julho,2026,Portal,Resolvido,Céu Soft,1,136.68,1,Redorai
+2026-07-27,Julho,2026,Telefone,Resolvido,Rio Branco,1,185.99,1,Redorai
+2026-07-27,Julho,2026,WhatsApp,Em andamento,Terra Nova,1,84.27,1,Redorai
+2026-07-27,Julho,2026,WhatsApp,Resolvido,Nimbus SA,1,214.01,1,Redorai
+2026-07-27,Julho,2026,Portal,Resolvido,Helix Saúde,1,101.30,1,Redorai
+2026-07-27,Julho,2026,Portal,Resolvido,Serra Café,1,136.58,1,Redorai
+2026-07-27,Julho,2026,Chat,Pendente,Delta Log,1,196.75,1,Redorai
+2026-07-28,Julho,2026,Portal,Pendente,Orbit Educação,1,41.63,1,Redorai
+2026-07-28,Julho,2026,E-mail,Em andamento,Forge Engenharia,1,78.40,1,Redorai
+2026-07-28,Julho,2026,WhatsApp,Resolvido,Céu Soft,1,96.18,1,Redorai
+2026-07-28,Julho,2026,Chat,Resolvido,Lumen Tech,1,196.01,1,Redorai
+2026-07-28,Julho,2026,E-mail,Em andamento,Pulse Varejo,1,63.42,1,Redorai
+2026-07-28,Julho,2026,E-mail,Pendente,Verde Agro,1,46.60,1,Redorai
+2026-07-28,Julho,2026,WhatsApp,Resolvido,Atlas Ltda,1,112.86,1,Redorai
+2026-07-28,Julho,2026,Telefone,Em andamento,Sul Minas,1,155.79,1,Redorai
+2026-07-28,Julho,2026,Telefone,Resolvido,Serra Café,1,185.43,1,Redorai
+2026-07-28,Julho,2026,E-mail,Resolvido,Serra Café,1,41.34,1,Redorai
+2026-07-28,Julho,2026,Chat,Resolvido,Serra Café,1,173.52,1,Redorai
+2026-07-28,Julho,2026,Telefone,Resolvido,Terra Nova,1,95.74,1,Redorai
+2026-07-29,Julho,2026,Portal,Em andamento,Atlas Ltda,1,60.45,1,Redorai
+2026-07-29,Julho,2026,Chat,Resolvido,Pampa Alimentos,1,89.27,1,Redorai
+2026-07-29,Julho,2026,E-mail,Resolvido,Terra Nova,1,137.83,1,Redorai
+2026-07-29,Julho,2026,E-mail,Em andamento,Verde Agro,1,43.31,1,Redorai
+2026-07-29,Julho,2026,Chat,Pendente,Delta Log,1,104.26,1,Redorai
+2026-07-30,Julho,2026,Chat,Em andamento,Maré Energia,1,45.90,1,Redorai
+2026-07-30,Julho,2026,Telefone,Em andamento,Nimbus SA,1,68.51,1,Redorai
+2026-07-30,Julho,2026,Chat,Escalado,Pulse Varejo,1,96.63,1,Redorai
+2026-07-30,Julho,2026,E-mail,Resolvido,Céu Soft,1,180.28,1,Redorai
+2026-07-30,Julho,2026,E-mail,Em andamento,Serra Café,1,179.73,1,Redorai
+2026-07-30,Julho,2026,WhatsApp,Aberto,Orbit Educação,1,132.81,1,Redorai
+2026-07-30,Julho,2026,Telefone,Em andamento,Atlas Ltda,1,114.66,1,Redorai
+2026-07-30,Julho,2026,Telefone,Escalado,Maré Energia,1,173.13,1,Redorai
+2026-07-30,Julho,2026,WhatsApp,Em andamento,Helix Saúde,1,138.75,1,Redorai
+2026-07-31,Julho,2026,Telefone,Resolvido,Aurora Moda,1,188.05,1,Redorai
+2026-07-31,Julho,2026,E-mail,Escalado,Pulse Varejo,1,216.05,1,Redorai
+2026-07-31,Julho,2026,Telefone,Resolvido,Forge Engenharia,1,45.83,1,Redorai
+2026-07-31,Julho,2026,Portal,Em andamento,Costa Farma,1,55.51,1,Redorai
+2026-07-31,Julho,2026,Telefone,Resolvido,Maré Energia,1,24.95,1,Redorai
+2026-07-31,Julho,2026,E-mail,Em andamento,Rio Branco,1,109.35,1,Redorai
+2026-07-31,Julho,2026,Portal,Aberto,Pampa Alimentos,1,66.73,1,Redorai
+2026-07-31,Julho,2026,WhatsApp,Em andamento,Atlas Ltda,1,126.26,1,Redorai
+2026-07-31,Julho,2026,WhatsApp,Pendente,Maré Energia,1,18.59,1,Redorai
+2026-07-31,Julho,2026,E-mail,Em andamento,Terra Nova,1,37.90,1,Redorai
+2026-07-31,Julho,2026,Portal,Resolvido,Serra Café,1,65.97,1,Redorai
+2026-08-01,Agosto,2026,Chat,Resolvido,Orbit Educação,1,144.75,1,Redorai
+2026-08-02,Agosto,2026,WhatsApp,Resolvido,Céu Soft,1,156.24,1,Redorai
+2026-08-02,Agosto,2026,Portal,Em andamento,Boa Vista,1,108.98,1,Redorai
+2026-08-02,Agosto,2026,WhatsApp,Aberto,Nimbus SA,1,45.08,1,Redorai
+2026-08-02,Agosto,2026,E-mail,Escalado,Serra Café,1,120.09,1,Redorai
+2026-08-03,Agosto,2026,WhatsApp,Em andamento,Maré Energia,1,97.15,1,Redorai
+2026-08-03,Agosto,2026,WhatsApp,Pendente,Forge Engenharia,1,186.55,1,Redorai
+2026-08-03,Agosto,2026,E-mail,Resolvido,Lumen Tech,1,132.03,1,Redorai
+2026-08-03,Agosto,2026,Portal,Escalado,Casa Norte,1,125.53,1,Redorai
+2026-08-03,Agosto,2026,E-mail,Resolvido,Pampa Alimentos,1,132.53,1,Redorai
+2026-08-04,Agosto,2026,Telefone,Resolvido,Costa Farma,1,168.11,1,Redorai
+2026-08-04,Agosto,2026,WhatsApp,Resolvido,Casa Norte,1,152.65,1,Redorai
+2026-08-04,Agosto,2026,Chat,Resolvido,Delta Log,1,70.90,1,Redorai
+2026-08-04,Agosto,2026,E-mail,Resolvido,Maré Energia,1,149.73,1,Redorai
+2026-08-04,Agosto,2026,Telefone,Em andamento,Terra Nova,1,177.00,1,Redorai
+2026-08-04,Agosto,2026,E-mail,Resolvido,Verde Agro,1,61.09,1,Redorai
+2026-08-04,Agosto,2026,Chat,Resolvido,Forge Engenharia,1,140.33,1,Redorai
+2026-08-05,Agosto,2026,Portal,Resolvido,Maré Energia,1,145.13,1,Redorai
+2026-08-05,Agosto,2026,Telefone,Em andamento,Rio Branco,1,205.62,1,Redorai
+2026-08-05,Agosto,2026,WhatsApp,Aberto,Aurora Moda,1,86.01,1,Redorai
+2026-08-05,Agosto,2026,Telefone,Resolvido,Rio Branco,1,58.18,1,Redorai
+2026-08-05,Agosto,2026,Telefone,Resolvido,Costa Farma,1,97.60,1,Redorai
+2026-08-05,Agosto,2026,Portal,Resolvido,Forge Engenharia,1,144.43,1,Redorai
+2026-08-05,Agosto,2026,WhatsApp,Resolvido,Forge Engenharia,1,57.55,1,Redorai
+2026-08-05,Agosto,2026,WhatsApp,Escalado,Delta Log,1,74.82,1,Redorai
+2026-08-05,Agosto,2026,Telefone,Em andamento,Atlas Ltda,1,46.96,1,Redorai
+2026-08-05,Agosto,2026,Portal,Resolvido,Pampa Alimentos,1,130.80,1,Redorai
+2026-08-05,Agosto,2026,E-mail,Resolvido,Delta Log,1,129.07,1,Redorai
+2026-08-05,Agosto,2026,Chat,Resolvido,Serra Café,1,203.84,1,Redorai
+2026-08-05,Agosto,2026,Portal,Pendente,Helix Saúde,1,34.88,1,Redorai
+2026-08-06,Agosto,2026,E-mail,Pendente,Boa Vista,1,74.32,1,Redorai
+2026-08-06,Agosto,2026,Telefone,Resolvido,Sul Minas,1,98.75,1,Redorai
+2026-08-06,Agosto,2026,Telefone,Resolvido,Terra Nova,1,72.17,1,Redorai
+2026-08-06,Agosto,2026,E-mail,Resolvido,Aurora Moda,1,117.97,1,Redorai
+2026-08-06,Agosto,2026,Chat,Resolvido,Serra Café,1,116.44,1,Redorai
+2026-08-06,Agosto,2026,Telefone,Resolvido,Pulse Varejo,1,204.40,1,Redorai
+2026-08-06,Agosto,2026,WhatsApp,Pendente,Atlas Ltda,1,124.20,1,Redorai
+2026-08-07,Agosto,2026,Chat,Resolvido,Helix Saúde,1,93.59,1,Redorai
+2026-08-07,Agosto,2026,Telefone,Resolvido,Maré Energia,1,53.72,1,Redorai
+2026-08-07,Agosto,2026,Chat,Aberto,Orbit Educação,1,139.99,1,Redorai
+2026-08-07,Agosto,2026,E-mail,Resolvido,Terra Nova,1,131.97,1,Redorai
+2026-08-07,Agosto,2026,E-mail,Resolvido,Aurora Moda,1,140.01,1,Redorai
+2026-08-07,Agosto,2026,Telefone,Pendente,Forge Engenharia,1,210.13,1,Redorai
+2026-08-07,Agosto,2026,Portal,Aberto,Serra Café,1,128.17,1,Redorai
+2026-08-07,Agosto,2026,Chat,Resolvido,Céu Soft,1,90.66,1,Redorai
+2026-08-07,Agosto,2026,Chat,Resolvido,Rio Branco,1,207.11,1,Redorai
+2026-08-08,Agosto,2026,WhatsApp,Em andamento,Forge Engenharia,1,198.36,1,Redorai
+2026-08-08,Agosto,2026,Telefone,Pendente,Céu Soft,1,65.23,1,Redorai
+2026-08-09,Agosto,2026,Chat,Escalado,Céu Soft,1,117.54,1,Redorai
+2026-08-09,Agosto,2026,Portal,Aberto,Aurora Moda,1,193.78,1,Redorai
+2026-08-09,Agosto,2026,Chat,Resolvido,Céu Soft,1,163.02,1,Redorai
+2026-08-09,Agosto,2026,E-mail,Aberto,Maré Energia,1,192.75,1,Redorai
+2026-08-10,Agosto,2026,E-mail,Resolvido,Maré Energia,1,211.30,1,Redorai
+2026-08-10,Agosto,2026,Portal,Resolvido,Helix Saúde,1,161.74,1,Redorai
+2026-08-10,Agosto,2026,Portal,Resolvido,Atlas Ltda,1,104.90,1,Redorai
+2026-08-10,Agosto,2026,E-mail,Resolvido,Delta Log,1,181.39,1,Redorai
+2026-08-10,Agosto,2026,E-mail,Resolvido,Pampa Alimentos,1,96.88,1,Redorai
+2026-08-10,Agosto,2026,Telefone,Escalado,Maré Energia,1,176.42,1,Redorai
+2026-08-10,Agosto,2026,WhatsApp,Aberto,Boa Vista,1,169.48,1,Redorai
+2026-08-10,Agosto,2026,Chat,Aberto,Pampa Alimentos,1,99.64,1,Redorai
+2026-08-10,Agosto,2026,Chat,Em andamento,Rio Branco,1,58.07,1,Redorai
+2026-08-10,Agosto,2026,E-mail,Aberto,Céu Soft,1,199.34,1,Redorai
+2026-08-10,Agosto,2026,Chat,Resolvido,Costa Farma,1,85.20,1,Redorai
+2026-08-11,Agosto,2026,Telefone,Em andamento,Costa Farma,1,131.49,1,Redorai
+2026-08-11,Agosto,2026,Chat,Resolvido,Orbit Educação,1,121.96,1,Redorai
+2026-08-11,Agosto,2026,WhatsApp,Aberto,Boa Vista,1,89.36,1,Redorai
+2026-08-11,Agosto,2026,Chat,Em andamento,Boa Vista,1,144.95,1,Redorai
+2026-08-11,Agosto,2026,Telefone,Resolvido,Delta Log,1,46.66,1,Redorai
+2026-08-11,Agosto,2026,Chat,Resolvido,Orbit Educação,1,139.53,1,Redorai
+2026-08-11,Agosto,2026,WhatsApp,Resolvido,Verde Agro,1,20.74,1,Redorai
+2026-08-11,Agosto,2026,WhatsApp,Pendente,Orbit Educação,1,134.77,1,Redorai
+2026-08-11,Agosto,2026,Portal,Em andamento,Casa Norte,1,98.20,1,Redorai
+2026-08-11,Agosto,2026,Chat,Resolvido,Pampa Alimentos,1,146.99,1,Redorai
+2026-08-11,Agosto,2026,Portal,Resolvido,Aurora Moda,1,122.28,1,Redorai
+2026-08-12,Agosto,2026,Telefone,Resolvido,Pulse Varejo,1,193.51,1,Redorai
+2026-08-12,Agosto,2026,Telefone,Resolvido,Serra Café,1,17.92,1,Redorai
+2026-08-12,Agosto,2026,WhatsApp,Escalado,Verde Agro,1,78.41,1,Redorai
+2026-08-12,Agosto,2026,WhatsApp,Em andamento,Terra Nova,1,174.49,1,Redorai
+2026-08-12,Agosto,2026,Chat,Resolvido,Pampa Alimentos,1,117.25,1,Redorai
+2026-08-12,Agosto,2026,E-mail,Resolvido,Casa Norte,1,199.12,1,Redorai
+2026-08-12,Agosto,2026,WhatsApp,Resolvido,Nimbus SA,1,96.69,1,Redorai
+2026-08-12,Agosto,2026,WhatsApp,Aberto,Casa Norte,1,28.78,1,Redorai
+2026-08-12,Agosto,2026,Portal,Resolvido,Sul Minas,1,193.89,1,Redorai
+2026-08-12,Agosto,2026,E-mail,Escalado,Céu Soft,1,131.17,1,Redorai
+2026-08-13,Agosto,2026,Chat,Em andamento,Verde Agro,1,61.81,1,Redorai
+2026-08-13,Agosto,2026,Chat,Resolvido,Nimbus SA,1,215.77,1,Redorai
+2026-08-13,Agosto,2026,WhatsApp,Em andamento,Forge Engenharia,1,167.34,1,Redorai
+2026-08-13,Agosto,2026,E-mail,Resolvido,Orbit Educação,1,122.12,1,Redorai
+2026-08-13,Agosto,2026,Chat,Aberto,Verde Agro,1,135.06,1,Redorai
+2026-08-13,Agosto,2026,Telefone,Resolvido,Helix Saúde,1,125.07,1,Redorai
+2026-08-13,Agosto,2026,WhatsApp,Resolvido,Forge Engenharia,1,55.27,1,Redorai
+2026-08-14,Agosto,2026,Telefone,Resolvido,Lumen Tech,1,35.47,1,Redorai
+2026-08-14,Agosto,2026,Portal,Resolvido,Rio Branco,1,76.49,1,Redorai
+2026-08-14,Agosto,2026,Telefone,Aberto,Helix Saúde,1,162.60,1,Redorai
+2026-08-14,Agosto,2026,Chat,Resolvido,Boa Vista,1,180.18,1,Redorai
+2026-08-14,Agosto,2026,Telefone,Resolvido,Atlas Ltda,1,66.61,1,Redorai
+2026-08-15,Agosto,2026,Telefone,Resolvido,Pulse Varejo,1,82.37,1,Redorai
+2026-08-15,Agosto,2026,WhatsApp,Resolvido,Delta Log,1,69.16,1,Redorai
+2026-08-15,Agosto,2026,WhatsApp,Resolvido,Costa Farma,1,153.96,1,Redorai
+2026-08-15,Agosto,2026,Telefone,Resolvido,Helix Saúde,1,215.33,1,Redorai
+2026-08-16,Agosto,2026,WhatsApp,Resolvido,Casa Norte,1,111.45,1,Redorai
+2026-08-16,Agosto,2026,E-mail,Pendente,Maré Energia,1,152.96,1,Redorai
+2026-08-17,Agosto,2026,Telefone,Escalado,Aurora Moda,1,145.77,1,Redorai
+2026-08-17,Agosto,2026,Chat,Resolvido,Lumen Tech,1,174.65,1,Redorai
+2026-08-17,Agosto,2026,Chat,Resolvido,Delta Log,1,117.86,1,Redorai
+2026-08-17,Agosto,2026,Portal,Em andamento,Rio Branco,1,36.10,1,Redorai
+2026-08-17,Agosto,2026,Portal,Em andamento,Lumen Tech,1,132.06,1,Redorai
+2026-08-18,Agosto,2026,Chat,Em andamento,Serra Café,1,176.09,1,Redorai
+2026-08-18,Agosto,2026,Portal,Resolvido,Pulse Varejo,1,81.76,1,Redorai
+2026-08-18,Agosto,2026,Telefone,Resolvido,Terra Nova,1,176.69,1,Redorai
+2026-08-18,Agosto,2026,WhatsApp,Resolvido,Verde Agro,1,206.23,1,Redorai
+2026-08-18,Agosto,2026,WhatsApp,Resolvido,Pampa Alimentos,1,44.72,1,Redorai
+2026-08-18,Agosto,2026,WhatsApp,Em andamento,Aurora Moda,1,107.19,1,Redorai
+2026-08-19,Agosto,2026,Telefone,Resolvido,Atlas Ltda,1,171.26,1,Redorai
+2026-08-19,Agosto,2026,Telefone,Resolvido,Pampa Alimentos,1,147.39,1,Redorai
+2026-08-19,Agosto,2026,Telefone,Pendente,Costa Farma,1,18.99,1,Redorai
+2026-08-19,Agosto,2026,Chat,Resolvido,Costa Farma,1,75.43,1,Redorai
+2026-08-19,Agosto,2026,WhatsApp,Em andamento,Maré Energia,1,177.14,1,Redorai
+2026-08-19,Agosto,2026,Portal,Em andamento,Lumen Tech,1,178.48,1,Redorai
+2026-08-19,Agosto,2026,Telefone,Resolvido,Costa Farma,1,36.90,1,Redorai
+2026-08-19,Agosto,2026,WhatsApp,Em andamento,Rio Branco,1,208.01,1,Redorai
+2026-08-19,Agosto,2026,E-mail,Resolvido,Serra Café,1,156.00,1,Redorai
+2026-08-19,Agosto,2026,Telefone,Resolvido,Verde Agro,1,72.43,1,Redorai
+2026-08-20,Agosto,2026,E-mail,Resolvido,Helix Saúde,1,26.50,1,Redorai
+2026-08-20,Agosto,2026,Portal,Em andamento,Pampa Alimentos,1,104.82,1,Redorai
+2026-08-20,Agosto,2026,Telefone,Em andamento,Orbit Educação,1,195.57,1,Redorai
+2026-08-20,Agosto,2026,Telefone,Aberto,Orbit Educação,1,194.16,1,Redorai
+2026-08-20,Agosto,2026,Portal,Resolvido,Lumen Tech,1,130.18,1,Redorai
+2026-08-20,Agosto,2026,WhatsApp,Resolvido,Boa Vista,1,127.05,1,Redorai
+2026-08-20,Agosto,2026,Portal,Resolvido,Casa Norte,1,182.55,1,Redorai
+2026-08-20,Agosto,2026,Chat,Resolvido,Forge Engenharia,1,193.50,1,Redorai
+2026-08-20,Agosto,2026,WhatsApp,Resolvido,Pampa Alimentos,1,200.55,1,Redorai
+2026-08-20,Agosto,2026,Chat,Resolvido,Pulse Varejo,1,80.86,1,Redorai
+2026-08-20,Agosto,2026,WhatsApp,Em andamento,Aurora Moda,1,55.79,1,Redorai
+2026-08-20,Agosto,2026,WhatsApp,Escalado,Costa Farma,1,138.74,1,Redorai
+2026-08-20,Agosto,2026,Chat,Escalado,Helix Saúde,1,146.66,1,Redorai
+2026-08-21,Agosto,2026,Telefone,Em andamento,Nimbus SA,1,185.49,1,Redorai
+2026-08-21,Agosto,2026,Portal,Aberto,Pampa Alimentos,1,18.32,1,Redorai
+2026-08-21,Agosto,2026,E-mail,Resolvido,Casa Norte,1,193.98,1,Redorai
+2026-08-21,Agosto,2026,Portal,Em andamento,Rio Branco,1,72.94,1,Redorai
+2026-08-21,Agosto,2026,E-mail,Em andamento,Forge Engenharia,1,130.89,1,Redorai
+2026-08-21,Agosto,2026,E-mail,Escalado,Sul Minas,1,47.44,1,Redorai
+2026-08-21,Agosto,2026,E-mail,Resolvido,Boa Vista,1,204.11,1,Redorai
+2026-08-21,Agosto,2026,Chat,Resolvido,Forge Engenharia,1,172.26,1,Redorai
+2026-08-21,Agosto,2026,WhatsApp,Resolvido,Céu Soft,1,107.51,1,Redorai
+2026-08-21,Agosto,2026,Chat,Resolvido,Aurora Moda,1,29.97,1,Redorai
+2026-08-22,Agosto,2026,Telefone,Resolvido,Atlas Ltda,1,97.30,1,Redorai
+2026-08-22,Agosto,2026,Portal,Em andamento,Serra Café,1,18.87,1,Redorai
+2026-08-22,Agosto,2026,Telefone,Em andamento,Orbit Educação,1,68.06,1,Redorai
+2026-08-23,Agosto,2026,WhatsApp,Resolvido,Sul Minas,1,108.84,1,Redorai
+2026-08-23,Agosto,2026,Portal,Resolvido,Pampa Alimentos,1,198.11,1,Redorai
+2026-08-24,Agosto,2026,Chat,Pendente,Lumen Tech,1,78.24,1,Redorai
+2026-08-24,Agosto,2026,Portal,Aberto,Terra Nova,1,208.62,1,Redorai
+2026-08-24,Agosto,2026,Chat,Aberto,Sul Minas,1,86.45,1,Redorai
+2026-08-24,Agosto,2026,WhatsApp,Aberto,Verde Agro,1,149.92,1,Redorai
+2026-08-24,Agosto,2026,Chat,Pendente,Maré Energia,1,218.16,1,Redorai
+2026-08-24,Agosto,2026,Chat,Em andamento,Pampa Alimentos,1,20.60,1,Redorai
+2026-08-24,Agosto,2026,Telefone,Resolvido,Helix Saúde,1,186.00,1,Redorai
+2026-08-24,Agosto,2026,Telefone,Em andamento,Lumen Tech,1,92.99,1,Redorai
+2026-08-24,Agosto,2026,Telefone,Resolvido,Lumen Tech,1,57.15,1,Redorai
+2026-08-24,Agosto,2026,E-mail,Em andamento,Forge Engenharia,1,213.69,1,Redorai
+2026-08-24,Agosto,2026,Portal,Resolvido,Casa Norte,1,39.95,1,Redorai
+2026-08-24,Agosto,2026,E-mail,Resolvido,Rio Branco,1,166.83,1,Redorai
+2026-08-24,Agosto,2026,WhatsApp,Em andamento,Maré Energia,1,54.15,1,Redorai
+2026-08-25,Agosto,2026,WhatsApp,Resolvido,Rio Branco,1,67.33,1,Redorai
+2026-08-25,Agosto,2026,Telefone,Aberto,Atlas Ltda,1,16.49,1,Redorai
+2026-08-25,Agosto,2026,Telefone,Resolvido,Helix Saúde,1,87.71,1,Redorai
+2026-08-25,Agosto,2026,E-mail,Escalado,Maré Energia,1,208.92,1,Redorai
+2026-08-25,Agosto,2026,Chat,Resolvido,Forge Engenharia,1,148.34,1,Redorai
+2026-08-26,Agosto,2026,E-mail,Resolvido,Costa Farma,1,164.57,1,Redorai
+2026-08-26,Agosto,2026,E-mail,Resolvido,Orbit Educação,1,188.72,1,Redorai
+2026-08-26,Agosto,2026,E-mail,Pendente,Orbit Educação,1,121.32,1,Redorai
+2026-08-26,Agosto,2026,Telefone,Pendente,Nimbus SA,1,27.54,1,Redorai
+2026-08-26,Agosto,2026,WhatsApp,Resolvido,Pampa Alimentos,1,141.60,1,Redorai
+2026-08-26,Agosto,2026,Telefone,Resolvido,Pulse Varejo,1,50.80,1,Redorai
+2026-08-26,Agosto,2026,Chat,Resolvido,Pulse Varejo,1,89.84,1,Redorai
+2026-08-26,Agosto,2026,Chat,Escalado,Atlas Ltda,1,117.00,1,Redorai
+2026-08-26,Agosto,2026,WhatsApp,Em andamento,Costa Farma,1,142.49,1,Redorai
+2026-08-26,Agosto,2026,E-mail,Aberto,Aurora Moda,1,20.84,1,Redorai
+2026-08-27,Agosto,2026,Chat,Aberto,Maré Energia,1,24.53,1,Redorai
+2026-08-27,Agosto,2026,Portal,Em andamento,Casa Norte,1,49.80,1,Redorai
+2026-08-27,Agosto,2026,WhatsApp,Aberto,Verde Agro,1,33.89,1,Redorai
+2026-08-27,Agosto,2026,E-mail,Escalado,Rio Branco,1,110.21,1,Redorai
+2026-08-27,Agosto,2026,Portal,Resolvido,Céu Soft,1,42.55,1,Redorai
+2026-08-27,Agosto,2026,E-mail,Resolvido,Delta Log,1,112.63,1,Redorai
+2026-08-27,Agosto,2026,WhatsApp,Resolvido,Orbit Educação,1,81.19,1,Redorai
+2026-08-27,Agosto,2026,Portal,Resolvido,Helix Saúde,1,112.95,1,Redorai
+2026-08-27,Agosto,2026,Portal,Resolvido,Lumen Tech,1,40.80,1,Redorai
+2026-08-27,Agosto,2026,Chat,Resolvido,Verde Agro,1,150.14,1,Redorai
+2026-08-27,Agosto,2026,Telefone,Resolvido,Delta Log,1,196.82,1,Redorai
+2026-08-28,Agosto,2026,WhatsApp,Em andamento,Pulse Varejo,1,164.66,1,Redorai
+2026-08-28,Agosto,2026,Telefone,Em andamento,Boa Vista,1,121.58,1,Redorai
+2026-08-28,Agosto,2026,WhatsApp,Resolvido,Orbit Educação,1,82.23,1,Redorai
+2026-08-28,Agosto,2026,Chat,Em andamento,Boa Vista,1,165.96,1,Redorai
+2026-08-28,Agosto,2026,Telefone,Resolvido,Nimbus SA,1,177.81,1,Redorai

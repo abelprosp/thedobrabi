@@ -1,0 +1,81 @@
+data,mes,ano,fornecedor,categoria,produto,quantidade,valor,empresa
+2025-11-01,Novembro,2025,NuvemAzul,Infra,Instâncias cloud,3,13202.57,Redorai
+2025-11-01,Novembro,2025,ChipNet,Infra,Domínio e DNS,1,193.13,Redorai
+2025-11-01,Novembro,2025,Papel & Toner,Escritório,Papel A4,6,533.23,Redorai
+2025-11-01,Novembro,2025,Papel & Toner,Escritório,Toner,1,340.26,Redorai
+2025-11-01,Novembro,2025,Café Central,Facilities,Café,3,793.91,Redorai
+2025-11-01,Novembro,2025,Móveis Alfa,Facilities,Mesas,6,5582.55,Redorai
+2025-11-01,Novembro,2025,LogiSul,Logística,Frete inbound,3,1996.73,Redorai
+2025-11-01,Novembro,2025,ChipNet,Software,Licenças design,2,2405.25,Redorai
+2025-12-01,Dezembro,2025,NuvemAzul,Infra,Instâncias cloud,1,4696.14,Redorai
+2025-12-01,Dezembro,2025,ChipNet,Infra,Domínio e DNS,3,531.14,Redorai
+2025-12-01,Dezembro,2025,Papel & Toner,Escritório,Papel A4,4,381.54,Redorai
+2025-12-01,Dezembro,2025,Papel & Toner,Escritório,Toner,5,1615.39,Redorai
+2025-12-01,Dezembro,2025,Café Central,Facilities,Café,2,438.10,Redorai
+2025-12-01,Dezembro,2025,Móveis Alfa,Facilities,Mesas,4,3663.50,Redorai
+2025-12-01,Dezembro,2025,LogiSul,Logística,Frete inbound,3,1601.81,Redorai
+2025-12-01,Dezembro,2025,ChipNet,Software,Licenças design,6,7152.52,Redorai
+2026-01-01,Janeiro,2026,NuvemAzul,Infra,Instâncias cloud,5,24173.92,Redorai
+2026-01-01,Janeiro,2026,ChipNet,Infra,Domínio e DNS,2,366.97,Redorai
+2026-01-01,Janeiro,2026,Papel & Toner,Escritório,Papel A4,6,662.92,Redorai
+2026-01-01,Janeiro,2026,Papel & Toner,Escritório,Toner,6,2353.43,Redorai
+2026-01-01,Janeiro,2026,Café Central,Facilities,Café,5,1211.56,Redorai
+2026-01-01,Janeiro,2026,Móveis Alfa,Facilities,Mesas,2,1984.83,Redorai
+2026-01-01,Janeiro,2026,LogiSul,Logística,Frete inbound,2,1226.73,Redorai
+2026-01-01,Janeiro,2026,ChipNet,Software,Licenças design,1,1530.14,Redorai
+2026-02-01,Fevereiro,2026,NuvemAzul,Infra,Instâncias cloud,2,9314.49,Redorai
+2026-02-01,Fevereiro,2026,ChipNet,Infra,Domínio e DNS,5,860.50,Redorai
+2026-02-01,Fevereiro,2026,Papel & Toner,Escritório,Papel A4,5,574.99,Redorai
+2026-02-01,Fevereiro,2026,Papel & Toner,Escritório,Toner,6,2377.05,Redorai
+2026-02-01,Fevereiro,2026,Café Central,Facilities,Café,2,497.82,Redorai
+2026-02-01,Fevereiro,2026,Móveis Alfa,Facilities,Mesas,1,838.79,Redorai
+2026-02-01,Fevereiro,2026,LogiSul,Logística,Frete inbound,5,3095.97,Redorai
+2026-02-01,Fevereiro,2026,ChipNet,Software,Licenças design,3,4402.53,Redorai
+2026-03-01,Março,2026,NuvemAzul,Infra,Instâncias cloud,2,9072.57,Redorai
+2026-03-01,Março,2026,ChipNet,Infra,Domínio e DNS,2,335.93,Redorai
+2026-03-01,Março,2026,Papel & Toner,Escritório,Papel A4,2,198.64,Redorai
+2026-03-01,Março,2026,Papel & Toner,Escritório,Toner,6,2031.35,Redorai
+2026-03-01,Março,2026,Café Central,Facilities,Café,5,1333.79,Redorai
+2026-03-01,Março,2026,Móveis Alfa,Facilities,Mesas,3,2815.63,Redorai
+2026-03-01,Março,2026,LogiSul,Logística,Frete inbound,6,3209.57,Redorai
+2026-03-01,Março,2026,ChipNet,Software,Licenças design,4,4852.01,Redorai
+2026-04-01,Abril,2026,NuvemAzul,Infra,Instâncias cloud,4,18095.76,Redorai
+2026-04-01,Abril,2026,ChipNet,Infra,Domínio e DNS,5,1041.54,Redorai
+2026-04-01,Abril,2026,Papel & Toner,Escritório,Papel A4,2,208.95,Redorai
+2026-04-01,Abril,2026,Papel & Toner,Escritório,Toner,6,2468.90,Redorai
+2026-04-01,Abril,2026,Café Central,Facilities,Café,3,616.20,Redorai
+2026-04-01,Abril,2026,Móveis Alfa,Facilities,Mesas,5,4175.16,Redorai
+2026-04-01,Abril,2026,LogiSul,Logística,Frete inbound,6,3282.91,Redorai
+2026-04-01,Abril,2026,ChipNet,Software,Licenças design,4,5513.50,Redorai
+2026-05-01,Maio,2026,NuvemAzul,Infra,Instâncias cloud,5,24802.61,Redorai
+2026-05-01,Maio,2026,ChipNet,Infra,Domínio e DNS,1,174.54,Redorai
+2026-05-01,Maio,2026,Papel & Toner,Escritório,Papel A4,5,491.74,Redorai
+2026-05-01,Maio,2026,Papel & Toner,Escritório,Toner,4,1414.75,Redorai
+2026-05-01,Maio,2026,Café Central,Facilities,Café,3,648.17,Redorai
+2026-05-01,Maio,2026,Móveis Alfa,Facilities,Mesas,1,861.52,Redorai
+2026-05-01,Maio,2026,LogiSul,Logística,Frete inbound,2,1229.35,Redorai
+2026-05-01,Maio,2026,ChipNet,Software,Licenças design,1,1527.03,Redorai
+2026-06-01,Junho,2026,NuvemAzul,Infra,Instâncias cloud,5,22189.28,Redorai
+2026-06-01,Junho,2026,ChipNet,Infra,Domínio e DNS,6,1227.07,Redorai
+2026-06-01,Junho,2026,Papel & Toner,Escritório,Papel A4,3,288.14,Redorai
+2026-06-01,Junho,2026,Papel & Toner,Escritório,Toner,2,686.06,Redorai
+2026-06-01,Junho,2026,Café Central,Facilities,Café,3,716.53,Redorai
+2026-06-01,Junho,2026,Móveis Alfa,Facilities,Mesas,2,1757.18,Redorai
+2026-06-01,Junho,2026,LogiSul,Logística,Frete inbound,5,2776.10,Redorai
+2026-06-01,Junho,2026,ChipNet,Software,Licenças design,1,1434.33,Redorai
+2026-07-01,Julho,2026,NuvemAzul,Infra,Instâncias cloud,3,15097.00,Redorai
+2026-07-01,Julho,2026,ChipNet,Infra,Domínio e DNS,3,638.29,Redorai
+2026-07-01,Julho,2026,Papel & Toner,Escritório,Papel A4,1,105.71,Redorai
+2026-07-01,Julho,2026,Papel & Toner,Escritório,Toner,2,827.47,Redorai
+2026-07-01,Julho,2026,Café Central,Facilities,Café,2,475.37,Redorai
+2026-07-01,Julho,2026,Móveis Alfa,Facilities,Mesas,1,991.99,Redorai
+2026-07-01,Julho,2026,LogiSul,Logística,Frete inbound,6,3701.20,Redorai
+2026-07-01,Julho,2026,ChipNet,Software,Licenças design,3,3937.22,Redorai
+2026-08-01,Agosto,2026,NuvemAzul,Infra,Instâncias cloud,6,29866.94,Redorai
+2026-08-01,Agosto,2026,ChipNet,Infra,Domínio e DNS,3,613.78,Redorai
+2026-08-01,Agosto,2026,Papel & Toner,Escritório,Papel A4,4,452.01,Redorai
+2026-08-01,Agosto,2026,Papel & Toner,Escritório,Toner,3,1037.74,Redorai
+2026-08-01,Agosto,2026,Café Central,Facilities,Café,1,243.71,Redorai
+2026-08-01,Agosto,2026,Móveis Alfa,Facilities,Mesas,1,1038.79,Redorai
+2026-08-01,Agosto,2026,LogiSul,Logística,Frete inbound,2,1275.84,Redorai
+2026-08-01,Agosto,2026,ChipNet,Software,Licenças design,3,3765.59,Redorai

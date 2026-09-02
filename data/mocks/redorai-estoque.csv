@@ -1,0 +1,289 @@
+data,mes,ano,produto,categoria,armazem,status,estoque,quantidade,valor,empresa
+2026-01-01,Janeiro,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,37,37,7047.52,Redorai
+2026-01-01,Janeiro,2026,Camiseta logo,Vestuário,CD Recife,Disponível,170,170,23776.82,Redorai
+2026-01-01,Janeiro,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,84,84,17129.09,Redorai
+2026-01-01,Janeiro,2026,Moletom,Vestuário,CD São Paulo,Disponível,12,12,479.94,Redorai
+2026-01-01,Janeiro,2026,Moletom,Vestuário,CD Recife,Disponível,45,45,2276.54,Redorai
+2026-01-01,Janeiro,2026,Moletom,Vestuário,CD Curitiba,Disponível,72,72,10183.69,Redorai
+2026-01-01,Janeiro,2026,Caneca,Acessórios,CD São Paulo,Disponível,177,177,23647.39,Redorai
+2026-01-01,Janeiro,2026,Caneca,Acessórios,CD Recife,Parado,143,143,15726.89,Redorai
+2026-01-01,Janeiro,2026,Caneca,Acessórios,CD Curitiba,Disponível,148,148,3735.47,Redorai
+2026-01-01,Janeiro,2026,Caderno,Acessórios,CD São Paulo,Disponível,76,76,6323.96,Redorai
+2026-01-01,Janeiro,2026,Caderno,Acessórios,CD Recife,Disponível,97,97,17818.27,Redorai
+2026-01-01,Janeiro,2026,Caderno,Acessórios,CD Curitiba,Disponível,109,109,20529.99,Redorai
+2026-01-01,Janeiro,2026,Boné,Vestuário,CD São Paulo,Disponível,16,16,1234.44,Redorai
+2026-01-01,Janeiro,2026,Boné,Vestuário,CD Recife,Disponível,34,34,1450.06,Redorai
+2026-01-01,Janeiro,2026,Boné,Vestuário,CD Curitiba,Disponível,70,70,5915.01,Redorai
+2026-01-01,Janeiro,2026,Garrafa,Acessórios,CD São Paulo,Disponível,105,105,13017.75,Redorai
+2026-01-01,Janeiro,2026,Garrafa,Acessórios,CD Recife,Parado,178,178,5296.09,Redorai
+2026-01-01,Janeiro,2026,Garrafa,Acessórios,CD Curitiba,Disponível,146,146,21177.84,Redorai
+2026-01-01,Janeiro,2026,Kit onboarding,Kits,CD São Paulo,Disponível,22,22,2545.40,Redorai
+2026-01-01,Janeiro,2026,Kit onboarding,Kits,CD Recife,Disponível,176,176,31189.55,Redorai
+2026-01-01,Janeiro,2026,Kit onboarding,Kits,CD Curitiba,Disponível,180,180,25377.59,Redorai
+2026-01-01,Janeiro,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,81,81,5706.56,Redorai
+2026-01-01,Janeiro,2026,Mouse pad,Acessórios,CD Recife,Disponível,147,147,13153.32,Redorai
+2026-01-01,Janeiro,2026,Mouse pad,Acessórios,CD Curitiba,Disponível,33,33,4688.86,Redorai
+2026-01-01,Janeiro,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,127,127,15618.53,Redorai
+2026-01-01,Janeiro,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,161,161,29175.14,Redorai
+2026-01-01,Janeiro,2026,Cabo USB-C,Acessórios,CD Curitiba,Parado,156,156,11961.86,Redorai
+2026-01-01,Janeiro,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,49,49,897.65,Redorai
+2026-01-01,Janeiro,2026,Suporte notebook,Acessórios,CD Recife,Baixo,6,6,671.44,Redorai
+2026-01-01,Janeiro,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,30,30,5009.06,Redorai
+2026-01-01,Janeiro,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,53,53,9514.14,Redorai
+2026-01-01,Janeiro,2026,Cadeira,Mobiliário,CD Recife,Disponível,106,106,10773.45,Redorai
+2026-01-01,Janeiro,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,85,85,7533.49,Redorai
+2026-01-01,Janeiro,2026,Monitor 27,Informática,CD São Paulo,Baixo,3,3,60.85,Redorai
+2026-01-01,Janeiro,2026,Monitor 27,Informática,CD Recife,Disponível,11,11,823.77,Redorai
+2026-01-01,Janeiro,2026,Monitor 27,Informática,CD Curitiba,Baixo,4,4,314.63,Redorai
+2026-02-01,Fevereiro,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,140,140,11680.57,Redorai
+2026-02-01,Fevereiro,2026,Camiseta logo,Vestuário,CD Recife,Baixo,1,1,41.00,Redorai
+2026-02-01,Fevereiro,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,85,85,7391.18,Redorai
+2026-02-01,Fevereiro,2026,Moletom,Vestuário,CD São Paulo,Disponível,145,145,3462.85,Redorai
+2026-02-01,Fevereiro,2026,Moletom,Vestuário,CD Recife,Disponível,44,44,2516.41,Redorai
+2026-02-01,Fevereiro,2026,Moletom,Vestuário,CD Curitiba,Disponível,86,86,17569.84,Redorai
+2026-02-01,Fevereiro,2026,Caneca,Acessórios,CD São Paulo,Disponível,122,122,24773.92,Redorai
+2026-02-01,Fevereiro,2026,Caneca,Acessórios,CD Recife,Disponível,9,9,1335.80,Redorai
+2026-02-01,Fevereiro,2026,Caneca,Acessórios,CD Curitiba,Disponível,123,123,6074.73,Redorai
+2026-02-01,Fevereiro,2026,Caderno,Acessórios,CD São Paulo,Disponível,117,117,23188.91,Redorai
+2026-02-01,Fevereiro,2026,Caderno,Acessórios,CD Recife,Disponível,137,137,27259.93,Redorai
+2026-02-01,Fevereiro,2026,Caderno,Acessórios,CD Curitiba,Disponível,118,118,20811.16,Redorai
+2026-02-01,Fevereiro,2026,Boné,Vestuário,CD São Paulo,Disponível,105,105,21568.43,Redorai
+2026-02-01,Fevereiro,2026,Boné,Vestuário,CD Recife,Disponível,14,14,2613.68,Redorai
+2026-02-01,Fevereiro,2026,Boné,Vestuário,CD Curitiba,Disponível,76,76,10041.00,Redorai
+2026-02-01,Fevereiro,2026,Garrafa,Acessórios,CD São Paulo,Disponível,173,173,21841.05,Redorai
+2026-02-01,Fevereiro,2026,Garrafa,Acessórios,CD Recife,Disponível,53,53,7135.62,Redorai
+2026-02-01,Fevereiro,2026,Garrafa,Acessórios,CD Curitiba,Disponível,84,84,15078.52,Redorai
+2026-02-01,Fevereiro,2026,Kit onboarding,Kits,CD São Paulo,Disponível,90,90,2823.75,Redorai
+2026-02-01,Fevereiro,2026,Kit onboarding,Kits,CD Recife,Disponível,38,38,2836.81,Redorai
+2026-02-01,Fevereiro,2026,Kit onboarding,Kits,CD Curitiba,Baixo,7,7,605.56,Redorai
+2026-02-01,Fevereiro,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,96,96,13877.30,Redorai
+2026-02-01,Fevereiro,2026,Mouse pad,Acessórios,CD Recife,Disponível,42,42,5600.21,Redorai
+2026-02-01,Fevereiro,2026,Mouse pad,Acessórios,CD Curitiba,Disponível,99,99,5529.20,Redorai
+2026-02-01,Fevereiro,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,29,29,5586.79,Redorai
+2026-02-01,Fevereiro,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,78,78,12516.17,Redorai
+2026-02-01,Fevereiro,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,80,80,12911.01,Redorai
+2026-02-01,Fevereiro,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,69,69,7010.51,Redorai
+2026-02-01,Fevereiro,2026,Suporte notebook,Acessórios,CD Recife,Disponível,127,127,24785.81,Redorai
+2026-02-01,Fevereiro,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,95,95,10382.08,Redorai
+2026-02-01,Fevereiro,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,77,77,4747.84,Redorai
+2026-02-01,Fevereiro,2026,Cadeira,Mobiliário,CD Recife,Disponível,77,77,4108.15,Redorai
+2026-02-01,Fevereiro,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,95,95,16773.08,Redorai
+2026-02-01,Fevereiro,2026,Monitor 27,Informática,CD São Paulo,Baixo,1,1,107.64,Redorai
+2026-02-01,Fevereiro,2026,Monitor 27,Informática,CD Recife,Disponível,12,12,1385.98,Redorai
+2026-02-01,Fevereiro,2026,Monitor 27,Informática,CD Curitiba,Baixo,2,2,112.85,Redorai
+2026-03-01,Março,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,123,123,20412.23,Redorai
+2026-03-01,Março,2026,Camiseta logo,Vestuário,CD Recife,Disponível,134,134,10812.79,Redorai
+2026-03-01,Março,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,83,83,3896.48,Redorai
+2026-03-01,Março,2026,Moletom,Vestuário,CD São Paulo,Disponível,25,25,4601.80,Redorai
+2026-03-01,Março,2026,Moletom,Vestuário,CD Recife,Disponível,132,132,20419.99,Redorai
+2026-03-01,Março,2026,Moletom,Vestuário,CD Curitiba,Disponível,33,33,1961.78,Redorai
+2026-03-01,Março,2026,Caneca,Acessórios,CD São Paulo,Disponível,9,9,997.13,Redorai
+2026-03-01,Março,2026,Caneca,Acessórios,CD Recife,Disponível,133,133,5506.05,Redorai
+2026-03-01,Março,2026,Caneca,Acessórios,CD Curitiba,Disponível,79,79,16300.24,Redorai
+2026-03-01,Março,2026,Caderno,Acessórios,CD São Paulo,Disponível,175,175,33970.78,Redorai
+2026-03-01,Março,2026,Caderno,Acessórios,CD Recife,Disponível,85,85,9546.26,Redorai
+2026-03-01,Março,2026,Caderno,Acessórios,CD Curitiba,Disponível,11,11,427.09,Redorai
+2026-03-01,Março,2026,Boné,Vestuário,CD São Paulo,Disponível,168,168,3786.89,Redorai
+2026-03-01,Março,2026,Boné,Vestuário,CD Recife,Disponível,79,79,11616.78,Redorai
+2026-03-01,Março,2026,Boné,Vestuário,CD Curitiba,Disponível,53,53,4389.35,Redorai
+2026-03-01,Março,2026,Garrafa,Acessórios,CD São Paulo,Disponível,49,49,3718.44,Redorai
+2026-03-01,Março,2026,Garrafa,Acessórios,CD Recife,Disponível,136,136,11215.68,Redorai
+2026-03-01,Março,2026,Garrafa,Acessórios,CD Curitiba,Disponível,112,112,17199.51,Redorai
+2026-03-01,Março,2026,Kit onboarding,Kits,CD São Paulo,Disponível,69,69,3323.23,Redorai
+2026-03-01,Março,2026,Kit onboarding,Kits,CD Recife,Disponível,70,70,2878.47,Redorai
+2026-03-01,Março,2026,Kit onboarding,Kits,CD Curitiba,Disponível,159,159,6150.09,Redorai
+2026-03-01,Março,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,138,138,12249.47,Redorai
+2026-03-01,Março,2026,Mouse pad,Acessórios,CD Recife,Disponível,81,81,5892.95,Redorai
+2026-03-01,Março,2026,Mouse pad,Acessórios,CD Curitiba,Disponível,180,180,24113.66,Redorai
+2026-03-01,Março,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,43,43,1392.82,Redorai
+2026-03-01,Março,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,156,156,19842.67,Redorai
+2026-03-01,Março,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,12,12,531.30,Redorai
+2026-03-01,Março,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,120,120,24055.81,Redorai
+2026-03-01,Março,2026,Suporte notebook,Acessórios,CD Recife,Disponível,12,12,472.77,Redorai
+2026-03-01,Março,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,13,13,460.15,Redorai
+2026-03-01,Março,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,100,100,5415.46,Redorai
+2026-03-01,Março,2026,Cadeira,Mobiliário,CD Recife,Disponível,152,152,22063.27,Redorai
+2026-03-01,Março,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,176,176,25079.24,Redorai
+2026-03-01,Março,2026,Monitor 27,Informática,CD São Paulo,Baixo,5,5,915.62,Redorai
+2026-03-01,Março,2026,Monitor 27,Informática,CD Recife,Disponível,12,12,1509.17,Redorai
+2026-03-01,Março,2026,Monitor 27,Informática,CD Curitiba,Disponível,9,9,401.60,Redorai
+2026-04-01,Abril,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,178,178,19584.98,Redorai
+2026-04-01,Abril,2026,Camiseta logo,Vestuário,CD Recife,Disponível,175,175,30245.55,Redorai
+2026-04-01,Abril,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,120,120,7776.27,Redorai
+2026-04-01,Abril,2026,Moletom,Vestuário,CD São Paulo,Disponível,57,57,2680.81,Redorai
+2026-04-01,Abril,2026,Moletom,Vestuário,CD Recife,Disponível,157,157,14352.43,Redorai
+2026-04-01,Abril,2026,Moletom,Vestuário,CD Curitiba,Disponível,46,46,7328.82,Redorai
+2026-04-01,Abril,2026,Caneca,Acessórios,CD São Paulo,Disponível,170,170,32619.58,Redorai
+2026-04-01,Abril,2026,Caneca,Acessórios,CD Recife,Disponível,83,83,9093.74,Redorai
+2026-04-01,Abril,2026,Caneca,Acessórios,CD Curitiba,Baixo,7,7,218.43,Redorai
+2026-04-01,Abril,2026,Caderno,Acessórios,CD São Paulo,Disponível,28,28,2491.75,Redorai
+2026-04-01,Abril,2026,Caderno,Acessórios,CD Recife,Disponível,118,118,22283.68,Redorai
+2026-04-01,Abril,2026,Caderno,Acessórios,CD Curitiba,Disponível,72,72,12464.94,Redorai
+2026-04-01,Abril,2026,Boné,Vestuário,CD São Paulo,Disponível,154,154,18573.30,Redorai
+2026-04-01,Abril,2026,Boné,Vestuário,CD Recife,Disponível,103,103,18864.01,Redorai
+2026-04-01,Abril,2026,Boné,Vestuário,CD Curitiba,Disponível,27,27,2263.29,Redorai
+2026-04-01,Abril,2026,Garrafa,Acessórios,CD São Paulo,Parado,166,166,13118.63,Redorai
+2026-04-01,Abril,2026,Garrafa,Acessórios,CD Recife,Disponível,118,118,11677.86,Redorai
+2026-04-01,Abril,2026,Garrafa,Acessórios,CD Curitiba,Disponível,105,105,6950.18,Redorai
+2026-04-01,Abril,2026,Kit onboarding,Kits,CD São Paulo,Disponível,62,62,7978.51,Redorai
+2026-04-01,Abril,2026,Kit onboarding,Kits,CD Recife,Disponível,123,123,11750.30,Redorai
+2026-04-01,Abril,2026,Kit onboarding,Kits,CD Curitiba,Disponível,87,87,5225.58,Redorai
+2026-04-01,Abril,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,177,177,31228.36,Redorai
+2026-04-01,Abril,2026,Mouse pad,Acessórios,CD Recife,Disponível,111,111,14716.01,Redorai
+2026-04-01,Abril,2026,Mouse pad,Acessórios,CD Curitiba,Disponível,87,87,11135.52,Redorai
+2026-04-01,Abril,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,60,60,3177.80,Redorai
+2026-04-01,Abril,2026,Cabo USB-C,Acessórios,CD Recife,Parado,171,171,35231.88,Redorai
+2026-04-01,Abril,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,146,146,5999.61,Redorai
+2026-04-01,Abril,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,152,152,19779.41,Redorai
+2026-04-01,Abril,2026,Suporte notebook,Acessórios,CD Recife,Disponível,113,113,6055.35,Redorai
+2026-04-01,Abril,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,103,103,3302.26,Redorai
+2026-04-01,Abril,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,27,27,4224.76,Redorai
+2026-04-01,Abril,2026,Cadeira,Mobiliário,CD Recife,Disponível,152,152,14370.08,Redorai
+2026-04-01,Abril,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,126,126,18684.26,Redorai
+2026-04-01,Abril,2026,Monitor 27,Informática,CD São Paulo,Baixo,1,1,61.96,Redorai
+2026-04-01,Abril,2026,Monitor 27,Informática,CD Recife,Disponível,9,9,1804.12,Redorai
+2026-04-01,Abril,2026,Monitor 27,Informática,CD Curitiba,Disponível,12,12,216.45,Redorai
+2026-05-01,Maio,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,37,37,5605.43,Redorai
+2026-05-01,Maio,2026,Camiseta logo,Vestuário,CD Recife,Disponível,115,115,14411.07,Redorai
+2026-05-01,Maio,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,99,99,14092.21,Redorai
+2026-05-01,Maio,2026,Moletom,Vestuário,CD São Paulo,Disponível,114,114,6557.81,Redorai
+2026-05-01,Maio,2026,Moletom,Vestuário,CD Recife,Disponível,174,174,13667.10,Redorai
+2026-05-01,Maio,2026,Moletom,Vestuário,CD Curitiba,Disponível,173,173,36079.73,Redorai
+2026-05-01,Maio,2026,Caneca,Acessórios,CD São Paulo,Disponível,111,111,18092.31,Redorai
+2026-05-01,Maio,2026,Caneca,Acessórios,CD Recife,Disponível,88,88,19187.38,Redorai
+2026-05-01,Maio,2026,Caneca,Acessórios,CD Curitiba,Parado,149,149,32371.32,Redorai
+2026-05-01,Maio,2026,Caderno,Acessórios,CD São Paulo,Disponível,103,103,19489.93,Redorai
+2026-05-01,Maio,2026,Caderno,Acessórios,CD Recife,Disponível,75,75,2295.52,Redorai
+2026-05-01,Maio,2026,Caderno,Acessórios,CD Curitiba,Disponível,140,140,29892.20,Redorai
+2026-05-01,Maio,2026,Boné,Vestuário,CD São Paulo,Ruptura,0,1,0.00,Redorai
+2026-05-01,Maio,2026,Boné,Vestuário,CD Recife,Disponível,91,91,3654.47,Redorai
+2026-05-01,Maio,2026,Boné,Vestuário,CD Curitiba,Disponível,72,72,13886.44,Redorai
+2026-05-01,Maio,2026,Garrafa,Acessórios,CD São Paulo,Disponível,60,60,6312.39,Redorai
+2026-05-01,Maio,2026,Garrafa,Acessórios,CD Recife,Disponível,151,151,12421.52,Redorai
+2026-05-01,Maio,2026,Garrafa,Acessórios,CD Curitiba,Disponível,97,97,9701.80,Redorai
+2026-05-01,Maio,2026,Kit onboarding,Kits,CD São Paulo,Disponível,111,111,14220.65,Redorai
+2026-05-01,Maio,2026,Kit onboarding,Kits,CD Recife,Parado,169,169,7789.53,Redorai
+2026-05-01,Maio,2026,Kit onboarding,Kits,CD Curitiba,Disponível,142,142,29073.84,Redorai
+2026-05-01,Maio,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,106,106,5211.17,Redorai
+2026-05-01,Maio,2026,Mouse pad,Acessórios,CD Recife,Parado,171,171,3478.78,Redorai
+2026-05-01,Maio,2026,Mouse pad,Acessórios,CD Curitiba,Parado,165,165,27012.24,Redorai
+2026-05-01,Maio,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,124,124,18711.75,Redorai
+2026-05-01,Maio,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,34,34,1193.47,Redorai
+2026-05-01,Maio,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,164,164,31447.14,Redorai
+2026-05-01,Maio,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,178,178,18510.62,Redorai
+2026-05-01,Maio,2026,Suporte notebook,Acessórios,CD Recife,Disponível,46,46,5050.23,Redorai
+2026-05-01,Maio,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,108,108,13987.52,Redorai
+2026-05-01,Maio,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,115,115,11006.92,Redorai
+2026-05-01,Maio,2026,Cadeira,Mobiliário,CD Recife,Disponível,57,57,3165.20,Redorai
+2026-05-01,Maio,2026,Cadeira,Mobiliário,CD Curitiba,Parado,154,154,18268.67,Redorai
+2026-05-01,Maio,2026,Monitor 27,Informática,CD São Paulo,Disponível,11,11,1312.84,Redorai
+2026-05-01,Maio,2026,Monitor 27,Informática,CD Recife,Disponível,8,8,1075.39,Redorai
+2026-05-01,Maio,2026,Monitor 27,Informática,CD Curitiba,Ruptura,0,1,0.00,Redorai
+2026-06-01,Junho,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,180,180,24338.57,Redorai
+2026-06-01,Junho,2026,Camiseta logo,Vestuário,CD Recife,Parado,176,176,29127.55,Redorai
+2026-06-01,Junho,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,134,134,29035.52,Redorai
+2026-06-01,Junho,2026,Moletom,Vestuário,CD São Paulo,Disponível,71,71,7946.12,Redorai
+2026-06-01,Junho,2026,Moletom,Vestuário,CD Recife,Disponível,20,20,2474.36,Redorai
+2026-06-01,Junho,2026,Moletom,Vestuário,CD Curitiba,Parado,156,156,17695.89,Redorai
+2026-06-01,Junho,2026,Caneca,Acessórios,CD São Paulo,Disponível,169,169,5707.56,Redorai
+2026-06-01,Junho,2026,Caneca,Acessórios,CD Recife,Disponível,162,162,21883.76,Redorai
+2026-06-01,Junho,2026,Caneca,Acessórios,CD Curitiba,Parado,156,156,13633.83,Redorai
+2026-06-01,Junho,2026,Caderno,Acessórios,CD São Paulo,Baixo,2,2,225.42,Redorai
+2026-06-01,Junho,2026,Caderno,Acessórios,CD Recife,Disponível,131,131,26334.03,Redorai
+2026-06-01,Junho,2026,Caderno,Acessórios,CD Curitiba,Disponível,146,146,15044.61,Redorai
+2026-06-01,Junho,2026,Boné,Vestuário,CD São Paulo,Disponível,75,75,5731.51,Redorai
+2026-06-01,Junho,2026,Boné,Vestuário,CD Recife,Disponível,9,9,1425.60,Redorai
+2026-06-01,Junho,2026,Boné,Vestuário,CD Curitiba,Disponível,152,152,25056.94,Redorai
+2026-06-01,Junho,2026,Garrafa,Acessórios,CD São Paulo,Disponível,144,144,20897.08,Redorai
+2026-06-01,Junho,2026,Garrafa,Acessórios,CD Recife,Parado,148,148,4207.23,Redorai
+2026-06-01,Junho,2026,Garrafa,Acessórios,CD Curitiba,Disponível,74,74,13423.37,Redorai
+2026-06-01,Junho,2026,Kit onboarding,Kits,CD São Paulo,Parado,159,159,18431.53,Redorai
+2026-06-01,Junho,2026,Kit onboarding,Kits,CD Recife,Disponível,32,32,3844.17,Redorai
+2026-06-01,Junho,2026,Kit onboarding,Kits,CD Curitiba,Disponível,71,71,4892.92,Redorai
+2026-06-01,Junho,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,157,157,30032.12,Redorai
+2026-06-01,Junho,2026,Mouse pad,Acessórios,CD Recife,Baixo,3,3,503.31,Redorai
+2026-06-01,Junho,2026,Mouse pad,Acessórios,CD Curitiba,Parado,154,154,21180.79,Redorai
+2026-06-01,Junho,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,38,38,5743.68,Redorai
+2026-06-01,Junho,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,94,94,17031.28,Redorai
+2026-06-01,Junho,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,66,66,11620.66,Redorai
+2026-06-01,Junho,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,60,60,6957.21,Redorai
+2026-06-01,Junho,2026,Suporte notebook,Acessórios,CD Recife,Disponível,135,135,25937.13,Redorai
+2026-06-01,Junho,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,87,87,18860.08,Redorai
+2026-06-01,Junho,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,37,37,5117.10,Redorai
+2026-06-01,Junho,2026,Cadeira,Mobiliário,CD Recife,Disponível,39,39,7300.72,Redorai
+2026-06-01,Junho,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,105,105,18229.50,Redorai
+2026-06-01,Junho,2026,Monitor 27,Informática,CD São Paulo,Disponível,10,10,1069.17,Redorai
+2026-06-01,Junho,2026,Monitor 27,Informática,CD Recife,Baixo,2,2,121.19,Redorai
+2026-06-01,Junho,2026,Monitor 27,Informática,CD Curitiba,Ruptura,0,1,0.00,Redorai
+2026-07-01,Julho,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,29,29,829.68,Redorai
+2026-07-01,Julho,2026,Camiseta logo,Vestuário,CD Recife,Disponível,118,118,11628.48,Redorai
+2026-07-01,Julho,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,77,77,8793.85,Redorai
+2026-07-01,Julho,2026,Moletom,Vestuário,CD São Paulo,Disponível,136,136,8867.14,Redorai
+2026-07-01,Julho,2026,Moletom,Vestuário,CD Recife,Disponível,174,174,19812.87,Redorai
+2026-07-01,Julho,2026,Moletom,Vestuário,CD Curitiba,Disponível,37,37,4630.52,Redorai
+2026-07-01,Julho,2026,Caneca,Acessórios,CD São Paulo,Disponível,111,111,2263.99,Redorai
+2026-07-01,Julho,2026,Caneca,Acessórios,CD Recife,Disponível,114,114,10848.79,Redorai
+2026-07-01,Julho,2026,Caneca,Acessórios,CD Curitiba,Disponível,80,80,16982.09,Redorai
+2026-07-01,Julho,2026,Caderno,Acessórios,CD São Paulo,Disponível,174,174,6554.16,Redorai
+2026-07-01,Julho,2026,Caderno,Acessórios,CD Recife,Disponível,136,136,19959.32,Redorai
+2026-07-01,Julho,2026,Caderno,Acessórios,CD Curitiba,Disponível,110,110,15544.99,Redorai
+2026-07-01,Julho,2026,Boné,Vestuário,CD São Paulo,Disponível,166,166,14220.13,Redorai
+2026-07-01,Julho,2026,Boné,Vestuário,CD Recife,Disponível,68,68,12244.62,Redorai
+2026-07-01,Julho,2026,Boné,Vestuário,CD Curitiba,Disponível,65,65,9761.53,Redorai
+2026-07-01,Julho,2026,Garrafa,Acessórios,CD São Paulo,Disponível,100,100,11114.39,Redorai
+2026-07-01,Julho,2026,Garrafa,Acessórios,CD Recife,Disponível,172,172,28608.99,Redorai
+2026-07-01,Julho,2026,Garrafa,Acessórios,CD Curitiba,Disponível,150,150,18454.56,Redorai
+2026-07-01,Julho,2026,Kit onboarding,Kits,CD São Paulo,Disponível,173,173,9401.37,Redorai
+2026-07-01,Julho,2026,Kit onboarding,Kits,CD Recife,Disponível,140,140,2819.15,Redorai
+2026-07-01,Julho,2026,Kit onboarding,Kits,CD Curitiba,Baixo,2,2,372.00,Redorai
+2026-07-01,Julho,2026,Mouse pad,Acessórios,CD São Paulo,Baixo,3,3,303.22,Redorai
+2026-07-01,Julho,2026,Mouse pad,Acessórios,CD Recife,Disponível,134,134,5224.56,Redorai
+2026-07-01,Julho,2026,Mouse pad,Acessórios,CD Curitiba,Disponível,114,114,10146.72,Redorai
+2026-07-01,Julho,2026,Cabo USB-C,Acessórios,CD São Paulo,Disponível,72,72,4959.58,Redorai
+2026-07-01,Julho,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,8,8,182.30,Redorai
+2026-07-01,Julho,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,23,23,678.27,Redorai
+2026-07-01,Julho,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,152,152,28387.94,Redorai
+2026-07-01,Julho,2026,Suporte notebook,Acessórios,CD Recife,Disponível,153,153,24637.77,Redorai
+2026-07-01,Julho,2026,Suporte notebook,Acessórios,CD Curitiba,Disponível,30,30,1063.50,Redorai
+2026-07-01,Julho,2026,Cadeira,Mobiliário,CD São Paulo,Parado,154,154,23191.12,Redorai
+2026-07-01,Julho,2026,Cadeira,Mobiliário,CD Recife,Disponível,165,165,35205.63,Redorai
+2026-07-01,Julho,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,28,28,4438.62,Redorai
+2026-07-01,Julho,2026,Monitor 27,Informática,CD São Paulo,Baixo,4,4,449.30,Redorai
+2026-07-01,Julho,2026,Monitor 27,Informática,CD Recife,Disponível,10,10,1095.96,Redorai
+2026-07-01,Julho,2026,Monitor 27,Informática,CD Curitiba,Disponível,12,12,1251.01,Redorai
+2026-08-01,Agosto,2026,Camiseta logo,Vestuário,CD São Paulo,Disponível,170,170,14165.70,Redorai
+2026-08-01,Agosto,2026,Camiseta logo,Vestuário,CD Recife,Disponível,41,41,7204.02,Redorai
+2026-08-01,Agosto,2026,Camiseta logo,Vestuário,CD Curitiba,Disponível,70,70,12248.28,Redorai
+2026-08-01,Agosto,2026,Moletom,Vestuário,CD São Paulo,Disponível,97,97,9360.04,Redorai
+2026-08-01,Agosto,2026,Moletom,Vestuário,CD Recife,Disponível,15,15,1052.46,Redorai
+2026-08-01,Agosto,2026,Moletom,Vestuário,CD Curitiba,Disponível,67,67,3614.10,Redorai
+2026-08-01,Agosto,2026,Caneca,Acessórios,CD São Paulo,Disponível,17,17,1994.57,Redorai
+2026-08-01,Agosto,2026,Caneca,Acessórios,CD Recife,Disponível,51,51,7205.33,Redorai
+2026-08-01,Agosto,2026,Caneca,Acessórios,CD Curitiba,Disponível,45,45,6677.44,Redorai
+2026-08-01,Agosto,2026,Caderno,Acessórios,CD São Paulo,Disponível,27,27,1270.68,Redorai
+2026-08-01,Agosto,2026,Caderno,Acessórios,CD Recife,Disponível,110,110,6832.55,Redorai
+2026-08-01,Agosto,2026,Caderno,Acessórios,CD Curitiba,Parado,164,164,17580.72,Redorai
+2026-08-01,Agosto,2026,Boné,Vestuário,CD São Paulo,Disponível,66,66,2565.02,Redorai
+2026-08-01,Agosto,2026,Boné,Vestuário,CD Recife,Disponível,18,18,580.02,Redorai
+2026-08-01,Agosto,2026,Boné,Vestuário,CD Curitiba,Disponível,64,64,11200.12,Redorai
+2026-08-01,Agosto,2026,Garrafa,Acessórios,CD São Paulo,Baixo,4,4,796.38,Redorai
+2026-08-01,Agosto,2026,Garrafa,Acessórios,CD Recife,Disponível,38,38,5695.39,Redorai
+2026-08-01,Agosto,2026,Garrafa,Acessórios,CD Curitiba,Ruptura,0,1,0.00,Redorai
+2026-08-01,Agosto,2026,Kit onboarding,Kits,CD São Paulo,Disponível,170,170,8266.20,Redorai
+2026-08-01,Agosto,2026,Kit onboarding,Kits,CD Recife,Disponível,84,84,16861.55,Redorai
+2026-08-01,Agosto,2026,Kit onboarding,Kits,CD Curitiba,Parado,147,147,23657.64,Redorai
+2026-08-01,Agosto,2026,Mouse pad,Acessórios,CD São Paulo,Disponível,125,125,14323.02,Redorai
+2026-08-01,Agosto,2026,Mouse pad,Acessórios,CD Recife,Disponível,103,103,19415.29,Redorai
+2026-08-01,Agosto,2026,Mouse pad,Acessórios,CD Curitiba,Disponível,17,17,2160.80,Redorai
+2026-08-01,Agosto,2026,Cabo USB-C,Acessórios,CD São Paulo,Ruptura,0,1,0.00,Redorai
+2026-08-01,Agosto,2026,Cabo USB-C,Acessórios,CD Recife,Disponível,176,176,20306.42,Redorai
+2026-08-01,Agosto,2026,Cabo USB-C,Acessórios,CD Curitiba,Disponível,145,145,31654.00,Redorai
+2026-08-01,Agosto,2026,Suporte notebook,Acessórios,CD São Paulo,Disponível,85,85,13237.12,Redorai
+2026-08-01,Agosto,2026,Suporte notebook,Acessórios,CD Recife,Disponível,102,102,2973.23,Redorai
+2026-08-01,Agosto,2026,Suporte notebook,Acessórios,CD Curitiba,Parado,165,165,20789.09,Redorai
+2026-08-01,Agosto,2026,Cadeira,Mobiliário,CD São Paulo,Disponível,87,87,2979.95,Redorai
+2026-08-01,Agosto,2026,Cadeira,Mobiliário,CD Recife,Disponível,117,117,20078.55,Redorai
+2026-08-01,Agosto,2026,Cadeira,Mobiliário,CD Curitiba,Disponível,74,74,11015.20,Redorai
+2026-08-01,Agosto,2026,Monitor 27,Informática,CD São Paulo,Disponível,8,8,207.56,Redorai
+2026-08-01,Agosto,2026,Monitor 27,Informática,CD Recife,Disponível,10,10,565.83,Redorai
+2026-08-01,Agosto,2026,Monitor 27,Informática,CD Curitiba,Baixo,6,6,1194.51,Redorai

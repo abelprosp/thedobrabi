@@ -1,0 +1,321 @@
+data,mes,ano,canal,produto,categoria,regiao,quantidade,valor,empresa
+2026-03-13,Março,2026,Loja física,Caderno,Acessórios,Sudeste,3,107.95,Redorai
+2026-07-02,Julho,2026,Marketplace,Moletom,Vestuário,Norte,1,181.84,Redorai
+2026-07-17,Julho,2026,Loja física,Mouse pad,Acessórios,Sudeste,2,92.35,Redorai
+2026-08-02,Agosto,2026,Loja física,Gift card 100,Digital,Centro-Oeste,4,394.36,Redorai
+2026-03-06,Março,2026,Site,Licença anual,Digital,Centro-Oeste,3,3075.19,Redorai
+2026-07-06,Julho,2026,Site,Camiseta logo,Vestuário,Centro-Oeste,2,164.82,Redorai
+2026-02-16,Fevereiro,2026,App,Caderno,Acessórios,Sudeste,2,75.15,Redorai
+2026-06-28,Junho,2026,App,Kit onboarding,Kits,Norte,2,467.46,Redorai
+2026-08-26,Agosto,2026,WhatsApp,Moletom,Vestuário,Norte,1,181.37,Redorai
+2026-03-29,Março,2026,Site,Boné,Vestuário,Norte,4,272.73,Redorai
+2026-07-24,Julho,2026,WhatsApp,Kit onboarding,Kits,Sul,1,229.64,Redorai
+2026-06-04,Junho,2026,Site,Mouse pad,Acessórios,Norte,1,45.76,Redorai
+2026-07-25,Julho,2026,WhatsApp,Boné,Vestuário,Nordeste,3,198.19,Redorai
+2026-05-09,Maio,2026,Site,Mouse pad,Acessórios,Sul,5,211.80,Redorai
+2026-02-10,Fevereiro,2026,Site,Mouse pad,Acessórios,Centro-Oeste,4,186.02,Redorai
+2026-03-30,Março,2026,WhatsApp,Caderno,Acessórios,Nordeste,1,40.35,Redorai
+2026-01-10,Janeiro,2026,Marketplace,Garrafa,Acessórios,Nordeste,3,243.26,Redorai
+2026-08-12,Agosto,2026,App,Moletom,Vestuário,Nordeste,2,395.44,Redorai
+2026-04-28,Abril,2026,WhatsApp,Garrafa,Acessórios,Norte,3,236.25,Redorai
+2026-02-22,Fevereiro,2026,WhatsApp,Licença anual,Digital,Centro-Oeste,2,2007.57,Redorai
+2026-08-15,Agosto,2026,Loja física,Garrafa,Acessórios,Sul,1,71.88,Redorai
+2026-07-05,Julho,2026,App,Gift card 100,Digital,Norte,4,412.76,Redorai
+2026-01-12,Janeiro,2026,App,Caneca,Acessórios,Sudeste,2,91.87,Redorai
+2026-05-01,Maio,2026,App,Camiseta logo,Vestuário,Nordeste,4,340.07,Redorai
+2026-05-03,Maio,2026,Site,Gift card 100,Digital,Sudeste,5,468.15,Redorai
+2026-05-10,Maio,2026,App,Mouse pad,Acessórios,Centro-Oeste,5,222.31,Redorai
+2026-04-04,Abril,2026,Marketplace,Garrafa,Acessórios,Sudeste,2,148.96,Redorai
+2026-04-13,Abril,2026,Loja física,Camiseta logo,Vestuário,Sul,2,183.08,Redorai
+2026-06-19,Junho,2026,Marketplace,Caderno,Acessórios,Centro-Oeste,2,76.21,Redorai
+2026-08-14,Agosto,2026,App,Camiseta logo,Vestuário,Sul,4,352.50,Redorai
+2026-01-07,Janeiro,2026,Loja física,Caderno,Acessórios,Nordeste,3,117.81,Redorai
+2026-07-05,Julho,2026,WhatsApp,Boné,Vestuário,Nordeste,4,267.40,Redorai
+2026-03-01,Março,2026,Loja física,Licença anual,Digital,Norte,3,2849.93,Redorai
+2026-01-31,Janeiro,2026,Loja física,Camiseta logo,Vestuário,Norte,3,264.69,Redorai
+2026-03-22,Março,2026,Site,Moletom,Vestuário,Nordeste,4,792.48,Redorai
+2026-06-17,Junho,2026,Marketplace,Garrafa,Acessórios,Nordeste,3,220.00,Redorai
+2026-05-17,Maio,2026,Loja física,Caderno,Acessórios,Centro-Oeste,2,77.93,Redorai
+2026-06-28,Junho,2026,WhatsApp,Caneca,Acessórios,Nordeste,1,46.01,Redorai
+2026-04-22,Abril,2026,Site,Kit onboarding,Kits,Norte,4,1002.19,Redorai
+2026-05-31,Maio,2026,App,Caderno,Acessórios,Norte,4,155.34,Redorai
+2026-05-06,Maio,2026,App,Garrafa,Acessórios,Norte,4,292.99,Redorai
+2026-01-29,Janeiro,2026,Marketplace,Licença anual,Digital,Norte,2,2008.59,Redorai
+2026-02-20,Fevereiro,2026,App,Garrafa,Acessórios,Nordeste,1,73.75,Redorai
+2026-08-16,Agosto,2026,Marketplace,Boné,Vestuário,Nordeste,4,259.19,Redorai
+2026-03-21,Março,2026,WhatsApp,Licença anual,Digital,Sudeste,1,1019.66,Redorai
+2026-06-03,Junho,2026,WhatsApp,Mouse pad,Acessórios,Sul,1,43.88,Redorai
+2026-08-15,Agosto,2026,WhatsApp,Kit onboarding,Kits,Sudeste,3,769.88,Redorai
+2026-02-12,Fevereiro,2026,Marketplace,Caneca,Acessórios,Centro-Oeste,2,102.71,Redorai
+2026-08-21,Agosto,2026,Marketplace,Licença anual,Digital,Sul,2,2013.35,Redorai
+2026-05-09,Maio,2026,Marketplace,Garrafa,Acessórios,Sudeste,3,213.47,Redorai
+2026-03-16,Março,2026,Loja física,Caderno,Acessórios,Sul,2,75.93,Redorai
+2026-07-19,Julho,2026,Loja física,Moletom,Vestuário,Centro-Oeste,2,376.12,Redorai
+2026-04-18,Abril,2026,WhatsApp,Kit onboarding,Kits,Sudeste,4,902.04,Redorai
+2026-02-25,Fevereiro,2026,Marketplace,Garrafa,Acessórios,Norte,1,73.36,Redorai
+2026-06-27,Junho,2026,App,Camiseta logo,Vestuário,Nordeste,2,168.53,Redorai
+2026-01-31,Janeiro,2026,App,Kit onboarding,Kits,Sudeste,3,764.61,Redorai
+2026-03-22,Março,2026,Loja física,Boné,Vestuário,Norte,4,270.10,Redorai
+2026-04-26,Abril,2026,WhatsApp,Caneca,Acessórios,Nordeste,3,148.84,Redorai
+2026-02-16,Fevereiro,2026,App,Kit onboarding,Kits,Sul,1,251.26,Redorai
+2026-02-07,Fevereiro,2026,Loja física,Caderno,Acessórios,Norte,1,36.09,Redorai
+2026-04-08,Abril,2026,Marketplace,Camiseta logo,Vestuário,Norte,4,353.68,Redorai
+2026-06-06,Junho,2026,Site,Camiseta logo,Vestuário,Sudeste,1,89.31,Redorai
+2026-04-21,Abril,2026,Site,Licença anual,Digital,Norte,4,3714.13,Redorai
+2026-07-03,Julho,2026,Site,Caneca,Acessórios,Nordeste,2,94.39,Redorai
+2026-01-30,Janeiro,2026,Loja física,Gift card 100,Digital,Norte,3,301.53,Redorai
+2026-04-22,Abril,2026,Marketplace,Moletom,Vestuário,Sudeste,1,192.35,Redorai
+2026-05-12,Maio,2026,Marketplace,Caderno,Acessórios,Norte,3,122.38,Redorai
+2026-04-06,Abril,2026,App,Kit onboarding,Kits,Sudeste,3,733.72,Redorai
+2026-08-26,Agosto,2026,Marketplace,Caderno,Acessórios,Sul,4,140.46,Redorai
+2026-06-25,Junho,2026,Loja física,Moletom,Vestuário,Centro-Oeste,1,174.33,Redorai
+2026-01-28,Janeiro,2026,Site,Gift card 100,Digital,Nordeste,1,99.67,Redorai
+2026-05-01,Maio,2026,WhatsApp,Boné,Vestuário,Sudeste,4,252.53,Redorai
+2026-02-18,Fevereiro,2026,Marketplace,Camiseta logo,Vestuário,Nordeste,3,257.36,Redorai
+2026-02-03,Fevereiro,2026,Site,Moletom,Vestuário,Sul,1,188.91,Redorai
+2026-02-17,Fevereiro,2026,WhatsApp,Garrafa,Acessórios,Norte,3,222.84,Redorai
+2026-07-11,Julho,2026,Marketplace,Moletom,Vestuário,Sul,3,519.98,Redorai
+2026-04-17,Abril,2026,WhatsApp,Licença anual,Digital,Centro-Oeste,3,3029.36,Redorai
+2026-06-20,Junho,2026,App,Caneca,Acessórios,Sudeste,1,51.31,Redorai
+2026-08-09,Agosto,2026,WhatsApp,Caneca,Acessórios,Norte,1,47.65,Redorai
+2026-05-30,Maio,2026,Loja física,Licença anual,Digital,Centro-Oeste,3,3020.12,Redorai
+2026-06-10,Junho,2026,WhatsApp,Camiseta logo,Vestuário,Centro-Oeste,2,163.22,Redorai
+2026-04-20,Abril,2026,Site,Licença anual,Digital,Nordeste,1,988.26,Redorai
+2026-01-08,Janeiro,2026,Marketplace,Gift card 100,Digital,Norte,2,195.69,Redorai
+2026-07-03,Julho,2026,WhatsApp,Mouse pad,Acessórios,Sul,1,43.75,Redorai
+2026-06-23,Junho,2026,Loja física,Kit onboarding,Kits,Norte,2,452.28,Redorai
+2026-06-18,Junho,2026,WhatsApp,Caneca,Acessórios,Sul,4,178.60,Redorai
+2026-05-10,Maio,2026,Marketplace,Garrafa,Acessórios,Nordeste,3,215.09,Redorai
+2026-03-03,Março,2026,WhatsApp,Gift card 100,Digital,Sul,4,364.73,Redorai
+2026-04-28,Abril,2026,Site,Mouse pad,Acessórios,Centro-Oeste,4,174.07,Redorai
+2026-02-04,Fevereiro,2026,Site,Licença anual,Digital,Centro-Oeste,1,952.23,Redorai
+2026-05-27,Maio,2026,Site,Gift card 100,Digital,Norte,2,208.90,Redorai
+2026-06-17,Junho,2026,WhatsApp,Boné,Vestuário,Nordeste,2,131.72,Redorai
+2026-01-18,Janeiro,2026,Marketplace,Caderno,Acessórios,Norte,4,158.36,Redorai
+2026-06-07,Junho,2026,WhatsApp,Licença anual,Digital,Sudeste,3,2716.41,Redorai
+2026-06-22,Junho,2026,Marketplace,Caderno,Acessórios,Nordeste,1,39.95,Redorai
+2026-07-28,Julho,2026,Site,Boné,Vestuário,Sudeste,3,214.15,Redorai
+2026-05-11,Maio,2026,Site,Caneca,Acessórios,Nordeste,5,242.95,Redorai
+2026-02-22,Fevereiro,2026,App,Moletom,Vestuário,Centro-Oeste,4,773.90,Redorai
+2026-02-22,Fevereiro,2026,WhatsApp,Garrafa,Acessórios,Sudeste,1,82.08,Redorai
+2026-08-07,Agosto,2026,WhatsApp,Mouse pad,Acessórios,Centro-Oeste,1,44.94,Redorai
+2026-05-14,Maio,2026,Site,Caneca,Acessórios,Norte,5,247.56,Redorai
+2026-05-26,Maio,2026,Loja física,Kit onboarding,Kits,Sul,5,1249.70,Redorai
+2026-02-18,Fevereiro,2026,WhatsApp,Caneca,Acessórios,Norte,1,48.56,Redorai
+2026-03-28,Março,2026,WhatsApp,Gift card 100,Digital,Norte,4,414.95,Redorai
+2026-07-19,Julho,2026,WhatsApp,Caderno,Acessórios,Nordeste,3,122.33,Redorai
+2026-04-30,Abril,2026,WhatsApp,Caneca,Acessórios,Norte,2,98.49,Redorai
+2026-07-15,Julho,2026,Loja física,Gift card 100,Digital,Nordeste,3,302.03,Redorai
+2026-05-26,Maio,2026,App,Caderno,Acessórios,Norte,3,117.84,Redorai
+2026-06-29,Junho,2026,App,Garrafa,Acessórios,Norte,2,155.06,Redorai
+2026-06-17,Junho,2026,Marketplace,Garrafa,Acessórios,Norte,1,76.79,Redorai
+2026-05-31,Maio,2026,WhatsApp,Kit onboarding,Kits,Sudeste,4,974.50,Redorai
+2026-01-11,Janeiro,2026,Site,Kit onboarding,Kits,Sudeste,2,463.13,Redorai
+2026-07-16,Julho,2026,Marketplace,Caneca,Acessórios,Sul,3,150.81,Redorai
+2026-06-30,Junho,2026,Loja física,Boné,Vestuário,Sudeste,2,131.62,Redorai
+2026-04-30,Abril,2026,Loja física,Moletom,Vestuário,Centro-Oeste,2,353.67,Redorai
+2026-07-24,Julho,2026,WhatsApp,Boné,Vestuário,Centro-Oeste,1,66.41,Redorai
+2026-07-25,Julho,2026,Site,Garrafa,Acessórios,Nordeste,1,73.51,Redorai
+2026-08-15,Agosto,2026,Marketplace,Licença anual,Digital,Norte,2,1944.34,Redorai
+2026-06-08,Junho,2026,Marketplace,Caderno,Acessórios,Centro-Oeste,2,72.28,Redorai
+2026-06-28,Junho,2026,App,Moletom,Vestuário,Norte,2,346.97,Redorai
+2026-01-15,Janeiro,2026,Loja física,Kit onboarding,Kits,Nordeste,3,686.87,Redorai
+2026-06-03,Junho,2026,Marketplace,Boné,Vestuário,Centro-Oeste,1,69.45,Redorai
+2026-02-13,Fevereiro,2026,Marketplace,Camiseta logo,Vestuário,Norte,2,161.56,Redorai
+2026-06-14,Junho,2026,WhatsApp,Mouse pad,Acessórios,Norte,3,132.64,Redorai
+2026-01-23,Janeiro,2026,App,Garrafa,Acessórios,Norte,2,143.82,Redorai
+2026-05-14,Maio,2026,Loja física,Caneca,Acessórios,Norte,5,235.33,Redorai
+2026-04-04,Abril,2026,Marketplace,Caderno,Acessórios,Nordeste,2,74.42,Redorai
+2026-03-01,Março,2026,Loja física,Mouse pad,Acessórios,Sudeste,4,165.10,Redorai
+2026-04-03,Abril,2026,Loja física,Licença anual,Digital,Norte,2,1854.42,Redorai
+2026-01-15,Janeiro,2026,Site,Garrafa,Acessórios,Centro-Oeste,4,296.56,Redorai
+2026-07-09,Julho,2026,Loja física,Boné,Vestuário,Nordeste,1,67.42,Redorai
+2026-05-15,Maio,2026,Site,Licença anual,Digital,Nordeste,5,5121.97,Redorai
+2026-02-23,Fevereiro,2026,Site,Garrafa,Acessórios,Sul,1,82.61,Redorai
+2026-07-21,Julho,2026,Site,Gift card 100,Digital,Sul,1,100.06,Redorai
+2026-07-22,Julho,2026,Site,Caderno,Acessórios,Sul,4,152.98,Redorai
+2026-07-03,Julho,2026,App,Kit onboarding,Kits,Sudeste,1,241.25,Redorai
+2026-03-30,Março,2026,Site,Camiseta logo,Vestuário,Sudeste,1,82.48,Redorai
+2026-03-10,Março,2026,Loja física,Gift card 100,Digital,Sul,1,103.66,Redorai
+2026-04-19,Abril,2026,WhatsApp,Kit onboarding,Kits,Centro-Oeste,4,943.67,Redorai
+2026-04-14,Abril,2026,Loja física,Moletom,Vestuário,Sudeste,1,191.53,Redorai
+2026-06-03,Junho,2026,Marketplace,Camiseta logo,Vestuário,Norte,1,81.52,Redorai
+2026-07-25,Julho,2026,Marketplace,Boné,Vestuário,Centro-Oeste,1,66.05,Redorai
+2026-08-03,Agosto,2026,App,Camiseta logo,Vestuário,Norte,4,332.14,Redorai
+2026-07-15,Julho,2026,App,Kit onboarding,Kits,Nordeste,3,748.19,Redorai
+2026-08-27,Agosto,2026,Loja física,Garrafa,Acessórios,Norte,1,72.78,Redorai
+2026-01-15,Janeiro,2026,Loja física,Camiseta logo,Vestuário,Norte,4,370.97,Redorai
+2026-03-24,Março,2026,App,Caderno,Acessórios,Centro-Oeste,3,121.19,Redorai
+2026-08-10,Agosto,2026,App,Gift card 100,Digital,Sul,2,186.62,Redorai
+2026-08-06,Agosto,2026,Site,Boné,Vestuário,Sul,2,138.09,Redorai
+2026-05-30,Maio,2026,Loja física,Camiseta logo,Vestuário,Sudeste,5,419.90,Redorai
+2026-01-22,Janeiro,2026,App,Boné,Vestuário,Norte,1,67.14,Redorai
+2026-03-30,Março,2026,App,Garrafa,Acessórios,Sudeste,2,148.96,Redorai
+2026-01-22,Janeiro,2026,WhatsApp,Caderno,Acessórios,Centro-Oeste,3,111.06,Redorai
+2026-06-22,Junho,2026,Loja física,Boné,Vestuário,Norte,2,131.75,Redorai
+2026-03-26,Março,2026,Site,Kit onboarding,Kits,Nordeste,2,466.59,Redorai
+2026-03-02,Março,2026,Marketplace,Kit onboarding,Kits,Sul,3,748.45,Redorai
+2026-03-30,Março,2026,WhatsApp,Licença anual,Digital,Nordeste,4,4024.21,Redorai
+2026-05-09,Maio,2026,App,Gift card 100,Digital,Norte,2,182.46,Redorai
+2026-03-17,Março,2026,Marketplace,Caneca,Acessórios,Sudeste,2,98.89,Redorai
+2026-08-21,Agosto,2026,Loja física,Camiseta logo,Vestuário,Norte,1,85.51,Redorai
+2026-06-05,Junho,2026,Loja física,Caderno,Acessórios,Nordeste,1,38.28,Redorai
+2026-05-23,Maio,2026,Marketplace,Licença anual,Digital,Centro-Oeste,3,2772.48,Redorai
+2026-07-21,Julho,2026,App,Mouse pad,Acessórios,Centro-Oeste,3,131.65,Redorai
+2026-01-28,Janeiro,2026,Loja física,Kit onboarding,Kits,Sudeste,3,746.55,Redorai
+2026-08-10,Agosto,2026,Loja física,Mouse pad,Acessórios,Sul,2,87.02,Redorai
+2026-02-19,Fevereiro,2026,WhatsApp,Mouse pad,Acessórios,Nordeste,2,81.55,Redorai
+2026-07-18,Julho,2026,Site,Licença anual,Digital,Nordeste,2,1891.72,Redorai
+2026-01-15,Janeiro,2026,WhatsApp,Caderno,Acessórios,Centro-Oeste,3,121.41,Redorai
+2026-08-18,Agosto,2026,Marketplace,Camiseta logo,Vestuário,Sudeste,1,89.49,Redorai
+2026-05-18,Maio,2026,Loja física,Boné,Vestuário,Norte,4,272.00,Redorai
+2026-04-11,Abril,2026,Loja física,Kit onboarding,Kits,Sudeste,3,730.19,Redorai
+2026-04-11,Abril,2026,Marketplace,Caderno,Acessórios,Nordeste,4,151.79,Redorai
+2026-05-08,Maio,2026,Loja física,Mouse pad,Acessórios,Sul,2,86.94,Redorai
+2026-03-04,Março,2026,App,Moletom,Vestuário,Sul,3,526.20,Redorai
+2026-04-07,Abril,2026,App,Mouse pad,Acessórios,Centro-Oeste,1,45.98,Redorai
+2026-07-08,Julho,2026,WhatsApp,Moletom,Vestuário,Centro-Oeste,4,704.29,Redorai
+2026-02-15,Fevereiro,2026,App,Kit onboarding,Kits,Sudeste,1,228.88,Redorai
+2026-06-05,Junho,2026,Loja física,Caneca,Acessórios,Sudeste,2,101.29,Redorai
+2026-02-11,Fevereiro,2026,Marketplace,Camiseta logo,Vestuário,Sul,2,173.99,Redorai
+2026-04-18,Abril,2026,Marketplace,Mouse pad,Acessórios,Sudeste,1,41.96,Redorai
+2026-06-09,Junho,2026,App,Licença anual,Digital,Sul,4,4057.24,Redorai
+2026-06-07,Junho,2026,Loja física,Caneca,Acessórios,Norte,2,92.09,Redorai
+2026-07-09,Julho,2026,Loja física,Garrafa,Acessórios,Norte,4,287.66,Redorai
+2026-04-11,Abril,2026,Site,Kit onboarding,Kits,Sudeste,2,463.32,Redorai
+2026-08-13,Agosto,2026,App,Gift card 100,Digital,Norte,4,365.78,Redorai
+2026-05-06,Maio,2026,Loja física,Mouse pad,Acessórios,Norte,2,91.16,Redorai
+2026-01-28,Janeiro,2026,Loja física,Licença anual,Digital,Norte,2,2027.77,Redorai
+2026-08-22,Agosto,2026,Marketplace,Kit onboarding,Kits,Sudeste,4,1000.63,Redorai
+2026-04-24,Abril,2026,WhatsApp,Caderno,Acessórios,Nordeste,4,154.18,Redorai
+2026-07-13,Julho,2026,WhatsApp,Mouse pad,Acessórios,Sul,1,42.22,Redorai
+2026-07-20,Julho,2026,Marketplace,Caderno,Acessórios,Norte,1,40.23,Redorai
+2026-04-19,Abril,2026,Site,Boné,Vestuário,Sudeste,2,136.16,Redorai
+2026-02-04,Fevereiro,2026,WhatsApp,Gift card 100,Digital,Sul,1,100.32,Redorai
+2026-03-26,Março,2026,Site,Kit onboarding,Kits,Sul,3,720.04,Redorai
+2026-06-03,Junho,2026,Loja física,Boné,Vestuário,Centro-Oeste,3,203.83,Redorai
+2026-06-10,Junho,2026,App,Boné,Vestuário,Centro-Oeste,4,271.26,Redorai
+2026-05-27,Maio,2026,Marketplace,Licença anual,Digital,Norte,3,2920.21,Redorai
+2026-03-10,Março,2026,WhatsApp,Boné,Vestuário,Sul,3,212.85,Redorai
+2026-06-22,Junho,2026,WhatsApp,Moletom,Vestuário,Sul,2,345.89,Redorai
+2026-05-15,Maio,2026,Loja física,Kit onboarding,Kits,Norte,4,1000.54,Redorai
+2026-07-04,Julho,2026,WhatsApp,Camiseta logo,Vestuário,Sudeste,2,181.68,Redorai
+2026-08-03,Agosto,2026,Loja física,Caneca,Acessórios,Centro-Oeste,4,178.99,Redorai
+2026-03-13,Março,2026,Site,Caderno,Acessórios,Norte,3,105.96,Redorai
+2026-04-13,Abril,2026,Loja física,Kit onboarding,Kits,Sudeste,3,778.27,Redorai
+2026-08-02,Agosto,2026,WhatsApp,Caneca,Acessórios,Sudeste,4,182.33,Redorai
+2026-06-22,Junho,2026,App,Gift card 100,Digital,Sudeste,3,305.28,Redorai
+2026-05-15,Maio,2026,Loja física,Gift card 100,Digital,Sul,3,300.33,Redorai
+2026-04-07,Abril,2026,App,Caderno,Acessórios,Sudeste,1,40.93,Redorai
+2026-07-23,Julho,2026,WhatsApp,Kit onboarding,Kits,Centro-Oeste,3,737.97,Redorai
+2026-05-17,Maio,2026,Site,Camiseta logo,Vestuário,Norte,2,167.80,Redorai
+2026-08-05,Agosto,2026,Marketplace,Gift card 100,Digital,Nordeste,3,280.18,Redorai
+2026-02-23,Fevereiro,2026,Loja física,Licença anual,Digital,Sudeste,4,3719.10,Redorai
+2026-04-19,Abril,2026,Loja física,Gift card 100,Digital,Sudeste,1,97.55,Redorai
+2026-04-02,Abril,2026,Loja física,Moletom,Vestuário,Norte,3,531.57,Redorai
+2026-04-28,Abril,2026,App,Kit onboarding,Kits,Nordeste,4,1040.01,Redorai
+2026-05-02,Maio,2026,WhatsApp,Licença anual,Digital,Sudeste,2,1858.57,Redorai
+2026-04-12,Abril,2026,Marketplace,Caderno,Acessórios,Centro-Oeste,2,81.38,Redorai
+2026-05-17,Maio,2026,Marketplace,Gift card 100,Digital,Sul,2,188.62,Redorai
+2026-04-17,Abril,2026,Loja física,Garrafa,Acessórios,Sul,1,76.75,Redorai
+2026-04-05,Abril,2026,App,Caderno,Acessórios,Sul,3,114.06,Redorai
+2026-02-25,Fevereiro,2026,Marketplace,Caderno,Acessórios,Sul,2,72.88,Redorai
+2026-08-06,Agosto,2026,App,Caderno,Acessórios,Sudeste,3,107.40,Redorai
+2026-01-25,Janeiro,2026,Loja física,Licença anual,Digital,Sudeste,1,1016.93,Redorai
+2026-04-10,Abril,2026,WhatsApp,Mouse pad,Acessórios,Norte,3,139.09,Redorai
+2026-05-10,Maio,2026,WhatsApp,Caneca,Acessórios,Sul,4,198.45,Redorai
+2026-02-06,Fevereiro,2026,WhatsApp,Camiseta logo,Vestuário,Norte,4,322.14,Redorai
+2026-04-03,Abril,2026,WhatsApp,Kit onboarding,Kits,Sudeste,2,500.36,Redorai
+2026-05-02,Maio,2026,Site,Garrafa,Acessórios,Sul,2,151.19,Redorai
+2026-01-30,Janeiro,2026,Loja física,Garrafa,Acessórios,Nordeste,3,219.95,Redorai
+2026-03-13,Março,2026,WhatsApp,Caderno,Acessórios,Norte,3,111.32,Redorai
+2026-02-21,Fevereiro,2026,App,Licença anual,Digital,Centro-Oeste,4,3980.22,Redorai
+2026-04-10,Abril,2026,Marketplace,Garrafa,Acessórios,Centro-Oeste,4,292.93,Redorai
+2026-02-07,Fevereiro,2026,Site,Mouse pad,Acessórios,Nordeste,2,91.86,Redorai
+2026-05-27,Maio,2026,App,Kit onboarding,Kits,Sul,5,1269.91,Redorai
+2026-07-13,Julho,2026,Site,Caneca,Acessórios,Sul,4,188.79,Redorai
+2026-02-08,Fevereiro,2026,WhatsApp,Gift card 100,Digital,Nordeste,3,281.29,Redorai
+2026-08-12,Agosto,2026,WhatsApp,Mouse pad,Acessórios,Sudeste,1,45.16,Redorai
+2026-01-20,Janeiro,2026,WhatsApp,Caderno,Acessórios,Sudeste,3,113.19,Redorai
+2026-03-31,Março,2026,Marketplace,Boné,Vestuário,Norte,3,203.61,Redorai
+2026-07-31,Julho,2026,Site,Boné,Vestuário,Centro-Oeste,3,190.06,Redorai
+2026-08-15,Agosto,2026,Loja física,Mouse pad,Acessórios,Norte,2,89.77,Redorai
+2026-05-22,Maio,2026,Marketplace,Caneca,Acessórios,Nordeste,4,196.19,Redorai
+2026-05-09,Maio,2026,WhatsApp,Licença anual,Digital,Norte,2,1867.10,Redorai
+2026-06-15,Junho,2026,Marketplace,Caneca,Acessórios,Centro-Oeste,2,97.48,Redorai
+2026-05-31,Maio,2026,Site,Kit onboarding,Kits,Sul,2,473.87,Redorai
+2026-03-26,Março,2026,Marketplace,Garrafa,Acessórios,Norte,3,236.22,Redorai
+2026-03-15,Março,2026,Loja física,Licença anual,Digital,Norte,3,3103.14,Redorai
+2026-04-20,Abril,2026,Site,Caneca,Acessórios,Sul,2,98.90,Redorai
+2026-06-23,Junho,2026,App,Boné,Vestuário,Sul,1,66.21,Redorai
+2026-01-29,Janeiro,2026,Loja física,Moletom,Vestuário,Sudeste,4,683.39,Redorai
+2026-04-16,Abril,2026,Site,Gift card 100,Digital,Nordeste,1,99.27,Redorai
+2026-01-26,Janeiro,2026,App,Kit onboarding,Kits,Sul,3,754.95,Redorai
+2026-04-28,Abril,2026,Loja física,Caneca,Acessórios,Sul,2,88.62,Redorai
+2026-06-23,Junho,2026,WhatsApp,Garrafa,Acessórios,Centro-Oeste,3,247.96,Redorai
+2026-05-23,Maio,2026,App,Boné,Vestuário,Norte,5,319.66,Redorai
+2026-06-06,Junho,2026,Loja física,Licença anual,Digital,Norte,4,3747.94,Redorai
+2026-04-03,Abril,2026,Site,Licença anual,Digital,Centro-Oeste,2,1873.44,Redorai
+2026-04-20,Abril,2026,Marketplace,Boné,Vestuário,Sudeste,2,124.20,Redorai
+2026-08-01,Agosto,2026,Marketplace,Caneca,Acessórios,Centro-Oeste,3,144.10,Redorai
+2026-06-30,Junho,2026,Marketplace,Licença anual,Digital,Sudeste,4,4018.93,Redorai
+2026-07-28,Julho,2026,Site,Boné,Vestuário,Norte,2,131.93,Redorai
+2026-04-20,Abril,2026,WhatsApp,Gift card 100,Digital,Sul,4,369.80,Redorai
+2026-07-12,Julho,2026,App,Kit onboarding,Kits,Nordeste,4,908.23,Redorai
+2026-06-14,Junho,2026,Marketplace,Caderno,Acessórios,Norte,3,119.49,Redorai
+2026-04-20,Abril,2026,App,Caderno,Acessórios,Sul,1,36.79,Redorai
+2026-06-17,Junho,2026,Marketplace,Licença anual,Digital,Norte,4,3856.25,Redorai
+2026-03-28,Março,2026,Site,Camiseta logo,Vestuário,Norte,2,160.79,Redorai
+2026-01-31,Janeiro,2026,App,Boné,Vestuário,Centro-Oeste,3,208.88,Redorai
+2026-03-05,Março,2026,Site,Moletom,Vestuário,Centro-Oeste,2,352.51,Redorai
+2026-04-22,Abril,2026,Marketplace,Boné,Vestuário,Centro-Oeste,4,277.25,Redorai
+2026-01-13,Janeiro,2026,App,Garrafa,Acessórios,Sudeste,1,74.26,Redorai
+2026-04-15,Abril,2026,App,Moletom,Vestuário,Sul,4,781.97,Redorai
+2026-03-10,Março,2026,Site,Kit onboarding,Kits,Sul,1,238.47,Redorai
+2026-04-28,Abril,2026,App,Caderno,Acessórios,Centro-Oeste,1,39.40,Redorai
+2026-01-29,Janeiro,2026,WhatsApp,Gift card 100,Digital,Centro-Oeste,2,200.44,Redorai
+2026-03-25,Março,2026,Site,Garrafa,Acessórios,Norte,2,154.55,Redorai
+2026-03-10,Março,2026,App,Licença anual,Digital,Nordeste,3,3068.39,Redorai
+2026-08-14,Agosto,2026,App,Caderno,Acessórios,Centro-Oeste,1,37.00,Redorai
+2026-02-16,Fevereiro,2026,WhatsApp,Boné,Vestuário,Sul,1,62.19,Redorai
+2026-01-15,Janeiro,2026,Loja física,Mouse pad,Acessórios,Sul,4,172.03,Redorai
+2026-01-27,Janeiro,2026,WhatsApp,Caderno,Acessórios,Sudeste,2,78.23,Redorai
+2026-04-01,Abril,2026,Marketplace,Camiseta logo,Vestuário,Sul,1,89.46,Redorai
+2026-07-26,Julho,2026,WhatsApp,Moletom,Vestuário,Sul,2,358.16,Redorai
+2026-05-27,Maio,2026,App,Garrafa,Acessórios,Sudeste,5,396.34,Redorai
+2026-04-06,Abril,2026,Site,Caneca,Acessórios,Centro-Oeste,3,147.88,Redorai
+2026-05-28,Maio,2026,App,Boné,Vestuário,Norte,5,320.16,Redorai
+2026-04-04,Abril,2026,Marketplace,Garrafa,Acessórios,Norte,4,327.75,Redorai
+2026-05-26,Maio,2026,Loja física,Caneca,Acessórios,Sul,2,94.81,Redorai
+2026-08-02,Agosto,2026,WhatsApp,Boné,Vestuário,Sudeste,3,210.39,Redorai
+2026-05-14,Maio,2026,Site,Kit onboarding,Kits,Norte,3,768.31,Redorai
+2026-07-22,Julho,2026,Marketplace,Mouse pad,Acessórios,Sudeste,2,89.89,Redorai
+2026-05-22,Maio,2026,Loja física,Kit onboarding,Kits,Centro-Oeste,3,758.10,Redorai
+2026-02-13,Fevereiro,2026,Marketplace,Mouse pad,Acessórios,Centro-Oeste,3,134.48,Redorai
+2026-02-02,Fevereiro,2026,Site,Moletom,Vestuário,Sul,1,175.16,Redorai
+2026-01-13,Janeiro,2026,WhatsApp,Caderno,Acessórios,Sul,1,35.68,Redorai
+2026-05-31,Maio,2026,Loja física,Kit onboarding,Kits,Norte,5,1251.47,Redorai
+2026-03-11,Março,2026,App,Camiseta logo,Vestuário,Norte,3,269.05,Redorai
+2026-01-08,Janeiro,2026,Site,Caderno,Acessórios,Centro-Oeste,4,159.14,Redorai
+2026-01-20,Janeiro,2026,Marketplace,Garrafa,Acessórios,Sudeste,4,323.44,Redorai
+2026-03-14,Março,2026,Site,Gift card 100,Digital,Nordeste,1,91.17,Redorai
+2026-03-01,Março,2026,Site,Gift card 100,Digital,Sul,1,97.97,Redorai
+2026-02-22,Fevereiro,2026,Loja física,Caderno,Acessórios,Sul,2,76.73,Redorai
+2026-05-27,Maio,2026,Loja física,Kit onboarding,Kits,Nordeste,2,498.58,Redorai
+2026-07-03,Julho,2026,App,Kit onboarding,Kits,Sul,1,244.64,Redorai
+2026-05-14,Maio,2026,Loja física,Garrafa,Acessórios,Norte,3,229.05,Redorai
+2026-04-05,Abril,2026,Marketplace,Garrafa,Acessórios,Centro-Oeste,3,240.47,Redorai
+2026-04-25,Abril,2026,Loja física,Garrafa,Acessórios,Norte,2,147.27,Redorai
+2026-07-20,Julho,2026,Marketplace,Gift card 100,Digital,Centro-Oeste,3,290.14,Redorai
+2026-04-16,Abril,2026,Marketplace,Camiseta logo,Vestuário,Norte,1,80.32,Redorai
+2026-02-08,Fevereiro,2026,Marketplace,Boné,Vestuário,Sul,1,64.32,Redorai
+2026-03-26,Março,2026,Loja física,Camiseta logo,Vestuário,Norte,3,262.58,Redorai
+2026-05-31,Maio,2026,Site,Caneca,Acessórios,Centro-Oeste,2,93.43,Redorai
+2026-02-09,Fevereiro,2026,Loja física,Boné,Vestuário,Sul,3,193.53,Redorai
+2026-07-31,Julho,2026,Loja física,Boné,Vestuário,Centro-Oeste,1,67.99,Redorai
+2026-03-01,Março,2026,WhatsApp,Moletom,Vestuário,Sul,3,551.83,Redorai
+2026-08-23,Agosto,2026,Loja física,Mouse pad,Acessórios,Nordeste,1,40.75,Redorai
+2026-07-30,Julho,2026,Site,Mouse pad,Acessórios,Sudeste,4,186.89,Redorai
+2026-03-31,Março,2026,WhatsApp,Garrafa,Acessórios,Sudeste,4,325.63,Redorai
+2026-03-04,Março,2026,WhatsApp,Mouse pad,Acessórios,Sudeste,1,42.56,Redorai
+2026-01-15,Janeiro,2026,Marketplace,Garrafa,Acessórios,Norte,2,158.74,Redorai

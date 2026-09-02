@@ -1,0 +1,72 @@
+data,mes,ano,colaborador,departamento,cargo,tipo_contrato,status,headcount,salario,empresa
+2024-01-25,Janeiro,2024,Thales Prado,Engenharia,Dev Sénior,CLT,Ativo,1,13950.00,Redorai
+2024-03-06,Março,2024,Débora Lins,Customer Success,CSM,CLT,Desligado,0,7950.00,Redorai
+2024-03-31,Março,2024,Heloísa Bastos,Customer Success,Analista de CS,CLT,Ativo,1,4650.00,Redorai
+2024-04-08,Abril,2024,Murilo Coelho,Produto,Product Manager,CLT,Ativo,1,11600.00,Redorai
+2024-05-31,Maio,2024,Nina Vasconcelos,Produto,Designer de produto,CLT,Ativo,1,8350.00,Redorai
+2024-06-03,Junho,2024,Carla Souza,Comercial,SDR,CLT,Ativo,1,4350.00,Redorai
+2024-06-19,Junho,2024,Arthur Nascimento,Customer Success,CSM,CLT,Ativo,1,8150.00,Redorai
+2024-06-22,Junho,2024,Felipe Andrade,Engenharia,Dev Júnior,CLT,Ativo,1,6550.00,Redorai
+2024-07-22,Julho,2024,Júlia Fonseca,Engenharia,Dev Pleno,CLT,Ativo,1,9050.00,Redorai
+2024-08-08,Agosto,2024,Kauã Trindade,Customer Success,Analista de CS,CLT,Ativo,1,4650.00,Redorai
+2024-09-10,Setembro,2024,Elisa Duarte,Engenharia,Dev Júnior,CLT,Ativo,1,6500.00,Redorai
+2024-10-29,Outubro,2024,Samuel Dutra,Operações,Analista de operações,CLT,Ativo,1,6000.00,Redorai
+2024-10-30,Outubro,2024,Renato Guimarães,Engenharia,Dev Sénior,CLT,Desligado,0,13400.00,Redorai
+2024-11-24,Novembro,2024,Ana Costa,Comercial,SDR,CLT,Ativo,1,4850.00,Redorai
+2025-01-11,Janeiro,2025,Olívia Castro,Comercial,Account Executive,CLT,Ativo,1,8250.00,Redorai
+2025-02-09,Fevereiro,2025,Gabriela Rocha,Comercial,SDR,CLT,Ativo,1,4650.00,Redorai
+2025-03-05,Março,2025,Diogo Saraiva,Customer Success,Estagiário,Estágio,Ativo,1,1700.00,Redorai
+2025-03-13,Março,2025,Eduarda Mota,Customer Success,CSM,CLT,Desligado,0,7550.00,Redorai
+2025-04-08,Abril,2025,Igor Menezes,Engenharia,Tech Lead,CLT,Ativo,1,19550.00,Redorai
+2025-05-03,Maio,2025,Diego Alves,Comercial,SDR,CLT,Ativo,1,4250.00,Redorai
+2025-05-11,Maio,2025,Vinícius Porto,Operações,Analista de operações,CLT,Ativo,1,5950.00,Redorai
+2025-05-15,Maio,2025,Letícia Aguiar,Financeiro,Controller,CLT,Ativo,1,12000.00,Redorai
+2025-06-12,Junho,2025,Isabela Freitas,Comercial,Account Executive,CLT,Afastado,1,9050.00,Redorai
+2025-06-20,Junho,2025,João Mendes,Comercial,Account Executive,CLT,Ativo,1,9500.00,Redorai
+2025-08-02,Agosto,2025,Karina Lopes,Comercial,Account Executive,CLT,Ativo,1,9700.00,Redorai
+2025-08-03,Agosto,2025,Pedro Henrique Luz,Customer Success,Estagiário,Estágio,Afastado,1,1900.00,Redorai
+2025-08-15,Agosto,2025,Caio Rezende,Financeiro,Analista financeiro,CLT,Desligado,0,6950.00,Redorai
+2025-08-16,Agosto,2025,Joana Peres,Customer Success,Analista de CS,CLT,Ativo,1,5400.00,Redorai
+2025-08-18,Agosto,2025,Natália Borges,Engenharia,Dev Pleno,CLT,Ativo,1,9050.00,Redorai
+2025-09-09,Setembro,2025,Giovana Reis,Engenharia,Dev Pleno,CLT,Ativo,1,10600.00,Redorai
+2025-09-15,Setembro,2025,Daniel Pires,Engenharia,Dev Júnior,CLT,Ativo,1,6850.00,Redorai
+2025-09-21,Setembro,2025,Beatriz Furtado,Marketing,Coordenador de marketing,CLT,Ativo,1,9950.00,Redorai
+2025-09-23,Setembro,2025,Camila Falcão,Customer Success,CSM,CLT,Ativo,1,7300.00,Redorai
+2025-09-25,Setembro,2025,Paulo Ribeiro,Comercial,Account Executive,CLT,Ativo,1,8350.00,Redorai
+2025-10-05,Outubro,2025,Mateus Peixoto,Engenharia,Dev Pleno,CLT,Ativo,1,9700.00,Redorai
+2025-10-16,Outubro,2025,Stella Paiva,Marketing,Analista de marketing,CLT,Ativo,1,5950.00,Redorai
+2025-10-20,Outubro,2025,Helena Sales,Engenharia,Tech Lead,CLT,Ativo,1,17700.00,Redorai
+2025-11-17,Novembro,2025,Rafael Pinto,Comercial,Account Executive,CLT,Ativo,1,7900.00,Redorai
+2025-11-20,Novembro,2025,Larissa Moura,Engenharia,Dev Pleno,CLT,Ativo,1,10750.00,Redorai
+2025-11-26,Novembro,2025,Otávio Farias,Engenharia,Dev Pleno,CLT,Ativo,1,9200.00,Redorai
+2025-12-04,Dezembro,2025,Sabrina Tavares,Engenharia,Dev Sénior,CLT,Ativo,1,13500.00,Redorai
+2025-12-20,Dezembro,2025,Sofia Carvalho,Comercial,Gerente comercial,CLT,Ativo,1,14300.00,Redorai
+2025-12-25,Dezembro,2025,Enzo Pimentel,Customer Success,Analista de CS,CLT,Ativo,1,5500.00,Redorai
+2026-01-07,Janeiro,2026,Gustavo Cordeiro,Financeiro,Analista financeiro,CLT,Ativo,1,6150.00,Redorai
+2026-01-11,Janeiro,2026,Nicolas Barbosa,Comercial,Account Executive,CLT,Ativo,1,9250.00,Redorai
+2026-01-31,Janeiro,2026,Hugo Batista,Engenharia,Dev Pleno,CLT,Ativo,1,10000.00,Redorai
+2026-02-03,Fevereiro,2026,Aline Macedo,Operações,Analista de operações,CLT,Ativo,1,5200.00,Redorai
+2026-02-04,Fevereiro,2026,Henrique Dias,Comercial,SDR,CLT,Ativo,1,4550.00,Redorai
+2026-02-06,Fevereiro,2026,Nicole Braga,RH,Analista de RH,CLT,Ativo,1,6400.00,Redorai
+2026-02-08,Fevereiro,2026,Bruno Lima,Comercial,SDR,CLT,Ativo,1,4300.00,Redorai
+2026-02-13,Fevereiro,2026,Tiago Moreira,Comercial,Gerente comercial,CLT,Ativo,1,15650.00,Redorai
+2026-03-13,Março,2026,Rafaela Quaresma,RH,Business Partner,CLT,Ativo,1,11200.00,Redorai
+2026-03-14,Março,2026,Patrícia Nogueira,Engenharia,Dev Pleno,CLT,Ativo,1,11000.00,Redorai
+2026-03-15,Março,2026,Miguel Salles,RH,Analista de RH,CLT,Ativo,1,6500.00,Redorai
+2026-03-16,Março,2026,Eva Martins,Comercial,SDR,CLT,Ativo,1,4450.00,Redorai
+2026-03-23,Março,2026,Queila Santos,Comercial,Account Executive,CLT,Afastado,1,9250.00,Redorai
+2026-03-25,Março,2026,Lucas Azevedo,Comercial,Account Executive,CLT,Desligado,0,9300.00,Redorai
+2026-04-03,Abril,2026,Priscila Guedes,Produto,Designer de produto,CLT,Ativo,1,7900.00,Redorai
+2026-04-18,Abril,2026,Fábio Nunes,Comercial,SDR,CLT,Ativo,1,4500.00,Redorai
+2026-04-20,Abril,2026,Marina Teixeira,Comercial,Account Executive,CLT,Ativo,1,9700.00,Redorai
+2026-05-05,Maio,2026,Alice Pacheco,Engenharia,Dev Sénior,CLT,Ativo,1,15500.00,Redorai
+2026-05-15,Maio,2026,Valentina Campos,Engenharia,Dev Sénior,CLT,Ativo,1,15400.00,Redorai
+2026-05-20,Maio,2026,Talita Rangel,Customer Success,Estagiário,Estágio,Ativo,1,1950.00,Redorai
+2026-06-06,Junho,2026,Lívia Magalhães,Produto,Product Manager,CLT,Ativo,1,14050.00,Redorai
+2026-06-13,Junho,2026,Vitória Sampaio,Marketing,Analista de marketing,CLT,Ativo,1,5850.00,Redorai
+2026-06-16,Junho,2026,Catarina Melo,Engenharia,Dev Júnior,CLT,Ativo,1,7350.00,Redorai
+2026-06-28,Junho,2026,Amanda Vieira,Engenharia,Dev Júnior,CLT,Ativo,1,6150.00,Redorai
+2026-07-08,Julho,2026,Bernardo Cunha,Engenharia,Dev Júnior,CLT,Ativo,1,7500.00,Redorai
+2026-07-13,Julho,2026,Tainá Leal,Marketing,Analista de marketing,CLT,Ativo,1,6100.00,Redorai
+2026-07-24,Julho,2026,Fernanda Assis,Financeiro,Analista financeiro,CLT,Ativo,1,5750.00,Redorai
+2026-08-05,Agosto,2026,Jéssica Brito,Produto,Product Manager,CLT,Ativo,1,13000.00,Redorai

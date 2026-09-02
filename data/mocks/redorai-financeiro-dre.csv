@@ -1,0 +1,397 @@
+data,mes,ano,categoria,linha,natureza,valor,empresa
+2025-09-01,Setembro,2025,Receita,Receita bruta vendas,Receita,48733.44,Redorai
+2025-09-01,Setembro,2025,Receita,Receita serviços,Receita,18877.36,Redorai
+2025-09-01,Setembro,2025,Receita,Outras receitas,Receita,2735.36,Redorai
+2025-09-01,Setembro,2025,Custos variáveis,Custo do produto,Despesa,15081.30,Redorai
+2025-09-01,Setembro,2025,Custos variáveis,Comissões,Despesa,5062.67,Redorai
+2025-09-01,Setembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,6071.41,Redorai
+2025-09-01,Setembro,2025,Custos fixos,Folha,Despesa,27374.10,Redorai
+2025-09-01,Setembro,2025,Custos fixos,Aluguel,Despesa,5007.40,Redorai
+2025-09-01,Setembro,2025,Custos fixos,SaaS e ferramentas,Despesa,2366.39,Redorai
+2025-09-01,Setembro,2025,Custos fixos,Marketing,Despesa,3704.19,Redorai
+2025-09-01,Setembro,2025,Custos fixos,Informática e publicidade,Despesa,968.48,Redorai
+2025-09-01,Setembro,2025,Receita,Receita bruta vendas,Receita,21469.88,Redorai SP
+2025-09-01,Setembro,2025,Receita,Receita serviços,Receita,8497.05,Redorai SP
+2025-09-01,Setembro,2025,Receita,Outras receitas,Receita,1215.35,Redorai SP
+2025-09-01,Setembro,2025,Custos variáveis,Custo do produto,Despesa,6960.60,Redorai SP
+2025-09-01,Setembro,2025,Custos variáveis,Comissões,Despesa,2041.96,Redorai SP
+2025-09-01,Setembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,2305.96,Redorai SP
+2025-09-01,Setembro,2025,Custos fixos,Folha,Despesa,10798.23,Redorai SP
+2025-09-01,Setembro,2025,Custos fixos,Aluguel,Despesa,2466.81,Redorai SP
+2025-09-01,Setembro,2025,Custos fixos,SaaS e ferramentas,Despesa,902.39,Redorai SP
+2025-09-01,Setembro,2025,Custos fixos,Marketing,Despesa,1848.74,Redorai SP
+2025-09-01,Setembro,2025,Custos fixos,Informática e publicidade,Despesa,452.02,Redorai SP
+2025-09-01,Setembro,2025,Receita,Receita bruta vendas,Receita,13006.44,Redorai RJ
+2025-09-01,Setembro,2025,Receita,Receita serviços,Receita,5405.07,Redorai RJ
+2025-09-01,Setembro,2025,Receita,Outras receitas,Receita,852.62,Redorai RJ
+2025-09-01,Setembro,2025,Custos variáveis,Custo do produto,Despesa,3869.42,Redorai RJ
+2025-09-01,Setembro,2025,Custos variáveis,Comissões,Despesa,1096.89,Redorai RJ
+2025-09-01,Setembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,1333.20,Redorai RJ
+2025-09-01,Setembro,2025,Custos fixos,Folha,Despesa,6782.16,Redorai RJ
+2025-09-01,Setembro,2025,Custos fixos,Aluguel,Despesa,1406.70,Redorai RJ
+2025-09-01,Setembro,2025,Custos fixos,SaaS e ferramentas,Despesa,642.10,Redorai RJ
+2025-09-01,Setembro,2025,Custos fixos,Marketing,Despesa,1083.34,Redorai RJ
+2025-09-01,Setembro,2025,Custos fixos,Informática e publicidade,Despesa,259.96,Redorai RJ
+2025-10-01,Outubro,2025,Receita,Receita bruta vendas,Receita,51956.24,Redorai
+2025-10-01,Outubro,2025,Receita,Receita serviços,Receita,20297.71,Redorai
+2025-10-01,Outubro,2025,Receita,Outras receitas,Receita,2898.94,Redorai
+2025-10-01,Outubro,2025,Custos variáveis,Custo do produto,Despesa,17427.75,Redorai
+2025-10-01,Outubro,2025,Custos variáveis,Comissões,Despesa,5004.24,Redorai
+2025-10-01,Outubro,2025,Custos variáveis,Impostos sobre vendas,Despesa,6390.36,Redorai
+2025-10-01,Outubro,2025,Custos fixos,Folha,Despesa,25983.54,Redorai
+2025-10-01,Outubro,2025,Custos fixos,Aluguel,Despesa,5823.63,Redorai
+2025-10-01,Outubro,2025,Custos fixos,SaaS e ferramentas,Despesa,2197.85,Redorai
+2025-10-01,Outubro,2025,Custos fixos,Marketing,Despesa,3933.57,Redorai
+2025-10-01,Outubro,2025,Custos fixos,Informática e publicidade,Despesa,997.39,Redorai
+2025-10-01,Outubro,2025,Receita,Receita bruta vendas,Receita,20273.68,Redorai SP
+2025-10-01,Outubro,2025,Receita,Receita serviços,Receita,8916.75,Redorai SP
+2025-10-01,Outubro,2025,Receita,Outras receitas,Receita,1211.16,Redorai SP
+2025-10-01,Outubro,2025,Custos variáveis,Custo do produto,Despesa,6499.32,Redorai SP
+2025-10-01,Outubro,2025,Custos variáveis,Comissões,Despesa,2109.44,Redorai SP
+2025-10-01,Outubro,2025,Custos variáveis,Impostos sobre vendas,Despesa,2414.68,Redorai SP
+2025-10-01,Outubro,2025,Custos fixos,Folha,Despesa,10428.78,Redorai SP
+2025-10-01,Outubro,2025,Custos fixos,Aluguel,Despesa,2193.42,Redorai SP
+2025-10-01,Outubro,2025,Custos fixos,SaaS e ferramentas,Despesa,972.45,Redorai SP
+2025-10-01,Outubro,2025,Custos fixos,Marketing,Despesa,1923.22,Redorai SP
+2025-10-01,Outubro,2025,Custos fixos,Informática e publicidade,Despesa,453.20,Redorai SP
+2025-10-01,Outubro,2025,Receita,Receita bruta vendas,Receita,13760.14,Redorai RJ
+2025-10-01,Outubro,2025,Receita,Receita serviços,Receita,5491.03,Redorai RJ
+2025-10-01,Outubro,2025,Receita,Outras receitas,Receita,834.51,Redorai RJ
+2025-10-01,Outubro,2025,Custos variáveis,Custo do produto,Despesa,3767.19,Redorai RJ
+2025-10-01,Outubro,2025,Custos variáveis,Comissões,Despesa,1187.55,Redorai RJ
+2025-10-01,Outubro,2025,Custos variáveis,Impostos sobre vendas,Despesa,1638.82,Redorai RJ
+2025-10-01,Outubro,2025,Custos fixos,Folha,Despesa,6583.06,Redorai RJ
+2025-10-01,Outubro,2025,Custos fixos,Aluguel,Despesa,1411.09,Redorai RJ
+2025-10-01,Outubro,2025,Custos fixos,SaaS e ferramentas,Despesa,634.31,Redorai RJ
+2025-10-01,Outubro,2025,Custos fixos,Marketing,Despesa,1123.42,Redorai RJ
+2025-10-01,Outubro,2025,Custos fixos,Informática e publicidade,Despesa,277.05,Redorai RJ
+2025-11-01,Novembro,2025,Receita,Receita bruta vendas,Receita,46808.77,Redorai
+2025-11-01,Novembro,2025,Receita,Receita serviços,Receita,19400.10,Redorai
+2025-11-01,Novembro,2025,Receita,Outras receitas,Receita,2826.50,Redorai
+2025-11-01,Novembro,2025,Custos variáveis,Custo do produto,Despesa,15639.71,Redorai
+2025-11-01,Novembro,2025,Custos variáveis,Comissões,Despesa,4630.81,Redorai
+2025-11-01,Novembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,6579.86,Redorai
+2025-11-01,Novembro,2025,Custos fixos,Folha,Despesa,28008.49,Redorai
+2025-11-01,Novembro,2025,Custos fixos,Aluguel,Despesa,5419.93,Redorai
+2025-11-01,Novembro,2025,Custos fixos,SaaS e ferramentas,Despesa,2554.63,Redorai
+2025-11-01,Novembro,2025,Custos fixos,Marketing,Despesa,4139.64,Redorai
+2025-11-01,Novembro,2025,Custos fixos,Informática e publicidade,Despesa,1154.61,Redorai
+2025-11-01,Novembro,2025,Receita,Receita bruta vendas,Receita,21873.54,Redorai SP
+2025-11-01,Novembro,2025,Receita,Receita serviços,Receita,9081.51,Redorai SP
+2025-11-01,Novembro,2025,Receita,Outras receitas,Receita,1257.49,Redorai SP
+2025-11-01,Novembro,2025,Custos variáveis,Custo do produto,Despesa,7011.19,Redorai SP
+2025-11-01,Novembro,2025,Custos variáveis,Comissões,Despesa,1968.34,Redorai SP
+2025-11-01,Novembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,2566.82,Redorai SP
+2025-11-01,Novembro,2025,Custos fixos,Folha,Despesa,11814.37,Redorai SP
+2025-11-01,Novembro,2025,Custos fixos,Aluguel,Despesa,2320.15,Redorai SP
+2025-11-01,Novembro,2025,Custos fixos,SaaS e ferramentas,Despesa,974.36,Redorai SP
+2025-11-01,Novembro,2025,Custos fixos,Marketing,Despesa,1971.90,Redorai SP
+2025-11-01,Novembro,2025,Custos fixos,Informática e publicidade,Despesa,445.70,Redorai SP
+2025-11-01,Novembro,2025,Receita,Receita bruta vendas,Receita,12803.65,Redorai RJ
+2025-11-01,Novembro,2025,Receita,Receita serviços,Receita,5446.14,Redorai RJ
+2025-11-01,Novembro,2025,Receita,Outras receitas,Receita,764.57,Redorai RJ
+2025-11-01,Novembro,2025,Custos variáveis,Custo do produto,Despesa,4232.60,Redorai RJ
+2025-11-01,Novembro,2025,Custos variáveis,Comissões,Despesa,1314.09,Redorai RJ
+2025-11-01,Novembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,1474.79,Redorai RJ
+2025-11-01,Novembro,2025,Custos fixos,Folha,Despesa,5856.30,Redorai RJ
+2025-11-01,Novembro,2025,Custos fixos,Aluguel,Despesa,1375.57,Redorai RJ
+2025-11-01,Novembro,2025,Custos fixos,SaaS e ferramentas,Despesa,684.50,Redorai RJ
+2025-11-01,Novembro,2025,Custos fixos,Marketing,Despesa,1065.70,Redorai RJ
+2025-11-01,Novembro,2025,Custos fixos,Informática e publicidade,Despesa,291.91,Redorai RJ
+2025-12-01,Dezembro,2025,Receita,Receita bruta vendas,Receita,52420.84,Redorai
+2025-12-01,Dezembro,2025,Receita,Receita serviços,Receita,19579.82,Redorai
+2025-12-01,Dezembro,2025,Receita,Outras receitas,Receita,3054.18,Redorai
+2025-12-01,Dezembro,2025,Custos variáveis,Custo do produto,Despesa,17345.61,Redorai
+2025-12-01,Dezembro,2025,Custos variáveis,Comissões,Despesa,5045.87,Redorai
+2025-12-01,Dezembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,5769.47,Redorai
+2025-12-01,Dezembro,2025,Custos fixos,Folha,Despesa,27024.66,Redorai
+2025-12-01,Dezembro,2025,Custos fixos,Aluguel,Despesa,5236.60,Redorai
+2025-12-01,Dezembro,2025,Custos fixos,SaaS e ferramentas,Despesa,2467.22,Redorai
+2025-12-01,Dezembro,2025,Custos fixos,Marketing,Despesa,4247.23,Redorai
+2025-12-01,Dezembro,2025,Custos fixos,Informática e publicidade,Despesa,1178.65,Redorai
+2025-12-01,Dezembro,2025,Receita,Receita bruta vendas,Receita,23643.16,Redorai SP
+2025-12-01,Dezembro,2025,Receita,Receita serviços,Receita,9196.16,Redorai SP
+2025-12-01,Dezembro,2025,Receita,Outras receitas,Receita,1327.62,Redorai SP
+2025-12-01,Dezembro,2025,Custos variáveis,Custo do produto,Despesa,6517.26,Redorai SP
+2025-12-01,Dezembro,2025,Custos variáveis,Comissões,Despesa,2291.29,Redorai SP
+2025-12-01,Dezembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,2758.87,Redorai SP
+2025-12-01,Dezembro,2025,Custos fixos,Folha,Despesa,10528.76,Redorai SP
+2025-12-01,Dezembro,2025,Custos fixos,Aluguel,Despesa,2475.39,Redorai SP
+2025-12-01,Dezembro,2025,Custos fixos,SaaS e ferramentas,Despesa,1076.12,Redorai SP
+2025-12-01,Dezembro,2025,Custos fixos,Marketing,Despesa,1665.74,Redorai SP
+2025-12-01,Dezembro,2025,Custos fixos,Informática e publicidade,Despesa,476.26,Redorai SP
+2025-12-01,Dezembro,2025,Receita,Receita bruta vendas,Receita,13964.23,Redorai RJ
+2025-12-01,Dezembro,2025,Receita,Receita serviços,Receita,6212.33,Redorai RJ
+2025-12-01,Dezembro,2025,Receita,Outras receitas,Receita,830.01,Redorai RJ
+2025-12-01,Dezembro,2025,Custos variáveis,Custo do produto,Despesa,3717.52,Redorai RJ
+2025-12-01,Dezembro,2025,Custos variáveis,Comissões,Despesa,1203.46,Redorai RJ
+2025-12-01,Dezembro,2025,Custos variáveis,Impostos sobre vendas,Despesa,1360.50,Redorai RJ
+2025-12-01,Dezembro,2025,Custos fixos,Folha,Despesa,7167.57,Redorai RJ
+2025-12-01,Dezembro,2025,Custos fixos,Aluguel,Despesa,1548.14,Redorai RJ
+2025-12-01,Dezembro,2025,Custos fixos,SaaS e ferramentas,Despesa,670.90,Redorai RJ
+2025-12-01,Dezembro,2025,Custos fixos,Marketing,Despesa,1027.65,Redorai RJ
+2025-12-01,Dezembro,2025,Custos fixos,Informática e publicidade,Despesa,242.33,Redorai RJ
+2026-01-01,Janeiro,2026,Receita,Receita bruta vendas,Receita,45876.43,Redorai
+2026-01-01,Janeiro,2026,Receita,Receita serviços,Receita,19865.83,Redorai
+2026-01-01,Janeiro,2026,Receita,Outras receitas,Receita,2404.29,Redorai
+2026-01-01,Janeiro,2026,Custos variáveis,Custo do produto,Despesa,14519.76,Redorai
+2026-01-01,Janeiro,2026,Custos variáveis,Comissões,Despesa,3959.27,Redorai
+2026-01-01,Janeiro,2026,Custos variáveis,Impostos sobre vendas,Despesa,5606.70,Redorai
+2026-01-01,Janeiro,2026,Custos fixos,Folha,Despesa,24211.84,Redorai
+2026-01-01,Janeiro,2026,Custos fixos,Aluguel,Despesa,4589.25,Redorai
+2026-01-01,Janeiro,2026,Custos fixos,SaaS e ferramentas,Despesa,2172.87,Redorai
+2026-01-01,Janeiro,2026,Custos fixos,Marketing,Despesa,3785.71,Redorai
+2026-01-01,Janeiro,2026,Custos fixos,Informática e publicidade,Despesa,888.36,Redorai
+2026-01-01,Janeiro,2026,Receita,Receita bruta vendas,Receita,20627.02,Redorai SP
+2026-01-01,Janeiro,2026,Receita,Receita serviços,Receita,8240.40,Redorai SP
+2026-01-01,Janeiro,2026,Receita,Outras receitas,Receita,1105.32,Redorai SP
+2026-01-01,Janeiro,2026,Custos variáveis,Custo do produto,Despesa,6169.32,Redorai SP
+2026-01-01,Janeiro,2026,Custos variáveis,Comissões,Despesa,1927.00,Redorai SP
+2026-01-01,Janeiro,2026,Custos variáveis,Impostos sobre vendas,Despesa,2083.27,Redorai SP
+2026-01-01,Janeiro,2026,Custos fixos,Folha,Despesa,9218.15,Redorai SP
+2026-01-01,Janeiro,2026,Custos fixos,Aluguel,Despesa,2323.44,Redorai SP
+2026-01-01,Janeiro,2026,Custos fixos,SaaS e ferramentas,Despesa,947.50,Redorai SP
+2026-01-01,Janeiro,2026,Custos fixos,Marketing,Despesa,1551.73,Redorai SP
+2026-01-01,Janeiro,2026,Custos fixos,Informática e publicidade,Despesa,394.74,Redorai SP
+2026-01-01,Janeiro,2026,Receita,Receita bruta vendas,Receita,11378.29,Redorai RJ
+2026-01-01,Janeiro,2026,Receita,Receita serviços,Receita,4962.54,Redorai RJ
+2026-01-01,Janeiro,2026,Receita,Outras receitas,Receita,702.32,Redorai RJ
+2026-01-01,Janeiro,2026,Custos variáveis,Custo do produto,Despesa,3711.09,Redorai RJ
+2026-01-01,Janeiro,2026,Custos variáveis,Comissões,Despesa,1028.10,Redorai RJ
+2026-01-01,Janeiro,2026,Custos variáveis,Impostos sobre vendas,Despesa,1245.55,Redorai RJ
+2026-01-01,Janeiro,2026,Custos fixos,Folha,Despesa,5186.98,Redorai RJ
+2026-01-01,Janeiro,2026,Custos fixos,Aluguel,Despesa,1284.01,Redorai RJ
+2026-01-01,Janeiro,2026,Custos fixos,SaaS e ferramentas,Despesa,513.91,Redorai RJ
+2026-01-01,Janeiro,2026,Custos fixos,Marketing,Despesa,1018.95,Redorai RJ
+2026-01-01,Janeiro,2026,Custos fixos,Informática e publicidade,Despesa,252.40,Redorai RJ
+2026-02-01,Fevereiro,2026,Receita,Receita bruta vendas,Receita,40876.39,Redorai
+2026-02-01,Fevereiro,2026,Receita,Receita serviços,Receita,18021.50,Redorai
+2026-02-01,Fevereiro,2026,Receita,Outras receitas,Receita,2683.13,Redorai
+2026-02-01,Fevereiro,2026,Custos variáveis,Custo do produto,Despesa,13856.54,Redorai
+2026-02-01,Fevereiro,2026,Custos variáveis,Comissões,Despesa,4077.86,Redorai
+2026-02-01,Fevereiro,2026,Custos variáveis,Impostos sobre vendas,Despesa,5893.43,Redorai
+2026-02-01,Fevereiro,2026,Custos fixos,Folha,Despesa,23579.22,Redorai
+2026-02-01,Fevereiro,2026,Custos fixos,Aluguel,Despesa,5036.00,Redorai
+2026-02-01,Fevereiro,2026,Custos fixos,SaaS e ferramentas,Despesa,2353.86,Redorai
+2026-02-01,Fevereiro,2026,Custos fixos,Marketing,Despesa,4054.12,Redorai
+2026-02-01,Fevereiro,2026,Custos fixos,Informática e publicidade,Despesa,885.85,Redorai
+2026-02-01,Fevereiro,2026,Receita,Receita bruta vendas,Receita,18476.77,Redorai SP
+2026-02-01,Fevereiro,2026,Receita,Receita serviços,Receita,8371.12,Redorai SP
+2026-02-01,Fevereiro,2026,Receita,Outras receitas,Receita,1161.25,Redorai SP
+2026-02-01,Fevereiro,2026,Custos variáveis,Custo do produto,Despesa,6161.47,Redorai SP
+2026-02-01,Fevereiro,2026,Custos variáveis,Comissões,Despesa,1954.71,Redorai SP
+2026-02-01,Fevereiro,2026,Custos variáveis,Impostos sobre vendas,Despesa,2346.15,Redorai SP
+2026-02-01,Fevereiro,2026,Custos fixos,Folha,Despesa,10780.86,Redorai SP
+2026-02-01,Fevereiro,2026,Custos fixos,Aluguel,Despesa,1941.66,Redorai SP
+2026-02-01,Fevereiro,2026,Custos fixos,SaaS e ferramentas,Despesa,911.16,Redorai SP
+2026-02-01,Fevereiro,2026,Custos fixos,Marketing,Despesa,1539.98,Redorai SP
+2026-02-01,Fevereiro,2026,Custos fixos,Informática e publicidade,Despesa,430.39,Redorai SP
+2026-02-01,Fevereiro,2026,Receita,Receita bruta vendas,Receita,11794.99,Redorai RJ
+2026-02-01,Fevereiro,2026,Receita,Receita serviços,Receita,5005.74,Redorai RJ
+2026-02-01,Fevereiro,2026,Receita,Outras receitas,Receita,725.49,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos variáveis,Custo do produto,Despesa,3631.22,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos variáveis,Comissões,Despesa,1054.76,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos variáveis,Impostos sobre vendas,Despesa,1272.36,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos fixos,Folha,Despesa,6340.17,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos fixos,Aluguel,Despesa,1250.85,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos fixos,SaaS e ferramentas,Despesa,597.73,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos fixos,Marketing,Despesa,960.32,Redorai RJ
+2026-02-01,Fevereiro,2026,Custos fixos,Informática e publicidade,Despesa,214.23,Redorai RJ
+2026-03-01,Março,2026,Receita,Receita bruta vendas,Receita,48076.49,Redorai
+2026-03-01,Março,2026,Receita,Receita serviços,Receita,20105.83,Redorai
+2026-03-01,Março,2026,Receita,Outras receitas,Receita,2848.85,Redorai
+2026-03-01,Março,2026,Custos variáveis,Custo do produto,Despesa,16380.40,Redorai
+2026-03-01,Março,2026,Custos variáveis,Comissões,Despesa,4838.05,Redorai
+2026-03-01,Março,2026,Custos variáveis,Impostos sobre vendas,Despesa,5063.20,Redorai
+2026-03-01,Março,2026,Custos fixos,Folha,Despesa,23479.53,Redorai
+2026-03-01,Março,2026,Custos fixos,Aluguel,Despesa,4818.46,Redorai
+2026-03-01,Março,2026,Custos fixos,SaaS e ferramentas,Despesa,2199.80,Redorai
+2026-03-01,Março,2026,Custos fixos,Marketing,Despesa,3483.63,Redorai
+2026-03-01,Março,2026,Custos fixos,Informática e publicidade,Despesa,938.14,Redorai
+2026-03-01,Março,2026,Receita,Receita bruta vendas,Receita,21589.63,Redorai SP
+2026-03-01,Março,2026,Receita,Receita serviços,Receita,8263.45,Redorai SP
+2026-03-01,Março,2026,Receita,Outras receitas,Receita,1246.70,Redorai SP
+2026-03-01,Março,2026,Custos variáveis,Custo do produto,Despesa,6233.43,Redorai SP
+2026-03-01,Março,2026,Custos variáveis,Comissões,Despesa,1856.87,Redorai SP
+2026-03-01,Março,2026,Custos variáveis,Impostos sobre vendas,Despesa,2521.66,Redorai SP
+2026-03-01,Março,2026,Custos fixos,Folha,Despesa,10959.86,Redorai SP
+2026-03-01,Março,2026,Custos fixos,Aluguel,Despesa,2184.55,Redorai SP
+2026-03-01,Março,2026,Custos fixos,SaaS e ferramentas,Despesa,989.19,Redorai SP
+2026-03-01,Março,2026,Custos fixos,Marketing,Despesa,1497.03,Redorai SP
+2026-03-01,Março,2026,Custos fixos,Informática e publicidade,Despesa,386.77,Redorai SP
+2026-03-01,Março,2026,Receita,Receita bruta vendas,Receita,13400.44,Redorai RJ
+2026-03-01,Março,2026,Receita,Receita serviços,Receita,5410.08,Redorai RJ
+2026-03-01,Março,2026,Receita,Outras receitas,Receita,747.01,Redorai RJ
+2026-03-01,Março,2026,Custos variáveis,Custo do produto,Despesa,3949.50,Redorai RJ
+2026-03-01,Março,2026,Custos variáveis,Comissões,Despesa,1015.70,Redorai RJ
+2026-03-01,Março,2026,Custos variáveis,Impostos sobre vendas,Despesa,1390.04,Redorai RJ
+2026-03-01,Março,2026,Custos fixos,Folha,Despesa,5891.96,Redorai RJ
+2026-03-01,Março,2026,Custos fixos,Aluguel,Despesa,1383.43,Redorai RJ
+2026-03-01,Março,2026,Custos fixos,SaaS e ferramentas,Despesa,520.12,Redorai RJ
+2026-03-01,Março,2026,Custos fixos,Marketing,Despesa,1060.25,Redorai RJ
+2026-03-01,Março,2026,Custos fixos,Informática e publicidade,Despesa,218.85,Redorai RJ
+2026-04-01,Abril,2026,Receita,Receita bruta vendas,Receita,42880.40,Redorai
+2026-04-01,Abril,2026,Receita,Receita serviços,Receita,19644.23,Redorai
+2026-04-01,Abril,2026,Receita,Outras receitas,Receita,2762.84,Redorai
+2026-04-01,Abril,2026,Custos variáveis,Custo do produto,Despesa,14323.76,Redorai
+2026-04-01,Abril,2026,Custos variáveis,Comissões,Despesa,4182.58,Redorai
+2026-04-01,Abril,2026,Custos variáveis,Impostos sobre vendas,Despesa,6008.07,Redorai
+2026-04-01,Abril,2026,Custos fixos,Folha,Despesa,22566.06,Redorai
+2026-04-01,Abril,2026,Custos fixos,Aluguel,Despesa,5318.90,Redorai
+2026-04-01,Abril,2026,Custos fixos,SaaS e ferramentas,Despesa,2339.37,Redorai
+2026-04-01,Abril,2026,Custos fixos,Marketing,Despesa,3839.93,Redorai
+2026-04-01,Abril,2026,Custos fixos,Informática e publicidade,Despesa,994.98,Redorai
+2026-04-01,Abril,2026,Receita,Receita bruta vendas,Receita,20391.56,Redorai SP
+2026-04-01,Abril,2026,Receita,Receita serviços,Receita,9313.13,Redorai SP
+2026-04-01,Abril,2026,Receita,Outras receitas,Receita,1152.15,Redorai SP
+2026-04-01,Abril,2026,Custos variáveis,Custo do produto,Despesa,6684.85,Redorai SP
+2026-04-01,Abril,2026,Custos variáveis,Comissões,Despesa,1806.25,Redorai SP
+2026-04-01,Abril,2026,Custos variáveis,Impostos sobre vendas,Despesa,2272.88,Redorai SP
+2026-04-01,Abril,2026,Custos fixos,Folha,Despesa,10407.52,Redorai SP
+2026-04-01,Abril,2026,Custos fixos,Aluguel,Despesa,2093.51,Redorai SP
+2026-04-01,Abril,2026,Custos fixos,SaaS e ferramentas,Despesa,919.29,Redorai SP
+2026-04-01,Abril,2026,Custos fixos,Marketing,Despesa,1731.72,Redorai SP
+2026-04-01,Abril,2026,Custos fixos,Informática e publicidade,Despesa,372.20,Redorai SP
+2026-04-01,Abril,2026,Receita,Receita bruta vendas,Receita,12557.62,Redorai RJ
+2026-04-01,Abril,2026,Receita,Receita serviços,Receita,5850.10,Redorai RJ
+2026-04-01,Abril,2026,Receita,Outras receitas,Receita,812.23,Redorai RJ
+2026-04-01,Abril,2026,Custos variáveis,Custo do produto,Despesa,3446.89,Redorai RJ
+2026-04-01,Abril,2026,Custos variáveis,Comissões,Despesa,1068.81,Redorai RJ
+2026-04-01,Abril,2026,Custos variáveis,Impostos sobre vendas,Despesa,1313.53,Redorai RJ
+2026-04-01,Abril,2026,Custos fixos,Folha,Despesa,6535.19,Redorai RJ
+2026-04-01,Abril,2026,Custos fixos,Aluguel,Despesa,1410.99,Redorai RJ
+2026-04-01,Abril,2026,Custos fixos,SaaS e ferramentas,Despesa,617.11,Redorai RJ
+2026-04-01,Abril,2026,Custos fixos,Marketing,Despesa,949.40,Redorai RJ
+2026-04-01,Abril,2026,Custos fixos,Informática e publicidade,Despesa,226.08,Redorai RJ
+2026-05-01,Maio,2026,Receita,Receita bruta vendas,Receita,48224.62,Redorai
+2026-05-01,Maio,2026,Receita,Receita serviços,Receita,20258.95,Redorai
+2026-05-01,Maio,2026,Receita,Outras receitas,Receita,2773.69,Redorai
+2026-05-01,Maio,2026,Custos variáveis,Custo do produto,Despesa,17048.34,Redorai
+2026-05-01,Maio,2026,Custos variáveis,Comissões,Despesa,4778.86,Redorai
+2026-05-01,Maio,2026,Custos variáveis,Impostos sobre vendas,Despesa,5012.67,Redorai
+2026-05-01,Maio,2026,Custos fixos,Folha,Despesa,25892.71,Redorai
+2026-05-01,Maio,2026,Custos fixos,Aluguel,Despesa,5053.40,Redorai
+2026-05-01,Maio,2026,Custos fixos,SaaS e ferramentas,Despesa,2394.17,Redorai
+2026-05-01,Maio,2026,Custos fixos,Marketing,Despesa,4342.16,Redorai
+2026-05-01,Maio,2026,Custos fixos,Informática e publicidade,Despesa,911.88,Redorai
+2026-05-01,Maio,2026,Receita,Receita bruta vendas,Receita,19333.39,Redorai SP
+2026-05-01,Maio,2026,Receita,Receita serviços,Receita,8273.88,Redorai SP
+2026-05-01,Maio,2026,Receita,Outras receitas,Receita,1236.69,Redorai SP
+2026-05-01,Maio,2026,Custos variáveis,Custo do produto,Despesa,6152.30,Redorai SP
+2026-05-01,Maio,2026,Custos variáveis,Comissões,Despesa,1986.33,Redorai SP
+2026-05-01,Maio,2026,Custos variáveis,Impostos sobre vendas,Despesa,2469.90,Redorai SP
+2026-05-01,Maio,2026,Custos fixos,Folha,Despesa,9515.56,Redorai SP
+2026-05-01,Maio,2026,Custos fixos,Aluguel,Despesa,2284.31,Redorai SP
+2026-05-01,Maio,2026,Custos fixos,SaaS e ferramentas,Despesa,921.08,Redorai SP
+2026-05-01,Maio,2026,Custos fixos,Marketing,Despesa,1660.40,Redorai SP
+2026-05-01,Maio,2026,Custos fixos,Informática e publicidade,Despesa,452.88,Redorai SP
+2026-05-01,Maio,2026,Receita,Receita bruta vendas,Receita,13528.24,Redorai RJ
+2026-05-01,Maio,2026,Receita,Receita serviços,Receita,5135.24,Redorai RJ
+2026-05-01,Maio,2026,Receita,Outras receitas,Receita,753.67,Redorai RJ
+2026-05-01,Maio,2026,Custos variáveis,Custo do produto,Despesa,3665.72,Redorai RJ
+2026-05-01,Maio,2026,Custos variáveis,Comissões,Despesa,1030.94,Redorai RJ
+2026-05-01,Maio,2026,Custos variáveis,Impostos sobre vendas,Despesa,1486.54,Redorai RJ
+2026-05-01,Maio,2026,Custos fixos,Folha,Despesa,6235.79,Redorai RJ
+2026-05-01,Maio,2026,Custos fixos,Aluguel,Despesa,1252.58,Redorai RJ
+2026-05-01,Maio,2026,Custos fixos,SaaS e ferramentas,Despesa,608.34,Redorai RJ
+2026-05-01,Maio,2026,Custos fixos,Marketing,Despesa,1001.96,Redorai RJ
+2026-05-01,Maio,2026,Custos fixos,Informática e publicidade,Despesa,243.80,Redorai RJ
+2026-06-01,Junho,2026,Receita,Receita bruta vendas,Receita,42769.00,Redorai
+2026-06-01,Junho,2026,Receita,Receita serviços,Receita,18538.26,Redorai
+2026-06-01,Junho,2026,Receita,Outras receitas,Receita,2931.83,Redorai
+2026-06-01,Junho,2026,Custos variáveis,Custo do produto,Despesa,16999.43,Redorai
+2026-06-01,Junho,2026,Custos variáveis,Comissões,Despesa,4733.96,Redorai
+2026-06-01,Junho,2026,Custos variáveis,Impostos sobre vendas,Despesa,6106.69,Redorai
+2026-06-01,Junho,2026,Custos fixos,Folha,Despesa,24994.38,Redorai
+2026-06-01,Junho,2026,Custos fixos,Aluguel,Despesa,4946.41,Redorai
+2026-06-01,Junho,2026,Custos fixos,SaaS e ferramentas,Despesa,2153.51,Redorai
+2026-06-01,Junho,2026,Custos fixos,Marketing,Despesa,3849.98,Redorai
+2026-06-01,Junho,2026,Custos fixos,Informática e publicidade,Despesa,1091.74,Redorai
+2026-06-01,Junho,2026,Receita,Receita bruta vendas,Receita,21874.00,Redorai SP
+2026-06-01,Junho,2026,Receita,Receita serviços,Receita,9467.05,Redorai SP
+2026-06-01,Junho,2026,Receita,Outras receitas,Receita,1322.47,Redorai SP
+2026-06-01,Junho,2026,Custos variáveis,Custo do produto,Despesa,6147.95,Redorai SP
+2026-06-01,Junho,2026,Custos variáveis,Comissões,Despesa,1861.30,Redorai SP
+2026-06-01,Junho,2026,Custos variáveis,Impostos sobre vendas,Despesa,2183.75,Redorai SP
+2026-06-01,Junho,2026,Custos fixos,Folha,Despesa,10941.51,Redorai SP
+2026-06-01,Junho,2026,Custos fixos,Aluguel,Despesa,2438.22,Redorai SP
+2026-06-01,Junho,2026,Custos fixos,SaaS e ferramentas,Despesa,964.28,Redorai SP
+2026-06-01,Junho,2026,Custos fixos,Marketing,Despesa,1731.82,Redorai SP
+2026-06-01,Junho,2026,Custos fixos,Informática e publicidade,Despesa,390.12,Redorai SP
+2026-06-01,Junho,2026,Receita,Receita bruta vendas,Receita,13888.59,Redorai RJ
+2026-06-01,Junho,2026,Receita,Receita serviços,Receita,5894.09,Redorai RJ
+2026-06-01,Junho,2026,Receita,Outras receitas,Receita,832.44,Redorai RJ
+2026-06-01,Junho,2026,Custos variáveis,Custo do produto,Despesa,4170.60,Redorai RJ
+2026-06-01,Junho,2026,Custos variáveis,Comissões,Despesa,1269.21,Redorai RJ
+2026-06-01,Junho,2026,Custos variáveis,Impostos sobre vendas,Despesa,1275.67,Redorai RJ
+2026-06-01,Junho,2026,Custos fixos,Folha,Despesa,6454.57,Redorai RJ
+2026-06-01,Junho,2026,Custos fixos,Aluguel,Despesa,1290.31,Redorai RJ
+2026-06-01,Junho,2026,Custos fixos,SaaS e ferramentas,Despesa,640.91,Redorai RJ
+2026-06-01,Junho,2026,Custos fixos,Marketing,Despesa,1070.57,Redorai RJ
+2026-06-01,Junho,2026,Custos fixos,Informática e publicidade,Despesa,271.02,Redorai RJ
+2026-07-01,Julho,2026,Receita,Receita bruta vendas,Receita,49378.82,Redorai
+2026-07-01,Julho,2026,Receita,Receita serviços,Receita,19407.81,Redorai
+2026-07-01,Julho,2026,Receita,Outras receitas,Receita,2928.74,Redorai
+2026-07-01,Julho,2026,Custos variáveis,Custo do produto,Despesa,14484.89,Redorai
+2026-07-01,Julho,2026,Custos variáveis,Comissões,Despesa,5136.19,Redorai
+2026-07-01,Julho,2026,Custos variáveis,Impostos sobre vendas,Despesa,6219.74,Redorai
+2026-07-01,Julho,2026,Custos fixos,Folha,Despesa,23381.77,Redorai
+2026-07-01,Julho,2026,Custos fixos,Aluguel,Despesa,5804.19,Redorai
+2026-07-01,Julho,2026,Custos fixos,SaaS e ferramentas,Despesa,2354.98,Redorai
+2026-07-01,Julho,2026,Custos fixos,Marketing,Despesa,3899.52,Redorai
+2026-07-01,Julho,2026,Custos fixos,Informática e publicidade,Despesa,1083.58,Redorai
+2026-07-01,Julho,2026,Receita,Receita bruta vendas,Receita,20245.40,Redorai SP
+2026-07-01,Julho,2026,Receita,Receita serviços,Receita,8380.59,Redorai SP
+2026-07-01,Julho,2026,Receita,Outras receitas,Receita,1198.13,Redorai SP
+2026-07-01,Julho,2026,Custos variáveis,Custo do produto,Despesa,6402.64,Redorai SP
+2026-07-01,Julho,2026,Custos variáveis,Comissões,Despesa,2153.80,Redorai SP
+2026-07-01,Julho,2026,Custos variáveis,Impostos sobre vendas,Despesa,2669.45,Redorai SP
+2026-07-01,Julho,2026,Custos fixos,Folha,Despesa,9949.41,Redorai SP
+2026-07-01,Julho,2026,Custos fixos,Aluguel,Despesa,2350.78,Redorai SP
+2026-07-01,Julho,2026,Custos fixos,SaaS e ferramentas,Despesa,975.92,Redorai SP
+2026-07-01,Julho,2026,Custos fixos,Marketing,Despesa,1889.63,Redorai SP
+2026-07-01,Julho,2026,Custos fixos,Informática e publicidade,Despesa,430.97,Redorai SP
+2026-07-01,Julho,2026,Receita,Receita bruta vendas,Receita,14096.84,Redorai RJ
+2026-07-01,Julho,2026,Receita,Receita serviços,Receita,5297.39,Redorai RJ
+2026-07-01,Julho,2026,Receita,Outras receitas,Receita,843.01,Redorai RJ
+2026-07-01,Julho,2026,Custos variáveis,Custo do produto,Despesa,3682.00,Redorai RJ
+2026-07-01,Julho,2026,Custos variáveis,Comissões,Despesa,1307.43,Redorai RJ
+2026-07-01,Julho,2026,Custos variáveis,Impostos sobre vendas,Despesa,1368.60,Redorai RJ
+2026-07-01,Julho,2026,Custos fixos,Folha,Despesa,5690.91,Redorai RJ
+2026-07-01,Julho,2026,Custos fixos,Aluguel,Despesa,1338.09,Redorai RJ
+2026-07-01,Julho,2026,Custos fixos,SaaS e ferramentas,Despesa,623.44,Redorai RJ
+2026-07-01,Julho,2026,Custos fixos,Marketing,Despesa,976.76,Redorai RJ
+2026-07-01,Julho,2026,Custos fixos,Informática e publicidade,Despesa,260.41,Redorai RJ
+2026-08-01,Agosto,2026,Receita,Receita bruta vendas,Receita,47757.13,Redorai
+2026-08-01,Agosto,2026,Receita,Receita serviços,Receita,20054.73,Redorai
+2026-08-01,Agosto,2026,Receita,Outras receitas,Receita,2872.27,Redorai
+2026-08-01,Agosto,2026,Custos variáveis,Custo do produto,Despesa,15191.46,Redorai
+2026-08-01,Agosto,2026,Custos variáveis,Comissões,Despesa,5033.63,Redorai
+2026-08-01,Agosto,2026,Custos variáveis,Impostos sobre vendas,Despesa,5211.80,Redorai
+2026-08-01,Agosto,2026,Custos fixos,Folha,Despesa,27557.55,Redorai
+2026-08-01,Agosto,2026,Custos fixos,Aluguel,Despesa,5548.57,Redorai
+2026-08-01,Agosto,2026,Custos fixos,SaaS e ferramentas,Despesa,2522.40,Redorai
+2026-08-01,Agosto,2026,Custos fixos,Marketing,Despesa,4344.35,Redorai
+2026-08-01,Agosto,2026,Custos fixos,Informática e publicidade,Despesa,1070.06,Redorai
+2026-08-01,Agosto,2026,Receita,Receita bruta vendas,Receita,20985.48,Redorai SP
+2026-08-01,Agosto,2026,Receita,Receita serviços,Receita,8560.95,Redorai SP
+2026-08-01,Agosto,2026,Receita,Outras receitas,Receita,1310.43,Redorai SP
+2026-08-01,Agosto,2026,Custos variáveis,Custo do produto,Despesa,6491.23,Redorai SP
+2026-08-01,Agosto,2026,Custos variáveis,Comissões,Despesa,1940.20,Redorai SP
+2026-08-01,Agosto,2026,Custos variáveis,Impostos sobre vendas,Despesa,2641.62,Redorai SP
+2026-08-01,Agosto,2026,Custos fixos,Folha,Despesa,11099.30,Redorai SP
+2026-08-01,Agosto,2026,Custos fixos,Aluguel,Despesa,2210.52,Redorai SP
+2026-08-01,Agosto,2026,Custos fixos,SaaS e ferramentas,Despesa,969.08,Redorai SP
+2026-08-01,Agosto,2026,Custos fixos,Marketing,Despesa,1698.70,Redorai SP
+2026-08-01,Agosto,2026,Custos fixos,Informática e publicidade,Despesa,424.11,Redorai SP
+2026-08-01,Agosto,2026,Receita,Receita bruta vendas,Receita,12911.20,Redorai RJ
+2026-08-01,Agosto,2026,Receita,Receita serviços,Receita,5379.27,Redorai RJ
+2026-08-01,Agosto,2026,Receita,Outras receitas,Receita,784.39,Redorai RJ
+2026-08-01,Agosto,2026,Custos variáveis,Custo do produto,Despesa,4397.08,Redorai RJ
+2026-08-01,Agosto,2026,Custos variáveis,Comissões,Despesa,1250.16,Redorai RJ
+2026-08-01,Agosto,2026,Custos variáveis,Impostos sobre vendas,Despesa,1589.84,Redorai RJ
+2026-08-01,Agosto,2026,Custos fixos,Folha,Despesa,6463.57,Redorai RJ
+2026-08-01,Agosto,2026,Custos fixos,Aluguel,Despesa,1315.98,Redorai RJ
+2026-08-01,Agosto,2026,Custos fixos,SaaS e ferramentas,Despesa,608.12,Redorai RJ
+2026-08-01,Agosto,2026,Custos fixos,Marketing,Despesa,919.44,Redorai RJ
+2026-08-01,Agosto,2026,Custos fixos,Informática e publicidade,Despesa,245.96,Redorai RJ

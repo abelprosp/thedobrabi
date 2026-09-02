@@ -1,0 +1,221 @@
+data,mes,ano,regiao,status,fornecedor,cliente,quantidade,frete,valor,empresa
+2026-03-09,Março,2026,Sudeste,Entregue,Rápido Nordeste,Nimbus SA,1,161.53,161.53,Redorai
+2026-06-22,Junho,2026,Centro-Oeste,Entregue,LogiSul,Helix Saúde,1,114.60,114.60,Redorai
+2026-08-21,Agosto,2026,Centro-Oeste,Entregue,Jadlog,Helix Saúde,1,20.77,20.77,Redorai
+2026-08-06,Agosto,2026,Norte,Em trânsito,Azul Cargo,Atlas Ltda,1,51.16,51.16,Redorai
+2026-06-25,Junho,2026,Norte,Entregue,Azul Cargo,Helix Saúde,1,145.59,145.59,Redorai
+2026-05-26,Maio,2026,Sudeste,Entregue,Jadlog,Casa Norte,1,125.53,125.53,Redorai
+2026-05-24,Maio,2026,Sudeste,Entregue,Azul Cargo,Forge Engenharia,1,30.15,30.15,Redorai
+2026-07-30,Julho,2026,Norte,Em trânsito,Rápido Nordeste,Casa Norte,1,44.53,44.53,Redorai
+2026-05-05,Maio,2026,Norte,Entregue,Jadlog,Pulse Varejo,1,92.88,92.88,Redorai
+2026-05-02,Maio,2026,Sul,Entregue,Correios,Boa Vista,1,19.40,19.40,Redorai
+2026-06-20,Junho,2026,Nordeste,Entregue,Correios,Boa Vista,1,121.49,121.49,Redorai
+2026-07-17,Julho,2026,Nordeste,Em trânsito,Azul Cargo,Aurora Moda,1,36.76,36.76,Redorai
+2026-05-14,Maio,2026,Norte,Entregue,Rápido Nordeste,Nimbus SA,1,13.36,13.36,Redorai
+2026-04-30,Abril,2026,Sudeste,Entregue,Jadlog,Pampa Alimentos,1,152.31,152.31,Redorai
+2026-04-20,Abril,2026,Sul,Atraso,LogiSul,Aurora Moda,1,149.52,149.52,Redorai
+2026-04-18,Abril,2026,Centro-Oeste,Entregue,Azul Cargo,Aurora Moda,1,128.72,128.72,Redorai
+2026-07-27,Julho,2026,Nordeste,Entregue,Jadlog,Aurora Moda,1,68.39,68.39,Redorai
+2026-04-11,Abril,2026,Sudeste,Entregue,Jadlog,Verde Agro,1,159.19,159.19,Redorai
+2026-03-01,Março,2026,Centro-Oeste,Entregue,Azul Cargo,Lumen Tech,1,128.46,128.46,Redorai
+2026-05-01,Maio,2026,Nordeste,Entregue,Jadlog,Lumen Tech,1,141.08,141.08,Redorai
+2026-06-11,Junho,2026,Nordeste,Entregue,LogiSul,Forge Engenharia,1,178.30,178.30,Redorai
+2026-05-31,Maio,2026,Nordeste,Entregue,Jadlog,Lumen Tech,1,31.35,31.35,Redorai
+2026-08-09,Agosto,2026,Sudeste,Entregue,LogiSul,Lumen Tech,1,140.61,140.61,Redorai
+2026-04-20,Abril,2026,Nordeste,Entregue,Rápido Nordeste,Aurora Moda,1,48.78,48.78,Redorai
+2026-07-20,Julho,2026,Sul,Entregue,Correios,Helix Saúde,1,44.93,44.93,Redorai
+2026-03-06,Março,2026,Sudeste,Em trânsito,Correios,Lumen Tech,1,35.06,35.06,Redorai
+2026-05-18,Maio,2026,Nordeste,Entregue,Rápido Nordeste,Casa Norte,1,74.10,74.10,Redorai
+2026-08-07,Agosto,2026,Sudeste,Atraso,LogiSul,Orbit Educação,1,199.46,199.46,Redorai
+2026-04-03,Abril,2026,Centro-Oeste,Em trânsito,Correios,Aurora Moda,1,44.20,44.20,Redorai
+2026-08-01,Agosto,2026,Sudeste,Entregue,Azul Cargo,Boa Vista,1,118.87,118.87,Redorai
+2026-04-18,Abril,2026,Sul,Em trânsito,Correios,Verde Agro,1,61.42,61.42,Redorai
+2026-03-14,Março,2026,Sul,Entregue,Azul Cargo,Boa Vista,1,59.05,59.05,Redorai
+2026-07-04,Julho,2026,Centro-Oeste,Entregue,Azul Cargo,Forge Engenharia,1,25.68,25.68,Redorai
+2026-04-12,Abril,2026,Norte,Entregue,Correios,Rio Branco,1,138.22,138.22,Redorai
+2026-07-11,Julho,2026,Nordeste,Entregue,Azul Cargo,Rio Branco,1,66.07,66.07,Redorai
+2026-07-05,Julho,2026,Norte,Entregue,LogiSul,Lumen Tech,1,109.64,109.64,Redorai
+2026-04-26,Abril,2026,Sul,Atraso,Jadlog,Lumen Tech,1,109.94,109.94,Redorai
+2026-05-18,Maio,2026,Sul,Entregue,Correios,Costa Farma,1,75.35,75.35,Redorai
+2026-07-19,Julho,2026,Nordeste,Entregue,Jadlog,Casa Norte,1,138.27,138.27,Redorai
+2026-05-30,Maio,2026,Norte,Entregue,Azul Cargo,Aurora Moda,1,18.91,18.91,Redorai
+2026-06-18,Junho,2026,Nordeste,Entregue,Jadlog,Aurora Moda,1,84.66,84.66,Redorai
+2026-05-09,Maio,2026,Sul,Entregue,Correios,Forge Engenharia,1,42.17,42.17,Redorai
+2026-05-31,Maio,2026,Norte,Atraso,Azul Cargo,Sul Minas,1,76.85,76.85,Redorai
+2026-08-12,Agosto,2026,Sul,Entregue,LogiSul,Helix Saúde,1,58.44,58.44,Redorai
+2026-03-19,Março,2026,Nordeste,Entregue,Rápido Nordeste,Aurora Moda,1,103.73,103.73,Redorai
+2026-05-04,Maio,2026,Nordeste,Entregue,Rápido Nordeste,Terra Nova,1,149.01,149.01,Redorai
+2026-04-05,Abril,2026,Norte,Extravio,Correios,Atlas Ltda,1,138.40,138.40,Redorai
+2026-05-16,Maio,2026,Centro-Oeste,Entregue,Jadlog,Boa Vista,1,70.23,70.23,Redorai
+2026-08-15,Agosto,2026,Sul,Entregue,Jadlog,Verde Agro,1,121.89,121.89,Redorai
+2026-04-28,Abril,2026,Sul,Em trânsito,Azul Cargo,Boa Vista,1,47.26,47.26,Redorai
+2026-07-20,Julho,2026,Centro-Oeste,Em trânsito,Correios,Forge Engenharia,1,133.38,133.38,Redorai
+2026-05-20,Maio,2026,Centro-Oeste,Em trânsito,Rápido Nordeste,Céu Soft,1,84.04,84.04,Redorai
+2026-06-24,Junho,2026,Sul,Em trânsito,Azul Cargo,Orbit Educação,1,17.06,17.06,Redorai
+2026-05-18,Maio,2026,Nordeste,Atraso,Correios,Verde Agro,1,17.03,17.03,Redorai
+2026-06-16,Junho,2026,Norte,Entregue,Correios,Aurora Moda,1,138.44,138.44,Redorai
+2026-07-29,Julho,2026,Sul,Entregue,Rápido Nordeste,Aurora Moda,1,143.94,143.94,Redorai
+2026-07-24,Julho,2026,Norte,Entregue,Azul Cargo,Serra Café,1,113.30,113.30,Redorai
+2026-06-06,Junho,2026,Norte,Entregue,Jadlog,Lumen Tech,1,77.63,77.63,Redorai
+2026-06-30,Junho,2026,Centro-Oeste,Entregue,Correios,Forge Engenharia,1,107.68,107.68,Redorai
+2026-04-13,Abril,2026,Sudeste,Entregue,Azul Cargo,Rio Branco,1,104.89,104.89,Redorai
+2026-03-07,Março,2026,Centro-Oeste,Entregue,Correios,Lumen Tech,1,23.67,23.67,Redorai
+2026-04-29,Abril,2026,Centro-Oeste,Entregue,LogiSul,Pampa Alimentos,1,100.10,100.10,Redorai
+2026-07-11,Julho,2026,Centro-Oeste,Entregue,Jadlog,Pulse Varejo,1,66.90,66.90,Redorai
+2026-03-29,Março,2026,Sudeste,Entregue,Jadlog,Lumen Tech,1,82.29,82.29,Redorai
+2026-04-03,Abril,2026,Centro-Oeste,Em trânsito,Rápido Nordeste,Terra Nova,1,64.04,64.04,Redorai
+2026-07-26,Julho,2026,Norte,Atraso,Jadlog,Costa Farma,1,138.37,138.37,Redorai
+2026-04-21,Abril,2026,Sudeste,Entregue,Jadlog,Terra Nova,1,35.97,35.97,Redorai
+2026-05-03,Maio,2026,Centro-Oeste,Entregue,Jadlog,Céu Soft,1,164.93,164.93,Redorai
+2026-07-26,Julho,2026,Centro-Oeste,Entregue,Correios,Delta Log,1,27.31,27.31,Redorai
+2026-06-09,Junho,2026,Sul,Entregue,Jadlog,Verde Agro,1,148.08,148.08,Redorai
+2026-04-15,Abril,2026,Centro-Oeste,Atraso,Jadlog,Pulse Varejo,1,168.98,168.98,Redorai
+2026-08-26,Agosto,2026,Sudeste,Entregue,Rápido Nordeste,Pulse Varejo,1,78.12,78.12,Redorai
+2026-05-10,Maio,2026,Sudeste,Atraso,Rápido Nordeste,Rio Branco,1,127.92,127.92,Redorai
+2026-06-14,Junho,2026,Nordeste,Extravio,LogiSul,Helix Saúde,1,104.87,104.87,Redorai
+2026-07-08,Julho,2026,Centro-Oeste,Em trânsito,Rápido Nordeste,Costa Farma,1,66.77,66.77,Redorai
+2026-04-23,Abril,2026,Sudeste,Entregue,Jadlog,Serra Café,1,89.64,89.64,Redorai
+2026-05-27,Maio,2026,Centro-Oeste,Em trânsito,LogiSul,Atlas Ltda,1,155.77,155.77,Redorai
+2026-05-04,Maio,2026,Nordeste,Entregue,Jadlog,Rio Branco,1,166.08,166.08,Redorai
+2026-06-27,Junho,2026,Sul,Entregue,Jadlog,Orbit Educação,1,104.14,104.14,Redorai
+2026-06-29,Junho,2026,Sul,Em trânsito,LogiSul,Terra Nova,1,153.38,153.38,Redorai
+2026-03-26,Março,2026,Centro-Oeste,Entregue,Rápido Nordeste,Forge Engenharia,1,32.86,32.86,Redorai
+2026-08-19,Agosto,2026,Sul,Em trânsito,Jadlog,Pampa Alimentos,1,125.80,125.80,Redorai
+2026-04-15,Abril,2026,Norte,Entregue,Rápido Nordeste,Céu Soft,1,17.79,17.79,Redorai
+2026-08-26,Agosto,2026,Norte,Entregue,LogiSul,Serra Café,1,118.64,118.64,Redorai
+2026-08-24,Agosto,2026,Sudeste,Entregue,LogiSul,Serra Café,1,20.81,20.81,Redorai
+2026-04-21,Abril,2026,Sul,Atraso,Rápido Nordeste,Forge Engenharia,1,93.68,93.68,Redorai
+2026-03-05,Março,2026,Nordeste,Entregue,Rápido Nordeste,Forge Engenharia,1,178.20,178.20,Redorai
+2026-04-26,Abril,2026,Sul,Atraso,Rápido Nordeste,Nimbus SA,1,35.29,35.29,Redorai
+2026-06-15,Junho,2026,Nordeste,Entregue,Azul Cargo,Lumen Tech,1,149.02,149.02,Redorai
+2026-08-07,Agosto,2026,Centro-Oeste,Entregue,LogiSul,Verde Agro,1,103.01,103.01,Redorai
+2026-04-24,Abril,2026,Sudeste,Entregue,Jadlog,Aurora Moda,1,66.33,66.33,Redorai
+2026-03-04,Março,2026,Sudeste,Entregue,Correios,Terra Nova,1,89.07,89.07,Redorai
+2026-06-03,Junho,2026,Centro-Oeste,Entregue,Correios,Terra Nova,1,160.76,160.76,Redorai
+2026-07-06,Julho,2026,Norte,Extravio,Azul Cargo,Pulse Varejo,1,29.10,29.10,Redorai
+2026-05-04,Maio,2026,Centro-Oeste,Atraso,Rápido Nordeste,Aurora Moda,1,140.97,140.97,Redorai
+2026-04-14,Abril,2026,Nordeste,Entregue,Jadlog,Forge Engenharia,1,160.51,160.51,Redorai
+2026-05-25,Maio,2026,Centro-Oeste,Entregue,Jadlog,Casa Norte,1,165.23,165.23,Redorai
+2026-08-11,Agosto,2026,Sudeste,Em trânsito,Rápido Nordeste,Atlas Ltda,1,96.57,96.57,Redorai
+2026-08-05,Agosto,2026,Sul,Em trânsito,Jadlog,Verde Agro,1,32.84,32.84,Redorai
+2026-08-06,Agosto,2026,Centro-Oeste,Entregue,Correios,Lumen Tech,1,35.11,35.11,Redorai
+2026-04-08,Abril,2026,Sul,Entregue,Azul Cargo,Céu Soft,1,119.86,119.86,Redorai
+2026-05-24,Maio,2026,Sudeste,Entregue,Azul Cargo,Maré Energia,1,65.35,65.35,Redorai
+2026-08-13,Agosto,2026,Sul,Em trânsito,Correios,Aurora Moda,1,138.09,138.09,Redorai
+2026-05-02,Maio,2026,Sul,Entregue,Rápido Nordeste,Terra Nova,1,21.08,21.08,Redorai
+2026-06-06,Junho,2026,Sudeste,Entregue,LogiSul,Rio Branco,1,42.84,42.84,Redorai
+2026-03-18,Março,2026,Sul,Atraso,Rápido Nordeste,Orbit Educação,1,25.94,25.94,Redorai
+2026-03-24,Março,2026,Sul,Entregue,Rápido Nordeste,Casa Norte,1,104.21,104.21,Redorai
+2026-03-21,Março,2026,Sul,Entregue,Rápido Nordeste,Verde Agro,1,90.47,90.47,Redorai
+2026-06-17,Junho,2026,Nordeste,Entregue,Azul Cargo,Céu Soft,1,53.83,53.83,Redorai
+2026-08-10,Agosto,2026,Centro-Oeste,Entregue,LogiSul,Pampa Alimentos,1,156.89,156.89,Redorai
+2026-06-10,Junho,2026,Centro-Oeste,Entregue,Azul Cargo,Terra Nova,1,91.08,91.08,Redorai
+2026-06-19,Junho,2026,Centro-Oeste,Em trânsito,LogiSul,Serra Café,1,149.69,149.69,Redorai
+2026-06-18,Junho,2026,Nordeste,Em trânsito,Azul Cargo,Sul Minas,1,139.49,139.49,Redorai
+2026-04-09,Abril,2026,Centro-Oeste,Entregue,Jadlog,Delta Log,1,41.52,41.52,Redorai
+2026-06-25,Junho,2026,Centro-Oeste,Entregue,LogiSul,Aurora Moda,1,106.44,106.44,Redorai
+2026-04-04,Abril,2026,Sul,Entregue,LogiSul,Atlas Ltda,1,44.88,44.88,Redorai
+2026-07-07,Julho,2026,Centro-Oeste,Em trânsito,Jadlog,Serra Café,1,74.88,74.88,Redorai
+2026-06-04,Junho,2026,Norte,Entregue,LogiSul,Maré Energia,1,63.71,63.71,Redorai
+2026-03-10,Março,2026,Norte,Extravio,Rápido Nordeste,Lumen Tech,1,32.91,32.91,Redorai
+2026-06-20,Junho,2026,Nordeste,Atraso,Azul Cargo,Rio Branco,1,176.97,176.97,Redorai
+2026-08-10,Agosto,2026,Centro-Oeste,Entregue,Jadlog,Verde Agro,1,129.00,129.00,Redorai
+2026-05-02,Maio,2026,Nordeste,Entregue,LogiSul,Orbit Educação,1,166.81,166.81,Redorai
+2026-05-06,Maio,2026,Sul,Entregue,Correios,Verde Agro,1,170.64,170.64,Redorai
+2026-08-02,Agosto,2026,Sul,Entregue,LogiSul,Helix Saúde,1,123.32,123.32,Redorai
+2026-03-24,Março,2026,Centro-Oeste,Entregue,Azul Cargo,Forge Engenharia,1,166.04,166.04,Redorai
+2026-07-11,Julho,2026,Sul,Atraso,Jadlog,Costa Farma,1,198.96,198.96,Redorai
+2026-08-25,Agosto,2026,Centro-Oeste,Entregue,Azul Cargo,Delta Log,1,174.57,174.57,Redorai
+2026-06-14,Junho,2026,Sudeste,Em trânsito,LogiSul,Boa Vista,1,167.29,167.29,Redorai
+2026-05-28,Maio,2026,Sul,Em trânsito,Jadlog,Delta Log,1,57.20,57.20,Redorai
+2026-03-02,Março,2026,Sudeste,Extravio,LogiSul,Forge Engenharia,1,149.15,149.15,Redorai
+2026-08-26,Agosto,2026,Nordeste,Entregue,Jadlog,Pulse Varejo,1,82.03,82.03,Redorai
+2026-04-15,Abril,2026,Sul,Entregue,Jadlog,Pulse Varejo,1,130.28,130.28,Redorai
+2026-07-07,Julho,2026,Sul,Atraso,Rápido Nordeste,Lumen Tech,1,109.64,109.64,Redorai
+2026-03-16,Março,2026,Sul,Em trânsito,Correios,Maré Energia,1,147.94,147.94,Redorai
+2026-06-21,Junho,2026,Sul,Entregue,LogiSul,Delta Log,1,116.90,116.90,Redorai
+2026-03-22,Março,2026,Nordeste,Entregue,LogiSul,Boa Vista,1,58.50,58.50,Redorai
+2026-04-30,Abril,2026,Sudeste,Entregue,LogiSul,Nimbus SA,1,125.03,125.03,Redorai
+2026-05-08,Maio,2026,Norte,Em trânsito,LogiSul,Helix Saúde,1,13.21,13.21,Redorai
+2026-04-24,Abril,2026,Norte,Entregue,Azul Cargo,Costa Farma,1,13.22,13.22,Redorai
+2026-07-03,Julho,2026,Centro-Oeste,Entregue,Correios,Pampa Alimentos,1,68.62,68.62,Redorai
+2026-08-22,Agosto,2026,Sul,Atraso,Correios,Serra Café,1,224.88,224.88,Redorai
+2026-06-05,Junho,2026,Nordeste,Entregue,LogiSul,Atlas Ltda,1,175.85,175.85,Redorai
+2026-06-25,Junho,2026,Sul,Em trânsito,LogiSul,Terra Nova,1,79.50,79.50,Redorai
+2026-04-01,Abril,2026,Sul,Em trânsito,Correios,Céu Soft,1,58.95,58.95,Redorai
+2026-08-06,Agosto,2026,Norte,Entregue,Jadlog,Lumen Tech,1,158.14,158.14,Redorai
+2026-03-01,Março,2026,Nordeste,Extravio,LogiSul,Pampa Alimentos,1,172.87,172.87,Redorai
+2026-03-12,Março,2026,Centro-Oeste,Atraso,Rápido Nordeste,Terra Nova,1,169.52,169.52,Redorai
+2026-07-03,Julho,2026,Sudeste,Entregue,Correios,Maré Energia,1,114.92,114.92,Redorai
+2026-06-30,Junho,2026,Sudeste,Extravio,Jadlog,Delta Log,1,155.99,155.99,Redorai
+2026-08-03,Agosto,2026,Norte,Entregue,Azul Cargo,Casa Norte,1,36.05,36.05,Redorai
+2026-03-09,Março,2026,Nordeste,Entregue,Azul Cargo,Céu Soft,1,145.87,145.87,Redorai
+2026-04-13,Abril,2026,Centro-Oeste,Atraso,Azul Cargo,Verde Agro,1,215.56,215.56,Redorai
+2026-05-02,Maio,2026,Sudeste,Entregue,LogiSul,Maré Energia,1,138.55,138.55,Redorai
+2026-03-08,Março,2026,Centro-Oeste,Entregue,Correios,Verde Agro,1,168.07,168.07,Redorai
+2026-05-05,Maio,2026,Sudeste,Entregue,Rápido Nordeste,Sul Minas,1,171.85,171.85,Redorai
+2026-08-10,Agosto,2026,Nordeste,Em trânsito,Rápido Nordeste,Boa Vista,1,27.19,27.19,Redorai
+2026-08-01,Agosto,2026,Centro-Oeste,Entregue,Azul Cargo,Maré Energia,1,69.66,69.66,Redorai
+2026-04-29,Abril,2026,Sudeste,Entregue,LogiSul,Forge Engenharia,1,31.44,31.44,Redorai
+2026-05-27,Maio,2026,Sudeste,Em trânsito,Azul Cargo,Pampa Alimentos,1,169.45,169.45,Redorai
+2026-04-02,Abril,2026,Norte,Em trânsito,LogiSul,Delta Log,1,172.28,172.28,Redorai
+2026-03-16,Março,2026,Centro-Oeste,Entregue,Jadlog,Aurora Moda,1,43.90,43.90,Redorai
+2026-06-02,Junho,2026,Sul,Em trânsito,Azul Cargo,Terra Nova,1,168.90,168.90,Redorai
+2026-07-30,Julho,2026,Norte,Entregue,Jadlog,Aurora Moda,1,78.41,78.41,Redorai
+2026-04-07,Abril,2026,Sul,Em trânsito,Jadlog,Céu Soft,1,61.87,61.87,Redorai
+2026-04-07,Abril,2026,Sudeste,Entregue,Azul Cargo,Aurora Moda,1,36.51,36.51,Redorai
+2026-05-19,Maio,2026,Nordeste,Entregue,Azul Cargo,Rio Branco,1,127.68,127.68,Redorai
+2026-08-09,Agosto,2026,Centro-Oeste,Em trânsito,LogiSul,Aurora Moda,1,95.16,95.16,Redorai
+2026-04-09,Abril,2026,Sul,Em trânsito,LogiSul,Pulse Varejo,1,47.38,47.38,Redorai
+2026-07-03,Julho,2026,Sul,Em trânsito,LogiSul,Sul Minas,1,62.25,62.25,Redorai
+2026-06-09,Junho,2026,Nordeste,Entregue,Jadlog,Serra Café,1,125.89,125.89,Redorai
+2026-03-19,Março,2026,Sul,Entregue,Azul Cargo,Serra Café,1,59.55,59.55,Redorai
+2026-03-25,Março,2026,Norte,Entregue,LogiSul,Delta Log,1,138.38,138.38,Redorai
+2026-06-26,Junho,2026,Centro-Oeste,Entregue,Jadlog,Delta Log,1,108.96,108.96,Redorai
+2026-04-07,Abril,2026,Sul,Entregue,LogiSul,Pampa Alimentos,1,147.13,147.13,Redorai
+2026-07-26,Julho,2026,Sul,Entregue,Jadlog,Maré Energia,1,143.96,143.96,Redorai
+2026-08-21,Agosto,2026,Sudeste,Em trânsito,Correios,Rio Branco,1,167.57,167.57,Redorai
+2026-04-15,Abril,2026,Norte,Atraso,Correios,Boa Vista,1,39.64,39.64,Redorai
+2026-06-20,Junho,2026,Centro-Oeste,Atraso,Rápido Nordeste,Nimbus SA,1,146.66,146.66,Redorai
+2026-03-31,Março,2026,Norte,Entregue,Rápido Nordeste,Serra Café,1,94.09,94.09,Redorai
+2026-08-25,Agosto,2026,Sudeste,Extravio,Jadlog,Serra Café,1,124.68,124.68,Redorai
+2026-05-10,Maio,2026,Sudeste,Entregue,LogiSul,Helix Saúde,1,86.78,86.78,Redorai
+2026-03-22,Março,2026,Norte,Entregue,Rápido Nordeste,Atlas Ltda,1,119.76,119.76,Redorai
+2026-07-29,Julho,2026,Nordeste,Entregue,LogiSul,Boa Vista,1,108.20,108.20,Redorai
+2026-04-16,Abril,2026,Centro-Oeste,Entregue,Correios,Boa Vista,1,179.99,179.99,Redorai
+2026-04-02,Abril,2026,Norte,Entregue,Rápido Nordeste,Serra Café,1,22.67,22.67,Redorai
+2026-08-27,Agosto,2026,Norte,Entregue,Azul Cargo,Rio Branco,1,105.42,105.42,Redorai
+2026-03-17,Março,2026,Sudeste,Entregue,Rápido Nordeste,Helix Saúde,1,110.23,110.23,Redorai
+2026-04-16,Abril,2026,Sudeste,Em trânsito,Azul Cargo,Céu Soft,1,128.80,128.80,Redorai
+2026-05-20,Maio,2026,Sul,Entregue,Rápido Nordeste,Forge Engenharia,1,33.64,33.64,Redorai
+2026-07-22,Julho,2026,Sudeste,Entregue,LogiSul,Casa Norte,1,138.52,138.52,Redorai
+2026-05-16,Maio,2026,Centro-Oeste,Entregue,LogiSul,Verde Agro,1,103.46,103.46,Redorai
+2026-05-16,Maio,2026,Nordeste,Entregue,Azul Cargo,Céu Soft,1,170.89,170.89,Redorai
+2026-04-05,Abril,2026,Norte,Entregue,Correios,Terra Nova,1,128.78,128.78,Redorai
+2026-07-16,Julho,2026,Sudeste,Entregue,Rápido Nordeste,Nimbus SA,1,127.57,127.57,Redorai
+2026-04-18,Abril,2026,Sul,Entregue,Rápido Nordeste,Terra Nova,1,155.82,155.82,Redorai
+2026-07-20,Julho,2026,Sul,Entregue,Azul Cargo,Maré Energia,1,72.32,72.32,Redorai
+2026-03-20,Março,2026,Sul,Entregue,Jadlog,Céu Soft,1,55.79,55.79,Redorai
+2026-03-22,Março,2026,Sul,Atraso,Azul Cargo,Lumen Tech,1,157.07,157.07,Redorai
+2026-03-19,Março,2026,Sul,Entregue,Correios,Boa Vista,1,57.26,57.26,Redorai
+2026-08-16,Agosto,2026,Sul,Entregue,Jadlog,Orbit Educação,1,97.92,97.92,Redorai
+2026-05-20,Maio,2026,Sudeste,Extravio,Azul Cargo,Verde Agro,1,84.85,84.85,Redorai
+2026-03-20,Março,2026,Norte,Entregue,Jadlog,Forge Engenharia,1,101.29,101.29,Redorai
+2026-05-24,Maio,2026,Nordeste,Entregue,Correios,Orbit Educação,1,72.95,72.95,Redorai
+2026-04-27,Abril,2026,Sul,Entregue,Jadlog,Helix Saúde,1,28.46,28.46,Redorai
+2026-04-01,Abril,2026,Nordeste,Entregue,Azul Cargo,Rio Branco,1,134.36,134.36,Redorai
+2026-03-25,Março,2026,Nordeste,Entregue,Azul Cargo,Costa Farma,1,129.68,129.68,Redorai
+2026-08-03,Agosto,2026,Nordeste,Entregue,Jadlog,Pulse Varejo,1,20.06,20.06,Redorai
+2026-05-28,Maio,2026,Norte,Em trânsito,Azul Cargo,Terra Nova,1,125.87,125.87,Redorai
+2026-06-12,Junho,2026,Sudeste,Entregue,Azul Cargo,Orbit Educação,1,33.43,33.43,Redorai
+2026-08-16,Agosto,2026,Nordeste,Entregue,LogiSul,Pampa Alimentos,1,75.64,75.64,Redorai
+2026-05-03,Maio,2026,Centro-Oeste,Entregue,Rápido Nordeste,Céu Soft,1,82.26,82.26,Redorai
+2026-05-30,Maio,2026,Nordeste,Em trânsito,Jadlog,Casa Norte,1,96.37,96.37,Redorai
+2026-04-28,Abril,2026,Nordeste,Entregue,Jadlog,Aurora Moda,1,156.13,156.13,Redorai
+2026-03-24,Março,2026,Sul,Entregue,LogiSul,Pulse Varejo,1,24.88,24.88,Redorai
+2026-07-26,Julho,2026,Norte,Entregue,Jadlog,Atlas Ltda,1,136.89,136.89,Redorai
+2026-06-17,Junho,2026,Sul,Entregue,Jadlog,Rio Branco,1,168.65,168.65,Redorai
+2026-07-10,Julho,2026,Norte,Entregue,LogiSul,Serra Café,1,125.70,125.70,Redorai
+2026-03-04,Março,2026,Sudeste,Entregue,Jadlog,Sul Minas,1,165.03,165.03,Redorai
+2026-05-28,Maio,2026,Norte,Entregue,Azul Cargo,Nimbus SA,1,136.15,136.15,Redorai
+2026-08-03,Agosto,2026,Norte,Entregue,Rápido Nordeste,Pulse Varejo,1,40.31,40.31,Redorai

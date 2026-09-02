@@ -1,0 +1,121 @@
+data,mes,ano,vendedor,cliente,produto,status,quantidade,valor,customer_count,empresa
+2026-06-26,Junho,2026,Ana Costa,Atlas Ltda,Plano Start,Proposta,1,24274.09,1,Redorai
+2026-05-08,Maio,2026,Ana Costa,Nimbus SA,Add-on API,Ganho,1,14468.22,1,Redorai
+2026-07-18,Julho,2026,Fábio Nunes,Forge Engenharia,Plano Pro,Lead,1,18705.08,1,Redorai
+2026-05-16,Maio,2026,Carla Souza,Helix Saúde,Plano Start,Ganho,1,4531.84,1,Redorai
+2026-06-21,Junho,2026,Bruno Lima,Orbit Educação,Plano Pro,Ganho,1,5330.30,1,Redorai
+2026-07-29,Julho,2026,Diego Alves,Pulse Varejo,Plano Pro,Negociação,1,78400.21,1,Redorai
+2026-08-05,Agosto,2026,Ana Costa,Lumen Tech,Plano Scale,Lead,1,9850.21,1,Redorai
+2026-07-15,Julho,2026,Fábio Nunes,Verde Agro,Plano Scale,Qualificado,1,32935.92,1,Redorai
+2026-05-14,Maio,2026,Fábio Nunes,Costa Farma,Plano Start,Proposta,1,50095.25,1,Redorai
+2026-04-04,Abril,2026,Carla Souza,Delta Log,Plano Pro,Perdido,1,28868.67,1,Redorai
+2026-08-27,Agosto,2026,Carla Souza,Aurora Moda,Plano Pro,Ganho,1,6880.78,1,Redorai
+2026-08-21,Agosto,2026,Carla Souza,Pampa Alimentos,Add-on API,Qualificado,1,8799.54,1,Redorai
+2026-06-05,Junho,2026,Ana Costa,Serra Café,Add-on API,Proposta,1,85589.35,1,Redorai
+2026-07-10,Julho,2026,Carla Souza,Maré Energia,Add-on API,Negociação,1,91117.11,1,Redorai
+2026-07-03,Julho,2026,Fábio Nunes,Céu Soft,Plano Start,Qualificado,1,5558.82,1,Redorai
+2026-06-26,Junho,2026,Ana Costa,Rio Branco,Add-on API,Negociação,1,68570.69,1,Redorai
+2026-04-25,Abril,2026,Carla Souza,Casa Norte,Plano Scale,Perdido,1,8431.48,1,Redorai
+2026-05-26,Maio,2026,Diego Alves,Sul Minas,Plano Scale,Proposta,1,8749.33,1,Redorai
+2026-08-22,Agosto,2026,Diego Alves,Boa Vista,Plano Start,Negociação,1,3673.96,1,Redorai
+2026-04-01,Abril,2026,Ana Costa,Terra Nova,Add-on API,Perdido,1,8193.72,1,Redorai
+2026-04-21,Abril,2026,Carla Souza,Atlas Ltda 20,Plano Pro,Perdido,1,10155.56,1,Redorai
+2026-05-10,Maio,2026,Carla Souza,Nimbus SA 21,Plano Pro,Lead,1,12295.40,1,Redorai
+2026-03-14,Março,2026,Bruno Lima,Forge Engenharia 22,Add-on API,Qualificado,1,15838.61,1,Redorai
+2026-08-15,Agosto,2026,Diego Alves,Helix Saúde 23,Plano Start,Lead,1,3432.66,1,Redorai
+2026-04-03,Abril,2026,Ana Costa,Orbit Educação 24,Plano Start,Proposta,1,43679.64,1,Redorai
+2026-08-26,Agosto,2026,Diego Alves,Pulse Varejo 25,Plano Pro,Qualificado,1,5850.98,1,Redorai
+2026-07-01,Julho,2026,Ana Costa,Lumen Tech 26,Plano Start,Lead,1,18542.17,1,Redorai
+2026-05-20,Maio,2026,Bruno Lima,Verde Agro 27,Plano Pro,Qualificado,1,11451.61,1,Redorai
+2026-03-18,Março,2026,Bruno Lima,Costa Farma 28,Add-on API,Proposta,1,4925.28,1,Redorai
+2026-05-29,Maio,2026,Diego Alves,Delta Log 29,Add-on API,Negociação,1,83782.48,1,Redorai
+2026-04-25,Abril,2026,Ana Costa,Aurora Moda 30,Add-on API,Lead,1,3773.03,1,Redorai
+2026-05-29,Maio,2026,Bruno Lima,Pampa Alimentos 31,Plano Scale,Perdido,1,16323.52,1,Redorai
+2026-08-13,Agosto,2026,Fábio Nunes,Serra Café 32,Plano Scale,Lead,1,42020.98,1,Redorai
+2026-08-24,Agosto,2026,Bruno Lima,Maré Energia 33,Plano Pro,Lead,1,88757.26,1,Redorai
+2026-06-09,Junho,2026,Bruno Lima,Céu Soft 34,Add-on API,Qualificado,1,5350.31,1,Redorai
+2026-06-07,Junho,2026,Ana Costa,Rio Branco 35,Plano Start,Lead,1,25374.13,1,Redorai
+2026-06-01,Junho,2026,Eva Martins,Casa Norte 36,Add-on API,Perdido,1,7951.43,1,Redorai
+2026-06-02,Junho,2026,Ana Costa,Sul Minas 37,Plano Start,Proposta,1,9624.13,1,Redorai
+2026-07-29,Julho,2026,Ana Costa,Boa Vista 38,Add-on API,Lead,1,12037.28,1,Redorai
+2026-07-08,Julho,2026,Diego Alves,Terra Nova 39,Add-on API,Qualificado,1,74140.91,1,Redorai
+2026-08-27,Agosto,2026,Eva Martins,Atlas Ltda 40,Plano Pro,Qualificado,1,75526.03,1,Redorai
+2026-05-11,Maio,2026,Bruno Lima,Nimbus SA 41,Plano Pro,Lead,1,4682.70,1,Redorai
+2026-07-16,Julho,2026,Fábio Nunes,Forge Engenharia 42,Plano Start,Qualificado,1,42720.18,1,Redorai
+2026-05-19,Maio,2026,Bruno Lima,Helix Saúde 43,Plano Start,Negociação,1,91783.69,1,Redorai
+2026-05-02,Maio,2026,Eva Martins,Orbit Educação 44,Plano Start,Lead,1,18874.03,1,Redorai
+2026-05-19,Maio,2026,Ana Costa,Pulse Varejo 45,Plano Start,Negociação,1,83485.67,1,Redorai
+2026-04-05,Abril,2026,Carla Souza,Lumen Tech 46,Plano Scale,Negociação,1,8439.04,1,Redorai
+2026-04-12,Abril,2026,Carla Souza,Verde Agro 47,Plano Start,Qualificado,1,85063.84,1,Redorai
+2026-03-08,Março,2026,Ana Costa,Costa Farma 48,Plano Scale,Qualificado,1,20816.16,1,Redorai
+2026-07-26,Julho,2026,Carla Souza,Delta Log 49,Plano Start,Negociação,1,23097.21,1,Redorai
+2026-07-06,Julho,2026,Carla Souza,Aurora Moda 50,Plano Start,Ganho,1,7866.21,1,Redorai
+2026-07-25,Julho,2026,Eva Martins,Pampa Alimentos 51,Plano Start,Negociação,1,3989.59,1,Redorai
+2026-03-12,Março,2026,Diego Alves,Serra Café 52,Plano Scale,Ganho,1,4029.15,1,Redorai
+2026-06-07,Junho,2026,Ana Costa,Maré Energia 53,Add-on API,Perdido,1,10373.66,1,Redorai
+2026-04-27,Abril,2026,Carla Souza,Céu Soft 54,Plano Scale,Qualificado,1,28832.39,1,Redorai
+2026-03-20,Março,2026,Ana Costa,Rio Branco 55,Plano Pro,Proposta,1,4660.00,1,Redorai
+2026-04-27,Abril,2026,Ana Costa,Casa Norte 56,Add-on API,Ganho,1,5767.49,1,Redorai
+2026-05-12,Maio,2026,Eva Martins,Sul Minas 57,Add-on API,Ganho,1,12868.39,1,Redorai
+2026-03-03,Março,2026,Carla Souza,Boa Vista 58,Plano Pro,Qualificado,1,14630.36,1,Redorai
+2026-06-27,Junho,2026,Bruno Lima,Terra Nova 59,Plano Pro,Qualificado,1,29852.45,1,Redorai
+2026-04-08,Abril,2026,Eva Martins,Atlas Ltda 60,Plano Scale,Lead,1,17727.68,1,Redorai
+2026-08-10,Agosto,2026,Ana Costa,Nimbus SA 61,Add-on API,Ganho,1,5759.93,1,Redorai
+2026-05-18,Maio,2026,Diego Alves,Forge Engenharia 62,Add-on API,Lead,1,50045.43,1,Redorai
+2026-03-16,Março,2026,Ana Costa,Helix Saúde 63,Plano Start,Perdido,1,9396.85,1,Redorai
+2026-04-29,Abril,2026,Carla Souza,Orbit Educação 64,Add-on API,Ganho,1,38074.19,1,Redorai
+2026-03-22,Março,2026,Diego Alves,Pulse Varejo 65,Plano Start,Proposta,1,32203.79,1,Redorai
+2026-07-30,Julho,2026,Bruno Lima,Lumen Tech 66,Plano Pro,Proposta,1,25677.43,1,Redorai
+2026-05-14,Maio,2026,Diego Alves,Verde Agro 67,Plano Scale,Qualificado,1,17329.01,1,Redorai
+2026-05-21,Maio,2026,Bruno Lima,Costa Farma 68,Plano Pro,Proposta,1,6562.36,1,Redorai
+2026-07-28,Julho,2026,Diego Alves,Delta Log 69,Plano Scale,Lead,1,3832.72,1,Redorai
+2026-06-13,Junho,2026,Bruno Lima,Aurora Moda 70,Add-on API,Lead,1,17616.53,1,Redorai
+2026-05-18,Maio,2026,Fábio Nunes,Pampa Alimentos 71,Plano Scale,Proposta,1,3651.53,1,Redorai
+2026-08-28,Agosto,2026,Carla Souza,Serra Café 72,Plano Pro,Negociação,1,3956.80,1,Redorai
+2026-03-24,Março,2026,Ana Costa,Maré Energia 73,Plano Scale,Negociação,1,13382.02,1,Redorai
+2026-05-06,Maio,2026,Diego Alves,Céu Soft 74,Add-on API,Ganho,1,6368.32,1,Redorai
+2026-07-21,Julho,2026,Ana Costa,Rio Branco 75,Plano Pro,Negociação,1,6651.53,1,Redorai
+2026-04-01,Abril,2026,Diego Alves,Casa Norte 76,Plano Scale,Lead,1,6811.68,1,Redorai
+2026-08-23,Agosto,2026,Eva Martins,Sul Minas 77,Plano Scale,Negociação,1,57877.54,1,Redorai
+2026-03-20,Março,2026,Fábio Nunes,Boa Vista 78,Add-on API,Lead,1,3914.49,1,Redorai
+2026-04-02,Abril,2026,Diego Alves,Terra Nova 79,Plano Start,Lead,1,11342.83,1,Redorai
+2026-04-13,Abril,2026,Diego Alves,Atlas Ltda 80,Add-on API,Perdido,1,27659.98,1,Redorai
+2026-03-08,Março,2026,Bruno Lima,Nimbus SA 81,Plano Pro,Qualificado,1,19581.45,1,Redorai
+2026-05-10,Maio,2026,Eva Martins,Forge Engenharia 82,Plano Pro,Qualificado,1,6384.19,1,Redorai
+2026-08-13,Agosto,2026,Diego Alves,Helix Saúde 83,Plano Start,Qualificado,1,28420.59,1,Redorai
+2026-03-23,Março,2026,Fábio Nunes,Orbit Educação 84,Plano Pro,Qualificado,1,8095.59,1,Redorai
+2026-08-09,Agosto,2026,Diego Alves,Pulse Varejo 85,Plano Scale,Perdido,1,46091.77,1,Redorai
+2026-07-01,Julho,2026,Eva Martins,Lumen Tech 86,Plano Scale,Proposta,1,21713.22,1,Redorai
+2026-06-08,Junho,2026,Bruno Lima,Verde Agro 87,Plano Start,Qualificado,1,4211.25,1,Redorai
+2026-05-11,Maio,2026,Eva Martins,Costa Farma 88,Plano Pro,Lead,1,24021.43,1,Redorai
+2026-04-10,Abril,2026,Eva Martins,Delta Log 89,Plano Start,Lead,1,64004.96,1,Redorai
+2026-04-26,Abril,2026,Bruno Lima,Aurora Moda 90,Plano Pro,Proposta,1,21847.32,1,Redorai
+2026-04-30,Abril,2026,Eva Martins,Pampa Alimentos 91,Plano Start,Proposta,1,81807.44,1,Redorai
+2026-08-28,Agosto,2026,Eva Martins,Serra Café 92,Plano Pro,Negociação,1,41235.74,1,Redorai
+2026-07-05,Julho,2026,Ana Costa,Maré Energia 93,Plano Start,Proposta,1,8412.44,1,Redorai
+2026-04-29,Abril,2026,Ana Costa,Céu Soft 94,Plano Scale,Proposta,1,4719.80,1,Redorai
+2026-08-05,Agosto,2026,Bruno Lima,Rio Branco 95,Plano Scale,Lead,1,7746.38,1,Redorai
+2026-03-16,Março,2026,Bruno Lima,Casa Norte 96,Plano Start,Lead,1,44198.62,1,Redorai
+2026-07-13,Julho,2026,Fábio Nunes,Sul Minas 97,Add-on API,Ganho,1,4345.30,1,Redorai
+2026-07-29,Julho,2026,Bruno Lima,Boa Vista 98,Add-on API,Lead,1,12833.39,1,Redorai
+2026-08-11,Agosto,2026,Fábio Nunes,Terra Nova 99,Plano Scale,Perdido,1,66974.05,1,Redorai
+2026-04-27,Abril,2026,Fábio Nunes,Atlas Ltda 100,Plano Scale,Negociação,1,7913.81,1,Redorai
+2026-04-02,Abril,2026,Eva Martins,Nimbus SA 101,Add-on API,Lead,1,5754.53,1,Redorai
+2026-07-24,Julho,2026,Eva Martins,Forge Engenharia 102,Plano Pro,Lead,1,36082.56,1,Redorai
+2026-08-11,Agosto,2026,Fábio Nunes,Helix Saúde 103,Plano Start,Proposta,1,19181.01,1,Redorai
+2026-04-30,Abril,2026,Ana Costa,Orbit Educação 104,Plano Scale,Qualificado,1,11680.76,1,Redorai
+2026-06-23,Junho,2026,Ana Costa,Pulse Varejo 105,Plano Scale,Lead,1,7340.46,1,Redorai
+2026-05-05,Maio,2026,Diego Alves,Lumen Tech 106,Add-on API,Ganho,1,54649.97,1,Redorai
+2026-06-16,Junho,2026,Diego Alves,Verde Agro 107,Plano Scale,Perdido,1,23568.87,1,Redorai
+2026-07-18,Julho,2026,Eva Martins,Costa Farma 108,Plano Pro,Qualificado,1,27249.69,1,Redorai
+2026-04-11,Abril,2026,Carla Souza,Delta Log 109,Plano Scale,Proposta,1,4152.53,1,Redorai
+2026-03-27,Março,2026,Bruno Lima,Aurora Moda 110,Plano Start,Lead,1,10181.29,1,Redorai
+2026-07-19,Julho,2026,Eva Martins,Pampa Alimentos 111,Add-on API,Perdido,1,4257.98,1,Redorai
+2026-08-28,Agosto,2026,Diego Alves,Serra Café 112,Plano Pro,Lead,1,61034.89,1,Redorai
+2026-03-14,Março,2026,Diego Alves,Maré Energia 113,Plano Scale,Lead,1,10566.07,1,Redorai
+2026-08-17,Agosto,2026,Diego Alves,Céu Soft 114,Add-on API,Qualificado,1,6656.83,1,Redorai
+2026-04-09,Abril,2026,Carla Souza,Rio Branco 115,Add-on API,Lead,1,4477.63,1,Redorai
+2026-04-21,Abril,2026,Carla Souza,Casa Norte 116,Plano Start,Lead,1,6990.20,1,Redorai
+2026-06-30,Junho,2026,Diego Alves,Sul Minas 117,Add-on API,Ganho,1,16277.33,1,Redorai
+2026-08-17,Agosto,2026,Bruno Lima,Boa Vista 118,Plano Scale,Qualificado,1,75820.92,1,Redorai
+2026-06-06,Junho,2026,Diego Alves,Terra Nova 119,Add-on API,Qualificado,1,17985.48,1,Redorai

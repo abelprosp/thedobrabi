@@ -1,0 +1,326 @@
+data,mes,ano,produto,status,quantidade,valor,empresa
+2026-06-01,Junho,2026,Kit onboarding,Concluído,65,5054.95,Redorai
+2026-06-01,Junho,2026,Camiseta logo,Em linha,76,2342.05,Redorai
+2026-06-01,Junho,2026,Moletom,Concluído,44,3729.98,Redorai
+2026-06-01,Junho,2026,Caneca,Concluído,50,1298.43,Redorai
+2026-06-01,Junho,2026,Caderno,Concluído,89,4759.73,Redorai
+2026-06-02,Junho,2026,Kit onboarding,Parado,0,0.00,Redorai
+2026-06-02,Junho,2026,Camiseta logo,Concluído,27,1820.44,Redorai
+2026-06-02,Junho,2026,Moletom,Concluído,71,5172.17,Redorai
+2026-06-02,Junho,2026,Caneca,Concluído,86,5565.83,Redorai
+2026-06-02,Junho,2026,Caderno,Concluído,88,5147.89,Redorai
+2026-06-03,Junho,2026,Kit onboarding,Concluído,29,896.69,Redorai
+2026-06-03,Junho,2026,Camiseta logo,Concluído,22,1756.37,Redorai
+2026-06-03,Junho,2026,Moletom,Concluído,25,1571.84,Redorai
+2026-06-03,Junho,2026,Caneca,Concluído,21,528.09,Redorai
+2026-06-03,Junho,2026,Caderno,Em linha,59,1659.64,Redorai
+2026-06-04,Junho,2026,Kit onboarding,Em linha,41,1067.20,Redorai
+2026-06-04,Junho,2026,Camiseta logo,Concluído,33,1962.96,Redorai
+2026-06-04,Junho,2026,Moletom,Concluído,48,1668.79,Redorai
+2026-06-04,Junho,2026,Caneca,Em linha,63,5284.32,Redorai
+2026-06-04,Junho,2026,Caderno,Concluído,71,5926.99,Redorai
+2026-06-05,Junho,2026,Kit onboarding,Concluído,89,6647.85,Redorai
+2026-06-05,Junho,2026,Camiseta logo,Em linha,47,2790.13,Redorai
+2026-06-05,Junho,2026,Moletom,Concluído,62,2433.83,Redorai
+2026-06-05,Junho,2026,Caneca,Concluído,73,3307.30,Redorai
+2026-06-05,Junho,2026,Caderno,Concluído,41,3293.02,Redorai
+2026-06-08,Junho,2026,Kit onboarding,Concluído,25,1795.91,Redorai
+2026-06-08,Junho,2026,Camiseta logo,Em linha,68,1562.96,Redorai
+2026-06-08,Junho,2026,Moletom,Concluído,82,1841.32,Redorai
+2026-06-08,Junho,2026,Caneca,Em linha,31,1841.56,Redorai
+2026-06-08,Junho,2026,Caderno,Concluído,56,4080.55,Redorai
+2026-06-09,Junho,2026,Kit onboarding,Concluído,80,2799.05,Redorai
+2026-06-09,Junho,2026,Camiseta logo,Concluído,54,2589.73,Redorai
+2026-06-09,Junho,2026,Moletom,Concluído,42,1023.55,Redorai
+2026-06-09,Junho,2026,Caneca,Em linha,43,2604.04,Redorai
+2026-06-09,Junho,2026,Caderno,Concluído,31,2210.38,Redorai
+2026-06-10,Junho,2026,Kit onboarding,Concluído,64,3656.69,Redorai
+2026-06-10,Junho,2026,Camiseta logo,Concluído,44,2437.71,Redorai
+2026-06-10,Junho,2026,Moletom,Concluído,32,2443.27,Redorai
+2026-06-10,Junho,2026,Caneca,Concluído,89,4560.86,Redorai
+2026-06-10,Junho,2026,Caderno,Concluído,46,1573.40,Redorai
+2026-06-11,Junho,2026,Kit onboarding,Concluído,39,3237.79,Redorai
+2026-06-11,Junho,2026,Camiseta logo,Concluído,80,2565.19,Redorai
+2026-06-11,Junho,2026,Moletom,Concluído,25,1123.60,Redorai
+2026-06-11,Junho,2026,Caneca,Concluído,46,1980.79,Redorai
+2026-06-11,Junho,2026,Caderno,Concluído,78,5354.41,Redorai
+2026-06-12,Junho,2026,Kit onboarding,Concluído,88,6290.77,Redorai
+2026-06-12,Junho,2026,Camiseta logo,Concluído,82,2170.06,Redorai
+2026-06-12,Junho,2026,Moletom,Em linha,50,2967.03,Redorai
+2026-06-12,Junho,2026,Caneca,Concluído,61,4213.05,Redorai
+2026-06-12,Junho,2026,Caderno,Concluído,61,1765.24,Redorai
+2026-06-15,Junho,2026,Kit onboarding,Concluído,49,3355.43,Redorai
+2026-06-15,Junho,2026,Camiseta logo,Concluído,45,1615.58,Redorai
+2026-06-15,Junho,2026,Moletom,Concluído,80,2033.87,Redorai
+2026-06-15,Junho,2026,Caneca,Concluído,75,6034.27,Redorai
+2026-06-15,Junho,2026,Caderno,Concluído,78,3551.31,Redorai
+2026-06-16,Junho,2026,Kit onboarding,Em linha,78,4821.75,Redorai
+2026-06-16,Junho,2026,Camiseta logo,Concluído,54,1620.77,Redorai
+2026-06-16,Junho,2026,Moletom,Concluído,27,783.00,Redorai
+2026-06-16,Junho,2026,Caneca,Concluído,79,2590.07,Redorai
+2026-06-16,Junho,2026,Caderno,Concluído,63,2557.50,Redorai
+2026-06-17,Junho,2026,Kit onboarding,Em linha,40,2487.76,Redorai
+2026-06-17,Junho,2026,Camiseta logo,Concluído,41,2329.77,Redorai
+2026-06-17,Junho,2026,Moletom,Concluído,49,3723.48,Redorai
+2026-06-17,Junho,2026,Caneca,Em linha,82,2922.14,Redorai
+2026-06-17,Junho,2026,Caderno,Em linha,80,3167.02,Redorai
+2026-06-18,Junho,2026,Kit onboarding,Em linha,74,2777.90,Redorai
+2026-06-18,Junho,2026,Camiseta logo,Concluído,61,2196.71,Redorai
+2026-06-18,Junho,2026,Moletom,Retrabalho,39,3065.00,Redorai
+2026-06-18,Junho,2026,Caneca,Parado,0,0.00,Redorai
+2026-06-18,Junho,2026,Caderno,Concluído,84,4658.70,Redorai
+2026-06-19,Junho,2026,Kit onboarding,Em linha,81,5337.02,Redorai
+2026-06-19,Junho,2026,Camiseta logo,Concluído,32,1188.87,Redorai
+2026-06-19,Junho,2026,Moletom,Concluído,21,999.96,Redorai
+2026-06-19,Junho,2026,Caneca,Concluído,47,1909.84,Redorai
+2026-06-19,Junho,2026,Caderno,Concluído,31,1988.63,Redorai
+2026-06-22,Junho,2026,Kit onboarding,Em linha,40,3041.96,Redorai
+2026-06-22,Junho,2026,Camiseta logo,Parado,7,494.38,Redorai
+2026-06-22,Junho,2026,Moletom,Concluído,71,5460.45,Redorai
+2026-06-22,Junho,2026,Caneca,Em linha,79,1744.79,Redorai
+2026-06-22,Junho,2026,Caderno,Concluído,29,1900.00,Redorai
+2026-06-23,Junho,2026,Kit onboarding,Concluído,87,4248.37,Redorai
+2026-06-23,Junho,2026,Camiseta logo,Concluído,54,3271.73,Redorai
+2026-06-23,Junho,2026,Moletom,Em linha,46,1246.62,Redorai
+2026-06-23,Junho,2026,Caneca,Em linha,62,1578.09,Redorai
+2026-06-23,Junho,2026,Caderno,Retrabalho,66,1913.40,Redorai
+2026-06-24,Junho,2026,Kit onboarding,Concluído,66,1621.96,Redorai
+2026-06-24,Junho,2026,Camiseta logo,Concluído,66,3775.45,Redorai
+2026-06-24,Junho,2026,Moletom,Concluído,28,1980.59,Redorai
+2026-06-24,Junho,2026,Caneca,Parado,3,167.99,Redorai
+2026-06-24,Junho,2026,Caderno,Em linha,81,5620.87,Redorai
+2026-06-25,Junho,2026,Kit onboarding,Em linha,46,3217.05,Redorai
+2026-06-25,Junho,2026,Camiseta logo,Concluído,61,2369.46,Redorai
+2026-06-25,Junho,2026,Moletom,Concluído,74,1923.43,Redorai
+2026-06-25,Junho,2026,Caneca,Concluído,64,3429.85,Redorai
+2026-06-25,Junho,2026,Caderno,Concluído,35,1942.85,Redorai
+2026-06-26,Junho,2026,Kit onboarding,Retrabalho,88,4441.77,Redorai
+2026-06-26,Junho,2026,Camiseta logo,Em linha,67,5464.39,Redorai
+2026-06-26,Junho,2026,Moletom,Concluído,28,2175.34,Redorai
+2026-06-26,Junho,2026,Caneca,Concluído,31,2435.69,Redorai
+2026-06-26,Junho,2026,Caderno,Retrabalho,56,1503.47,Redorai
+2026-06-29,Junho,2026,Kit onboarding,Concluído,41,2702.56,Redorai
+2026-06-29,Junho,2026,Camiseta logo,Concluído,83,2894.06,Redorai
+2026-06-29,Junho,2026,Moletom,Concluído,22,1827.83,Redorai
+2026-06-29,Junho,2026,Caneca,Retrabalho,89,4615.18,Redorai
+2026-06-29,Junho,2026,Caderno,Concluído,73,4570.90,Redorai
+2026-06-30,Junho,2026,Kit onboarding,Concluído,57,1333.13,Redorai
+2026-06-30,Junho,2026,Camiseta logo,Em linha,49,2682.07,Redorai
+2026-06-30,Junho,2026,Moletom,Concluído,62,2702.95,Redorai
+2026-06-30,Junho,2026,Caneca,Concluído,61,3900.88,Redorai
+2026-06-30,Junho,2026,Caderno,Em linha,87,4354.45,Redorai
+2026-07-01,Julho,2026,Kit onboarding,Concluído,58,4558.32,Redorai
+2026-07-01,Julho,2026,Camiseta logo,Concluído,59,2264.45,Redorai
+2026-07-01,Julho,2026,Moletom,Concluído,81,3252.41,Redorai
+2026-07-01,Julho,2026,Caneca,Concluído,26,1037.82,Redorai
+2026-07-01,Julho,2026,Caderno,Concluído,41,1317.32,Redorai
+2026-07-02,Julho,2026,Kit onboarding,Concluído,88,7331.45,Redorai
+2026-07-02,Julho,2026,Camiseta logo,Concluído,39,1145.27,Redorai
+2026-07-02,Julho,2026,Moletom,Concluído,60,2986.56,Redorai
+2026-07-02,Julho,2026,Caneca,Concluído,67,3848.26,Redorai
+2026-07-02,Julho,2026,Caderno,Concluído,24,2006.77,Redorai
+2026-07-03,Julho,2026,Kit onboarding,Concluído,38,2128.44,Redorai
+2026-07-03,Julho,2026,Camiseta logo,Concluído,40,1186.15,Redorai
+2026-07-03,Julho,2026,Moletom,Concluído,23,1229.66,Redorai
+2026-07-03,Julho,2026,Caneca,Retrabalho,38,3057.18,Redorai
+2026-07-03,Julho,2026,Caderno,Concluído,39,2672.48,Redorai
+2026-07-06,Julho,2026,Kit onboarding,Concluído,84,5581.25,Redorai
+2026-07-06,Julho,2026,Camiseta logo,Retrabalho,80,6646.81,Redorai
+2026-07-06,Julho,2026,Moletom,Em linha,38,2580.13,Redorai
+2026-07-06,Julho,2026,Caneca,Concluído,76,2209.77,Redorai
+2026-07-06,Julho,2026,Caderno,Retrabalho,81,2493.48,Redorai
+2026-07-07,Julho,2026,Kit onboarding,Concluído,90,2120.59,Redorai
+2026-07-07,Julho,2026,Camiseta logo,Concluído,48,1335.66,Redorai
+2026-07-07,Julho,2026,Moletom,Concluído,27,925.95,Redorai
+2026-07-07,Julho,2026,Caneca,Concluído,87,7042.38,Redorai
+2026-07-07,Julho,2026,Caderno,Concluído,55,1499.64,Redorai
+2026-07-08,Julho,2026,Kit onboarding,Concluído,77,6339.43,Redorai
+2026-07-08,Julho,2026,Camiseta logo,Concluído,85,4496.44,Redorai
+2026-07-08,Julho,2026,Moletom,Retrabalho,85,6734.73,Redorai
+2026-07-08,Julho,2026,Caneca,Concluído,66,4428.98,Redorai
+2026-07-08,Julho,2026,Caderno,Concluído,74,3366.14,Redorai
+2026-07-09,Julho,2026,Kit onboarding,Concluído,56,2318.93,Redorai
+2026-07-09,Julho,2026,Camiseta logo,Em linha,77,2118.94,Redorai
+2026-07-09,Julho,2026,Moletom,Em linha,76,3661.94,Redorai
+2026-07-09,Julho,2026,Caneca,Concluído,76,5529.56,Redorai
+2026-07-09,Julho,2026,Caderno,Em linha,74,3558.97,Redorai
+2026-07-10,Julho,2026,Kit onboarding,Concluído,31,1274.21,Redorai
+2026-07-10,Julho,2026,Camiseta logo,Parado,1,80.79,Redorai
+2026-07-10,Julho,2026,Moletom,Concluído,68,3250.13,Redorai
+2026-07-10,Julho,2026,Caneca,Concluído,54,3078.88,Redorai
+2026-07-10,Julho,2026,Caderno,Concluído,37,2754.05,Redorai
+2026-07-13,Julho,2026,Kit onboarding,Concluído,57,1405.66,Redorai
+2026-07-13,Julho,2026,Camiseta logo,Em linha,58,2386.50,Redorai
+2026-07-13,Julho,2026,Moletom,Concluído,79,5675.90,Redorai
+2026-07-13,Julho,2026,Caneca,Concluído,39,3206.96,Redorai
+2026-07-13,Julho,2026,Caderno,Concluído,80,5116.20,Redorai
+2026-07-14,Julho,2026,Kit onboarding,Concluído,56,2967.38,Redorai
+2026-07-14,Julho,2026,Camiseta logo,Concluído,51,3579.04,Redorai
+2026-07-14,Julho,2026,Moletom,Parado,1,59.73,Redorai
+2026-07-14,Julho,2026,Caneca,Concluído,66,3803.66,Redorai
+2026-07-14,Julho,2026,Caderno,Concluído,53,2755.50,Redorai
+2026-07-15,Julho,2026,Kit onboarding,Concluído,35,2386.17,Redorai
+2026-07-15,Julho,2026,Camiseta logo,Em linha,22,709.71,Redorai
+2026-07-15,Julho,2026,Moletom,Concluído,27,1378.24,Redorai
+2026-07-15,Julho,2026,Caneca,Concluído,37,937.28,Redorai
+2026-07-15,Julho,2026,Caderno,Concluído,66,5244.53,Redorai
+2026-07-16,Julho,2026,Kit onboarding,Concluído,65,2624.36,Redorai
+2026-07-16,Julho,2026,Camiseta logo,Concluído,29,2038.29,Redorai
+2026-07-16,Julho,2026,Moletom,Em linha,43,2568.05,Redorai
+2026-07-16,Julho,2026,Caneca,Concluído,41,3155.52,Redorai
+2026-07-16,Julho,2026,Caderno,Concluído,58,3826.37,Redorai
+2026-07-17,Julho,2026,Kit onboarding,Concluído,66,3863.83,Redorai
+2026-07-17,Julho,2026,Camiseta logo,Concluído,38,2076.50,Redorai
+2026-07-17,Julho,2026,Moletom,Em linha,67,3213.03,Redorai
+2026-07-17,Julho,2026,Caneca,Concluído,40,1269.48,Redorai
+2026-07-17,Julho,2026,Caderno,Em linha,48,3460.40,Redorai
+2026-07-20,Julho,2026,Kit onboarding,Em linha,87,5819.47,Redorai
+2026-07-20,Julho,2026,Camiseta logo,Concluído,34,2710.14,Redorai
+2026-07-20,Julho,2026,Moletom,Em linha,34,2725.94,Redorai
+2026-07-20,Julho,2026,Caneca,Concluído,81,5308.43,Redorai
+2026-07-20,Julho,2026,Caderno,Em linha,37,2887.95,Redorai
+2026-07-21,Julho,2026,Kit onboarding,Em linha,86,3745.20,Redorai
+2026-07-21,Julho,2026,Camiseta logo,Concluído,58,4252.45,Redorai
+2026-07-21,Julho,2026,Moletom,Concluído,48,3155.39,Redorai
+2026-07-21,Julho,2026,Caneca,Concluído,49,1725.78,Redorai
+2026-07-21,Julho,2026,Caderno,Concluído,30,2102.11,Redorai
+2026-07-22,Julho,2026,Kit onboarding,Concluído,34,2407.39,Redorai
+2026-07-22,Julho,2026,Camiseta logo,Concluído,75,2159.44,Redorai
+2026-07-22,Julho,2026,Moletom,Concluído,85,4381.94,Redorai
+2026-07-22,Julho,2026,Caneca,Concluído,52,2132.19,Redorai
+2026-07-22,Julho,2026,Caderno,Em linha,21,1497.08,Redorai
+2026-07-23,Julho,2026,Kit onboarding,Concluído,46,1591.67,Redorai
+2026-07-23,Julho,2026,Camiseta logo,Concluído,64,1994.89,Redorai
+2026-07-23,Julho,2026,Moletom,Retrabalho,55,2415.25,Redorai
+2026-07-23,Julho,2026,Caneca,Em linha,40,2847.62,Redorai
+2026-07-23,Julho,2026,Caderno,Concluído,50,1315.26,Redorai
+2026-07-24,Julho,2026,Kit onboarding,Concluído,21,1409.02,Redorai
+2026-07-24,Julho,2026,Camiseta logo,Concluído,56,3892.18,Redorai
+2026-07-24,Julho,2026,Moletom,Parado,1,80.23,Redorai
+2026-07-24,Julho,2026,Caneca,Em linha,84,4360.19,Redorai
+2026-07-24,Julho,2026,Caderno,Concluído,43,3540.54,Redorai
+2026-07-27,Julho,2026,Kit onboarding,Em linha,43,3604.34,Redorai
+2026-07-27,Julho,2026,Camiseta logo,Concluído,74,2688.86,Redorai
+2026-07-27,Julho,2026,Moletom,Em linha,34,1421.19,Redorai
+2026-07-27,Julho,2026,Caneca,Concluído,79,2414.44,Redorai
+2026-07-27,Julho,2026,Caderno,Em linha,66,3768.56,Redorai
+2026-07-28,Julho,2026,Kit onboarding,Concluído,25,1327.60,Redorai
+2026-07-28,Julho,2026,Camiseta logo,Concluído,69,4127.89,Redorai
+2026-07-28,Julho,2026,Moletom,Concluído,59,4424.33,Redorai
+2026-07-28,Julho,2026,Caneca,Concluído,48,1934.74,Redorai
+2026-07-28,Julho,2026,Caderno,Concluído,74,1952.52,Redorai
+2026-07-29,Julho,2026,Kit onboarding,Retrabalho,80,3611.90,Redorai
+2026-07-29,Julho,2026,Camiseta logo,Parado,7,450.39,Redorai
+2026-07-29,Julho,2026,Moletom,Concluído,70,4444.20,Redorai
+2026-07-29,Julho,2026,Caneca,Concluído,30,1406.19,Redorai
+2026-07-29,Julho,2026,Caderno,Em linha,33,2581.36,Redorai
+2026-07-30,Julho,2026,Kit onboarding,Concluído,41,3420.96,Redorai
+2026-07-30,Julho,2026,Camiseta logo,Concluído,63,4735.95,Redorai
+2026-07-30,Julho,2026,Moletom,Concluído,71,5310.86,Redorai
+2026-07-30,Julho,2026,Caneca,Concluído,83,5556.86,Redorai
+2026-07-30,Julho,2026,Caderno,Em linha,54,3912.95,Redorai
+2026-07-31,Julho,2026,Kit onboarding,Concluído,71,4544.05,Redorai
+2026-07-31,Julho,2026,Camiseta logo,Parado,8,316.56,Redorai
+2026-07-31,Julho,2026,Moletom,Concluído,78,2947.89,Redorai
+2026-07-31,Julho,2026,Caneca,Concluído,83,6753.83,Redorai
+2026-07-31,Julho,2026,Caderno,Concluído,23,582.58,Redorai
+2026-08-03,Agosto,2026,Kit onboarding,Concluído,28,663.19,Redorai
+2026-08-03,Agosto,2026,Camiseta logo,Concluído,42,2721.17,Redorai
+2026-08-03,Agosto,2026,Moletom,Concluído,39,2389.28,Redorai
+2026-08-03,Agosto,2026,Caneca,Concluído,29,1587.95,Redorai
+2026-08-03,Agosto,2026,Caderno,Em linha,83,2881.90,Redorai
+2026-08-04,Agosto,2026,Kit onboarding,Concluído,83,3194.25,Redorai
+2026-08-04,Agosto,2026,Camiseta logo,Em linha,63,3531.36,Redorai
+2026-08-04,Agosto,2026,Moletom,Retrabalho,22,527.80,Redorai
+2026-08-04,Agosto,2026,Caneca,Retrabalho,75,2212.91,Redorai
+2026-08-04,Agosto,2026,Caderno,Concluído,77,3519.61,Redorai
+2026-08-05,Agosto,2026,Kit onboarding,Concluído,78,2585.14,Redorai
+2026-08-05,Agosto,2026,Camiseta logo,Retrabalho,58,1875.78,Redorai
+2026-08-05,Agosto,2026,Moletom,Concluído,75,5031.79,Redorai
+2026-08-05,Agosto,2026,Caneca,Em linha,82,4742.71,Redorai
+2026-08-05,Agosto,2026,Caderno,Concluído,82,5344.64,Redorai
+2026-08-06,Agosto,2026,Kit onboarding,Concluído,80,6065.93,Redorai
+2026-08-06,Agosto,2026,Camiseta logo,Concluído,84,3241.87,Redorai
+2026-08-06,Agosto,2026,Moletom,Concluído,68,3007.24,Redorai
+2026-08-06,Agosto,2026,Caneca,Concluído,56,1331.30,Redorai
+2026-08-06,Agosto,2026,Caderno,Concluído,25,1127.10,Redorai
+2026-08-07,Agosto,2026,Kit onboarding,Em linha,23,1411.85,Redorai
+2026-08-07,Agosto,2026,Camiseta logo,Concluído,68,2974.59,Redorai
+2026-08-07,Agosto,2026,Moletom,Concluído,65,1661.16,Redorai
+2026-08-07,Agosto,2026,Caneca,Concluído,51,3204.29,Redorai
+2026-08-07,Agosto,2026,Caderno,Retrabalho,30,783.80,Redorai
+2026-08-10,Agosto,2026,Kit onboarding,Concluído,59,1929.07,Redorai
+2026-08-10,Agosto,2026,Camiseta logo,Concluído,88,4491.28,Redorai
+2026-08-10,Agosto,2026,Moletom,Concluído,74,5830.37,Redorai
+2026-08-10,Agosto,2026,Caneca,Concluído,54,2785.92,Redorai
+2026-08-10,Agosto,2026,Caderno,Parado,6,347.59,Redorai
+2026-08-11,Agosto,2026,Kit onboarding,Concluído,61,4448.40,Redorai
+2026-08-11,Agosto,2026,Camiseta logo,Concluído,32,1119.11,Redorai
+2026-08-11,Agosto,2026,Moletom,Concluído,83,5825.68,Redorai
+2026-08-11,Agosto,2026,Caneca,Concluído,63,2574.80,Redorai
+2026-08-11,Agosto,2026,Caderno,Concluído,75,4652.47,Redorai
+2026-08-12,Agosto,2026,Kit onboarding,Em linha,29,1616.97,Redorai
+2026-08-12,Agosto,2026,Camiseta logo,Concluído,56,2280.95,Redorai
+2026-08-12,Agosto,2026,Moletom,Em linha,71,4355.71,Redorai
+2026-08-12,Agosto,2026,Caneca,Em linha,31,1811.21,Redorai
+2026-08-12,Agosto,2026,Caderno,Concluído,63,3634.15,Redorai
+2026-08-13,Agosto,2026,Kit onboarding,Concluído,87,3063.58,Redorai
+2026-08-13,Agosto,2026,Camiseta logo,Concluído,29,1189.47,Redorai
+2026-08-13,Agosto,2026,Moletom,Concluído,58,3248.97,Redorai
+2026-08-13,Agosto,2026,Caneca,Concluído,45,1702.34,Redorai
+2026-08-13,Agosto,2026,Caderno,Concluído,85,5958.23,Redorai
+2026-08-14,Agosto,2026,Kit onboarding,Retrabalho,43,2646.83,Redorai
+2026-08-14,Agosto,2026,Camiseta logo,Em linha,86,5017.34,Redorai
+2026-08-14,Agosto,2026,Moletom,Concluído,47,3473.59,Redorai
+2026-08-14,Agosto,2026,Caneca,Concluído,79,4912.96,Redorai
+2026-08-14,Agosto,2026,Caderno,Retrabalho,75,5083.26,Redorai
+2026-08-17,Agosto,2026,Kit onboarding,Concluído,27,1213.63,Redorai
+2026-08-17,Agosto,2026,Camiseta logo,Concluído,38,2622.96,Redorai
+2026-08-17,Agosto,2026,Moletom,Em linha,58,2775.09,Redorai
+2026-08-17,Agosto,2026,Caneca,Concluído,28,2108.29,Redorai
+2026-08-17,Agosto,2026,Caderno,Em linha,54,3385.84,Redorai
+2026-08-18,Agosto,2026,Kit onboarding,Concluído,52,1917.56,Redorai
+2026-08-18,Agosto,2026,Camiseta logo,Concluído,50,1704.54,Redorai
+2026-08-18,Agosto,2026,Moletom,Em linha,51,2119.77,Redorai
+2026-08-18,Agosto,2026,Caneca,Concluído,82,4057.06,Redorai
+2026-08-18,Agosto,2026,Caderno,Concluído,24,940.34,Redorai
+2026-08-19,Agosto,2026,Kit onboarding,Concluído,23,1670.33,Redorai
+2026-08-19,Agosto,2026,Camiseta logo,Concluído,90,6813.79,Redorai
+2026-08-19,Agosto,2026,Moletom,Em linha,82,2089.82,Redorai
+2026-08-19,Agosto,2026,Caneca,Concluído,30,1223.18,Redorai
+2026-08-19,Agosto,2026,Caderno,Retrabalho,28,1333.96,Redorai
+2026-08-20,Agosto,2026,Kit onboarding,Concluído,66,5134.82,Redorai
+2026-08-20,Agosto,2026,Camiseta logo,Retrabalho,70,4733.87,Redorai
+2026-08-20,Agosto,2026,Moletom,Concluído,37,2144.94,Redorai
+2026-08-20,Agosto,2026,Caneca,Retrabalho,84,4610.20,Redorai
+2026-08-20,Agosto,2026,Caderno,Concluído,87,6762.30,Redorai
+2026-08-21,Agosto,2026,Kit onboarding,Concluído,50,3535.55,Redorai
+2026-08-21,Agosto,2026,Camiseta logo,Concluído,60,3528.75,Redorai
+2026-08-21,Agosto,2026,Moletom,Em linha,69,4751.99,Redorai
+2026-08-21,Agosto,2026,Caneca,Concluído,74,2125.97,Redorai
+2026-08-21,Agosto,2026,Caderno,Parado,7,334.09,Redorai
+2026-08-24,Agosto,2026,Kit onboarding,Concluído,27,1231.37,Redorai
+2026-08-24,Agosto,2026,Camiseta logo,Concluído,34,1655.74,Redorai
+2026-08-24,Agosto,2026,Moletom,Parado,2,89.74,Redorai
+2026-08-24,Agosto,2026,Caneca,Em linha,67,1562.95,Redorai
+2026-08-24,Agosto,2026,Caderno,Em linha,24,1529.28,Redorai
+2026-08-25,Agosto,2026,Kit onboarding,Concluído,26,1864.06,Redorai
+2026-08-25,Agosto,2026,Camiseta logo,Concluído,50,2311.77,Redorai
+2026-08-25,Agosto,2026,Moletom,Retrabalho,66,4301.26,Redorai
+2026-08-25,Agosto,2026,Caneca,Em linha,88,6690.80,Redorai
+2026-08-25,Agosto,2026,Caderno,Concluído,69,5694.37,Redorai
+2026-08-26,Agosto,2026,Kit onboarding,Concluído,52,4211.39,Redorai
+2026-08-26,Agosto,2026,Camiseta logo,Concluído,50,3807.16,Redorai
+2026-08-26,Agosto,2026,Moletom,Retrabalho,40,2471.01,Redorai
+2026-08-26,Agosto,2026,Caneca,Em linha,72,2827.03,Redorai
+2026-08-26,Agosto,2026,Caderno,Em linha,30,2437.54,Redorai
+2026-08-27,Agosto,2026,Kit onboarding,Em linha,80,6429.55,Redorai
+2026-08-27,Agosto,2026,Camiseta logo,Em linha,62,4788.63,Redorai
+2026-08-27,Agosto,2026,Moletom,Em linha,32,2112.14,Redorai
+2026-08-27,Agosto,2026,Caneca,Concluído,84,4075.25,Redorai
+2026-08-27,Agosto,2026,Caderno,Em linha,90,4549.99,Redorai
+2026-08-28,Agosto,2026,Kit onboarding,Em linha,23,1435.35,Redorai
+2026-08-28,Agosto,2026,Camiseta logo,Concluído,43,3088.87,Redorai
+2026-08-28,Agosto,2026,Moletom,Concluído,37,1280.38,Redorai
+2026-08-28,Agosto,2026,Caneca,Concluído,59,1603.66,Redorai
+2026-08-28,Agosto,2026,Caderno,Concluído,40,2678.18,Redorai

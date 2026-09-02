@@ -1,0 +1,291 @@
+data,mes,ano,canal,campanha,session_count,conversao,valor,quantidade,empresa
+2025-11-01,Novembro,2025,Google Ads,Brand sempre-on,19603,3.26,84856.43,638,Redorai
+2025-11-01,Novembro,2025,Meta Ads,Brand sempre-on,11017,2.21,97189.13,242,Redorai
+2025-11-01,Novembro,2025,LinkedIn,Brand sempre-on,8565,4.24,48723.39,363,Redorai
+2025-11-01,Novembro,2025,Orgânico,Brand sempre-on,3783,3.01,22552.16,113,Redorai
+2025-11-01,Novembro,2025,E-mail,Brand sempre-on,5646,0.77,9202.61,43,Redorai
+2025-11-01,Novembro,2025,Google Ads,Performance Q3,10595,2.06,79768.79,218,Redorai
+2025-11-01,Novembro,2025,Meta Ads,Performance Q3,10610,0.49,5085.85,52,Redorai
+2025-11-01,Novembro,2025,LinkedIn,Performance Q3,10406,3.09,53255.66,321,Redorai
+2025-11-01,Novembro,2025,Orgânico,Performance Q3,2330,2.43,10006.13,56,Redorai
+2025-11-01,Novembro,2025,E-mail,Performance Q3,15451,0.62,28115.09,95,Redorai
+2025-11-01,Novembro,2025,Google Ads,Retargeting carrinho,15577,1.06,66853.64,164,Redorai
+2025-11-01,Novembro,2025,Meta Ads,Retargeting carrinho,3726,2.9,10213.60,107,Redorai
+2025-11-01,Novembro,2025,LinkedIn,Retargeting carrinho,9844,3.8,148365.96,374,Redorai
+2025-11-01,Novembro,2025,Orgânico,Retargeting carrinho,15028,2.57,63475.73,386,Redorai
+2025-11-01,Novembro,2025,E-mail,Retargeting carrinho,4294,4.56,70222.61,195,Redorai
+2025-11-01,Novembro,2025,Google Ads,Lançamento Scale,7530,3.68,59948.58,277,Redorai
+2025-11-01,Novembro,2025,Meta Ads,Lançamento Scale,8218,1.31,17334.96,107,Redorai
+2025-11-01,Novembro,2025,LinkedIn,Lançamento Scale,14974,3.6,82145.06,538,Redorai
+2025-11-01,Novembro,2025,Orgânico,Lançamento Scale,3902,3.89,15089.88,151,Redorai
+2025-11-01,Novembro,2025,E-mail,Lançamento Scale,17589,1.44,60327.01,252,Redorai
+2025-11-01,Novembro,2025,Google Ads,Parceiros 2026,7099,2.96,63895.89,210,Redorai
+2025-11-01,Novembro,2025,Meta Ads,Parceiros 2026,2274,2.46,21148.21,56,Redorai
+2025-11-01,Novembro,2025,LinkedIn,Parceiros 2026,17559,2.15,60393.64,377,Redorai
+2025-11-01,Novembro,2025,Orgânico,Parceiros 2026,7396,2.26,48037.07,167,Redorai
+2025-11-01,Novembro,2025,E-mail,Parceiros 2026,2056,2.85,6283.09,58,Redorai
+2025-11-01,Novembro,2025,Google Ads,ABM enterprise,23540,2.47,120413.31,581,Redorai
+2025-11-01,Novembro,2025,Meta Ads,ABM enterprise,11229,3.35,133502.90,376,Redorai
+2025-11-01,Novembro,2025,LinkedIn,ABM enterprise,13004,3.96,47297.30,515,Redorai
+2025-11-01,Novembro,2025,E-mail,ABM enterprise,9478,2.08,81186.08,196,Redorai
+2025-12-01,Dezembro,2025,Google Ads,Brand sempre-on,17283,0.98,65235.79,169,Redorai
+2025-12-01,Dezembro,2025,Meta Ads,Brand sempre-on,1507,1.19,2617.59,17,Redorai
+2025-12-01,Dezembro,2025,LinkedIn,Brand sempre-on,9276,1.89,42913.17,175,Redorai
+2025-12-01,Dezembro,2025,Orgânico,Brand sempre-on,2341,3.53,19216.90,82,Redorai
+2025-12-01,Dezembro,2025,E-mail,Brand sempre-on,5278,1.78,38757.11,93,Redorai
+2025-12-01,Dezembro,2025,Google Ads,Performance Q3,13140,4.68,112438.37,615,Redorai
+2025-12-01,Dezembro,2025,Meta Ads,Performance Q3,7002,2.29,62266.20,160,Redorai
+2025-12-01,Dezembro,2025,LinkedIn,Performance Q3,5327,4.05,85398.91,215,Redorai
+2025-12-01,Dezembro,2025,Orgânico,Performance Q3,9691,2.32,32439.43,224,Redorai
+2025-12-01,Dezembro,2025,E-mail,Performance Q3,13474,2.56,139274.28,345,Redorai
+2025-12-01,Dezembro,2025,Google Ads,Retargeting carrinho,14500,4.46,194095.62,646,Redorai
+2025-12-01,Dezembro,2025,Meta Ads,Retargeting carrinho,8367,1.23,11126.74,103,Redorai
+2025-12-01,Dezembro,2025,LinkedIn,Retargeting carrinho,3950,2.47,14041.56,97,Redorai
+2025-12-01,Dezembro,2025,Orgânico,Retargeting carrinho,8834,0.91,30999.92,80,Redorai
+2025-12-01,Dezembro,2025,E-mail,Retargeting carrinho,9312,2.34,90818.46,218,Redorai
+2025-12-01,Dezembro,2025,Google Ads,Lançamento Scale,14625,2.41,44882.75,353,Redorai
+2025-12-01,Dezembro,2025,Meta Ads,Lançamento Scale,13179,1.05,28457.79,138,Redorai
+2025-12-01,Dezembro,2025,LinkedIn,Lançamento Scale,4304,1.65,25960.58,71,Redorai
+2025-12-01,Dezembro,2025,Orgânico,Lançamento Scale,13698,4.02,151885.51,550,Redorai
+2025-12-01,Dezembro,2025,E-mail,Lançamento Scale,12205,1.33,68302.76,162,Redorai
+2025-12-01,Dezembro,2025,Google Ads,Parceiros 2026,1219,3.77,6882.03,46,Redorai
+2025-12-01,Dezembro,2025,Meta Ads,Parceiros 2026,16631,1.48,62742.78,246,Redorai
+2025-12-01,Dezembro,2025,LinkedIn,Parceiros 2026,2422,1.85,8218.71,44,Redorai
+2025-12-01,Dezembro,2025,Orgânico,Parceiros 2026,17678,0.94,35318.31,165,Redorai
+2025-12-01,Dezembro,2025,E-mail,Parceiros 2026,16781,0.87,28618.32,145,Redorai
+2025-12-01,Dezembro,2025,Google Ads,ABM enterprise,1815,2.43,14240.50,44,Redorai
+2025-12-01,Dezembro,2025,Meta Ads,ABM enterprise,9053,3.16,51248.89,286,Redorai
+2025-12-01,Dezembro,2025,LinkedIn,ABM enterprise,12117,1.85,23411.75,224,Redorai
+2025-12-01,Dezembro,2025,E-mail,ABM enterprise,11504,2.39,110875.33,275,Redorai
+2026-01-01,Janeiro,2026,Google Ads,Brand sempre-on,25195,4.39,390486.18,1106,Redorai
+2026-01-01,Janeiro,2026,Meta Ads,Brand sempre-on,3024,4.2,45009.27,126,Redorai
+2026-01-01,Janeiro,2026,LinkedIn,Brand sempre-on,5666,3.91,74351.78,221,Redorai
+2026-01-01,Janeiro,2026,Orgânico,Brand sempre-on,10211,3.05,37542.02,311,Redorai
+2026-01-01,Janeiro,2026,E-mail,Brand sempre-on,5188,1.46,26020.55,75,Redorai
+2026-01-01,Janeiro,2026,Google Ads,Performance Q3,10725,0.49,8345.10,52,Redorai
+2026-01-01,Janeiro,2026,Meta Ads,Performance Q3,7482,2.17,49299.05,162,Redorai
+2026-01-01,Janeiro,2026,LinkedIn,Performance Q3,17216,1.08,34993.46,185,Redorai
+2026-01-01,Janeiro,2026,Orgânico,Performance Q3,14578,3.64,209037.32,530,Redorai
+2026-01-01,Janeiro,2026,E-mail,Performance Q3,16344,3.06,104113.95,499,Redorai
+2026-01-01,Janeiro,2026,Google Ads,Retargeting carrinho,3434,2.02,10801.19,69,Redorai
+2026-01-01,Janeiro,2026,Meta Ads,Retargeting carrinho,8461,2.11,31848.26,178,Redorai
+2026-01-01,Janeiro,2026,LinkedIn,Retargeting carrinho,11125,0.8,20342.77,88,Redorai
+2026-01-01,Janeiro,2026,Orgânico,Retargeting carrinho,7133,1.22,25943.01,87,Redorai
+2026-01-01,Janeiro,2026,E-mail,Retargeting carrinho,2398,2.66,26215.04,63,Redorai
+2026-01-01,Janeiro,2026,Google Ads,Lançamento Scale,17408,3.25,184125.63,565,Redorai
+2026-01-01,Janeiro,2026,Meta Ads,Lançamento Scale,16807,2.72,138785.06,457,Redorai
+2026-01-01,Janeiro,2026,LinkedIn,Lançamento Scale,2244,2.46,6411.11,55,Redorai
+2026-01-01,Janeiro,2026,Orgânico,Lançamento Scale,14586,1.72,104164.72,251,Redorai
+2026-01-01,Janeiro,2026,E-mail,Lançamento Scale,12570,1.72,37238.01,216,Redorai
+2026-01-01,Janeiro,2026,Google Ads,Parceiros 2026,11419,2.9,90064.49,331,Redorai
+2026-01-01,Janeiro,2026,Meta Ads,Parceiros 2026,16577,2.66,113949.90,440,Redorai
+2026-01-01,Janeiro,2026,LinkedIn,Parceiros 2026,7903,2.44,63308.13,193,Redorai
+2026-01-01,Janeiro,2026,Orgânico,Parceiros 2026,14780,1.96,82218.50,290,Redorai
+2026-01-01,Janeiro,2026,E-mail,Parceiros 2026,14020,0.47,22107.17,66,Redorai
+2026-01-01,Janeiro,2026,Google Ads,ABM enterprise,12266,3.86,174274.88,473,Redorai
+2026-01-01,Janeiro,2026,Meta Ads,ABM enterprise,1578,2.23,11354.31,35,Redorai
+2026-01-01,Janeiro,2026,LinkedIn,ABM enterprise,6199,3.59,75564.79,222,Redorai
+2026-01-01,Janeiro,2026,E-mail,ABM enterprise,8539,3.95,68426.01,337,Redorai
+2026-02-01,Fevereiro,2026,Google Ads,Brand sempre-on,23228,3.96,147002.34,920,Redorai
+2026-02-01,Fevereiro,2026,Meta Ads,Brand sempre-on,2145,4.72,17782.00,101,Redorai
+2026-02-01,Fevereiro,2026,LinkedIn,Brand sempre-on,12382,2.31,27417.90,285,Redorai
+2026-02-01,Fevereiro,2026,Orgânico,Brand sempre-on,7592,0.46,10667.01,34,Redorai
+2026-02-01,Fevereiro,2026,E-mail,Brand sempre-on,8714,2.18,58392.47,190,Redorai
+2026-02-01,Fevereiro,2026,Google Ads,Performance Q3,19041,3.59,129971.73,684,Redorai
+2026-02-01,Fevereiro,2026,Meta Ads,Performance Q3,14785,3.11,146356.09,460,Redorai
+2026-02-01,Fevereiro,2026,LinkedIn,Performance Q3,17366,3.37,208096.95,585,Redorai
+2026-02-01,Fevereiro,2026,Orgânico,Performance Q3,2307,0.99,3509.49,22,Redorai
+2026-02-01,Fevereiro,2026,E-mail,Performance Q3,14834,3.46,78130.33,513,Redorai
+2026-02-01,Fevereiro,2026,Google Ads,Retargeting carrinho,1765,2.52,6126.05,44,Redorai
+2026-02-01,Fevereiro,2026,Meta Ads,Retargeting carrinho,4958,4.11,75959.98,203,Redorai
+2026-02-01,Fevereiro,2026,LinkedIn,Retargeting carrinho,10063,0.78,26960.53,78,Redorai
+2026-02-01,Fevereiro,2026,Orgânico,Retargeting carrinho,3348,2.26,9701.69,75,Redorai
+2026-02-01,Fevereiro,2026,E-mail,Retargeting carrinho,16321,3.65,141172.38,595,Redorai
+2026-02-01,Fevereiro,2026,Google Ads,Lançamento Scale,12799,0.49,14836.57,62,Redorai
+2026-02-01,Fevereiro,2026,Meta Ads,Lançamento Scale,4973,1.7,30699.55,84,Redorai
+2026-02-01,Fevereiro,2026,LinkedIn,Lançamento Scale,7537,1.87,17449.84,140,Redorai
+2026-02-01,Fevereiro,2026,Orgânico,Lançamento Scale,15379,2.3,80351.49,353,Redorai
+2026-02-01,Fevereiro,2026,E-mail,Lançamento Scale,9326,2.95,91013.95,274,Redorai
+2026-02-01,Fevereiro,2026,Google Ads,Parceiros 2026,25176,0.56,31444.58,141,Redorai
+2026-02-01,Fevereiro,2026,Meta Ads,Parceiros 2026,9629,3.59,137738.09,345,Redorai
+2026-02-01,Fevereiro,2026,LinkedIn,Parceiros 2026,16367,4.22,114953.75,690,Redorai
+2026-02-01,Fevereiro,2026,Orgânico,Parceiros 2026,1844,0.48,2499.27,8,Redorai
+2026-02-01,Fevereiro,2026,E-mail,Parceiros 2026,10315,1.58,49489.15,162,Redorai
+2026-02-01,Fevereiro,2026,Google Ads,ABM enterprise,22530,0.91,60884.42,206,Redorai
+2026-02-01,Fevereiro,2026,Meta Ads,ABM enterprise,11914,2.37,66133.56,282,Redorai
+2026-02-01,Fevereiro,2026,LinkedIn,ABM enterprise,3574,3.6,31462.34,128,Redorai
+2026-02-01,Fevereiro,2026,E-mail,ABM enterprise,8335,2.63,62325.01,219,Redorai
+2026-03-01,Março,2026,Google Ads,Brand sempre-on,17614,4.46,291668.76,784,Redorai
+2026-03-01,Março,2026,Meta Ads,Brand sempre-on,13101,2.46,122997.33,322,Redorai
+2026-03-01,Março,2026,LinkedIn,Brand sempre-on,13235,2.12,63779.13,280,Redorai
+2026-03-01,Março,2026,Orgânico,Brand sempre-on,16988,3.27,116072.35,555,Redorai
+2026-03-01,Março,2026,E-mail,Brand sempre-on,8923,4.67,59811.35,416,Redorai
+2026-03-01,Março,2026,Google Ads,Performance Q3,6109,3.44,24884.08,210,Redorai
+2026-03-01,Março,2026,Meta Ads,Performance Q3,9105,1.16,14985.76,105,Redorai
+2026-03-01,Março,2026,LinkedIn,Performance Q3,9265,3.89,144647.96,360,Redorai
+2026-03-01,Março,2026,Orgânico,Performance Q3,9292,1.43,36445.52,133,Redorai
+2026-03-01,Março,2026,E-mail,Performance Q3,17987,1.98,62662.45,355,Redorai
+2026-03-01,Março,2026,Google Ads,Retargeting carrinho,17420,1.17,76067.79,203,Redorai
+2026-03-01,Março,2026,Meta Ads,Retargeting carrinho,9459,3.95,75268.57,373,Redorai
+2026-03-01,Março,2026,LinkedIn,Retargeting carrinho,2760,1.4,10624.05,38,Redorai
+2026-03-01,Março,2026,Orgânico,Retargeting carrinho,9165,4.77,152645.59,437,Redorai
+2026-03-01,Março,2026,E-mail,Retargeting carrinho,14033,3.79,145569.16,531,Redorai
+2026-03-01,Março,2026,Google Ads,Lançamento Scale,22703,4.15,356872.15,943,Redorai
+2026-03-01,Março,2026,Meta Ads,Lançamento Scale,11193,0.86,10243.89,96,Redorai
+2026-03-01,Março,2026,LinkedIn,Lançamento Scale,17075,3.92,272561.91,668,Redorai
+2026-03-01,Março,2026,Orgânico,Lançamento Scale,13799,4.69,225108.95,646,Redorai
+2026-03-01,Março,2026,E-mail,Lançamento Scale,11286,4.18,58273.47,471,Redorai
+2026-03-01,Março,2026,Google Ads,Parceiros 2026,14664,2.63,56015.13,385,Redorai
+2026-03-01,Março,2026,Meta Ads,Parceiros 2026,2830,1.3,7723.56,36,Redorai
+2026-03-01,Março,2026,LinkedIn,Parceiros 2026,13327,3.52,159991.26,468,Redorai
+2026-03-01,Março,2026,Orgânico,Parceiros 2026,9372,4.23,55866.97,396,Redorai
+2026-03-01,Março,2026,E-mail,Parceiros 2026,7056,4.0,36895.87,282,Redorai
+2026-03-01,Março,2026,Google Ads,ABM enterprise,5981,4.67,95965.53,279,Redorai
+2026-03-01,Março,2026,Meta Ads,ABM enterprise,913,4.07,9159.77,37,Redorai
+2026-03-01,Março,2026,LinkedIn,ABM enterprise,5732,1.15,11755.44,66,Redorai
+2026-03-01,Março,2026,E-mail,ABM enterprise,13101,2.23,86823.68,291,Redorai
+2026-04-01,Abril,2026,Google Ads,Brand sempre-on,7030,3.71,69135.72,261,Redorai
+2026-04-01,Abril,2026,Meta Ads,Brand sempre-on,14340,1.01,33436.96,144,Redorai
+2026-04-01,Abril,2026,LinkedIn,Brand sempre-on,16589,4.35,291712.27,721,Redorai
+2026-04-01,Abril,2026,Orgânico,Brand sempre-on,9677,3.4,132144.14,329,Redorai
+2026-04-01,Abril,2026,E-mail,Brand sempre-on,8412,3.79,104157.32,318,Redorai
+2026-04-01,Abril,2026,Google Ads,Performance Q3,13577,0.71,19332.25,95,Redorai
+2026-04-01,Abril,2026,Meta Ads,Performance Q3,7708,3.8,68290.00,292,Redorai
+2026-04-01,Abril,2026,LinkedIn,Performance Q3,7564,0.56,16803.32,42,Redorai
+2026-04-01,Abril,2026,Orgânico,Performance Q3,3396,2.93,41032.72,99,Redorai
+2026-04-01,Abril,2026,E-mail,Performance Q3,17656,3.92,262050.79,691,Redorai
+2026-04-01,Abril,2026,Google Ads,Retargeting carrinho,24541,2.24,210625.72,550,Redorai
+2026-04-01,Abril,2026,Meta Ads,Retargeting carrinho,12853,4.24,178962.18,545,Redorai
+2026-04-01,Abril,2026,LinkedIn,Retargeting carrinho,6195,1.91,43037.79,118,Redorai
+2026-04-01,Abril,2026,Orgânico,Retargeting carrinho,16283,3.09,69572.14,502,Redorai
+2026-04-01,Abril,2026,E-mail,Retargeting carrinho,7747,3.23,95903.71,250,Redorai
+2026-04-01,Abril,2026,Google Ads,Lançamento Scale,16154,3.12,118899.44,504,Redorai
+2026-04-01,Abril,2026,Meta Ads,Lançamento Scale,6738,3.97,81385.74,267,Redorai
+2026-04-01,Abril,2026,LinkedIn,Lançamento Scale,14136,4.28,71217.33,604,Redorai
+2026-04-01,Abril,2026,Orgânico,Lançamento Scale,10043,2.12,69538.80,212,Redorai
+2026-04-01,Abril,2026,E-mail,Lançamento Scale,15933,2.69,115064.52,428,Redorai
+2026-04-01,Abril,2026,Google Ads,Parceiros 2026,6266,2.65,32071.04,166,Redorai
+2026-04-01,Abril,2026,Meta Ads,Parceiros 2026,6660,3.2,20808.62,212,Redorai
+2026-04-01,Abril,2026,LinkedIn,Parceiros 2026,16113,2.78,78433.08,447,Redorai
+2026-04-01,Abril,2026,Orgânico,Parceiros 2026,15114,1.74,60264.26,262,Redorai
+2026-04-01,Abril,2026,E-mail,Parceiros 2026,9490,3.62,126352.46,343,Redorai
+2026-04-01,Abril,2026,Google Ads,ABM enterprise,7374,2.63,25407.08,194,Redorai
+2026-04-01,Abril,2026,Meta Ads,ABM enterprise,13812,4.54,149356.36,627,Redorai
+2026-04-01,Abril,2026,LinkedIn,ABM enterprise,10645,0.42,9088.27,45,Redorai
+2026-04-01,Abril,2026,E-mail,ABM enterprise,4860,3.68,50440.19,178,Redorai
+2026-05-01,Maio,2026,Google Ads,Brand sempre-on,18328,4.53,256792.19,829,Redorai
+2026-05-01,Maio,2026,Meta Ads,Brand sempre-on,15325,1.43,41328.94,218,Redorai
+2026-05-01,Maio,2026,LinkedIn,Brand sempre-on,12271,3.99,136483.20,489,Redorai
+2026-05-01,Maio,2026,Orgânico,Brand sempre-on,3207,2.06,22042.91,66,Redorai
+2026-05-01,Maio,2026,E-mail,Brand sempre-on,2609,2.67,10705.43,69,Redorai
+2026-05-01,Maio,2026,Google Ads,Performance Q3,19867,2.4,65943.85,476,Redorai
+2026-05-01,Maio,2026,Meta Ads,Performance Q3,8121,2.21,21645.89,179,Redorai
+2026-05-01,Maio,2026,LinkedIn,Performance Q3,8108,0.97,12682.46,78,Redorai
+2026-05-01,Maio,2026,Orgânico,Performance Q3,2142,3.38,16129.04,72,Redorai
+2026-05-01,Maio,2026,E-mail,Performance Q3,10414,3.83,150549.11,398,Redorai
+2026-05-01,Maio,2026,Google Ads,Retargeting carrinho,15190,3.2,203621.36,486,Redorai
+2026-05-01,Maio,2026,Meta Ads,Retargeting carrinho,12651,4.57,191654.76,578,Redorai
+2026-05-01,Maio,2026,LinkedIn,Retargeting carrinho,7971,1.12,22864.13,88,Redorai
+2026-05-01,Maio,2026,Orgânico,Retargeting carrinho,9137,2.41,90308.96,220,Redorai
+2026-05-01,Maio,2026,E-mail,Retargeting carrinho,9626,2.73,83821.36,262,Redorai
+2026-05-01,Maio,2026,Google Ads,Lançamento Scale,12086,0.54,9311.19,65,Redorai
+2026-05-01,Maio,2026,Meta Ads,Lançamento Scale,10415,4.46,59950.24,464,Redorai
+2026-05-01,Maio,2026,LinkedIn,Lançamento Scale,15459,0.89,29014.86,136,Redorai
+2026-05-01,Maio,2026,Orgânico,Lançamento Scale,5780,2.7,20110.75,156,Redorai
+2026-05-01,Maio,2026,E-mail,Lançamento Scale,6044,2.05,23144.52,123,Redorai
+2026-05-01,Maio,2026,Google Ads,Parceiros 2026,1793,1.03,6430.27,18,Redorai
+2026-05-01,Maio,2026,Meta Ads,Parceiros 2026,8054,4.52,69454.96,364,Redorai
+2026-05-01,Maio,2026,LinkedIn,Parceiros 2026,5675,1.21,22856.41,68,Redorai
+2026-05-01,Maio,2026,Orgânico,Parceiros 2026,835,2.81,2634.08,23,Redorai
+2026-05-01,Maio,2026,E-mail,Parceiros 2026,1568,2.52,7586.07,39,Redorai
+2026-05-01,Maio,2026,Google Ads,ABM enterprise,12013,1.89,48611.57,226,Redorai
+2026-05-01,Maio,2026,Meta Ads,ABM enterprise,15152,4.07,82493.04,616,Redorai
+2026-05-01,Maio,2026,LinkedIn,ABM enterprise,3182,3.2,34762.65,101,Redorai
+2026-05-01,Maio,2026,E-mail,ABM enterprise,12276,1.06,42785.39,129,Redorai
+2026-06-01,Junho,2026,Google Ads,Brand sempre-on,3270,3.15,30457.52,102,Redorai
+2026-06-01,Junho,2026,Meta Ads,Brand sempre-on,7460,4.36,65675.40,325,Redorai
+2026-06-01,Junho,2026,LinkedIn,Brand sempre-on,1588,3.35,12566.35,53,Redorai
+2026-06-01,Junho,2026,Orgânico,Brand sempre-on,5570,0.79,6361.39,43,Redorai
+2026-06-01,Junho,2026,E-mail,Brand sempre-on,1226,3.17,13404.11,38,Redorai
+2026-06-01,Junho,2026,Google Ads,Performance Q3,8557,3.24,83831.27,277,Redorai
+2026-06-01,Junho,2026,Meta Ads,Performance Q3,2264,4.6,28011.14,104,Redorai
+2026-06-01,Junho,2026,LinkedIn,Performance Q3,13830,4.61,167231.19,637,Redorai
+2026-06-01,Junho,2026,Orgânico,Performance Q3,13709,2.61,34427.45,358,Redorai
+2026-06-01,Junho,2026,E-mail,Performance Q3,12121,2.74,135374.00,332,Redorai
+2026-06-01,Junho,2026,Google Ads,Retargeting carrinho,7741,1.31,36766.14,101,Redorai
+2026-06-01,Junho,2026,Meta Ads,Retargeting carrinho,15229,2.95,52982.99,449,Redorai
+2026-06-01,Junho,2026,LinkedIn,Retargeting carrinho,9976,1.81,51338.15,180,Redorai
+2026-06-01,Junho,2026,Orgânico,Retargeting carrinho,9253,4.51,84354.23,417,Redorai
+2026-06-01,Junho,2026,E-mail,Retargeting carrinho,3904,0.51,5217.68,19,Redorai
+2026-06-01,Junho,2026,Google Ads,Lançamento Scale,10318,0.8,34139.63,82,Redorai
+2026-06-01,Junho,2026,Meta Ads,Lançamento Scale,10118,1.66,25173.27,167,Redorai
+2026-06-01,Junho,2026,LinkedIn,Lançamento Scale,14014,1.08,61099.05,151,Redorai
+2026-06-01,Junho,2026,Orgânico,Lançamento Scale,12472,0.66,33476.75,82,Redorai
+2026-06-01,Junho,2026,E-mail,Lançamento Scale,3921,3.54,26132.44,138,Redorai
+2026-06-01,Junho,2026,Google Ads,Parceiros 2026,3497,1.03,13813.63,35,Redorai
+2026-06-01,Junho,2026,Meta Ads,Parceiros 2026,5236,4.54,92015.94,237,Redorai
+2026-06-01,Junho,2026,LinkedIn,Parceiros 2026,1692,1.45,7062.62,24,Redorai
+2026-06-01,Junho,2026,Orgânico,Parceiros 2026,4867,2.64,32926.32,128,Redorai
+2026-06-01,Junho,2026,E-mail,Parceiros 2026,17128,1.58,52947.71,271,Redorai
+2026-06-01,Junho,2026,Google Ads,ABM enterprise,14439,0.69,9888.48,99,Redorai
+2026-06-01,Junho,2026,Meta Ads,ABM enterprise,11696,4.42,49708.59,517,Redorai
+2026-06-01,Junho,2026,LinkedIn,ABM enterprise,10330,2.98,38006.20,307,Redorai
+2026-06-01,Junho,2026,E-mail,ABM enterprise,13923,3.27,59783.49,454,Redorai
+2026-07-01,Julho,2026,Google Ads,Brand sempre-on,14803,2.36,129132.28,349,Redorai
+2026-07-01,Julho,2026,Meta Ads,Brand sempre-on,9407,3.84,49541.82,361,Redorai
+2026-07-01,Julho,2026,LinkedIn,Brand sempre-on,10095,1.14,19668.56,115,Redorai
+2026-07-01,Julho,2026,Orgânico,Brand sempre-on,17184,4.63,217360.98,795,Redorai
+2026-07-01,Julho,2026,E-mail,Brand sempre-on,1518,3.98,24572.62,60,Redorai
+2026-07-01,Julho,2026,Google Ads,Performance Q3,16067,3.27,76386.36,525,Redorai
+2026-07-01,Julho,2026,Meta Ads,Performance Q3,1835,4.46,14733.59,81,Redorai
+2026-07-01,Julho,2026,LinkedIn,Performance Q3,5115,3.39,72826.72,173,Redorai
+2026-07-01,Julho,2026,Orgânico,Performance Q3,15289,1.34,75057.41,204,Redorai
+2026-07-01,Julho,2026,E-mail,Performance Q3,5638,1.11,16665.85,62,Redorai
+2026-07-01,Julho,2026,Google Ads,Retargeting carrinho,2804,0.79,7141.83,22,Redorai
+2026-07-01,Julho,2026,Meta Ads,Retargeting carrinho,15084,3.59,227246.46,541,Redorai
+2026-07-01,Julho,2026,LinkedIn,Retargeting carrinho,15906,1.33,54189.50,211,Redorai
+2026-07-01,Julho,2026,Orgânico,Retargeting carrinho,14595,4.29,251651.81,626,Redorai
+2026-07-01,Julho,2026,E-mail,Retargeting carrinho,11724,4.71,178685.17,552,Redorai
+2026-07-01,Julho,2026,Google Ads,Lançamento Scale,7694,3.31,50012.06,254,Redorai
+2026-07-01,Julho,2026,Meta Ads,Lançamento Scale,4422,4.62,40526.75,204,Redorai
+2026-07-01,Julho,2026,LinkedIn,Lançamento Scale,16521,0.99,64393.57,163,Redorai
+2026-07-01,Julho,2026,Orgânico,Lançamento Scale,11271,0.42,4397.77,47,Redorai
+2026-07-01,Julho,2026,E-mail,Lançamento Scale,3784,2.85,34438.29,107,Redorai
+2026-07-01,Julho,2026,Google Ads,Parceiros 2026,12894,2.13,32046.58,274,Redorai
+2026-07-01,Julho,2026,Meta Ads,Parceiros 2026,15879,3.27,138841.37,518,Redorai
+2026-07-01,Julho,2026,LinkedIn,Parceiros 2026,16152,3.99,152703.92,644,Redorai
+2026-07-01,Julho,2026,Orgânico,Parceiros 2026,2922,4.68,29273.39,136,Redorai
+2026-07-01,Julho,2026,E-mail,Parceiros 2026,11142,2.1,85921.92,234,Redorai
+2026-07-01,Julho,2026,Google Ads,ABM enterprise,20669,4.73,128204.31,977,Redorai
+2026-07-01,Julho,2026,Meta Ads,ABM enterprise,7172,1.25,8339.90,89,Redorai
+2026-07-01,Julho,2026,LinkedIn,ABM enterprise,13582,3.74,159671.75,507,Redorai
+2026-07-01,Julho,2026,E-mail,ABM enterprise,12998,1.24,58045.81,161,Redorai
+2026-08-01,Agosto,2026,Google Ads,Brand sempre-on,16175,3.96,104314.31,640,Redorai
+2026-08-01,Agosto,2026,Meta Ads,Brand sempre-on,17658,4.66,83979.16,822,Redorai
+2026-08-01,Agosto,2026,LinkedIn,Brand sempre-on,9276,3.5,94088.88,324,Redorai
+2026-08-01,Agosto,2026,Orgânico,Brand sempre-on,922,4.73,13115.11,43,Redorai
+2026-08-01,Agosto,2026,E-mail,Brand sempre-on,2708,1.62,11193.74,43,Redorai
+2026-08-01,Agosto,2026,Google Ads,Performance Q3,5225,1.25,21847.05,65,Redorai
+2026-08-01,Agosto,2026,Meta Ads,Performance Q3,12361,3.05,55825.40,377,Redorai
+2026-08-01,Agosto,2026,LinkedIn,Performance Q3,10916,3.68,53079.44,401,Redorai
+2026-08-01,Agosto,2026,Orgânico,Performance Q3,16857,4.16,267251.70,701,Redorai
+2026-08-01,Agosto,2026,E-mail,Performance Q3,13337,1.61,79244.76,214,Redorai
+2026-08-01,Agosto,2026,Google Ads,Retargeting carrinho,1676,4.67,24534.43,78,Redorai
+2026-08-01,Agosto,2026,Meta Ads,Retargeting carrinho,11368,3.39,147207.73,385,Redorai
+2026-08-01,Agosto,2026,LinkedIn,Retargeting carrinho,833,2.28,5926.15,18,Redorai
+2026-08-01,Agosto,2026,Orgânico,Retargeting carrinho,11980,4.16,97902.99,498,Redorai
+2026-08-01,Agosto,2026,E-mail,Retargeting carrinho,15322,2.19,43682.78,335,Redorai
+2026-08-01,Agosto,2026,Google Ads,Lançamento Scale,13600,2.58,91491.33,350,Redorai
+2026-08-01,Agosto,2026,Meta Ads,Lançamento Scale,1547,3.57,5831.95,55,Redorai
+2026-08-01,Agosto,2026,LinkedIn,Lançamento Scale,16596,2.74,88465.37,455,Redorai
+2026-08-01,Agosto,2026,Orgânico,Lançamento Scale,7539,1.87,53710.70,141,Redorai
+2026-08-01,Agosto,2026,E-mail,Lançamento Scale,14691,4.76,114935.06,698,Redorai
+2026-08-01,Agosto,2026,Google Ads,Parceiros 2026,17724,4.61,321084.24,817,Redorai
+2026-08-01,Agosto,2026,Meta Ads,Parceiros 2026,4186,1.85,8569.16,77,Redorai
+2026-08-01,Agosto,2026,LinkedIn,Parceiros 2026,11555,0.52,14043.53,60,Redorai
+2026-08-01,Agosto,2026,Orgânico,Parceiros 2026,1213,3.91,18892.73,47,Redorai
+2026-08-01,Agosto,2026,E-mail,Parceiros 2026,15256,1.49,55888.20,226,Redorai
+2026-08-01,Agosto,2026,Google Ads,ABM enterprise,24207,4.06,355198.08,983,Redorai
+2026-08-01,Agosto,2026,Meta Ads,ABM enterprise,9738,1.44,16012.97,140,Redorai
+2026-08-01,Agosto,2026,LinkedIn,ABM enterprise,11119,2.33,31489.46,259,Redorai
+2026-08-01,Agosto,2026,E-mail,ABM enterprise,8479,0.95,33127.40,80,Redorai
