@@ -3,23 +3,9 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import {
-  Cloud,
-  Database,
-  FileSpreadsheet,
-  Globe,
-  Landmark,
-  Megaphone,
-  MessagesSquare,
-  Plug,
-  Radio,
-  RefreshCw,
-  Search,
-  Trash2,
-  TrendingUp,
-  Unplug,
-} from "lucide-react";
+import { Cloud, Database, FileSpreadsheet, Globe, Landmark, Megaphone, MessagesSquare, Plug, Radio, RefreshCw, Search, Share2, Trash2, TrendingUp, Unplug } from "lucide-react";
 import { api, normalizeArray } from "@/lib/api";
 import { statusLabel } from "@/lib/labels";
 import {
@@ -30,10 +16,14 @@ import {
   connectorIconSrc,
   connectorLabel,
   formatSyncAt,
+  isGoogleSheetsType,
   isGuidedSQLType,
+  isManualType,
 } from "@/lib/connectors";
 import { ConnectorIcon } from "@/components/connector-icon";
 import { SqlDataPicker } from "@/components/sql-data-picker";
+import { ManualSchemaEditor, defaultManualColumns } from "@/components/manual-connector";
+import type { ManualColumn } from "@/lib/manual";
 import { Badge, Button, Card, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, TableWrap, Td, Textarea, Th, cn } from "@/components/ui";
 import { frequencyLabel, formatRelativePt } from "@/lib/schedules";
 
@@ -256,6 +246,7 @@ export default function ConnectorsPage() {
 }
 
 function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose: () => void; onSaved: () => void }) {
+  const router = useRouter();
   const [values, setValues] = useState<Record<string, string>>(() => {
     const init: Record<string, string> = {};
     for (const f of item.fields) {
@@ -268,17 +259,41 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
   const [busy, setBusy] = useState(false);
   const [ssl, setSsl] = useState(false);
   const [sourceId, setSourceId] = useState<string | null>(null);
+  const [columns, setColumns] = useState<ManualColumn[]>(() => (isManualType(item.id) ? defaultManualColumns() : []));
+  const [sheetsError, setSheetsError] = useState("");
+  const [sheetsSourceId, setSheetsSourceId] = useState<string | null>(null);
+  const sheets = isGoogleSheetsType(item.id);
 
   function set(key: string, v: string) {
     setValues((p) => ({ ...p, [key]: v }));
   }
 
+  async function importSheets(id: string) {
+    await api(`/api/v1/data-sources/${id}/sync`, {
+      method: "POST",
+      body: JSON.stringify({ storage_mode: "import", name: values.name || item.label, table: values.table || "" }),
+    });
+  }
+
   async function save() {
     setBusy(true);
+    setSheetsError("");
     try {
+      if (sheets && !values.url?.trim()) {
+        setSheetsError("Cole o link da planilha.");
+        return;
+      }
+      if (sheets && sheetsSourceId) {
+        await importSheets(sheetsSourceId);
+        toast.success("Planilha importada");
+        onSaved();
+        return;
+      }
+
       const config: Record<string, unknown> = { ssl };
       for (const f of item.fields) {
         if (f.key === "name" || f.key === "file" || f.type === "file") continue;
+        if (sheets && (f.key === "api_key" || f.key === "token")) continue;
         const v = values[f.key];
         if (v === undefined || v === "") continue;
         if (f.type === "number") config[f.key] = Number(v) || 0;
@@ -287,6 +302,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
       }
       if (ssl && !config.ssl_mode) config.ssl_mode = "require";
       if (file) config.file_name = file.name;
+      if (isManualType(item.id)) config.columns = columns;
 
       const res = await api<{ id: string; preview?: boolean; message?: string }>("/api/v1/data-sources", {
         method: "POST",
@@ -304,6 +320,12 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         onSaved();
         return;
       }
+      if (isManualType(item.id)) {
+        toast.success("Planilha criada. Agora preencha o formulário.");
+        router.push(`/connectors/${res.id}`);
+        onSaved();
+        return;
+      }
       if (item.preview || res.preview) {
         toast.message(res.message || item.message || "Conector guardado em preview.");
         onSaved();
@@ -314,9 +336,19 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         setSourceId(res.id);
         return;
       }
+      if (sheets) {
+        setSheetsSourceId(res.id);
+        await importSheets(res.id);
+        toast.success("Planilha importada");
+        onSaved();
+        return;
+      }
       toast.success("Conector ligado");
       onSaved();
     } catch (e: any) {
+      if (sheets) {
+        setSheetsError(e.message || "Não foi possível ler a planilha.");
+      }
       toast.error(e.message);
     } finally {
       setBusy(false);
@@ -333,7 +365,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         aria-labelledby="connect-title"
         className={cn(
           "max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-line bg-white p-5 shadow-2xl",
-          picking ? "max-w-2xl" : "max-w-lg",
+          picking || isManualType(item.id) ? "max-w-2xl" : "max-w-lg",
         )}
         onClick={(e) => e.stopPropagation()}
       >
@@ -358,6 +390,10 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         ) : (
           <>
         <p className="mt-1 text-[13px] text-mute">{item.description}</p>
+        {sheets && <SheetsShareGuide />}
+        {sheetsError && (
+          <p className="mt-3 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-800">{sheetsError}</p>
+        )}
         {(item.preview || item.message) && (
           <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
             {item.message || "Conector em preview. A sincronização directa requer o gateway ou CSV."}
@@ -366,6 +402,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         <div className="mt-4 space-y-3">
           {item.fields.map((f) => {
             if (isGuidedSQLType(item.id) && (f.key === "query" || f.key === "table")) return null;
+            if (sheets && (f.key === "api_key" || f.key === "token" || f.key === "query" || f.key === "limit")) return null;
             if (f.type === "file") {
               return (
                 <FieldLabel key={f.key} label={f.label} required={f.required} hint={f.hint}>
@@ -430,17 +467,57 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
             );
           })}
         </div>
+        {isManualType(item.id) && (
+          <div className="mt-4">
+            <p className="mb-2 text-[13px] font-medium text-ink">Colunas da planilha</p>
+            <ManualSchemaEditor columns={columns} onChange={setColumns} />
+          </div>
+        )}
         <div className="mt-5 flex justify-end gap-2">
           <Button variant="secondary" onClick={onClose}>
             Cancelar
           </Button>
           <Button onClick={save} busy={busy}>
-            <Plug size={14} /> {isGuidedSQLType(item.id) ? "Ligar e escolher dados" : "Guardar ligação"}
+            <Plug size={14} />{" "}
+            {isGuidedSQLType(item.id)
+              ? "Ligar e escolher dados"
+              : isManualType(item.id)
+                ? "Criar planilha"
+                : sheets
+                  ? sheetsSourceId
+                    ? "Tentar importar de novo"
+                    : "Importar planilha"
+                  : "Guardar ligação"}
           </Button>
         </div>
           </>
         )}
       </div>
+    </div>
+  );
+}
+
+function SheetsShareGuide() {
+  const steps = [
+    "Abra a planilha no Google Sheets",
+    "Clique em Partilhar (canto superior direito)",
+    "Em Acesso geral, escolha Qualquer pessoa com o link",
+    "Deixe a permissão em Leitor e copie o link",
+  ];
+  return (
+    <div className="mt-3 rounded-xl border border-emerald-200 bg-emerald-50/70 px-3 py-3">
+      <div className="flex items-center gap-2 text-[12px] font-medium text-emerald-900">
+        <Share2 size={14} />
+        Sem chave de API — basta partilhar o link
+      </div>
+      <ol className="mt-2 space-y-1 pl-1 text-[12px] text-emerald-900/90">
+        {steps.map((s, i) => (
+          <li key={s} className="flex gap-2">
+            <span className="mt-px flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-emerald-200 text-[10px] font-semibold">{i + 1}</span>
+            <span>{s}</span>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

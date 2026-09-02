@@ -157,7 +157,52 @@ func TestFetchGoogleSheetsPublicHTML(t *testing.T) {
 	_, _, err := e.fetchGoogleSheets(t.Context(), SQLConfig{
 		URL: "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms",
 	})
-	if err == nil || !strings.Contains(err.Error(), "pública") {
-		t.Fatalf("esperava erro de planilha pública, got %v", err)
+	if err == nil || !strings.Contains(strings.ToLower(err.Error()), "qualquer pessoa com o link") {
+		t.Fatalf("esperava ajuda de partilha, got %v", err)
+	}
+}
+
+func TestParseGvizTable(t *testing.T) {
+	raw := []byte(`/*O_o*/
+google.visualization.Query.setResponse({"status":"ok","table":{"cols":[{"id":"A","label":"produto"},{"id":"B","label":"qtd"}],"rows":[{"c":[{"v":"café"},{"v":2}]}]}});`)
+	js, ok := extractGvizJSON(raw)
+	if !ok {
+		t.Fatal("não extraiu JSON gviz")
+	}
+	h, rows, err := parseGvizTable(js, 50)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(h) != 2 || h[0] != "produto" || len(rows) != 1 || rows[0][0] != "café" || rows[0][1] != "2" {
+		t.Fatalf("headers=%v rows=%v", h, rows)
+	}
+}
+
+func TestParseGvizAccessDenied(t *testing.T) {
+	raw := []byte(`google.visualization.Query.setResponse({"status":"error","errors":[{"reason":"access_denied","message":"Access denied"}]});`)
+	js, ok := extractGvizJSON(raw)
+	if !ok {
+		t.Fatal("não extraiu JSON")
+	}
+	_, _, err := parseGvizTable(js, 10)
+	if err == nil || !strings.Contains(err.Error(), "partilhada") {
+		t.Fatalf("esperava partilhada, got %v", err)
+	}
+}
+
+func TestParseSheetTitlesHTML(t *testing.T) {
+	html := []byte(`<html><script>var bootstrap={"sheets":[{"properties":{"sheetId":0,"title":"Vendas"}},{"properties":{"title":"Stock","sheetId":123}}]};</script></html>`)
+	got := parseSheetTitlesHTML(html)
+	if len(got) != 2 || got[0] != "Vendas" || got[1] != "Stock" {
+		t.Fatalf("titles=%v", got)
+	}
+}
+
+func TestGoogleSheetsShareHelpHasNoAPI(t *testing.T) {
+	if strings.Contains(strings.ToLower(sheetsShareHelp), "oauth") || strings.Contains(strings.ToLower(sheetsShareHelp), "chave de api google") {
+		t.Fatalf("ajuda não deveria pedir API: %s", sheetsShareHelp)
+	}
+	if !strings.Contains(strings.ToLower(sheetsShareHelp), "qualquer pessoa com o link") {
+		t.Fatal("ajuda deveria explicar a partilha")
 	}
 }

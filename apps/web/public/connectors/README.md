@@ -19,6 +19,7 @@ Logótipos são marcas dos respectivos detentores; uso apenas na UI do produto (
 | mongodb | Simple Icons `mongodb` |
 | odbc | Simple Icons `microsoft` (ODBC é standard Microsoft; sem ícone ODBC) |
 | csv | Simple Icons `libreofficecalc` (CSV não tem marca própria) |
+| manual | ícone original (planilha + formulário, teal TheDobra) |
 | xlsx | Simple Icons `microsoftexcel` (jsDelivr) |
 | json | Simple Icons `json` |
 | parquet | Simple Icons `apacheparquet` |

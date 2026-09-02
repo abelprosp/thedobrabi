@@ -90,3 +90,12 @@ const GUIDED_SQL = new Set(["postgres", "mysql", "mariadb", "sqlserver", "supaba
 export function isGuidedSQLType(type?: string | null) {
   return GUIDED_SQL.has((type || "").toLowerCase());
 }
+
+export function isManualType(type?: string | null) {
+  const t = (type || "").toLowerCase();
+  return t === "manual" || t === "formulario" || t === "form" || t === "planilha_manual" || t === "enter_data" || t === "manual_entry";
+}
+
+export function isGoogleSheetsType(type?: string | null) {
+  return (type || "").toLowerCase() === "google_sheets";
+}

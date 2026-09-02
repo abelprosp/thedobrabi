@@ -96,3 +96,126 @@ func (s *Server) testSource(w http.ResponseWriter, r *http.Request) {
 	}
 	httpx.JSON(w, 200, res)
 }
+
+func (s *Server) getManualTable(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, _ := principal(r)
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	view, err := s.ingest.GetManualTable(r.Context(), org, ws, id)
+	if err != nil {
+		httpx.Error(w, 400, "manual_failed", err.Error())
+		return
+	}
+	httpx.JSON(w, 200, view)
+}
+
+func (s *Server) putManualSchema(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, role := principal(r)
+	if role == "viewer" {
+		httpx.Error(w, 403, "forbidden", "sem permissão para alterar a planilha")
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	var body struct {
+		Columns []ingest.ManualColumn `json:"columns"`
+	}
+	if err := httpx.Decode(r, &body); err != nil {
+		httpx.Error(w, 400, "invalid", "corpo inválido")
+		return
+	}
+	view, err := s.ingest.SaveManualSchema(r.Context(), org, ws, uid, id, body.Columns)
+	if err != nil {
+		httpx.Error(w, 400, "schema_failed", err.Error())
+		return
+	}
+	s.audit(r, "MANUAL_SCHEMA_SAVED", "data_source", id, map[string]any{"columns": len(view.Columns)})
+	httpx.JSON(w, 200, view)
+}
+
+func (s *Server) postManualRow(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, role := principal(r)
+	if role == "viewer" {
+		httpx.Error(w, 403, "forbidden", "sem permissão para preencher a planilha")
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	var body struct {
+		Values map[string]any `json:"values"`
+	}
+	if err := httpx.Decode(r, &body); err != nil {
+		httpx.Error(w, 400, "invalid", "corpo inválido")
+		return
+	}
+	row, err := s.ingest.InsertManualRow(r.Context(), org, ws, uid, id, body.Values)
+	if err != nil {
+		httpx.Error(w, 400, "row_failed", err.Error())
+		return
+	}
+	s.audit(r, "MANUAL_ROW_CREATED", "data_source", id, map[string]any{"row_id": row.ID})
+	httpx.JSON(w, 201, row)
+}
+
+func (s *Server) patchManualRow(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, role := principal(r)
+	if role == "viewer" {
+		httpx.Error(w, 403, "forbidden", "sem permissão para editar linhas")
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	rowID, err := uuid.Parse(chi.URLParam(r, "rowId"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "linha inválida")
+		return
+	}
+	var body struct {
+		Values map[string]any `json:"values"`
+	}
+	if err := httpx.Decode(r, &body); err != nil {
+		httpx.Error(w, 400, "invalid", "corpo inválido")
+		return
+	}
+	row, err := s.ingest.UpdateManualRow(r.Context(), org, ws, uid, id, rowID, body.Values)
+	if err != nil {
+		httpx.Error(w, 400, "row_failed", err.Error())
+		return
+	}
+	httpx.JSON(w, 200, row)
+}
+
+func (s *Server) deleteManualRow(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, role := principal(r)
+	if role == "viewer" {
+		httpx.Error(w, 403, "forbidden", "sem permissão para excluir linhas")
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	rowID, err := uuid.Parse(chi.URLParam(r, "rowId"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "linha inválida")
+		return
+	}
+	if err := s.ingest.DeleteManualRow(r.Context(), org, ws, uid, id, rowID); err != nil {
+		httpx.Error(w, 400, "row_failed", err.Error())
+		return
+	}
+	httpx.JSON(w, 200, map[string]any{"ok": true})
+}

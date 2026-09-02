@@ -143,6 +143,11 @@ func (s *Server) createSource(w http.ResponseWriter, r *http.Request) {
 		out["preview"] = true
 		out["message"] = connector.PreviewMessage(body.Type)
 	}
+	if body.Type == "manual" && len(cfg.Columns) > 0 {
+		if _, err := s.ingest.PublishManual(r.Context(), org, ws, uid, id); err != nil {
+			out["message"] = "Planilha criada. A publicação do conjunto falhou: " + err.Error()
+		}
+	}
 	httpx.JSON(w, 201, out)
 }
 

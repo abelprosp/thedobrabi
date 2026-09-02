@@ -8,14 +8,23 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"regexp"
 	"strconv"
 	"strings"
+	"time"
 	"unicode"
 )
 
 var (
 	googleSheetsAPIBase  = "https://sheets.googleapis.com/v4"
 	googleSheetsDocsBase = "https://docs.google.com"
+)
+
+const sheetsShareHelp = "Partilhe a planilha: Partilhar → Qualquer pessoa com o link → Leitor. Não precisa de chave de API."
+
+var (
+	sheetIDTitleRe = regexp.MustCompile(`"sheetId"\s*:\s*(-?\d+)\s*,\s*"title"\s*:\s*"((?:\\.|[^"\\])*)"`)
+	sheetTitleIDRe = regexp.MustCompile(`"title"\s*:\s*"((?:\\.|[^"\\])*)"\s*,\s*"sheetId"\s*:\s*(-?\d+)`)
 )
 
 type googleSheetRef struct {
@@ -234,10 +243,13 @@ func (e *Engine) discoverGoogleSheets(ctx context.Context, cfg SQLConfig) (Disco
 			return DiscoverResult{Tables: titles}, nil
 		}
 	}
+	if titles := e.listPublicSheetTitles(ctx, cfg); len(titles) > 0 {
+		return DiscoverResult{Tables: titles}, nil
+	}
 	if strings.TrimSpace(cfg.Table) != "" {
 		return DiscoverResult{Tables: []string{cfg.Table}}, nil
 	}
-	return DiscoverResult{Tables: []string{"folha"}, Message: "A primeira folha será usada no sync. Indique o nome ou o gid para escolher outra."}, nil
+	return DiscoverResult{Tables: []string{"folha"}, Message: "A primeira folha será usada no sync. Indique o nome ou o gid no URL para escolher outra."}, nil
 }
 
 func (e *Engine) listGoogleSheetTitles(ctx context.Context, cfg SQLConfig) ([]string, error) {
@@ -345,10 +357,10 @@ func (e *Engine) googleSheetsGET(ctx context.Context, cfg SQLConfig, rawURL stri
 	}
 	if err := mustOK(status, raw); err != nil {
 		if status == 401 || status == 403 {
-			return nil, fmt.Errorf("sem permissão na planilha (HTTP %d). Partilhe-a ou verifique o token / chave de API", status)
+			return nil, fmt.Errorf("sem permissão na planilha (HTTP %d). %s", status, sheetsShareHelp)
 		}
 		if status == 404 {
-			return nil, fmt.Errorf("planilha não encontrada. Confirme o URL e se a Sheets API está activa")
+			return nil, fmt.Errorf("planilha não encontrada. Confirme o URL. %s", sheetsShareHelp)
 		}
 		return nil, err
 	}
@@ -364,60 +376,69 @@ func (e *Engine) fetchGoogleSheetsPublic(ctx context.Context, cfg SQLConfig, ref
 			last = err
 			continue
 		}
-		if looksLikeHTML(raw) {
-			last = fmt.Errorf("a planilha não é pública")
-			continue
-		}
-		raw = bytes.TrimPrefix(raw, []byte{0xEF, 0xBB, 0xBF})
-		headers, rows, err := parseCSV(raw)
+		headers, rows, err := parseGoogleSheetBody(raw, cfg.RowLimit())
 		if err != nil {
 			last = err
 			continue
 		}
-		if len(rows) > cfg.RowLimit() {
-			rows = rows[:cfg.RowLimit()]
-		}
 		return headers, rows, nil
 	}
-	if last != nil && strings.Contains(last.Error(), "pública") {
-		return nil, nil, fmt.Errorf("a planilha não é pública. Partilhe com «qualquer pessoa com o link» ou indique uma chave de API / token OAuth")
+	return nil, nil, sheetsPublicErr(last)
+}
+
+func sheetsPublicErr(last error) error {
+	if last == nil {
+		return fmt.Errorf("não consegui ler a planilha. %s", sheetsShareHelp)
 	}
-	if last != nil {
-		return nil, nil, fmt.Errorf("falha a ler a planilha pública: %w. Partilhe-a ou indique uma chave de API", last)
+	msg := last.Error()
+	if strings.Contains(msg, "partilh") || strings.Contains(msg, "pública") || strings.Contains(msg, "acessível") || strings.Contains(msg, "login") {
+		return fmt.Errorf("a planilha não está acessível. %s", sheetsShareHelp)
 	}
-	return nil, nil, fmt.Errorf("não consegui ler a planilha. Partilhe-a publicamente ou indique uma chave de API")
+	return fmt.Errorf("não consegui ler a planilha: %w. %s", last, sheetsShareHelp)
 }
 
 func publicSheetURLs(ref googleSheetRef) []string {
-	var out []string
-	q := url.Values{}
-	q.Set("tqx", "out:csv")
+	id := url.PathEscape(ref.ID)
+	prefix := "/spreadsheets/d/"
+	if ref.Published {
+		prefix = "/spreadsheets/d/e/"
+	}
+	base := googleSheetsDocsBase + prefix + id
+
+	gviz := url.Values{}
+	gviz.Set("tqx", "out:csv")
+	gviz.Set("headers", "1")
 	if ref.Title != "" {
-		q.Set("sheet", ref.Title)
+		gviz.Set("sheet", ref.Title)
 	}
 	if ref.GID != "" {
-		q.Set("gid", ref.GID)
+		gviz.Set("gid", ref.GID)
+	}
+	gvizJSON := url.Values{}
+	for k, vs := range gviz {
+		gvizJSON[k] = append([]string(nil), vs...)
+	}
+	gvizJSON.Set("tqx", "out:json")
+
+	out := []string{
+		base + "/gviz/tq?" + gviz.Encode(),
+		base + "/gviz/tq?" + gvizJSON.Encode(),
 	}
 	if !ref.Published {
-		out = append(out, googleSheetsDocsBase+"/spreadsheets/d/"+url.PathEscape(ref.ID)+"/gviz/tq?"+q.Encode())
-		exp := url.Values{"format": {"csv"}}
+		exp := url.Values{"format": {"csv"}, "usp": {"sharing"}}
 		if ref.GID != "" {
 			exp.Set("gid", ref.GID)
 		} else {
 			exp.Set("gid", "0")
 		}
-		out = append(out, googleSheetsDocsBase+"/spreadsheets/d/"+url.PathEscape(ref.ID)+"/export?"+exp.Encode())
+		out = append(out, googleSheetsDocsBase+"/spreadsheets/d/"+id+"/export?"+exp.Encode())
 	}
 	pub := url.Values{"output": {"csv"}}
 	if ref.GID != "" {
 		pub.Set("gid", ref.GID)
 		pub.Set("single", "true")
 	}
-	prefix := "/spreadsheets/d/"
-	if ref.Published {
-		prefix = "/spreadsheets/d/e/"
-	}
-	out = append(out, googleSheetsDocsBase+prefix+url.PathEscape(ref.ID)+"/pub?"+pub.Encode())
+	out = append(out, base+"/pub?"+pub.Encode())
 	return out
 }
 
@@ -429,9 +450,13 @@ func downloadPublicSheet(ctx context.Context, rawURL string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Accept", "text/csv,text/plain,*/*")
-	resp, err := connectorHTTP.Do(req)
+	req.Header.Set("Accept", "text/csv,application/json,text/plain,*/*")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
+	resp, err := sheetsHTTP.Do(req)
 	if err != nil {
+		if strings.Contains(err.Error(), "partilh") || strings.Contains(err.Error(), "login") {
+			return nil, err
+		}
 		return nil, err
 	}
 	defer resp.Body.Close()
@@ -439,10 +464,220 @@ func downloadPublicSheet(ctx context.Context, rawURL string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
+	if host := resp.Request.URL.Host; strings.Contains(strings.ToLower(host), "accounts.google") {
+		return nil, fmt.Errorf("a planilha não está partilhada")
+	}
+	if resp.StatusCode == 401 || resp.StatusCode == 403 {
+		return nil, fmt.Errorf("a planilha não está partilhada")
+	}
 	if resp.StatusCode >= 300 {
 		return nil, fmt.Errorf("HTTP %d: %s", resp.StatusCode, truncate(string(raw), 160))
 	}
 	return raw, nil
+}
+
+var sheetsHTTP = &http.Client{
+	Timeout: 25 * time.Second,
+	CheckRedirect: func(req *http.Request, via []*http.Request) error {
+		if len(via) >= 8 {
+			return fmt.Errorf("demasiados redireccionamentos")
+		}
+		if strings.Contains(strings.ToLower(req.URL.Host), "accounts.google") {
+			return fmt.Errorf("a planilha não está partilhada")
+		}
+		return assertHTTPURL(req.URL.String())
+	},
+}
+
+func parseGoogleSheetBody(raw []byte, limit int) ([]string, [][]string, error) {
+	raw = bytes.TrimPrefix(bytes.TrimSpace(raw), []byte{0xEF, 0xBB, 0xBF})
+	if len(raw) == 0 {
+		return nil, nil, fmt.Errorf("resposta vazia")
+	}
+	if js, ok := extractGvizJSON(raw); ok {
+		return parseGvizTable(js, limit)
+	}
+	if looksLikeGoogleGate(raw) {
+		return nil, nil, fmt.Errorf("a planilha não está partilhada")
+	}
+	if looksLikeHTML(raw) {
+		return nil, nil, fmt.Errorf("a planilha não está partilhada")
+	}
+	headers, rows, err := parseCSV(raw)
+	if err != nil {
+		return nil, nil, err
+	}
+	if limit > 0 && len(rows) > limit {
+		rows = rows[:limit]
+	}
+	return headers, rows, nil
+}
+
+func extractGvizJSON(raw []byte) ([]byte, bool) {
+	s := bytes.TrimSpace(raw)
+	s = bytes.TrimPrefix(s, []byte("/*O_o*/"))
+	s = bytes.TrimSpace(s)
+	const prefix = "google.visualization.Query.setResponse("
+	i := bytes.Index(s, []byte(prefix))
+	if i < 0 {
+		if len(s) > 0 && s[0] == '{' && bytes.Contains(s, []byte(`"table"`)) {
+			return s, true
+		}
+		return nil, false
+	}
+	s = bytes.TrimSpace(s[i+len(prefix):])
+	s = bytes.TrimSuffix(s, []byte(";"))
+	s = bytes.TrimSpace(s)
+	s = bytes.TrimSuffix(s, []byte(")"))
+	return s, true
+}
+
+func parseGvizTable(raw []byte, limit int) ([]string, [][]string, error) {
+	var parsed struct {
+		Status string `json:"status"`
+		Errors []struct {
+			Reason          string `json:"reason"`
+			Message         string `json:"message"`
+			DetailedMessage string `json:"detailed_message"`
+		} `json:"errors"`
+		Table struct {
+			Cols []struct {
+				ID    string `json:"id"`
+				Label string `json:"label"`
+			} `json:"cols"`
+			Rows []struct {
+				C []struct {
+					V any    `json:"v"`
+					F string `json:"f"`
+				} `json:"c"`
+			} `json:"rows"`
+		} `json:"table"`
+	}
+	if err := json.Unmarshal(raw, &parsed); err != nil {
+		return nil, nil, fmt.Errorf("resposta gviz inválida")
+	}
+	st := strings.ToLower(strings.TrimSpace(parsed.Status))
+	if st == "error" || (st == "warning" && len(parsed.Table.Cols) == 0) {
+		msg := "a planilha não está acessível"
+		if len(parsed.Errors) > 0 {
+			if parsed.Errors[0].DetailedMessage != "" {
+				msg = parsed.Errors[0].DetailedMessage
+			} else if parsed.Errors[0].Message != "" {
+				msg = parsed.Errors[0].Message
+			}
+			reason := strings.ToLower(parsed.Errors[0].Reason)
+			if strings.Contains(reason, "access") || strings.Contains(reason, "denied") || strings.Contains(reason, "not_logged") {
+				return nil, nil, fmt.Errorf("a planilha não está partilhada")
+			}
+		}
+		return nil, nil, fmt.Errorf("%s", msg)
+	}
+	if len(parsed.Table.Cols) == 0 {
+		return nil, nil, fmt.Errorf("a folha está vazia")
+	}
+	headers := make([]string, len(parsed.Table.Cols))
+	for i, c := range parsed.Table.Cols {
+		h := strings.TrimSpace(c.Label)
+		if h == "" {
+			h = strings.TrimSpace(c.ID)
+		}
+		if h == "" {
+			h = fmt.Sprintf("col_%d", i+1)
+		}
+		headers[i] = h
+	}
+	values := make([][]any, 0, len(parsed.Table.Rows)+1)
+	headerVals := make([]any, len(headers))
+	for i, h := range headers {
+		headerVals[i] = h
+	}
+	values = append(values, headerVals)
+	for _, row := range parsed.Table.Rows {
+		rec := make([]any, len(headers))
+		for i := range headers {
+			if i >= len(row.C) {
+				continue
+			}
+			cell := row.C[i]
+			if s, ok := cell.V.(string); ok && strings.HasPrefix(s, "Date(") && cell.F != "" {
+				rec[i] = cell.F
+				continue
+			}
+			if cell.V == nil && cell.F != "" {
+				rec[i] = cell.F
+				continue
+			}
+			rec[i] = cell.V
+		}
+		values = append(values, rec)
+	}
+	return sheetsValuesToTable(values, limit)
+}
+
+func (e *Engine) listPublicSheetTitles(ctx context.Context, cfg SQLConfig) []string {
+	ref, err := parseGoogleSheetRef(cfg.URL, cfg.Table, cfg.Query)
+	if err != nil {
+		return nil
+	}
+	prefix := "/spreadsheets/d/"
+	if ref.Published {
+		prefix = "/spreadsheets/d/e/"
+	}
+	candidates := []string{
+		googleSheetsDocsBase + prefix + url.PathEscape(ref.ID) + "/htmlview",
+		googleSheetsDocsBase + prefix + url.PathEscape(ref.ID) + "/pubhtml",
+	}
+	for _, u := range candidates {
+		raw, err := downloadPublicSheet(ctx, u)
+		if err != nil || looksLikeGoogleGate(raw) {
+			continue
+		}
+		if titles := parseSheetTitlesHTML(raw); len(titles) > 0 {
+			return titles
+		}
+	}
+	return nil
+}
+
+func parseSheetTitlesHTML(raw []byte) []string {
+	seen := map[string]bool{}
+	var out []string
+	add := func(title string) {
+		title = unescapeJSONString(strings.TrimSpace(title))
+		if title == "" || seen[title] {
+			return
+		}
+		seen[title] = true
+		out = append(out, title)
+	}
+	for _, m := range sheetIDTitleRe.FindAllSubmatch(raw, -1) {
+		add(string(m[2]))
+	}
+	for _, m := range sheetTitleIDRe.FindAllSubmatch(raw, -1) {
+		add(string(m[1]))
+	}
+	return out
+}
+
+func unescapeJSONString(s string) string {
+	s = strings.ReplaceAll(s, `\/`, `/`)
+	s = strings.ReplaceAll(s, `\n`, "\n")
+	s = strings.ReplaceAll(s, `\"`, `"`)
+	s = strings.ReplaceAll(s, `\\`, `\`)
+	return s
+}
+
+func looksLikeGoogleGate(raw []byte) bool {
+	if !looksLikeHTML(raw) {
+		return false
+	}
+	n := min(len(raw), 4096)
+	low := bytes.ToLower(raw[:n])
+	return bytes.Contains(low, []byte("accounts.google")) ||
+		bytes.Contains(low, []byte("servicelogin")) ||
+		bytes.Contains(low, []byte("signin")) ||
+		bytes.Contains(low, []byte("sign in")) ||
+		bytes.Contains(low, []byte("google-signin"))
 }
 
 func looksLikeHTML(raw []byte) bool {

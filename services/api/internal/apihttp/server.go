@@ -151,6 +151,11 @@ func New(deps *platform.Deps) http.Handler {
 			r.Post("/data-sources/{id}/discover", s.discoverSource)
 			r.Post("/data-sources/{id}/sync", s.syncSource)
 			r.Post("/data-sources/{id}/test", s.testSource)
+			r.Get("/data-sources/{id}/manual", s.getManualTable)
+			r.Put("/data-sources/{id}/manual/schema", s.putManualSchema)
+			r.Post("/data-sources/{id}/manual/rows", s.postManualRow)
+			r.Patch("/data-sources/{id}/manual/rows/{rowId}", s.patchManualRow)
+			r.Delete("/data-sources/{id}/manual/rows/{rowId}", s.deleteManualRow)
 			r.Get("/connectors/catalog", s.connectorsCatalog)
 
 			r.Get("/sync-schedules", s.listSchedules)

@@ -89,6 +89,7 @@ type SQLConfig struct {
 	ServiceRoleKey string           `json:"service_role_key"`
 	AnonKey        string           `json:"anon_key"`
 	Selection      *SourceSelection `json:"selection,omitempty"`
+	Columns        []ManualColumn   `json:"columns,omitempty"`
 }
 
 func (c SQLConfig) AuthToken() string {
@@ -215,17 +216,30 @@ func RedactConfig(cfg SQLConfig) map[string]any {
 		}
 		out["header_keys"] = keys
 	}
+	if len(cfg.Columns) > 0 {
+		out["columns"] = cfg.Columns
+	}
 	return out
 }
 
 func (e *Engine) SaveDataSource(ctx context.Context, orgID, wsID, userID uuid.UUID, name, typ string, cfg SQLConfig) (uuid.UUID, error) {
+	typ = connector.Canonical(typ)
+	if typ == "manual" && len(cfg.Columns) > 0 {
+		norm, nerr := NormalizeManualColumns(cfg.Columns)
+		if nerr != nil {
+			return uuid.Nil, nerr
+		}
+		cfg.Columns = norm
+		if strings.TrimSpace(cfg.Table) == "" {
+			cfg.Table = name
+		}
+	}
 	raw, _ := json.Marshal(cfg)
 	enc, err := cryptoenc.Encrypt(e.cfg.EncryptionKey, string(raw))
 	if err != nil {
 		return uuid.Nil, err
 	}
 	id := uuid.New()
-	typ = connector.Canonical(typ)
 	_, err = e.pg.Exec(ctx, `
 		INSERT INTO data_sources (id, org_id, workspace_id, name, type, config_enc, created_by, status)
 		VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
@@ -307,6 +321,15 @@ func (e *Engine) Discover(ctx context.Context, orgID, wsID, sourceID uuid.UUID) 
 		return DiscoverResult{Tables: []string{}, Message: "Carregue um ficheiro para ingerir este conector."}, nil
 	case "google_sheets":
 		return e.discoverGoogleSheets(ctx, cfg)
+	case "manual":
+		label := cfg.Table
+		if label == "" {
+			label = "planilha"
+		}
+		if len(cfg.Columns) == 0 {
+			return DiscoverResult{Tables: []string{label}, Message: "Defina as colunas e preencha o formulário."}, nil
+		}
+		return DiscoverResult{Tables: []string{label}}, nil
 	case "kafka":
 		if cfg.Topic != "" {
 			return DiscoverResult{Tables: []string{cfg.Topic}}, nil
@@ -335,6 +358,9 @@ func (e *Engine) SyncSourceWithSelection(ctx context.Context, orgID, wsID, userI
 		return Result{}, err
 	}
 	typ = connector.Canonical(typ)
+	if typ == "manual" {
+		return e.PublishManual(ctx, orgID, wsID, userID, sourceID)
+	}
 	if sel != nil {
 		cfg.Selection = sel
 		_ = e.SaveSelection(ctx, orgID, wsID, sourceID, sel)
@@ -440,6 +466,8 @@ func (e *Engine) fetchSourceRows(ctx context.Context, typ string, cfg SQLConfig)
 		return e.readRemoteFile(ctx, typ, cfg)
 	case "google_sheets":
 		return e.fetchGoogleSheets(ctx, cfg)
+	case "manual":
+		return nil, nil, fmt.Errorf("planilha manual: use PublishManual")
 	case "kafka":
 		return e.readKafka(ctx, cfg)
 	case "mqtt":
@@ -499,6 +527,13 @@ func (e *Engine) RefreshSource(ctx context.Context, orgID, wsID, userID, sourceI
 		return RefreshResult{}, err
 	}
 	typ = connector.Canonical(typ)
+	if typ == "manual" {
+		res, err := e.PublishManual(ctx, orgID, wsID, userID, sourceID)
+		if err != nil {
+			return RefreshResult{}, err
+		}
+		return RefreshResult{DatasetID: res.DatasetID, Name: res.Name, RowCount: res.RowCount, Created: false, Mode: "full"}, nil
+	}
 	if tableOrQuery != "" {
 		cfg.Table = tableOrQuery
 		if looksLikeSelect(tableOrQuery) {
@@ -1032,6 +1067,11 @@ func (e *Engine) pingSource(ctx context.Context, typ string, cfg SQLConfig) erro
 		return nil
 	case "google_sheets":
 		return e.pingGoogleSheets(ctx, cfg)
+	case "manual":
+		if len(cfg.Columns) == 0 {
+			return fmt.Errorf("defina pelo menos uma coluna")
+		}
+		return nil
 	case "kafka":
 		return e.pingKafka(cfg)
 	case "mqtt":

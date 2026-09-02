@@ -8,9 +8,10 @@ import { toast } from "sonner";
 import { Plug, RefreshCw, Trash2, Unplug, LayoutDashboard } from "lucide-react";
 import { api, normalizeArray } from "@/lib/api";
 import { statusLabel } from "@/lib/labels";
-import { type CatalogResponse, type DataSource, connectorIconSrc, formatSyncAt, isGuidedSQLType } from "@/lib/connectors";
+import { type CatalogResponse, type DataSource, connectorIconSrc, formatSyncAt, isGoogleSheetsType, isGuidedSQLType, isManualType } from "@/lib/connectors";
 import { ConnectorIcon } from "@/components/connector-icon";
 import { SqlDataPicker } from "@/components/sql-data-picker";
+import { ManualWorkbook } from "@/components/manual-connector";
 import { Badge, Button, Card, CardTitle, EmptyState, ErrorState, FieldLabel, PageHeader, PageSkeleton, Select } from "@/components/ui";
 import { starterDashboardWidgets } from "@/lib/semantic";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
@@ -201,6 +202,15 @@ export default function ConnectorDetailPage() {
         </p>
       )}
 
+      {isGoogleSheetsType(s.type) && (
+        <p className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-[13px] text-emerald-900">
+          Esta ligação não usa chave de API. A planilha tem de estar partilhada com <strong>qualquer pessoa com o link</strong> (Leitor). Depois sincronize de novo.
+        </p>
+      )}
+
+      {isManualType(s.type) && <ManualWorkbook sourceId={id} />}
+
+      {!isManualType(s.type) && (
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <CardTitle>Configuração</CardTitle>
@@ -272,13 +282,14 @@ export default function ConnectorDetailPage() {
           )}
         </Card>
       </div>
+      )}
 
-      <AutoRefreshCard kind="connector" targetId={id} targetType={s.type} />
+      {!isManualType(s.type) && <AutoRefreshCard kind="connector" targetId={id} targetType={s.type} />}
 
       <Card>
         <CardTitle>Conjuntos gerados</CardTitle>
         {datasets.length === 0 && (
-          <EmptyState icon={Unplug} title="Nenhum conjunto" description="Sincronize uma tabela ou carregue um ficheiro para materializar dados." />
+          <EmptyState icon={Unplug} title="Nenhum conjunto" description={isManualType(s.type) ? "Guarde as colunas e adicione a primeira linha no formulário." : "Sincronize uma tabela ou carregue um ficheiro para materializar dados."} />
         )}
         {datasets.map((d: any) => (
           <div key={d.id} className="flex items-center justify-between gap-3 border-t border-line py-2 text-sm first:border-0">

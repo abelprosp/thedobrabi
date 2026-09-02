@@ -30,4 +30,7 @@ func TestConnectorAllowedGoogleSheets(t *testing.T) {
 	if !ConnectorAllowed(TierBasic, "csv") {
 		t.Fatal("CSV no Essencial")
 	}
+	if !ConnectorAllowed(TierBasic, "manual") {
+		t.Fatal("planilha manual no Essencial")
+	}
 }

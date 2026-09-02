@@ -9,7 +9,7 @@ func TestCatalogCoverage(t *testing.T) {
 	want := []string{
 		"postgres", "supabase", "mysql", "sqlserver", "oracle", "mariadb", "snowflake", "redshift",
 		"bigquery", "databricks", "mongodb", "odbc",
-		"csv", "xlsx", "google_sheets", "json", "parquet", "pdf",
+		"csv", "xlsx", "manual", "google_sheets", "json", "parquet", "pdf",
 		"rest", "odata", "url",
 		"asaas", "conta_azul", "bitrix24", "omie", "google_ads", "meta_ads",
 		"instagram", "facebook", "google_business", "salesforce", "mercado_livre",
@@ -87,28 +87,30 @@ func TestImplementedFlags(t *testing.T) {
 
 func TestCanonicalAliases(t *testing.T) {
 	cases := map[string]string{
-		"SQL":          "sqlserver",
-		"sql":          "sqlserver",
-		"mssql":        "sqlserver",
-		"Excel":        "xlsx",
-		"excel":        "xlsx",
-		"postgresql":   "postgres",
-		"assas":        "asaas",
-		"contaazul":    "conta_azul",
-		"metaads":      "meta_ads",
-		"googleads":    "google_ads",
-		"postgres":     "postgres",
-		"supabase.co":  "supabase",
-		"ibge":         "ibge_censo",
-		"ipca":         "inflacao",
-		"ml":           "mercado_livre",
-		"gmb":          "google_business",
-		"gsheets":      "google_sheets",
-		"planilha":     "google_sheets",
-		"sheets":       "google_sheets",
-		"googlesheets": "google_sheets",
-		"focus":        "expectativas",
-		"ptax":         "cambio",
+		"SQL":             "sqlserver",
+		"sql":             "sqlserver",
+		"mssql":           "sqlserver",
+		"Excel":           "xlsx",
+		"excel":           "xlsx",
+		"postgresql":      "postgres",
+		"assas":           "asaas",
+		"contaazul":       "conta_azul",
+		"metaads":         "meta_ads",
+		"googleads":       "google_ads",
+		"postgres":        "postgres",
+		"supabase.co":     "supabase",
+		"ibge":            "ibge_censo",
+		"ipca":            "inflacao",
+		"ml":              "mercado_livre",
+		"gmb":             "google_business",
+		"gsheets":         "google_sheets",
+		"planilha":        "google_sheets",
+		"sheets":          "google_sheets",
+		"googlesheets":    "google_sheets",
+		"formulario":      "manual",
+		"planilha_manual": "manual",
+		"focus":           "expectativas",
+		"ptax":            "cambio",
 	}
 	for in, want := range cases {
 		if Canonical(in) != want {
@@ -145,6 +147,7 @@ func TestRequestedLabels(t *testing.T) {
 		"expectativas":    "Expectativa de mercado",
 		"cambio":          "Câmbio em tempo real",
 		"google_sheets":   "Google Sheets",
+		"manual":          "Planilha manual",
 	}
 	for id, label := range want {
 		it := ByID(id)
@@ -153,6 +156,29 @@ func TestRequestedLabels(t *testing.T) {
 		}
 		if it.Label != label {
 			t.Fatalf("%s label %q want %q", id, it.Label, label)
+		}
+	}
+}
+
+func TestGoogleSheetsLinkOnly(t *testing.T) {
+	it := ByID("google_sheets")
+	if it == nil {
+		t.Fatal("falta google_sheets")
+	}
+	if !strings.Contains(strings.ToLower(it.Description), "sem chave de api") {
+		t.Fatalf("descrição deveria dizer que não precisa de API: %q", it.Description)
+	}
+	keys := map[string]bool{}
+	for _, f := range it.Fields {
+		switch f.Key {
+		case "api_key", "token", "query":
+			t.Fatalf("Google Sheets não deveria pedir %s", f.Key)
+		}
+		keys[f.Key] = true
+	}
+	for _, k := range []string{"name", "url"} {
+		if !keys[k] {
+			t.Fatalf("google_sheets sem campo %s", k)
 		}
 	}
 }

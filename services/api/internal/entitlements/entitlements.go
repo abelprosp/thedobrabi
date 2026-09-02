@@ -118,10 +118,11 @@ func ForPlan(plan string) Limits {
 
 var basicConnectors = map[string]bool{
 	"csv": true, "xlsx": true, "json": true, "postgres": true, "mysql": true,
+	"manual": true,
 }
 
 var plusConnectors = map[string]bool{
-	"csv": true, "xlsx": true, "json": true, "pdf": true, "postgres": true, "mysql": true,
+	"csv": true, "xlsx": true, "json": true, "pdf": true, "postgres": true, "mysql": true, "manual": true,
 	"mariadb": true, "supabase": true, "sqlserver": true, "rest": true, "url": true,
 	"asaas": true, "conta_azul": true, "google_analytics": true, "google_sheets": true, "stripe": true,
 }
