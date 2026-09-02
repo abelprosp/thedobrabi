@@ -94,12 +94,6 @@ func Suggest(datasetName string, cols []schemax.Column) Model {
 		}
 	}
 
-	if !hasMeasure(m, "orders") && m.TimeColumn != "" {
-		m.Measures = append([]Measure{{
-			Name: "Orders", Column: "*", Aggregation: "count", Expression: "COUNT(*)", Format: "number", Description: "Row count",
-		}}, m.Measures...)
-	}
-
 	// Common derived metrics when columns exist.
 	rev := findMeasureCol(m, "revenue", "total", "amount", "sales")
 	qty := findCol(cols, "quantity", "qty", "units")
@@ -199,16 +193,76 @@ func EnsureBasics(m *Model, cols []schemax.Column) {
 
 	if len(m.Measures) == 0 {
 		m.Measures = append(m.Measures, Measure{
-			Name: "Linhas", Column: "*", Aggregation: "count", Expression: "COUNT(*)", Format: "number",
-			Description: "Contagem de linhas",
+			Name: "N.º de registos", Column: "*", Aggregation: "count", Expression: "COUNT(*)", Format: "number",
+			Description: "Contagem de registos — só quando não há valores numéricos",
 		})
 	}
-	if !hasMeasure(*m, "linhas") && !hasMeasure(*m, "count") && !hasMeasure(*m, "orders") {
-		m.Measures = append([]Measure{{
-			Name: "Linhas", Column: "*", Aggregation: "count", Expression: "COUNT(*)", Format: "number",
-			Description: "Contagem de linhas",
-		}}, m.Measures...)
+	preferRealMeasures(m)
+}
+
+func isRowCount(m Measure) bool {
+	expr := strings.ToLower(strings.ReplaceAll(m.Expression, " ", ""))
+	col := strings.TrimSpace(m.Column)
+	return col == "*" || expr == "count(*)" || (strings.EqualFold(m.Aggregation, "count") && (col == "*" || col == ""))
+}
+
+// preferRealMeasures drops COUNT(*) named Linhas/Orders when the dataset already has SUM/AVG
+// of real columns (ex.: valor). "linha" in a P&L file is a dimension, not a row count.
+func preferRealMeasures(m *Model) {
+	if m == nil || len(m.Measures) == 0 {
+		return
 	}
+	var real, counts []Measure
+	for _, meas := range m.Measures {
+		if isRowCount(meas) {
+			counts = append(counts, meas)
+			continue
+		}
+		real = append(real, meas)
+	}
+	if len(real) == 0 {
+		if len(counts) > 0 {
+			counts[0].Name = "N.º de registos"
+			m.Measures = counts[:1]
+		}
+		return
+	}
+	m.Measures = append(preferredFirst(real), counts...)
+}
+
+func preferredFirst(ms []Measure) []Measure {
+	score := func(m Measure) int {
+		n := normalize(m.Name + " " + m.Column)
+		switch {
+		case strings.Contains(n, "valor") || strings.Contains(n, "revenue") || strings.Contains(n, "receita") || strings.Contains(n, "amount") || strings.Contains(n, "montante"):
+			return 0
+		case strings.Contains(n, "total") || strings.Contains(n, "sales") || strings.Contains(n, "gmv"):
+			return 1
+		default:
+			return 2
+		}
+	}
+	out := append([]Measure{}, ms...)
+	for i := 0; i < len(out); i++ {
+		for j := i + 1; j < len(out); j++ {
+			if score(out[j]) < score(out[i]) {
+				out[i], out[j] = out[j], out[i]
+			}
+		}
+	}
+	return out
+}
+
+func PrimaryMeasure(m Model) string {
+	for _, meas := range m.Measures {
+		if !isRowCount(meas) {
+			return meas.Name
+		}
+	}
+	if len(m.Measures) > 0 {
+		return m.Measures[0].Name
+	}
+	return ""
 }
 
 func ResolveMeasure(model Model, name string) (Measure, bool) {

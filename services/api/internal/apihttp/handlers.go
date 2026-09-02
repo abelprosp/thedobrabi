@@ -1094,21 +1094,17 @@ func hydrateModelJSON(schema, model []byte, name string) []byte {
 }
 
 func (s *Server) hydrateAndPersistModel(ctx context.Context, org, ws, datasetID uuid.UUID, name string, schema, model []byte) []byte {
-	var orig semantic.Model
-	_ = json.Unmarshal(model, &orig)
 	raw := hydrateModelJSON(schema, model, name)
-	if len(orig.Measures) > 0 && len(orig.Dimensions) > 0 {
-		return raw
+	if string(raw) != string(model) {
+		var hydrated semantic.Model
+		_ = json.Unmarshal(raw, &hydrated)
+		if len(hydrated.Measures) > 0 {
+			_, _ = s.deps.PG.Exec(ctx, `
+				INSERT INTO semantic_models (org_id, workspace_id, dataset_id, name, status, model_json)
+				VALUES ($1,$2,$3,$4,'published',$5)
+				ON CONFLICT (dataset_id) DO UPDATE SET model_json=EXCLUDED.model_json, name=EXCLUDED.name, status='published', updated_at=now()
+			`, org, ws, datasetID, hydrated.Name, raw)
+		}
 	}
-	var hydrated semantic.Model
-	_ = json.Unmarshal(raw, &hydrated)
-	if len(hydrated.Measures) == 0 {
-		return raw
-	}
-	_, _ = s.deps.PG.Exec(ctx, `
-		INSERT INTO semantic_models (org_id, workspace_id, dataset_id, name, status, model_json)
-		VALUES ($1,$2,$3,$4,'published',$5)
-		ON CONFLICT (dataset_id) DO UPDATE SET model_json=EXCLUDED.model_json, name=EXCLUDED.name, status='published', updated_at=now()
-	`, org, ws, datasetID, hydrated.Name, raw)
 	return raw
 }

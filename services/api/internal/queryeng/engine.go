@@ -563,6 +563,9 @@ func alias(s string) string {
 }
 
 func defaultMeasures(m semantic.Model) []string {
+	if name := semantic.PrimaryMeasure(m); name != "" {
+		return []string{name}
+	}
 	if len(m.Measures) == 0 {
 		return nil
 	}

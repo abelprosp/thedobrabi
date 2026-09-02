@@ -28,8 +28,10 @@ func TestSuggestIBGEStringOnlyHasCount(t *testing.T) {
 		{Name: "uf", Type: schemax.TypeString},
 	}
 	m := Suggest("Municípios", cols)
-	if _, ok := ResolveMeasure(m, "linhas"); !ok {
-		t.Fatal("expected Linhas COUNT(*) for datasets without numeric measures")
+	if _, ok := ResolveMeasure(m, "n.º de registos"); !ok {
+		if PrimaryMeasure(m) == "" {
+			t.Fatal("expected a row-count measure for datasets without numeric measures")
+		}
 	}
 	if _, ok := ResolveDimension(m, "nome"); !ok {
 		t.Fatal("expected nome dimension")
@@ -51,6 +53,29 @@ func TestSuggestInflacaoNumericSum(t *testing.T) {
 	}
 	if _, ok := ResolveDimension(m, "indice"); !ok {
 		t.Fatal("expected indice dimension")
+	}
+}
+
+func TestPreferValorOverLinhas(t *testing.T) {
+	cols := []schemax.Column{
+		{Name: "data", Type: schemax.TypeDate, Role: "time"},
+		{Name: "categoria", Type: schemax.TypeString},
+		{Name: "linha", Type: schemax.TypeString},
+		{Name: "natureza", Type: schemax.TypeString},
+		{Name: "valor", Type: schemax.TypeFloat},
+		{Name: "empresa", Type: schemax.TypeString},
+	}
+	m := Suggest("redorai-financeiro", cols)
+	if PrimaryMeasure(m) != "Valor" {
+		t.Fatalf("primary measure want Valor, got %q among %+v", PrimaryMeasure(m), m.Measures)
+	}
+	if _, ok := ResolveDimension(m, "linha"); !ok {
+		t.Fatal("expected linha as dimension")
+	}
+	for _, meas := range m.Measures {
+		if isRowCount(meas) {
+			t.Fatalf("did not expect row-count measure when valor exists: %+v", meas)
+		}
 	}
 }
 

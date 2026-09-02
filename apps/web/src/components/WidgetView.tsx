@@ -163,6 +163,12 @@ export function WidgetView({
     queryKey: ["widget", w.id, body],
     queryFn: () => api<any>("/api/v1/queries", { method: "POST", body: JSON.stringify(body) }),
     enabled: !!w.query?.dataset_id && !NO_QUERY.includes(w.type),
+    retry: (count, err) => {
+      const status = (err as { status?: number })?.status || 0;
+      if (status && status < 500) return false;
+      return count < 1;
+    },
+    refetchOnWindowFocus: false,
   });
 
   const rows = q.data?.rows || [];

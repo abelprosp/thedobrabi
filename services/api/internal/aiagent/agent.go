@@ -14,6 +14,7 @@ import (
 	"github.com/thedobra/thedobra/services/api/internal/intelligence"
 	"github.com/thedobra/thedobra/services/api/internal/mljobs"
 	"github.com/thedobra/thedobra/services/api/internal/queryeng"
+	"github.com/thedobra/thedobra/services/api/internal/schemax"
 	"github.com/thedobra/thedobra/services/api/internal/semantic"
 )
 
@@ -36,20 +37,20 @@ type AskRequest struct {
 }
 
 type Answer struct {
-	ConversationID string           `json:"conversation_id"`
-	Answer         string           `json:"answer"`
-	KeyMetric      *Metric          `json:"key_metric,omitempty"`
-	Chart          *Chart           `json:"chart,omitempty"`
-	Explanation    string           `json:"explanation,omitempty"`
-	Drivers        []string         `json:"drivers,omitempty"`
-	Recommendation string           `json:"recommendation,omitempty"`
-	Evidence       map[string]any   `json:"evidence"`
-	Insufficient   bool             `json:"insufficient_data"`
+	ConversationID string         `json:"conversation_id"`
+	Answer         string         `json:"answer"`
+	KeyMetric      *Metric        `json:"key_metric,omitempty"`
+	Chart          *Chart         `json:"chart,omitempty"`
+	Explanation    string         `json:"explanation,omitempty"`
+	Drivers        []string       `json:"drivers,omitempty"`
+	Recommendation string         `json:"recommendation,omitempty"`
+	Evidence       map[string]any `json:"evidence"`
+	Insufficient   bool           `json:"insufficient_data"`
 }
 
 type Metric struct {
-	Label string  `json:"label"`
-	Value float64 `json:"value"`
+	Label string   `json:"label"`
+	Value float64  `json:"value"`
 	Delta *float64 `json:"delta_pct,omitempty"`
 }
 
@@ -73,7 +74,7 @@ func (a *Agent) Ask(ctx context.Context, orgID, wsID, userID uuid.UUID, role str
 		dsID, err = a.defaultDataset(ctx, orgID, wsID)
 		if err != nil {
 			ans := Answer{ConversationID: convID.String(), Insufficient: true,
-				Answer: "Não tenho dados suficientes para responder com fiabilidade. Ligue um conjunto primeiro.",
+				Answer:   "Não tenho dados suficientes para responder com fiabilidade. Ligue um conjunto primeiro.",
 				Evidence: map[string]any{}}
 			a.storeAssistant(ctx, convID, ans)
 			return ans, nil
@@ -351,17 +352,20 @@ func (a *Agent) loadModel(ctx context.Context, orgID, wsID uuid.UUID, dsID strin
 		return semantic.Model{}, "", err
 	}
 	var name string
-	var raw []byte
+	var schema, raw []byte
 	err = a.pg.QueryRow(ctx, `
-		SELECT d.name, s.model_json FROM datasets d
-		JOIN semantic_models s ON s.dataset_id=d.id
+		SELECT d.name, d.schema_json, COALESCE(s.model_json, '{}'::jsonb) FROM datasets d
+		LEFT JOIN semantic_models s ON s.dataset_id=d.id
 		WHERE d.id=$1 AND d.org_id=$2 AND d.workspace_id=$3
-	`, id, orgID, wsID).Scan(&name, &raw)
+	`, id, orgID, wsID).Scan(&name, &schema, &raw)
 	if err != nil {
 		return semantic.Model{}, "", fmt.Errorf("conjunto não encontrado")
 	}
 	var m semantic.Model
 	_ = json.Unmarshal(raw, &m)
+	var cols []schemax.Column
+	_ = json.Unmarshal(schema, &cols)
+	m = semantic.Hydrate(m, cols)
 	return m, name, nil
 }
 
@@ -454,7 +458,7 @@ func (a *Agent) GenerateDashboard(ctx context.Context, orgID, wsID, userID uuid.
 	out.DatasetName = dsName
 
 	a.storeAssistant(ctx, convID, map[string]any{
-		"intent":             "generate_dashboard",
+		"intent":              "generate_dashboard",
 		"generated_dashboard": out,
 	})
 	return out, nil
@@ -705,10 +709,18 @@ func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semant
 
 func (a *Agent) findClosestMeasure(model semantic.Model, name string) string {
 	want := alias(name)
+	if want == "linhas" || want == "orders" || want == "count" {
+		if p := semantic.PrimaryMeasure(model); p != "" {
+			return p
+		}
+	}
 	for _, m := range model.Measures {
 		if strings.Contains(alias(m.Name), want) || strings.Contains(want, alias(m.Name)) {
 			return m.Name
 		}
+	}
+	if p := semantic.PrimaryMeasure(model); p != "" {
+		return p
 	}
 	if len(model.Measures) > 0 {
 		return model.Measures[0].Name
@@ -734,15 +746,18 @@ func (a *Agent) findClosestDimension(model semantic.Model, name string) string {
 
 func pickMeasure(model semantic.Model, q string) string {
 	for _, m := range model.Measures {
+		if isRowCountMeasure(m) && !asksForCount(q) {
+			continue
+		}
 		n := strings.ToLower(m.Name)
 		c := strings.ToLower(m.Column)
-		if strings.Contains(q, n) || strings.Contains(q, strings.ReplaceAll(n, " ", "_")) || strings.Contains(q, c) {
+		if strings.Contains(q, n) || strings.Contains(q, strings.ReplaceAll(n, " ", "_")) || (c != "*" && strings.Contains(q, c)) {
 			return m.Name
 		}
 	}
-	if strings.Contains(q, "revenue") || strings.Contains(q, "sales") || strings.Contains(q, "receita") || strings.Contains(q, "vendas") {
-		if _, ok := semantic.ResolveMeasure(model, "revenue"); ok {
-			return "revenue"
+	if strings.Contains(q, "revenue") || strings.Contains(q, "sales") || strings.Contains(q, "receita") || strings.Contains(q, "vendas") || strings.Contains(q, "valor") {
+		if name := semantic.PrimaryMeasure(model); name != "" {
+			return name
 		}
 	}
 	if strings.Contains(q, "profit") || strings.Contains(q, "lucro") {
@@ -755,14 +770,33 @@ func pickMeasure(model semantic.Model, q string) string {
 			return "margin"
 		}
 	}
+	if asksForCount(q) {
+		for _, m := range model.Measures {
+			if isRowCountMeasure(m) {
+				return m.Name
+			}
+		}
+	}
+	if name := semantic.PrimaryMeasure(model); name != "" {
+		return name
+	}
 	if len(model.Measures) > 0 {
 		return model.Measures[0].Name
 	}
 	return ""
 }
 
+func isRowCountMeasure(m semantic.Measure) bool {
+	expr := strings.ToLower(strings.ReplaceAll(m.Expression, " ", ""))
+	return m.Column == "*" || expr == "count(*)"
+}
+
+func asksForCount(q string) bool {
+	return strings.Contains(q, "quantos registos") || strings.Contains(q, "número de linhas") || strings.Contains(q, "numero de linhas") || strings.Contains(q, "contagem")
+}
+
 func pickDimension(model semantic.Model, q string) string {
-	cands := []string{"customer", "product", "region", "seller", "channel", "segment", "cliente", "produto", "região", "regiao", "vendedor", "canal", "segmento"}
+	cands := []string{"customer", "product", "region", "seller", "channel", "segment", "cliente", "produto", "região", "regiao", "vendedor", "canal", "segmento", "categoria", "linha", "natureza", "empresa", "mes", "mês"}
 	for _, c := range cands {
 		if strings.Contains(q, c) {
 			key := c

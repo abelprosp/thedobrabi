@@ -186,10 +186,10 @@ func ClickHouseType(t ColType) string {
 }
 
 var (
-	idRe     = regexp.MustCompile(`(^|_)(id|uuid|key)$`)
-	timeRe   = regexp.MustCompile(`(date|time|ts|timestamp|created|updated|month|year|day)`)
-	moneyRe  = regexp.MustCompile(`(revenue|amount|total|price|cost|profit|sales|fee|gmv|arr|mrr)`)
-	qtyRe    = regexp.MustCompile(`(qty|quantity|count|units|volume)`)
+	idRe    = regexp.MustCompile(`(^|_)(id|uuid|key)$`)
+	timeRe  = regexp.MustCompile(`(date|time|ts|timestamp|created|updated|month|year|day)`)
+	moneyRe = regexp.MustCompile(`(revenue|amount|total|price|cost|profit|sales|fee|gmv|arr|mrr|valor|value|receita|despesa|montante)`)
+	qtyRe   = regexp.MustCompile(`(qty|quantity|count|units|volume)`)
 )
 
 func GuessRole(col Column) string {

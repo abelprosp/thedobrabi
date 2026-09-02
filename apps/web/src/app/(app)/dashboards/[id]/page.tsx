@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, normalizeArray } from "@/lib/api";
+import { api, apiStatus, normalizeArray } from "@/lib/api";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { WidgetView, type Widget, type DashboardFilter, type WidgetType } from "@/components/WidgetView";
 import { WidgetInspector } from "@/components/widget-inspector";
@@ -230,7 +230,9 @@ function DashboardEditorInner() {
   }, [semantic.data]);
   const d = useQuery({
     queryKey: ["dashboard", id],
-    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[] } }>(`/api/v1/dashboards/${id}`),
+    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[] }; workspace_id?: string }>(`/api/v1/dashboards/${id}`),
+    enabled: !!id,
+    retry: (count, err) => apiStatus(err) !== 404 && count < 1,
   });
 
   const history = useDashboardHistory(d.data?.layout?.widgets || []);
@@ -243,7 +245,19 @@ function DashboardEditorInner() {
       history.set(d.data.layout?.widgets || []);
       setHydrated(true);
     }
+    const ws = d.data?.workspace_id;
+    if (ws && typeof window !== "undefined" && localStorage.getItem("thedobra.workspace") !== ws) {
+      localStorage.setItem("thedobra.workspace", ws);
+    }
   }, [d.data, hydrated, history]);
+
+  useEffect(() => {
+    if (!d.isError) return;
+    if (apiStatus(d.error) === 404 || /não encontrado|not found/i.test((d.error as Error).message || "")) {
+      toast.error("Este dashboard já não existe.");
+      router.replace("/dashboards");
+    }
+  }, [d.isError, d.error, router]);
 
   useEffect(() => {
     if (!hydrated || datasets.isLoading || !datasetList.length) return;
@@ -455,7 +469,10 @@ function DashboardEditorInner() {
   const currentDataset = current?.query?.dataset_id;
   const model = useMemo(() => modelForDataset(semanticModels, currentDataset), [currentDataset, semanticModels]);
 
-  if (d.isError) return <ErrorState message={(d.error as Error).message} onRetry={() => d.refetch()} />;
+  if (d.isError) {
+    if (apiStatus(d.error) === 404) return <PageSkeleton />;
+    return <ErrorState message={(d.error as Error).message} onRetry={() => d.refetch()} />;
+  }
   if (!d.data && widgets.length === 0) return <PageSkeleton />;
 
   return (

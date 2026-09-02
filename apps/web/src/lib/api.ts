@@ -4,6 +4,22 @@ export type Tokens = {
   expires_in: number;
 };
 
+export class ApiError extends Error {
+  status: number;
+  code?: string;
+  constructor(message: string, status: number, code?: string) {
+    super(message);
+    this.name = "ApiError";
+    this.status = status;
+    this.code = code;
+  }
+}
+
+export function apiStatus(err: unknown): number {
+  if (err instanceof ApiError) return err.status;
+  return 0;
+}
+
 const ACCESS = "thedobra.access";
 const REFRESH = "thedobra.refresh";
 
@@ -111,7 +127,7 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   }
 
   if (!res.ok) {
-    throw new Error(json?.error?.message || res.statusText);
+    throw new ApiError(json?.error?.message || res.statusText, res.status, json?.error?.code);
   }
   // httpx.JSON wraps successful payloads as { data: ... } and omits data on nil slices,
   // so treat an explicit "data" key as the payload, even when its value is null/empty.

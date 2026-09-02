@@ -54,7 +54,15 @@ export function modelForDataset(models: any[], datasetId?: string | null): Seman
 }
 
 export function pickMeasures(model: SemanticModel | null | undefined, n: number): string[] {
-  return (model?.measures || []).map(measureKey).filter(Boolean).slice(0, Math.max(0, n));
+  const all = (model?.measures || []).map(measureKey).filter(Boolean);
+  const real = all.filter((name) => !isRowCountMeasure(model, name));
+  return (real.length ? real : all).slice(0, Math.max(0, n));
+}
+
+function isRowCountMeasure(model: SemanticModel | null | undefined, name: string) {
+  const m = model?.measures?.find((x) => measureKey(x) === name);
+  const expr = (m?.expression || "").replace(/\s/g, "").toLowerCase();
+  return m?.column === "*" || expr === "count(*)" || (m?.aggregation === "count" && (!m.column || m.column === "*"));
 }
 
 export function pickDimensions(model: SemanticModel | null | undefined, n: number): string[] {
