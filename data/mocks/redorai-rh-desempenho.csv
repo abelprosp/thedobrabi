@@ -1,0 +1,214 @@
+data,mes,ano,ciclo,colaborador,gestor,departamento,cargo,tipo_contrato,faixa,potencial,status_ciclo,headcount,nota,atingimento,objetivos_count,quantidade,empresa
+2025-06-30,Junho,2025,2025.1,Ana Costa,Sofia Carvalho,Comercial,SDR,CLT,Atende parcialmente,Médio,Concluído,1,2.62,78.7,7,4.4,Redorai
+2025-06-30,Junho,2025,2025.1,Bruno Lima,Sofia Carvalho,Comercial,SDR,CLT,Não atende,Médio,Concluído,1,1.29,56.2,4,9.5,Redorai
+2025-06-30,Junho,2025,2025.1,Carla Souza,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.34,99.8,5,8.5,Redorai
+2025-06-30,Junho,2025,2025.1,Diego Alves,Sofia Carvalho,Comercial,SDR,CLT,Excepcional,Médio,Concluído,1,4.45,125.7,5,10.8,Redorai
+2025-06-30,Junho,2025,2025.1,Eva Martins,Sofia Carvalho,Comercial,SDR,CLT,Excede,Alto,Concluído,1,3.93,119.6,5,10.4,Redorai
+2025-06-30,Junho,2025,2025.1,Fábio Nunes,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.17,102.1,4,5.9,Redorai
+2025-06-30,Junho,2025,2025.1,Gabriela Rocha,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,2.94,97.3,8,22.7,Redorai
+2025-06-30,Junho,2025,2025.1,Henrique Dias,Sofia Carvalho,Comercial,SDR,CLT,Não atende,Médio,Concluído,1,2.01,72.8,4,18.5,Redorai
+2025-06-30,Junho,2025,2025.1,Isabela Freitas,Sofia Carvalho,Comercial,Account Executive,CLT,Atende parcialmente,Médio,Concluído,1,2.82,87.1,8,16.1,Redorai
+2025-06-30,Junho,2025,2025.1,João Mendes,Sofia Carvalho,Comercial,Account Executive,CLT,Excepcional,Alto,Concluído,1,4.89,138.0,6,25.2,Redorai
+2025-06-30,Junho,2025,2025.1,Karina Lopes,Sofia Carvalho,Comercial,Account Executive,CLT,Atende parcialmente,Médio,Concluído,1,2.33,74.1,7,27.6,Redorai
+2025-06-30,Junho,2025,2025.1,Lucas Azevedo,Sofia Carvalho,Comercial,Account Executive,CLT,Excepcional,Baixo,Concluído,1,4.82,132.5,8,26.6,Redorai
+2025-06-30,Junho,2025,2025.1,Marina Teixeira,Sofia Carvalho,Comercial,Account Executive,CLT,Excede,Alto,Concluído,1,3.77,113.4,4,17.3,Redorai
+2025-06-30,Junho,2025,2025.1,Nicolas Barbosa,Sofia Carvalho,Comercial,Account Executive,CLT,Excede,Médio,Concluído,1,3.97,120.2,7,5.4,Redorai
+2025-06-30,Junho,2025,2025.1,Olívia Castro,Sofia Carvalho,Comercial,Account Executive,CLT,Excede,Médio,Concluído,1,4.27,114.7,4,9.2,Redorai
+2025-06-30,Junho,2025,2025.1,Paulo Ribeiro,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.56,111.3,7,25.2,Redorai
+2025-06-30,Junho,2025,2025.1,Queila Santos,Sofia Carvalho,Comercial,Account Executive,CLT,Atende parcialmente,Médio,Concluído,1,2.50,85.5,3,12.4,Redorai
+2025-06-30,Junho,2025,2025.1,Rafael Pinto,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Baixo,Concluído,1,3.37,101.3,3,4.9,Redorai
+2025-06-30,Junho,2025,2025.1,Sofia Carvalho,Ana Costa,Comercial,Gerente comercial,CLT,Atende,Alto,Concluído,1,3.43,96.7,3,26.8,Redorai
+2025-06-30,Junho,2025,2025.1,Tiago Moreira,Sofia Carvalho,Comercial,Gerente comercial,CLT,Atende,Alto,Concluído,1,2.93,94.4,3,31.2,Redorai
+2025-06-30,Junho,2025,2025.1,Arthur Nascimento,Camila Falcão,Customer Success,CSM,CLT,Atende parcialmente,Médio,Concluído,1,2.22,70.4,7,26.2,Redorai
+2025-06-30,Junho,2025,2025.1,Camila Falcão,Eduarda Mota,Customer Success,CSM,CLT,Excede,Alto,Concluído,1,3.87,112.9,6,23.8,Redorai
+2025-06-30,Junho,2025,2025.1,Diogo Saraiva,Camila Falcão,Customer Success,Estagiário,Estágio,Atende,Alto,Concluído,1,2.92,87.8,8,16.5,Redorai
+2025-06-30,Junho,2025,2025.1,Débora Lins,Camila Falcão,Customer Success,CSM,CLT,Excede,Médio,Concluído,1,4.19,122.1,6,4.8,Redorai
+2025-06-30,Junho,2025,2025.1,Eduarda Mota,Camila Falcão,Customer Success,CSM,CLT,Atende,Alto,Concluído,1,3.08,100.5,8,30.0,Redorai
+2025-06-30,Junho,2025,2025.1,Enzo Pimentel,Camila Falcão,Customer Success,Analista de CS,CLT,Atende parcialmente,Baixo,Concluído,1,2.38,82.4,5,25.7,Redorai
+2025-06-30,Junho,2025,2025.1,Heloísa Bastos,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Alto,Concluído,1,3.12,94.7,7,11.3,Redorai
+2025-06-30,Junho,2025,2025.1,Joana Peres,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Médio,Concluído,1,3.27,93.5,8,21.9,Redorai
+2025-06-30,Junho,2025,2025.1,Kauã Trindade,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Alto,Concluído,1,3.18,102.3,4,30.5,Redorai
+2025-06-30,Junho,2025,2025.1,Pedro Henrique Luz,Camila Falcão,Customer Success,Estagiário,Estágio,Atende parcialmente,Médio,Concluído,1,2.42,82.2,8,8.2,Redorai
+2025-06-30,Junho,2025,2025.1,Talita Rangel,Camila Falcão,Customer Success,Estagiário,Estágio,Atende parcialmente,Alto,Concluído,1,2.83,83.7,6,9.9,Redorai
+2025-06-30,Junho,2025,2025.1,Alice Pacheco,Helena Sales,Engenharia,Dev Sénior,CLT,Excede,Médio,Concluído,1,3.74,102.6,7,5.7,Redorai
+2025-06-30,Junho,2025,2025.1,Amanda Vieira,Helena Sales,Engenharia,Dev Júnior,CLT,Excepcional,Médio,Concluído,1,4.70,126.8,6,4.8,Redorai
+2025-06-30,Junho,2025,2025.1,Bernardo Cunha,Helena Sales,Engenharia,Dev Júnior,CLT,Excede,Alto,Concluído,1,3.71,110.4,5,17.2,Redorai
+2025-06-30,Junho,2025,2025.1,Catarina Melo,Helena Sales,Engenharia,Dev Júnior,CLT,Atende parcialmente,Médio,Concluído,1,2.83,86.6,5,6.8,Redorai
+2025-06-30,Junho,2025,2025.1,Daniel Pires,Helena Sales,Engenharia,Dev Júnior,CLT,Excepcional,Baixo,Concluído,1,4.89,129.8,8,22.4,Redorai
+2025-06-30,Junho,2025,2025.1,Elisa Duarte,Helena Sales,Engenharia,Dev Júnior,CLT,Excede,Alto,Concluído,1,4.07,120.9,3,27.5,Redorai
+2025-06-30,Junho,2025,2025.1,Felipe Andrade,Helena Sales,Engenharia,Dev Júnior,CLT,Atende,Médio,Concluído,1,2.90,95.0,8,26.2,Redorai
+2025-06-30,Junho,2025,2025.1,Giovana Reis,Helena Sales,Engenharia,Dev Pleno,CLT,Excede,Baixo,Concluído,1,3.89,106.2,8,18.7,Redorai
+2025-06-30,Junho,2025,2025.1,Helena Sales,Amanda Vieira,Engenharia,Tech Lead,CLT,Atende,Médio,Concluído,1,3.15,91.7,3,4.0,Redorai
+2025-06-30,Junho,2025,2025.1,Hugo Batista,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Concluído,1,3.25,93.2,7,7.2,Redorai
+2025-06-30,Junho,2025,2025.1,Igor Menezes,Helena Sales,Engenharia,Tech Lead,CLT,Atende,Médio,Concluído,1,3.57,99.0,6,8.4,Redorai
+2025-06-30,Junho,2025,2025.1,Júlia Fonseca,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Concluído,1,3.35,102.5,5,25.1,Redorai
+2025-06-30,Junho,2025,2025.1,Larissa Moura,Helena Sales,Engenharia,Dev Pleno,CLT,Excede,Baixo,Concluído,1,4.25,115.2,4,20.5,Redorai
+2025-06-30,Junho,2025,2025.1,Mateus Peixoto,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Concluído,1,3.28,94.8,5,22.4,Redorai
+2025-06-30,Junho,2025,2025.1,Natália Borges,Helena Sales,Engenharia,Dev Pleno,CLT,Atende parcialmente,Alto,Concluído,1,2.51,80.0,5,12.6,Redorai
+2025-06-30,Junho,2025,2025.1,Otávio Farias,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Alto,Concluído,1,3.31,96.2,4,14.9,Redorai
+2025-06-30,Junho,2025,2025.1,Patrícia Nogueira,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Concluído,1,3.30,103.7,4,4.4,Redorai
+2025-06-30,Junho,2025,2025.1,Renato Guimarães,Helena Sales,Engenharia,Dev Sénior,CLT,Excede,Alto,Concluído,1,4.04,115.4,6,12.5,Redorai
+2025-06-30,Junho,2025,2025.1,Sabrina Tavares,Helena Sales,Engenharia,Dev Sénior,CLT,Atende,Médio,Concluído,1,3.00,89.5,8,13.4,Redorai
+2025-06-30,Junho,2025,2025.1,Thales Prado,Helena Sales,Engenharia,Dev Sénior,CLT,Atende,Médio,Concluído,1,3.31,93.2,6,20.3,Redorai
+2025-06-30,Junho,2025,2025.1,Valentina Campos,Helena Sales,Engenharia,Dev Sénior,CLT,Excede,Médio,Concluído,1,4.18,119.0,4,14.9,Redorai
+2025-06-30,Junho,2025,2025.1,Caio Rezende,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Médio,Concluído,1,3.19,91.9,4,27.2,Redorai
+2025-06-30,Junho,2025,2025.1,Fernanda Assis,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Médio,Concluído,1,3.18,97.0,4,2.6,Redorai
+2025-06-30,Junho,2025,2025.1,Gustavo Cordeiro,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Baixo,Concluído,1,2.96,95.4,8,15.3,Redorai
+2025-06-30,Junho,2025,2025.1,Letícia Aguiar,Caio Rezende,Financeiro,Controller,CLT,Atende parcialmente,Alto,Concluído,1,2.71,92.6,3,27.7,Redorai
+2025-06-30,Junho,2025,2025.1,Beatriz Furtado,Stella Paiva,Marketing,Coordenador de marketing,CLT,Atende,Alto,Concluído,1,3.53,98.3,6,14.2,Redorai
+2025-06-30,Junho,2025,2025.1,Stella Paiva,Beatriz Furtado,Marketing,Analista de marketing,CLT,Excede,Baixo,Concluído,1,4.29,125.8,5,12.6,Redorai
+2025-06-30,Junho,2025,2025.1,Tainá Leal,Beatriz Furtado,Marketing,Analista de marketing,CLT,Excepcional,Médio,Concluído,1,4.79,131.2,3,10.1,Redorai
+2025-06-30,Junho,2025,2025.1,Vitória Sampaio,Beatriz Furtado,Marketing,Analista de marketing,CLT,Atende,Alto,Concluído,1,3.02,86.6,7,9.7,Redorai
+2025-06-30,Junho,2025,2025.1,Aline Macedo,Samuel Dutra,Operações,Analista de operações,CLT,Atende,Baixo,Concluído,1,3.65,110.4,6,20.6,Redorai
+2025-06-30,Junho,2025,2025.1,Samuel Dutra,Vinícius Porto,Operações,Analista de operações,CLT,Atende parcialmente,Médio,Concluído,1,2.81,85.2,4,13.7,Redorai
+2025-06-30,Junho,2025,2025.1,Vinícius Porto,Samuel Dutra,Operações,Analista de operações,CLT,Excede,Médio,Concluído,1,3.73,109.5,6,6.8,Redorai
+2025-06-30,Junho,2025,2025.1,Jéssica Brito,Lívia Magalhães,Produto,Product Manager,CLT,Atende,Alto,Concluído,1,3.44,104.0,8,30.6,Redorai
+2025-06-30,Junho,2025,2025.1,Lívia Magalhães,Jéssica Brito,Produto,Product Manager,CLT,Excede,Alto,Concluído,1,4.09,114.6,5,18.0,Redorai
+2025-06-30,Junho,2025,2025.1,Murilo Coelho,Jéssica Brito,Produto,Product Manager,CLT,Atende parcialmente,Baixo,Concluído,1,2.52,85.4,6,6.5,Redorai
+2025-06-30,Junho,2025,2025.1,Nina Vasconcelos,Jéssica Brito,Produto,Designer de produto,CLT,Atende parcialmente,Médio,Concluído,1,2.35,75.6,7,6.9,Redorai
+2025-06-30,Junho,2025,2025.1,Priscila Guedes,Jéssica Brito,Produto,Designer de produto,CLT,Atende parcialmente,Médio,Concluído,1,2.32,84.7,7,7.0,Redorai
+2025-06-30,Junho,2025,2025.1,Miguel Salles,Rafaela Quaresma,RH,Analista de RH,CLT,Atende,Médio,Concluído,1,3.11,93.0,6,6.4,Redorai
+2025-06-30,Junho,2025,2025.1,Nicole Braga,Rafaela Quaresma,RH,Analista de RH,CLT,Atende,Alto,Concluído,1,3.64,108.2,5,14.6,Redorai
+2025-06-30,Junho,2025,2025.1,Rafaela Quaresma,Miguel Salles,RH,Business Partner,CLT,Atende,Médio,Concluído,1,3.37,100.0,5,25.3,Redorai
+2025-12-15,Dezembro,2025,2025.2,Ana Costa,Sofia Carvalho,Comercial,SDR,CLT,Excede,Médio,Concluído,1,3.91,107.2,6,3.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Bruno Lima,Sofia Carvalho,Comercial,SDR,CLT,Atende parcialmente,Médio,Concluído,1,2.36,83.3,4,4.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Carla Souza,Sofia Carvalho,Comercial,SDR,CLT,Excede,Médio,Concluído,1,3.72,106.0,6,24.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Diego Alves,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.51,98.2,3,26.6,Redorai
+2025-12-15,Dezembro,2025,2025.2,Eva Martins,Sofia Carvalho,Comercial,SDR,CLT,Não atende,Alto,Concluído,1,1.85,62.5,4,16.3,Redorai
+2025-12-15,Dezembro,2025,2025.2,Fábio Nunes,Sofia Carvalho,Comercial,SDR,CLT,Atende parcialmente,Médio,Concluído,1,2.32,77.8,7,6.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Gabriela Rocha,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.00,94.9,3,7.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Henrique Dias,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.42,96.9,6,27.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Isabela Freitas,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.56,110.4,8,24.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,João Mendes,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Alto,Concluído,1,3.15,89.7,3,26.5,Redorai
+2025-12-15,Dezembro,2025,2025.2,Karina Lopes,Sofia Carvalho,Comercial,Account Executive,CLT,Não atende,Médio,Concluído,1,2.13,71.7,8,4.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Lucas Azevedo,Sofia Carvalho,Comercial,Account Executive,CLT,Atende parcialmente,Baixo,Concluído,1,2.39,74.7,6,23.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Marina Teixeira,Sofia Carvalho,Comercial,Account Executive,CLT,Excede,Alto,Concluído,1,3.98,111.1,5,19.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Nicolas Barbosa,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.51,108.1,7,2.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Olívia Castro,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.44,106.3,3,13.5,Redorai
+2025-12-15,Dezembro,2025,2025.2,Paulo Ribeiro,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.19,95.7,5,3.9,Redorai
+2025-12-15,Dezembro,2025,2025.2,Queila Santos,Sofia Carvalho,Comercial,Account Executive,CLT,Excepcional,Médio,Concluído,1,4.93,130.7,6,27.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Rafael Pinto,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Baixo,Concluído,1,2.93,85.6,5,3.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Sofia Carvalho,Ana Costa,Comercial,Gerente comercial,CLT,Excede,Alto,Concluído,1,3.84,104.7,3,26.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Tiago Moreira,Sofia Carvalho,Comercial,Gerente comercial,CLT,Atende parcialmente,Alto,Concluído,1,2.79,90.2,7,25.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Arthur Nascimento,Camila Falcão,Customer Success,CSM,CLT,Atende parcialmente,Médio,Concluído,1,2.23,69.6,8,18.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Camila Falcão,Eduarda Mota,Customer Success,CSM,CLT,Excepcional,Alto,Concluído,1,4.73,137.1,4,8.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Diogo Saraiva,Camila Falcão,Customer Success,Estagiário,Estágio,Excede,Alto,Concluído,1,4.09,118.0,8,22.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Débora Lins,Camila Falcão,Customer Success,CSM,CLT,Atende parcialmente,Médio,Concluído,1,2.20,80.3,8,4.3,Redorai
+2025-12-15,Dezembro,2025,2025.2,Eduarda Mota,Camila Falcão,Customer Success,CSM,CLT,Excede,Alto,Concluído,1,4.22,119.4,7,24.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Enzo Pimentel,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Baixo,Concluído,1,3.38,98.4,8,2.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Heloísa Bastos,Camila Falcão,Customer Success,Analista de CS,CLT,Excepcional,Alto,Concluído,1,4.52,126.3,6,24.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Joana Peres,Camila Falcão,Customer Success,Analista de CS,CLT,Excepcional,Médio,Concluído,1,4.77,126.4,5,11.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Kauã Trindade,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Alto,Concluído,1,3.37,102.6,3,15.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Pedro Henrique Luz,Camila Falcão,Customer Success,Estagiário,Estágio,Atende,Médio,Concluído,1,3.40,106.6,4,20.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Talita Rangel,Camila Falcão,Customer Success,Estagiário,Estágio,Atende,Alto,Concluído,1,3.08,91.6,3,22.6,Redorai
+2025-12-15,Dezembro,2025,2025.2,Alice Pacheco,Helena Sales,Engenharia,Dev Sénior,CLT,Não atende,Médio,Concluído,1,1.42,63.8,5,21.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Amanda Vieira,Helena Sales,Engenharia,Dev Júnior,CLT,Atende,Médio,Concluído,1,3.40,106.5,6,27.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Bernardo Cunha,Helena Sales,Engenharia,Dev Júnior,CLT,Atende,Alto,Concluído,1,3.12,95.7,5,21.6,Redorai
+2025-12-15,Dezembro,2025,2025.2,Catarina Melo,Helena Sales,Engenharia,Dev Júnior,CLT,Atende parcialmente,Médio,Concluído,1,2.39,81.8,4,15.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Daniel Pires,Helena Sales,Engenharia,Dev Júnior,CLT,Excede,Baixo,Concluído,1,4.24,120.2,5,20.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Elisa Duarte,Helena Sales,Engenharia,Dev Júnior,CLT,Excede,Alto,Concluído,1,4.22,122.5,4,8.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Felipe Andrade,Helena Sales,Engenharia,Dev Júnior,CLT,Atende parcialmente,Médio,Concluído,1,2.70,89.8,6,8.6,Redorai
+2025-12-15,Dezembro,2025,2025.2,Giovana Reis,Helena Sales,Engenharia,Dev Pleno,CLT,Atende parcialmente,Baixo,Concluído,1,2.31,81.2,5,18.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Helena Sales,Amanda Vieira,Engenharia,Tech Lead,CLT,Atende,Médio,Concluído,1,3.50,104.9,4,11.9,Redorai
+2025-12-15,Dezembro,2025,2025.2,Hugo Batista,Helena Sales,Engenharia,Dev Pleno,CLT,Excepcional,Médio,Concluído,1,4.58,127.2,7,27.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Igor Menezes,Helena Sales,Engenharia,Tech Lead,CLT,Atende,Médio,Concluído,1,3.26,98.2,3,8.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Júlia Fonseca,Helena Sales,Engenharia,Dev Pleno,CLT,Atende parcialmente,Médio,Concluído,1,2.89,90.4,3,6.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Larissa Moura,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Baixo,Concluído,1,3.33,98.8,7,4.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Mateus Peixoto,Helena Sales,Engenharia,Dev Pleno,CLT,Não atende,Médio,Concluído,1,1.92,67.8,7,16.3,Redorai
+2025-12-15,Dezembro,2025,2025.2,Natália Borges,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Alto,Concluído,1,3.32,96.4,6,20.5,Redorai
+2025-12-15,Dezembro,2025,2025.2,Otávio Farias,Helena Sales,Engenharia,Dev Pleno,CLT,Atende parcialmente,Alto,Concluído,1,2.31,78.8,3,25.5,Redorai
+2025-12-15,Dezembro,2025,2025.2,Patrícia Nogueira,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Concluído,1,3.54,103.9,5,24.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Renato Guimarães,Helena Sales,Engenharia,Dev Sénior,CLT,Atende parcialmente,Alto,Concluído,1,2.49,84.3,8,24.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Sabrina Tavares,Helena Sales,Engenharia,Dev Sénior,CLT,Atende parcialmente,Médio,Concluído,1,2.51,88.4,4,12.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Thales Prado,Helena Sales,Engenharia,Dev Sénior,CLT,Não atende,Médio,Concluído,1,1.60,64.6,6,4.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Valentina Campos,Helena Sales,Engenharia,Dev Sénior,CLT,Excede,Médio,Concluído,1,3.80,110.1,5,21.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Caio Rezende,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Médio,Concluído,1,2.91,95.8,8,3.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Fernanda Assis,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Médio,Concluído,1,3.16,100.2,6,23.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Gustavo Cordeiro,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Baixo,Concluído,1,3.12,102.0,4,2.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Letícia Aguiar,Caio Rezende,Financeiro,Controller,CLT,Atende parcialmente,Alto,Concluído,1,2.49,83.4,6,9.7,Redorai
+2025-12-15,Dezembro,2025,2025.2,Beatriz Furtado,Stella Paiva,Marketing,Coordenador de marketing,CLT,Atende,Alto,Concluído,1,3.04,96.9,8,27.4,Redorai
+2025-12-15,Dezembro,2025,2025.2,Stella Paiva,Beatriz Furtado,Marketing,Analista de marketing,CLT,Atende,Baixo,Concluído,1,2.98,86.0,6,16.2,Redorai
+2025-12-15,Dezembro,2025,2025.2,Tainá Leal,Beatriz Furtado,Marketing,Analista de marketing,CLT,Atende,Médio,Concluído,1,3.28,104.3,5,18.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Vitória Sampaio,Beatriz Furtado,Marketing,Analista de marketing,CLT,Atende,Alto,Concluído,1,3.46,109.1,8,19.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Aline Macedo,Samuel Dutra,Operações,Analista de operações,CLT,Excede,Baixo,Concluído,1,4.11,116.9,8,19.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Samuel Dutra,Vinícius Porto,Operações,Analista de operações,CLT,Atende parcialmente,Médio,Concluído,1,2.57,80.3,5,27.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Vinícius Porto,Samuel Dutra,Operações,Analista de operações,CLT,Excede,Médio,Concluído,1,3.73,110.6,8,26.5,Redorai
+2025-12-15,Dezembro,2025,2025.2,Jéssica Brito,Lívia Magalhães,Produto,Product Manager,CLT,Excede,Alto,Concluído,1,3.71,111.6,6,30.8,Redorai
+2025-12-15,Dezembro,2025,2025.2,Lívia Magalhães,Jéssica Brito,Produto,Product Manager,CLT,Atende,Alto,Concluído,1,3.41,100.5,4,12.4,Redorai
+2025-12-15,Dezembro,2025,2025.2,Murilo Coelho,Jéssica Brito,Produto,Product Manager,CLT,Atende,Baixo,Concluído,1,3.52,100.7,7,24.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Nina Vasconcelos,Jéssica Brito,Produto,Designer de produto,CLT,Atende parcialmente,Médio,Concluído,1,2.30,78.0,8,23.0,Redorai
+2025-12-15,Dezembro,2025,2025.2,Priscila Guedes,Jéssica Brito,Produto,Designer de produto,CLT,Atende,Médio,Concluído,1,2.97,93.8,8,26.6,Redorai
+2025-12-15,Dezembro,2025,2025.2,Miguel Salles,Rafaela Quaresma,RH,Analista de RH,CLT,Atende parcialmente,Médio,Concluído,1,2.67,87.6,5,27.1,Redorai
+2025-12-15,Dezembro,2025,2025.2,Nicole Braga,Rafaela Quaresma,RH,Analista de RH,CLT,Atende parcialmente,Alto,Concluído,1,2.54,89.3,5,27.3,Redorai
+2025-12-15,Dezembro,2025,2025.2,Rafaela Quaresma,Miguel Salles,RH,Business Partner,CLT,Atende parcialmente,Médio,Concluído,1,2.58,77.1,3,16.7,Redorai
+2026-06-30,Junho,2026,2026.1,Ana Costa,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.54,99.6,4,18.4,Redorai
+2026-06-30,Junho,2026,2026.1,Bruno Lima,Sofia Carvalho,Comercial,SDR,CLT,Atende parcialmente,Médio,Concluído,1,2.29,80.3,7,3.5,Redorai
+2026-06-30,Junho,2026,2026.1,Carla Souza,Sofia Carvalho,Comercial,SDR,CLT,Excede,Médio,Concluído,1,3.71,103.3,6,6.3,Redorai
+2026-06-30,Junho,2026,2026.1,Diego Alves,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.00,95.8,8,17.0,Redorai
+2026-06-30,Junho,2026,2026.1,Eva Martins,Sofia Carvalho,Comercial,SDR,CLT,Atende,Alto,Concluído,1,3.13,94.5,5,29.0,Redorai
+2026-06-30,Junho,2026,2026.1,Fábio Nunes,Sofia Carvalho,Comercial,SDR,CLT,Atende parcialmente,Médio,Concluído,1,2.51,83.8,5,26.8,Redorai
+2026-06-30,Junho,2026,2026.1,Gabriela Rocha,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.18,98.4,3,2.0,Redorai
+2026-06-30,Junho,2026,2026.1,Henrique Dias,Sofia Carvalho,Comercial,SDR,CLT,Atende,Médio,Concluído,1,3.17,91.2,5,21.2,Redorai
+2026-06-30,Junho,2026,2026.1,Isabela Freitas,Sofia Carvalho,Comercial,Account Executive,CLT,Excede,Médio,Concluído,1,3.91,109.1,7,22.3,Redorai
+2026-06-30,Junho,2026,2026.1,João Mendes,Sofia Carvalho,Comercial,Account Executive,CLT,Atende parcialmente,Alto,Concluído,1,2.62,82.5,8,31.7,Redorai
+2026-06-30,Junho,2026,2026.1,Karina Lopes,Sofia Carvalho,Comercial,Account Executive,CLT,Excede,Médio,Concluído,1,4.38,126.9,6,25.1,Redorai
+2026-06-30,Junho,2026,2026.1,Lucas Azevedo,Sofia Carvalho,Comercial,Account Executive,CLT,Excepcional,Baixo,Concluído,1,4.40,126.0,5,6.1,Redorai
+2026-06-30,Junho,2026,2026.1,Marina Teixeira,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Alto,Concluído,1,3.57,110.2,3,29.7,Redorai
+2026-06-30,Junho,2026,2026.1,Nicolas Barbosa,Sofia Carvalho,Comercial,Account Executive,CLT,Atende parcialmente,Médio,Concluído,1,2.60,87.4,7,3.6,Redorai
+2026-06-30,Junho,2026,2026.1,Olívia Castro,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.48,106.3,6,15.2,Redorai
+2026-06-30,Junho,2026,2026.1,Paulo Ribeiro,Sofia Carvalho,Comercial,Account Executive,CLT,Não atende,Médio,Concluído,1,1.74,69.3,4,26.4,Redorai
+2026-06-30,Junho,2026,2026.1,Queila Santos,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Médio,Concluído,1,3.24,92.6,5,2.5,Redorai
+2026-06-30,Junho,2026,2026.1,Rafael Pinto,Sofia Carvalho,Comercial,Account Executive,CLT,Atende,Baixo,Concluído,1,3.28,98.1,8,23.3,Redorai
+2026-06-30,Junho,2026,2026.1,Sofia Carvalho,Ana Costa,Comercial,Gerente comercial,CLT,Atende,Alto,Concluído,1,3.65,112.4,6,6.3,Redorai
+2026-06-30,Junho,2026,2026.1,Tiago Moreira,Sofia Carvalho,Comercial,Gerente comercial,CLT,Atende,Alto,Pendente,1,3.02,91.3,3,31.9,Redorai
+2026-06-30,Junho,2026,2026.1,Arthur Nascimento,Camila Falcão,Customer Success,CSM,CLT,Não atende,Médio,Concluído,1,1.04,54.9,5,7.2,Redorai
+2026-06-30,Junho,2026,2026.1,Camila Falcão,Eduarda Mota,Customer Success,CSM,CLT,Atende,Alto,Concluído,1,3.00,97.8,4,30.6,Redorai
+2026-06-30,Junho,2026,2026.1,Diogo Saraiva,Camila Falcão,Customer Success,Estagiário,Estágio,Atende,Alto,Concluído,1,3.64,112.4,8,24.2,Redorai
+2026-06-30,Junho,2026,2026.1,Débora Lins,Camila Falcão,Customer Success,CSM,CLT,Atende,Médio,Concluído,1,3.35,95.6,8,7.3,Redorai
+2026-06-30,Junho,2026,2026.1,Eduarda Mota,Camila Falcão,Customer Success,CSM,CLT,Excede,Alto,Concluído,1,3.76,110.7,5,26.5,Redorai
+2026-06-30,Junho,2026,2026.1,Enzo Pimentel,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Baixo,Concluído,1,3.63,104.7,8,3.3,Redorai
+2026-06-30,Junho,2026,2026.1,Heloísa Bastos,Camila Falcão,Customer Success,Analista de CS,CLT,Excepcional,Alto,Concluído,1,5.00,138.0,7,12.8,Redorai
+2026-06-30,Junho,2026,2026.1,Joana Peres,Camila Falcão,Customer Success,Analista de CS,CLT,Atende,Médio,Concluído,1,3.64,101.3,8,2.7,Redorai
+2026-06-30,Junho,2026,2026.1,Kauã Trindade,Camila Falcão,Customer Success,Analista de CS,CLT,Atende parcialmente,Alto,Concluído,1,2.71,88.9,8,14.4,Redorai
+2026-06-30,Junho,2026,2026.1,Pedro Henrique Luz,Camila Falcão,Customer Success,Estagiário,Estágio,Excede,Médio,Concluído,1,4.24,118.2,4,10.5,Redorai
+2026-06-30,Junho,2026,2026.1,Talita Rangel,Camila Falcão,Customer Success,Estagiário,Estágio,Atende parcialmente,Alto,Concluído,1,2.36,72.4,6,28.2,Redorai
+2026-06-30,Junho,2026,2026.1,Alice Pacheco,Helena Sales,Engenharia,Dev Sénior,CLT,Excepcional,Médio,Pendente,1,4.70,126.0,7,21.4,Redorai
+2026-06-30,Junho,2026,2026.1,Amanda Vieira,Helena Sales,Engenharia,Dev Júnior,CLT,Atende parcialmente,Médio,Concluído,1,2.48,77.3,8,20.9,Redorai
+2026-06-30,Junho,2026,2026.1,Bernardo Cunha,Helena Sales,Engenharia,Dev Júnior,CLT,Não atende,Alto,Concluído,1,1.29,52.1,3,12.8,Redorai
+2026-06-30,Junho,2026,2026.1,Catarina Melo,Helena Sales,Engenharia,Dev Júnior,CLT,Atende,Médio,Concluído,1,2.90,89.4,3,12.2,Redorai
+2026-06-30,Junho,2026,2026.1,Daniel Pires,Helena Sales,Engenharia,Dev Júnior,CLT,Não atende,Baixo,Concluído,1,2.13,79.3,8,13.2,Redorai
+2026-06-30,Junho,2026,2026.1,Elisa Duarte,Helena Sales,Engenharia,Dev Júnior,CLT,Atende,Alto,Concluído,1,3.62,104.9,6,20.5,Redorai
+2026-06-30,Junho,2026,2026.1,Felipe Andrade,Helena Sales,Engenharia,Dev Júnior,CLT,Atende,Médio,Concluído,1,3.54,100.8,8,18.9,Redorai
+2026-06-30,Junho,2026,2026.1,Giovana Reis,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Baixo,Concluído,1,3.16,103.1,3,20.0,Redorai
+2026-06-30,Junho,2026,2026.1,Helena Sales,Amanda Vieira,Engenharia,Tech Lead,CLT,Atende,Médio,Concluído,1,3.56,99.5,8,14.3,Redorai
+2026-06-30,Junho,2026,2026.1,Hugo Batista,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Pendente,1,3.27,105.2,4,3.9,Redorai
+2026-06-30,Junho,2026,2026.1,Igor Menezes,Helena Sales,Engenharia,Tech Lead,CLT,Excede,Médio,Concluído,1,4.12,114.5,7,3.1,Redorai
+2026-06-30,Junho,2026,2026.1,Júlia Fonseca,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Médio,Concluído,1,3.47,106.5,6,10.9,Redorai
+2026-06-30,Junho,2026,2026.1,Larissa Moura,Helena Sales,Engenharia,Dev Pleno,CLT,Excepcional,Baixo,Concluído,1,4.57,124.5,3,23.7,Redorai
+2026-06-30,Junho,2026,2026.1,Mateus Peixoto,Helena Sales,Engenharia,Dev Pleno,CLT,Não atende,Médio,Concluído,1,1.99,70.1,4,18.8,Redorai
+2026-06-30,Junho,2026,2026.1,Natália Borges,Helena Sales,Engenharia,Dev Pleno,CLT,Atende parcialmente,Alto,Concluído,1,2.44,76.6,6,20.3,Redorai
+2026-06-30,Junho,2026,2026.1,Otávio Farias,Helena Sales,Engenharia,Dev Pleno,CLT,Atende,Alto,Concluído,1,3.26,97.0,5,25.6,Redorai
+2026-06-30,Junho,2026,2026.1,Patrícia Nogueira,Helena Sales,Engenharia,Dev Pleno,CLT,Não atende,Médio,Concluído,1,1.39,60.5,6,27.2,Redorai
+2026-06-30,Junho,2026,2026.1,Renato Guimarães,Helena Sales,Engenharia,Dev Sénior,CLT,Excede,Alto,Concluído,1,3.84,115.4,3,26.3,Redorai
+2026-06-30,Junho,2026,2026.1,Sabrina Tavares,Helena Sales,Engenharia,Dev Sénior,CLT,Atende,Médio,Concluído,1,3.00,90.2,6,9.2,Redorai
+2026-06-30,Junho,2026,2026.1,Thales Prado,Helena Sales,Engenharia,Dev Sénior,CLT,Atende,Médio,Concluído,1,3.16,96.4,8,10.8,Redorai
+2026-06-30,Junho,2026,2026.1,Valentina Campos,Helena Sales,Engenharia,Dev Sénior,CLT,Excepcional,Médio,Concluído,1,4.66,125.1,4,14.6,Redorai
+2026-06-30,Junho,2026,2026.1,Caio Rezende,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende parcialmente,Médio,Concluído,1,2.86,90.6,8,22.2,Redorai
+2026-06-30,Junho,2026,2026.1,Fernanda Assis,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Médio,Concluído,1,3.16,94.5,5,4.4,Redorai
+2026-06-30,Junho,2026,2026.1,Gustavo Cordeiro,Letícia Aguiar,Financeiro,Analista financeiro,CLT,Atende,Baixo,Concluído,1,3.29,93.9,4,27.5,Redorai
+2026-06-30,Junho,2026,2026.1,Letícia Aguiar,Caio Rezende,Financeiro,Controller,CLT,Excede,Alto,Concluído,1,3.96,110.8,7,12.2,Redorai
+2026-06-30,Junho,2026,2026.1,Beatriz Furtado,Stella Paiva,Marketing,Coordenador de marketing,CLT,Excede,Alto,Concluído,1,3.88,111.0,4,27.6,Redorai
+2026-06-30,Junho,2026,2026.1,Stella Paiva,Beatriz Furtado,Marketing,Analista de marketing,CLT,Atende parcialmente,Baixo,Concluído,1,2.41,80.7,8,15.9,Redorai
+2026-06-30,Junho,2026,2026.1,Tainá Leal,Beatriz Furtado,Marketing,Analista de marketing,CLT,Excede,Médio,Concluído,1,3.70,107.5,4,13.0,Redorai
+2026-06-30,Junho,2026,2026.1,Vitória Sampaio,Beatriz Furtado,Marketing,Analista de marketing,CLT,Atende,Alto,Concluído,1,3.38,107.3,3,16.0,Redorai
+2026-06-30,Junho,2026,2026.1,Aline Macedo,Samuel Dutra,Operações,Analista de operações,CLT,Excepcional,Baixo,Concluído,1,4.44,126.7,3,10.7,Redorai
+2026-06-30,Junho,2026,2026.1,Samuel Dutra,Vinícius Porto,Operações,Analista de operações,CLT,Excede,Médio,Concluído,1,4.15,119.6,7,13.5,Redorai
+2026-06-30,Junho,2026,2026.1,Vinícius Porto,Samuel Dutra,Operações,Analista de operações,CLT,Atende parcialmente,Médio,Concluído,1,2.51,82.3,8,12.8,Redorai
+2026-06-30,Junho,2026,2026.1,Jéssica Brito,Lívia Magalhães,Produto,Product Manager,CLT,Atende parcialmente,Alto,Concluído,1,2.44,80.6,6,10.8,Redorai
+2026-06-30,Junho,2026,2026.1,Lívia Magalhães,Jéssica Brito,Produto,Product Manager,CLT,Não atende,Alto,Concluído,1,1.72,62.4,6,29.0,Redorai
+2026-06-30,Junho,2026,2026.1,Murilo Coelho,Jéssica Brito,Produto,Product Manager,CLT,Atende parcialmente,Baixo,Concluído,1,2.79,85.5,7,9.0,Redorai
+2026-06-30,Junho,2026,2026.1,Nina Vasconcelos,Jéssica Brito,Produto,Designer de produto,CLT,Excepcional,Médio,Concluído,1,4.49,125.4,4,23.9,Redorai
+2026-06-30,Junho,2026,2026.1,Priscila Guedes,Jéssica Brito,Produto,Designer de produto,CLT,Atende,Médio,Pendente,1,3.25,94.5,5,10.8,Redorai
+2026-06-30,Junho,2026,2026.1,Miguel Salles,Rafaela Quaresma,RH,Analista de RH,CLT,Atende,Médio,Concluído,1,3.58,111.3,5,27.8,Redorai
+2026-06-30,Junho,2026,2026.1,Nicole Braga,Rafaela Quaresma,RH,Analista de RH,CLT,Atende,Alto,Concluído,1,3.57,106.7,8,29.3,Redorai
+2026-06-30,Junho,2026,2026.1,Rafaela Quaresma,Miguel Salles,RH,Business Partner,CLT,Atende,Médio,Concluído,1,3.25,97.3,5,17.3,Redorai

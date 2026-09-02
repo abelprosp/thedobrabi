@@ -76,6 +76,9 @@ func Suggest(datasetName string, cols []schemax.Column) Model {
 				agg = "avg"
 				format = "currency"
 			}
+			if strings.Contains(ln, "nota") || strings.Contains(ln, "score") || strings.Contains(ln, "rating") || strings.Contains(ln, "desempenho") || strings.Contains(ln, "atingimento") {
+				agg = "avg"
+			}
 			if strings.Contains(ln, "revenue") || strings.Contains(ln, "amount") || strings.Contains(ln, "total") || strings.Contains(ln, "profit") || strings.Contains(ln, "cost") || strings.Contains(ln, "sales") {
 				format = "currency"
 			}
@@ -169,6 +172,9 @@ func EnsureBasics(m *Model, cols []schemax.Column) {
 				if strings.Contains(ln, "rate") || strings.Contains(ln, "pct") || strings.Contains(ln, "margin") {
 					agg = "avg"
 					format = "percent"
+				}
+				if strings.Contains(ln, "nota") || strings.Contains(ln, "score") || strings.Contains(ln, "rating") || strings.Contains(ln, "desempenho") || strings.Contains(ln, "atingimento") {
+					agg = "avg"
 				}
 				expr := strings.ToUpper(agg) + "(" + c.Name + ")"
 				m.Measures = append(m.Measures, Measure{

@@ -11,6 +11,7 @@ Carregue o CSV em **Dados** e ative o painel correspondente em **Loja**.
 | `redorai-pipeline.csv` | Pipeline e follow-up |
 | `redorai-ecommerce.csv` | E-commerce |
 | `redorai-rh.csv` | RH e pessoas |
+| `redorai-rh-desempenho.csv` | Desempenho de pessoas |
 | `redorai-estoque.csv` | Ruptura zero |
 | `redorai-producao.csv` | Performance de produção |
 | `redorai-marketing.csv` | Aquisição e campanhas |

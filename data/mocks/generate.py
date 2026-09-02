@@ -368,6 +368,120 @@ def rh() -> tuple[list[str], list[dict]]:
     return headers, rows
 
 
+def rh_desempenho() -> tuple[list[str], list[dict]]:
+    rng = random.Random(7)
+    papeis = [
+        ("Comercial", "SDR", "CLT", 8),
+        ("Comercial", "Account Executive", "CLT", 10),
+        ("Comercial", "Gerente comercial", "CLT", 2),
+        ("Engenharia", "Dev Júnior", "CLT", 6),
+        ("Engenharia", "Dev Pleno", "CLT", 8),
+        ("Engenharia", "Dev Sénior", "CLT", 5),
+        ("Engenharia", "Tech Lead", "CLT", 2),
+        ("Produto", "Product Manager", "CLT", 3),
+        ("Produto", "Designer de produto", "CLT", 2),
+        ("Marketing", "Analista de marketing", "CLT", 3),
+        ("Marketing", "Coordenador de marketing", "CLT", 1),
+        ("Financeiro", "Analista financeiro", "CLT", 3),
+        ("Financeiro", "Controller", "CLT", 1),
+        ("RH", "Analista de RH", "CLT", 2),
+        ("RH", "Business Partner", "CLT", 1),
+        ("Operações", "Analista de operações", "CLT", 3),
+        ("Customer Success", "CSM", "CLT", 4),
+        ("Customer Success", "Analista de CS", "CLT", 4),
+        ("Customer Success", "Estagiário", "Estágio", 3),
+    ]
+    pessoas: list[tuple[str, str, str, str]] = []
+    for dept, cargo, tipo, n in papeis:
+        for _ in range(n):
+            i = len(pessoas)
+            nome = NOMES[i % len(NOMES)]
+            if i >= len(NOMES):
+                nome = f"{nome} {i}"
+            pessoas.append((nome, dept, cargo, tipo))
+
+    gestores_por_area: dict[str, str] = {}
+    for nome, dept, cargo, _tipo in pessoas:
+        if dept not in gestores_por_area and any(k in cargo for k in ("Gerente", "Lead", "Coordenador", "Controller", "Partner", "Product Manager")):
+            gestores_por_area[dept] = nome
+    for nome, dept, _cargo, _tipo in pessoas:
+        gestores_por_area.setdefault(dept, nome)
+
+    ciclos = [
+        (date(2025, 6, 30), "2025.1"),
+        (date(2025, 12, 15), "2025.2"),
+        (date(2026, 6, 30), "2026.1"),
+    ]
+    faixas = [
+        ("Não atende", 1.05, 2.15, 8),
+        ("Atende parcialmente", 2.20, 2.85, 18),
+        ("Atende", 2.90, 3.65, 45),
+        ("Excede", 3.70, 4.35, 22),
+        ("Excepcional", 4.40, 4.98, 7),
+    ]
+    labels = [f[0] for f in faixas]
+    weights = [f[3] for f in faixas]
+    lows = {f[0]: f[1] for f in faixas}
+    highs = {f[0]: f[2] for f in faixas}
+
+    rows = []
+    for nome, dept, cargo, tipo in pessoas:
+        gestor = gestores_por_area[dept]
+        if gestor == nome:
+            other = next((p[0] for p in pessoas if p[1] == dept and p[0] != nome), "Diretoria")
+            gestor = other
+        potencial = rng.choices(["Baixo", "Médio", "Alto"], weights=[15, 55, 30])[0]
+        drift = 0.0
+        for cycle_i, (dt, ciclo) in enumerate(ciclos):
+            faixa = rng.choices(labels, weights=weights)[0]
+            lo, hi = lows[faixa], highs[faixa]
+            nota = round(rng.uniform(lo, hi) + drift, 2)
+            nota = max(1.0, min(5.0, nota))
+            if nota < 2.2:
+                faixa = "Não atende"
+            elif nota < 2.9:
+                faixa = "Atende parcialmente"
+            elif nota < 3.7:
+                faixa = "Atende"
+            elif nota < 4.4:
+                faixa = "Excede"
+            else:
+                faixa = "Excepcional"
+            atingimento = round(48 + (nota - 1) * 22 + rng.uniform(-6, 8), 1)
+            atingimento = max(42.0, min(138.0, atingimento))
+            objetivos = rng.randint(3, 8)
+            horas = round(rng.uniform(2, 28) + (4 if potencial == "Alto" else 0), 1)
+            pendente = cycle_i == len(ciclos) - 1 and rng.random() < 0.11
+            rows.append({
+                "data": dt.isoformat(),
+                "mes": MESES[dt.month],
+                "ano": dt.year,
+                "ciclo": ciclo,
+                "colaborador": nome,
+                "gestor": gestor,
+                "departamento": dept,
+                "cargo": cargo,
+                "tipo_contrato": tipo,
+                "faixa": faixa,
+                "potencial": potencial,
+                "status_ciclo": "Pendente" if pendente else "Concluído",
+                "headcount": 1,
+                "nota": f"{nota:.2f}",
+                "atingimento": f"{atingimento:.1f}",
+                "objetivos_count": objetivos,
+                "quantidade": f"{horas:.1f}",
+                "empresa": "Redorai",
+            })
+            drift += rng.uniform(-0.08, 0.18)
+    rows.sort(key=lambda r: (r["data"], r["departamento"], r["colaborador"]))
+    headers = [
+        "data", "mes", "ano", "ciclo", "colaborador", "gestor", "departamento", "cargo",
+        "tipo_contrato", "faixa", "potencial", "status_ciclo", "headcount", "nota",
+        "atingimento", "objetivos_count", "quantidade", "empresa",
+    ]
+    return headers, rows
+
+
 def estoque() -> tuple[list[str], list[dict]]:
     itens = [
         ("Camiseta logo", "Vestuário"), ("Moletom", "Vestuário"), ("Caneca", "Acessórios"),
@@ -588,6 +702,7 @@ DATASETS = [
     ("redorai-pipeline.csv", "Pipeline e follow-up", comercial_pipeline),
     ("redorai-ecommerce.csv", "E-commerce", ecommerce),
     ("redorai-rh.csv", "RH e pessoas", rh),
+    ("redorai-rh-desempenho.csv", "Desempenho de pessoas", rh_desempenho),
     ("redorai-estoque.csv", "Ruptura zero", estoque),
     ("redorai-producao.csv", "Performance de produção", producao),
     ("redorai-marketing.csv", "Aquisição e campanhas", marketing),
