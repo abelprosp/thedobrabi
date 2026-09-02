@@ -42,7 +42,7 @@ func (e *DuckDBExecutor) Execute(ctx context.Context, sql string, limit int) (Du
 		return DuckDBResult{}, err
 	}
 	filtered := filterRows(rows, q.where)
-	if len(q.groupby) > 0 {
+	if len(q.aggs) > 0 {
 		agg, err := aggregateRows(filtered, cols, q)
 		if err != nil {
 			return DuckDBResult{}, err
@@ -215,18 +215,15 @@ func evalPred(left any, op string, right any) bool {
 }
 
 func aggregateRows(rows []map[string]any, cols []string, q simpleQuery) ([]map[string]any, error) {
+	_ = cols
 	groups := map[string]map[string]any{}
 	counts := map[string]int{}
 	for _, r := range rows {
-		keyParts := make([]string, len(q.groupby))
-		for i, g := range q.groupby {
-			keyParts[i] = fmt.Sprint(r[g])
-		}
-		key := strings.Join(keyParts, "\x1f")
+		key := groupKey(r, q.groupby)
 		if _, ok := groups[key]; !ok {
 			newRow := map[string]any{}
 			for _, g := range q.groupby {
-				newRow[g] = r[g]
+				newRow[g] = rowLookup(r, g)
 			}
 			for name, spec := range q.aggs {
 				newRow[name] = aggInit(spec.fn)
@@ -236,35 +233,62 @@ func aggregateRows(rows []map[string]any, cols []string, q simpleQuery) ([]map[s
 		}
 		counts[key]++
 		for name, spec := range q.aggs {
-			v := toF(r[spec.col])
+			v := toF(rowLookup(r, spec.col))
 			groups[key][name] = aggCombine(spec.fn, groups[key][name], v)
 		}
 	}
 	var out []map[string]any
-	for _, g := range groups {
+	for key, g := range groups {
+		n := float64(counts[key])
+		if n == 0 {
+			n = 1
+		}
 		for name, spec := range q.aggs {
 			if spec.fn == "AVG" || spec.fn == "AVERAGE" {
-				g[name] = toF(g[name]) / float64(counts[strings.Join(func() []string {
-					parts := []string{}
-					for _, col := range q.groupby {
-						parts = append(parts, fmt.Sprint(g[col]))
-					}
-					return parts
-				}(), "\x1f")])
+				g[name] = toF(g[name]) / n
 			}
 			if spec.fn == "COUNT" && spec.col == "*" {
-				g[name] = counts[strings.Join(func() []string {
-					parts := []string{}
-					for _, col := range q.groupby {
-						parts = append(parts, fmt.Sprint(g[col]))
-					}
-					return parts
-				}(), "\x1f")]
+				g[name] = counts[key]
 			}
 		}
 		out = append(out, g)
 	}
+	if len(out) == 0 && len(q.aggs) > 0 {
+		empty := map[string]any{}
+		for name, spec := range q.aggs {
+			if spec.fn == "COUNT" {
+				empty[name] = 0
+			} else {
+				empty[name] = 0.0
+			}
+		}
+		out = append(out, empty)
+	}
 	return out, nil
+}
+
+func groupKey(r map[string]any, groupby []string) string {
+	if len(groupby) == 0 {
+		return ""
+	}
+	parts := make([]string, len(groupby))
+	for i, g := range groupby {
+		parts[i] = fmt.Sprint(rowLookup(r, g))
+	}
+	return strings.Join(parts, "\x1f")
+}
+
+func rowLookup(r map[string]any, col string) any {
+	if v, ok := r[col]; ok {
+		return v
+	}
+	want := strings.ToLower(strings.Trim(col, "`"))
+	for k, v := range r {
+		if strings.ToLower(k) == want {
+			return v
+		}
+	}
+	return nil
 }
 
 func aggInit(fn string) any {

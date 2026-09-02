@@ -176,7 +176,7 @@ func requestToSimpleSQL(meta datasetInfo, req Request) (string, Evidence) {
 			continue
 		}
 		expr, _ := measureSQL(sm, &meta.Model)
-		parts = append(parts, fmt.Sprintf("%s AS `%s`", expr, m))
+		parts = append(parts, fmt.Sprintf("%s AS `%s`", expr, sqlOutAlias(m, sm.Name)))
 		ev.Metrics = append(ev.Metrics, m+" = "+sm.Expression)
 	}
 	if len(parts) == 0 {

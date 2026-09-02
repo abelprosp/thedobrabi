@@ -734,7 +734,13 @@ function QueryFields({
                   query: {
                     ...base,
                     dataset_id: liveId || base?.dataset_id,
-                    measures: e.target.value ? [e.target.value, ...(base?.measures || []).slice(1)] : (base?.measures || []).slice(1),
+                    measures: e.target.value
+                      ? ["scatter"].includes(widget.type)
+                        ? [e.target.value, ...(base?.measures || []).slice(1)]
+                        : [e.target.value]
+                      : ["scatter"].includes(widget.type)
+                        ? (base?.measures || []).slice(1)
+                        : [],
                   },
                   config: widget.type === "scatter" ? { ...w.config, xMeasure: e.target.value } : w.config,
                 };

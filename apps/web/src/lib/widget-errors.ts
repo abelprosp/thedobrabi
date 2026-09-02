@@ -27,10 +27,16 @@ function preview(raw: unknown) {
 
 export function firstNumericEntry(row: Record<string, unknown> | undefined, prefer?: string[]) {
   if (!row) return { key: "", value: undefined as unknown };
+  const keys = Object.keys(row);
+  const lookup = (wanted: string) => {
+    if (!wanted) return undefined;
+    const alts = [wanted, wanted.replaceAll(".", "_"), wanted.replaceAll("_", ".")];
+    const lower = new Set(alts.map((a) => a.toLowerCase()));
+    return keys.find((k) => lower.has(k.toLowerCase()) || lower.has(k.toLowerCase().replaceAll(".", "_")));
+  };
   for (const key of prefer || []) {
-    if (key && key in row && isNumericValue(row[key])) return { key, value: row[key] };
-    const alt = key.replace(".", "_");
-    if (alt && alt in row && isNumericValue(row[alt])) return { key: alt, value: row[alt] };
+    const hit = lookup(key);
+    if (hit && isNumericValue(row[hit])) return { key: hit, value: row[hit] };
   }
   const entries = Object.entries(row);
   const num = entries.find(([, v]) => isNumericValue(v));
