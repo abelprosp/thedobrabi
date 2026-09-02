@@ -183,6 +183,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Post("/dashboards/ai", s.aiDashboard)
 			r.Get("/dashboards/{id}", s.getDashboard)
 			r.Put("/dashboards/{id}", s.putDashboard)
+			r.Delete("/dashboards/{id}", s.deleteDashboard)
 			r.Post("/dashboards/{id}/share", s.shareDashboard)
 
 			r.Get("/ai/config", s.aiConfig)

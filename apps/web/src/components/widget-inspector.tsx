@@ -49,7 +49,7 @@ export function WidgetInspector({
     onUpdate((w) => ({ ...w, config: { ...w.config, ...partial } }));
 
   return (
-    <aside className="w-80 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
+    <aside className="w-80 min-h-0 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
       <div className="mb-2 flex items-center justify-between">
         <span className="text-[13px] font-semibold text-ink">Propriedades</span>
         <Badge tone="accent">{catalog.find((t) => t.type === widget.type)?.label || widget.type}</Badge>

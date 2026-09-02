@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { WidgetView, type Widget, type DashboardFilter, type WidgetType } from "@/components/WidgetView";
 import { WidgetInspector } from "@/components/widget-inspector";
 import { toast } from "sonner";
@@ -184,6 +184,7 @@ export default function DashboardEditorPage() {
 
 function DashboardEditorInner() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const searchParams = useSearchParams();
   const qc = useQueryClient();
   const [edit, setEdit] = useState(true);
@@ -203,6 +204,8 @@ function DashboardEditorInner() {
   const [preferredDatasetId, setPreferredDatasetId] = useState(searchParams.get("dataset_id") || "");
   const [sourceFilter, setSourceFilter] = useState("");
 
+  const me = useQuery({ queryKey: ["me"], queryFn: () => api<{ role?: string }>("/api/v1/auth/me") });
+  const canDelete = !me.data || me.data.role !== "viewer";
   const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
   const datasetList = normalizeArray<DatasetListItem>(datasets.data);
   const sourceOptions = useMemo(() => {
@@ -250,6 +253,16 @@ function DashboardEditorInner() {
     onSuccess: () => {
       toast.success("Dashboard guardado");
       qc.invalidateQueries({ queryKey: ["dashboard", id] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const remove = useMutation({
+    mutationFn: () => api(`/api/v1/dashboards/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      toast.success("Dashboard excluído");
+      qc.invalidateQueries({ queryKey: ["dashboards"] });
+      router.replace("/dashboards");
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -425,9 +438,9 @@ function DashboardEditorInner() {
   if (!d.data && widgets.length === 0) return <PageSkeleton />;
 
   return (
-    <div className="flex h-[calc(100vh-7rem)] gap-3">
+    <div className="flex h-[calc(100vh-7rem)] min-h-0 gap-3">
       {edit && (
-        <aside className="flex w-56 flex-col gap-3 overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-sm">
+        <aside className="flex w-56 min-h-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-sm">
           <div className="flex items-center justify-between">
             <span className="text-[12px] font-semibold uppercase text-mute">Componentes</span>
             <Button variant="ghost" size="icon" onClick={() => setEdit(false)} title="Fechar painel">
@@ -468,7 +481,7 @@ function DashboardEditorInner() {
         </aside>
       )}
 
-      <div className="flex min-w-0 flex-1 flex-col gap-3">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden">
         <PageHeader
           title={edit ? name || "Dashboard" : name}
           description={edit ? description : undefined}
@@ -508,6 +521,19 @@ function DashboardEditorInner() {
               }}>
                 <Share2 size={14} /> Partilhar
               </Button>
+              {canDelete && (
+                <Button
+                  variant="danger"
+                  onClick={() => {
+                    if (confirm(`Excluir o dashboard «${name || d.data?.name}»? Esta ação não pode ser desfeita.`)) {
+                      remove.mutate();
+                    }
+                  }}
+                  busy={remove.isPending}
+                >
+                  <Trash2 size={14} /> Excluir
+                </Button>
+              )}
               <Button onClick={() => save.mutate()} busy={save.isPending}>
                 <Save size={14} /> Guardar
               </Button>
@@ -577,7 +603,7 @@ function DashboardEditorInner() {
           </div>
         </Card>
 
-        <div className="relative flex-1 overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+        <div className="relative min-h-0 flex-1 overflow-auto rounded-2xl border border-line bg-surface pb-8 shadow-sm">
           {widgets.length === 0 ? (
             <EmptyState
               icon={LayoutDashboard}

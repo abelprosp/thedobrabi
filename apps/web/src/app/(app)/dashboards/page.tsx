@@ -1,11 +1,11 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter, useSearchParams } from "next/navigation";
-import { LayoutDashboard, Sparkles, Wand2, X, AlertCircle, Loader2 } from "lucide-react";
+import { LayoutDashboard, Sparkles, Trash2, Wand2, X, AlertCircle, Loader2 } from "lucide-react";
 import { Button, Card, EmptyState, ErrorState, PageHeader, PageSkeleton, Input, Select, Textarea, Skeleton, cn } from "@/components/ui";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { starterDashboardWidgets, type DatasetListItem } from "@/lib/semantic";
@@ -24,9 +24,12 @@ export default function DashboardsPage() {
 
 function DashboardsPageInner() {
   const router = useRouter();
+  const qc = useQueryClient();
   const searchParams = useSearchParams();
   const seedDatasetId = searchParams.get("dataset_id") || "";
   const seeded = useRef(false);
+  const me = useQuery({ queryKey: ["me"], queryFn: () => api<{ role?: string }>("/api/v1/auth/me") });
+  const canDelete = !me.data || me.data.role !== "viewer";
   const q = useQuery({ queryKey: ["dashboards"], queryFn: () => api<any>("/api/v1/dashboards") });
   const dashboards = normalizeArray<Dash>(q.data);
   const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
@@ -57,6 +60,15 @@ function DashboardsPageInner() {
     onSuccess: (d) => {
       toast.success("Dashboard gerado a partir do modelo semântico");
       router.push(`/dashboards/${d.id}`);
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const remove = useMutation({
+    mutationFn: (id: string) => api(`/api/v1/dashboards/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      toast.success("Dashboard excluído");
+      qc.invalidateQueries({ queryKey: ["dashboards"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -152,12 +164,30 @@ function DashboardsPageInner() {
       {!!dashboards.length && (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {dashboards.map((d) => (
-            <Link key={d.id} href={`/dashboards/${d.id}`}>
-              <Card className="h-full transition hover:border-accent/30">
-                <div className="text-sm font-medium text-ink">{d.name}</div>
-                <div className="mt-1 text-[12px] text-mute">{d.description || "Sem descrição"}</div>
-              </Card>
-            </Link>
+            <Card key={d.id} className="h-full transition hover:border-accent/30">
+              <div className="flex items-start justify-between gap-2">
+                <Link href={`/dashboards/${d.id}`} className="min-w-0 flex-1">
+                  <div className="text-sm font-medium text-ink">{d.name}</div>
+                  <div className="mt-1 text-[12px] text-mute">{d.description || "Sem descrição"}</div>
+                </Link>
+                {canDelete && (
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      if (confirm(`Excluir o dashboard «${d.name}»? Esta ação não pode ser desfeita.`)) {
+                        remove.mutate(d.id);
+                      }
+                    }}
+                    busy={remove.isPending}
+                  >
+                    <Trash2 size={12} /> Excluir
+                  </Button>
+                )}
+              </div>
+            </Card>
           ))}
         </div>
       )}

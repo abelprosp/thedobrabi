@@ -176,9 +176,9 @@ export default function ReportEditorPage() {
   if (!q.data && !hydrated) return <PageSkeleton />;
 
   return (
-    <div className="flex h-[calc(100vh-7rem)] gap-3">
+    <div className="flex h-[calc(100vh-7rem)] min-h-0 gap-3">
       {edit && (
-        <aside className="flex w-56 flex-col gap-3 overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-sm print:hidden">
+        <aside className="flex w-56 min-h-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-sm print:hidden">
           <div className="flex items-center justify-between">
             <span className="text-[12px] font-semibold uppercase text-mute">Componentes</span>
             <Button variant="ghost" size="icon" onClick={() => setEdit(false)} title="Fechar painel"><EyeOff size={16} /></Button>
@@ -197,7 +197,7 @@ export default function ReportEditorPage() {
         </aside>
       )}
 
-      <div className="flex min-w-0 flex-1 flex-col gap-3">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden">
         <div className="print:hidden">
           <PageHeader
             title={name || "Relatório"}
@@ -257,7 +257,7 @@ export default function ReportEditorPage() {
           </div>
         </Card>
 
-        <div ref={canvasRef} className="relative flex-1 overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm print:overflow-visible print:shadow-none">
+        <div ref={canvasRef} className="relative min-h-0 flex-1 overflow-auto rounded-2xl border border-line bg-surface p-4 pb-8 shadow-sm print:overflow-visible print:shadow-none">
           <h2 className="mb-3 hidden text-lg font-semibold text-ink print:block">{name} — {currentPage.name}</h2>
           {widgets.length === 0 ? (
             <EmptyState
@@ -295,7 +295,7 @@ export default function ReportEditorPage() {
       </div>
 
       {edit && current && (
-        <aside className="w-80 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm print:hidden">
+        <aside className="w-80 min-h-0 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm print:hidden">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-[13px] font-semibold text-ink">Propriedades</span>
             <Badge tone="accent">{WIDGET_CATALOG.find((t) => t.type === current.type)?.label}</Badge>

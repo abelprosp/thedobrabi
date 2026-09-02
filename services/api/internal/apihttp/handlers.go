@@ -570,6 +570,30 @@ func (s *Server) putDashboard(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{"id": id})
 }
 
+func (s *Server) deleteDashboard(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, role := principal(r)
+	if role == "viewer" {
+		httpx.Error(w, 403, "forbidden", "sem permissão para excluir dashboards")
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	ct, err := s.deps.PG.Exec(r.Context(), `DELETE FROM dashboards WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, org, ws)
+	if err != nil {
+		httpx.Error(w, 400, "delete_failed", err.Error())
+		return
+	}
+	if ct.RowsAffected() == 0 {
+		httpx.Error(w, 404, "not_found", "dashboard não encontrado")
+		return
+	}
+	s.audit(r, "DASHBOARD_DELETED", "dashboard", id, nil)
+	httpx.JSON(w, 200, map[string]any{"ok": true})
+}
+
 func (s *Server) aiDashboard(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, _ := principal(r)
 	var body struct {
