@@ -6,11 +6,14 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { PageHeader, PageSkeleton } from "@/components/ui";
 import { ROLE_LABELS, planLabel, roleLabel } from "@/lib/labels";
+import { ThemeSegmented } from "@/components/theme-toggle";
+import { useTheme } from "@/components/theme-provider";
 
-const inputCls = "w-full rounded-lg border border-line bg-white px-3 py-2 text-sm text-ink outline-none focus:border-accent/50";
-const selectCls = "rounded-lg border border-line bg-white px-2 text-sm text-ink outline-none";
+const inputCls = "w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-accent/50";
+const selectCls = "rounded-lg border border-line bg-surface px-2 text-sm text-ink outline-none";
 
 export default function SettingsPage() {
+  const { theme, setTheme } = useTheme();
   const me = useQuery({ queryKey: ["me"], queryFn: () => api<any>("/api/v1/auth/me") });
   const org = useQuery({ queryKey: ["org"], queryFn: () => api<any>("/api/v1/organizations/current") });
   const sso = useQuery({ queryKey: ["sso"], queryFn: () => api<any>("/api/v1/sso/connections") });
@@ -89,6 +92,10 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader title="Definições" description="Organização, membros, espaços de trabalho e autenticação." />
       {me.isLoading && <PageSkeleton cards={2} />}
+      <Box title="Aparência">
+        <p className="mb-3 text-[13px] text-mute">Escolha se o dashboard e a aplicação aparecem em tema claro ou escuro.</p>
+        <ThemeSegmented value={theme} onChange={setTheme} />
+      </Box>
       <Box title="Organização">
         <Row k="Utilizador" v={me.data?.name} />
         <Row k="E-mail" v={me.data?.email} />
@@ -106,7 +113,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <input
-                className={`flex-1 rounded-xl border border-indigo-200 bg-white px-3 py-2 text-sm text-ink outline-none focus:border-indigo-400`}
+                className={`flex-1 rounded-xl border border-indigo-200 bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-indigo-400`}
                 placeholder="E-mail do colega"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
@@ -146,7 +153,7 @@ export default function SettingsPage() {
               {m.name} · {m.email}
             </span>
             <select
-              className="rounded border border-line bg-white px-2 py-1 text-[12px]"
+              className="rounded border border-line bg-surface px-2 py-1 text-[12px]"
               value={m.role}
               onChange={async (e) => {
                 try {
@@ -266,7 +273,7 @@ export default function SettingsPage() {
         </p>
         <input className={`mb-2 ${inputCls}`} value={samlName} onChange={(e) => setSamlName(e.target.value)} />
         <textarea
-          className="h-28 w-full rounded-lg border border-line bg-white p-2 font-mono text-[11px] outline-none focus:border-accent/50"
+          className="h-28 w-full rounded-lg border border-line bg-surface p-2 font-mono text-[11px] outline-none focus:border-accent/50"
           placeholder="Cole aqui o metadata XML do IdP"
           value={meta}
           onChange={(e) => setMeta(e.target.value)}

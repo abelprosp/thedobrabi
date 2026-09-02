@@ -75,9 +75,39 @@ export function chartPalette(color?: string) {
   return [color, ...BRAND_PALETTE.filter((c) => c.toLowerCase() !== color.toLowerCase())];
 }
 
+export type ChartChrome = {
+  ink: string;
+  mute: string;
+  line: string;
+  surface: string;
+  surface2: string;
+};
+
+const LIGHT_CHROME: ChartChrome = {
+  ink: "#0f172a",
+  mute: "#5b6470",
+  line: "#e2e8f0",
+  surface: "#ffffff",
+  surface2: "#f1f5f9",
+};
+
+export function chartChrome(): ChartChrome {
+  if (typeof window === "undefined") return LIGHT_CHROME;
+  const s = getComputedStyle(document.documentElement);
+  const v = (name: string, fb: string) => s.getPropertyValue(name).trim() || fb;
+  return {
+    ink: v("--color-ink", LIGHT_CHROME.ink),
+    mute: v("--color-mute", LIGHT_CHROME.mute),
+    line: v("--color-line", LIGHT_CHROME.line),
+    surface: v("--color-surface", LIGHT_CHROME.surface),
+    surface2: v("--color-surface-2", LIGHT_CHROME.surface2),
+  };
+}
+
 export function legendOption(show: boolean, position: LegendPosition = "top") {
   if (!show) return undefined;
-  const base = { textStyle: { color: "#5b6470", fontSize: 11 } };
+  const c = chartChrome();
+  const base = { textStyle: { color: c.mute, fontSize: 11 } };
   if (position === "bottom") return { ...base, bottom: 0, left: "center" };
   if (position === "left") return { ...base, left: 0, top: "middle", orient: "vertical" };
   if (position === "right") return { ...base, right: 0, top: "middle", orient: "vertical" };
@@ -136,9 +166,12 @@ export function inspectorCaps(type: string): InspectorCaps {
   };
 }
 
-export const echartsTooltip = {
-  backgroundColor: "#ffffff",
-  borderColor: "#e2e8f0",
-  textStyle: { color: "#0f172a", fontSize: 12 },
-  extraCssText: "box-shadow: 0 8px 24px rgba(15,23,42,0.08); border-radius: 10px;",
-};
+export function echartsTooltip() {
+  const c = chartChrome();
+  return {
+    backgroundColor: c.surface,
+    borderColor: c.line,
+    textStyle: { color: c.ink, fontSize: 12 },
+    extraCssText: "box-shadow: 0 8px 24px rgba(15,23,42,0.18); border-radius: 10px;",
+  };
+}

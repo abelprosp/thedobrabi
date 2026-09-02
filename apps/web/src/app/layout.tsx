@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers";
+import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
@@ -28,8 +29,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <body className={inter.className}>
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         <Providers>{children}</Providers>
       </body>
     </html>

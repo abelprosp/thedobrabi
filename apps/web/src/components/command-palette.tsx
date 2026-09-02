@@ -54,7 +54,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
         role="dialog"
         aria-modal="true"
         aria-label="Procurar"
-        className="mx-auto max-w-lg overflow-hidden rounded-2xl border border-line bg-white shadow-2xl"
+        className="mx-auto max-w-lg overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <input

@@ -4,6 +4,7 @@ import ReactECharts from "echarts-for-react";
 import { Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import {
+  chartChrome,
   chartPalette,
   echartsTooltip,
   formatNumber,
@@ -11,6 +12,7 @@ import {
   legendOption,
   type LegendPosition,
 } from "@/lib/widget-config";
+import { useTheme } from "@/components/theme-provider";
 
 type ChartProps = {
   type?: "line" | "bar" | "area" | "pie";
@@ -69,6 +71,8 @@ function pivotSeries(
 }
 
 export function Chart({ type = "bar", title, columns = [], rows = [], height = 280, onClick, config = {} }: ChartProps) {
+  const { theme } = useTheme();
+  const chrome = chartChrome();
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const rawCatsAll = rows.map((r) => String(r[dim] ?? ""));
   const numericCols = columns.filter((c) => c !== dim && typeof rows[0]?.[c] === "number");
@@ -111,14 +115,14 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
     type === "pie"
       ? {
           backgroundColor: "transparent",
-          tooltip: showTooltip ? { ...echartsTooltip, trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)} (${p.percent}%)` } : { show: false },
+          tooltip: showTooltip ? { ...echartsTooltip(), trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)} (${p.percent}%)` } : { show: false },
           legend,
           color: palette,
           series: [
             {
               type: "pie",
               radius: ["45%", "70%"],
-              label: { show: showLabels, fontSize: 11, color: "#0f172a", formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` },
+              label: { show: showLabels, fontSize: 11, color: chrome.ink, formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` },
               data: cats.map((n, i) => ({ name: n, value: Number(rows[i]?.[measCols[0]] ?? 0) })),
             },
           ],
@@ -131,10 +135,10 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
             name: config.xAxisLabel || undefined,
             nameLocation: "middle" as const,
             nameGap: 28,
-            nameTextStyle: { color: "#5b6470", fontSize: 10 },
-            axisLine: { lineStyle: { color: "#e2e8f0" } },
+            nameTextStyle: { color: chrome.mute, fontSize: 10 },
+            axisLine: { lineStyle: { color: chrome.line } },
             axisTick: { show: false },
-            axisLabel: { color: "#5b6470", fontSize: 11, rotate: horizontal ? 0 : (config.xAxisRotate ?? 0) },
+            axisLabel: { color: chrome.mute, fontSize: 11, rotate: horizontal ? 0 : (config.xAxisRotate ?? 0) },
           };
           const valueAxis = {
             type: "value" as const,
@@ -142,9 +146,9 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
             name: config.yAxisLabel || undefined,
             nameLocation: "middle" as const,
             nameGap: 40,
-            nameTextStyle: { color: "#5b6470", fontSize: 10 },
-            splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } },
-            axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt },
+            nameTextStyle: { color: chrome.mute, fontSize: 10 },
+            splitLine: { show: showGrid, lineStyle: { color: chrome.surface2 } },
+            axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt },
           };
           const series = seriesNames.map((m, i) => {
             const c = palette[i % palette.length];
@@ -159,7 +163,7 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
                 show: showLabels,
                 position: horizontal ? "right" : "top",
                 fontSize: 10,
-                color: "#0f172a",
+                color: chrome.ink,
                 formatter: (p: any) => formatNumber(p.value, config),
               },
               areaStyle:
@@ -184,10 +188,10 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
           });
           return {
             backgroundColor: "transparent",
-            title: title ? { text: title, left: 0, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
+            title: title ? { text: title, left: 0, textStyle: { color: chrome.mute, fontSize: 12, fontWeight: 500 } } : undefined,
             tooltip: showTooltip
               ? {
-                  ...echartsTooltip,
+                  ...echartsTooltip(),
                   trigger: "axis",
                   formatter: (params: any) => {
                     const list = Array.isArray(params) ? params : [params];
@@ -210,7 +214,7 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
           };
         })();
 
-  return <ReactECharts option={option} style={{ height }} notMerge onEvents={{ click: handleClick }} />;
+  return <ReactECharts key={theme} option={option} style={{ height }} notMerge onEvents={{ click: handleClick }} />;
 }
 
 const KPI_SIZE = { sm: "text-2xl", md: "text-3xl", lg: "text-4xl" } as const;

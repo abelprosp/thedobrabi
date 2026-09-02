@@ -6,6 +6,9 @@ import { useParams } from "next/navigation";
 import { Chart, Kpi } from "@/components/viz";
 import { Logo } from "@/components/brand";
 import { ErrorState, PageSkeleton } from "@/components/ui";
+import { ThemeSegmented } from "@/components/theme-toggle";
+import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
+import { useEffect } from "react";
 
 type Widget = {
   id: string;
@@ -19,10 +22,16 @@ type Widget = {
 
 export default function SharePage() {
   const { token } = useParams<{ token: string }>();
+  const { theme, setTheme } = useTheme();
   const q = useQuery({
     queryKey: ["public-dash", token],
-    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[] } }>(`/api/v1/public/dashboards/${token}`),
+    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[]; theme?: string } }>(`/api/v1/public/dashboards/${token}`),
   });
+
+  useEffect(() => {
+    const saved = parseLayoutTheme(q.data?.layout);
+    if (saved) setTheme(saved);
+  }, [q.data, setTheme]);
 
   if (q.isError) return <ErrorState message="Partilha inválida ou expirada." />;
   if (q.isLoading || !q.data) return <div className="p-8"><PageSkeleton /></div>;
@@ -30,9 +39,12 @@ export default function SharePage() {
   const widgets = q.data.layout?.widgets || [];
   return (
     <div className="min-h-screen bg-bg p-8">
-      <div className="mb-6 flex items-center gap-2">
-        <Logo variant="light" size={28} />
-        <span className="text-sm text-mute">· partilha</span>
+      <div className="mb-6 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Logo variant={theme === "dark" ? "dark" : "light"} size={28} />
+          <span className="text-sm text-mute">· partilha</span>
+        </div>
+        <ThemeSegmented value={theme} onChange={setTheme} />
       </div>
       <h1 className="text-2xl font-semibold text-ink">{q.data.name}</h1>
       {q.data.description && <p className="mt-1 text-sm text-mute">{q.data.description}</p>}

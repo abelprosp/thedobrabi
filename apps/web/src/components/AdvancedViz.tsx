@@ -4,15 +4,14 @@ import ReactECharts from "echarts-for-react";
 import { Card } from "@/components/ui";
 import { useMemo } from "react";
 import { BarChart3, Globe, Layers } from "lucide-react";
-import { chartPalette, echartsTooltip, formatNumber, hexToRgba, legendOption } from "@/lib/widget-config";
+import { chartChrome, chartPalette, echartsTooltip, formatNumber, hexToRgba, legendOption } from "@/lib/widget-config";
+import { useTheme } from "@/components/theme-provider";
 
 export type Rows = Record<string, any>[];
 export type Config = Record<string, any>;
 export { formatNumber };
 
 const PALETTE = ["#2563EB", "#6366F1", "#0EA5E9", "#F59E0B", "#8B5CF6", "#10B981", "#EF4444"];
-
-const tooltip = echartsTooltip;
 
 function pickColumns(rows: Rows, columns: string[], config?: Config) {
   if (!rows.length || !columns.length) return { dim: undefined, measure: undefined, numericCols: [] as string[] };
@@ -38,7 +37,10 @@ export function AdvancedChart({
   config?: Config;
   title?: string;
 }) {
+  const { theme } = useTheme();
   const option = useMemo(() => {
+    const chrome = chartChrome();
+    const tooltip = echartsTooltip();
     const palette = chartPalette(config.color);
     const showTooltip = config.showTooltip !== false;
     const showLabels = ["funnel", "treemap", "heatmap"].includes(type) ? config.showDataLabels !== false : !!config.showDataLabels;
@@ -67,18 +69,18 @@ export function AdvancedChart({
             itemStyle: { color },
             progress: { show: true, width: 18 },
             pointer: { show: true, width: 4 },
-            axisLine: { lineStyle: { width: 18, color: [[1, "#e2e8f0"]] } },
+            axisLine: { lineStyle: { width: 18, color: [[1, chrome.line]] } },
             axisTick: { show: false },
-            splitLine: { length: 8, lineStyle: { color: "#cbd5e1" } },
-            axisLabel: { show: showX, distance: 20, color: "#5b6470", fontSize: 10, formatter: axisFmt },
+            splitLine: { length: 8, lineStyle: { color: chrome.line } },
+            axisLabel: { show: showX, distance: 20, color: chrome.mute, fontSize: 10, formatter: axisFmt },
             anchor: { show: true, size: 10, itemStyle: { color } },
-            title: { show: true, offsetCenter: [0, "40%"], color: "#5b6470", fontSize: 11 },
+            title: { show: true, offsetCenter: [0, "40%"], color: chrome.mute, fontSize: 11 },
             detail: {
               valueAnimation: true,
               fontSize: 22,
               offsetCenter: [0, "60%"],
               formatter: (v: number) => formatNumber(v, config),
-              color: "#0f172a",
+              color: chrome.ink,
             },
             data: [{ value: val, name: config.gaugeLabel || "Valor" }],
             markLine: target != null ? {
@@ -120,8 +122,8 @@ export function AdvancedChart({
           return `<div class="font-medium text-xs">${cats[i]}</div><div class="text-xs">${formatNumber(series[i], config)}</div>`;
         }} : { show: false },
         grid: { left: 52, right: 16, top: 16, bottom: 36 },
-        xAxis: { type: "category", show: showX, data: cats, name: config.xAxisLabel, nameTextStyle: { color: "#5b6470", fontSize: 10 }, axisLine: { lineStyle: { color: "#e2e8f0" } }, axisLabel: { color: "#5b6470", fontSize: 11, rotate: config.xAxisRotate ?? 0 } },
-        yAxis: { type: "value", show: showY, name: config.yAxisLabel, nameTextStyle: { color: "#5b6470", fontSize: 10 }, splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt } },
+        xAxis: { type: "category", show: showX, data: cats, name: config.xAxisLabel, nameTextStyle: { color: chrome.mute, fontSize: 10 }, axisLine: { lineStyle: { color: chrome.line } }, axisLabel: { color: chrome.mute, fontSize: 11, rotate: config.xAxisRotate ?? 0 } },
+        yAxis: { type: "value", show: showY, name: config.yAxisLabel, nameTextStyle: { color: chrome.mute, fontSize: 10 }, splitLine: { show: showGrid, lineStyle: { color: chrome.surface2 } }, axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt } },
         series: [
           { type: "bar", stack: "Total", itemStyle: { borderColor: "transparent", color: "transparent" }, emphasis: { itemStyle: { borderColor: "transparent", color: "transparent" } }, data: helper },
           { type: "bar", stack: "Total", data: series, itemStyle: { color: (p: any) => colors[p.dataIndex] }, barMaxWidth: 36, label: { show: showLabels, position: "top", fontSize: 10, formatter: (p: any) => formatNumber(p.value, config) } },
@@ -137,7 +139,7 @@ export function AdvancedChart({
         tooltip: showTooltip ? { ...tooltip, trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
         legend: legendOption(!!config.showLegend, config.legendPosition || "top"),
         color: palette,
-        series: [{ type: "funnel", left: "10%", top: 24, bottom: 16, width: "80%", minSize: "0%", maxSize: "100%", sort: "descending", gap: 2, label: { show: showLabels, color: "#0f172a", fontSize: 11, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` }, labelLine: { length: 10, lineStyle: { width: 1, type: "solid" } }, itemStyle: { borderColor: "#fff", borderWidth: 1 }, emphasis: { label: { fontSize: 12 } }, data }],
+        series: [{ type: "funnel", left: "10%", top: 24, bottom: 16, width: "80%", minSize: "0%", maxSize: "100%", sort: "descending", gap: 2, label: { show: showLabels, color: chrome.ink, fontSize: 11, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` }, labelLine: { length: 10, lineStyle: { width: 1, type: "solid" } }, itemStyle: { borderColor: chrome.surface, borderWidth: 1 }, emphasis: { label: { fontSize: 12 } }, data }],
       };
     }
 
@@ -150,8 +152,8 @@ export function AdvancedChart({
         backgroundColor: "transparent",
         tooltip: showTooltip ? { ...tooltip, trigger: "item", formatter: (p: any) => `<div class="text-xs font-medium">${p.data[2] || p.name}</div><div class="text-xs">${xCol}: ${formatNumber(p.data[0], config)}</div><div class="text-xs">${yCol}: ${formatNumber(p.data[1], config)}</div>` } : { show: false },
         grid: { left: 52, right: 16, top: 16, bottom: 36 },
-        xAxis: { type: "value", show: showX, name: config.xAxisLabel || xCol, splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt }, nameTextStyle: { color: "#5b6470", fontSize: 10 } },
-        yAxis: { type: "value", show: showY, name: config.yAxisLabel || yCol, splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt }, nameTextStyle: { color: "#5b6470", fontSize: 10 } },
+        xAxis: { type: "value", show: showX, name: config.xAxisLabel || xCol, splitLine: { show: showGrid, lineStyle: { color: chrome.surface2 } }, axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt }, nameTextStyle: { color: chrome.mute, fontSize: 10 } },
+        yAxis: { type: "value", show: showY, name: config.yAxisLabel || yCol, splitLine: { show: showGrid, lineStyle: { color: chrome.surface2 } }, axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt }, nameTextStyle: { color: chrome.mute, fontSize: 10 } },
         series: [{ type: "scatter", symbolSize: 12, itemStyle: { color: config.color || PALETTE[0] }, label: { show: showLabels, fontSize: 10, formatter: (p: any) => p.data[2] || formatNumber(p.data[1], config) }, data }],
       };
     }
@@ -163,7 +165,7 @@ export function AdvancedChart({
         backgroundColor: "transparent",
         tooltip: showTooltip ? { ...tooltip, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
         color: palette,
-        series: [{ type: "treemap", width: "100%", height: "100%", roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: showLabels, fontSize: 11, formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` }, itemStyle: { borderColor: "#fff", borderWidth: 2, gapWidth: 2 }, data }],
+        series: [{ type: "treemap", width: "100%", height: "100%", roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: showLabels, fontSize: 11, formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` }, itemStyle: { borderColor: chrome.surface, borderWidth: 2, gapWidth: 2 }, data }],
       };
     }
 
@@ -180,24 +182,26 @@ export function AdvancedChart({
         backgroundColor: "transparent",
         tooltip: showTooltip ? { ...tooltip, position: "top", formatter: (p: any) => `<div class="text-xs font-medium">${xSet[p.data[0]]} / ${ySet[p.data[1]]}</div><div class="text-xs">${formatNumber(p.data[2], config)}</div>` } : { show: false },
         grid: { left: 80, right: 24, top: 16, bottom: 48 },
-        xAxis: { type: "category", show: showX, data: xSet, name: config.xAxisLabel, splitArea: { show: true }, axisLabel: { color: "#5b6470", fontSize: 10, rotate: config.xAxisRotate ?? 30 } },
-        yAxis: { type: "category", show: showY, data: ySet, name: config.yAxisLabel, splitArea: { show: true }, axisLabel: { color: "#5b6470", fontSize: 10 } },
-        visualMap: { min: 0, max, calculable: true, orient: "horizontal", left: "center", bottom: 4, inRange: { color: ["#e0f2fe", accent, "#1e40af"] }, textStyle: { color: "#5b6470", fontSize: 10 } },
+        xAxis: { type: "category", show: showX, data: xSet, name: config.xAxisLabel, splitArea: { show: true }, axisLabel: { color: chrome.mute, fontSize: 10, rotate: config.xAxisRotate ?? 30 } },
+        yAxis: { type: "category", show: showY, data: ySet, name: config.yAxisLabel, splitArea: { show: true }, axisLabel: { color: chrome.mute, fontSize: 10 } },
+        visualMap: { min: 0, max, calculable: true, orient: "horizontal", left: "center", bottom: 4, inRange: { color: ["#e0f2fe", accent, "#1e40af"] }, textStyle: { color: chrome.mute, fontSize: 10 } },
         series: [{ type: "heatmap", label: { show: showLabels, fontSize: 10, formatter: (p: any) => formatNumber(p.data[2], config) }, data }],
       };
     }
 
     return {};
-  }, [type, rows, columns, config]);
+  }, [type, rows, columns, config, theme]);
 
-  return <ReactECharts option={option} style={{ height }} notMerge />;
+  return <ReactECharts key={theme} option={option} style={{ height }} notMerge />;
 }
 
 export function Sparkline({ rows = [], columns = [], height = 60, config = {} }: { rows?: Rows; columns?: string[]; height?: number; config?: Config }) {
+  const { theme } = useTheme();
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const meas = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[1] || columns[0];
   const data = rows.map((r) => Number(r[meas] ?? 0));
   const color = config.color || PALETTE[0];
+  const tooltip = echartsTooltip();
   const option = {
     backgroundColor: "transparent",
     grid: { left: 0, right: 0, top: 4, bottom: 4 },
@@ -206,7 +210,7 @@ export function Sparkline({ rows = [], columns = [], height = 60, config = {} }:
     tooltip: config.showTooltip === false ? { show: false } : { ...tooltip, trigger: "axis", formatter: (p: any) => formatNumber(p?.[0]?.value, config) },
     series: [{ type: "line", data, smooth: config.smooth !== false, showSymbol: false, lineStyle: { color, width: 2 }, areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: hexToRgba(color, 0.2) }, { offset: 1, color: hexToRgba(color, 0.02) }] } } }],
   };
-  return <ReactECharts option={option} style={{ height }} notMerge />;
+  return <ReactECharts key={theme} option={option} style={{ height }} notMerge />;
 }
 
 export function KpiGoal({ label, value, goal, variance, config = {} }: { label: string; value: any; goal?: any; variance?: any; config?: Config }) {

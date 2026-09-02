@@ -75,6 +75,9 @@ import {
   widgetFieldDefaults,
 } from "@/lib/semantic";
 import { DASHBOARD_TEMPLATES, instantiateTemplate } from "@/lib/dashboard-templates";
+import { ThemeSegmented } from "@/components/theme-toggle";
+import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
+import { readStoredAppearance, type Appearance } from "@/lib/theme";
 const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description: string; defaultW: number; defaultH: number }[] = [
   { type: "kpi", label: "KPI", icon: Monitor, description: "Métrica principal", defaultW: 3, defaultH: 2 },
   { type: "kpi_goal", label: "KPI com meta", icon: Target, description: "Valor, meta e progresso", defaultW: 4, defaultH: 3 },
@@ -169,6 +172,8 @@ function DashboardEditorInner() {
   const [hydrated, setHydrated] = useState(false);
   const [preferredDatasetId, setPreferredDatasetId] = useState(searchParams.get("dataset_id") || "");
   const [sourceFilter, setSourceFilter] = useState("");
+  const { theme, setTheme } = useTheme();
+  const [dashTheme, setDashTheme] = useState<Appearance>("light");
 
   const me = useQuery({ queryKey: ["me"], queryFn: () => api<{ role?: string }>("/api/v1/auth/me") });
   const canDelete = !me.data || me.data.role !== "viewer";
@@ -195,7 +200,7 @@ function DashboardEditorInner() {
   }, [semantic.data]);
   const d = useQuery({
     queryKey: ["dashboard", id],
-    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[] }; workspace_id?: string }>(`/api/v1/dashboards/${id}`),
+    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[]; theme?: Appearance }; workspace_id?: string }>(`/api/v1/dashboards/${id}`),
     enabled: !!id,
     retry: (count, err) => apiStatus(err) !== 404 && count < 1,
   });
@@ -208,6 +213,10 @@ function DashboardEditorInner() {
       setName(d.data.name);
       setDescription(d.data.description || "");
       history.set(d.data.layout?.widgets || []);
+      const saved = parseLayoutTheme(d.data.layout);
+      const next = saved || readStoredAppearance();
+      setDashTheme(next);
+      if (saved) setTheme(saved);
       setHydrated(true);
     }
     const ws = d.data?.workspace_id;
@@ -215,6 +224,11 @@ function DashboardEditorInner() {
       localStorage.setItem("thedobra.workspace", ws);
     }
   }, [d.data, hydrated, history]);
+
+  useEffect(() => {
+    if (!hydrated) return;
+    setDashTheme(theme);
+  }, [theme, hydrated]);
 
   useEffect(() => {
     if (!d.isError) return;
@@ -247,7 +261,7 @@ function DashboardEditorInner() {
     mutationFn: () =>
       api(`/api/v1/dashboards/${id}`, {
         method: "PUT",
-        body: JSON.stringify({ name, description, layout: { widgets } }),
+        body: JSON.stringify({ name, description, layout: { widgets, theme: dashTheme } }),
       }),
     onSuccess: () => {
       toast.success("Dashboard guardado");
@@ -452,7 +466,7 @@ function DashboardEditorInner() {
                 <button
                   key={t.type}
                   onClick={() => addWidget(t.type)}
-                  className="flex flex-col items-center gap-1 rounded-xl border border-line bg-white p-3 text-center transition hover:border-primary hover:shadow-sm"
+                  className="flex flex-col items-center gap-1 rounded-xl border border-line bg-surface-2 p-3 text-center transition hover:border-primary hover:shadow-sm"
                 >
                   <Icon size={18} className="text-primary" />
                   <span className="text-[11px] font-medium text-ink">{t.label}</span>
@@ -489,6 +503,13 @@ function DashboardEditorInner() {
           crumbs={[{ href: "/dashboards", label: "Dashboards" }]}
           actions={
             <div className="flex flex-wrap items-center gap-2">
+              <ThemeSegmented
+                value={dashTheme}
+                onChange={(next) => {
+                  setDashTheme(next);
+                  setTheme(next);
+                }}
+              />
               {edit && (
                 <>
                   <Button variant="ghost" size="icon" onClick={history.undo} disabled={!history.canUndo} title="Desfazer">
@@ -650,13 +671,13 @@ function DashboardEditorInner() {
                 >
                   {edit && (
                     <div className="absolute right-2 top-2 z-10 flex items-center gap-1">
-                      <div className="drag-handle flex h-8 cursor-move items-center gap-1 rounded-lg bg-white/95 px-2 text-[10px] text-mute shadow-sm">
+                      <div className="drag-handle flex h-8 cursor-move items-center gap-1 rounded-lg bg-surface/95 px-2 text-[10px] text-mute shadow-sm">
                         <Maximize2 size={12} /> Mover
                       </div>
-                      <button className="flex h-8 items-center rounded-lg bg-white/95 p-2 text-mute shadow-sm hover:text-accent" onClick={() => duplicateWidget(w.id)} title="Duplicar">
+                      <button className="flex h-8 items-center rounded-lg bg-surface/95 p-2 text-mute shadow-sm hover:text-accent" onClick={() => duplicateWidget(w.id)} title="Duplicar">
                         <Copy size={12} />
                       </button>
-                      <button className="flex h-8 items-center rounded-lg bg-white/95 p-2 text-mute shadow-sm hover:text-danger" onClick={() => removeWidget(w.id)} title="Remover">
+                      <button className="flex h-8 items-center rounded-lg bg-surface/95 p-2 text-mute shadow-sm hover:text-danger" onClick={() => removeWidget(w.id)} title="Remover">
                         <Trash2 size={12} />
                       </button>
                     </div>

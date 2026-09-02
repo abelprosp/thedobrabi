@@ -7,7 +7,7 @@ import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAt
 
 export { cn, formatPt, isNumericValue };
 
-const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white";
+const focusRing = "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
 
 export function Button({
   variant = "primary",
@@ -25,9 +25,9 @@ export function Button({
 }) {
   const variants = {
     primary: "bg-primary text-white shadow-sm shadow-primary/20 hover:bg-primary-600 disabled:opacity-60",
-    secondary: "border border-line bg-white text-ink hover:bg-bg hover:border-slate-300",
+    secondary: "border border-line bg-surface text-ink hover:bg-surface-2 hover:border-slate-300 dark:hover:border-slate-500",
     ghost: "text-mute hover:bg-surface-2 hover:text-ink",
-    danger: "border border-line bg-white text-danger hover:bg-rose-50",
+    danger: "border border-line bg-surface text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10",
   };
   const sizes = {
     sm: "min-h-9 px-3 text-[12px]",
@@ -63,7 +63,7 @@ export function CardTitle({ children }: { children: ReactNode }) {
 }
 
 const fieldCls =
-  "w-full min-h-10 rounded-xl border border-line bg-white px-3.5 py-2 text-sm text-ink placeholder:text-slate-400 outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 disabled:bg-bg";
+  "w-full min-h-10 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink placeholder:text-mute outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 disabled:bg-bg";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldCls, className)} {...props} />;

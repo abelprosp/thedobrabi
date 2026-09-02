@@ -31,6 +31,8 @@ import { useEffect, useMemo, useRef, useState, lazy, Suspense, type ComponentTyp
 import { api, setTokens, clearTokens, getAccess } from "@/lib/api";
 import { CommandPalette } from "@/components/command-palette";
 import { Logo } from "@/components/brand";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { useTheme } from "@/components/theme-provider";
 
 const OnboardingModal = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingModal })));
 const OnboardingSpotlight = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingSpotlight })));
@@ -89,6 +91,7 @@ function groupIdForPath(path: string) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const router = useRouter();
+  const { theme } = useTheme();
   const [me, setMe] = useState<{ name: string; email: string; org_name?: string; role?: string; workspace_id?: string } | null>(null);
   const [workspaces, setWorkspaces] = useState<{ id: string; name: string }[]>([]);
   const [wsId, setWsId] = useState("");
@@ -243,7 +246,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className={`flex items-center ${iconOnly ? "justify-center" : "px-2"}`}
             aria-label="TheDobra — visão geral"
           >
-            <Logo variant="light" size={28} markOnly={iconOnly} />
+            <Logo variant={theme === "dark" ? "dark" : "light"} size={28} markOnly={iconOnly} />
           </Link>
           {showCollapse && (
             <button
@@ -324,7 +327,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-bg">
       <aside
-        className={`hidden min-h-0 flex-col overflow-hidden border-r border-line bg-white print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
+        className={`hidden min-h-0 flex-col overflow-hidden border-r border-line bg-surface print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
           collapsed ? "w-[72px]" : "w-60"
         }`}
       >
@@ -333,7 +336,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {mobile && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-ink/30" onClick={() => setMobile(false)} />
-          <aside className="relative z-10 flex h-full min-h-0 w-64 flex-col overflow-hidden bg-white shadow-xl">
+          <aside className="relative z-10 flex h-full min-h-0 w-64 flex-col overflow-hidden bg-surface shadow-xl">
             <button
               className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2"
               onClick={() => setMobile(false)}
@@ -346,7 +349,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 items-center justify-between border-b border-line bg-white px-4 print:hidden sm:px-6">
+        <header className="flex h-14 items-center justify-between border-b border-line bg-surface px-4 print:hidden sm:px-6">
           <div className="flex min-w-0 items-center gap-2 text-[13px] text-mute">
             <button
               className="flex h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2 lg:hidden"
@@ -360,7 +363,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {workspaces.length > 0 ? (
               <select
                 aria-label="Espaço de trabalho"
-                className="max-w-[160px] rounded-lg border border-line bg-white px-2 py-1.5 text-[13px] text-ink outline-none"
+                className="max-w-[160px] rounded-lg border border-line bg-surface px-2 py-1.5 text-[13px] text-ink outline-none"
                 value={wsId || workspaces[0].id}
                 onChange={async (e) => {
                   const id = e.target.value;
@@ -399,6 +402,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="hidden sm:inline">Procurar</span>
               <kbd className="ml-2 hidden text-[10px] text-slate-400 sm:inline">⌘K</kbd>
             </button>
+            <ThemeToggle />
             <Link href="/ask" className="flex h-9 items-center rounded-lg bg-primary px-3 text-[12px] font-medium text-white hover:bg-primary-600">
               Perguntar
             </Link>
@@ -419,7 +423,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 {(me?.name || "U").slice(0, 1).toUpperCase()}
               </button>
               {menu && (
-                <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-line bg-white py-1 shadow-lg">
+                <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-line bg-surface py-1 shadow-lg">
                   <div className="border-b border-line px-3 py-2">
                     <div className="truncate text-[13px] font-medium text-ink">{me?.name}</div>
                     <div className="truncate text-[11px] text-mute">{me?.email}</div>
@@ -428,7 +432,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     <Settings size={14} /> Definições
                   </Link>
                   <button
-                    className="flex min-h-10 w-full items-center gap-2 px-3 text-sm text-danger hover:bg-rose-50"
+                    className="flex min-h-10 w-full items-center gap-2 px-3 text-sm text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10"
                     onClick={() => {
                       clearTokens();
                       router.replace("/login");

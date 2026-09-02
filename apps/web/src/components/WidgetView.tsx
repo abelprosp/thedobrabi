@@ -534,13 +534,13 @@ function SlicerView({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Pesquisar…"
-          className="mb-2 w-full rounded-lg border border-line bg-white px-2.5 py-1.5 text-[12px] text-ink outline-none focus:border-primary/50"
+          className="mb-2 w-full rounded-lg border border-line bg-surface px-2.5 py-1.5 text-[12px] text-ink outline-none focus:border-primary/50"
         />
       )}
       {style === "dropdown" ? (
         <select
           multiple={multi}
-          className="w-full rounded-xl border border-line bg-white px-2 py-1.5 text-[12px] text-ink"
+          className="w-full rounded-xl border border-line bg-surface px-2 py-1.5 text-[12px] text-ink"
           value={multi ? selected : selected[0] || ""}
           onChange={(e) => {
             if (multi) {
