@@ -251,19 +251,19 @@ func (s *Service) Issue(ctx context.Context, p Principal) (TokenPair, error) {
 
 func (s *Service) issue(ctx context.Context, p Principal) (TokenPair, error) {
 	now := time.Now()
-	accessTTL := 15 * time.Minute
+	accessTTL := 8 * time.Hour
 	claims := jwt.MapClaims{
-		"sub":                   p.UserID.String(),
-		"org_id":                p.OrgID.String(),
-		"workspace_id":          p.WorkspaceID.String(),
-		"role":                  p.Role,
-		"email":                 p.Email,
-		"name":                  p.Name,
-		"plan":                  p.Plan,
-		"onboarding_step":       p.OnboardingStep,
-		"onboarding_completed":  p.OnboardingCompleted,
-		"iat":                   now.Unix(),
-		"exp":                   now.Add(accessTTL).Unix(),
+		"sub":                  p.UserID.String(),
+		"org_id":               p.OrgID.String(),
+		"workspace_id":         p.WorkspaceID.String(),
+		"role":                 p.Role,
+		"email":                p.Email,
+		"name":                 p.Name,
+		"plan":                 p.Plan,
+		"onboarding_step":      p.OnboardingStep,
+		"onboarding_completed": p.OnboardingCompleted,
+		"iat":                  now.Unix(),
+		"exp":                  now.Add(accessTTL).Unix(),
 	}
 	tok := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	access, err := tok.SignedString(s.secret)

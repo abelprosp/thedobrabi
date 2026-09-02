@@ -141,9 +141,37 @@ export function remapQueryToModel(
   const kpiNoDims = type === "kpi" || type === "kpi_goal" || type === "metric_group" || type === "gauge";
   return {
     ...query,
+    dataset_id: query?.dataset_id,
     measures: measures.length ? measures : next.measures,
     dimensions: kpiNoDims ? [] : dimensions.length ? dimensions : next.dimensions,
   };
+}
+
+export function pickLiveDatasetId(live: DatasetListItem[], preferred?: string, currentName?: string) {
+  const ids = new Set(live.map((d) => d.id));
+  if (preferred && ids.has(preferred)) return preferred;
+  if (currentName) {
+    const n = norm(currentName);
+    const hit = live.find((d) => norm(d.name || "") === n || norm(d.name || "").includes(n) || n.includes(norm(d.name || "")));
+    if (hit) return hit.id;
+  }
+  return live[0]?.id || "";
+}
+
+export function rebindQueryToLiveDataset(
+  query: { measures?: string[]; dimensions?: string[]; dataset_id?: string; limit?: number; filters?: any[] } | undefined,
+  type: string,
+  live: DatasetListItem[],
+  models: any[],
+  preferred?: string,
+) {
+  if (!query) return query;
+  const ids = new Set(live.map((d) => d.id));
+  if (query.dataset_id && ids.has(query.dataset_id)) return query;
+  const staleName = models.find((m: any) => m.dataset_id === query.dataset_id)?.name as string | undefined;
+  const nextId = pickLiveDatasetId(live, preferred, staleName);
+  if (!nextId) return query;
+  return remapQueryToModel({ ...query, dataset_id: nextId }, type, modelForDataset(models, nextId));
 }
 
 function norm(s: string) {

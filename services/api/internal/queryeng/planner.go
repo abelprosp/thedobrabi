@@ -18,7 +18,7 @@ import (
 
 // Planner chooses the execution path for a query based on dataset metadata and storage_mode.
 type Planner struct {
-	pg *pgxpool.Pool
+	pg  *pgxpool.Pool
 	rdb *redis.Client
 }
 
@@ -27,18 +27,18 @@ func NewPlanner(pg *pgxpool.Pool, rdb *redis.Client) *Planner {
 }
 
 type datasetInfo struct {
-	ID           uuid.UUID
-	OrgID        uuid.UUID
-	WorkspaceID  uuid.UUID
-	Name         string
-	Table        string
-	StorageMode  string
-	SourceTable  *string
-	SourceQuery  *string
-	SchemaJSON   []byte
-	ModelJSON    []byte
-	Model        semantic.Model
-	RowCount     int64
+	ID          uuid.UUID
+	OrgID       uuid.UUID
+	WorkspaceID uuid.UUID
+	Name        string
+	Table       string
+	StorageMode string
+	SourceTable *string
+	SourceQuery *string
+	SchemaJSON  []byte
+	ModelJSON   []byte
+	Model       semantic.Model
+	RowCount    int64
 }
 
 type plan struct {
@@ -58,11 +58,19 @@ func (p *Planner) loadDataset(ctx context.Context, orgID, wsID uuid.UUID, datase
 	m.ID = id
 	m.OrgID = orgID
 	err = p.pg.QueryRow(ctx, `
-		SELECT d.name, d.clickhouse_table, d.storage_mode, d.source_table, d.source_query, d.schema_json, d.row_count, COALESCE(s.model_json, '{}'::jsonb)
+		SELECT d.workspace_id, d.name, d.clickhouse_table, d.storage_mode, d.source_table, d.source_query, d.schema_json, d.row_count, COALESCE(s.model_json, '{}'::jsonb)
 		FROM datasets d
 		LEFT JOIN semantic_models s ON s.dataset_id = d.id
 		WHERE d.id=$1 AND d.org_id=$2 AND d.workspace_id=$3
-	`, id, orgID, wsID).Scan(&m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON)
+	`, id, orgID, wsID).Scan(&m.WorkspaceID, &m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON)
+	if err != nil {
+		err = p.pg.QueryRow(ctx, `
+			SELECT d.workspace_id, d.name, d.clickhouse_table, d.storage_mode, d.source_table, d.source_query, d.schema_json, d.row_count, COALESCE(s.model_json, '{}'::jsonb)
+			FROM datasets d
+			LEFT JOIN semantic_models s ON s.dataset_id = d.id
+			WHERE d.id=$1 AND d.org_id=$2
+		`, id, orgID).Scan(&m.WorkspaceID, &m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON)
+	}
 	if err != nil {
 		return datasetInfo{}, fmt.Errorf("dataset not found")
 	}

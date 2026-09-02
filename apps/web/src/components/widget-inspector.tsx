@@ -528,16 +528,27 @@ function QueryFields({
         <FieldLabel label={measureLabel}>
           <Select
             value={widget.query?.measures?.[0] || ""}
-            onChange={(e) =>
-              onUpdate((w) => ({
-                ...w,
-                query: {
-                  ...w.query,
-                  measures: e.target.value ? [e.target.value, ...(w.query?.measures || []).slice(1)] : (w.query?.measures || []).slice(1),
-                },
-                config: widget.type === "scatter" ? { ...w.config, xMeasure: e.target.value } : w.config,
-              }))
-            }
+            onChange={(e) => {
+              const liveId = visibleDatasets.some((d) => d.id === widget.query?.dataset_id)
+                ? widget.query?.dataset_id
+                : visibleDatasets[0]?.id || widget.query?.dataset_id;
+              if (liveId && liveId !== widget.query?.dataset_id) onPreferredDataset(liveId);
+              onUpdate((w) => {
+                const base =
+                  liveId && liveId !== w.query?.dataset_id
+                    ? remapQueryToModel({ ...w.query, dataset_id: liveId }, w.type, modelForDataset(semanticModels, liveId))
+                    : w.query;
+                return {
+                  ...w,
+                  query: {
+                    ...base,
+                    dataset_id: liveId || base?.dataset_id,
+                    measures: e.target.value ? [e.target.value, ...(base?.measures || []).slice(1)] : (base?.measures || []).slice(1),
+                  },
+                  config: widget.type === "scatter" ? { ...w.config, xMeasure: e.target.value } : w.config,
+                };
+              });
+            }}
           >
             <option value="">—</option>
             {(model?.measures || []).map((m) => (

@@ -71,6 +71,7 @@ import Link from "next/link";
 import {
   type DatasetListItem,
   modelForDataset,
+  rebindQueryToLiveDataset,
   remapQueryToModel,
   widgetFieldDefaults,
 } from "@/lib/semantic";
@@ -243,6 +244,25 @@ function DashboardEditorInner() {
       setHydrated(true);
     }
   }, [d.data, hydrated, history]);
+
+  useEffect(() => {
+    if (!hydrated || datasets.isLoading || !datasetList.length) return;
+    const liveIds = new Set(datasetList.map((ds) => ds.id));
+    let changed = false;
+    const next = widgets.map((w) => {
+      if (!w.query || ["text", "image", "markdown", "iframe"].includes(w.type)) return w;
+      if (w.query.dataset_id && liveIds.has(w.query.dataset_id)) return w;
+      const query = rebindQueryToLiveDataset(w.query, w.type, datasetList, semanticModels, preferredDatasetId);
+      if (!query || query.dataset_id === w.query.dataset_id) return w;
+      changed = true;
+      return { ...w, query };
+    });
+    if (changed) {
+      history.set(next);
+      const fallback = datasetList.find((ds) => next.some((w) => w.query?.dataset_id === ds.id));
+      toast.message(`Visuais ligados ao conjunto «${fallback?.name || datasetList[0].name}».`);
+    }
+  }, [hydrated, datasets.isLoading, datasetList, semanticModels, preferredDatasetId, widgets, history.set]);
 
   const save = useMutation({
     mutationFn: () =>

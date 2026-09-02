@@ -211,7 +211,11 @@ export function WidgetView({
   }
   if (q.isError) {
     const msg = (q.error as Error).message || "";
-    const friendly = /dataset not found/i.test(msg) ? "O conjunto deste visual foi excluído." : msg;
+    const friendly = /unauthorized|token|sessão expirada/i.test(msg)
+      ? "Sessão expirada. A página vai renovar o acesso; se continuar, entre outra vez."
+      : /dataset not found/i.test(msg)
+        ? "O conjunto deste visual foi excluído. Escolha outro conjunto no inspector."
+        : msg;
     return <div className="flex h-full items-center rounded-2xl border border-line bg-surface p-4 text-xs text-danger shadow-sm">{friendly}</div>;
   }
 

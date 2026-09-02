@@ -67,19 +67,22 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       router.replace("/login");
       return;
     }
-    api<any>("/api/v1/auth/me")
-      .then((u) => {
+    Promise.all([
+      api<any>("/api/v1/auth/me"),
+      api<{ id: string; name: string }[]>("/api/v1/workspaces").catch(() => [] as { id: string; name: string }[]),
+    ])
+      .then(([u, list]) => {
         setMe(u);
-        const stored = localStorage.getItem("thedobra.workspace") || u.workspace_id || "";
-        if (stored) {
-          localStorage.setItem("thedobra.workspace", stored);
-          setWsId(stored);
+        const ws = Array.isArray(list) ? list : [];
+        setWorkspaces(ws);
+        const stored = localStorage.getItem("thedobra.workspace") || "";
+        const valid = ws.some((w) => w.id === stored) ? stored : u.workspace_id || ws[0]?.id || "";
+        if (valid) {
+          localStorage.setItem("thedobra.workspace", valid);
+          setWsId(valid);
         }
       })
       .catch(() => router.replace("/login"));
-    api<{ id: string; name: string }[]>("/api/v1/workspaces")
-      .then(setWorkspaces)
-      .catch(() => {});
   }, [router]);
 
   useEffect(() => {

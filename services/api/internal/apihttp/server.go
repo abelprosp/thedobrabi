@@ -463,6 +463,9 @@ func (s *Server) me(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
 	p, err := s.auth.Principal(r.Context(), uid, ws)
 	if err != nil {
+		p, err = s.auth.Principal(r.Context(), uid, uuid.Nil)
+	}
+	if err != nil {
 		httpx.Error(w, 401, "unauthorized", "sessão expirada")
 		return
 	}
