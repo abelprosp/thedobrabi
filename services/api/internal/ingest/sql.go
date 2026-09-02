@@ -305,6 +305,8 @@ func (e *Engine) Discover(ctx context.Context, orgID, wsID, sourceID uuid.UUID) 
 			return DiscoverResult{Tables: []string{"remote_file"}}, nil
 		}
 		return DiscoverResult{Tables: []string{}, Message: "Carregue um ficheiro para ingerir este conector."}, nil
+	case "google_sheets":
+		return e.discoverGoogleSheets(ctx, cfg)
 	case "kafka":
 		if cfg.Topic != "" {
 			return DiscoverResult{Tables: []string{cfg.Topic}}, nil
@@ -436,6 +438,8 @@ func (e *Engine) fetchSourceRows(ctx context.Context, typ string, cfg SQLConfig)
 		return e.fetchJSON(ctx, cfg)
 	case "csv", "xlsx", "parquet", "pdf":
 		return e.readRemoteFile(ctx, typ, cfg)
+	case "google_sheets":
+		return e.fetchGoogleSheets(ctx, cfg)
 	case "kafka":
 		return e.readKafka(ctx, cfg)
 	case "mqtt":
@@ -554,7 +558,7 @@ func looksLikeSelect(s string) bool {
 
 func saasHasNativeURL(typ string) bool {
 	switch typ {
-	case "asaas", "conta_azul", "bitrix24", "omie", "salesforce", "instagram", "facebook", "google_business", "mercado_livre", "ibge_censo", "inflacao", "expectativas", "cambio", "contabilidade":
+	case "asaas", "conta_azul", "bitrix24", "omie", "salesforce", "instagram", "facebook", "google_business", "mercado_livre", "ibge_censo", "inflacao", "expectativas", "cambio", "contabilidade", "google_sheets":
 		return true
 	}
 	return false
@@ -1026,6 +1030,8 @@ func (e *Engine) pingSource(ctx context.Context, typ string, cfg SQLConfig) erro
 			return fmt.Errorf("carregue um ficheiro ou indique um URL")
 		}
 		return nil
+	case "google_sheets":
+		return e.pingGoogleSheets(ctx, cfg)
 	case "kafka":
 		return e.pingKafka(cfg)
 	case "mqtt":

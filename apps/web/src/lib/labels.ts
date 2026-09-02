@@ -8,10 +8,13 @@ export const ROLE_LABELS: Record<string, string> = {
 };
 
 export const PLAN_LABELS: Record<string, string> = {
-  starter: "Starter",
-  growth: "Growth",
-  business: "Business",
-  enterprise: "Enterprise",
+  essencial: "Essencial",
+  pro: "Pro",
+  completo: "Completo",
+  starter: "Essencial",
+  growth: "Pro",
+  business: "Completo",
+  enterprise: "Completo",
 };
 
 export const STATUS_LABELS: Record<string, string> = {

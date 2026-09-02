@@ -112,6 +112,10 @@ func (s *Server) createSource(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "invalid_type", "tipo de conector desconhecido")
 		return
 	}
+	if err := s.ent.CheckConnector(r.Context(), org, body.Type); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
 	var cfg ingest.SQLConfig
 	if len(body.Config) > 0 {
 		if err := json.Unmarshal(body.Config, &cfg); err != nil {

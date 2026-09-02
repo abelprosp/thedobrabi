@@ -9,7 +9,7 @@ func TestCatalogCoverage(t *testing.T) {
 	want := []string{
 		"postgres", "supabase", "mysql", "sqlserver", "oracle", "mariadb", "snowflake", "redshift",
 		"bigquery", "databricks", "mongodb", "odbc",
-		"csv", "xlsx", "json", "parquet", "pdf",
+		"csv", "xlsx", "google_sheets", "json", "parquet", "pdf",
 		"rest", "odata", "url",
 		"asaas", "conta_azul", "bitrix24", "omie", "google_ads", "meta_ads",
 		"instagram", "facebook", "google_business", "salesforce", "mercado_livre",
@@ -87,24 +87,28 @@ func TestImplementedFlags(t *testing.T) {
 
 func TestCanonicalAliases(t *testing.T) {
 	cases := map[string]string{
-		"SQL":         "sqlserver",
-		"sql":         "sqlserver",
-		"mssql":       "sqlserver",
-		"Excel":       "xlsx",
-		"excel":       "xlsx",
-		"postgresql":  "postgres",
-		"assas":       "asaas",
-		"contaazul":   "conta_azul",
-		"metaads":     "meta_ads",
-		"googleads":   "google_ads",
-		"postgres":    "postgres",
-		"supabase.co": "supabase",
-		"ibge":        "ibge_censo",
-		"ipca":        "inflacao",
-		"ml":          "mercado_livre",
-		"gmb":         "google_business",
-		"focus":       "expectativas",
-		"ptax":        "cambio",
+		"SQL":          "sqlserver",
+		"sql":          "sqlserver",
+		"mssql":        "sqlserver",
+		"Excel":        "xlsx",
+		"excel":        "xlsx",
+		"postgresql":   "postgres",
+		"assas":        "asaas",
+		"contaazul":    "conta_azul",
+		"metaads":      "meta_ads",
+		"googleads":    "google_ads",
+		"postgres":     "postgres",
+		"supabase.co":  "supabase",
+		"ibge":         "ibge_censo",
+		"ipca":         "inflacao",
+		"ml":           "mercado_livre",
+		"gmb":          "google_business",
+		"gsheets":      "google_sheets",
+		"planilha":     "google_sheets",
+		"sheets":       "google_sheets",
+		"googlesheets": "google_sheets",
+		"focus":        "expectativas",
+		"ptax":         "cambio",
 	}
 	for in, want := range cases {
 		if Canonical(in) != want {
@@ -140,6 +144,7 @@ func TestRequestedLabels(t *testing.T) {
 		"inflacao":        "Inflação (IPCA)",
 		"expectativas":    "Expectativa de mercado",
 		"cambio":          "Câmbio em tempo real",
+		"google_sheets":   "Google Sheets",
 	}
 	for id, label := range want {
 		it := ByID(id)
