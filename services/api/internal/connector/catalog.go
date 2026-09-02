@@ -418,12 +418,12 @@ func Catalog() []Item {
 		},
 		{
 			ID: "ibge_censo", Label: "Censo IBGE", Group: GroupEcon, GroupLabel: groupLabels[GroupEcon],
-			Description: "API pública SIDRA/localidades — municípios ou população (sem chave).", Implemented: true, Preview: false,
+			Description: "API pública SIDRA/localidades — municípios, UFs ou população estimada (agregado 6579, todos os períodos).", Implemented: true, Preview: false,
 			Aliases: []string{"ibge", "censo"},
 			Fields: append(nameField(), []Field{
 				{Key: "table", Label: "Recurso", Type: "select", Default: "municipios", Options: []FieldOption{
 					{Value: "municipios", Label: "Municípios"},
-					{Value: "populacao", Label: "População (agregado 6579)"},
+					{Value: "populacao", Label: "População estimada (SIDRA 6579)"},
 					{Value: "estados", Label: "Estados"},
 				}},
 				{Key: "url", Label: "URL IBGE (opcional)", Type: "url"},
@@ -453,7 +453,7 @@ func Catalog() []Item {
 		},
 		{
 			ID: "expectativas", Label: "Expectativa de mercado", Group: GroupEcon, GroupLabel: groupLabels[GroupEcon],
-			Description: "BCB Focus (Olinda OData) — ExpectativaMercadoAnuais.", Implemented: true, Preview: false,
+			Description: "BCB Focus (Olinda OData) — ExpectativasMercadoAnuais, mais recentes primeiro.", Implemented: true, Preview: false,
 			Aliases: []string{"focus"},
 			Fields: append(nameField(), []Field{
 				{Key: "table", Label: "Recurso", Type: "select", Default: "anuais", Options: []FieldOption{
@@ -466,7 +466,7 @@ func Catalog() []Item {
 		},
 		{
 			ID: "cambio", Label: "Câmbio em tempo real", Group: GroupEcon, GroupLabel: groupLabels[GroupEcon],
-			Description: "AwesomeAPI (USD/EUR) com fallback BCB SGS 1 e PTAX.", Implemented: true, Preview: false,
+			Description: "AwesomeAPI (USD/EUR) com fallback BCB SGS 1 e PTAX (coluna _fonte; _fallback se a API principal cair).", Implemented: true, Preview: false,
 			Aliases: []string{"ptax", "forex"},
 			Fields: append(nameField(), []Field{
 				{Key: "table", Label: "Fonte", Type: "select", Default: "ultima", Options: []FieldOption{

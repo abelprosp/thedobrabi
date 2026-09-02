@@ -39,55 +39,56 @@ func (h *HeaderMap) UnmarshalJSON(b []byte) error {
 }
 
 type SQLConfig struct {
-	Host           string    `json:"host"`
-	Port           int       `json:"port"`
-	Database       string    `json:"database"`
-	User           string    `json:"user"`
-	Password       string    `json:"password"`
-	SSLMode        string    `json:"ssl_mode"`
-	SSL            bool      `json:"ssl"`
-	Table          string    `json:"table"`
-	Query          string    `json:"query"`
-	URL            string    `json:"url"`
-	Token          string    `json:"token"`
-	APIKey         string    `json:"api_key"`
-	Headers        HeaderMap `json:"headers"`
-	Account        string    `json:"account"`
-	Warehouse      string    `json:"warehouse"`
-	Project        string    `json:"project"`
-	Dataset        string    `json:"dataset"`
-	Schema         string    `json:"schema"`
-	Region         string    `json:"region"`
-	Role           string    `json:"role"`
-	Catalog        string    `json:"catalog"`
-	HTTPPath       string    `json:"http_path"`
-	AuthType       string    `json:"auth_type"`
-	Topic          string    `json:"topic"`
-	Broker         string    `json:"broker"`
-	FileName       string    `json:"file_name"`
-	StorageMode    string    `json:"storage_mode"`
-	Environment    string    `json:"environment"`
-	WebhookURL     string    `json:"webhook_url"`
-	ClientID       string    `json:"client_id"`
-	ClientSecret   string    `json:"client_secret"`
-	AccessToken    string    `json:"access_token"`
-	Domain         string    `json:"domain"`
-	AppKey         string    `json:"app_key"`
-	AppSecret      string    `json:"app_secret"`
-	DeveloperToken string    `json:"developer_token"`
-	RefreshToken   string    `json:"refresh_token"`
-	CustomerID     string    `json:"customer_id"`
-	AdAccountID    string    `json:"ad_account_id"`
-	PropertyID     string    `json:"property_id"`
-	PageID         string    `json:"page_id"`
-	InstagramID    string    `json:"instagram_business_account_id"`
-	LocationID     string    `json:"location_id"`
-	SellerID       string    `json:"seller_id"`
-	Series         string    `json:"series"`
-	Limit          int       `json:"limit"`
-	ProjectURL     string    `json:"project_url"`
-	ServiceRoleKey string    `json:"service_role_key"`
-	AnonKey        string    `json:"anon_key"`
+	Host           string           `json:"host"`
+	Port           int              `json:"port"`
+	Database       string           `json:"database"`
+	User           string           `json:"user"`
+	Password       string           `json:"password"`
+	SSLMode        string           `json:"ssl_mode"`
+	SSL            bool             `json:"ssl"`
+	Table          string           `json:"table"`
+	Query          string           `json:"query"`
+	URL            string           `json:"url"`
+	Token          string           `json:"token"`
+	APIKey         string           `json:"api_key"`
+	Headers        HeaderMap        `json:"headers"`
+	Account        string           `json:"account"`
+	Warehouse      string           `json:"warehouse"`
+	Project        string           `json:"project"`
+	Dataset        string           `json:"dataset"`
+	Schema         string           `json:"schema"`
+	Region         string           `json:"region"`
+	Role           string           `json:"role"`
+	Catalog        string           `json:"catalog"`
+	HTTPPath       string           `json:"http_path"`
+	AuthType       string           `json:"auth_type"`
+	Topic          string           `json:"topic"`
+	Broker         string           `json:"broker"`
+	FileName       string           `json:"file_name"`
+	StorageMode    string           `json:"storage_mode"`
+	Environment    string           `json:"environment"`
+	WebhookURL     string           `json:"webhook_url"`
+	ClientID       string           `json:"client_id"`
+	ClientSecret   string           `json:"client_secret"`
+	AccessToken    string           `json:"access_token"`
+	Domain         string           `json:"domain"`
+	AppKey         string           `json:"app_key"`
+	AppSecret      string           `json:"app_secret"`
+	DeveloperToken string           `json:"developer_token"`
+	RefreshToken   string           `json:"refresh_token"`
+	CustomerID     string           `json:"customer_id"`
+	AdAccountID    string           `json:"ad_account_id"`
+	PropertyID     string           `json:"property_id"`
+	PageID         string           `json:"page_id"`
+	InstagramID    string           `json:"instagram_business_account_id"`
+	LocationID     string           `json:"location_id"`
+	SellerID       string           `json:"seller_id"`
+	Series         string           `json:"series"`
+	Limit          int              `json:"limit"`
+	ProjectURL     string           `json:"project_url"`
+	ServiceRoleKey string           `json:"service_role_key"`
+	AnonKey        string           `json:"anon_key"`
+	Selection      *SourceSelection `json:"selection,omitempty"`
 }
 
 func (c SQLConfig) AuthToken() string {
@@ -117,9 +118,11 @@ func (c SQLConfig) EffectiveSSLMode() string {
 }
 
 type DiscoverResult struct {
-	Tables  []string `json:"tables"`
-	Preview bool     `json:"preview,omitempty"`
-	Message string   `json:"message,omitempty"`
+	Tables      []string       `json:"tables"`
+	Catalog     []InspectTable `json:"catalog,omitempty"`
+	ForeignKeys []InspectFK    `json:"foreign_keys,omitempty"`
+	Preview     bool           `json:"preview,omitempty"`
+	Message     string         `json:"message,omitempty"`
 }
 
 type TestResult struct {
@@ -202,6 +205,9 @@ func RedactConfig(cfg SQLConfig) map[string]any {
 		"refresh_token_set":    cfg.RefreshToken != "",
 		"developer_token_set":  cfg.DeveloperToken != "",
 	}
+	if cfg.Selection != nil && !cfg.Selection.empty() {
+		out["selection"] = cfg.Selection
+	}
 	if len(cfg.Headers) > 0 {
 		keys := make([]string, 0, len(cfg.Headers))
 		for k := range cfg.Headers {
@@ -234,13 +240,25 @@ func (e *Engine) Discover(ctx context.Context, orgID, wsID, sourceID uuid.UUID) 
 	}
 	typ = connector.Canonical(typ)
 	switch typ {
-	case "postgres", "mysql", "mariadb", "sqlserver", "oracle", "redshift", "snowflake", "odbc":
+	case "postgres", "mysql", "mariadb", "sqlserver":
+		if catalog, fks, err := e.inspectSQL(ctx, typ, cfg); err == nil {
+			return inspectToDiscover(catalog, fks), nil
+		}
+		tables, err := e.discoverSQL(ctx, typ, cfg)
+		if err != nil {
+			return DiscoverResult{}, err
+		}
+		return DiscoverResult{Tables: tables}, nil
+	case "oracle", "redshift", "snowflake", "odbc":
 		tables, err := e.discoverSQL(ctx, typ, cfg)
 		if err != nil {
 			return DiscoverResult{}, err
 		}
 		return DiscoverResult{Tables: tables}, nil
 	case "supabase":
+		if catalog, fks, err := e.inspectSupabase(ctx, cfg); err == nil {
+			return inspectToDiscover(catalog, fks), nil
+		}
 		tables, err := e.discoverSupabase(ctx, cfg)
 		if err != nil {
 			return DiscoverResult{}, err
@@ -306,18 +324,30 @@ func (e *Engine) Discover(ctx context.Context, orgID, wsID, sourceID uuid.UUID) 
 }
 
 func (e *Engine) SyncSource(ctx context.Context, orgID, wsID, userID, sourceID uuid.UUID, tableOrQuery, datasetName string) (Result, error) {
+	return e.SyncSourceWithSelection(ctx, orgID, wsID, userID, sourceID, tableOrQuery, datasetName, nil)
+}
+
+func (e *Engine) SyncSourceWithSelection(ctx context.Context, orgID, wsID, userID, sourceID uuid.UUID, tableOrQuery, datasetName string, sel *SourceSelection) (Result, error) {
 	typ, cfg, err := e.loadSource(ctx, orgID, wsID, sourceID)
 	if err != nil {
 		return Result{}, err
 	}
 	typ = connector.Canonical(typ)
+	if sel != nil {
+		cfg.Selection = sel
+		_ = e.SaveSelection(ctx, orgID, wsID, sourceID, sel)
+	}
 	if tableOrQuery != "" {
 		cfg.Table = tableOrQuery
 		if looksLikeSelect(tableOrQuery) {
 			cfg.Query = tableOrQuery
 		}
+		cfg.Selection = nil
 	}
 	name := datasetName
+	if name == "" && cfg.Selection != nil {
+		name = cfg.Selection.datasetName()
+	}
 	if name == "" {
 		name = cfg.Table
 	}
@@ -329,42 +359,193 @@ func (e *Engine) SyncSource(ctx context.Context, orgID, wsID, userID, sourceID u
 		}
 	}
 
-	var headers []string
-	var rows [][]string
-	switch typ {
-	case "postgres", "mysql", "mariadb", "sqlserver", "oracle", "redshift", "snowflake", "odbc":
-		headers, rows, err = e.readSQL(ctx, typ, cfg)
-	case "supabase":
-		headers, rows, err = e.fetchSupabase(ctx, cfg)
-	case "mongodb":
-		headers, rows, err = e.readMongo(ctx, cfg)
-	case "bigquery":
-		headers, rows, err = e.readBigQuery(ctx, cfg)
-	case "databricks":
-		headers, rows, err = e.readDatabricks(ctx, cfg)
-	case "rest", "url", "odata", "json", "webhook":
-		if typ == "odata" {
-			headers, rows, err = e.fetchOData(ctx, cfg)
-		} else {
-			headers, rows, err = e.fetchJSON(ctx, cfg)
-		}
-	case "csv", "xlsx", "parquet", "pdf":
-		headers, rows, err = e.readRemoteFile(ctx, typ, cfg)
-	case "kafka":
-		headers, rows, err = e.readKafka(ctx, cfg)
-	case "mqtt":
-		headers, rows, err = e.readMQTT(ctx, cfg)
-	default:
-		if strings.TrimSpace(cfg.URL) != "" && !saasHasNativeURL(typ) {
-			headers, rows, err = e.fetchJSON(ctx, cfg)
-		} else {
-			headers, rows, err = e.fetchSaaS(ctx, typ, cfg)
-		}
+	if cfg.Selection != nil && len(cfg.Selection.Tables) > 1 && len(cfg.Selection.Joins) == 0 {
+		return e.syncSelectionSeparate(ctx, orgID, wsID, userID, sourceID, typ, cfg)
 	}
+
+	headers, rows, err := e.fetchSourceRows(ctx, typ, cfg)
 	if err != nil {
 		return Result{}, err
 	}
 	return e.finishSync(ctx, orgID, wsID, userID, sourceID, typ, name, headers, rows)
+}
+
+func (e *Engine) syncSelectionSeparate(ctx context.Context, orgID, wsID, userID, sourceID uuid.UUID, typ string, cfg SQLConfig) (Result, error) {
+	var last Result
+	for i, t := range cfg.Selection.Tables {
+		one := cfg
+		sel := SourceSelection{Tables: []SelectedTable{t}}
+		one.Selection = &sel
+		headers, rows, err := e.fetchSourceRows(ctx, typ, one)
+		if err != nil {
+			return Result{}, err
+		}
+		name := HumanizeIdent(t.Name)
+		last, err = e.finishSync(ctx, orgID, wsID, userID, sourceID, typ, name, headers, rows)
+		if err != nil {
+			return Result{}, err
+		}
+		_ = i
+	}
+	return last, nil
+}
+
+func (e *Engine) SaveSelection(ctx context.Context, orgID, wsID, sourceID uuid.UUID, sel *SourceSelection) error {
+	typ, cfg, err := e.loadSource(ctx, orgID, wsID, sourceID)
+	if err != nil {
+		return err
+	}
+	_ = typ
+	cfg.Selection = sel
+	raw, err := json.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+	enc, err := cryptoenc.Encrypt(e.cfg.EncryptionKey, string(raw))
+	if err != nil {
+		return err
+	}
+	_, err = e.pg.Exec(ctx, `UPDATE data_sources SET config_enc=$1, updated_at=now() WHERE id=$2 AND org_id=$3 AND workspace_id=$4`,
+		enc, sourceID, orgID, wsID)
+	return err
+}
+
+func (e *Engine) fetchSourceRows(ctx context.Context, typ string, cfg SQLConfig) ([]string, [][]string, error) {
+	if GuidedSQLType(typ) && cfg.Selection != nil && !cfg.Selection.empty() && typ != "supabase" {
+		applied, err := applySelection(typ, cfg)
+		if err != nil {
+			return nil, nil, err
+		}
+		cfg = applied
+	}
+	switch typ {
+	case "postgres", "mysql", "mariadb", "sqlserver", "oracle", "redshift", "snowflake", "odbc":
+		return e.readSQL(ctx, typ, cfg)
+	case "supabase":
+		return e.fetchSupabase(ctx, cfg)
+	case "mongodb":
+		return e.readMongo(ctx, cfg)
+	case "bigquery":
+		return e.readBigQuery(ctx, cfg)
+	case "databricks":
+		return e.readDatabricks(ctx, cfg)
+	case "rest", "url", "odata", "json", "webhook":
+		if typ == "odata" {
+			return e.fetchOData(ctx, cfg)
+		}
+		return e.fetchJSON(ctx, cfg)
+	case "csv", "xlsx", "parquet", "pdf":
+		return e.readRemoteFile(ctx, typ, cfg)
+	case "kafka":
+		return e.readKafka(ctx, cfg)
+	case "mqtt":
+		return e.readMQTT(ctx, cfg)
+	default:
+		if strings.TrimSpace(cfg.URL) != "" && !saasHasNativeURL(typ) {
+			return e.fetchJSON(ctx, cfg)
+		}
+		return e.fetchSaaS(ctx, typ, cfg)
+	}
+}
+
+func (e *Engine) SourceMeta(ctx context.Context, orgID, wsID, sourceID uuid.UUID) (typ, table string, err error) {
+	typ, cfg, err := e.loadSource(ctx, orgID, wsID, sourceID)
+	if err != nil {
+		return "", "", err
+	}
+	return connector.Canonical(typ), cfg.Table, nil
+}
+
+func (e *Engine) LatestDatasetForSource(ctx context.Context, orgID, wsID, sourceID uuid.UUID) (uuid.UUID, error) {
+	var id uuid.UUID
+	err := e.pg.QueryRow(ctx, `
+		SELECT id FROM datasets
+		WHERE org_id=$1 AND workspace_id=$2 AND data_source_id=$3 AND status='ready'
+		ORDER BY updated_at DESC LIMIT 1
+	`, orgID, wsID, sourceID).Scan(&id)
+	return id, err
+}
+
+func (e *Engine) DatasetSource(ctx context.Context, orgID, wsID, datasetID uuid.UUID) (uuid.UUID, string, error) {
+	var src *uuid.UUID
+	var name string
+	err := e.pg.QueryRow(ctx, `
+		SELECT data_source_id, name FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+	`, datasetID, orgID, wsID).Scan(&src, &name)
+	if err != nil {
+		return uuid.Nil, "", fmt.Errorf("conjunto não encontrado")
+	}
+	if src == nil || *src == uuid.Nil {
+		return uuid.Nil, name, fmt.Errorf("conjunto sem conector associado")
+	}
+	return *src, name, nil
+}
+
+type RefreshResult struct {
+	DatasetID uuid.UUID `json:"dataset_id"`
+	Name      string    `json:"name"`
+	RowCount  int64     `json:"row_count"`
+	Created   bool      `json:"created"`
+	Mode      string    `json:"mode"`
+}
+
+func (e *Engine) RefreshSource(ctx context.Context, orgID, wsID, userID, sourceID uuid.UUID, tableOrQuery, datasetName string) (RefreshResult, error) {
+	typ, cfg, err := e.loadSource(ctx, orgID, wsID, sourceID)
+	if err != nil {
+		return RefreshResult{}, err
+	}
+	typ = connector.Canonical(typ)
+	if tableOrQuery != "" {
+		cfg.Table = tableOrQuery
+		if looksLikeSelect(tableOrQuery) {
+			cfg.Query = tableOrQuery
+		}
+		cfg.Selection = nil
+	}
+	name := datasetName
+	if name == "" && cfg.Selection != nil {
+		name = cfg.Selection.datasetName()
+	}
+	if name == "" {
+		name = cfg.Table
+	}
+	if name == "" {
+		if it := connector.ByID(typ); it != nil {
+			name = it.Label
+		} else {
+			name = typ
+		}
+	}
+	if cfg.Selection != nil && len(cfg.Selection.Tables) > 1 && len(cfg.Selection.Joins) == 0 {
+		res, err := e.syncSelectionSeparate(ctx, orgID, wsID, userID, sourceID, typ, cfg)
+		if err != nil {
+			return RefreshResult{}, err
+		}
+		return RefreshResult{DatasetID: res.DatasetID, Name: res.Name, RowCount: res.RowCount, Created: true, Mode: "full"}, nil
+	}
+	headers, rows, err := e.fetchSourceRows(ctx, typ, cfg)
+	if err != nil {
+		return RefreshResult{}, err
+	}
+	if len(headers) == 0 {
+		return RefreshResult{}, fmt.Errorf("nenhuma coluna devolvida — verifique o recurso e as credenciais")
+	}
+	if len(rows) == 0 {
+		return RefreshResult{}, fmt.Errorf("nenhuma linha devolvida — verifique credenciais, permissões e o recurso escolhido")
+	}
+	if existing, err := e.LatestDatasetForSource(ctx, orgID, wsID, sourceID); err == nil && existing != uuid.Nil {
+		n, err := e.ReplaceDataset(ctx, orgID, wsID, existing, headers, rows)
+		if err != nil {
+			return RefreshResult{}, err
+		}
+		e.LinkDataset(ctx, orgID, sourceID, existing)
+		return RefreshResult{DatasetID: existing, Name: name, RowCount: n, Created: false, Mode: "full"}, nil
+	}
+	res, err := e.finishSync(ctx, orgID, wsID, userID, sourceID, typ, name, headers, rows)
+	if err != nil {
+		return RefreshResult{}, err
+	}
+	return RefreshResult{DatasetID: res.DatasetID, Name: res.Name, RowCount: res.RowCount, Created: true, Mode: "full"}, nil
 }
 
 func looksLikeSelect(s string) bool {

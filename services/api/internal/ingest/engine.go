@@ -393,6 +393,66 @@ func (e *Engine) AppendToDataset(ctx context.Context, orgID, wsID, datasetID uui
 	return n, nil
 }
 
+func safeCHTable(s string) bool {
+	if s == "" || len(s) > 80 {
+		return false
+	}
+	for _, c := range s {
+		if !((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '_') {
+			return false
+		}
+	}
+	return true
+}
+
+func (e *Engine) ReplaceDataset(ctx context.Context, orgID, wsID, datasetID uuid.UUID, headers []string, rows [][]string) (int64, error) {
+	if len(headers) == 0 {
+		return 0, fmt.Errorf("nenhuma coluna devolvida — verifique o recurso e as credenciais")
+	}
+	var table string
+	var schemaJSON []byte
+	err := e.pg.QueryRow(ctx, `SELECT clickhouse_table, schema_json FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3`,
+		datasetID, orgID, wsID).Scan(&table, &schemaJSON)
+	if err != nil {
+		return 0, fmt.Errorf("conjunto não encontrado")
+	}
+	if !safeCHTable(table) {
+		return 0, fmt.Errorf("tabela inválida")
+	}
+	var cols []schemax.Column
+	_ = json.Unmarshal(schemaJSON, &cols)
+	if len(cols) == 0 {
+		return 0, fmt.Errorf("esquema vazio")
+	}
+	idx := map[string]int{}
+	for i, h := range headers {
+		idx[strings.ToLower(h)] = i
+	}
+	aligned := make([][]string, len(rows))
+	for r, row := range rows {
+		rec := make([]string, len(cols))
+		for i, c := range cols {
+			j, ok := idx[strings.ToLower(c.Name)]
+			if !ok {
+				j, ok = idx[strings.ToLower(c.SourceName)]
+			}
+			if ok && j < len(row) {
+				rec[i] = row[j]
+			}
+		}
+		aligned[r] = rec
+	}
+	if err := e.ch.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, table)); err != nil {
+		return 0, err
+	}
+	n, err := e.insertRows(ctx, table, orgID, cols, aligned)
+	if err != nil {
+		return 0, err
+	}
+	_, _ = e.pg.Exec(ctx, `UPDATE datasets SET row_count=$2, status='ready', updated_at=now() WHERE id=$1`, datasetID, n)
+	return n, nil
+}
+
 func (e *Engine) writeLake(ctx context.Context, orgID, wsID, datasetID uuid.UUID, slug string, headers []string, rows [][]string) error {
 	if e.minio == nil {
 		return nil

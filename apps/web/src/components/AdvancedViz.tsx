@@ -4,26 +4,15 @@ import ReactECharts from "echarts-for-react";
 import { Card } from "@/components/ui";
 import { useMemo } from "react";
 import { BarChart3, Globe, Layers } from "lucide-react";
+import { chartPalette, echartsTooltip, formatNumber, hexToRgba, legendOption } from "@/lib/widget-config";
 
 export type Rows = Record<string, any>[];
 export type Config = Record<string, any>;
+export { formatNumber };
 
 const PALETTE = ["#2563EB", "#6366F1", "#0EA5E9", "#F59E0B", "#8B5CF6", "#10B981", "#EF4444"];
 
-const tooltip = {
-  backgroundColor: "#ffffff",
-  borderColor: "#e2e8f0",
-  textStyle: { color: "#0f172a", fontSize: 12 },
-  extraCssText: "box-shadow: 0 8px 24px rgba(15,23,42,0.08); border-radius: 10px;",
-};
-
-export function formatNumber(value: any, config?: Config) {
-  const n = Number(value);
-  if (Number.isNaN(n) || value == null) return "—";
-  const d = config?.decimals ?? 0;
-  const s = n.toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
-  return `${config?.prefix || ""}${s}${config?.suffix || ""}`;
-}
+const tooltip = echartsTooltip;
 
 function pickColumns(rows: Rows, columns: string[], config?: Config) {
   if (!rows.length || !columns.length) return { dim: undefined, measure: undefined, numericCols: [] as string[] };
@@ -40,7 +29,7 @@ export function AdvancedChart({
   columns = [],
   height = 280,
   config = {},
-  title,
+  title: _title,
 }: {
   type: "gauge" | "waterfall" | "funnel" | "scatter" | "treemap" | "heatmap";
   rows?: Rows;
@@ -50,6 +39,14 @@ export function AdvancedChart({
   title?: string;
 }) {
   const option = useMemo(() => {
+    const palette = chartPalette(config.color);
+    const showTooltip = config.showTooltip !== false;
+    const showLabels = ["funnel", "treemap", "heatmap"].includes(type) ? config.showDataLabels !== false : !!config.showDataLabels;
+    const showGrid = config.showGrid !== false;
+    const showX = config.showXAxis !== false;
+    const showY = config.showYAxis !== false;
+    const axisFmt = (v: number) => formatNumber(v, config);
+
     if (type === "gauge") {
       const { measure } = pickColumns(rows, columns, config);
       const val = rows[0] ? Number(rows[0][measure ?? columns[0]] ?? 0) : 0;
@@ -59,7 +56,6 @@ export function AdvancedChart({
       const color = config.color || PALETTE[0];
       return {
         backgroundColor: "transparent",
-        title: title ? { text: title, left: "center", top: 8, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
         series: [
           {
             type: "gauge",
@@ -74,7 +70,7 @@ export function AdvancedChart({
             axisLine: { lineStyle: { width: 18, color: [[1, "#e2e8f0"]] } },
             axisTick: { show: false },
             splitLine: { length: 8, lineStyle: { color: "#cbd5e1" } },
-            axisLabel: { distance: 20, color: "#5b6470", fontSize: 10 },
+            axisLabel: { show: showX, distance: 20, color: "#5b6470", fontSize: 10, formatter: axisFmt },
             anchor: { show: true, size: 10, itemStyle: { color } },
             title: { show: true, offsetCenter: [0, "40%"], color: "#5b6470", fontSize: 11 },
             detail: {
@@ -104,30 +100,31 @@ export function AdvancedChart({
       const helper: number[] = [];
       const series: number[] = [];
       const colors: string[] = [];
+      const pos = config.color || "#10B981";
+      const neg = config.colorNegative || "#EF4444";
       values.forEach((v, i) => {
         const isNeg = v < 0 || negatives.has(cats[i]);
         const val = isNeg ? -Math.abs(v) : Math.abs(v);
         helper.push(sum);
         series.push(val);
-        colors.push(isNeg ? "#EF4444" : "#10B981");
+        colors.push(isNeg ? neg : pos);
         sum += val;
       });
       helper.push(sum); series.push(0); colors.push("transparent");
       cats.push("Total");
       return {
         backgroundColor: "transparent",
-        title: title ? { text: title, left: 0, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
-        tooltip: { ...tooltip, trigger: "axis", axisPointer: { type: "shadow" }, formatter: (params: any) => {
+        tooltip: showTooltip ? { ...tooltip, trigger: "axis", axisPointer: { type: "shadow" }, formatter: (params: any) => {
           const p = params[0];
           const i = p.dataIndex;
           return `<div class="font-medium text-xs">${cats[i]}</div><div class="text-xs">${formatNumber(series[i], config)}</div>`;
-        }},
-        grid: { left: 52, right: 16, top: title ? 36 : 16, bottom: 36 },
-        xAxis: { type: "category", data: cats, axisLine: { lineStyle: { color: "#e2e8f0" } }, axisLabel: { color: "#5b6470", fontSize: 11 } },
-        yAxis: { type: "value", splitLine: { lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11 } },
+        }} : { show: false },
+        grid: { left: 52, right: 16, top: 16, bottom: 36 },
+        xAxis: { type: "category", show: showX, data: cats, name: config.xAxisLabel, nameTextStyle: { color: "#5b6470", fontSize: 10 }, axisLine: { lineStyle: { color: "#e2e8f0" } }, axisLabel: { color: "#5b6470", fontSize: 11, rotate: config.xAxisRotate ?? 0 } },
+        yAxis: { type: "value", show: showY, name: config.yAxisLabel, nameTextStyle: { color: "#5b6470", fontSize: 10 }, splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt } },
         series: [
           { type: "bar", stack: "Total", itemStyle: { borderColor: "transparent", color: "transparent" }, emphasis: { itemStyle: { borderColor: "transparent", color: "transparent" } }, data: helper },
-          { type: "bar", stack: "Total", data: series, itemStyle: { color: (p: any) => colors[p.dataIndex] }, barMaxWidth: 36 },
+          { type: "bar", stack: "Total", data: series, itemStyle: { color: (p: any) => colors[p.dataIndex] }, barMaxWidth: 36, label: { show: showLabels, position: "top", fontSize: 10, formatter: (p: any) => formatNumber(p.value, config) } },
         ],
       };
     }
@@ -137,10 +134,10 @@ export function AdvancedChart({
       const data = rows.map((r) => ({ name: String(r[dim ?? columns[0]] ?? ""), value: Number(r[measure ?? columns[1]] ?? 0) })).sort((a, b) => b.value - a.value);
       return {
         backgroundColor: "transparent",
-        title: title ? { text: title, left: 0, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
-        tooltip: { ...tooltip, trigger: "item", formatter: "{b}: {c}" },
-        color: PALETTE,
-        series: [{ type: "funnel", left: "10%", top: 24, bottom: 16, width: "80%", minSize: "0%", maxSize: "100%", sort: "descending", gap: 2, label: { show: true, color: "#0f172a", fontSize: 11 }, labelLine: { length: 10, lineStyle: { width: 1, type: "solid" } }, itemStyle: { borderColor: "#fff", borderWidth: 1 }, emphasis: { label: { fontSize: 12 } }, data }],
+        tooltip: showTooltip ? { ...tooltip, trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
+        legend: legendOption(!!config.showLegend, config.legendPosition || "top"),
+        color: palette,
+        series: [{ type: "funnel", left: "10%", top: 24, bottom: 16, width: "80%", minSize: "0%", maxSize: "100%", sort: "descending", gap: 2, label: { show: showLabels, color: "#0f172a", fontSize: 11, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` }, labelLine: { length: 10, lineStyle: { width: 1, type: "solid" } }, itemStyle: { borderColor: "#fff", borderWidth: 1 }, emphasis: { label: { fontSize: 12 } }, data }],
       };
     }
 
@@ -151,12 +148,11 @@ export function AdvancedChart({
       const data = rows.map((r) => [Number(r[xCol] ?? 0), Number(r[yCol] ?? 0), dim ? String(r[dim]) : ""]);
       return {
         backgroundColor: "transparent",
-        title: title ? { text: title, left: 0, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
-        tooltip: { ...tooltip, trigger: "item", formatter: (p: any) => `<div class="text-xs font-medium">${p.data[2] || p.name}</div><div class="text-xs">${xCol}: ${formatNumber(p.data[0], config)}</div><div class="text-xs">${yCol}: ${formatNumber(p.data[1], config)}</div>` },
-        grid: { left: 52, right: 16, top: title ? 36 : 16, bottom: 36 },
-        xAxis: { type: "value", splitLine: { lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11 }, name: xCol, nameTextStyle: { color: "#5b6470", fontSize: 10 } },
-        yAxis: { type: "value", splitLine: { lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11 }, name: yCol, nameTextStyle: { color: "#5b6470", fontSize: 10 } },
-        series: [{ type: "scatter", symbolSize: 12, itemStyle: { color: config.color || PALETTE[0] }, data }],
+        tooltip: showTooltip ? { ...tooltip, trigger: "item", formatter: (p: any) => `<div class="text-xs font-medium">${p.data[2] || p.name}</div><div class="text-xs">${xCol}: ${formatNumber(p.data[0], config)}</div><div class="text-xs">${yCol}: ${formatNumber(p.data[1], config)}</div>` } : { show: false },
+        grid: { left: 52, right: 16, top: 16, bottom: 36 },
+        xAxis: { type: "value", show: showX, name: config.xAxisLabel || xCol, splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt }, nameTextStyle: { color: "#5b6470", fontSize: 10 } },
+        yAxis: { type: "value", show: showY, name: config.yAxisLabel || yCol, splitLine: { show: showGrid, lineStyle: { color: "#f1f5f9" } }, axisLabel: { color: "#5b6470", fontSize: 11, formatter: axisFmt }, nameTextStyle: { color: "#5b6470", fontSize: 10 } },
+        series: [{ type: "scatter", symbolSize: 12, itemStyle: { color: config.color || PALETTE[0] }, label: { show: showLabels, fontSize: 10, formatter: (p: any) => p.data[2] || formatNumber(p.data[1], config) }, data }],
       };
     }
 
@@ -165,10 +161,9 @@ export function AdvancedChart({
       const data = rows.map((r) => ({ name: String(r[dim ?? columns[0]] ?? ""), value: Number(r[measure ?? columns[1]] ?? 0) }));
       return {
         backgroundColor: "transparent",
-        title: title ? { text: title, left: 0, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
-        tooltip: { ...tooltip, formatter: "{b}: {c}" },
-        color: PALETTE,
-        series: [{ type: "treemap", width: "100%", height: "100%", roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: true, fontSize: 11 }, itemStyle: { borderColor: "#fff", borderWidth: 2, gapWidth: 2 }, data }],
+        tooltip: showTooltip ? { ...tooltip, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
+        color: palette,
+        series: [{ type: "treemap", width: "100%", height: "100%", roam: false, nodeClick: false, breadcrumb: { show: false }, label: { show: showLabels, fontSize: 11, formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` }, itemStyle: { borderColor: "#fff", borderWidth: 2, gapWidth: 2 }, data }],
       };
     }
 
@@ -180,20 +175,20 @@ export function AdvancedChart({
       const ySet = Array.from(new Set(rows.map((r) => String(r[yCol]))));
       const data = rows.map((r) => [xSet.indexOf(String(r[xCol])), ySet.indexOf(String(r[yCol])), Number(r[valCol] ?? 0)]);
       const max = Math.max(...data.map((d) => d[2]), 0);
+      const accent = config.color || "#0ea5e9";
       return {
         backgroundColor: "transparent",
-        title: title ? { text: title, left: 0, textStyle: { color: "#5b6470", fontSize: 12, fontWeight: 500 } } : undefined,
-        tooltip: { ...tooltip, position: "top", formatter: (p: any) => `<div class="text-xs font-medium">${xSet[p.data[0]]} / ${ySet[p.data[1]]}</div><div class="text-xs">${formatNumber(p.data[2], config)}</div>` },
-        grid: { left: 80, right: 24, top: title ? 36 : 16, bottom: 48 },
-        xAxis: { type: "category", data: xSet, splitArea: { show: true }, axisLabel: { color: "#5b6470", fontSize: 10, rotate: 30 } },
-        yAxis: { type: "category", data: ySet, splitArea: { show: true }, axisLabel: { color: "#5b6470", fontSize: 10 } },
-        visualMap: { min: 0, max, calculable: true, orient: "horizontal", left: "center", bottom: 4, inRange: { color: ["#e0f2fe", "#0ea5e9", "#1e40af"] }, textStyle: { color: "#5b6470", fontSize: 10 } },
-        series: [{ type: "heatmap", label: { show: true, fontSize: 10 }, data }],
+        tooltip: showTooltip ? { ...tooltip, position: "top", formatter: (p: any) => `<div class="text-xs font-medium">${xSet[p.data[0]]} / ${ySet[p.data[1]]}</div><div class="text-xs">${formatNumber(p.data[2], config)}</div>` } : { show: false },
+        grid: { left: 80, right: 24, top: 16, bottom: 48 },
+        xAxis: { type: "category", show: showX, data: xSet, name: config.xAxisLabel, splitArea: { show: true }, axisLabel: { color: "#5b6470", fontSize: 10, rotate: config.xAxisRotate ?? 30 } },
+        yAxis: { type: "category", show: showY, data: ySet, name: config.yAxisLabel, splitArea: { show: true }, axisLabel: { color: "#5b6470", fontSize: 10 } },
+        visualMap: { min: 0, max, calculable: true, orient: "horizontal", left: "center", bottom: 4, inRange: { color: ["#e0f2fe", accent, "#1e40af"] }, textStyle: { color: "#5b6470", fontSize: 10 } },
+        series: [{ type: "heatmap", label: { show: showLabels, fontSize: 10, formatter: (p: any) => formatNumber(p.data[2], config) }, data }],
       };
     }
 
     return {};
-  }, [type, rows, columns, config, title]);
+  }, [type, rows, columns, config]);
 
   return <ReactECharts option={option} style={{ height }} notMerge />;
 }
@@ -202,34 +197,36 @@ export function Sparkline({ rows = [], columns = [], height = 60, config = {} }:
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const meas = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[1] || columns[0];
   const data = rows.map((r) => Number(r[meas] ?? 0));
+  const color = config.color || PALETTE[0];
   const option = {
     backgroundColor: "transparent",
     grid: { left: 0, right: 0, top: 4, bottom: 4 },
     xAxis: { type: "category", show: false, data: rows.map((r) => r[dim ?? ""]) },
     yAxis: { type: "value", show: false },
-    tooltip: { show: false },
-    series: [{ type: "line", data, smooth: true, showSymbol: false, lineStyle: { color: config.color || PALETTE[0], width: 2 }, areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(37,99,235,0.2)" }, { offset: 1, color: "rgba(37,99,235,0.02)" }] } } }],
+    tooltip: config.showTooltip === false ? { show: false } : { ...tooltip, trigger: "axis", formatter: (p: any) => formatNumber(p?.[0]?.value, config) },
+    series: [{ type: "line", data, smooth: config.smooth !== false, showSymbol: false, lineStyle: { color, width: 2 }, areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: hexToRgba(color, 0.2) }, { offset: 1, color: hexToRgba(color, 0.02) }] } } }],
   };
   return <ReactECharts option={option} style={{ height }} notMerge />;
 }
 
 export function KpiGoal({ label, value, goal, variance, config = {} }: { label: string; value: any; goal?: any; variance?: any; config?: Config }) {
   const val = Number(value ?? 0);
-  const g = Number(goal ?? 0);
-  const v = variance !== undefined ? Number(variance) : g !== 0 ? ((val - g) / g) * 100 : 0;
+  const g = Number(goal ?? config.goal ?? 0);
+  const v = variance !== undefined ? Number(variance) : config.variance !== undefined ? Number(config.variance) : g !== 0 ? ((val - g) / g) * 100 : 0;
   const pct = g > 0 ? Math.min(100, Math.max(0, (val / g) * 100)) : 0;
   const positive = v >= 0;
+  const size = config.fontSize === "sm" ? "text-2xl" : config.fontSize === "lg" ? "text-4xl" : "text-3xl";
   return (
-    <Card className="flex h-full flex-col justify-between p-4">
-      <div className="text-[12px] uppercase tracking-wide text-mute">{label}</div>
-      <div className="mt-2 text-3xl font-semibold tracking-tight text-ink">{formatNumber(value, config)}</div>
+    <Card className={`flex h-full flex-col justify-between p-4 ${config.kpiAlign === "center" ? "text-center" : ""}`}>
+      {config.showTitle !== false && <div className="text-[12px] uppercase tracking-wide text-mute">{label}</div>}
+      <div className={`mt-2 font-semibold tracking-tight text-ink ${size}`} style={config.color ? { color: config.color } : undefined}>{formatNumber(value, config)}</div>
       <div className="mt-3 space-y-1.5">
-        <div className="flex items-center justify-between text-[11px] text-mute">
+        <div className={`flex items-center justify-between text-[11px] text-mute ${config.kpiAlign === "center" ? "justify-center gap-3" : ""}`}>
           <span>Meta: {formatNumber(g, config)}</span>
-          <span className={positive ? "text-ok" : "text-danger"}>{positive ? "+" : ""}{v.toFixed(1)}%</span>
+          {(config.showTrend !== false) && <span className={positive ? "text-ok" : "text-danger"}>{positive ? "+" : ""}{v.toFixed(1)}% {config.comparisonLabel || ""}</span>}
         </div>
         <div className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
-          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+          <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%`, backgroundColor: config.color }} />
         </div>
       </div>
     </Card>
@@ -261,12 +258,14 @@ export function DecompositionTree({
   hierarchy = [] as string[],
   drillPath = [] as string[],
   onDrill,
+  config = {},
 }: {
   rows?: Rows;
   columns?: string[];
   hierarchy?: string[];
   drillPath?: string[];
   onDrill?: (value: string) => void;
+  config?: Config;
 }) {
   const level = drillPath.length < hierarchy.length ? drillPath.length : hierarchy.length - 1;
   const dim = hierarchy[level] || columns[0];
@@ -297,7 +296,7 @@ export function DecompositionTree({
                 {drillPath.length < hierarchy.length - 1 ? <Layers size={14} className="text-primary" /> : <BarChart3 size={14} className="text-mute" />}
                 <button className="text-[12px] text-ink" onClick={() => onDrill?.(name)}>{name}</button>
               </div>
-              <span className="text-[12px] font-medium text-ink">{formatNumber(val)}</span>
+              <span className="text-[12px] font-medium text-ink">{formatNumber(val, config)}</span>
             </div>
           ))
         )}

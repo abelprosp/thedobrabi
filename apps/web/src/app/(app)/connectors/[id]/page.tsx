@@ -8,10 +8,13 @@ import { toast } from "sonner";
 import { Plug, RefreshCw, Trash2, Unplug, LayoutDashboard } from "lucide-react";
 import { api, normalizeArray } from "@/lib/api";
 import { statusLabel } from "@/lib/labels";
-import { type CatalogResponse, type DataSource, connectorIconSrc, formatSyncAt } from "@/lib/connectors";
+import { type CatalogResponse, type DataSource, connectorIconSrc, formatSyncAt, isGuidedSQLType } from "@/lib/connectors";
 import { ConnectorIcon } from "@/components/connector-icon";
+import { SqlDataPicker } from "@/components/sql-data-picker";
 import { Badge, Button, Card, CardTitle, EmptyState, ErrorState, FieldLabel, PageHeader, PageSkeleton, Select } from "@/components/ui";
 import { starterDashboardWidgets } from "@/lib/semantic";
+import { AutoRefreshCard } from "@/components/auto-refresh-card";
+import type { SourceSelection } from "@/lib/sql-picker";
 
 export default function ConnectorDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -219,13 +222,29 @@ export default function ConnectorDetailPage() {
         </Card>
 
         <Card className="space-y-3">
-          <CardTitle>Sincronização</CardTitle>
+          <CardTitle>{isGuidedSQLType(s.type) ? "O que trazer" : "Sincronização"}</CardTitle>
           <FieldLabel label="Modo de armazenamento" hint="Importar copia os dados. Consulta directa marca o conjunto sem materializar (PostgreSQL/MySQL).">
             <Select value={storageMode} onChange={(e) => setStorageMode(e.target.value)}>
               <option value="import">Importar</option>
               <option value="direct_query">Consulta directa</option>
             </Select>
           </FieldLabel>
+          {isGuidedSQLType(s.type) ? (
+            <SqlDataPicker
+              sourceId={id}
+              sourceName={s.name}
+              storageMode={storageMode}
+              initialSelection={readSelection(cfg)}
+              compact
+              onDone={(dsId) => {
+                if (dsId) setLastSyncedId(dsId);
+                qc.invalidateQueries({ queryKey: ["source", id] });
+                qc.invalidateQueries({ queryKey: ["datasets"] });
+                qc.invalidateQueries({ queryKey: ["semantic"] });
+              }}
+            />
+          ) : (
+            <>
           <div className="flex flex-wrap gap-2">
             <Button variant="secondary" onClick={discover}>
               Descobrir tabelas
@@ -248,8 +267,12 @@ export default function ConnectorDetailPage() {
               </button>
             ))}
           </div>
+            </>
+          )}
         </Card>
       </div>
+
+      <AutoRefreshCard kind="connector" targetId={id} targetType={s.type} />
 
       <Card>
         <CardTitle>Conjuntos gerados</CardTitle>
@@ -279,4 +302,12 @@ export default function ConnectorDetailPage() {
 function str(v: unknown) {
   if (v == null || v === "" || v === 0 || v === false) return "";
   return String(v);
+}
+
+function readSelection(cfg: Record<string, unknown>): SourceSelection | null {
+  const sel = cfg.selection;
+  if (!sel || typeof sel !== "object") return null;
+  const s = sel as SourceSelection;
+  if (!Array.isArray(s.tables)) return null;
+  return s;
 }

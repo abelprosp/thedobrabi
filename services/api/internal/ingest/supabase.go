@@ -203,6 +203,13 @@ func parsePostgRESTOpenAPI(raw []byte) []string {
 func (e *Engine) fetchSupabase(ctx context.Context, cfg SQLConfig) ([]string, [][]string, error) {
 	if supabaseUsePostgres(cfg) {
 		cfg = supabasePreparedSQL(cfg)
+		if cfg.Selection != nil && !cfg.Selection.empty() {
+			applied, err := applySelection("postgres", cfg)
+			if err != nil {
+				return nil, nil, err
+			}
+			cfg = applied
+		}
 		return e.readSQL(ctx, "postgres", cfg)
 	}
 	if supabaseUseREST(cfg) {
@@ -212,7 +219,92 @@ func (e *Engine) fetchSupabase(ctx context.Context, cfg SQLConfig) ([]string, []
 }
 
 func (e *Engine) fetchSupabaseREST(ctx context.Context, cfg SQLConfig) ([]string, [][]string, error) {
+	if cfg.Selection != nil && !cfg.Selection.empty() {
+		return e.fetchSupabaseRESTSelection(ctx, cfg)
+	}
 	table := supabaseRESTTable(cfg.Table)
+	if table == "" {
+		return nil, nil, fmt.Errorf("indique uma tabela para o sync REST do Supabase")
+	}
+	if !tableIdentOK(table) {
+		return nil, nil, fmt.Errorf("nome de tabela inválido")
+	}
+	return e.fetchSupabaseRESTTable(ctx, cfg, table, nil)
+}
+
+func (e *Engine) fetchSupabaseRESTSelection(ctx context.Context, cfg SQLConfig) ([]string, [][]string, error) {
+	sel := cfg.Selection
+	if len(sel.Tables) == 1 {
+		t := sel.Tables[0]
+		return e.fetchSupabaseRESTTable(ctx, cfg, t.Name, t.Columns)
+	}
+	type packed struct {
+		key     string
+		headers []string
+		rows    [][]string
+	}
+	byKey := map[string]packed{}
+	var order []packed
+	for _, t := range sel.Tables {
+		headers, rows, err := e.fetchSupabaseRESTTable(ctx, cfg, t.Name, t.Columns)
+		if err != nil {
+			return nil, nil, err
+		}
+		p := packed{key: t.Key(), headers: headers, rows: rows}
+		order = append(order, p)
+		byKey[p.key] = p
+		byKey[t.Name] = p
+	}
+	left := order[0]
+	joined := map[string]bool{order[0].key: true}
+	pending := append([]SelectedJoin(nil), sel.Joins...)
+	for len(pending) > 0 {
+		progress := false
+		next := pending[:0]
+		for _, j := range pending {
+			lp, okL := byKey[j.LeftTable]
+			rp, okR := byKey[j.RightTable]
+			if !okL || !okR {
+				return nil, nil, fmt.Errorf("cruzamento refere uma lista que não foi escolhida")
+			}
+			allLeft := j.Match == "all_left" || j.Match == "left"
+			leftIn, rightIn := joined[lp.key], joined[rp.key]
+			if leftIn && rightIn {
+				progress = true
+				continue
+			}
+			if !leftIn && !rightIn {
+				next = append(next, j)
+				continue
+			}
+			var headers []string
+			var rows [][]string
+			var err error
+			var add packed
+			if leftIn {
+				headers, rows, err = joinInMemory(left.headers, left.rows, j.LeftColumn, rp.headers, rp.rows, j.RightColumn, allLeft)
+				add = rp
+			} else {
+				headers, rows, err = joinInMemory(left.headers, left.rows, j.RightColumn, lp.headers, lp.rows, j.LeftColumn, allLeft)
+				add = lp
+			}
+			if err != nil {
+				return nil, nil, err
+			}
+			left.headers, left.rows = headers, rows
+			joined[add.key] = true
+			progress = true
+		}
+		if !progress {
+			return nil, nil, fmt.Errorf("não foi possível ligar todas as listas — verifique os cruzamentos")
+		}
+		pending = next
+	}
+	return left.headers, left.rows, nil
+}
+
+func (e *Engine) fetchSupabaseRESTTable(ctx context.Context, cfg SQLConfig, table string, cols []string) ([]string, [][]string, error) {
+	table = supabaseRESTTable(table)
 	if table == "" {
 		return nil, nil, fmt.Errorf("indique uma tabela para o sync REST do Supabase")
 	}
@@ -225,7 +317,8 @@ func (e *Engine) fetchSupabaseREST(ctx context.Context, cfg SQLConfig) ([]string
 	}
 	base := supabaseProjectURL(cfg)
 	key := supabaseRESTKey(cfg)
-	u := fmt.Sprintf("%s/rest/v1/%s?select=*&limit=%d", base, url.PathEscape(table), lim)
+	sel := restSelectParam(cols)
+	u := fmt.Sprintf("%s/rest/v1/%s?select=%s&limit=%d", base, url.PathEscape(table), url.QueryEscape(sel), lim)
 	raw, status, err := httpJSON(ctx, http.MethodGet, u, supabaseRESTHeaders(key), nil, "", "")
 	if err != nil {
 		return nil, nil, err

@@ -42,6 +42,13 @@ export type DataSource = {
   preview?: boolean;
   message?: string;
   config?: Record<string, unknown>;
+  schedule?: {
+    enabled: boolean;
+    frequency: string;
+    next_run_at?: string | null;
+    last_run_at?: string | null;
+    last_status?: string;
+  } | null;
   datasets?: {
     id: string;
     name: string;
@@ -76,4 +83,10 @@ export function formatSyncAt(iso?: string | null) {
   } catch {
     return iso;
   }
+}
+
+const GUIDED_SQL = new Set(["postgres", "mysql", "mariadb", "sqlserver", "supabase"]);
+
+export function isGuidedSQLType(type?: string | null) {
+  return GUIDED_SQL.has((type || "").toLowerCase());
 }

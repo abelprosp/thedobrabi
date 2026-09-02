@@ -28,29 +28,32 @@ import (
 	"github.com/thedobra/thedobra/services/api/internal/platform"
 	"github.com/thedobra/thedobra/services/api/internal/queryeng"
 	"github.com/thedobra/thedobra/services/api/internal/rls"
+	"github.com/thedobra/thedobra/services/api/internal/scheduler"
 	"github.com/thedobra/thedobra/services/api/internal/scim"
 	"github.com/thedobra/thedobra/services/api/internal/sso"
 )
 
 type Server struct {
-	deps    *platform.Deps
-	auth    *authn.Service
-	ingest  *ingest.Engine
-	query   *queryeng.Engine
-	intel   *intelligence.Engine
-	ai      *aiagent.Agent
-	sso     *sso.Service
-	billing *billing.Service
-	lineage *lineage.Service
-	cdc     *cdc.Engine
-	scim    *scim.Server
-	ent     *entitlements.Service
-	notify  *notify.Service
-	flow    *flow.Store
-	flowEng *flow.Engine
-	apps    *apps.Store
-	gateway *gateway.Store
-	rls     *rls.Store
+	deps     *platform.Deps
+	auth     *authn.Service
+	ingest   *ingest.Engine
+	query    *queryeng.Engine
+	intel    *intelligence.Engine
+	ai       *aiagent.Agent
+	sso      *sso.Service
+	billing  *billing.Service
+	lineage  *lineage.Service
+	cdc      *cdc.Engine
+	scim     *scim.Server
+	ent      *entitlements.Service
+	notify   *notify.Service
+	flow     *flow.Store
+	flowEng  *flow.Engine
+	apps     *apps.Store
+	gateway  *gateway.Store
+	rls      *rls.Store
+	sched    *scheduler.Store
+	schedRun *scheduler.Runner
 }
 
 func New(deps *platform.Deps) http.Handler {
@@ -79,7 +82,14 @@ func New(deps *platform.Deps) http.Handler {
 		gateway: gateway.NewStore(deps.PG),
 		rls:     rls.NewStore(deps.PG),
 	}
+	s.sched = scheduler.NewStore(deps.PG)
+	s.schedRun = scheduler.NewRunner(s.sched, deps.Log, scheduler.Jobs{
+		Connector: s.runScheduledConnector,
+		Flow:      s.runScheduledFlow,
+		Dataset:   s.runScheduledDataset,
+	})
 	go s.cdc.RunLoop(context.Background())
+	go s.schedRun.RunLoop(context.Background())
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
@@ -136,11 +146,22 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/data-sources", s.listSources)
 			r.Post("/data-sources", s.createSource)
 			r.Get("/data-sources/{id}", s.getSource)
+			r.Patch("/data-sources/{id}", s.patchSource)
 			r.Delete("/data-sources/{id}", s.deleteSource)
 			r.Post("/data-sources/{id}/discover", s.discoverSource)
 			r.Post("/data-sources/{id}/sync", s.syncSource)
 			r.Post("/data-sources/{id}/test", s.testSource)
 			r.Get("/connectors/catalog", s.connectorsCatalog)
+
+			r.Get("/sync-schedules", s.listSchedules)
+			r.Post("/sync-schedules", s.upsertSchedule)
+			r.Get("/sync-schedules/{id}", s.getSchedule)
+			r.Patch("/sync-schedules/{id}", s.patchSchedule)
+			r.Delete("/sync-schedules/{id}", s.deleteSchedule)
+			r.Post("/sync-schedules/{id}/pause", s.pauseSchedule)
+			r.Post("/sync-schedules/{id}/resume", s.resumeSchedule)
+			r.Post("/sync-schedules/{id}/run", s.runScheduleNow)
+			r.Get("/sync-schedules/{id}/runs", s.listScheduleRuns)
 
 			r.Get("/datasets", s.listDatasets)
 			r.Post("/datasets/upload", s.uploadDataset)

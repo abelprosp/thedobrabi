@@ -7,6 +7,7 @@ import { useParams } from "next/navigation";
 import { Chart } from "@/components/viz";
 import { toast } from "sonner";
 import { Button, Card, CardTitle, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, Td, Textarea, Th, cellValue, isNumericValue } from "@/components/ui";
+import { AutoRefreshCard } from "@/components/auto-refresh-card";
 
 export default function DatasetPage() {
   const { id } = useParams<{ id: string }>();
@@ -44,6 +45,9 @@ export default function DatasetPage() {
         description={`${ds.data.row_count?.toLocaleString("pt-BR")} linhas · qualidade ${ds.data.quality_score ?? "—"}/100 · ${ds.data.clickhouse_table} · ${ds.data.storage_mode || "import"}`}
         crumbs={[{ href: "/data", label: "Dados" }]}
       />
+      {ds.data.source_id && (
+        <AutoRefreshCard kind="dataset" targetId={id} targetType={ds.data.source_type} />
+      )}
       <div className="border-b border-line">
         <div className="flex gap-1 overflow-x-auto pb-1">
           {tabs.map((t) => (

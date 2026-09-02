@@ -39,14 +39,25 @@ func (s *Server) overview(w http.ResponseWriter, r *http.Request) {
 func (s *Server) listSources(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	rows, err := s.deps.PG.Query(r.Context(), `
-		SELECT id, name, type, status, last_sync_at, created_at FROM data_sources
-		WHERE org_id=$1 AND workspace_id=$2 ORDER BY created_at DESC
+		SELECT ds.id, ds.name, ds.type, ds.status, ds.last_sync_at, ds.created_at,
+			sch.enabled, sch.frequency, sch.next_run_at, sch.last_run_at, sch.last_status
+		FROM data_sources ds
+		LEFT JOIN sync_schedules sch
+			ON sch.target_id = ds.id AND sch.kind = 'connector' AND sch.org_id = ds.org_id AND sch.workspace_id = ds.workspace_id
+		WHERE ds.org_id=$1 AND ds.workspace_id=$2 ORDER BY ds.created_at DESC
 	`, org, ws)
 	if err != nil {
 		httpx.Error(w, 500, "query_failed", err.Error())
 		return
 	}
 	defer rows.Close()
+	type schedInfo struct {
+		Enabled    bool       `json:"enabled"`
+		Frequency  string     `json:"frequency"`
+		NextRunAt  *time.Time `json:"next_run_at,omitempty"`
+		LastRunAt  *time.Time `json:"last_run_at,omitempty"`
+		LastStatus string     `json:"last_status,omitempty"`
+	}
 	type src struct {
 		ID          uuid.UUID  `json:"id"`
 		Name        string     `json:"name"`
@@ -56,16 +67,27 @@ func (s *Server) listSources(w http.ResponseWriter, r *http.Request) {
 		CreatedAt   time.Time  `json:"created_at"`
 		Implemented bool       `json:"implemented"`
 		Preview     bool       `json:"preview"`
+		Schedule    *schedInfo `json:"schedule,omitempty"`
 	}
 	var out []src
 	for rows.Next() {
 		var x src
-		if err := rows.Scan(&x.ID, &x.Name, &x.Type, &x.Status, &x.LastSyncAt, &x.CreatedAt); err != nil {
+		var en *bool
+		var freq, lastStatus *string
+		var next, last *time.Time
+		if err := rows.Scan(&x.ID, &x.Name, &x.Type, &x.Status, &x.LastSyncAt, &x.CreatedAt, &en, &freq, &next, &last, &lastStatus); err != nil {
 			httpx.Error(w, 500, "scan", err.Error())
 			return
 		}
 		x.Implemented = connector.Implemented(x.Type)
 		x.Preview = !x.Implemented
+		if en != nil && freq != nil {
+			st := ""
+			if lastStatus != nil {
+				st = *lastStatus
+			}
+			x.Schedule = &schedInfo{Enabled: *en, Frequency: *freq, NextRunAt: next, LastRunAt: last, LastStatus: st}
+		}
 		out = append(out, x)
 	}
 	if out == nil {
@@ -143,12 +165,13 @@ func (s *Server) syncSource(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var body struct {
-		Table       string `json:"table"`
-		Name        string `json:"name"`
-		StorageMode string `json:"storage_mode"`
+		Table       string                  `json:"table"`
+		Name        string                  `json:"name"`
+		StorageMode string                  `json:"storage_mode"`
+		Selection   *ingest.SourceSelection `json:"selection"`
 	}
 	_ = httpx.Decode(r, &body)
-	res, err := s.ingest.SyncSource(r.Context(), org, ws, uid, id, body.Table, body.Name)
+	res, err := s.ingest.SyncSourceWithSelection(r.Context(), org, ws, uid, id, body.Table, body.Name, body.Selection)
 	if err != nil {
 		httpx.Error(w, 400, "sync_failed", err.Error())
 		return

@@ -12,32 +12,32 @@ import (
 )
 
 type Flow struct {
-	ID                uuid.UUID       `json:"id"`
-	OrgID             uuid.UUID       `json:"org_id"`
-	WorkspaceID       uuid.UUID       `json:"workspace_id"`
-	Name              string          `json:"name"`
-	Description       string          `json:"description"`
-	Status            string          `json:"status"`
-	Schedule          string          `json:"schedule,omitempty"`
-	SourceDatasetID   *uuid.UUID      `json:"source_dataset_id,omitempty"`
-	TargetDatasetID   *uuid.UUID      `json:"target_dataset_id,omitempty"`
-	OutputDatasetID   *uuid.UUID      `json:"output_dataset_id,omitempty"`
-	Layout            json.RawMessage `json:"layout,omitempty"`
-	CreatedBy         *uuid.UUID      `json:"created_by,omitempty"`
-	CreatedAt         time.Time       `json:"created_at"`
-	UpdatedAt         time.Time       `json:"updated_at"`
+	ID              uuid.UUID       `json:"id"`
+	OrgID           uuid.UUID       `json:"org_id"`
+	WorkspaceID     uuid.UUID       `json:"workspace_id"`
+	Name            string          `json:"name"`
+	Description     string          `json:"description"`
+	Status          string          `json:"status"`
+	Schedule        string          `json:"schedule,omitempty"`
+	SourceDatasetID *uuid.UUID      `json:"source_dataset_id,omitempty"`
+	TargetDatasetID *uuid.UUID      `json:"target_dataset_id,omitempty"`
+	OutputDatasetID *uuid.UUID      `json:"output_dataset_id,omitempty"`
+	Layout          json.RawMessage `json:"layout,omitempty"`
+	CreatedBy       *uuid.UUID      `json:"created_by,omitempty"`
+	CreatedAt       time.Time       `json:"created_at"`
+	UpdatedAt       time.Time       `json:"updated_at"`
 }
 
 type Step struct {
-	ID         uuid.UUID `json:"id"`
-	FlowID     uuid.UUID `json:"flow_id"`
-	StepOrder  int       `json:"step_order"`
-	Kind       string    `json:"kind"`     // extract | transform | validate | load
-	Subkind    string    `json:"subkind"`  // rename, filter, change_type, join, append, aggregate, dedup, fill_null, conditional, sql, source
-	Name       string    `json:"name"`
-	Config     Config    `json:"config"`
-	CreatedAt  time.Time `json:"created_at"`
-	UpdatedAt  time.Time `json:"updated_at"`
+	ID        uuid.UUID `json:"id"`
+	FlowID    uuid.UUID `json:"flow_id"`
+	StepOrder int       `json:"step_order"`
+	Kind      string    `json:"kind"`    // extract | transform | validate | load
+	Subkind   string    `json:"subkind"` // rename, filter, change_type, join, append, aggregate, dedup, fill_null, conditional, sql, source
+	Name      string    `json:"name"`
+	Config    Config    `json:"config"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type Config map[string]any
@@ -51,24 +51,24 @@ func (c Config) Value() (string, error) {
 }
 
 type Run struct {
-	ID           uuid.UUID  `json:"id"`
-	FlowID       uuid.UUID  `json:"flow_id"`
-	Status       string     `json:"status"`
-	StartedAt    *time.Time `json:"started_at,omitempty"`
-	FinishedAt   *time.Time `json:"finished_at,omitempty"`
-	RowsProcessed *int64    `json:"rows_processed,omitempty"`
-	Error        string     `json:"error,omitempty"`
-	CreatedAt    time.Time  `json:"created_at"`
+	ID            uuid.UUID  `json:"id"`
+	FlowID        uuid.UUID  `json:"flow_id"`
+	Status        string     `json:"status"`
+	StartedAt     *time.Time `json:"started_at,omitempty"`
+	FinishedAt    *time.Time `json:"finished_at,omitempty"`
+	RowsProcessed *int64     `json:"rows_processed,omitempty"`
+	Error         string     `json:"error,omitempty"`
+	CreatedAt     time.Time  `json:"created_at"`
 }
 
 type RunLog struct {
-	ID        uuid.UUID  `json:"id"`
-	RunID     uuid.UUID  `json:"run_id"`
-	StepID    *uuid.UUID `json:"step_id,omitempty"`
-	Level     string     `json:"level"`
-	Message   string     `json:"message"`
+	ID        uuid.UUID      `json:"id"`
+	RunID     uuid.UUID      `json:"run_id"`
+	StepID    *uuid.UUID     `json:"step_id,omitempty"`
+	Level     string         `json:"level"`
+	Message   string         `json:"message"`
 	Details   map[string]any `json:"details,omitempty"`
-	CreatedAt time.Time  `json:"created_at"`
+	CreatedAt time.Time      `json:"created_at"`
 }
 
 type Store struct{ pg *pgxpool.Pool }
@@ -110,14 +110,35 @@ func (s *Store) Get(ctx context.Context, orgID, wsID, id uuid.UUID) (Flow, error
 	return f, err
 }
 
+func layoutBytes(raw json.RawMessage) []byte {
+	if len(raw) == 0 || string(raw) == "null" {
+		return []byte("{}")
+	}
+	return raw
+}
+
+func inferSourceDataset(steps []Step) *uuid.UUID {
+	for _, st := range steps {
+		if st.Kind != "extract" || st.Config == nil {
+			continue
+		}
+		id, _ := st.Config["dataset_id"].(string)
+		if id == "" {
+			continue
+		}
+		u, err := uuid.Parse(id)
+		if err == nil {
+			return &u
+		}
+	}
+	return nil
+}
+
 func (s *Store) Create(ctx context.Context, f Flow) (uuid.UUID, error) {
 	if f.ID == uuid.Nil {
 		f.ID = uuid.New()
 	}
-	layout, _ := json.Marshal(f.Layout)
-	if len(layout) == 0 {
-		layout = []byte("{}")
-	}
+	layout := layoutBytes(f.Layout)
 	_, err := s.pg.Exec(ctx, `
 		INSERT INTO flows (id, org_id, workspace_id, name, description, status, schedule, source_dataset_id, target_dataset_id, output_dataset_id, layout_json, created_by)
 		VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
@@ -125,13 +146,75 @@ func (s *Store) Create(ctx context.Context, f Flow) (uuid.UUID, error) {
 	return f.ID, err
 }
 
-func (s *Store) Update(ctx context.Context, orgID, wsID, id uuid.UUID, f Flow) error {
-	layout, _ := json.Marshal(f.Layout)
-	if len(layout) == 0 {
-		layout = []byte("{}")
+// CreateWithGraph creates a flow and its starter steps in one transaction, then stores a connected canvas layout.
+func (s *Store) CreateWithGraph(ctx context.Context, f Flow, steps []Step) (uuid.UUID, error) {
+	if f.ID == uuid.Nil {
+		f.ID = uuid.New()
 	}
+	if f.Status == "" {
+		f.Status = "draft"
+	}
+	if f.SourceDatasetID == nil {
+		f.SourceDatasetID = inferSourceDataset(steps)
+	}
+	err := s.WithTx(ctx, func(tx pgx.Tx) error {
+		_, err := tx.Exec(ctx, `
+			INSERT INTO flows (id, org_id, workspace_id, name, description, status, schedule, source_dataset_id, target_dataset_id, output_dataset_id, layout_json, created_by)
+			VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+		`, f.ID, f.OrgID, f.WorkspaceID, f.Name, f.Description, f.Status, f.Schedule, f.SourceDatasetID, f.TargetDatasetID, f.OutputDatasetID, []byte("{}"), f.CreatedBy)
+		if err != nil {
+			return err
+		}
+		created := make([]Step, 0, len(steps))
+		for i, st := range steps {
+			if st.ID == uuid.Nil {
+				st.ID = uuid.New()
+			}
+			st.FlowID = f.ID
+			if st.StepOrder == 0 {
+				st.StepOrder = i + 1
+			}
+			if st.Kind == "" {
+				st.Kind = "transform"
+			}
+			if st.Config == nil {
+				st.Config = Config{}
+			}
+			raw, err := json.Marshal(st.Config)
+			if err != nil {
+				return err
+			}
+			if _, err := tx.Exec(ctx, `
+				INSERT INTO flow_steps (id, flow_id, step_order, kind, subkind, name, config)
+				VALUES ($1,$2,$3,$4,$5,$6,$7)
+			`, st.ID, st.FlowID, st.StepOrder, st.Kind, st.Subkind, st.Name, raw); err != nil {
+				return err
+			}
+			created = append(created, st)
+		}
+		layout, err := json.Marshal(DefaultLayout(created))
+		if err != nil {
+			return err
+		}
+		_, err = tx.Exec(ctx, `UPDATE flows SET layout_json=$1, updated_at=now() WHERE id=$2`, layout, f.ID)
+		return err
+	})
+	return f.ID, err
+}
+
+func (s *Store) Update(ctx context.Context, orgID, wsID, id uuid.UUID, f Flow) error {
+	layout := layoutBytes(f.Layout)
 	ct, err := s.pg.Exec(ctx, `
-		UPDATE flows SET name=$1, description=$2, status=$3, schedule=$4, source_dataset_id=$5, target_dataset_id=$6, output_dataset_id=$7, layout_json=$8, updated_at=now()
+		UPDATE flows SET
+			name=CASE WHEN $1 <> '' THEN $1 ELSE name END,
+			description=$2,
+			status=CASE WHEN $3 <> '' THEN $3 ELSE status END,
+			schedule=CASE WHEN $4 <> '' THEN $4 ELSE schedule END,
+			source_dataset_id=COALESCE($5, source_dataset_id),
+			target_dataset_id=COALESCE($6, target_dataset_id),
+			output_dataset_id=COALESCE($7, output_dataset_id),
+			layout_json=CASE WHEN $8::jsonb <> '{}'::jsonb THEN $8::jsonb ELSE layout_json END,
+			updated_at=now()
 		WHERE id=$9 AND org_id=$10 AND workspace_id=$11
 	`, f.Name, f.Description, f.Status, f.Schedule, f.SourceDatasetID, f.TargetDatasetID, f.OutputDatasetID, layout, id, orgID, wsID)
 	if err != nil {
@@ -190,7 +273,9 @@ func (s *Store) CreateStep(ctx context.Context, st Step) (uuid.UUID, error) {
 func (s *Store) UpdateStep(ctx context.Context, stepID uuid.UUID, st Step) error {
 	raw, _ := json.Marshal(st.Config)
 	ct, err := s.pg.Exec(ctx, `
-		UPDATE flow_steps SET step_order=$1, kind=$2, subkind=$3, name=$4, config=$5, updated_at=now()
+		UPDATE flow_steps SET
+			step_order=CASE WHEN $1 = 0 THEN step_order ELSE $1 END,
+			kind=$2, subkind=$3, name=$4, config=$5, updated_at=now()
 		WHERE id=$6
 	`, st.StepOrder, st.Kind, st.Subkind, st.Name, raw, stepID)
 	if err != nil {

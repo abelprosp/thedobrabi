@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import { useParams, useSearchParams } from "next/navigation";
 import { WidgetView, type Widget, type DashboardFilter, type WidgetType } from "@/components/WidgetView";
+import { WidgetInspector } from "@/components/widget-inspector";
 import { toast } from "sonner";
 import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -21,7 +22,6 @@ import {
   PageSkeleton,
   Select,
   Textarea,
-  Badge,
   Skeleton,
   cn,
 } from "@/components/ui";
@@ -191,7 +191,6 @@ export default function DashboardEditorPage() {
   const [aiCompleteDataset, setAiCompleteDataset] = useState("");
   const [aiCompleteStep, setAiCompleteStep] = useState(0);
   const [mobilePreview, setMobilePreview] = useState(false);
-  const [activeTab, setActiveTab] = useState("data");
   const [hydrated, setHydrated] = useState(false);
   const [preferredDatasetId, setPreferredDatasetId] = useState(searchParams.get("dataset_id") || "");
   const [sourceFilter, setSourceFilter] = useState("");
@@ -360,7 +359,7 @@ export default function DashboardEditorPage() {
       type,
       title: catalog.label,
       layout: { x, y: 100, w: catalog.defaultW, h: catalog.defaultH },
-      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: 20 } : undefined,
+      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: type === "slicer" ? 200 : type === "table" ? 50 : 20 } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
       hierarchy: type === "decomposition_tree" ? fields.dimensions : undefined,
       config: (() => {
@@ -385,13 +384,17 @@ export default function DashboardEditorPage() {
     add({ ...w, id: crypto.randomUUID(), layout: { ...w.layout, x: (w.layout.x + 2) % 12, y: w.layout.y } });
   };
 
-  const applyFilter = useCallback((dim: string, value: any) => {
+  const applyFilter = useCallback((dim: string, value: any, op?: "eq" | "in") => {
     setGlobalFilters((prev) => {
+      if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) {
+        return prev.filter((f) => f.dimension !== dim);
+      }
+      const nextOp = op || (Array.isArray(value) ? "in" : "eq");
       const existing = prev.find((f) => f.dimension === dim);
       if (existing) {
-        return prev.map((f) => (f.dimension === dim ? { ...f, value } : f));
+        return prev.map((f) => (f.dimension === dim ? { ...f, value, op: nextOp } : f));
       }
-      return [...prev, { dimension: dim, op: "eq", value }];
+      return [...prev, { dimension: dim, op: nextOp, value }];
     });
   }, []);
 
@@ -556,7 +559,7 @@ export default function DashboardEditorPage() {
               <div className="flex flex-wrap gap-1">
                 {globalFilters.map((f) => (
                   <span key={f.dimension} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] text-primary-600">
-                    {f.dimension} = {String(f.value)}
+                    {f.dimension} = {Array.isArray(f.value) ? f.value.join(", ") : String(f.value)}
                     <button className="text-primary-700" onClick={() => setGlobalFilters(globalFilters.filter((x) => x.dimension !== f.dimension))}>×</button>
                   </span>
                 ))}
@@ -632,286 +635,19 @@ export default function DashboardEditorPage() {
       </div>
 
       {edit && current && (
-        <aside className="w-80 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
-          <div className="mb-3 flex items-center justify-between">
-            <span className="text-[13px] font-semibold text-ink">Propriedades</span>
-            <Badge tone="accent">{WIDGET_CATALOG.find((t) => t.type === current.type)?.label}</Badge>
-          </div>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="data" active={activeTab === "data"} onClick={() => setActiveTab("data")}>Dados</TabsTrigger>
-              <TabsTrigger value="format" active={activeTab === "format"} onClick={() => setActiveTab("format")}>Formato</TabsTrigger>
-              <TabsTrigger value="filters" active={activeTab === "filters"} onClick={() => setActiveTab("filters")}>Filtros</TabsTrigger>
-            </TabsList>
-            <TabsContent value="data" activeValue={activeTab} className="space-y-3 pt-3">
-              <FieldLabel label="Título">
-                <Input value={current.title} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, title: e.target.value } : w)))} />
-              </FieldLabel>
-              {current.type === "text" && (
-                <FieldLabel label="Texto">
-                  <Textarea value={current.text} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, text: e.target.value } : w)))} />
-                </FieldLabel>
-              )}
-              {current.type === "iframe" && (
-                <FieldLabel label="URL do embed" hint="Use apenas fontes confiáveis. Conteúdo externo pode definir cookies.">
-                  <Input value={current.config?.url || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, url: e.target.value } } : w)))} placeholder="https://..." />
-                </FieldLabel>
-              )}
-              {(current.type === "image" || current.type === "markdown") && (
-                <>
-                  {current.type === "image" && (
-                    <FieldLabel label="URL da imagem">
-                      <Input value={current.config?.imageUrl || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, imageUrl: e.target.value } } : w)))} />
-                    </FieldLabel>
-                  )}
-                  {current.type === "markdown" && (
-                    <FieldLabel label="Markdown">
-                      <Textarea value={current.config?.markdown || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, markdown: e.target.value } } : w)))} />
-                    </FieldLabel>
-                  )}
-                </>
-              )}
-              {!["text", "image", "markdown", "iframe"].includes(current.type) && (
-                <>
-                  {sourceOptions.length > 0 && (
-                    <FieldLabel label="Origem">
-                      <Select
-                        value={sourceFilter}
-                        onChange={(e) => setSourceFilter(e.target.value)}
-                      >
-                        <option value="">Todos os conjuntos</option>
-                        {sourceOptions.map((s) => (
-                          <option key={s.id} value={s.id}>
-                            Conector {s.name}
-                          </option>
-                        ))}
-                      </Select>
-                    </FieldLabel>
-                  )}
-                  <FieldLabel label="Conjunto">
-                    <Select
-                      value={current.query?.dataset_id || ""}
-                      onChange={(e) => {
-                        const nextId = e.target.value;
-                        setPreferredDatasetId(nextId);
-                        const nextModel = modelForDataset(semanticModels, nextId);
-                        updateWidgets((p) =>
-                          p.map((w) => {
-                            if (w.id !== current.id) return w;
-                            const q = remapQueryToModel({ ...w.query, dataset_id: nextId }, w.type, nextModel);
-                            return { ...w, query: q };
-                          }),
-                        );
-                      }}
-                    >
-                      <option value="">—</option>
-                      {visibleDatasets.map((ds) => (
-                        <option key={ds.id} value={ds.id}>
-                          {ds.name}
-                          {ds.source_name ? ` · ${ds.source_name}` : ""}
-                        </option>
-                      ))}
-                    </Select>
-                  </FieldLabel>
-                  {current.type !== "slicer" && current.type !== "metric_group" && (
-                    <FieldLabel label={current.type === "scatter" ? "Métrica X" : current.type === "funnel" || current.type === "treemap" || current.type === "waterfall" ? "Medida" : "Métrica"}>
-                      <Select
-                        value={current.query?.measures?.[0] || ""}
-                        onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: e.target.value ? [e.target.value, ...(w.query?.measures || []).slice(1)] : (w.query?.measures || []).slice(1) }, config: current.type === "scatter" ? { ...w.config, xMeasure: e.target.value } : w.config } : w)))}
-                      >
-                        <option value="">—</option>
-                        {(model?.measures || []).map((m: any) => <option key={m.name} value={m.name}>{m.name}</option>)}
-                      </Select>
-                    </FieldLabel>
-                  )}
-                  {current.type === "scatter" && (
-                    <FieldLabel label="Métrica Y">
-                      <Select
-                        value={current.query?.measures?.[1] || ""}
-                        onChange={(e) => {
-                          const first = current.query?.measures?.[0] || "";
-                          updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: [first, e.target.value].filter(Boolean) }, config: { ...w.config, xMeasure: first, yMeasure: e.target.value } } : w)));
-                        }}
-                      >
-                        <option value="">—</option>
-                        {(model?.measures || []).map((m: any) => <option key={m.name} value={m.name}>{m.name}</option>)}
-                      </Select>
-                    </FieldLabel>
-                  )}
-                  <FieldLabel label={current.type === "slicer" ? "Dimensão do slicer" : current.type === "heatmap" ? "Dimensão X" : current.type === "sparkline" ? "Dimensão temporal" : "Dimensão"}>
-                    <Select
-                      value={current.query?.dimensions?.[0] || ""}
-                      onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, dimensions: e.target.value ? [e.target.value, ...(w.query?.dimensions || []).slice(1)] : (w.query?.dimensions || []).slice(1) } } : w)))}
-                    >
-                      <option value="">Nenhuma</option>
-                      {(model?.dimensions || []).map((d: any) => <option key={d.column || d.name} value={d.column || d.name}>{d.name || d.column}</option>)}
-                    </Select>
-                  </FieldLabel>
-                  {current.type === "heatmap" && (
-                    <FieldLabel label="Dimensão Y">
-                      <Select
-                        value={current.query?.dimensions?.[1] || ""}
-                        onChange={(e) => {
-                          const first = current.query?.dimensions?.[0] || "";
-                          updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, dimensions: [first, e.target.value].filter(Boolean) } } : w)));
-                        }}
-                      >
-                        <option value="">Nenhuma</option>
-                        {(model?.dimensions || []).map((d: any) => <option key={d.column || d.name} value={d.column || d.name}>{d.name || d.column}</option>)}
-                      </Select>
-                    </FieldLabel>
-                  )}
-                  {!["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer"].includes(current.type) && (
-                    <FieldLabel label={current.type === "decomposition_tree" ? "Hierarquia (níveis separados por vírgula)" : "Hierarquia de drill-down (separada por vírgula)"} hint="Ex.: regiao, cidade, loja">
-                      <Input
-                        value={(current.hierarchy || []).join(",")}
-                        onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, hierarchy: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) } : w)))}
-                        placeholder="regiao, cidade, loja"
-                      />
-                    </FieldLabel>
-                  )}
-                  {current.drillPath && current.drillPath.length > 0 && (
-                    <div className="flex items-center gap-2 text-xs text-mute">
-                      <span>Drill:</span>
-                      {current.hierarchy?.slice(0, current.drillPath.length).map((h, i) => (
-                        <span key={h} className="rounded bg-surface-2 px-1.5 py-0.5">{h}={current.drillPath?.[i]}</span>
-                      ))}
-                      <button className="text-accent" onClick={() => drill(current.id, "up")}>Subir</button>
-                    </div>
-                  )}
-                </>
-              )}
-            </TabsContent>
-            <TabsContent value="format" activeValue={activeTab} className="space-y-3 pt-3">
-              <FieldLabel label="Tipo de visualização">
-                <Select
-                  value={current.type}
-                  onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, type: e.target.value as WidgetType } : w)))}
-                >
-                  {WIDGET_CATALOG.filter((t) => !["text", "image", "markdown", "iframe"].includes(t.type)).map((t) => <option key={t.type} value={t.type}>{t.label}</option>)}
-                </Select>
-              </FieldLabel>
-              {current.type !== "slicer" && (
-                <>
-                  <FieldLabel label="Cor principal">
-                    <div className="flex flex-wrap gap-2">
-                      {["#2563EB", "#6366F1", "#0EA5E9", "#F59E0B", "#10B981", "#8B5CF6", "#EF4444"].map((c) => (
-                        <button
-                          key={c}
-                          className={`h-7 w-7 rounded-full border-2 ${current.config?.color === c ? "border-ink" : "border-transparent"}`}
-                          style={{ backgroundColor: c }}
-                          onClick={() => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, color: c } } : w)))}
-                        />
-                      ))}
-                    </div>
-                  </FieldLabel>
-                </>
-              )}
-              {["kpi", "kpi_goal", "metric_group", "gauge", "waterfall", "funnel", "scatter", "treemap", "heatmap", "sparkline", "table"].includes(current.type) && (
-                <>
-                  <FieldLabel label="Prefixo">
-                    <Input value={current.config?.prefix || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, prefix: e.target.value } } : w)))} placeholder="R$ " />
-                  </FieldLabel>
-                  <FieldLabel label="Sufixo">
-                    <Input value={current.config?.suffix || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, suffix: e.target.value } } : w)))} placeholder="%" />
-                  </FieldLabel>
-                  <FieldLabel label="Casas decimais">
-                    <Input type="number" min={0} max={6} value={current.config?.decimals ?? 0} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, decimals: Number(e.target.value) } } : w)))} />
-                  </FieldLabel>
-                </>
-              )}
-              {current.type === "gauge" && (
-                <>
-                  <FieldLabel label="Etiqueta do medidor">
-                    <Input value={current.config?.gaugeLabel || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, gaugeLabel: e.target.value } } : w)))} placeholder="Valor" />
-                  </FieldLabel>
-                  <FieldLabel label="Mínimo">
-                    <Input type="number" value={current.config?.min ?? 0} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, min: Number(e.target.value) } } : w)))} />
-                  </FieldLabel>
-                  <FieldLabel label="Máximo">
-                    <Input type="number" value={current.config?.max ?? 100} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, max: Number(e.target.value) } } : w)))} />
-                  </FieldLabel>
-                  <FieldLabel label="Meta">
-                    <Input type="number" value={current.config?.target ?? 80} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, target: Number(e.target.value) } } : w)))} />
-                  </FieldLabel>
-                </>
-              )}
-              {current.type === "waterfall" && (
-                <FieldLabel label="Categorias negativas (separadas por vírgula)" hint="Valores destas categorias serão subtraídos. Deixe vazio para usar o sinal do valor.">
-                  <Input value={current.config?.waterfallNegativeCategories || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, waterfallNegativeCategories: e.target.value } } : w)))} placeholder="Despesas, Custos, Impostos" />
-                </FieldLabel>
-              )}
-              {current.type === "scatter" && (
-                <>
-                  <FieldLabel label="Eixo X (medida ou dimensão)">
-                    <Input value={current.config?.xMeasure || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, xMeasure: e.target.value } } : w)))} placeholder="revenue" />
-                  </FieldLabel>
-                  <FieldLabel label="Eixo Y (medida ou dimensão)">
-                    <Input value={current.config?.yMeasure || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, yMeasure: e.target.value } } : w)))} placeholder="orders" />
-                  </FieldLabel>
-                </>
-              )}
-              {current.type === "kpi_goal" && (
-                <FieldLabel label="Meta">
-                  <Input type="number" value={current.config?.goal ?? 100} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, goal: Number(e.target.value) } } : w)))} />
-                </FieldLabel>
-              )}
-              {current.type === "metric_group" && (
-                <FieldLabel label="Métricas do grupo">
-                  <div className="grid grid-cols-1 gap-1.5">
-                    {(model?.measures || []).map((m: any) => {
-                      const checked = current.query?.measures?.includes(m.name) || false;
-                      return (
-                        <label key={m.name} className="flex items-center gap-2 text-[12px] text-ink">
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {
-                              const ms = current.query?.measures || [];
-                              const next = checked ? ms.filter((x) => x !== m.name) : [...ms, m.name];
-                              updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: next } } : w)));
-                            }}
-                          />
-                          {m.name}
-                        </label>
-                      );
-                    })}
-                  </div>
-                </FieldLabel>
-              )}
-              <FieldLabel label="Largura (cols)">
-                <Input type="number" min={2} max={12} value={current.layout.w} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, layout: { ...w.layout, w: Number(e.target.value) } } : w)))} />
-              </FieldLabel>
-              <FieldLabel label="Altura (rows)">
-                <Input type="number" min={2} max={20} value={current.layout.h} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, layout: { ...w.layout, h: Number(e.target.value) } } : w)))} />
-              </FieldLabel>
-            </TabsContent>
-            <TabsContent value="filters" activeValue={activeTab} className="space-y-3 pt-3">
-              <p className="text-xs text-mute">Filtros aplicados a este widget. Os slicers e cliques no canvas aplicam filtros globais automaticamente.</p>
-              {(current.query?.filters || []).map((f, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-lg border border-line p-2">
-                  <Input value={f.dimension} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, filters: (w.query?.filters || []).map((x, j) => (j === i ? { ...x, dimension: e.target.value } : x)) } } : w)))} className="w-24" />
-                  <Select value={f.op} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, filters: (w.query?.filters || []).map((x, j) => (j === i ? { ...x, op: e.target.value as any } : x)) } } : w)))}>
-                    <option value="eq">=</option>
-                    <option value="neq">≠</option>
-                    <option value="in">em</option>
-                  </Select>
-                  <Input value={String(f.value)} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, filters: (w.query?.filters || []).map((x, j) => (j === i ? { ...x, value: e.target.value } : x)) } } : w)))} />
-                  <Button variant="ghost" size="icon" onClick={() => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, filters: (w.query?.filters || []).filter((_, j) => j !== i) } } : w)))}>
-                    <Trash2 size={14} />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, filters: [...(w.query?.filters || []), { dimension: "", op: "eq", value: "" }] } } : w)))}
-              >
-                <Plus size={14} /> Adicionar filtro
-              </Button>
-            </TabsContent>
-          </Tabs>
-        </aside>
+        <WidgetInspector
+          widget={current}
+          catalog={WIDGET_CATALOG}
+          model={model}
+          visibleDatasets={visibleDatasets}
+          sourceOptions={sourceOptions}
+          sourceFilter={sourceFilter}
+          onSourceFilter={setSourceFilter}
+          onPreferredDataset={setPreferredDatasetId}
+          semanticModels={semanticModels}
+          onUpdate={(fn) => updateWidgets((p) => p.map((w) => (w.id === current.id ? fn(w) : w)))}
+          onDrillUp={() => drill(current.id, "up")}
+        />
       )}
 
       {aiCompleteOpen && (
@@ -975,30 +711,4 @@ export default function DashboardEditorPage() {
       )}
     </div>
   );
-}
-
-// Tabs componentes locais simples
-function Tabs({ value, onValueChange, children }: { value: string; onValueChange: (v: string) => void; children: React.ReactNode }) {
-  return <div className="w-full" data-value={value} data-onchange={String(onValueChange)}>{children}</div>;
-}
-function TabsList({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn("flex gap-1 rounded-xl bg-surface-2 p-1", className)}>{children}</div>;
-}
-function TabsTrigger({ value, active, children, onClick }: { value: string; active?: boolean; children: React.ReactNode; onClick?: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "flex-1 rounded-lg px-3 py-1.5 text-[12px] font-medium transition",
-        active ? "bg-white text-ink shadow-sm" : "text-mute hover:text-ink hover:bg-white/50",
-      )}
-    >
-      {children}
-    </button>
-  );
-}
-function TabsContent({ value, activeValue, children, className }: { value: string; activeValue: string; children: React.ReactNode; className?: string }) {
-  if (value !== activeValue) return null;
-  return <div className={cn("animate-in fade-in duration-200", className)}>{children}</div>;
 }

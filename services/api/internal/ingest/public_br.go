@@ -14,30 +14,66 @@ func publicGET(ctx context.Context, cfg SQLConfig, official string) ([]byte, err
 	if u == "" {
 		u = official
 	}
-	raw, status, err := httpJSON(ctx, http.MethodGet, u, map[string]string{"User-Agent": "TheDobra/1.0"}, nil, "", "")
-	if err != nil {
-		return nil, err
+	var last error
+	for attempt := 0; attempt < 3; attempt++ {
+		if attempt > 0 {
+			select {
+			case <-ctx.Done():
+				return nil, ctx.Err()
+			case <-time.After(time.Duration(attempt) * 400 * time.Millisecond):
+			}
+		}
+		raw, status, err := httpJSON(ctx, http.MethodGet, u, map[string]string{"User-Agent": "TheDobra/1.0"}, nil, "", "")
+		if err != nil {
+			last = err
+			continue
+		}
+		if status >= 500 {
+			last = fmt.Errorf("HTTP %d: %s", status, truncate(string(raw), 200))
+			continue
+		}
+		if err := mustOK(status, raw); err != nil {
+			return nil, err
+		}
+		return raw, nil
 	}
-	if err := mustOK(status, raw); err != nil {
-		return nil, err
+	if last == nil {
+		last = fmt.Errorf("pedido HTTP falhou")
 	}
-	return raw, nil
+	return nil, last
+}
+
+func ibgeOfficialURL(resource string) string {
+	switch resource {
+	case "estados":
+		return "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
+	case "populacao":
+		// 6579 = população residente estimada. "all" evita o período 2022, que a SIDRA já não publica.
+		return "https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/all/variaveis/9324?localidades=N3[all]"
+	default:
+		return "https://servicodados.ibge.gov.br/api/v1/localidades/municipios"
+	}
+}
+
+func focusOfficialURL(resource string, top int) string {
+	if top <= 0 || top > 10000 {
+		top = 10000
+	}
+	entity := "ExpectativasMercadoAnuais"
+	if resource == "selic" {
+		entity = "ExpectativasMercadoSelic"
+	}
+	return fmt.Sprintf(
+		"https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/%s?$top=%d&$orderby=Data%%20desc&$format=json",
+		entity, top,
+	)
 }
 
 func (e *Engine) fetchIBGE(ctx context.Context, cfg SQLConfig, resource string) ([]string, [][]string, error) {
 	if resource == "" {
 		resource = "municipios"
 	}
-	var official string
-	switch resource {
-	case "estados":
-		official = "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-	case "populacao":
-		official = "https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/2022/variaveis/9324?localidades=N3[all]"
-	default:
-		official = "https://servicodados.ibge.gov.br/api/v1/localidades/municipios"
-	}
-	raw, err := publicGET(ctx, cfg, official)
+	raw, err := publicGET(ctx, cfg, ibgeOfficialURL(resource))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -128,19 +164,36 @@ func flattenSIDRA(raw []byte, limit int) ([]string, [][]string, error) {
 	return mapsToRows(maps)
 }
 
+func sgsOfficialURL(seriesID string) string {
+	return fmt.Sprintf("https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json", seriesID)
+}
+
+func sgsRangeURL(seriesID string, start, end time.Time) string {
+	return fmt.Sprintf(
+		"https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json&dataInicial=%s&dataFinal=%s",
+		seriesID, start.Format("02/01/2006"), end.Format("02/01/2006"),
+	)
+}
+
 func (e *Engine) fetchBCBSGS(ctx context.Context, cfg SQLConfig, seriesID string) ([]string, [][]string, error) {
 	seriesID = strings.TrimSpace(seriesID)
 	if seriesID == "" {
 		return nil, nil, fmt.Errorf("série SGS obrigatória")
 	}
-	official := fmt.Sprintf("https://api.bcb.gov.br/dados/serie/bcdata.sgs.%s/dados?formato=json", seriesID)
-	raw, err := publicGET(ctx, cfg, official)
+	raw, err := publicGET(ctx, cfg, sgsOfficialURL(seriesID))
+	if err != nil && strings.TrimSpace(cfg.URL) == "" {
+		end := time.Now()
+		raw, err = publicGET(ctx, cfg, sgsRangeURL(seriesID, end.AddDate(-20, 0, 0), end))
+	}
 	if err != nil {
 		return nil, nil, err
 	}
 	page, err := pickJSONArray(raw, "value", "data")
 	if err != nil {
 		return nil, nil, err
+	}
+	if len(page) == 0 {
+		return nil, nil, fmt.Errorf("série SGS %s sem observações", seriesID)
 	}
 	for i := range page {
 		page[i]["serie"] = seriesID
@@ -204,11 +257,7 @@ func (e *Engine) fetchContabilidade(ctx context.Context, cfg SQLConfig) ([]strin
 }
 
 func (e *Engine) fetchExpectativas(ctx context.Context, cfg SQLConfig, resource string) ([]string, [][]string, error) {
-	official := "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativaMercadoAnuais?$top=100&$format=json"
-	if resource == "selic" {
-		official = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoSelic?$top=100&$format=json"
-	}
-	raw, err := publicGET(ctx, cfg, official)
+	raw, err := publicGET(ctx, cfg, focusOfficialURL(resource, cfg.RowLimit()))
 	if err != nil {
 		return nil, nil, err
 	}
@@ -216,7 +265,70 @@ func (e *Engine) fetchExpectativas(ctx context.Context, cfg SQLConfig, resource 
 	if err != nil {
 		return nil, nil, err
 	}
+	if len(page) == 0 {
+		return nil, nil, fmt.Errorf("Focus Olinda sem linhas")
+	}
 	return mapsToRows(mapsLimited(page, cfg.RowLimit()))
+}
+
+func awesomeAPIURL() string {
+	return "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL"
+}
+
+func ptaxOfficialURL(start, end time.Time, top int) string {
+	if top <= 0 || top > 10000 {
+		top = 10000
+	}
+	return fmt.Sprintf(
+		"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@i,dataFinalCotacao=@f)?@i='%s'&@f='%s'&$top=%d&$orderby=dataHoraCotacao%%20desc&$format=json",
+		start.Format("01-02-2006"), end.Format("01-02-2006"), top,
+	)
+}
+
+func tagFonte(headers []string, rows [][]string, fonte string, fallback bool) ([]string, [][]string) {
+	outH := append(append([]string{}, headers...), "_fonte")
+	if fallback {
+		outH = append(outH, "_fallback")
+	}
+	out := make([][]string, len(rows))
+	for i, r := range rows {
+		rec := make([]string, len(outH))
+		copy(rec, r)
+		rec[len(headers)] = fonte
+		if fallback {
+			rec[len(headers)+1] = "true"
+		}
+		out[i] = rec
+	}
+	return outH, out
+}
+
+func (e *Engine) fetchAwesomeAPI(ctx context.Context, cfg SQLConfig) ([]string, [][]string, error) {
+	raw, err := publicGET(ctx, cfg, awesomeAPIURL())
+	if err != nil {
+		return nil, nil, err
+	}
+	var obj map[string]any
+	if err := json.Unmarshal(raw, &obj); err != nil {
+		page, err2 := pickJSONArray(raw)
+		if err2 != nil {
+			return nil, nil, err
+		}
+		return mapsToRows(page)
+	}
+	var maps []map[string]any
+	for code, v := range obj {
+		m, ok := v.(map[string]any)
+		if !ok {
+			continue
+		}
+		m["par"] = code
+		maps = append(maps, m)
+	}
+	if len(maps) == 0 {
+		return nil, nil, fmt.Errorf("AwesomeAPI sem cotações")
+	}
+	return mapsToRows(maps)
 }
 
 func (e *Engine) fetchCambio(ctx context.Context, cfg SQLConfig, resource string) ([]string, [][]string, error) {
@@ -225,50 +337,51 @@ func (e *Engine) fetchCambio(ctx context.Context, cfg SQLConfig, resource string
 	}
 	switch resource {
 	case "serie":
-		return e.fetchBCBSGS(ctx, cfg, orDefault(cfg.Series, "1"))
+		h, rows, err := e.fetchBCBSGS(ctx, cfg, orDefault(cfg.Series, "1"))
+		if err != nil {
+			return nil, nil, err
+		}
+		h, rows = tagFonte(h, rows, "bcb_sgs", false)
+		return h, rows, nil
 	case "ptax":
 		end := time.Now()
-		start := end.AddDate(0, 0, -10)
-		official := fmt.Sprintf(
-			"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarPeriodo(dataInicial=@i,dataFinalCotacao=@f)?@i='%s'&@f='%s'&$top=20&$format=json",
-			start.Format("01-02-2006"), end.Format("01-02-2006"),
-		)
-		raw, err := publicGET(ctx, cfg, official)
-		if err != nil {
-			return e.fetchCambio(ctx, cfg, "ultima")
+		start := end.AddDate(0, 0, -90)
+		raw, err := publicGET(ctx, cfg, ptaxOfficialURL(start, end, cfg.RowLimit()))
+		if err == nil {
+			page, perr := pickJSONArray(raw, "value")
+			if perr == nil && len(page) > 0 {
+				h, rows, merr := mapsToRows(mapsLimited(page, cfg.RowLimit()))
+				if merr != nil {
+					return nil, nil, merr
+				}
+				h, rows = tagFonte(h, rows, "ptax", false)
+				return h, rows, nil
+			}
+			err = fmt.Errorf("PTAX sem cotações no período")
 		}
-		page, err := pickJSONArray(raw, "value")
-		if err != nil || len(page) == 0 {
-			return e.fetchCambio(ctx, cfg, "ultima")
+		h, rows, err2 := e.fetchAwesomeAPI(ctx, SQLConfig{Limit: cfg.Limit})
+		if err2 == nil {
+			h, rows = tagFonte(h, rows, "awesomeapi", true)
+			return h, rows, nil
 		}
-		return mapsToRows(mapsLimited(page, cfg.RowLimit()))
+		h, rows, err3 := e.fetchBCBSGS(ctx, SQLConfig{Limit: cfg.Limit}, "1")
+		if err3 == nil {
+			h, rows = tagFonte(h, rows, "bcb_sgs", true)
+			return h, rows, nil
+		}
+		return nil, nil, fmt.Errorf("PTAX indisponível (%v); fallbacks também falharam: %w", err, err3)
 	default:
-		official := "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL"
-		raw, err := publicGET(ctx, cfg, official)
-		if err != nil {
-			return e.fetchBCBSGS(ctx, cfg, "1")
+		h, rows, err := e.fetchAwesomeAPI(ctx, cfg)
+		if err == nil {
+			h, rows = tagFonte(h, rows, "awesomeapi", false)
+			return h, rows, nil
 		}
-		var obj map[string]any
-		if err := json.Unmarshal(raw, &obj); err != nil {
-			page, err2 := pickJSONArray(raw)
-			if err2 != nil {
-				return nil, nil, err
-			}
-			return mapsToRows(page)
+		h, rows, err2 := e.fetchBCBSGS(ctx, SQLConfig{Limit: cfg.Limit}, "1")
+		if err2 != nil {
+			return nil, nil, fmt.Errorf("AwesomeAPI indisponível (%v); fallback SGS 1 falhou: %w", err, err2)
 		}
-		var maps []map[string]any
-		for code, v := range obj {
-			m, ok := v.(map[string]any)
-			if !ok {
-				continue
-			}
-			m["par"] = code
-			maps = append(maps, m)
-		}
-		if len(maps) == 0 {
-			return e.fetchBCBSGS(ctx, cfg, "1")
-		}
-		return mapsToRows(maps)
+		h, rows = tagFonte(h, rows, "bcb_sgs", true)
+		return h, rows, nil
 	}
 }
 

@@ -56,18 +56,50 @@ func (s *Server) getFlow(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{"flow": f, "steps": steps})
 }
 
+type createFlowBody struct {
+	Name            string          `json:"name"`
+	Description     string          `json:"description"`
+	SourceDatasetID *uuid.UUID      `json:"source_dataset_id"`
+	TargetDatasetID *uuid.UUID      `json:"target_dataset_id"`
+	Layout          json.RawMessage `json:"layout"`
+	Steps           []flow.Step     `json:"steps"`
+}
+
 func (s *Server) createFlow(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, _ := principal(r)
-	var body flow.Flow
-	if err := httpx.Decode(r, &body); err != nil || body.Name == "" {
+	var body createFlowBody
+	if err := httpx.Decode(r, &body); err != nil {
+		httpx.Error(w, 400, "invalid", "corpo inválido")
+		return
+	}
+	if body.Name == "" {
 		httpx.Error(w, 400, "invalid", "nome obrigatório")
 		return
 	}
-	body.OrgID = org
-	body.WorkspaceID = ws
-	body.Status = "draft"
-	body.CreatedBy = &uid
-	id, err := s.flow.Create(r.Context(), body)
+	if len(body.Steps) > 20 {
+		httpx.Error(w, 400, "invalid", "máximo de 20 passos no flow inicial")
+		return
+	}
+	f := flow.Flow{
+		OrgID:           org,
+		WorkspaceID:     ws,
+		Name:            body.Name,
+		Description:     body.Description,
+		Status:          "draft",
+		SourceDatasetID: body.SourceDatasetID,
+		TargetDatasetID: body.TargetDatasetID,
+		Layout:          body.Layout,
+		CreatedBy:       &uid,
+	}
+	var (
+		id  uuid.UUID
+		err error
+	)
+	if len(body.Steps) > 0 {
+		id, err = s.flow.CreateWithGraph(r.Context(), f, body.Steps)
+	} else {
+		id, err = s.flow.Create(r.Context(), f)
+	}
 	if err != nil {
 		httpx.Error(w, 400, "create_failed", err.Error())
 		return
@@ -107,6 +139,7 @@ func (s *Server) deleteFlow(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 500, "delete_failed", err.Error())
 		return
 	}
+	s.sched.DeleteForTarget(r.Context(), "flow", id)
 	s.audit(r, "FLOW_DELETED", "flow", id, nil)
 	httpx.JSON(w, 200, map[string]any{"ok": true})
 }
@@ -704,11 +737,11 @@ func (s *Server) generateVisual(w http.ResponseWriter, r *http.Request) {
 		color = "indigo"
 	}
 	httpx.JSON(w, 200, map[string]any{
-		"type":      visType,
-		"dimension": dim,
-		"measure":   measure,
-		"sort":      "desc",
-		"color":     color,
+		"type":        visType,
+		"dimension":   dim,
+		"measure":     measure,
+		"sort":        "desc",
+		"color":       color,
 		"explanation": fmt.Sprintf("Widget %s com %s por %s.", visType, measure, dim),
 	})
 }

@@ -30,9 +30,12 @@ import {
   connectorIconSrc,
   connectorLabel,
   formatSyncAt,
+  isGuidedSQLType,
 } from "@/lib/connectors";
 import { ConnectorIcon } from "@/components/connector-icon";
-import { Badge, Button, Card, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, TableWrap, Td, Textarea, Th } from "@/components/ui";
+import { SqlDataPicker } from "@/components/sql-data-picker";
+import { Badge, Button, Card, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, TableWrap, Td, Textarea, Th, cn } from "@/components/ui";
+import { frequencyLabel, formatRelativePt } from "@/lib/schedules";
 
 const groupIcon = {
   databases: Database,
@@ -105,7 +108,7 @@ export default function ConnectorsPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <PageHeader
         title="Conectores"
-        description="Hub de dados da TheDobra — ligue bases de dados, ficheiros, APIs e fontes cloud. Todos os conectores sincronizam dados reais."
+        description="Hub de dados da TheDobra — ligue bases de dados, ficheiros, APIs e fontes cloud. Configure a actualização automática em cada conector."
         actions={
           <div className="relative">
             <Search size={14} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-mute" />
@@ -132,6 +135,7 @@ export default function ConnectorsPage() {
                   <Th>Tipo</Th>
                   <Th>Estado</Th>
                   <Th>Último sync</Th>
+                  <Th>Actualização</Th>
                   <Th>Acções</Th>
                 </tr>
               </thead>
@@ -159,6 +163,18 @@ export default function ConnectorsPage() {
                       </Badge>
                     </Td>
                     <Td>{formatSyncAt(s.last_sync_at)}</Td>
+                    <Td>
+                      {s.schedule ? (
+                        <span className="text-[12px] text-ink">
+                          {s.schedule.enabled ? frequencyLabel(s.schedule.frequency) : "Em pausa"}
+                          {s.schedule.enabled && s.schedule.next_run_at ? (
+                            <span className="block text-mute">próximo {formatRelativePt(s.schedule.next_run_at)}</span>
+                          ) : null}
+                        </span>
+                      ) : (
+                        <span className="text-[12px] text-mute">Manual</span>
+                      )}
+                    </Td>
                     <Td>
                       <div className="flex flex-wrap gap-1">
                         <Button size="sm" variant="ghost" onClick={() => discover(s.id)}>
@@ -250,6 +266,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
   const [file, setFile] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
   const [ssl, setSsl] = useState(false);
+  const [sourceId, setSourceId] = useState<string | null>(null);
 
   function set(key: string, v: string) {
     setValues((p) => ({ ...p, [key]: v }));
@@ -283,11 +300,20 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         fd.append("data_source_id", res.id);
         await api("/api/v1/datasets/upload", { method: "POST", body: fd });
         toast.success("Ficheiro ingerido");
-      } else if (item.preview || res.preview) {
-        toast.message(res.message || item.message || "Conector guardado em preview.");
-      } else {
-        toast.success("Conector ligado");
+        onSaved();
+        return;
       }
+      if (item.preview || res.preview) {
+        toast.message(res.message || item.message || "Conector guardado em preview.");
+        onSaved();
+        return;
+      }
+      if (isGuidedSQLType(item.id)) {
+        toast.success("Ligação feita. Agora escolha o que trazer.");
+        setSourceId(res.id);
+        return;
+      }
+      toast.success("Conector ligado");
       onSaved();
     } catch (e: any) {
       toast.error(e.message);
@@ -296,21 +322,40 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
     }
   }
 
+  const picking = Boolean(sourceId);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/30 p-4 sm:items-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/30 p-4 sm:items-center" onClick={picking ? undefined : onClose}>
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby="connect-title"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl border border-line bg-white p-5 shadow-2xl"
+        className={cn(
+          "max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-line bg-white p-5 shadow-2xl",
+          picking ? "max-w-2xl" : "max-w-lg",
+        )}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-3">
           <ConnectorIcon src={connectorIconSrc(item)} />
           <h2 id="connect-title" className="text-lg font-semibold text-ink">
-            Ligar {item.label}
+            {picking ? `O que trazer de ${item.label}` : `Ligar ${item.label}`}
           </h2>
         </div>
+        {picking && sourceId ? (
+          <>
+            <p className="mt-1 text-[13px] text-mute">Ligação guardada. Escolha as listas, os campos e como se cruzam — sem SQL.</p>
+            <div className="mt-4">
+              <SqlDataPicker
+                sourceId={sourceId}
+                sourceName={values.name || item.label}
+                onCancel={onSaved}
+                onDone={() => onSaved()}
+              />
+            </div>
+          </>
+        ) : (
+          <>
         <p className="mt-1 text-[13px] text-mute">{item.description}</p>
         {(item.preview || item.message) && (
           <p className="mt-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
@@ -319,6 +364,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         )}
         <div className="mt-4 space-y-3">
           {item.fields.map((f) => {
+            if (isGuidedSQLType(item.id) && (f.key === "query" || f.key === "table")) return null;
             if (f.type === "file") {
               return (
                 <FieldLabel key={f.key} label={f.label} required={f.required} hint={f.hint}>
@@ -388,9 +434,11 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
             Cancelar
           </Button>
           <Button onClick={save} busy={busy}>
-            <Plug size={14} /> Guardar ligação
+            <Plug size={14} /> {isGuidedSQLType(item.id) ? "Ligar e escolher dados" : "Guardar ligação"}
           </Button>
         </div>
+          </>
+        )}
       </div>
     </div>
   );

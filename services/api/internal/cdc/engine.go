@@ -69,6 +69,40 @@ func (e *Engine) List(ctx context.Context, orgID, wsID uuid.UUID) ([]map[string]
 	return out, rows.Err()
 }
 
+func (e *Engine) PollSource(ctx context.Context, orgID, wsID, sourceID uuid.UUID) (int, error) {
+	rows, err := e.pg.Query(ctx, `
+		SELECT id, COALESCE(dataset_id, '00000000-0000-0000-0000-000000000000'::uuid), table_name, COALESCE(cursor_value,'')
+		FROM cdc_checkpoints
+		WHERE org_id=$1 AND workspace_id=$2 AND data_source_id=$3 AND status='running'
+	`, orgID, wsID, sourceID)
+	if err != nil {
+		return 0, err
+	}
+	defer rows.Close()
+	n := 0
+	for rows.Next() {
+		var id, ds uuid.UUID
+		var table, cursor string
+		if err := rows.Scan(&id, &ds, &table, &cursor); err != nil {
+			return n, err
+		}
+		if err := e.poll(ctx, id, orgID, wsID, sourceID, ds, table, cursor); err != nil {
+			return n, err
+		}
+		n++
+	}
+	return n, rows.Err()
+}
+
+func (e *Engine) HasCheckpoint(ctx context.Context, orgID, wsID, sourceID uuid.UUID) bool {
+	var n int
+	_ = e.pg.QueryRow(ctx, `
+		SELECT COUNT(*) FROM cdc_checkpoints
+		WHERE org_id=$1 AND workspace_id=$2 AND data_source_id=$3 AND status='running'
+	`, orgID, wsID, sourceID).Scan(&n)
+	return n > 0
+}
+
 func (e *Engine) RunLoop(ctx context.Context) {
 	t := time.NewTicker(15 * time.Second)
 	defer t.Stop()

@@ -99,8 +99,46 @@ func TestFetchCambioAwesomeAPI(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(rows) != 2 || !contains(h, "bid") {
+	if len(rows) != 2 || !contains(h, "bid") || !contains(h, "_fonte") {
 		t.Fatalf("headers=%v rows=%v", h, rows)
+	}
+}
+
+func TestOfficialPublicURLs(t *testing.T) {
+	pop := ibgeOfficialURL("populacao")
+	if !strings.Contains(pop, "periodos/all") || strings.Contains(pop, "2022") {
+		t.Fatalf("SIDRA deveria usar todos os períodos, got %s", pop)
+	}
+	focus := focusOfficialURL("anuais", 500)
+	if !strings.Contains(focus, "ExpectativasMercadoAnuais") {
+		t.Fatalf("Focus entidade errada: %s", focus)
+	}
+	if strings.Contains(focus, "ExpectativaMercadoAnuais?") {
+		t.Fatalf("Focus ainda usa o EntitySet inexistente: %s", focus)
+	}
+	if !strings.Contains(focus, "orderby=Data") {
+		t.Fatalf("Focus deveria ordenar por Data desc: %s", focus)
+	}
+	selic := focusOfficialURL("selic", 100)
+	if !strings.Contains(selic, "ExpectativasMercadoSelic") {
+		t.Fatalf("Selic URL %s", selic)
+	}
+}
+
+func TestTagFonteFallback(t *testing.T) {
+	h, rows := tagFonte([]string{"bid"}, [][]string{{"5.1"}}, "awesomeapi", true)
+	if !contains(h, "_fonte") || !contains(h, "_fallback") {
+		t.Fatalf("headers=%v", h)
+	}
+	if rows[0][1] != "awesomeapi" || rows[0][2] != "true" {
+		t.Fatalf("row=%v", rows[0])
+	}
+}
+
+func TestFlattenSIDRAEmpty(t *testing.T) {
+	_, _, err := flattenSIDRA([]byte("[]"), 10)
+	if err == nil {
+		t.Fatal("esperado erro SIDRA sem séries")
 	}
 }
 

@@ -30,7 +30,8 @@ type LineageRecorder interface {
 
 type noopLineage struct{}
 
-func (noopLineage) RecordFlowToDataset(context.Context, uuid.UUID, uuid.UUID, uuid.UUID, uuid.UUID, string) {}
+func (noopLineage) RecordFlowToDataset(context.Context, uuid.UUID, uuid.UUID, uuid.UUID, uuid.UUID, string) {
+}
 
 // Engine executes Dobra Flow pipelines in memory. It reads source data via an injected reader,
 // applies sequential transform/validate/load steps, and emits rows of maps[string]any.
@@ -69,8 +70,32 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 
 	var headers []string
 	var rows []map[string]any
+	loaded := false
 
-	if flow.SourceDatasetID != nil {
+	for _, st := range steps {
+		if st.Kind != "extract" {
+			continue
+		}
+		dsID := stringVal(st.Config["dataset_id"])
+		if dsID == "" {
+			continue
+		}
+		if loaded {
+			log(st.ID, "info", "Extract adicional registado — o join completo de duas fontes chega numa próxima versão; a usar a primeira origem")
+			continue
+		}
+		var err error
+		headers, rows, err = reader(dsID, 100000)
+		if err != nil {
+			log(st.ID, "error", err.Error())
+			_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), nil)
+			return ResultSummary{}, err
+		}
+		loaded = true
+		log(st.ID, "info", fmt.Sprintf("Extracted %d rows from dataset %s", len(rows), dsID))
+	}
+
+	if !loaded && flow.SourceDatasetID != nil {
 		var err error
 		headers, rows, err = reader(flow.SourceDatasetID.String(), 100000)
 		if err != nil {
@@ -82,7 +107,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 
 	for _, st := range steps {
 		if st.Kind == "extract" {
-			continue // source already loaded
+			continue
 		}
 		if st.Kind == "transform" {
 			out, err := applyTransform(st, headers, rows)
