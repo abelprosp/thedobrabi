@@ -74,8 +74,9 @@ export default function ConnectorsPage() {
   const remove = useMutation({
     mutationFn: (id: string) => api(`/api/v1/data-sources/${id}`, { method: "DELETE" }),
     onSuccess: () => {
-      toast.success("Conector removido");
+      toast.success("Fonte excluída");
       qc.invalidateQueries({ queryKey: ["sources"] });
+      qc.invalidateQueries({ queryKey: ["datasets"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -188,10 +189,10 @@ export default function ConnectorsPage() {
                           variant="ghost"
                           className="text-danger"
                           onClick={() => {
-                            if (confirm(`Remover «${s.name}»? Os conjuntos já ingeridos mantêm-se.`)) remove.mutate(s.id);
+                            if (confirm(`Excluir «${s.name}» e os conjuntos sincronizados a partir desta fonte?`)) remove.mutate(s.id);
                           }}
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={12} /> Excluir
                         </Button>
                       </div>
                     </Td>

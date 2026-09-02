@@ -944,12 +944,55 @@ func (e *Engine) GetDataSource(ctx context.Context, orgID, wsID, id uuid.UUID) (
 }
 
 func (e *Engine) DeleteDataSource(ctx context.Context, orgID, wsID, id uuid.UUID) error {
+	rows, err := e.pg.Query(ctx, `SELECT id FROM datasets WHERE data_source_id=$1 AND org_id=$2 AND workspace_id=$3`, id, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	var dsIDs []uuid.UUID
+	for rows.Next() {
+		var ds uuid.UUID
+		if err := rows.Scan(&ds); err != nil {
+			rows.Close()
+			return err
+		}
+		dsIDs = append(dsIDs, ds)
+	}
+	rows.Close()
+	for _, ds := range dsIDs {
+		if err := e.DeleteDataset(ctx, orgID, wsID, ds); err != nil {
+			return err
+		}
+	}
 	tag, err := e.pg.Exec(ctx, `DELETE FROM data_sources WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, orgID, wsID)
 	if err != nil {
 		return err
 	}
 	if tag.RowsAffected() == 0 {
 		return fmt.Errorf("fonte não encontrada")
+	}
+	return nil
+}
+
+func (e *Engine) DeleteDataset(ctx context.Context, orgID, wsID, id uuid.UUID) error {
+	var table string
+	err := e.pg.QueryRow(ctx, `
+		SELECT COALESCE(clickhouse_table, '') FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+	`, id, orgID, wsID).Scan(&table)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return fmt.Errorf("conjunto não encontrado")
+		}
+		return err
+	}
+	tag, err := e.pg.Exec(ctx, `DELETE FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		return fmt.Errorf("conjunto não encontrado")
+	}
+	if e.ch != nil && table != "" && identOK(table) && identOK(e.cfg.ClickHouseDB) {
+		_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, table))
 	}
 	return nil
 }

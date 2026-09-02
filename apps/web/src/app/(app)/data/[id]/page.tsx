@@ -3,14 +3,17 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Chart } from "@/components/viz";
 import { toast } from "sonner";
+import { Trash2 } from "lucide-react";
 import { Button, Card, CardTitle, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, Td, Textarea, Th, cellValue, isNumericValue } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
 
 export default function DatasetPage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const qc = useQueryClient();
   const [tab, setTab] = useState<"schema" | "quality" | "model" | "relationships" | "measures" | "security">("schema");
   const ds = useQuery({
     queryKey: ["dataset", id],
@@ -19,6 +22,15 @@ export default function DatasetPage() {
   const preview = useQuery({
     queryKey: ["preview", id],
     queryFn: () => api<any>(`/api/v1/datasets/${id}/preview`),
+  });
+  const remove = useMutation({
+    mutationFn: () => api(`/api/v1/datasets/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      toast.success("Conjunto excluído");
+      qc.invalidateQueries({ queryKey: ["datasets"] });
+      router.replace("/data");
+    },
+    onError: (e: Error) => toast.error(e.message),
   });
 
   if (ds.isLoading) return <PageSkeleton />;
@@ -44,6 +56,17 @@ export default function DatasetPage() {
         title={ds.data.name}
         description={`${ds.data.row_count?.toLocaleString("pt-BR")} linhas · qualidade ${ds.data.quality_score ?? "—"}/100 · ${ds.data.clickhouse_table} · ${ds.data.storage_mode || "import"}`}
         crumbs={[{ href: "/data", label: "Dados" }]}
+        actions={
+          <Button
+            variant="danger"
+            onClick={() => {
+              if (confirm(`Excluir o conjunto «${ds.data.name}»? Esta acção não se desfaz.`)) remove.mutate();
+            }}
+            busy={remove.isPending}
+          >
+            <Trash2 size={14} /> Excluir conjunto
+          </Button>
+        }
       />
       {ds.data.source_id && (
         <AutoRefreshCard kind="dataset" targetId={id} targetType={ds.data.source_type} />

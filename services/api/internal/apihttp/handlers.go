@@ -285,6 +285,26 @@ func (s *Server) demoDataset(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 201, res)
 }
 
+func (s *Server) deleteDataset(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, role := principal(r)
+	if role == "viewer" {
+		httpx.Error(w, 403, "forbidden", "sem permissão para excluir conjuntos")
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	if err := s.ingest.DeleteDataset(r.Context(), org, ws, id); err != nil {
+		httpx.Error(w, 400, "delete_failed", err.Error())
+		return
+	}
+	s.sched.DeleteForTarget(r.Context(), "dataset", id)
+	s.audit(r, "DATASET_DELETED", "dataset", id, nil)
+	httpx.JSON(w, 200, map[string]any{"ok": true})
+}
+
 func (s *Server) getDataset(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	id, err := uuid.Parse(chi.URLParam(r, "id"))

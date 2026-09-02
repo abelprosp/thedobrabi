@@ -1,10 +1,10 @@
 "use client";
 
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Database, Plug } from "lucide-react";
+import { Database, Plug, Trash2 } from "lucide-react";
 import { Badge, Button, Card, EmptyState, ErrorState, PageHeader, PageSkeleton, Table, TableWrap, Td, Th, formatPt } from "@/components/ui";
 import { statusLabel } from "@/lib/labels";
 
@@ -23,6 +23,7 @@ type Source = { id: string; name: string; type: string; status: string; last_syn
 type Lake = { id: string; stage: string; key: string; bytes: number; created_at: string };
 
 export default function DataPage() {
+  const qc = useQueryClient();
   const q = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
   const sources = useQuery({ queryKey: ["sources"], queryFn: () => api<any>("/api/v1/data-sources") });
   const lake = useQuery({ queryKey: ["lake"], queryFn: () => api<any>("/api/v1/lake") });
@@ -34,6 +35,23 @@ export default function DataPage() {
     onSuccess: () => {
       toast.success("Conjunto pronto");
       q.refetch();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const removeSource = useMutation({
+    mutationFn: (id: string) => api(`/api/v1/data-sources/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      toast.success("Fonte excluída");
+      qc.invalidateQueries({ queryKey: ["sources"] });
+      qc.invalidateQueries({ queryKey: ["datasets"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const removeDataset = useMutation({
+    mutationFn: (id: string) => api(`/api/v1/datasets/${id}`, { method: "DELETE" }),
+    onSuccess: () => {
+      toast.success("Conjunto excluído");
+      qc.invalidateQueries({ queryKey: ["datasets"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -93,18 +111,31 @@ export default function DataPage() {
         {sourceList.length > 0 && (
           <div className="mt-4 space-y-2">
             {sourceList.slice(0, 6).map((s) => (
-              <Link
+              <div
                 key={s.id}
-                href={`/connectors/${s.id}`}
-                className="flex items-center justify-between rounded-xl border border-line px-3 py-2 text-sm hover:bg-bg"
+                className="flex items-center justify-between gap-2 rounded-xl border border-line px-3 py-2 text-sm hover:bg-bg"
               >
-                <span>
+                <Link href={`/connectors/${s.id}`} className="min-w-0 flex-1">
                   {s.name} · {s.type}
-                </span>
-                <Badge tone={s.preview || s.status === "preview" ? "warn" : s.status === "synced" ? "ok" : "neutral"}>
-                  {s.preview ? "Preview" : statusLabel(s.status)}
-                </Badge>
-              </Link>
+                </Link>
+                <div className="flex shrink-0 items-center gap-1">
+                  <Badge tone={s.preview || s.status === "preview" ? "warn" : s.status === "synced" ? "ok" : "neutral"}>
+                    {s.preview ? "Preview" : statusLabel(s.status)}
+                  </Badge>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => {
+                      if (confirm(`Excluir a fonte «${s.name}» e os conjuntos sincronizados a partir dela?`)) {
+                        removeSource.mutate(s.id);
+                      }
+                    }}
+                    busy={removeSource.isPending}
+                  >
+                    <Trash2 size={12} /> Excluir
+                  </Button>
+                </div>
+              </div>
             ))}
             {sourceList.length > 6 && (
               <Link href="/connectors" className="text-[12px] text-accent hover:underline">
@@ -146,19 +177,20 @@ export default function DataPage() {
               <Th>Estado</Th>
               <Th numeric>Linhas</Th>
               <Th numeric>Qualidade</Th>
+              <Th> </Th>
             </tr>
           </thead>
           <tbody>
             {datasetList.map((d) => (
-              <tr key={d.id} className="cursor-pointer border-t border-line hover:bg-bg" onClick={() => (window.location.href = `/data/${d.id}`)}>
+              <tr key={d.id} className="border-t border-line hover:bg-bg">
                 <Td>
-                  <Link href={`/data/${d.id}`} className="font-medium text-accent hover:underline" onClick={(e) => e.stopPropagation()}>
+                  <Link href={`/data/${d.id}`} className="font-medium text-accent hover:underline">
                     {d.name}
                   </Link>
                 </Td>
                 <Td>
                   {d.source_name ? (
-                    <Link href={`/connectors/${d.source_id}`} className="text-accent hover:underline" onClick={(e) => e.stopPropagation()}>
+                    <Link href={`/connectors/${d.source_id}`} className="text-accent hover:underline">
                       {d.source_name}
                     </Link>
                   ) : (
@@ -172,6 +204,20 @@ export default function DataPage() {
                 </Td>
                 <Td numeric>{formatPt(d.row_count)}</Td>
                 <Td numeric>{d.quality_score != null ? `${d.quality_score}/100` : "—"}</Td>
+                <Td>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => {
+                      if (confirm(`Excluir o conjunto «${d.name}»? Esta acção não se desfaz.`)) {
+                        removeDataset.mutate(d.id);
+                      }
+                    }}
+                    busy={removeDataset.isPending}
+                  >
+                    <Trash2 size={12} /> Excluir
+                  </Button>
+                </Td>
               </tr>
             ))}
           </tbody>
