@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: TheDobra API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /auth/register:
+    post:
+      summary: Create user, organization and default workspace
+  /auth/login:
+    post:
+      summary: Email/password login
+  /auth/me:
+    get:
+      summary: Current principal
+  /datasets/upload:
+    post:
+      summary: Ingest CSV/XLSX
+  /datasets/demo:
+    post:
+      summary: Generate and ingest demo sales data
+  /queries:
+    post:
+      summary: Execute a semantic query (never raw SQL)
+  /ai/ask:
+    post:
+      summary: Ask TheDobra
+  /dashboards/ai:
+    post:
+      summary: Build a dashboard from the semantic model
+  /insights/refresh:
+    post:
+      summary: Run Dobra Intelligence on the latest dataset

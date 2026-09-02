@@ -1,0 +1,29 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: thedobra-api
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: thedobra-api
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: thedobra-web
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: thedobra-web
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: thedobra-analytics
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: thedobra-analytics

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 104 104" width="104" height="104" role="img" aria-label="TheDobra">
+  <defs>
+    <linearGradient id="td-g" gradientUnits="userSpaceOnUse" x1="4" y1="0" x2="100" y2="0">
+      <stop offset="0" stop-color="#6D3AFD"/>
+      <stop offset="0.3" stop-color="#4F46E5"/>
+      <stop offset="0.62" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#0EA5E9"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(4 23)" fill="url(#td-g)">
+    <rect x="0" y="33" width="12" height="24" rx="2"/>
+    <rect x="17" y="15" width="13" height="42" rx="2"/>
+    <path d="M34 0H54.5A28.5 28.5 0 0 1 54.5 57H34V45H54.5A16.5 16.5 0 0 0 54.5 12H34Z"/>
+  </g>
+</svg>

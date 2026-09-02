@@ -1,0 +1,36 @@
+# env & secrets
+.env
+.env.local
+*.pem
+*.key
+
+# deps
+node_modules/
+vendor/
+.venv/
+__pycache__/
+*.pyc
+
+# builds
+dist/
+.next/
+out/
+bin/
+tmp/
+*.exe
+
+# ide
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# data
+data/local/
+infra/docker/data/
+.minio/
+.clickhouse/
+
+# logs
+*.log
+coverage.*
