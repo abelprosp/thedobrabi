@@ -31,6 +31,7 @@ import {
   DASHBOARD_TEMPLATES,
   STORE_CATEGORIES,
   instantiateTemplate,
+  prepareTemplateModel,
   type DashboardTemplate,
   type StoreCategory,
   type StoreIcon,
@@ -84,6 +85,7 @@ export default function StorePage() {
       if (!dsId) throw new Error("Ligue um conjunto de dados primeiro");
       const ds = await api<{ name: string; semantic_model?: SemanticModel | { model?: SemanticModel } }>(`/api/v1/datasets/${dsId}`);
       const model =
+        (await prepareTemplateModel(dsId, picked)) ||
         (ds.semantic_model && "measures" in ds.semantic_model ? ds.semantic_model : null) ||
         modelFromSemanticRow(ds.semantic_model);
       const widgets = instantiateTemplate(picked, dsId, model);
@@ -262,7 +264,11 @@ export default function StorePage() {
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h3 className="text-lg font-medium text-ink">Ativar «{picked.name}»</h3>
-                <p className="mt-1 text-[13px] text-mute">Só precisa de ligar um conjunto. As colunas (valor, categoria, mês, etc.) são mapeadas sozinhas.</p>
+                <p className="mt-1 text-[13px] text-mute">
+                  {picked.measures?.length
+                    ? `Liga o conjunto com ${picked.needs.join(", ")}. As ${picked.measures.length} medidas SQL são gravadas no modelo automaticamente.`
+                    : "Só precisa de ligar um conjunto. As colunas (valor, categoria, mês, etc.) são mapeadas sozinhas."}
+                </p>
               </div>
               <button type="button" className="rounded-lg p-1 text-mute hover:bg-surface-2" onClick={() => setPicked(null)} aria-label="Fechar">
                 <X size={18} />

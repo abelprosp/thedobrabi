@@ -265,8 +265,10 @@ function norm(s: string) {
 }
 
 const MEASURE_ALIASES: string[][] = [
-  ["revenue", "receita", "sales", "vendas", "amount", "valor", "faturamento", "gmv", "billing", "turnover", "net_sales", "total"],
+  ["revenue", "receita", "sales", "vendas", "amount", "valor", "valor_mensal", "faturamento", "gmv", "billing", "turnover", "net_sales", "total"],
   ["cost", "custo", "despesa", "expense", "custos", "despesas", "valor", "amount"],
+  ["contratos", "linhas", "quantidade_linha", "orders", "pedidos"],
+  ["ticket", "ticket_medio", "average_ticket", "ticket médio"],
   ["margin", "margem", "lucro", "profit", "resultado", "ebitda", "result"],
   ["orders", "pedidos", "order_count", "qty", "quantidade", "volume", "units", "unidades"],
   ["customers", "clientes", "users", "usuarios", "accounts", "contas"],

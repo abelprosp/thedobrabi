@@ -1,5 +1,13 @@
 import type { Widget, WidgetType } from "@/components/WidgetView";
-import { remapQueryToModel, type SemanticModel } from "@/lib/semantic";
+import { api } from "@/lib/api";
+import {
+  measureKey,
+  modelForDataset,
+  modelIdForDataset,
+  remapQueryToModel,
+  type SemanticMeasure,
+  type SemanticModel,
+} from "@/lib/semantic";
 
 export type StoreCategory =
   | "financeiro"
@@ -39,6 +47,8 @@ export type DashboardTemplate = {
   icon: StoreIcon;
   popular?: boolean;
   needs: string[];
+  /** Custom SQL measures written onto the semantic model when the template is applied. */
+  measures?: SemanticMeasure[];
   widgets: TemplateWidget[];
 };
 
@@ -86,6 +96,32 @@ function w(
 }
 
 const brl = { currency: "BRL" as const, compact: "auto" as const };
+const brlFull = { currency: "BRL" as const, compact: "none" as const, decimals: 0 };
+const brlTicket = { currency: "BRL" as const, compact: "none" as const, decimals: 2 };
+const pct1 = { suffix: "%", decimals: 1 };
+
+const CONTRATOS_MEASURES: SemanticMeasure[] = [
+  { name: "Receita", expression: "SUM(valor_mensal)", aggregation: "expression" },
+  { name: "Contratos", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Ticket médio", expression: "AVERAGE(valor_mensal)", aggregation: "expression" },
+  { name: "Clientes", expression: "DISTINCTCOUNT(cliente)", aggregation: "expression" },
+  {
+    name: "Variação da receita",
+    expression:
+      "(SUM(CASE WHEN mes = '2026-08' THEN valor_mensal ELSE 0 END) - SUM(CASE WHEN mes = '2026-07' THEN valor_mensal ELSE 0 END)) / NULLIF(SUM(CASE WHEN mes = '2026-07' THEN valor_mensal ELSE 0 END), 0) * 100",
+    aggregation: "expression",
+  },
+  {
+    name: "Variação do ticket",
+    expression:
+      "(AVG(CASE WHEN mes = '2026-08' THEN valor_mensal END) - AVG(CASE WHEN mes = '2026-07' THEN valor_mensal END)) / NULLIF(AVG(CASE WHEN mes = '2026-07' THEN valor_mensal END), 0) * 100",
+    aggregation: "expression",
+  },
+  { name: "Linhas julho", expression: "SUM(CASE WHEN mes = '2026-07' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Linhas agosto", expression: "SUM(CASE WHEN mes = '2026-08' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Clientes julho", expression: "COUNT(DISTINCT CASE WHEN mes = '2026-07' THEN cliente END)", aggregation: "expression" },
+  { name: "Clientes agosto", expression: "COUNT(DISTINCT CASE WHEN mes = '2026-08' THEN cliente END)", aggregation: "expression" },
+];
 
 export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
   {
@@ -141,6 +177,39 @@ export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
       w("bar", "Por categoria", { x: 0, y: 2, w: 6, h: 5 }, { measures: ["valor"], dimensions: ["category"], limit: 12 }),
       w("line", "Mês a mês", { x: 6, y: 2, w: 6, h: 5 }, { measures: ["valor"], dimensions: ["date"], limit: 24 }),
       w("table", "Linhas", { x: 0, y: 7, w: 12, h: 5 }, { measures: ["valor"], dimensions: ["linha"], limit: 40 }),
+    ],
+  },
+  {
+    id: "comercial-contratos-jul-ago",
+    name: "Contratos julho vs agosto",
+    category: "comercial",
+    description: "Receita, ticket, linhas e clientes lado a lado — julho contra agosto, já com as medidas SQL.",
+    pain: "Os dois meses estão no mesmo CSV e ninguém vê o que caiu sem montar a conta à mão.",
+    icon: "repeat",
+    popular: true,
+    needs: ["valor_mensal", "mes", "cliente", "vendedor"],
+    measures: CONTRATOS_MEASURES,
+    widgets: [
+      w("kpi", "Receita", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Receita"] }, { config: brlFull }),
+      w("kpi", "Contratos", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Contratos"] }),
+      w("kpi", "Ticket médio", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Ticket médio"] }, { config: brlTicket }),
+      w("kpi", "Clientes", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Clientes"] }),
+      w("kpi", "Variação da receita", { x: 0, y: 2, w: 3, h: 2 }, { measures: ["Variação da receita"] }, { config: pct1 }),
+      w("kpi", "Variação do ticket", { x: 3, y: 2, w: 3, h: 2 }, { measures: ["Variação do ticket"] }, { config: pct1 }),
+      w("kpi", "Linhas julho", { x: 6, y: 2, w: 3, h: 2 }, { measures: ["Linhas julho"] }),
+      w("kpi", "Linhas agosto", { x: 9, y: 2, w: 3, h: 2 }, { measures: ["Linhas agosto"] }),
+      w("slicer", "Mês", { x: 0, y: 4, w: 3, h: 2 }, { dimensions: ["mes"], measures: [], limit: 200 }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Vendedor", { x: 3, y: 4, w: 3, h: 2 }, { dimensions: ["vendedor"], measures: [], limit: 200 }, { config: { slicerStyle: "dropdown" } }),
+      w("slicer", "Cliente", { x: 6, y: 4, w: 3, h: 2 }, { dimensions: ["cliente"], measures: [], limit: 200 }, { config: { slicerStyle: "dropdown", slicerSearch: true } }),
+      w("slicer", "Luxus", { x: 9, y: 4, w: 3, h: 2 }, { dimensions: ["cliente_luxus"], measures: [], limit: 200 }, { config: { slicerStyle: "buttons" } }),
+      w("bar", "Receita por mês", { x: 0, y: 6, w: 6, h: 4 }, { measures: ["Receita"], dimensions: ["mes"], limit: 12 }, { config: { ...brlFull, showDataLabels: true } }),
+      w("bar", "Contratos por mês", { x: 6, y: 6, w: 6, h: 4 }, { measures: ["Contratos"], dimensions: ["mes"], limit: 12 }, { config: { showDataLabels: true } }),
+      w("line", "Receita por dia", { x: 0, y: 10, w: 12, h: 4 }, { measures: ["Receita"], dimensions: ["data_venda"], limit: 90 }, { config: brlFull }),
+      w("bar", "Receita por vendedor", { x: 0, y: 14, w: 6, h: 4 }, { measures: ["Receita"], dimensions: ["vendedor", "mes"], limit: 15 }, { config: brlFull }),
+      w("bar", "Ticket por vendedor", { x: 6, y: 14, w: 6, h: 4 }, { measures: ["Ticket médio"], dimensions: ["vendedor"], limit: 15 }, { config: brlTicket }),
+      w("pie", "Mix de clientes", { x: 0, y: 18, w: 4, h: 4 }, { measures: ["Receita"], dimensions: ["cliente"], limit: 8 }, { config: brlFull }),
+      w("treemap", "Peso dos clientes", { x: 4, y: 18, w: 8, h: 4 }, { measures: ["Receita"], dimensions: ["cliente"], limit: 20 }, { config: brlFull }),
+      w("table", "Detalhe", { x: 0, y: 22, w: 12, h: 5 }, { measures: ["Receita", "Contratos"], dimensions: ["cliente", "vendedor", "mes"], limit: 20 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
     ],
   },
   {
@@ -363,6 +432,45 @@ export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
 
 export function getTemplate(id: string) {
   return DASHBOARD_TEMPLATES.find((t) => t.id === id);
+}
+
+export function mergeTemplateMeasures(model: SemanticModel | null | undefined, extra?: SemanticMeasure[]): SemanticModel {
+  const measures = [...(model?.measures || [])];
+  const seen = new Set(measures.map((m) => measureKey(m).toLowerCase()));
+  for (const m of extra || []) {
+    const key = (m.name || "").trim().toLowerCase();
+    if (!key || seen.has(key)) continue;
+    measures.push(m);
+    seen.add(key);
+  }
+  return { ...(model || {}), measures };
+}
+
+function semanticRows(raw: unknown): any[] {
+  if (Array.isArray(raw)) return raw;
+  if (raw && typeof raw === "object" && Array.isArray((raw as { data?: unknown }).data)) {
+    return (raw as { data: any[] }).data;
+  }
+  return [];
+}
+
+/** Installs template measures on the dataset model, then returns the merged model for remap. */
+export async function prepareTemplateModel(
+  datasetId: string,
+  tpl: DashboardTemplate,
+  knownRows?: any[],
+): Promise<SemanticModel | null> {
+  const rows = knownRows?.length ? knownRows : semanticRows(await api<any>("/api/v1/semantic-models"));
+  const current = modelForDataset(rows, datasetId);
+  const merged = mergeTemplateMeasures(current, tpl.measures);
+  const id = modelIdForDataset(rows, datasetId);
+  if (id && tpl.measures?.length) {
+    await api(`/api/v1/semantic-models/${id}`, {
+      method: "PUT",
+      body: JSON.stringify({ ...merged, dataset_id: datasetId }),
+    });
+  }
+  return merged;
 }
 
 export function instantiateTemplate(tpl: DashboardTemplate, datasetId: string, model: SemanticModel | null | undefined): Widget[] {

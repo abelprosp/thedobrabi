@@ -159,6 +159,21 @@ func TestRejectSelectFrom(t *testing.T) {
 	}
 }
 
+func TestCountDistinctCaseWhen(t *testing.T) {
+	expr, err := Parse("COUNT(DISTINCT CASE WHEN mes = '2026-07' THEN cliente END)")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	want := "uniqExact(CASE WHEN `mes` = '2026-07' THEN `cliente` END)"
+	if sql != want {
+		t.Fatalf("expected %s, got %s", want, sql)
+	}
+}
+
 func TestCountDistinct(t *testing.T) {
 	expr, err := Parse("COUNT(DISTINCT cliente)")
 	if err != nil {

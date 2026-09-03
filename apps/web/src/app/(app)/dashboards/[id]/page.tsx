@@ -75,7 +75,7 @@ import {
   rebindQueryToLiveDataset,
   widgetFieldDefaults,
 } from "@/lib/semantic";
-import { DASHBOARD_TEMPLATES, instantiateTemplate } from "@/lib/dashboard-templates";
+import { DASHBOARD_TEMPLATES, instantiateTemplate, prepareTemplateModel } from "@/lib/dashboard-templates";
 import { ThemeSegmented } from "@/components/theme-toggle";
 import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
 import { readStoredAppearance, type Appearance } from "@/lib/theme";
@@ -349,7 +349,7 @@ function DashboardEditorInner() {
     history.push(fn(widgets));
   }, [history, widgets]);
 
-  const applyTemplate = (templateId: string) => {
+  const applyTemplate = async (templateId: string) => {
     const tpl = DASHBOARD_TEMPLATES.find((t) => t.id === templateId);
     if (!tpl) return;
     const ds = preferredDatasetId || visibleDatasets[0]?.id || datasetList[0]?.id;
@@ -357,10 +357,15 @@ function DashboardEditorInner() {
       toast.error("Ligue um conector ou carregue um conjunto antes de aplicar um template.");
       return;
     }
-    const mdl = modelForDataset(semanticModels, ds);
-    history.push(instantiateTemplate(tpl, ds, mdl));
-    setSelected(null);
-    toast.success(`Painel «${tpl.name}» aplicado`);
+    try {
+      const mdl = await prepareTemplateModel(ds, tpl, semanticModels);
+      history.push(instantiateTemplate(tpl, ds, mdl));
+      setSelected(null);
+      qc.invalidateQueries({ queryKey: ["semantic"] });
+      toast.success(`Painel «${tpl.name}» aplicado`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não foi possível aplicar o template.");
+    }
   };
 
   const layout = useMemo<Layout[]>(() => widgets.map((w) => ({ i: w.id, x: w.layout.x, y: w.layout.y, w: w.layout.w, h: w.layout.h, minW: 2, minH: 2 })), [widgets]);
