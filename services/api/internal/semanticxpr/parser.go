@@ -39,6 +39,15 @@ func Parse(s string) (Expr, error) {
 	if err != nil {
 		return Expr{}, err
 	}
+	p.skipSpace()
+	if p.pos < len(p.input) {
+		rest := strings.TrimSpace(p.input[p.pos:])
+		up := strings.ToUpper(rest)
+		if strings.HasPrefix(up, "FROM ") || strings.HasPrefix(up, "SELECT ") || strings.HasPrefix(up, "AS ") {
+			return Expr{}, fmt.Errorf("a medida é só a expressão (SUM, AVG, CASE WHEN). Não uses SELECT, FROM nem AS")
+		}
+		return Expr{}, fmt.Errorf("texto extra depois da expressão: %s", rest)
+	}
 	expr.Raw = s
 	return expr, nil
 }
@@ -195,6 +204,9 @@ func (p *parser) parseIdentOrCall() (Expr, error) {
 		p.pos++
 	}
 	name := p.input[start:p.pos]
+	if strings.EqualFold(name, "CASE") {
+		return p.parseCase()
+	}
 	if !isIdent(name) {
 		return Expr{}, fmt.Errorf("invalid identifier: %s", name)
 	}
@@ -209,6 +221,95 @@ func (p *parser) parseIdentOrCall() (Expr, error) {
 		return Expr{}, err
 	}
 	return Expr{Func: fn, Args: args}, nil
+}
+
+func (p *parser) lookingAtWord(word string) bool {
+	p.skipSpace()
+	if p.pos+len(word) > len(p.input) {
+		return false
+	}
+	got := p.input[p.pos : p.pos+len(word)]
+	if !strings.EqualFold(got, word) {
+		return false
+	}
+	end := p.pos + len(word)
+	return end == len(p.input) || !isIdentChar(p.input[end])
+}
+
+func (p *parser) consumeWord(word string) bool {
+	if !p.lookingAtWord(word) {
+		return false
+	}
+	p.pos += len(word)
+	return true
+}
+
+func (p *parser) parseCompareOp() string {
+	p.skipSpace()
+	rest := p.input[p.pos:]
+	for _, op := range []string{"!=", "<>", ">=", "<=", "=", ">", "<"} {
+		if strings.HasPrefix(rest, op) {
+			p.pos += len(op)
+			if op == "<>" {
+				return "!="
+			}
+			return op
+		}
+	}
+	return ""
+}
+
+func (p *parser) parseComparison() (Expr, error) {
+	left, err := p.parsePrimary()
+	if err != nil {
+		return Expr{}, err
+	}
+	op := p.parseCompareOp()
+	if op == "" {
+		return left, nil
+	}
+	right, err := p.parsePrimary()
+	if err != nil {
+		return Expr{}, err
+	}
+	return Expr{Func: "CMP", Op: op, Left: &left, Right: &right}, nil
+}
+
+func (p *parser) parseCase() (Expr, error) {
+	var args []Expr
+	for {
+		p.skipSpace()
+		if p.consumeWord("WHEN") {
+			pred, err := p.parseComparison()
+			if err != nil {
+				return Expr{}, err
+			}
+			if !p.consumeWord("THEN") {
+				return Expr{}, fmt.Errorf("expected THEN after CASE WHEN")
+			}
+			thenExpr, err := p.parseExpr(0)
+			if err != nil {
+				return Expr{}, err
+			}
+			args = append(args, Expr{Func: "WHEN", Left: &pred, Right: &thenExpr})
+			continue
+		}
+		if p.consumeWord("ELSE") {
+			elseExpr, err := p.parseExpr(0)
+			if err != nil {
+				return Expr{}, err
+			}
+			args = append(args, Expr{Func: "ELSE", Args: []Expr{elseExpr}})
+			continue
+		}
+		if p.consumeWord("END") {
+			if len(args) == 0 {
+				return Expr{}, fmt.Errorf("CASE requires WHEN ... THEN")
+			}
+			return Expr{Func: "CASE", Args: args}, nil
+		}
+		return Expr{}, fmt.Errorf("expected WHEN, ELSE or END in CASE")
+	}
 }
 
 func (p *parser) parseArgs(parentFn string) ([]Expr, error) {
@@ -243,6 +344,19 @@ func (p *parser) parseArgs(parentFn string) ([]Expr, error) {
 // parseArg parses a function argument. For CALCULATE/FILTER the second+ args are predicates.
 func (p *parser) parseArg(parentFn string) (Expr, error) {
 	p.skipSpace()
+	if parentFn == "COUNT" && p.lookingAtWord("DISTINCT") {
+		p.consumeWord("DISTINCT")
+		p.skipSpace()
+		if p.peek() == '*' {
+			p.pos++
+			return Expr{Func: "DISTINCT", Column: "*"}, nil
+		}
+		col, err := p.parsePrimary()
+		if err != nil {
+			return Expr{}, err
+		}
+		return Expr{Func: "DISTINCT", Args: []Expr{col}}, nil
+	}
 	if p.peek() == '[' {
 		return p.parseBracketRef()
 	}
@@ -401,9 +515,107 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 			return "", err
 		}
 		return fmt.Sprintf("SUM(%s)", col), nil
+	case "MIN":
+		if len(e.Args) == 0 {
+			return "", fmt.Errorf("MIN requires a column")
+		}
+		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("MIN(%s)", col), nil
+	case "MAX":
+		if len(e.Args) == 0 {
+			return "", fmt.Errorf("MAX requires a column")
+		}
+		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("MAX(%s)", col), nil
+	case "NULLIF":
+		if len(e.Args) < 2 {
+			return "", fmt.Errorf("NULLIF requires two arguments")
+		}
+		a, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		b, err := e.Args[1].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("NULLIF(%s, %s)", a, b), nil
+	case "CMP":
+		if e.Left == nil || e.Right == nil {
+			return "", fmt.Errorf("comparison requires two sides")
+		}
+		left, err := e.Left.toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		right, err := e.Right.toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("%s %s %s", left, e.Op, right), nil
+	case "CASE":
+		if len(e.Args) == 0 {
+			return "", fmt.Errorf("CASE requires WHEN ... THEN")
+		}
+		var b strings.Builder
+		b.WriteString("CASE")
+		for _, a := range e.Args {
+			switch a.Func {
+			case "WHEN":
+				if a.Left == nil || a.Right == nil {
+					return "", fmt.Errorf("CASE WHEN requires a condition and a value")
+				}
+				pred, err := a.Left.toSQLWithContext(q, ctx)
+				if err != nil {
+					return "", err
+				}
+				thenSQL, err := a.Right.toSQLWithContext(q, ctx)
+				if err != nil {
+					return "", err
+				}
+				b.WriteString(" WHEN ")
+				b.WriteString(pred)
+				b.WriteString(" THEN ")
+				b.WriteString(thenSQL)
+			case "ELSE":
+				if len(a.Args) == 0 {
+					return "", fmt.Errorf("CASE ELSE requires a value")
+				}
+				elseSQL, err := a.Args[0].toSQLWithContext(q, ctx)
+				if err != nil {
+					return "", err
+				}
+				b.WriteString(" ELSE ")
+				b.WriteString(elseSQL)
+			default:
+				return "", fmt.Errorf("invalid CASE branch %s", a.Func)
+			}
+		}
+		b.WriteString(" END")
+		return b.String(), nil
 	case "COUNT":
 		if len(e.Args) == 0 || e.Args[0].Column == "*" {
 			return "COUNT(*)", nil
+		}
+		if e.Args[0].Func == "DISTINCT" {
+			inner := e.Args[0]
+			if inner.Column == "*" {
+				return "COUNT(*)", nil
+			}
+			if len(inner.Args) == 0 {
+				return "", fmt.Errorf("COUNT DISTINCT requires a column")
+			}
+			col, err := inner.Args[0].toSQLWithContext(q, ctx)
+			if err != nil {
+				return "", err
+			}
+			return fmt.Sprintf("uniqExact(%s)", col), nil
 		}
 		col, err := e.Args[0].toSQLWithContext(q, ctx)
 		if err != nil {

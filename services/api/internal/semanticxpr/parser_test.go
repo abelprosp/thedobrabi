@@ -1,6 +1,7 @@
 package semanticxpr
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -118,6 +119,57 @@ func TestRelated(t *testing.T) {
 	want := "(SELECT `Regiao` FROM DimRegiao AS r WHERE r._tenant = _tenant LIMIT 1)"
 	if sql != want {
 		t.Fatalf("expected %s, got %s", want, sql)
+	}
+}
+
+func TestCaseWhenSum(t *testing.T) {
+	expr, err := Parse("SUM(CASE WHEN mes = '2026-08' THEN valor_mensal ELSE 0 END)")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	want := "SUM(CASE WHEN `mes` = '2026-08' THEN `valor_mensal` ELSE 0 END)"
+	if sql != want {
+		t.Fatalf("expected %s, got %s", want, sql)
+	}
+}
+
+func TestVariacaoReceita(t *testing.T) {
+	src := `(SUM(CASE WHEN mes = '2026-08' THEN valor_mensal ELSE 0 END) - SUM(CASE WHEN mes = '2026-07' THEN valor_mensal ELSE 0 END)) / NULLIF(SUM(CASE WHEN mes = '2026-07' THEN valor_mensal ELSE 0 END), 0) * 100`
+	expr, err := Parse(src)
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if !strings.Contains(sql, "NULLIF") || !strings.Contains(sql, "`mes` = '2026-08'") {
+		t.Fatalf("unexpected sql: %s", sql)
+	}
+}
+
+func TestRejectSelectFrom(t *testing.T) {
+	_, err := Parse("SUM(valor_mensal) FROM contratos")
+	if err == nil {
+		t.Fatalf("expected error for SELECT/FROM")
+	}
+}
+
+func TestCountDistinct(t *testing.T) {
+	expr, err := Parse("COUNT(DISTINCT cliente)")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if sql != "uniqExact(`cliente`)" {
+		t.Fatalf("unexpected sql: %s", sql)
 	}
 }
 
