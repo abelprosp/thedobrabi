@@ -121,8 +121,8 @@ func Canonical(typ string) string {
 
 func Groups() []Group {
 	return []Group{
-		{ID: GroupDatabases, Label: groupLabels[GroupDatabases]},
 		{ID: GroupFiles, Label: groupLabels[GroupFiles]},
+		{ID: GroupDatabases, Label: groupLabels[GroupDatabases]},
 		{ID: GroupBrasil, Label: groupLabels[GroupBrasil]},
 		{ID: GroupAds, Label: groupLabels[GroupAds]},
 		{ID: GroupSocial, Label: groupLabels[GroupSocial]},
@@ -238,10 +238,10 @@ func Catalog() []Item {
 		},
 
 		{
-			ID: "manual", Label: "Planilha manual", Group: GroupFiles, GroupLabel: groupLabels[GroupFiles],
-			Description: "Crie a sua própria tabela: defina colunas e preencha os dados num formulário, sem ligação externa.",
+			ID: "manual", Label: "Manual", Group: GroupFiles, GroupLabel: groupLabels[GroupFiles],
+			Description: "Crie a sua própria planilha: defina colunas e preencha os dados num formulário, sem ligação externa.",
 			Implemented: true, Preview: false,
-			Aliases: []string{"formulario", "form", "enter_data", "planilha_manual", "manual_entry"},
+			Aliases: []string{"formulario", "form", "enter_data", "planilha_manual", "planilha", "manual_entry"},
 			Fields: append(nameField(), []Field{
 				{Key: "table", Label: "Nome da tabela", Type: "text", Placeholder: "Vendas da loja", Hint: "Como a planilha aparece nos conjuntos e no Ask TheDobra."},
 			}...),

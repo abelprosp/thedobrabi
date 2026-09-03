@@ -147,7 +147,7 @@ func TestRequestedLabels(t *testing.T) {
 		"expectativas":    "Expectativa de mercado",
 		"cambio":          "Câmbio em tempo real",
 		"google_sheets":   "Google Sheets",
-		"manual":          "Planilha manual",
+		"manual":          "Manual",
 	}
 	for id, label := range want {
 		it := ByID(id)

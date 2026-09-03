@@ -195,7 +195,11 @@ export default function ConnectorsPage() {
       </Card>
 
       {groups.map((g) => {
-        const list = filtered.filter((it) => it.group === g.id);
+        const list = filtered.filter((it) => it.group === g.id).sort((a, b) => {
+          if (a.id === "manual") return -1;
+          if (b.id === "manual") return 1;
+          return 0;
+        });
         if (list.length === 0) return null;
         const Icon = groupIcon[g.id as keyof typeof groupIcon] || Plug;
         return (
