@@ -187,13 +187,18 @@ func ClickHouseType(t ColType) string {
 
 var (
 	idRe    = regexp.MustCompile(`(^|_)(id|uuid|key)$`)
-	timeRe  = regexp.MustCompile(`(date|time|ts|timestamp|created|updated|month|year|day)`)
+	timeRe  = regexp.MustCompile(`(date|time|ts|timestamp|created|updated|month|year|day|data|periodo|competencia|lancamento|emissao|referencia|vencimento|vigencia|abertura|fechamento|registro)`)
 	moneyRe = regexp.MustCompile(`(revenue|amount|total|price|cost|profit|sales|fee|gmv|arr|mrr|valor|value|receita|despesa|montante)`)
 	qtyRe   = regexp.MustCompile(`(qty|quantity|count|units|volume)`)
 )
 
 func GuessRole(col Column) string {
 	n := strings.ToLower(col.Name)
+	// A column already inferred as a date/datetime type is always a time column,
+	// regardless of its name (covers Portuguese names like data_venda, data, etc.).
+	if col.Type == TypeDate || col.Type == TypeDateTime {
+		return "time"
+	}
 	if timeRe.MatchString(n) && (col.Type == TypeDate || col.Type == TypeDateTime || col.Type == TypeString) {
 		return "time"
 	}
@@ -211,3 +216,4 @@ func GuessRole(col Column) string {
 	}
 	return "dimension"
 }
+
