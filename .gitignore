@@ -18,6 +18,7 @@ out/
 bin/
 tmp/
 *.exe
+services/api/api
 
 # ide
 .idea/

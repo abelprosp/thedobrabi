@@ -71,6 +71,7 @@ import Link from "next/link";
 import {
   type DatasetListItem,
   modelForDataset,
+  modelIdForDataset,
   rebindQueryToLiveDataset,
   widgetFieldDefaults,
 } from "@/lib/semantic";
@@ -442,6 +443,8 @@ function DashboardEditorInner() {
   const current = widgets.find((w) => w.id === selected);
   const currentDataset = current?.query?.dataset_id;
   const model = useMemo(() => modelForDataset(semanticModels, currentDataset), [currentDataset, semanticModels]);
+  const semanticModelId = useMemo(() => modelIdForDataset(semanticModels, currentDataset), [currentDataset, semanticModels]);
+
 
   if (d.isError) {
     if (apiStatus(d.error) === 404) return <PageSkeleton />;
@@ -701,10 +704,12 @@ function DashboardEditorInner() {
           onSourceFilter={setSourceFilter}
           onPreferredDataset={setPreferredDatasetId}
           semanticModels={semanticModels}
+          semanticModelId={semanticModelId}
           onUpdate={(fn) => updateWidgets((p) => p.map((w) => (w.id === current.id ? fn(w) : w)))}
           onDrillUp={() => drill(current.id, "up")}
         />
       )}
+
 
       {aiCompleteOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">

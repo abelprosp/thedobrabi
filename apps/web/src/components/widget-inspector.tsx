@@ -1,7 +1,7 @@
 "use client";
 
 import type { WidgetConfig } from "@/components/WidgetView";
-import type { DatasetListItem, SemanticModel } from "@/lib/semantic";
+import type { DatasetListItem, SemanticModel, SemanticMeasure } from "@/lib/semantic";
 import { dimensionKey, measureKey, modelForDataset, remapQueryToModel } from "@/lib/semantic";
 import { asJoinField } from "@/lib/widget-errors";
 import {
@@ -13,9 +13,11 @@ import {
   type TitleAlign,
 } from "@/lib/widget-config";
 import { Badge, FieldLabel, Input, Select, Textarea, Toggle, Button, cn } from "@/components/ui";
-import { ChevronDown, Plus, Trash2 } from "lucide-react";
+import { ChevronDown, Plus, Trash2, Code2 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Widget, WidgetType, QueryJoin } from "@/components/WidgetView";
+import { CustomMeasureModal } from "@/components/custom-measure-modal";
+
 
 type CatalogItem = { type: WidgetType; label: string };
 
@@ -29,6 +31,7 @@ export function WidgetInspector({
   onSourceFilter,
   onPreferredDataset,
   semanticModels,
+  semanticModelId,
   onUpdate,
   onDrillUp,
 }: {
@@ -41,6 +44,8 @@ export function WidgetInspector({
   onSourceFilter: (v: string) => void;
   onPreferredDataset: (id: string) => void;
   semanticModels: any[];
+  /** UUID of the semantic model for the current dataset — used by the custom measure modal. */
+  semanticModelId?: string | null;
   onUpdate: (fn: (w: Widget) => Widget) => void;
   onDrillUp: () => void;
 }) {
@@ -48,19 +53,33 @@ export function WidgetInspector({
   const cfg = widget.config || {};
   const setCfg = (partial: Partial<WidgetConfig>) =>
     onUpdate((w) => ({ ...w, config: { ...w.config, ...partial } }));
+  const [measureModalOpen, setMeasureModalOpen] = useState(false);
 
   return (
-    <aside className="w-80 min-h-0 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      <div className="mb-2 flex items-center justify-between">
-        <span className="text-[13px] font-semibold text-ink">Propriedades</span>
-        <Badge tone="accent">{catalog.find((t) => t.type === widget.type)?.label || widget.type}</Badge>
-      </div>
-      <p className="mb-3 text-[11px] text-mute">As alterações aplicam-se imediatamente no canvas.</p>
+    <>
+      {measureModalOpen && semanticModelId && model && (
+        <CustomMeasureModal
+          semanticModelId={semanticModelId}
+          model={model}
+          onClose={() => setMeasureModalOpen(false)}
+          onAdded={(_measure: SemanticMeasure) => {
+            // The queryClient invalidation inside the modal refreshes semanticModels
+            // automatically. Nothing extra needed here.
+          }}
+        />
+      )}
+      <aside className="w-80 min-h-0 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-[13px] font-semibold text-ink">Propriedades</span>
+          <Badge tone="accent">{catalog.find((t) => t.type === widget.type)?.label || widget.type}</Badge>
+        </div>
+        <p className="mb-3 text-[11px] text-mute">As alterações aplicam-se imediatamente no canvas.</p>
 
-      <Section title="Dados" defaultOpen>
-        <FieldLabel label="Título">
-          <Input value={widget.title} onChange={(e) => onUpdate((w) => ({ ...w, title: e.target.value }))} />
-        </FieldLabel>
+        <Section title="Dados" defaultOpen>
+          <FieldLabel label="Título">
+            <Input value={widget.title} onChange={(e) => onUpdate((w) => ({ ...w, title: e.target.value }))} />
+          </FieldLabel>
+
         {caps.query && (
           <FieldLabel label="Tipo de visualização">
             <Select
@@ -752,6 +771,17 @@ function QueryFields({
           </Select>
         </FieldLabel>
       )}
+      {caps.query && widget.query?.dataset_id && semanticModelId && (
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 text-[12px] font-medium text-primary hover:underline"
+          onClick={() => setMeasureModalOpen(true)}
+        >
+          <Code2 size={13} />
+          + Nova medida SQL
+        </button>
+      )}
+
       {widget.type === "scatter" && (
         <FieldLabel label="Métrica Y">
           <Select

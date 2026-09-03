@@ -53,6 +53,14 @@ export function modelForDataset(models: any[], datasetId?: string | null): Seman
   return modelFromSemanticRow(row);
 }
 
+/** Returns the semantic model UUID (needed to call validate-measure and PUT endpoints). */
+export function modelIdForDataset(models: any[], datasetId?: string | null): string | null {
+  if (!datasetId) return null;
+  const row = models.find((m: any) => m.dataset_id === datasetId);
+  return row?.id ?? null;
+}
+
+
 export function pickMeasures(model: SemanticModel | null | undefined, n: number): string[] {
   const all = (model?.measures || []).map(measureKey).filter(Boolean);
   const real = all.filter((name) => !isRowCountMeasure(model, name));
