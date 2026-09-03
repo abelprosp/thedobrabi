@@ -103,6 +103,31 @@ function PublicWidget({ w }: { w: Widget }) {
       </div>
     );
   }
+  if (w.type === "slicer") {
+    const dim = columns[0];
+    const values = Array.from(
+      new Set(rows.map((r) => String(r[dim] ?? "")).filter(Boolean)),
+    ).sort((a, b) => a.localeCompare(b, "pt"));
+    return (
+      <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
+        <div className="mb-2 text-[13px] font-medium text-ink">{w.title}</div>
+        {values.length === 0 ? (
+          <p className="text-xs text-mute">Sem valores.</p>
+        ) : (
+          <div className="flex flex-wrap gap-1.5">
+            {values.map((v) => (
+              <span
+                key={v}
+                className="rounded-full border border-line bg-surface-2 px-2.5 py-1 text-[11px] text-mute"
+              >
+                {v}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
   return (
     <div className="rounded-2xl border border-line bg-surface p-3 shadow-sm">
       <Chart
