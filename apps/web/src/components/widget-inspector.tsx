@@ -126,6 +126,8 @@ export function WidgetInspector({
             onSourceFilter={onSourceFilter}
             onPreferredDataset={onPreferredDataset}
             semanticModels={semanticModels}
+            semanticModelId={semanticModelId}
+            onOpenCustomMeasure={() => setMeasureModalOpen(true)}
             onUpdate={onUpdate}
             onDrillUp={onDrillUp}
           />
@@ -469,7 +471,8 @@ export function WidgetInspector({
           </Button>
         </Section>
       )}
-    </aside>
+      </aside>
+    </>
   );
 }
 
@@ -580,6 +583,8 @@ function QueryFields({
   onSourceFilter,
   onPreferredDataset,
   semanticModels,
+  semanticModelId,
+  onOpenCustomMeasure,
   onUpdate,
   onDrillUp,
 }: {
@@ -591,6 +596,8 @@ function QueryFields({
   onSourceFilter: (v: string) => void;
   onPreferredDataset: (id: string) => void;
   semanticModels: any[];
+  semanticModelId?: string | null;
+  onOpenCustomMeasure: () => void;
   onUpdate: (fn: (w: Widget) => Widget) => void;
   onDrillUp: () => void;
 }) {
@@ -771,11 +778,11 @@ function QueryFields({
           </Select>
         </FieldLabel>
       )}
-      {caps.query && widget.query?.dataset_id && semanticModelId && (
+      {widget.query?.dataset_id && semanticModelId && (
         <button
           type="button"
           className="inline-flex items-center gap-1.5 text-[12px] font-medium text-primary hover:underline"
-          onClick={() => setMeasureModalOpen(true)}
+          onClick={onOpenCustomMeasure}
         >
           <Code2 size={13} />
           + Nova medida SQL
