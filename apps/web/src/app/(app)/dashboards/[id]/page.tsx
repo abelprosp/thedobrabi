@@ -13,12 +13,10 @@ import "react-resizable/css/styles.css";
 import {
   Button,
   Card,
-  CardTitle,
   EmptyState,
   ErrorState,
   FieldLabel,
   Input,
-  PageHeader,
   PageSkeleton,
   Select,
   Textarea,
@@ -47,7 +45,6 @@ import {
   Share2,
   Save,
   Eye,
-  EyeOff,
   Maximize2,
   Copy,
   X,
@@ -76,6 +73,7 @@ import {
   widgetFieldDefaults,
 } from "@/lib/semantic";
 import { DASHBOARD_TEMPLATES, instantiateTemplate, prepareTemplateModel } from "@/lib/dashboard-templates";
+import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
 import { ThemeSegmented } from "@/components/theme-toggle";
 import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
 import { readStoredAppearance, type Appearance } from "@/lib/theme";
@@ -296,7 +294,7 @@ function DashboardEditorInner() {
         type,
         title: `${res.measure} por ${res.dimension}`,
         layout: { x: (widgets.length * 4) % 12, y: 100, w: type === "kpi" ? 3 : 6, h: type === "kpi" ? 2 : 4 },
-        query: { dataset_id: ds, measures: [res.measure], dimensions: res.dimension ? [res.dimension] : [], limit: 20 },
+        query: { dataset_id: ds, measures: [res.measure], dimensions: res.dimension ? [res.dimension] : [], limit: DEFAULT_QUERY_LIMIT },
       };
       add(w);
       setAiOpen(false);
@@ -394,7 +392,7 @@ function DashboardEditorInner() {
       type,
       title: catalog.label,
       layout: { x, y: 100, w: catalog.defaultW, h: catalog.defaultH },
-      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: type === "slicer" ? 200 : type === "table" ? 50 : 20 } : undefined,
+      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
       hierarchy: type === "decomposition_tree" ? fields.dimensions : undefined,
       config: (() => {
@@ -445,6 +443,15 @@ function DashboardEditorInner() {
     );
   }, [updateWidgets]);
 
+  useEffect(() => {
+    if (!edit || !selected) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelected(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [edit, selected]);
+
   const current = widgets.find((w) => w.id === selected);
   const currentDataset = current?.query?.dataset_id;
   const model = useMemo(() => modelForDataset(semanticModels, currentDataset), [currentDataset, semanticModels]);
@@ -458,182 +465,173 @@ function DashboardEditorInner() {
   if (!d.data && widgets.length === 0) return <PageSkeleton />;
 
   return (
-    <div className="flex h-[calc(100vh-7rem)] min-h-0 gap-3">
-      {edit && (
-        <aside className="flex w-56 min-h-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-sm">
-          <div className="flex items-center justify-between">
-            <span className="text-[12px] font-semibold uppercase text-mute">Componentes</span>
-            <Button variant="ghost" size="icon" onClick={() => setEdit(false)} title="Fechar painel">
-              <EyeOff size={16} />
-            </Button>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {WIDGET_CATALOG.map((t) => {
-              const Icon = t.icon;
-              return (
-                <button
-                  key={t.type}
-                  onClick={() => addWidget(t.type)}
-                  className="flex flex-col items-center gap-1 rounded-xl border border-line bg-surface-2 p-3 text-center transition hover:border-primary hover:shadow-sm"
-                >
-                  <Icon size={18} className="text-primary" />
-                  <span className="text-[11px] font-medium text-ink">{t.label}</span>
-                  <span className="text-[10px] text-mute">{t.description}</span>
-                </button>
-              );
-            })}
-          </div>
-          <div className="mt-2 border-t border-line pt-3">
-            <span className="text-[12px] font-semibold uppercase text-mute">Loja</span>
-            <Link href="/store" className="mt-1 mb-2 block text-[11px] text-primary hover:underline">
-              Ver todos os painéis prontos
-            </Link>
-            <div className="mt-2 space-y-1">
-              {DASHBOARD_TEMPLATES.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => applyTemplate(t.id)}
-                  className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-[12px] text-ink hover:bg-surface-2"
-                >
-                  <Grid3X3 size={14} className="text-primary" />
-                  {t.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </aside>
-      )}
-
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col gap-3 overflow-hidden">
-        <PageHeader
-          title={edit ? name || "Dashboard" : name}
-          description={edit ? description : undefined}
-          crumbs={[{ href: "/dashboards", label: "Dashboards" }]}
-          actions={
-            <div className="flex flex-wrap items-center gap-2">
-              <ThemeSegmented
-                value={dashTheme}
-                onChange={(next) => {
-                  setDashTheme(next);
-                  setTheme(next);
-                }}
-              />
-              {edit && (
-                <>
-                  <Button variant="ghost" size="icon" onClick={history.undo} disabled={!history.canUndo} title="Desfazer">
-                    <Undo2 size={16} />
-                  </Button>
-                  <Button variant="ghost" size="icon" onClick={history.redo} disabled={!history.canRedo} title="Refazer">
-                    <Redo2 size={16} />
-                  </Button>
-                  <Button variant="secondary" onClick={() => setEdit(false)}>
-                    <Eye size={14} /> Pré-visualizar
-                  </Button>
-                </>
-              )}
-              {!edit && (
-                <Button variant="secondary" onClick={() => setEdit(true)}>
-                  <Settings2 size={14} /> Editar
-                </Button>
-              )}
-              <Button variant="secondary" onClick={() => setAiOpen(!aiOpen)}>
-                <Wand2 size={14} /> Gerar com IA
-              </Button>
-              <Button variant="secondary" onClick={() => setAiCompleteOpen(true)}>
-                <Sparkles size={14} /> Completar com IA
-              </Button>
-              <Button variant="secondary" onClick={async () => {
-                try {
-                  const d = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, { method: "POST" });
-                  await navigator.clipboard?.writeText(d.url);
-                  toast.success("Ligação de partilha copiada");
-                } catch (e: any) { toast.error(e.message); }
-              }}>
-                <Share2 size={14} /> Partilhar
-              </Button>
-              {canDelete && (
-                <Button
-                  variant="danger"
-                  onClick={() => {
-                    if (confirm(`Excluir o dashboard «${name || d.data?.name}»? Esta ação não pode ser desfeita.`)) {
-                      remove.mutate();
-                    }
-                  }}
-                  busy={remove.isPending}
-                >
-                  <Trash2 size={14} /> Excluir
-                </Button>
-              )}
-              <Button onClick={() => save.mutate()} busy={save.isPending}>
-                <Save size={14} /> Guardar
-              </Button>
-            </div>
-          }
-        />
-
-        {edit && datasetList.length === 0 && (
-          <EmptyState
-            icon={Database}
-            title="Ainda sem conjuntos de dados"
-            description="O editor precisa de um conjunto sincronizado. Ligue um conector (Inflação, CSV, Asaas…) ou carregue a demo de vendas."
-            action={
-              <div className="flex flex-wrap gap-2">
-                <Link href="/connectors">
-                  <Button>
-                    <Plug size={14} /> Ir a Conectores
-                  </Button>
-                </Link>
-                <Link href="/data">
-                  <Button variant="secondary">Carregar demo</Button>
-                </Link>
-              </div>
-            }
+    <div className="-m-4 flex h-[calc(100vh-3.5rem)] min-h-0 flex-col bg-surface-2 sm:-m-6">
+      <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
+        <nav className="flex min-w-0 items-center gap-1.5 text-[12px] text-mute">
+          <Link href="/dashboards" className="hover:text-ink">Dashboards</Link>
+          <span className="text-line">/</span>
+        </nav>
+        {edit ? (
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nome do dashboard"
+            className="h-8 max-w-[260px] border-0 bg-transparent px-1 text-[15px] font-semibold shadow-none"
+          />
+        ) : (
+          <h1 className="truncate text-[15px] font-semibold text-ink">{name || "Dashboard"}</h1>
+        )}
+        {edit && (
+          <Input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Descrição"
+            className="hidden h-8 max-w-xs border-0 bg-transparent px-1 text-[12px] text-mute shadow-none lg:block"
           />
         )}
-
-        {edit && (
-          <div className="flex items-center gap-2">
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome do dashboard" className="max-w-xs" />
-            <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Descrição" className="max-w-md" />
-            <Button variant={mobilePreview ? "primary" : "secondary"} size="sm" onClick={() => setMobilePreview(!mobilePreview)}>
-              <Smartphone size={14} /> Mobile
+        <div className="ml-auto flex flex-wrap items-center gap-1.5">
+          <ThemeSegmented
+            value={dashTheme}
+            onChange={(next) => {
+              setDashTheme(next);
+              setTheme(next);
+            }}
+          />
+          {edit && (
+            <>
+              <Button variant="ghost" size="icon" onClick={history.undo} disabled={!history.canUndo} title="Desfazer">
+                <Undo2 size={16} />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={history.redo} disabled={!history.canRedo} title="Refazer">
+                <Redo2 size={16} />
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => setEdit(false)}>
+                <Eye size={14} /> Pré-visualizar
+              </Button>
+            </>
+          )}
+          {!edit && (
+            <Button variant="secondary" size="sm" onClick={() => setEdit(true)}>
+              <Settings2 size={14} /> Editar
             </Button>
+          )}
+          <Button variant="secondary" size="sm" onClick={() => setAiOpen(!aiOpen)}>
+            <Wand2 size={14} /> Gerar
+          </Button>
+          <Button variant="secondary" size="sm" onClick={() => setAiCompleteOpen(true)}>
+            <Sparkles size={14} /> Completar
+          </Button>
+          <Button variant="secondary" size="sm" onClick={async () => {
+            try {
+              const d = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, { method: "POST" });
+              await navigator.clipboard?.writeText(d.url);
+              toast.success("Ligação de partilha copiada");
+            } catch (e: any) { toast.error(e.message); }
+          }}>
+            <Share2 size={14} /> Partilhar
+          </Button>
+          {canDelete && (
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={() => {
+                if (confirm(`Excluir o dashboard «${name || d.data?.name}»? Esta ação não pode ser desfeita.`)) {
+                  remove.mutate();
+                }
+              }}
+              busy={remove.isPending}
+            >
+              <Trash2 size={14} /> Excluir
+            </Button>
+          )}
+          <Button size="sm" onClick={() => save.mutate()} busy={save.isPending}>
+            <Save size={14} /> Guardar
+          </Button>
+        </div>
+      </div>
+
+      {edit && (
+        <div className="flex shrink-0 items-center gap-1.5 overflow-x-auto border-b border-line bg-surface px-3 py-1.5">
+          <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-mute">Adicionar</span>
+          {WIDGET_CATALOG.map((t) => {
+            const Icon = t.icon;
+            return (
+              <button
+                key={t.type}
+                type="button"
+                title={t.description}
+                onClick={() => addWidget(t.type)}
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-2 py-1 text-[11px] text-ink transition hover:border-primary hover:bg-primary/5"
+              >
+                <Icon size={13} className="text-primary" />
+                {t.label}
+              </button>
+            );
+          })}
+          <div className="mx-1 h-5 w-px shrink-0 bg-line" />
+          <Link href="/store" className="shrink-0 text-[11px] text-primary hover:underline">Loja</Link>
+          {DASHBOARD_TEMPLATES.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => applyTemplate(t.id)}
+              className="flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] text-mute hover:bg-surface-2 hover:text-ink"
+            >
+              <Grid3X3 size={12} className="text-primary" />
+              {t.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="flex shrink-0 flex-wrap items-end gap-2 border-b border-line bg-surface px-3 py-1.5 sm:px-4">
+        <FieldLabel label="Período início">
+          <Input type="date" value={timeRange.start || ""} onChange={(e) => setTimeRange({ ...timeRange, start: e.target.value })} className="h-8 w-[10.5rem]" />
+        </FieldLabel>
+        <FieldLabel label="Período fim">
+          <Input type="date" value={timeRange.end || ""} onChange={(e) => setTimeRange({ ...timeRange, end: e.target.value })} className="h-8 w-[10.5rem]" />
+        </FieldLabel>
+        {edit && (
+          <Button variant={mobilePreview ? "primary" : "secondary"} size="sm" onClick={() => setMobilePreview(!mobilePreview)}>
+            <Smartphone size={14} /> Mobile
+          </Button>
+        )}
+        {globalFilters.length > 0 && (
+          <div className="flex flex-wrap items-center gap-1 pb-0.5">
+            {globalFilters.map((f) => (
+              <span key={`${f.dataset_id || ""}:${f.dimension}`} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] text-primary-600">
+                {f.dimension} = {Array.isArray(f.value) ? f.value.join(", ") : String(f.value)}
+                <button className="text-primary-700" onClick={() => setGlobalFilters(globalFilters.filter((x) => !(x.dimension === f.dimension && (x.dataset_id || "") === (f.dataset_id || ""))))}>×</button>
+              </span>
+            ))}
+            <button className="text-[11px] text-mute hover:text-ink" onClick={() => setGlobalFilters([])}>Limpar filtros</button>
           </div>
         )}
+      </div>
 
-        {aiOpen && (
-          <Card className="space-y-3">
-            <CardTitle>Gerar widget com IA</CardTitle>
-            <div className="flex gap-2">
-              <Input value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} placeholder="Ex.: vendas por região em barras" />
-              <Button onClick={() => aiWidget.mutate()} busy={aiWidget.isPending} disabled={!aiPrompt.trim()}>Gerar</Button>
-            </div>
-          </Card>
-        )}
+      {edit && datasetList.length === 0 && (
+        <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-amber-200 bg-amber-50 px-4 py-2 text-[12px] text-amber-950">
+          <Database size={14} />
+          <span>Ainda sem conjuntos. Ligue um conector ou carregue a demo.</span>
+          <Link href="/connectors"><Button size="sm"><Plug size={14} /> Conectores</Button></Link>
+          <Link href="/data"><Button variant="secondary" size="sm">Carregar demo</Button></Link>
+        </div>
+      )}
 
-        <Card className="space-y-3">
-          <div className="flex flex-wrap items-end gap-3">
-            <FieldLabel label="Período início">
-              <Input type="date" value={timeRange.start || ""} onChange={(e) => setTimeRange({ ...timeRange, start: e.target.value })} />
-            </FieldLabel>
-            <FieldLabel label="Período fim">
-              <Input type="date" value={timeRange.end || ""} onChange={(e) => setTimeRange({ ...timeRange, end: e.target.value })} />
-            </FieldLabel>
-            {globalFilters.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {globalFilters.map((f) => (
-                  <span key={`${f.dataset_id || ""}:${f.dimension}`} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] text-primary-600">
-                    {f.dimension} = {Array.isArray(f.value) ? f.value.join(", ") : String(f.value)}
-                    <button className="text-primary-700" onClick={() => setGlobalFilters(globalFilters.filter((x) => !(x.dimension === f.dimension && (x.dataset_id || "") === (f.dataset_id || ""))))}>×</button>
-                  </span>
-                ))}
-                <button className="text-[11px] text-mute hover:text-ink" onClick={() => setGlobalFilters([])}>Limpar filtros</button>
-              </div>
-            )}
+      {aiOpen && (
+        <div className="shrink-0 border-b border-line bg-surface px-4 py-2">
+          <div className="flex gap-2">
+            <Input value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} placeholder="Ex.: vendas por região em barras" />
+            <Button size="sm" onClick={() => aiWidget.mutate()} busy={aiWidget.isPending} disabled={!aiPrompt.trim()}>Gerar</Button>
           </div>
-        </Card>
+        </div>
+      )}
 
-        <div className="relative min-h-0 flex-1 overflow-auto rounded-2xl border border-line bg-surface pb-8 shadow-sm">
+      <div className="relative min-h-0 flex-1">
+        <div
+          className={cn("h-full overflow-auto pb-10", edit && current && "pr-80")}
+          onClick={() => edit && setSelected(null)}
+        >
           {widgets.length === 0 ? (
             <EmptyState
               icon={LayoutDashboard}
@@ -642,7 +640,7 @@ function DashboardEditorInner() {
                 datasetList.length === 0
                   ? "Primeiro precisa de dados. Sincronize um conector ou carregue a demo."
                   : edit
-                    ? "Escolha um componente ou template à esquerda para começar."
+                    ? "Escolha um componente na faixa acima para começar."
                     : "Este dashboard ainda não tem widgets."
               }
               action={
@@ -664,7 +662,9 @@ function DashboardEditorInner() {
               className="layout min-h-full"
               layout={layout}
               cols={mobilePreview ? 4 : 12}
-              rowHeight={mobilePreview ? 90 : 70}
+              rowHeight={mobilePreview ? 110 : 96}
+              margin={[14, 14]}
+              containerPadding={[12, 12]}
               isDraggable={edit}
               isResizable={edit}
               onLayoutChange={onLayoutChange}
@@ -674,8 +674,11 @@ function DashboardEditorInner() {
               {widgets.map((w) => (
                 <div
                   key={w.id}
-                  className={`relative ${selected === w.id && edit ? "ring-2 ring-primary/30" : ""}`}
-                  onClick={() => edit && setSelected(w.id)}
+                  className={`widget-grid-item relative ${selected === w.id && edit ? "ring-2 ring-primary/40" : ""}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (edit) setSelected(w.id);
+                  }}
                 >
                   {edit && (
                     <div className="absolute right-2 top-2 z-10 flex items-center gap-1">
@@ -696,24 +699,27 @@ function DashboardEditorInner() {
             </Grid>
           )}
         </div>
-      </div>
 
-      {edit && current && (
-        <WidgetInspector
-          widget={current}
-          catalog={WIDGET_CATALOG}
-          model={model}
-          visibleDatasets={visibleDatasets}
-          sourceOptions={sourceOptions}
-          sourceFilter={sourceFilter}
-          onSourceFilter={setSourceFilter}
-          onPreferredDataset={setPreferredDatasetId}
-          semanticModels={semanticModels}
-          semanticModelId={semanticModelId}
-          onUpdate={(fn) => updateWidgets((p) => p.map((w) => (w.id === current.id ? fn(w) : w)))}
-          onDrillUp={() => drill(current.id, "up")}
-        />
-      )}
+        {edit && current && (
+          <div className="absolute inset-y-0 right-0 z-20">
+            <WidgetInspector
+              widget={current}
+              catalog={WIDGET_CATALOG}
+              model={model}
+              visibleDatasets={visibleDatasets}
+              sourceOptions={sourceOptions}
+              sourceFilter={sourceFilter}
+              onSourceFilter={setSourceFilter}
+              onPreferredDataset={setPreferredDatasetId}
+              semanticModels={semanticModels}
+              semanticModelId={semanticModelId}
+              onUpdate={(fn) => updateWidgets((p) => p.map((w) => (w.id === current.id ? fn(w) : w)))}
+              onDrillUp={() => drill(current.id, "up")}
+              onClose={() => setSelected(null)}
+            />
+          </div>
+        )}
+      </div>
 
 
       {aiCompleteOpen && (

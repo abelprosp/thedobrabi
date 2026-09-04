@@ -203,7 +203,7 @@ export default function AskPage() {
                   />
                 )}
                 {m.answer?.chart && (
-                  <Chart type={(m.answer.chart.type as any) || "bar"} title={m.answer.chart.title} columns={m.answer.chart.columns} rows={m.answer.chart.rows} />
+                  <Chart type={(m.answer.chart.type as any) || "bar"} title={m.answer.chart.title} columns={m.answer.chart.columns} rows={m.answer.chart.rows} height={280} />
                 )}
                 {m.answer?.drivers && m.answer.drivers.length > 0 && (
                   <div>

@@ -6,6 +6,8 @@ import { dimensionKey, measureKey, modelForDataset, remapQueryToModel } from "@/
 import { asJoinField } from "@/lib/widget-errors";
 import {
   BRAND_PALETTE,
+  DEFAULT_QUERY_LIMIT,
+  MAX_QUERY_LIMIT,
   inspectorCaps,
   type CompactMode,
   type CurrencyCode,
@@ -13,7 +15,7 @@ import {
   type TitleAlign,
 } from "@/lib/widget-config";
 import { Badge, FieldLabel, Input, Select, Textarea, Toggle, Button, cn } from "@/components/ui";
-import { ChevronDown, Plus, Trash2, Code2 } from "lucide-react";
+import { ChevronDown, Plus, Trash2, Code2, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Widget, WidgetType, QueryJoin } from "@/components/WidgetView";
 import { CustomMeasureModal } from "@/components/custom-measure-modal";
@@ -34,6 +36,7 @@ export function WidgetInspector({
   semanticModelId,
   onUpdate,
   onDrillUp,
+  onClose,
 }: {
   widget: Widget;
   catalog: CatalogItem[];
@@ -48,6 +51,7 @@ export function WidgetInspector({
   semanticModelId?: string | null;
   onUpdate: (fn: (w: Widget) => Widget) => void;
   onDrillUp: () => void;
+  onClose?: () => void;
 }) {
   const caps = inspectorCaps(widget.type);
   const cfg = widget.config || {};
@@ -68,12 +72,25 @@ export function WidgetInspector({
           }}
         />
       )}
-      <aside className="w-80 min-h-0 shrink-0 overflow-y-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
-        <div className="mb-2 flex items-center justify-between">
+      <aside className="flex h-full w-[min(20rem,100vw)] min-h-0 shrink-0 flex-col overflow-y-auto border-l border-line bg-surface p-4 shadow-[-16px_0_40px_rgba(15,23,42,0.08)]">
+        <div className="mb-2 flex items-center justify-between gap-2">
           <span className="text-[13px] font-semibold text-ink">Propriedades</span>
-          <Badge tone="accent">{catalog.find((t) => t.type === widget.type)?.label || widget.type}</Badge>
+          <div className="flex items-center gap-1">
+            <Badge tone="accent">{catalog.find((t) => t.type === widget.type)?.label || widget.type}</Badge>
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-lg p-1 text-mute hover:bg-surface-2 hover:text-ink"
+                title="Fechar painel"
+                aria-label="Fechar painel"
+              >
+                <X size={14} />
+              </button>
+            )}
+          </div>
         </div>
-        <p className="mb-3 text-[11px] text-mute">As alterações aplicam-se imediatamente no canvas.</p>
+        <p className="mb-3 text-[11px] text-mute">As alterações aplicam-se imediatamente no canvas. Esc fecha o painel.</p>
 
         <Section title="Dados" defaultOpen>
           <FieldLabel label="Título">
@@ -970,13 +987,22 @@ function QueryFields({
           </button>
         </div>
       )}
-      <FieldLabel label="Limite de linhas (consulta)">
+      <FieldLabel label="Limite de linhas (consulta)" hint="Padrão 900. Altera aqui se precisares de mais ou menos linhas.">
         <Input
           type="number"
           min={1}
-          max={1000}
-          value={widget.query?.limit ?? 20}
-          onChange={(e) => onUpdate((w) => ({ ...w, query: { ...w.query, limit: Number(e.target.value) } }))}
+          max={MAX_QUERY_LIMIT}
+          value={widget.query?.limit ?? DEFAULT_QUERY_LIMIT}
+          onChange={(e) => {
+            const n = Number(e.target.value);
+            onUpdate((w) => ({
+              ...w,
+              query: {
+                ...w.query,
+                limit: Number.isFinite(n) && n > 0 ? Math.min(MAX_QUERY_LIMIT, Math.max(1, n)) : DEFAULT_QUERY_LIMIT,
+              },
+            }));
+          }}
         />
       </FieldLabel>
     </>

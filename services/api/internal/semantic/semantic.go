@@ -98,19 +98,29 @@ func Suggest(datasetName string, cols []schemax.Column) Model {
 	}
 
 	// Common derived metrics when columns exist.
-	rev := findMeasureCol(m, "revenue", "total", "amount", "sales")
+	rev := findMeasureCol(m, "revenue", "total", "amount", "sales", "receita", "valor")
 	qty := findCol(cols, "quantity", "qty", "units")
-	if rev != "" && qty != "" && !hasMeasure(m, "average_ticket") {
+	cust := findCol(cols, "cliente", "customer", "client", "customer_id")
+	if rev != "" && (qty != "" || cust != "") && !hasMeasure(m, "average_ticket") && !hasMeasure(m, "ticket medio") && !hasMeasure(m, "ticket médio") {
+		den := "COUNT(*)"
+		desc := "Receita por linha"
+		if cust != "" {
+			den = "COUNT(DISTINCT " + cust + ")"
+			desc = "Receita por cliente"
+		} else if qty != "" {
+			den = "SUM(" + qty + ")"
+			desc = "Receita por unidade"
+		}
 		m.Measures = append(m.Measures, Measure{
-			Name: "Average Ticket", Column: rev, Aggregation: "avg",
-			Expression: "SUM(" + rev + ") / NULLIF(COUNT(*),0)", Format: "currency",
-			Description: "Revenue per order",
+			Name: "Average Ticket", Column: rev, Aggregation: "expression",
+			Expression: "SUM(" + rev + ") / NULLIF(" + den + ",0)", Format: "currency",
+			Description: desc,
 		})
 	}
 	profit := findCol(cols, "profit")
 	if rev != "" && profit != "" && !hasMeasure(m, "margin") {
 		m.Measures = append(m.Measures, Measure{
-			Name: "Margin", Column: profit, Aggregation: "avg",
+			Name: "Margin", Column: profit, Aggregation: "expression",
 			Expression: "SUM(" + profit + ") / NULLIF(SUM(" + rev + "),0)", Format: "percent",
 			Description: "Profit / Revenue",
 		})

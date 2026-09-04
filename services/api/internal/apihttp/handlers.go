@@ -728,7 +728,7 @@ func autoWidgets(datasetID string, model semantic.Model) []map[string]any {
 		widgets = append(widgets, map[string]any{
 			"id": "table-1", "type": "table", "title": "Breakdown",
 			"layout": map[string]int{"x": 0, "y": 6, "w": 12, "h": 4},
-			"query":  map[string]any{"dataset_id": datasetID, "measures": meas[:min(2, len(meas))], "dimensions": dims[:min(2, len(dims))], "limit": 20},
+			"query":  map[string]any{"dataset_id": datasetID, "measures": meas[:min(2, len(meas))], "dimensions": dims[:min(2, len(dims))], "limit": 900},
 		})
 	}
 	return widgets

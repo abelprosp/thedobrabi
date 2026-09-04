@@ -143,7 +143,7 @@ function SchemaTab({ schema, preview }: { schema: any[]; preview: any }) {
       </Card>
       {preview.data?.rows?.length > 0 && (
         <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm md:col-span-2">
-          <Chart type="bar" rows={preview.data.rows.slice(0, 12)} columns={preview.data.columns} />
+          <Chart type="bar" rows={preview.data.rows.slice(0, 12)} columns={preview.data.columns} height={280} />
         </div>
       )}
     </div>

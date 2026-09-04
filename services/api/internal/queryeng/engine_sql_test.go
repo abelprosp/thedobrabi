@@ -1,6 +1,11 @@
 package queryeng
 
-import "testing"
+import (
+	"strings"
+	"testing"
+
+	"github.com/thedobra/thedobra/services/api/internal/semantic"
+)
 
 func TestQualifyIdentExpr(t *testing.T) {
 	got := qualifyIdentExpr("SUM(`valor`)", "a")
@@ -12,6 +17,24 @@ func TestQualifyIdentExpr(t *testing.T) {
 	want = "SUM(b.`valor`) / NULLIF(SUM(b.`qtd`), 0)"
 	if got != want {
 		t.Fatalf("got %q want %q", got, want)
+	}
+}
+
+func TestTimeFilterIncludesEndDate(t *testing.T) {
+	w := timeFilterSQL("`data_venda`", "2026-07-01", "2026-08-31")
+	if len(w) != 2 {
+		t.Fatalf("want 2 clauses, got %v", w)
+	}
+	if !strings.Contains(w[1], "INTERVAL 1 DAY") {
+		t.Fatalf("end date should be inclusive via +1 day, got %q", w[1])
+	}
+}
+
+func TestDimensionExprTruncatesDates(t *testing.T) {
+	d := semantic.Dimension{Name: "Data", Column: "data_venda", Type: "date"}
+	got := dimensionExpr(d, "data_venda", "`data_venda`")
+	if !strings.Contains(got, "toDate(") {
+		t.Fatalf("expected date truncation, got %s", got)
 	}
 }
 

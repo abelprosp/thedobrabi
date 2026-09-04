@@ -19,18 +19,23 @@ type ChartProps = {
   title?: string;
   columns?: string[];
   rows?: Record<string, any>[];
-  height?: number;
+  height?: number | string;
   config?: Record<string, any>;
   onClick?: (payload: { dimension: string; value: string }) => void;
 };
 
-const PRIMARY = "#2563EB";
-
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?)?$/;
+const YEAR_MONTH = /^(\d{4})-(\d{2})$/;
 
-/** Formata categorias que sejam datas ISO (ex.: 2025-10-26T00:00:00Z → 26/10/2025). */
-function formatCategory(v: unknown) {
+export function formatCategory(v: unknown) {
   const s = String(v ?? "");
+  const ym = YEAR_MONTH.exec(s);
+  if (ym) {
+    const d = new Date(Number(ym[1]), Number(ym[2]) - 1, 1);
+    if (!Number.isNaN(d.getTime())) {
+      return d.toLocaleDateString("pt-BR", { month: "short", year: "numeric" });
+    }
+  }
   if (!ISO_DATE.test(s)) return s;
   const d = new Date(s);
   if (Number.isNaN(d.getTime())) return s;
@@ -70,8 +75,29 @@ function pivotSeries(
   };
 }
 
-export function Chart({ type = "bar", title, columns = [], rows = [], height = 280, onClick, config = {} }: ChartProps) {
+export function EChart({
+  option,
+  onEvents,
+}: {
+  option: Record<string, unknown>;
+  onEvents?: Record<string, (params: any) => void>;
+}) {
   const { theme } = useTheme();
+  return (
+    <ReactECharts
+      key={theme}
+      option={option}
+      notMerge
+      lazyUpdate
+      style={{ height: "100%", width: "100%" }}
+      opts={{ renderer: "canvas" }}
+      autoResize
+      onEvents={onEvents}
+    />
+  );
+}
+
+export function Chart({ type = "bar", columns = [], rows = [], height, onClick, config = {} }: ChartProps) {
   const chrome = chartChrome();
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const rawCatsAll = rows.map((r) => String(r[dim] ?? ""));
@@ -84,7 +110,6 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
   const seriesNames = pivoted ? pivoted.series : measCols;
   const seriesValues = pivoted ? pivoted.values : measCols.map((m) => rows.map((r) => Number(r[m] ?? 0)));
   const palette = chartPalette(config.color);
-  const color = config.color || PRIMARY;
   const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1;
   const showLabels = type === "pie" ? config.showDataLabels !== false : !!config.showDataLabels;
   const showTooltip = config.showTooltip !== false;
@@ -108,21 +133,37 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
   };
 
   const legend = legendOption(showLegend, legendPos);
-  const legendPad = showLegend && (legendPos === "top" || legendPos === "bottom") ? 22 : 0;
-  const sidePad = showLegend && (legendPos === "left" || legendPos === "right") ? 72 : 0;
+  const legendPad = showLegend && (legendPos === "top" || legendPos === "bottom") ? 28 : 0;
+  const sidePad = showLegend && (legendPos === "left" || legendPos === "right") ? 80 : 0;
 
   const option =
     type === "pie"
       ? {
           backgroundColor: "transparent",
-          tooltip: showTooltip ? { ...echartsTooltip(), trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)} (${p.percent}%)` } : { show: false },
+          animationDuration: 450,
+          tooltip: showTooltip
+            ? {
+                ...echartsTooltip(),
+                trigger: "item",
+                formatter: (p: any) =>
+                  `<div style="font-weight:600;margin-bottom:2px">${p.name}</div>${formatNumber(p.value, config)} · ${p.percent}%`,
+              }
+            : { show: false },
           legend,
           color: palette,
           series: [
             {
               type: "pie",
-              radius: ["45%", "70%"],
-              label: { show: showLabels, fontSize: 11, color: chrome.ink, formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` },
+              radius: ["52%", "74%"],
+              padAngle: 2,
+              itemStyle: { borderRadius: 8, borderColor: chrome.surface, borderWidth: 2 },
+              label: {
+                show: showLabels,
+                fontSize: 11,
+                color: chrome.ink,
+                formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}`,
+              },
+              emphasis: { scale: true, scaleSize: 6 },
               data: cats.map((n, i) => ({ name: n, value: Number(rows[i]?.[measCols[0]] ?? 0) })),
             },
           ],
@@ -134,31 +175,47 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
             data: cats,
             name: config.xAxisLabel || undefined,
             nameLocation: "middle" as const,
-            nameGap: 28,
-            nameTextStyle: { color: chrome.mute, fontSize: 10 },
-            axisLine: { lineStyle: { color: chrome.line } },
+            nameGap: 30,
+            nameTextStyle: { color: chrome.mute, fontSize: 11 },
+            axisLine: { show: false },
             axisTick: { show: false },
-            axisLabel: { color: chrome.mute, fontSize: 11, rotate: horizontal ? 0 : (config.xAxisRotate ?? 0) },
+            axisLabel: {
+              color: chrome.mute,
+              fontSize: 11,
+              hideOverlap: true,
+              rotate: horizontal ? 0 : (config.xAxisRotate ?? 0),
+            },
           };
           const valueAxis = {
             type: "value" as const,
             show: horizontal ? showX : showY,
             name: config.yAxisLabel || undefined,
             nameLocation: "middle" as const,
-            nameGap: 40,
-            nameTextStyle: { color: chrome.mute, fontSize: 10 },
-            splitLine: { show: showGrid, lineStyle: { color: chrome.surface2 } },
+            nameGap: 44,
+            nameTextStyle: { color: chrome.mute, fontSize: 11 },
+            splitLine: {
+              show: showGrid,
+              lineStyle: { color: chrome.line, type: "dashed" as const },
+            },
+            axisLine: { show: false },
+            axisTick: { show: false },
             axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt },
           };
           const series = seriesNames.map((m, i) => {
             const c = palette[i % palette.length];
+            const isBar = type === "bar";
             return {
               name: m,
               type: type === "area" ? "line" : type,
               data: seriesValues[i] || [],
               stack: stacked ? "total" : undefined,
               smooth,
-              barMaxWidth: 36,
+              showSymbol: type !== "bar",
+              symbol: "circle",
+              symbolSize: 7,
+              barMaxWidth: 52,
+              barCategoryGap: "32%",
+              emphasis: { focus: "series" },
               label: {
                 show: showLabels,
                 position: horizontal ? "right" : "top",
@@ -176,37 +233,45 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
                         x2: 0,
                         y2: 1,
                         colorStops: [
-                          { offset: 0, color: hexToRgba(c, 0.22) },
+                          { offset: 0, color: hexToRgba(c, type === "area" ? 0.32 : 0.16) },
                           { offset: 1, color: hexToRgba(c, 0.02) },
                         ],
                       },
                     }
                   : undefined,
-              lineStyle: { color: c, width: 2 },
-              itemStyle: { color: c, borderRadius: type === "bar" ? (horizontal ? [0, 6, 6, 0] : [6, 6, 0, 0]) : 0 },
+              lineStyle: { color: c, width: 2.5 },
+              itemStyle: {
+                color: c,
+                borderRadius: isBar ? (horizontal ? [0, 8, 8, 0] : [8, 8, 2, 2]) : 0,
+              },
             };
           });
           return {
             backgroundColor: "transparent",
-            title: title ? { text: title, left: 0, textStyle: { color: chrome.mute, fontSize: 12, fontWeight: 500 } } : undefined,
+            animationDuration: 450,
             tooltip: showTooltip
               ? {
                   ...echartsTooltip(),
                   trigger: "axis",
+                  axisPointer: { type: type === "bar" ? "shadow" : "line", shadowStyle: { color: "rgba(37,99,235,0.08)" } },
                   formatter: (params: any) => {
                     const list = Array.isArray(params) ? params : [params];
                     const head = list[0]?.axisValueLabel ?? list[0]?.name ?? "";
-                    const lines = list.map((p: any) => `${p.marker} ${p.seriesName}: ${formatNumber(p.value, config)}`);
-                    return `<div class="text-xs font-medium">${head}</div>${lines.map((l: string) => `<div class="text-xs">${l}</div>`).join("")}`;
+                    const lines = list.map(
+                      (p: any) =>
+                        `<div style="display:flex;gap:8px;align-items:center;margin-top:4px">${p.marker}<span>${p.seriesName}</span><span style="margin-left:auto;font-weight:600">${formatNumber(p.value, config)}</span></div>`,
+                    );
+                    return `<div style="font-weight:600;margin-bottom:4px">${head}</div>${lines.join("")}`;
                   },
                 }
               : { show: false },
             legend,
             grid: {
-              left: (horizontal ? 16 : 52) + (legendPos === "left" ? sidePad : 0),
-              right: 16 + (legendPos === "right" ? sidePad : 0),
-              top: (title ? 28 : 12) + (legendPos === "top" ? legendPad : 0),
-              bottom: 36 + (legendPos === "bottom" ? legendPad : 0),
+              containLabel: true,
+              left: 8 + (legendPos === "left" ? sidePad : 0),
+              right: 12 + (legendPos === "right" ? sidePad : 0),
+              top: 10 + (legendPos === "top" ? legendPad : 0),
+              bottom: 8 + (legendPos === "bottom" ? legendPad : 0),
             },
             xAxis: horizontal ? valueAxis : categoryAxis,
             yAxis: horizontal ? categoryAxis : valueAxis,
@@ -214,10 +279,15 @@ export function Chart({ type = "bar", title, columns = [], rows = [], height = 2
           };
         })();
 
-  return <ReactECharts key={theme} option={option} style={{ height }} notMerge onEvents={{ click: handleClick }} />;
+  const chart = <EChart option={option} onEvents={onClick ? { click: handleClick } : undefined} />;
+  return (
+    <div className="h-full w-full min-h-0" style={height == null ? undefined : { height }}>
+      {chart}
+    </div>
+  );
 }
 
-const KPI_SIZE = { sm: "text-2xl", md: "text-3xl", lg: "text-4xl" } as const;
+const KPI_SIZE = { sm: "text-2xl", md: "text-[28px]", lg: "text-4xl" } as const;
 
 export function Kpi({
   label,
@@ -244,19 +314,19 @@ export function Kpi({
 }) {
   const pos = delta === undefined ? null : delta >= 0;
   return (
-    <Card className={cn("flex h-full flex-col justify-between", align === "center" && "text-center")}>
-      {showTitle !== false && <div className="text-[12px] uppercase tracking-wide text-mute">{label}</div>}
-      <div className={cn("mt-2 font-semibold tracking-tight text-ink", KPI_SIZE[fontSize || "md"])} style={color ? { color } : undefined}>
+    <Card className={cn("flex h-full flex-col justify-between gap-1 p-4", align === "center" && "text-center")}>
+      {showTitle !== false && <div className="text-[11px] font-medium uppercase tracking-wide text-mute">{label}</div>}
+      <div className={cn("font-semibold tracking-tight text-ink", KPI_SIZE[fontSize || "md"])} style={color ? { color } : undefined}>
         {value}
       </div>
-      {goalLabel && <div className="mt-1 text-[11px] text-mute">{goalLabel}</div>}
+      {goalLabel && <div className="text-[11px] text-mute">{goalLabel}</div>}
       {progress != null && (
-        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+        <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${Math.min(100, Math.max(0, progress))}%`, backgroundColor: color }} />
         </div>
       )}
       {delta !== undefined && (
-        <div className={`mt-2 text-[12px] ${pos ? "text-ok" : "text-danger"}`}>
+        <div className={`text-[12px] font-medium ${pos ? "text-ok" : "text-danger"}`}>
           {pos ? "+" : ""}
           {delta.toFixed(1)}% {comparisonLabel || "vs. período anterior"}
         </div>

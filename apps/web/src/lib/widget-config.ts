@@ -1,3 +1,7 @@
+/** Default rows fetched per widget query. Editable in the inspector. */
+export const DEFAULT_QUERY_LIMIT = 900;
+export const MAX_QUERY_LIMIT = 10000;
+
 export const BRAND_PALETTE = [
   "#2563EB",
   "#1D4ED8",

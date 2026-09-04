@@ -180,7 +180,7 @@ func (a *Agent) askDeterministic(ctx context.Context, orgID, wsID, userID uuid.U
 	}
 
 	if cmp {
-		prev := &queryeng.TimeRange{Start: addDays(rangeCur.Start, -30), End: rangeCur.Start}
+		prev := previousPeriod(rangeCur)
 		pres, err := a.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
 			DatasetID: dsID, Measures: []string{measure}, Limit: 1, TimeRange: prev,
 		})
@@ -615,7 +615,7 @@ func (a *Agent) generateDashboardFallback(prompt, dsID, dsName string, model sem
 			"type":   "table",
 			"title":  "Detalhado",
 			"layout": map[string]int{"x": 0, "y": 6, "w": 12, "h": 4},
-			"query":  map[string]any{"dataset_id": dsID, "measures": measures[:min(2, len(measures))], "dimensions": dims[:min(2, len(dims))], "limit": 20},
+			"query":  map[string]any{"dataset_id": dsID, "measures": measures[:min(2, len(measures))], "dimensions": dims[:min(2, len(dims))], "limit": 900},
 		})
 	}
 	return out
@@ -830,18 +830,36 @@ func pickDimension(model semantic.Model, q string) string {
 }
 
 func firstNum(row map[string]any, key string) any {
-	if v, ok := row[key]; ok {
+	if v, ok := row[key]; ok && isNumeric(v) {
 		return v
 	}
+	want := strings.ToLower(strings.ReplaceAll(strings.TrimSpace(key), " ", "_"))
+	var first any
 	for k, v := range row {
-		if k != key && (strings.Contains(k, key) || true) {
-			switch v.(type) {
-			case float64, int64, float32, int:
-				return v
-			}
+		if !isNumeric(v) {
+			continue
+		}
+		if first == nil {
+			first = v
+		}
+		nk := strings.ToLower(k)
+		if nk == want || strings.Contains(nk, want) || strings.Contains(want, nk) {
+			return v
 		}
 	}
+	if first != nil {
+		return first
+	}
 	return 0
+}
+
+func isNumeric(v any) bool {
+	switch v.(type) {
+	case float64, float32, int, int32, int64, uint, uint32, uint64, json.Number:
+		return true
+	default:
+		return false
+	}
 }
 
 func toF(v any) float64 {
@@ -871,6 +889,29 @@ func addDays(iso string, days int) string {
 		return iso
 	}
 	return t.AddDate(0, 0, days).Format("2006-01-02")
+}
+
+func previousPeriod(cur *queryeng.TimeRange) *queryeng.TimeRange {
+	if cur == nil || cur.Start == "" {
+		return &queryeng.TimeRange{}
+	}
+	start, err := time.Parse("2006-01-02", cur.Start)
+	if err != nil {
+		return &queryeng.TimeRange{Start: addDays(cur.Start, -30), End: cur.Start}
+	}
+	end := start
+	if cur.End != "" {
+		if t, err := time.Parse("2006-01-02", cur.End); err == nil {
+			end = t
+		}
+	}
+	dur := end.Sub(start)
+	if dur < 24*time.Hour {
+		dur = 24 * time.Hour
+	}
+	prevEnd := start
+	prevStart := start.Add(-dur)
+	return &queryeng.TimeRange{Start: prevStart.Format("2006-01-02"), End: prevEnd.Format("2006-01-02")}
 }
 
 func abs(v float64) float64 {

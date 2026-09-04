@@ -103,9 +103,9 @@ func (p *Planner) choosePlan(meta datasetInfo, req Request) plan {
 		pl.SourceType = "clickhouse_import"
 		pl.TargetTable = meta.Table
 	}
-	// For very small imported datasets, prefer DuckDB in-memory path if lake/parquet existed. MVP placeholder.
+	// Always compile aggregations in ClickHouse so CASE/NULLIF/COUNT DISTINCT stay exact.
 	if meta.StorageMode == "import" && meta.RowCount > 0 && meta.RowCount < 1000 {
-		pl.SourceType = "duckdb" // logical choice; still executes via ClickHouse for now
+		pl.CacheTTL = 30 * time.Second
 	}
 	return pl
 }
@@ -113,7 +113,11 @@ func (p *Planner) choosePlan(meta datasetInfo, req Request) plan {
 // measureSQL resolves a measure to a SQL fragment. If the measure expression is a DAX-like expression,
 // it uses semanticxpr to translate it, including dependent measure references. Otherwise it falls back
 // to the simple aggregation mapping.
-func measureSQL(m semantic.Measure, model *semantic.Model) (string, error) {
+func measureSQL(m semantic.Measure, model *semantic.Model, rangeStart, rangeEnd string) (string, error) {
+	opts := semanticxpr.SQLOptions{RangeStart: rangeStart, RangeEnd: rangeEnd}
+	if model != nil {
+		opts.TimeColumn = model.TimeColumn
+	}
 	if m.Expression != "" {
 		expr, err := semanticxpr.Parse(m.Expression)
 		if err == nil && expr.Func != "COLUMN" && expr.Func != "LITERAL" {
@@ -121,7 +125,7 @@ func measureSQL(m semantic.Measure, model *semantic.Model) (string, error) {
 			if model != nil {
 				resolver = measureResolver(model)
 			}
-			return expr.ToSQLWithResolver(func(col string) string { return "`" + col + "`" }, resolver)
+			return expr.ToSQLWithOptions(func(col string) string { return "`" + col + "`" }, resolver, opts)
 		}
 	}
 	agg := strings.ToLower(m.Aggregation)
@@ -133,13 +137,13 @@ func measureSQL(m semantic.Measure, model *semantic.Model) (string, error) {
 	}
 	switch agg {
 	case "sum":
-		return "SUM(`" + m.Column + "`)", nil
+		return "SUM(toFloat64OrZero(`" + m.Column + "`))", nil
 	case "avg", "average":
-		return "AVG(`" + m.Column + "`)", nil
+		return "AVG(toFloat64OrZero(`" + m.Column + "`))", nil
 	case "min":
-		return "MIN(`" + m.Column + "`)", nil
+		return "MIN(toFloat64OrZero(`" + m.Column + "`))", nil
 	case "max":
-		return "MAX(`" + m.Column + "`)", nil
+		return "MAX(toFloat64OrZero(`" + m.Column + "`))", nil
 	case "count":
 		return "COUNT(`" + m.Column + "`)", nil
 	case "count_distinct":
@@ -147,6 +151,17 @@ func measureSQL(m semantic.Measure, model *semantic.Model) (string, error) {
 	default:
 		return "", fmt.Errorf("unsupported aggregation %s", agg)
 	}
+}
+
+func measureUsesTimeIntel(m semantic.Measure) bool {
+	if strings.TrimSpace(m.Expression) == "" {
+		return false
+	}
+	expr, err := semanticxpr.Parse(m.Expression)
+	if err != nil {
+		return false
+	}
+	return expr.UsesTimeIntel()
 }
 
 func measureResolver(model *semantic.Model) semanticxpr.MeasureResolver {

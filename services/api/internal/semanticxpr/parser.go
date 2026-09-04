@@ -133,6 +133,19 @@ func (p *parser) parsePrimary() (Expr, error) {
 	if ch >= '0' && ch <= '9' {
 		return p.parseNumber()
 	}
+	if ch == '-' {
+		p.pos++
+		p.skipSpace()
+		if p.peek() >= '0' && p.peek() <= '9' {
+			n, err := p.parseNumber()
+			if err != nil {
+				return Expr{}, err
+			}
+			n.Column = "-" + n.Column
+			return n, nil
+		}
+		return Expr{}, fmt.Errorf("unexpected character %q at position %d", '-', p.pos-1)
+	}
 	if isIdentStart(ch) {
 		return p.parseIdentOrCall()
 	}
@@ -275,12 +288,41 @@ func (p *parser) parseComparison() (Expr, error) {
 	return Expr{Func: "CMP", Op: op, Left: &left, Right: &right}, nil
 }
 
+func (p *parser) parseBoolExpr() (Expr, error) {
+	left, err := p.parseComparison()
+	if err != nil {
+		return Expr{}, err
+	}
+	for {
+		if p.consumeWord("AND") {
+			right, err := p.parseComparison()
+			if err != nil {
+				return Expr{}, err
+			}
+			l, r := left, right
+			left = Expr{Func: "AND", Left: &l, Right: &r}
+			continue
+		}
+		if p.consumeWord("OR") {
+			right, err := p.parseComparison()
+			if err != nil {
+				return Expr{}, err
+			}
+			l, r := left, right
+			left = Expr{Func: "OR", Left: &l, Right: &r}
+			continue
+		}
+		break
+	}
+	return left, nil
+}
+
 func (p *parser) parseCase() (Expr, error) {
 	var args []Expr
 	for {
 		p.skipSpace()
 		if p.consumeWord("WHEN") {
-			pred, err := p.parseComparison()
+			pred, err := p.parseBoolExpr()
 			if err != nil {
 				return Expr{}, err
 			}
@@ -321,7 +363,13 @@ func (p *parser) parseArgs(parentFn string) ([]Expr, error) {
 	var args []Expr
 	for {
 		p.skipSpace()
-		arg, err := p.parseArg(parentFn)
+		var arg Expr
+		var err error
+		if parentFn == "IF" && len(args) == 0 {
+			arg, err = p.parseBoolExpr()
+		} else {
+			arg, err = p.parseArg(parentFn)
+		}
 		if err != nil {
 			return nil, err
 		}
@@ -344,6 +392,10 @@ func (p *parser) parseArgs(parentFn string) ([]Expr, error) {
 // parseArg parses a function argument. For CALCULATE/FILTER the second+ args are predicates.
 func (p *parser) parseArg(parentFn string) (Expr, error) {
 	p.skipSpace()
+	if p.peek() == '*' {
+		p.pos++
+		return Expr{Func: "COLUMN", Column: "*"}, nil
+	}
 	if parentFn == "COUNT" && p.lookingAtWord("DISTINCT") {
 		p.consumeWord("DISTINCT")
 		p.skipSpace()
@@ -429,9 +481,21 @@ func (e Expr) ToSQL(columnQuote func(string) string) (string, error) {
 	return e.toSQLWithContext(columnQuote, nil)
 }
 
+// SQLOptions carries model context so time intelligence compiles to real ClickHouse, not stubs.
+type SQLOptions struct {
+	TimeColumn string
+	RangeStart string
+	RangeEnd   string
+}
+
 // ToSQLWithResolver returns a SQL fragment resolving measure references through the resolver.
 func (e Expr) ToSQLWithResolver(columnQuote func(string) string, resolve MeasureResolver) (string, error) {
-	ctx := evalContext{measures: map[string]Expr{}}
+	return e.ToSQLWithOptions(columnQuote, resolve, SQLOptions{})
+}
+
+// ToSQLWithOptions is ToSQLWithResolver plus time-column / period context.
+func (e Expr) ToSQLWithOptions(columnQuote func(string) string, resolve MeasureResolver, opts SQLOptions) (string, error) {
+	ctx := evalContext{measures: map[string]Expr{}, TimeColumn: opts.TimeColumn, RangeStart: opts.RangeStart, RangeEnd: opts.RangeEnd}
 	if resolve != nil {
 		if err := ctx.collectDependencies(e, resolve); err != nil {
 			return "", err
@@ -443,6 +507,30 @@ func (e Expr) ToSQLWithResolver(columnQuote func(string) string, resolve Measure
 type evalContext struct {
 	measures   map[string]Expr
 	filterMods []string
+	TimeColumn string
+	RangeStart string
+	RangeEnd   string
+}
+
+// UsesTimeIntel reports whether the expression needs a date column and must not be
+// constrained by the outer time-range WHERE (it encodes the period itself).
+func (e Expr) UsesTimeIntel() bool {
+	switch e.Func {
+	case "YOY", "MTD", "YTD", "SAMEPERIODLASTYEAR", "DATEADD", "TOTALYTD", "TOTALMTD", "TOTALQTD":
+		return true
+	}
+	if e.Left != nil && e.Left.UsesTimeIntel() {
+		return true
+	}
+	if e.Right != nil && e.Right.UsesTimeIntel() {
+		return true
+	}
+	for _, a := range e.Args {
+		if a.UsesTimeIntel() {
+			return true
+		}
+	}
+	return false
 }
 
 func (ctx *evalContext) collectDependencies(e Expr, resolve MeasureResolver) error {
@@ -505,7 +593,30 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		if err != nil {
 			return "", err
 		}
+		if e.Op == "/" {
+			return fmt.Sprintf("divide(toFloat64(%s), nullIf(toFloat64(%s), 0))", left, right), nil
+		}
 		return fmt.Sprintf("(%s %s %s)", left, e.Op, right), nil
+	case "AND":
+		left, err := e.Left.toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		right, err := e.Right.toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("(%s AND %s)", left, right), nil
+	case "OR":
+		left, err := e.Left.toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		right, err := e.Right.toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("(%s OR %s)", left, right), nil
 	case "SUM":
 		if len(e.Args) == 0 {
 			return "", fmt.Errorf("SUM requires a column")
@@ -513,6 +624,9 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		col, err := e.Args[0].toSQLWithContext(q, ctx)
 		if err != nil {
 			return "", err
+		}
+		if e.Args[0].Func == "COLUMN" {
+			return fmt.Sprintf("SUM(toFloat64OrZero(%s))", col), nil
 		}
 		return fmt.Sprintf("SUM(%s)", col), nil
 	case "MIN":
@@ -523,6 +637,9 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		if err != nil {
 			return "", err
 		}
+		if e.Args[0].Func == "COLUMN" {
+			return fmt.Sprintf("MIN(toFloat64OrZero(%s))", col), nil
+		}
 		return fmt.Sprintf("MIN(%s)", col), nil
 	case "MAX":
 		if len(e.Args) == 0 {
@@ -531,6 +648,9 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		col, err := e.Args[0].toSQLWithContext(q, ctx)
 		if err != nil {
 			return "", err
+		}
+		if e.Args[0].Func == "COLUMN" {
+			return fmt.Sprintf("MAX(toFloat64OrZero(%s))", col), nil
 		}
 		return fmt.Sprintf("MAX(%s)", col), nil
 	case "NULLIF":
@@ -639,6 +759,9 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		if err != nil {
 			return "", err
 		}
+		if e.Args[0].Func == "COLUMN" {
+			return fmt.Sprintf("AVG(toFloat64OrZero(%s))", col), nil
+		}
 		return fmt.Sprintf("AVG(%s)", col), nil
 	case "SUMX":
 		if len(e.Args) < 2 {
@@ -657,9 +780,9 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		if err != nil {
 			return "", err
 		}
+		var preds []string
 		for _, a := range e.Args[1:] {
 			if a.Func == "RAW" && strings.EqualFold(a.Column, "ALL") {
-				// ALL removes filters; no WHERE clause predicate in SQL fragment.
 				continue
 			}
 			if a.Func == "RAW" {
@@ -667,12 +790,16 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 				if err != nil {
 					return "", err
 				}
+				preds = append(preds, pred)
 				if ctx != nil {
 					ctx.filterMods = append(ctx.filterMods, pred)
 				}
 			}
 		}
-		return base, nil
+		if len(preds) == 0 {
+			return base, nil
+		}
+		return rewriteAggsWithFilter(base, strings.Join(preds, " AND ")), nil
 	case "FILTER":
 		if len(e.Args) == 0 {
 			return "", fmt.Errorf("FILTER requires a predicate")
@@ -684,42 +811,113 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		return pred, nil
 	case "REMOVEFILTERS":
 		return "1", nil
+	case "DIVIDE":
+		if len(e.Args) < 2 {
+			return "", fmt.Errorf("DIVIDE requires numerator and denominator")
+		}
+		a, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		b, err := e.Args[1].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("divide(toFloat64(%s), nullIf(toFloat64(%s), 0))", a, b), nil
+	case "IF":
+		if len(e.Args) < 3 {
+			return "", fmt.Errorf("IF requires condition, then, else")
+		}
+		cond, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		th, err := e.Args[1].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		el, err := e.Args[2].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("if(%s, %s, %s)", cond, th, el), nil
+	case "COALESCE", "IFNULL":
+		if len(e.Args) < 2 {
+			return "", fmt.Errorf("%s requires two arguments", e.Func)
+		}
+		parts := make([]string, 0, len(e.Args))
+		for _, a := range e.Args {
+			s, err := a.toSQLWithContext(q, ctx)
+			if err != nil {
+				return "", err
+			}
+			parts = append(parts, s)
+		}
+		return fmt.Sprintf("coalesce(%s)", strings.Join(parts, ", ")), nil
+	case "COUNTROWS":
+		return "COUNT(*)", nil
+	case "MEDIAN":
+		if len(e.Args) == 0 {
+			return "", fmt.Errorf("MEDIAN requires a column")
+		}
+		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("quantileExact(0.5)(%s)", col), nil
+	case "TOMONTH", "YEARMONTH":
+		if len(e.Args) == 0 {
+			return "", fmt.Errorf("%s requires a date column", e.Func)
+		}
+		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("formatDateTime(parseDateTimeBestEffortOrNull(toString(%s)), '%%Y-%%m')", col), nil
+	case "YEAR":
+		if len(e.Args) == 0 {
+			return "", fmt.Errorf("YEAR requires a date column")
+		}
+		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		if err != nil {
+			return "", err
+		}
+		return fmt.Sprintf("toYear(parseDateTimeBestEffortOrNull(toString(%s)))", col), nil
 	case "YOY":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("YOY requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("((SUM(%s) - SUM(%s)) / NULLIF(SUM(%s), 0)) * 100", col, col, col), nil
-	case "MTD":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("MTD requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		cur, prev := ctx.periodSums(col, d)
+		return fmt.Sprintf("divide((%s) - (%s), nullIf(toFloat64(%s), 0)) * 100", cur, prev, prev), nil
+	case "MTD", "TOTALMTD":
+		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("SUM(%s)", col), nil
-	case "YTD":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("YTD requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		asOf := ctx.asOfSQL()
+		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), toYYYYMM(%s) = toYYYYMM(%s) AND %s <= %s)", col, d, asOf, d, asOf), nil
+	case "YTD", "TOTALYTD":
+		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("SUM(%s)", col), nil
+		asOf := ctx.asOfSQL()
+		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), toYear(%s) = toYear(%s) AND %s <= %s)", col, d, asOf, d, asOf), nil
+	case "TOTALQTD":
+		col, d, err := ctx.timeArgs(e, q)
+		if err != nil {
+			return "", err
+		}
+		asOf := ctx.asOfSQL()
+		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), toYear(%s) = toYear(%s) AND toQuarter(%s) = toQuarter(%s) AND %s <= %s)", col, d, asOf, d, asOf, d, asOf), nil
 	case "SAMEPERIODLASTYEAR":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("SAMEPERIODLASTYEAR requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("SUM(%s)", col), nil
+		_, prev := ctx.periodSums(col, d)
+		return prev, nil
 	case "DATEADD":
 		if len(e.Args) < 3 {
 			return "", fmt.Errorf("DATEADD requires column, interval, unit")
@@ -728,35 +926,17 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		if err != nil {
 			return "", err
 		}
-		_ = col
-		return "SUM(0)", nil // Placeholder: time shift requires date column context.
-	case "TOTALYTD":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("TOTALYTD requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		n := strings.TrimSpace(e.Args[1].Column)
+		unit := strings.ToLower(strings.Trim(e.Args[2].Column, "'\""))
+		d, err := ctx.dateSQL(q)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("SUM(%s)", col), nil
-	case "TOTALMTD":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("TOTALMTD requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
+		shift, err := clickhouseDateShift(n, unit)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("SUM(%s)", col), nil
-	case "TOTALQTD":
-		if len(e.Args) == 0 {
-			return "", fmt.Errorf("TOTALQTD requires a column")
-		}
-		col, err := e.Args[0].toSQLWithContext(q, ctx)
-		if err != nil {
-			return "", err
-		}
-		return fmt.Sprintf("SUM(%s)", col), nil
+		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), %s >= (%s) AND %s < (%s))", col, d, shift.start, d, shift.end), nil
 	case "RELATED":
 		if len(e.Args) == 0 {
 			return "", fmt.Errorf("RELATED requires a column reference")
@@ -983,4 +1163,183 @@ func (ctx *evalContext) FilterMods() []string {
 		return nil
 	}
 	return ctx.filterMods
+}
+
+func (ctx *evalContext) dateSQL(q func(string) string) (string, error) {
+	if ctx == nil || strings.TrimSpace(ctx.TimeColumn) == "" {
+		return "", fmt.Errorf("esta função de tempo precisa de uma coluna de data no modelo semântico")
+	}
+	if !identOK(ctx.TimeColumn) {
+		return "", fmt.Errorf("invalid time column")
+	}
+	return fmt.Sprintf("parseDateTimeBestEffortOrNull(toString(%s))", q(ctx.TimeColumn)), nil
+}
+
+func (ctx *evalContext) asOfSQL() string {
+	if ctx != nil && dateOnlyLiteral(ctx.RangeEnd) {
+		return fmt.Sprintf("(parseDateTimeBestEffort('%s') + INTERVAL 1 DAY)", sqlDateLit(ctx.RangeEnd))
+	}
+	if ctx != nil && strings.TrimSpace(ctx.RangeEnd) != "" {
+		return fmt.Sprintf("parseDateTimeBestEffort('%s')", sqlDateLit(ctx.RangeEnd))
+	}
+	return "now()"
+}
+
+func (ctx *evalContext) timeArgs(e Expr, q func(string) string) (col, dateSQL string, err error) {
+	if len(e.Args) == 0 {
+		return "", "", fmt.Errorf("%s requires a column", e.Func)
+	}
+	col, err = e.Args[0].toSQLWithContext(q, ctx)
+	if err != nil {
+		return "", "", err
+	}
+	dateSQL, err = ctx.dateSQL(q)
+	if err != nil {
+		return "", "", err
+	}
+	return col, dateSQL, nil
+}
+
+func (ctx *evalContext) periodSums(col, dateSQL string) (current, previous string) {
+	val := fmt.Sprintf("toFloat64OrZero(%s)", col)
+	if ctx != nil && dateOnlyLiteral(ctx.RangeStart) && dateOnlyLiteral(ctx.RangeEnd) {
+		start := sqlDateLit(ctx.RangeStart)
+		endExcl := fmt.Sprintf("(parseDateTimeBestEffort('%s') + INTERVAL 1 DAY)", sqlDateLit(ctx.RangeEnd))
+		startLit := fmt.Sprintf("parseDateTimeBestEffort('%s')", start)
+		current = fmt.Sprintf("sumIf(%s, %s >= %s AND %s < %s)", val, dateSQL, startLit, dateSQL, endExcl)
+		previous = fmt.Sprintf("sumIf(%s, %s >= addYears(%s, -1) AND %s < addYears(%s, -1))", val, dateSQL, startLit, dateSQL, endExcl)
+		return current, previous
+	}
+	current = fmt.Sprintf("sumIf(%s, toYear(%s) = toYear(now()))", val, dateSQL)
+	previous = fmt.Sprintf("sumIf(%s, toYear(%s) = toYear(now()) - 1)", val, dateSQL)
+	return current, previous
+}
+
+func sqlDateLit(s string) string {
+	s = strings.TrimSpace(s)
+	s = strings.ReplaceAll(s, "'", "")
+	s = strings.ReplaceAll(s, ";", "")
+	s = strings.ReplaceAll(s, "--", "")
+	return s
+}
+
+func dateOnlyLiteral(s string) bool {
+	s = strings.TrimSpace(s)
+	if len(s) != 10 {
+		return false
+	}
+	matched, _ := regexp.MatchString(`^\d{4}-\d{2}-\d{2}$`, s)
+	return matched
+}
+
+type dateShift struct {
+	start string
+	end   string
+}
+
+func clickhouseDateShift(n, unit string) (dateShift, error) {
+	if n == "" {
+		n = "-1"
+	}
+	switch unit {
+	case "year", "years", "yy", "yyyy":
+		return dateShift{start: fmt.Sprintf("addYears(toStartOfYear(now()), %s)", n), end: fmt.Sprintf("addYears(now(), %s)", n)}, nil
+	case "month", "months", "mm":
+		return dateShift{start: fmt.Sprintf("addMonths(toStartOfMonth(now()), %s)", n), end: fmt.Sprintf("addMonths(now(), %s)", n)}, nil
+	case "day", "days", "dd":
+		return dateShift{start: fmt.Sprintf("addDays(now(), %s)", n), end: "now()"}, nil
+	default:
+		return dateShift{}, fmt.Errorf("DATEADD unit %s not supported (use year, month or day)", unit)
+	}
+}
+
+func rewriteAggsWithFilter(sql, pred string) string {
+	sql = strings.TrimSpace(sql)
+	if pred == "" {
+		return sql
+	}
+	type repl struct {
+		name string
+		ifn  string
+	}
+	fns := []repl{
+		{name: "uniqExact", ifn: "uniqExactIf"},
+		{name: "COUNT", ifn: "countIf"},
+		{name: "SUM", ifn: "sumIf"},
+		{name: "AVG", ifn: "avgIf"},
+		{name: "MIN", ifn: "minIf"},
+		{name: "MAX", ifn: "maxIf"},
+	}
+	out := sql
+	for _, fn := range fns {
+		out = replaceAggCalls(out, fn.name, fn.ifn, pred)
+	}
+	return out
+}
+
+func replaceAggCalls(sql, name, ifn, pred string) string {
+	var b strings.Builder
+	i := 0
+	upper := strings.ToUpper(sql)
+	uname := strings.ToUpper(name)
+	for i < len(sql) {
+		idx := strings.Index(upper[i:], uname)
+		if idx < 0 {
+			b.WriteString(sql[i:])
+			break
+		}
+		idx += i
+		if idx > 0 && isIdentChar(sql[idx-1]) {
+			b.WriteString(sql[i : idx+len(name)])
+			i = idx + len(name)
+			continue
+		}
+		j := idx + len(name)
+		for j < len(sql) && (sql[j] == ' ' || sql[j] == '\t') {
+			j++
+		}
+		if j >= len(sql) || sql[j] != '(' {
+			b.WriteString(sql[i : idx+len(name)])
+			i = idx + len(name)
+			continue
+		}
+		closeAt, args := matchingParen(sql, j)
+		if closeAt < 0 {
+			b.WriteString(sql[i:])
+			break
+		}
+		b.WriteString(sql[i:idx])
+		trimmed := strings.TrimSpace(args)
+		if strings.EqualFold(name, "COUNT") && (trimmed == "*" || trimmed == "") {
+			b.WriteString(ifn)
+			b.WriteByte('(')
+			b.WriteString(pred)
+			b.WriteByte(')')
+		} else {
+			b.WriteString(ifn)
+			b.WriteByte('(')
+			b.WriteString(args)
+			b.WriteString(", ")
+			b.WriteString(pred)
+			b.WriteByte(')')
+		}
+		i = closeAt + 1
+	}
+	return b.String()
+}
+
+func matchingParen(s string, open int) (close int, inside string) {
+	depth := 0
+	for i := open; i < len(s); i++ {
+		switch s[i] {
+		case '(':
+			depth++
+		case ')':
+			depth--
+			if depth == 0 {
+				return i, s[open+1 : i]
+			}
+		}
+	}
+	return -1, ""
 }

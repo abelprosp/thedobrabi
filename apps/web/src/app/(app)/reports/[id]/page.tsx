@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import { WidgetView, type Widget } from "@/components/WidgetView";
+import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
 import { toast } from "sonner";
 import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
@@ -151,7 +152,7 @@ export default function ReportEditorPage() {
       type,
       title: catalog.label,
       layout: { x: (widgets.length * 4) % 12, y: 100, w: catalog.defaultW, h: catalog.defaultH },
-      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: 20 } : undefined,
+      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
       config: type === "image" ? { imageUrl: "" } : type === "markdown" ? { markdown: "## Nota\nEdite aqui." } : undefined,
     };
@@ -271,7 +272,9 @@ export default function ReportEditorPage() {
               className="layout min-h-full"
               layout={layout}
               cols={12}
-              rowHeight={70}
+              rowHeight={96}
+              margin={[14, 14]}
+              containerPadding={[12, 12]}
               isDraggable={edit}
               isResizable={edit}
               onLayoutChange={onLayoutChange}
@@ -279,7 +282,7 @@ export default function ReportEditorPage() {
               compactType="vertical"
             >
               {widgets.map((w) => (
-                <div key={w.id} className={`relative ${selected === w.id && edit ? "ring-2 ring-primary/30" : ""}`} onClick={() => edit && setSelected(w.id)}>
+                <div key={w.id} className={`widget-grid-item relative ${selected === w.id && edit ? "ring-2 ring-primary/30" : ""}`} onClick={() => edit && setSelected(w.id)}>
                   {edit && (
                     <div className="absolute right-2 top-2 z-10 flex items-center gap-1 print:hidden">
                       <div className="drag-handle flex h-8 cursor-move items-center gap-1 rounded-lg bg-white/95 px-2 text-[10px] text-mute shadow-sm"><ChevronLeft size={12} /> Mover</div>

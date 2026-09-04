@@ -6,7 +6,7 @@ import { Chart, Kpi } from "@/components/viz";
 import { AdvancedChart, Sparkline, KpiGoal, MetricGroup, DecompositionTree, IframeWidget, formatNumber } from "@/components/AdvancedViz";
 import { api } from "@/lib/api";
 import { cn } from "@/lib/cn";
-import { titleAlignClass } from "@/lib/widget-config";
+import { DEFAULT_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
 import { AlertCircle, Image as ImageIcon } from "lucide-react";
 
@@ -173,6 +173,7 @@ export function WidgetView({
     }
     if (filters.length > 0) b.filters = filters;
     else delete b.filters;
+    if (!b.limit || b.limit <= 0) b.limit = DEFAULT_QUERY_LIMIT;
     return b;
   }, [w, scopedFilters, timeRange]);
 
@@ -310,7 +311,7 @@ export function WidgetView({
   if (w.type === "sparkline") {
     return (
       <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)} issue={issue}>
-        <Sparkline rows={rows} columns={columns} height={Math.max(40, (w.layout.h || 2) * 70 - 40)} config={cfg} />
+        <Sparkline rows={rows} columns={columns} config={cfg} />
       </ChartCard>
     );
   }
@@ -339,7 +340,6 @@ export function WidgetView({
           title={w.title}
           columns={columns}
           rows={rows}
-          height={Math.max(120, (w.layout.h || 4) * 70 - 28)}
           config={cfg}
         />
       </ChartCard>
@@ -352,7 +352,6 @@ export function WidgetView({
         type={w.type === "line" || w.type === "area" ? w.type : w.type === "pie" ? "pie" : "bar"}
         columns={columns}
         rows={rows}
-        height={Math.max(120, (w.layout.h || 4) * 70 - 28)}
         config={cfg}
         onClick={({ value, dimension }) => {
           if (w.hierarchy) onDrill(w.id, value);
@@ -379,14 +378,14 @@ function ChartCard({
   children: ReactNode;
 }) {
   return (
-    <div className="relative flex h-full flex-col rounded-2xl border border-line bg-surface p-3 shadow-sm">
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-3 shadow-sm">
       {showTitle && (
-        <div className={cn("mb-1 flex items-center justify-between text-[13px] text-mute", titleAlignClass(align))}>
+        <div className={cn("mb-1 flex shrink-0 items-center justify-between text-[13px] text-mute", titleAlignClass(align))}>
           <span className="font-medium">{title}</span>
           {drill}
         </div>
       )}
-      <div className="min-h-0 flex-1">{children}</div>
+      <div className="relative min-h-0 flex-1">{children}</div>
       {issue && <IssueHint issue={issue} />}
     </div>
   );

@@ -129,6 +129,10 @@ a {
   border-radius: 1rem;
 }
 
+.react-grid-item > .widget-grid-item {
+  height: 100%;
+}
+
 @media print {
   html.dark {
     --color-bg: #f8fafc;

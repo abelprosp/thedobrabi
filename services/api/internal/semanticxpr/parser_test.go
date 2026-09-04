@@ -19,7 +19,7 @@ func TestParseBasicAggregation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql: %v", err)
 	}
-	if sql != "SUM(`revenue`)" {
+	if sql != "SUM(toFloat64OrZero(`revenue`))" {
 		t.Fatalf("unexpected sql: %s", sql)
 	}
 }
@@ -55,7 +55,7 @@ func TestDependentMeasure(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql: %v", err)
 	}
-	want := "(SUM(`revenue`) - SUM(`cost`))"
+	want := "(SUM(toFloat64OrZero(`revenue`)) - SUM(toFloat64OrZero(`cost`)))"
 	if sql != want {
 		t.Fatalf("expected %s, got %s", want, sql)
 	}
@@ -80,7 +80,7 @@ func TestCalculatePredicate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql: %v", err)
 	}
-	if sql != "SUM(`revenue`)" {
+	if sql != "sumIf(toFloat64OrZero(`revenue`), `Regiao` = 'Norte')" {
 		t.Fatalf("unexpected sql: %s", sql)
 	}
 	if len(ctx.filterMods) != 1 || ctx.filterMods[0] != "`Regiao` = 'Norte'" {
@@ -95,15 +95,60 @@ func TestRejectBadIdentifier(t *testing.T) {
 	}
 }
 
-func TestTimeFunctions(t *testing.T) {
-	for _, fn := range []string{"SAMEPERIODLASTYEAR", "TOTALYTD", "TOTALMTD", "TOTALQTD"} {
-		expr, err := Parse(fn + "(revenue)")
-		if err != nil {
-			t.Fatalf("parse %s: %v", fn, err)
-		}
-		if expr.Func != fn {
-			t.Fatalf("expected %s, got %s", fn, expr.Func)
-		}
+func TestYoYUsesTimeColumn(t *testing.T) {
+	expr, err := Parse("YOY(valor_mensal)")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	_, err = expr.ToSQL(q)
+	if err == nil {
+		t.Fatal("expected error without time column")
+	}
+	sql, err := expr.ToSQLWithOptions(q, nil, SQLOptions{TimeColumn: "data_venda", RangeStart: "2026-07-01", RangeEnd: "2026-08-31"})
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if !strings.Contains(sql, "sumIf") || !strings.Contains(sql, "addYears") || !strings.Contains(sql, "`data_venda`") {
+		t.Fatalf("unexpected yoy sql: %s", sql)
+	}
+}
+
+func TestCaseWhenAnd(t *testing.T) {
+	expr, err := Parse("SUM(CASE WHEN mes = '2026-07' AND ano = 2026 THEN valor_mensal ELSE 0 END)")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if !strings.Contains(sql, "AND") || !strings.Contains(sql, "`ano` = 2026") {
+		t.Fatalf("unexpected sql: %s", sql)
+	}
+}
+
+func TestDivideAndTomonth(t *testing.T) {
+	expr, err := Parse("DIVIDE(SUM(valor_mensal), COUNT(DISTINCT cliente))")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if !strings.Contains(sql, "divide") || !strings.Contains(sql, "uniqExact") {
+		t.Fatalf("unexpected sql: %s", sql)
+	}
+	tm, err := Parse("SUM(CASE WHEN TOMONTH(data_venda) = '2026-07' THEN valor_mensal ELSE 0 END)")
+	if err != nil {
+		t.Fatalf("parse tomonth: %v", err)
+	}
+	sql, err = tm.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql tomonth: %v", err)
+	}
+	if !strings.Contains(sql, "%Y-%m") && !strings.Contains(sql, "formatDateTime") {
+		t.Fatalf("unexpected tomonth sql: %s", sql)
 	}
 }
 
@@ -171,6 +216,20 @@ func TestCountDistinctCaseWhen(t *testing.T) {
 	want := "uniqExact(CASE WHEN `mes` = '2026-07' THEN `cliente` END)"
 	if sql != want {
 		t.Fatalf("expected %s, got %s", want, sql)
+	}
+}
+
+func TestCountStar(t *testing.T) {
+	expr, err := Parse("COUNT(*)")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if sql != "COUNT(*)" {
+		t.Fatalf("unexpected sql: %s", sql)
 	}
 }
 

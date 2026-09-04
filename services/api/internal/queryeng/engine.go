@@ -89,7 +89,7 @@ type Evidence struct {
 
 func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, role string, req Request) (Result, error) {
 	if req.Limit <= 0 || req.Limit > e.cfg.QueryRowLimit {
-		req.Limit = 1000
+		req.Limit = 900
 	}
 	meta, err := e.planner.loadDataset(ctx, orgID, wsID, req.DatasetID)
 	if err != nil {
@@ -105,34 +105,26 @@ func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, rol
 
 	start := time.Now()
 	var out Result
-	useDuck := plan.SourceType == "duckdb" && meta.RowCount > 0 && meta.RowCount < 1000 && len(req.Joins) == 0
-	if useDuck {
-		out, err = e.executeDuckDB(ctx, meta, plan, req, orgID, userID, role)
-		if err != nil {
-			return Result{}, err
-		}
-	} else {
-		sql, evidence, err := e.buildSQL(ctx, meta, plan, req, orgID, userID, role)
-		if err != nil {
-			return Result{}, err
-		}
-		qctx, cancel := context.WithTimeout(ctx, e.cfg.QueryTimeout)
-		defer cancel()
-		rows, err := e.ch.Query(qctx, sql)
-		if err != nil {
-			return Result{}, fmt.Errorf("query failed: %w", err)
-		}
-		defer rows.Close()
-		cols, data, err := collectRows(rows, req.Limit)
-		if err != nil {
-			if qctx.Err() != nil {
-				return Result{}, fmt.Errorf("query timeout")
-			}
-			return Result{}, fmt.Errorf("query failed: %w", err)
-		}
-		out = Result{Columns: cols, Rows: data, SQL: sql, Evidence: evidence, Fingerprint: fp, RowCount: len(data), Planner: plan.SourceType}
-		out.BytesRead = estimateBytes(cols, data)
+	sql, evidence, err := e.buildSQL(ctx, meta, plan, req, orgID, userID, role)
+	if err != nil {
+		return Result{}, err
 	}
+	qctx, cancel := context.WithTimeout(ctx, e.cfg.QueryTimeout)
+	defer cancel()
+	rows, err := e.ch.Query(qctx, sql)
+	if err != nil {
+		return Result{}, fmt.Errorf("query failed: %w", err)
+	}
+	defer rows.Close()
+	cols, data, err := collectRows(rows, req.Limit)
+	if err != nil {
+		if qctx.Err() != nil {
+			return Result{}, fmt.Errorf("query timeout")
+		}
+		return Result{}, fmt.Errorf("query failed: %w", err)
+	}
+	out = Result{Columns: cols, Rows: data, SQL: sql, Evidence: evidence, Fingerprint: fp, RowCount: len(data), Planner: plan.SourceType}
+	out.BytesRead = estimateBytes(cols, data)
 	out.DurationMs = time.Since(start).Milliseconds()
 	out.Fingerprint = fp
 	e.setCache(ctx, fp, out, plan.CacheTTL)
@@ -172,10 +164,9 @@ func requestToSimpleSQL(meta datasetInfo, req Request) (string, Evidence) {
 	for _, m := range req.Measures {
 		sm, ok := semantic.ResolveMeasure(meta.Model, m)
 		if !ok {
-			parts = append(parts, fmt.Sprintf("COUNT(*) AS `%s`", m))
 			continue
 		}
-		expr, _ := measureSQL(sm, &meta.Model)
+		expr, _ := measureSQL(sm, &meta.Model, "", "")
 		parts = append(parts, fmt.Sprintf("%s AS `%s`", expr, sqlOutAlias(m, sm.Name)))
 		ev.Metrics = append(ev.Metrics, m+" = "+sm.Expression)
 	}
@@ -184,12 +175,7 @@ func requestToSimpleSQL(meta datasetInfo, req Request) (string, Evidence) {
 	}
 	var clauses []string
 	if req.TimeRange != nil && meta.Model.TimeColumn != "" {
-		if req.TimeRange.Start != "" {
-			clauses = append(clauses, fmt.Sprintf("`%s` >= '%s'", meta.Model.TimeColumn, sanitizeLiteral(req.TimeRange.Start)))
-		}
-		if req.TimeRange.End != "" {
-			clauses = append(clauses, fmt.Sprintf("`%s` < '%s'", meta.Model.TimeColumn, sanitizeLiteral(req.TimeRange.End)))
-		}
+		clauses = append(clauses, timeFilterSimple(meta.Model.TimeColumn, req.TimeRange.Start, req.TimeRange.End)...)
 		ev.Period = req.TimeRange.Start + " → " + req.TimeRange.End
 	}
 	for _, f := range req.Filters {
@@ -388,10 +374,16 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 			return "", ev, fmt.Errorf("coluna de dimensão inválida")
 		}
 		colSQL := qualify(joinField, d.Column)
-		selects = append(selects, fmt.Sprintf("%s AS `%s`", colSQL, sqlOutAlias(dname, d.Name)))
-		groups = append(groups, colSQL)
+		expr := dimensionExpr(d, src.TimeColumn, colSQL)
+		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, sqlOutAlias(dname, d.Name)))
+		groups = append(groups, expr)
 	}
 
+	skipTimeWhere := false
+	rangeStart, rangeEnd := "", ""
+	if req.TimeRange != nil {
+		rangeStart, rangeEnd = req.TimeRange.Start, req.TimeRange.End
+	}
 	if len(req.Measures) == 0 {
 		req.Measures = defaultMeasures(model)
 	}
@@ -409,7 +401,10 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		if !ok {
 			return "", ev, fmt.Errorf("medida desconhecida %q — não invento a definição da métrica", mname)
 		}
-		expr, err := measureSQL(m, &src)
+		if measureUsesTimeIntel(m) {
+			skipTimeWhere = true
+		}
+		expr, err := measureSQL(m, &src, rangeStart, rangeEnd)
 		if err != nil {
 			return "", ev, err
 		}
@@ -430,13 +425,8 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	} else {
 		where = append(where, fmt.Sprintf("_tenant = '%s'", orgID.String()))
 	}
-	if req.TimeRange != nil && model.TimeColumn != "" && identOK(model.TimeColumn) {
-		if req.TimeRange.Start != "" {
-			where = append(where, fmt.Sprintf("%s >= parseDateTimeBestEffort('%s')", qualify(false, model.TimeColumn), sanitizeLiteral(req.TimeRange.Start)))
-		}
-		if req.TimeRange.End != "" {
-			where = append(where, fmt.Sprintf("%s < parseDateTimeBestEffort('%s')", qualify(false, model.TimeColumn), sanitizeLiteral(req.TimeRange.End)))
-		}
+	if req.TimeRange != nil && model.TimeColumn != "" && identOK(model.TimeColumn) && !skipTimeWhere {
+		where = append(where, timeFilterSQL(qualify(false, model.TimeColumn), req.TimeRange.Start, req.TimeRange.End)...)
 		ev.Period = req.TimeRange.Start + " → " + req.TimeRange.End
 	}
 	for _, f := range req.Filters {
@@ -528,10 +518,66 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	}
 	lim := req.Limit
 	if lim <= 0 {
-		lim = 1000
+		lim = 900
 	}
 	fmt.Fprintf(&b, " LIMIT %d", lim)
 	return b.String(), ev, nil
+}
+
+func dimensionExpr(d semantic.Dimension, timeCol, colSQL string) string {
+	t := strings.ToLower(d.Type)
+	if t == "date" || t == "datetime" || (timeCol != "" && strings.EqualFold(d.Column, timeCol)) {
+		return fmt.Sprintf("toDate(parseDateTimeBestEffortOrNull(toString(%s)))", colSQL)
+	}
+	return colSQL
+}
+
+func timeFilterSQL(colSQL, start, end string) []string {
+	var w []string
+	if start != "" {
+		w = append(w, fmt.Sprintf("%s >= parseDateTimeBestEffort('%s')", colSQL, sanitizeLiteral(start)))
+	}
+	if end != "" {
+		lit := sanitizeLiteral(end)
+		if isDateOnly(lit) {
+			w = append(w, fmt.Sprintf("%s < parseDateTimeBestEffort('%s') + INTERVAL 1 DAY", colSQL, lit))
+		} else {
+			w = append(w, fmt.Sprintf("%s < parseDateTimeBestEffort('%s')", colSQL, lit))
+		}
+	}
+	return w
+}
+
+func timeFilterSimple(col, start, end string) []string {
+	var w []string
+	if start != "" {
+		w = append(w, fmt.Sprintf("`%s` >= '%s'", col, sanitizeLiteral(start)))
+	}
+	if end != "" {
+		lit := sanitizeLiteral(end)
+		if isDateOnly(lit) {
+			w = append(w, fmt.Sprintf("`%s` < '%s'", col, nextDate(lit)))
+		} else {
+			w = append(w, fmt.Sprintf("`%s` < '%s'", col, lit))
+		}
+	}
+	return w
+}
+
+func isDateOnly(s string) bool {
+	if len(s) != 10 {
+		return false
+	}
+	_, err := time.Parse("2006-01-02", s)
+	return err == nil
+}
+
+func nextDate(s string) string {
+	t, err := time.Parse("2006-01-02", s)
+	if err != nil {
+		return s
+	}
+	return t.AddDate(0, 0, 1).Format("2006-01-02")
 }
 
 func sqlOutAlias(requested, fallback string) string {

@@ -1,3 +1,5 @@
+import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
+
 export type SemanticMeasure = {
   name: string;
   column?: string;
@@ -134,14 +136,14 @@ export function starterDashboardWidgets(datasetId: string, model: SemanticModel 
       type: "kpi" as const,
       title: measureLabel,
       layout: { x: 0, y: 0, w: 3, h: 2 },
-      query: { dataset_id: datasetId, measures: kpi.measures, dimensions: [], limit: 20 },
+      query: { dataset_id: datasetId, measures: kpi.measures, dimensions: [], limit: DEFAULT_QUERY_LIMIT },
     },
     {
       id: crypto.randomUUID(),
       type: "bar" as const,
       title: dimLabel ? `${measureLabel} por ${dimLabel}` : measureLabel,
       layout: { x: 3, y: 0, w: 9, h: 4 },
-      query: { dataset_id: datasetId, measures: bar.measures, dimensions: bar.dimensions, limit: 20 },
+      query: { dataset_id: datasetId, measures: bar.measures, dimensions: bar.dimensions, limit: DEFAULT_QUERY_LIMIT },
     },
   ];
 }

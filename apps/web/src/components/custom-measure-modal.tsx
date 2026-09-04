@@ -95,12 +95,12 @@ export function CustomMeasureModal({
 
           <FieldLabel
             label="Expressão SQL"
-            hint="Só a expressão — sem SELECT, FROM ou AS. Usa SUM, AVG, COUNT, MIN, MAX, NULLIF, CASE WHEN"
+            hint="Só a expressão — sem SELECT, FROM ou AS. SUM, AVG, COUNT, COUNT DISTINCT, MIN, MAX, DIVIDE, NULLIF, CASE WHEN, TOMONTH, YOY, CALCULATE"
           >
             <Textarea
               value={expression}
               onChange={(e) => handleExpressionChange(e.target.value)}
-              placeholder={"Exemplos:\nSUM(valor_mensal)\nSUM(valor_mensal) / NULLIF(COUNT(DISTINCT cliente), 0)\nSUM(CASE WHEN mes = '2026-07' THEN valor_mensal ELSE 0 END)"}
+              placeholder={"Exemplos:\nSUM(valor_mensal)\nDIVIDE(SUM(valor_mensal), COUNT(DISTINCT cliente))\nSUM(CASE WHEN TOMONTH(data_venda) = '2026-07' THEN valor_mensal ELSE 0 END)\nCALCULATE(SUM(valor_mensal), vendedor = 'ANA')"}
               className="min-h-[120px] font-mono text-[12px]"
             />
           </FieldLabel>
