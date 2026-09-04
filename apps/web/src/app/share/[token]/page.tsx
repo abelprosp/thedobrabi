@@ -1,31 +1,49 @@
 "use client";
 
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
 import { useParams } from "next/navigation";
-import { Chart, Kpi } from "@/components/viz";
+import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
+import "react-grid-layout/css/styles.css";
+import "react-resizable/css/styles.css";
+import { api } from "@/lib/api";
 import { Logo } from "@/components/brand";
 import { ErrorState, PageSkeleton } from "@/components/ui";
 import { ThemeSegmented } from "@/components/theme-toggle";
 import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
-import { useEffect } from "react";
+import { WidgetView, type DashboardFilter, type Widget } from "@/components/WidgetView";
 
-type Widget = {
-  id: string;
-  type: string;
-  title: string;
-  layout?: { w: number; h: number };
-  text?: string;
-  result?: { columns: string[]; rows: any[] };
-  error?: string;
+const Grid = WidthProvider(GridLayout);
+
+type PublicDashboard = {
+  name: string;
+  description: string;
+  layout: { widgets: Widget[]; theme?: string };
 };
+
+function normalizeWidgets(raw: Widget[] | undefined): Widget[] {
+  return (raw || []).map((w, i) => ({
+    ...w,
+    id: w.id || `w-${i}`,
+    title: w.title || "",
+    type: w.type || "bar",
+    layout: {
+      x: Number(w.layout?.x ?? (i * 6) % 12),
+      y: Number(w.layout?.y ?? Math.floor(i / 2) * 4),
+      w: Math.max(2, Number(w.layout?.w ?? 6)),
+      h: Math.max(2, Number(w.layout?.h ?? 4)),
+    },
+  }));
+}
 
 export default function SharePage() {
   const { token } = useParams<{ token: string }>();
   const { theme, setTheme } = useTheme();
+  const [globalFilters, setGlobalFilters] = useState<DashboardFilter[]>([]);
+  const [widgets, setWidgets] = useState<Widget[]>([]);
   const q = useQuery({
     queryKey: ["public-dash", token],
-    queryFn: () => api<{ name: string; description: string; layout: { widgets: Widget[]; theme?: string } }>(`/api/v1/public/dashboards/${token}`),
+    queryFn: () => api<PublicDashboard>(`/api/v1/public/dashboards/${token}`),
   });
 
   useEffect(() => {
@@ -33,110 +51,107 @@ export default function SharePage() {
     if (saved) setTheme(saved);
   }, [q.data, setTheme]);
 
+  useEffect(() => {
+    if (!q.data) return;
+    setWidgets(normalizeWidgets(q.data.layout?.widgets));
+    setGlobalFilters([]);
+  }, [q.data]);
+
+  const applyFilter = useCallback((dim: string, value: any, op?: "eq" | "in", datasetId?: string) => {
+    setGlobalFilters((prev) => {
+      const same = (f: DashboardFilter) => f.dimension === dim && (f.dataset_id || "") === (datasetId || "");
+      if (value == null || value === "" || (Array.isArray(value) && value.length === 0)) {
+        return prev.filter((f) => !same(f));
+      }
+      const nextOp = op || (Array.isArray(value) ? "in" : "eq");
+      if (prev.some(same)) {
+        return prev.map((f) => (same(f) ? { ...f, value, op: nextOp, dataset_id: datasetId } : f));
+      }
+      return [...prev, { dimension: dim, op: nextOp, value, dataset_id: datasetId }];
+    });
+  }, []);
+
+  const drill = useCallback((widgetId: string, value: string) => {
+    setWidgets((prev) =>
+      prev.map((w) => {
+        if (w.id !== widgetId) return w;
+        const path = w.drillPath || [];
+        if (value === "up") return { ...w, drillPath: path.slice(0, -1) };
+        return { ...w, drillPath: [...path, value] };
+      }),
+    );
+  }, []);
+
+  const layout = useMemo<Layout[]>(
+    () => widgets.map((w) => ({ i: w.id, x: w.layout.x, y: w.layout.y, w: w.layout.w, h: w.layout.h, minW: 2, minH: 2 })),
+    [widgets],
+  );
+
+  const queryPath = `/api/v1/public/dashboards/${token}/queries`;
+
   if (q.isError) return <ErrorState message="Partilha inválida ou expirada." />;
   if (q.isLoading || !q.data) return <div className="p-8"><PageSkeleton /></div>;
 
-  const widgets = q.data.layout?.widgets || [];
   return (
-    <div className="min-h-screen bg-bg p-8">
-      <div className="mb-6 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Logo variant={theme === "dark" ? "dark" : "light"} size={28} />
-          <span className="text-sm text-mute">· partilha</span>
+    <div className="min-h-screen bg-bg">
+      <div className="border-b border-line px-6 py-4">
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Logo variant={theme === "dark" ? "dark" : "light"} size={28} />
+            <span className="text-sm text-mute">· partilha</span>
+          </div>
+          <ThemeSegmented value={theme} onChange={setTheme} />
         </div>
-        <ThemeSegmented value={theme} onChange={setTheme} />
-      </div>
-      <h1 className="text-2xl font-semibold text-ink">{q.data.name}</h1>
-      {q.data.description && <p className="mt-1 text-sm text-mute">{q.data.description}</p>}
-      <div className="mt-6 grid gap-4 md:grid-cols-2">
-        {widgets.map((w) => (
-          <PublicWidget key={w.id} w={w} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function PublicWidget({ w }: { w: Widget }) {
-  const rows = w.result?.rows || [];
-  const columns = w.result?.columns || [];
-  if (w.type === "text") {
-    return <div className="rounded-2xl border border-line bg-surface p-4 text-sm shadow-sm">{w.text || w.title}</div>;
-  }
-  if (w.error) {
-    return (
-      <div className="rounded-2xl border border-line bg-surface p-4 text-sm text-danger shadow-sm">
-        {w.title}: {w.error}
-      </div>
-    );
-  }
-  if (w.type === "kpi") {
-    const val = rows[0] ? Number(Object.values(rows[0])[0] ?? 0) : 0;
-    return <Kpi label={w.title} value={val.toLocaleString("pt-BR", { maximumFractionDigits: 0 })} />;
-  }
-  if (w.type === "table") {
-    return (
-      <div className="overflow-auto rounded-2xl border border-line bg-surface p-4 shadow-sm">
-        <div className="mb-2 text-[13px] text-mute">{w.title}</div>
-        <table className="w-full text-left text-[12px]">
-          <thead>
-            <tr className="text-mute">
-              {columns.map((c) => (
-                <th key={c} className="py-1 pr-3">
-                  {c}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rows.slice(0, 12).map((r, i) => (
-              <tr key={i} className="border-t border-line">
-                {columns.map((c) => (
-                  <td key={c} className="py-1 pr-3">
-                    {String(r[c] ?? "")}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-  if (w.type === "slicer") {
-    const dim = columns[0];
-    const values = Array.from(
-      new Set(rows.map((r) => String(r[dim] ?? "")).filter(Boolean)),
-    ).sort((a, b) => a.localeCompare(b, "pt"));
-    return (
-      <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm">
-        <div className="mb-2 text-[13px] font-medium text-ink">{w.title}</div>
-        {values.length === 0 ? (
-          <p className="text-xs text-mute">Sem valores.</p>
-        ) : (
-          <div className="flex flex-wrap gap-1.5">
-            {values.map((v) => (
-              <span
-                key={v}
-                className="rounded-full border border-line bg-surface-2 px-2.5 py-1 text-[11px] text-mute"
-              >
-                {v}
+        <h1 className="text-2xl font-semibold text-ink">{q.data.name}</h1>
+        {q.data.description && <p className="mt-1 text-sm text-mute">{q.data.description}</p>}
+        {globalFilters.length > 0 && (
+          <div className="mt-3 flex flex-wrap items-center gap-1">
+            {globalFilters.map((f) => (
+              <span key={`${f.dataset_id || ""}:${f.dimension}`} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-[11px] text-primary-600">
+                {f.dimension} = {Array.isArray(f.value) ? f.value.join(", ") : String(f.value)}
+                <button
+                  className="text-primary-700"
+                  onClick={() => setGlobalFilters(globalFilters.filter((x) => !(x.dimension === f.dimension && (x.dataset_id || "") === (f.dataset_id || ""))))}
+                >
+                  ×
+                </button>
               </span>
             ))}
+            <button className="text-[11px] text-mute hover:text-ink" onClick={() => setGlobalFilters([])}>
+              Limpar filtros
+            </button>
           </div>
         )}
       </div>
-    );
-  }
-  return (
-    <div className="rounded-2xl border border-line bg-surface p-3 shadow-sm">
-      <Chart
-        type={w.type === "line" || w.type === "area" ? w.type : w.type === "pie" ? "pie" : "bar"}
-        title={w.title}
-        columns={columns}
-        rows={rows}
-        height={240}
-      />
+      <div className="min-h-[calc(100vh-8rem)] pb-10">
+        {widgets.length === 0 ? (
+          <p className="px-6 py-10 text-sm text-mute">Este dashboard ainda não tem widgets.</p>
+        ) : (
+          <Grid
+            className="layout min-h-full"
+            layout={layout}
+            cols={12}
+            rowHeight={96}
+            margin={[14, 14]}
+            containerPadding={[16, 16]}
+            isDraggable={false}
+            isResizable={false}
+            compactType="vertical"
+          >
+            {widgets.map((w) => (
+              <div key={w.id} className="widget-grid-item relative">
+                <WidgetView
+                  w={w}
+                  globalFilters={globalFilters}
+                  onFilter={(dim, value, op) => applyFilter(dim, value, op, w.query?.dataset_id)}
+                  onDrill={drill}
+                  queryPath={queryPath}
+                />
+              </div>
+            ))}
+          </Grid>
+        )}
+      </div>
     </div>
   );
 }

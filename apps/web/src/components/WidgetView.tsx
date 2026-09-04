@@ -126,6 +126,7 @@ export function WidgetView({
   onFilter,
   onDrill,
   isPreview,
+  queryPath,
 }: {
   w: Widget;
   globalFilters: DashboardFilter[];
@@ -133,8 +134,11 @@ export function WidgetView({
   onFilter: (dim: string, value: any, op?: "eq" | "in", datasetId?: string) => void;
   onDrill: (widgetId: string, value: string) => void;
   isPreview?: boolean;
+  queryPath?: string;
 }) {
   void isPreview;
+  const queriesURL = queryPath || "/api/v1/queries";
+  const isPublicQuery = queriesURL.includes("/public/");
   const cfg = w.config || {};
   const emitFilter = (dim: string, value: any, op?: "eq" | "in") => onFilter(dim, value, op, w.query?.dataset_id);
   const scopedFilters = useMemo(
@@ -178,8 +182,8 @@ export function WidgetView({
   }, [w, scopedFilters, timeRange]);
 
   const q = useQuery({
-    queryKey: ["widget", w.id, body],
-    queryFn: () => api<any>("/api/v1/queries", { method: "POST", body: JSON.stringify(body) }),
+    queryKey: ["widget", w.id, queriesURL, body],
+    queryFn: () => api<any>(queriesURL, { method: "POST", body: JSON.stringify(body) }),
     enabled: !!w.query?.dataset_id && !NO_QUERY.includes(w.type),
     retry: (count, err) => {
       const status = (err as { status?: number })?.status || 0;
@@ -243,7 +247,7 @@ export function WidgetView({
   }
   if (q.isError) {
     const msg = (q.error as Error).message || "";
-    const friendly = /unauthorized|token|sessão expirada/i.test(msg)
+    const friendly = !isPublicQuery && /unauthorized|token|sessão expirada/i.test(msg)
       ? "Sessão expirada. A página vai renovar o acesso; se continuar, entre outra vez."
       : /dataset not found/i.test(msg)
         ? "O conjunto deste visual foi excluído. Escolha outro conjunto no inspector."
@@ -418,7 +422,9 @@ function TableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; colu
   const cfg = w.config || {};
   const limit = cfg.rowLimit ?? 20;
   const visible = rows.slice(0, limit);
-  const numeric = new Set(columns.filter((c) => visible.length && typeof visible[0][c] === "number"));
+  const numeric = new Set(
+    columns.filter((c) => visible.some((r) => typeof r[c] === "number" && Number.isFinite(r[c]))),
+  );
   const totals = cfg.showTotals
     ? Object.fromEntries(
         columns.map((c) => [c, numeric.has(c) ? visible.reduce((s, r) => s + Number(r[c] ?? 0), 0) : ""]),
@@ -497,7 +503,7 @@ function SlicerView({
   const values = useMemo(() => {
     const set = new Set<string>();
     rows.forEach((r) => { if (r[dim] != null) set.add(String(r[dim])); });
-    return Array.from(set).slice(0, 200).sort((a, b) => a.localeCompare(b, "pt"));
+    return Array.from(set).slice(0, 2000).sort((a, b) => a.localeCompare(b, "pt"));
   }, [rows, dim]);
   const current = globalFilters.find((f) => f.dimension === dim && (!f.dataset_id || f.dataset_id === w.query?.dataset_id));
   const selected = useMemo(() => {

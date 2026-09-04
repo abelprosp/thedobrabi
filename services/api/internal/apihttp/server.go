@@ -114,6 +114,7 @@ func New(deps *platform.Deps) http.Handler {
 		r.Post("/auth/reset", s.resetPassword)
 		r.Post("/invites/{token}/accept", s.acceptInvite)
 		r.Get("/public/dashboards/{token}", s.publicDashboard)
+		r.Post("/public/dashboards/{token}/queries", s.publicDashboardQuery)
 		r.Post("/auth/refresh", s.refresh)
 		r.Post("/auth/logout", s.logout)
 		r.Get("/auth/oauth/providers", s.oauthProviders)

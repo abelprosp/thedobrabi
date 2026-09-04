@@ -215,40 +215,102 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	var id, org, ws uuid.UUID
+	var id uuid.UUID
 	var name, desc string
 	var layout []byte
 	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT d.id, d.name, d.description, d.layout_json, s.org_id, s.workspace_id
+		SELECT d.id, d.name, d.description, d.layout_json
 		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
 		WHERE s.token=$1
-	`, tok).Scan(&id, &name, &desc, &layout, &org, &ws)
+	`, tok).Scan(&id, &name, &desc, &layout)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
 	}
+	var parsed any
+	if json.Unmarshal(layout, &parsed) != nil || parsed == nil {
+		parsed = map[string]any{"widgets": []any{}}
+	}
+	httpx.JSON(w, 200, map[string]any{"id": id, "name": name, "description": desc, "layout": parsed})
+}
+
+func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
+	tok := chi.URLParam(r, "token")
+	var org, ws uuid.UUID
+	var layout []byte
+	err := s.deps.PG.QueryRow(r.Context(), `
+		SELECT s.org_id, s.workspace_id, d.layout_json
+		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
+		WHERE s.token=$1
+	`, tok).Scan(&org, &ws, &layout)
+	if err != nil {
+		httpx.Error(w, 404, "not_found", "partilha não encontrada")
+		return
+	}
+	var req queryeng.Request
+	if err := httpx.Decode(r, &req); err != nil {
+		httpx.Error(w, 400, "invalid", "consulta inválida")
+		return
+	}
+	allowed := allowedDatasetIDs(layout)
+	if req.DatasetID == "" {
+		httpx.Error(w, 400, "invalid", "conjunto em falta")
+		return
+	}
+	if _, ok := allowed[req.DatasetID]; !ok {
+		httpx.Error(w, 403, "forbidden", "conjunto não faz parte desta partilha")
+		return
+	}
+	for _, j := range req.Joins {
+		if j.DatasetID == "" {
+			continue
+		}
+		if _, ok := allowed[j.DatasetID]; !ok {
+			httpx.Error(w, 403, "forbidden", "conjunto não faz parte desta partilha")
+			return
+		}
+	}
+	res, err := s.query.Execute(r.Context(), org, ws, uuid.Nil, "viewer", req)
+	if err != nil {
+		httpx.Error(w, 400, "query_failed", err.Error())
+		return
+	}
+	httpx.JSON(w, 200, res)
+}
+
+func allowedDatasetIDs(layout []byte) map[string]struct{} {
+	out := map[string]struct{}{}
 	var parsed struct {
 		Widgets []map[string]any `json:"widgets"`
 	}
-	_ = json.Unmarshal(layout, &parsed)
-	for i, wgt := range parsed.Widgets {
-		qraw, ok := wgt["query"]
-		if !ok || qraw == nil {
-			continue
-		}
-		b, _ := json.Marshal(qraw)
-		var req queryeng.Request
-		if json.Unmarshal(b, &req) != nil || req.DatasetID == "" {
-			continue
-		}
-		res, err := s.query.Execute(r.Context(), org, ws, uuid.Nil, "viewer", req)
-		if err != nil {
-			parsed.Widgets[i]["error"] = err.Error()
-			continue
-		}
-		parsed.Widgets[i]["result"] = res
+	if json.Unmarshal(layout, &parsed) != nil {
+		return out
 	}
-	httpx.JSON(w, 200, map[string]any{"id": id, "name": name, "description": desc, "layout": parsed})
+	add := func(id string) {
+		if id != "" {
+			out[id] = struct{}{}
+		}
+	}
+	for _, wgt := range parsed.Widgets {
+		q, _ := wgt["query"].(map[string]any)
+		if q == nil {
+			continue
+		}
+		if id, ok := q["dataset_id"].(string); ok {
+			add(id)
+		}
+		joins, _ := q["joins"].([]any)
+		for _, raw := range joins {
+			j, _ := raw.(map[string]any)
+			if j == nil {
+				continue
+			}
+			if id, ok := j["dataset_id"].(string); ok {
+				add(id)
+			}
+		}
+	}
+	return out
 }
 
 func (s *Server) lakeObjects(w http.ResponseWriter, r *http.Request) {
