@@ -19,7 +19,7 @@ func TestParseBasicAggregation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql: %v", err)
 	}
-	if sql != "SUM(toFloat64OrZero(`revenue`))" {
+	if sql != "SUM(toFloat64OrZero(toString(`revenue`)))" {
 		t.Fatalf("unexpected sql: %s", sql)
 	}
 }
@@ -55,7 +55,7 @@ func TestDependentMeasure(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql: %v", err)
 	}
-	want := "(SUM(toFloat64OrZero(`revenue`)) - SUM(toFloat64OrZero(`cost`)))"
+	want := "(SUM(toFloat64OrZero(toString(`revenue`))) - SUM(toFloat64OrZero(toString(`cost`))))"
 	if sql != want {
 		t.Fatalf("expected %s, got %s", want, sql)
 	}
@@ -80,7 +80,7 @@ func TestCalculatePredicate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("sql: %v", err)
 	}
-	if sql != "sumIf(toFloat64OrZero(`revenue`), `Regiao` = 'Norte')" {
+	if sql != "sumIf(toFloat64OrZero(toString(`revenue`)), `Regiao` = 'Norte')" {
 		t.Fatalf("unexpected sql: %s", sql)
 	}
 	if len(ctx.filterMods) != 1 || ctx.filterMods[0] != "`Regiao` = 'Norte'" {

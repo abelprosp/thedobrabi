@@ -137,13 +137,13 @@ func measureSQL(m semantic.Measure, model *semantic.Model, rangeStart, rangeEnd 
 	}
 	switch agg {
 	case "sum":
-		return "SUM(toFloat64OrZero(`" + m.Column + "`))", nil
+		return "SUM(" + semanticxpr.AsFloat64("`"+m.Column+"`") + ")", nil
 	case "avg", "average":
-		return "AVG(toFloat64OrZero(`" + m.Column + "`))", nil
+		return "AVG(" + semanticxpr.AsFloat64("`"+m.Column+"`") + ")", nil
 	case "min":
-		return "MIN(toFloat64OrZero(`" + m.Column + "`))", nil
+		return "MIN(" + semanticxpr.AsFloat64("`"+m.Column+"`") + ")", nil
 	case "max":
-		return "MAX(toFloat64OrZero(`" + m.Column + "`))", nil
+		return "MAX(" + semanticxpr.AsFloat64("`"+m.Column+"`") + ")", nil
 	case "count":
 		return "COUNT(`" + m.Column + "`)", nil
 	case "count_distinct":

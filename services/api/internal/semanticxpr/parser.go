@@ -477,6 +477,12 @@ func isIdent(s string) bool {
 
 // ToSQL returns a ClickHouse SQL fragment for a parsed expression. If measures are referenced,
 // they are left as placeholders unless resolved by a ModelResolver.
+func AsFloat64(expr string) string {
+	return "toFloat64OrZero(toString(" + expr + "))"
+}
+
+func asFloat64(expr string) string { return AsFloat64(expr) }
+
 func (e Expr) ToSQL(columnQuote func(string) string) (string, error) {
 	return e.toSQLWithContext(columnQuote, nil)
 }
@@ -626,7 +632,7 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 			return "", err
 		}
 		if e.Args[0].Func == "COLUMN" {
-			return fmt.Sprintf("SUM(toFloat64OrZero(%s))", col), nil
+			return fmt.Sprintf("SUM(%s)", asFloat64(col)), nil
 		}
 		return fmt.Sprintf("SUM(%s)", col), nil
 	case "MIN":
@@ -638,7 +644,7 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 			return "", err
 		}
 		if e.Args[0].Func == "COLUMN" {
-			return fmt.Sprintf("MIN(toFloat64OrZero(%s))", col), nil
+			return fmt.Sprintf("MIN(%s)", asFloat64(col)), nil
 		}
 		return fmt.Sprintf("MIN(%s)", col), nil
 	case "MAX":
@@ -650,7 +656,7 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 			return "", err
 		}
 		if e.Args[0].Func == "COLUMN" {
-			return fmt.Sprintf("MAX(toFloat64OrZero(%s))", col), nil
+			return fmt.Sprintf("MAX(%s)", asFloat64(col)), nil
 		}
 		return fmt.Sprintf("MAX(%s)", col), nil
 	case "NULLIF":
@@ -760,7 +766,7 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 			return "", err
 		}
 		if e.Args[0].Func == "COLUMN" {
-			return fmt.Sprintf("AVG(toFloat64OrZero(%s))", col), nil
+			return fmt.Sprintf("AVG(%s)", asFloat64(col)), nil
 		}
 		return fmt.Sprintf("AVG(%s)", col), nil
 	case "SUMX":
@@ -896,21 +902,21 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 			return "", err
 		}
 		asOf := ctx.asOfSQL()
-		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), toYYYYMM(%s) = toYYYYMM(%s) AND %s <= %s)", col, d, asOf, d, asOf), nil
+		return fmt.Sprintf("sumIf(%s, toYYYYMM(%s) = toYYYYMM(%s) AND %s <= %s)", asFloat64(col), d, asOf, d, asOf), nil
 	case "YTD", "TOTALYTD":
 		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
 			return "", err
 		}
 		asOf := ctx.asOfSQL()
-		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), toYear(%s) = toYear(%s) AND %s <= %s)", col, d, asOf, d, asOf), nil
+		return fmt.Sprintf("sumIf(%s, toYear(%s) = toYear(%s) AND %s <= %s)", asFloat64(col), d, asOf, d, asOf), nil
 	case "TOTALQTD":
 		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
 			return "", err
 		}
 		asOf := ctx.asOfSQL()
-		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), toYear(%s) = toYear(%s) AND toQuarter(%s) = toQuarter(%s) AND %s <= %s)", col, d, asOf, d, asOf, d, asOf), nil
+		return fmt.Sprintf("sumIf(%s, toYear(%s) = toYear(%s) AND toQuarter(%s) = toQuarter(%s) AND %s <= %s)", asFloat64(col), d, asOf, d, asOf, d, asOf), nil
 	case "SAMEPERIODLASTYEAR":
 		col, d, err := ctx.timeArgs(e, q)
 		if err != nil {
@@ -936,7 +942,7 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("sumIf(toFloat64OrZero(%s), %s >= (%s) AND %s < (%s))", col, d, shift.start, d, shift.end), nil
+		return fmt.Sprintf("sumIf(%s, %s >= (%s) AND %s < (%s))", asFloat64(col), d, shift.start, d, shift.end), nil
 	case "RELATED":
 		if len(e.Args) == 0 {
 			return "", fmt.Errorf("RELATED requires a column reference")
@@ -1201,7 +1207,7 @@ func (ctx *evalContext) timeArgs(e Expr, q func(string) string) (col, dateSQL st
 }
 
 func (ctx *evalContext) periodSums(col, dateSQL string) (current, previous string) {
-	val := fmt.Sprintf("toFloat64OrZero(%s)", col)
+	val := asFloat64(col)
 	if ctx != nil && dateOnlyLiteral(ctx.RangeStart) && dateOnlyLiteral(ctx.RangeEnd) {
 		start := sqlDateLit(ctx.RangeStart)
 		endExcl := fmt.Sprintf("(parseDateTimeBestEffort('%s') + INTERVAL 1 DAY)", sqlDateLit(ctx.RangeEnd))
