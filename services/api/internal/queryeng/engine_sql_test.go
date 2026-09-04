@@ -30,11 +30,19 @@ func TestTimeFilterIncludesEndDate(t *testing.T) {
 	}
 }
 
-func TestDimensionExprTruncatesDates(t *testing.T) {
+func TestDimensionExprLeavesDateColumn(t *testing.T) {
 	d := semantic.Dimension{Name: "Data", Column: "data_venda", Type: "date"}
-	got := dimensionExpr(d, "data_venda", "`data_venda`")
-	if !strings.Contains(got, "toDate(") {
-		t.Fatalf("expected date truncation, got %s", got)
+	got := dimensionExpr(d, "data_venda", "a.`data_venda`")
+	if got != "a.`data_venda`" {
+		t.Fatalf("date columns should group as-is, got %s", got)
+	}
+}
+
+func TestDimensionExprTruncatesDateTime(t *testing.T) {
+	d := semantic.Dimension{Name: "Data", Column: "data_venda", Type: "datetime"}
+	got := dimensionExpr(d, "data_venda", "a.`data_venda`")
+	if !strings.Contains(got, "toDate(") || !strings.Contains(got, "a.`data_venda`") {
+		t.Fatalf("expected date truncation of table-qualified datetime, got %s", got)
 	}
 }
 

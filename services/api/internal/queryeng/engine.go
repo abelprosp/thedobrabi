@@ -343,9 +343,6 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	}
 
 	qualify := func(joinField bool, col string) string {
-		if joinMeta == nil {
-			return "`" + col + "`"
-		}
 		if joinField {
 			return "b.`" + col + "`"
 		}
@@ -375,8 +372,9 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		}
 		colSQL := qualify(joinField, d.Column)
 		expr := dimensionExpr(d, src.TimeColumn, colSQL)
-		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, sqlOutAlias(dname, d.Name)))
-		groups = append(groups, expr)
+		alias := sqlOutAlias(dname, d.Name)
+		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, alias))
+		groups = append(groups, fmt.Sprintf("%d", len(selects)))
 	}
 
 	skipTimeWhere := false
@@ -408,23 +406,17 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		if err != nil {
 			return "", ev, err
 		}
-		if joinMeta != nil {
-			aliasTbl := "a"
-			if joinField {
-				aliasTbl = "b"
-			}
-			expr = qualifyIdentExpr(expr, aliasTbl)
+		aliasTbl := "a"
+		if joinField {
+			aliasTbl = "b"
 		}
+		expr = qualifyIdentExpr(expr, aliasTbl)
 		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, sqlOutAlias(mname, m.Name)))
 		ev.Metrics = append(ev.Metrics, m.Name+" = "+m.Expression)
 	}
 
 	var where []string
-	if joinMeta != nil {
-		where = append(where, fmt.Sprintf("a._tenant = '%s'", orgID.String()))
-	} else {
-		where = append(where, fmt.Sprintf("_tenant = '%s'", orgID.String()))
-	}
+	where = append(where, fmt.Sprintf("a._tenant = '%s'", orgID.String()))
 	if req.TimeRange != nil && model.TimeColumn != "" && identOK(model.TimeColumn) && !skipTimeWhere {
 		where = append(where, timeFilterSQL(qualify(false, model.TimeColumn), req.TimeRange.Start, req.TimeRange.End)...)
 		ev.Period = req.TimeRange.Start + " → " + req.TimeRange.End
@@ -461,11 +453,9 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 	if userID != uuid.Nil {
 		rlsPreds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
 		if err == nil {
-			if joinMeta != nil {
-				for i, p := range rlsPreds {
-					if strings.Contains(p, "`") {
-						rlsPreds[i] = qualifyIdentExpr(p, "a")
-					}
+			for i, p := range rlsPreds {
+				if strings.Contains(p, "`") {
+					rlsPreds[i] = qualifyIdentExpr(p, "a")
 				}
 			}
 			where = append(where, rlsPreds...)
@@ -488,7 +478,7 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 			e.cfg.ClickHouseDB, target, kind, e.cfg.ClickHouseDB, joinTable,
 			join.FromColumn, join.ToColumn, orgID.String())
 	} else {
-		fmt.Fprintf(&b, "SELECT %s FROM %s.`%s`", strings.Join(selects, ", "), e.cfg.ClickHouseDB, target)
+		fmt.Fprintf(&b, "SELECT %s FROM %s.`%s` AS a", strings.Join(selects, ", "), e.cfg.ClickHouseDB, target)
 	}
 	b.WriteString(" WHERE ")
 	b.WriteString(strings.Join(where, " AND "))
@@ -526,7 +516,10 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 
 func dimensionExpr(d semantic.Dimension, timeCol, colSQL string) string {
 	t := strings.ToLower(d.Type)
-	if t == "date" || t == "datetime" || (timeCol != "" && strings.EqualFold(d.Column, timeCol)) {
+	if t == "date" {
+		return colSQL
+	}
+	if t == "datetime" || (timeCol != "" && strings.EqualFold(d.Column, timeCol)) {
 		return fmt.Sprintf("toDate(parseDateTimeBestEffortOrNull(toString(%s)))", colSQL)
 	}
 	return colSQL
@@ -624,7 +617,7 @@ func filterClauseQualified(model semantic.Model, joinMeta *datasetInfo, f Filter
 		src = joinMeta.Model
 	}
 	clause, err := filterClause(src, Filter{Dimension: raw, Op: f.Op, Value: f.Value})
-	if err != nil || clause == "" || joinMeta == nil {
+	if err != nil || clause == "" {
 		return clause, err
 	}
 	d, ok := semantic.ResolveDimension(src, raw)
