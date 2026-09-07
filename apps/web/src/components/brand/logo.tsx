@@ -48,23 +48,36 @@ export function Logo({
   size = 32,
   markOnly = false,
   className,
+  brandName,
+  brandLogoUrl,
 }: {
   variant?: "light" | "dark";
   size?: number;
   markOnly?: boolean;
   className?: string;
+  brandName?: string;
+  brandLogoUrl?: string;
 }) {
-  if (markOnly) return <LogoMark size={size} className={className} />;
-  // Proporção do wordmark relativa ao símbolo (o símbolo tem margem de ~23/104 em cima).
+  const wordmark = brandName?.trim() || "TheDobra";
+  const mark = brandLogoUrl ? (
+    <img src={brandLogoUrl} alt="" width={size} height={size} className={cn("shrink-0 rounded object-contain", className)} />
+  ) : (
+    <LogoMark size={size} className={className} />
+  );
+  if (markOnly) return mark;
   const fontSize = Math.round(size * 0.56);
   return (
     <span className={cn("inline-flex items-center", className)} style={{ gap: Math.max(6, Math.round(size * 0.22)) }}>
-      <LogoMark size={size} />
+      {brandLogoUrl ? (
+        <img src={brandLogoUrl} alt="" width={size} height={size} className="shrink-0 rounded object-contain" />
+      ) : (
+        <LogoMark size={size} />
+      )}
       <span
         className={cn("font-bold tracking-tight leading-none", variant === "dark" ? "text-white" : "text-ink")}
         style={{ fontSize, letterSpacing: "-0.03em" }}
       >
-        TheDobra
+        {wordmark}
       </span>
     </span>
   );

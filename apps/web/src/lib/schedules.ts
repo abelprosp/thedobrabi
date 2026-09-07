@@ -1,4 +1,4 @@
-export type ScheduleKind = "connector" | "flow" | "dataset";
+export type ScheduleKind = "connector" | "flow" | "dataset" | "report";
 
 export type SyncSchedule = {
   id: string;
@@ -40,6 +40,7 @@ export const FREQUENCY_OPTIONS = [
   { value: "hourly", label: "De hora a hora" },
   { value: "daily", label: "Diário" },
   { value: "weekly", label: "Semanal" },
+  { value: "monthly", label: "Mensal" },
 ] as const;
 
 export const WEEKDAY_OPTIONS = [

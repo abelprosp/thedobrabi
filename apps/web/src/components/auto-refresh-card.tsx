@@ -112,8 +112,8 @@ export function AutoRefreshCard({
   const runNow = useMutation({
     mutationFn: (id: string) => api<SyncSchedule>(`/api/v1/sync-schedules/${id}/run`, { method: "POST" }),
     onSuccess: (sc) => {
-      if (sc.last_status === "error") toast.error(sc.last_error || "A sincronização falhou");
-      else toast.success("Sincronização concluída");
+      if (sc.last_status === "error") toast.error(sc.last_error || (kind === "report" ? "A geração falhou" : "A sincronização falhou"));
+      else toast.success(kind === "report" ? "Relatório gerado e enviado" : "Sincronização concluída");
       qc.invalidateQueries({ queryKey: ["sync-schedules"] });
       qc.invalidateQueries({ queryKey: ["sync-schedule-runs"] });
       qc.invalidateQueries({ queryKey: ["sources"] });
@@ -137,16 +137,19 @@ export function AutoRefreshCard({
 
   const statusTone =
     schedule?.last_status === "ok" ? "ok" : schedule?.last_status === "error" ? "danger" : schedule?.last_status === "running" ? "warn" : "neutral";
-  const showTimeFields = frequency === "daily" || frequency === "weekly";
-  const incrAvailable = cdcCapable(targetType);
+  const showTimeFields = frequency === "daily" || frequency === "weekly" || frequency === "monthly";
+  const incrAvailable = kind !== "report" && cdcCapable(targetType);
+  const isReport = kind === "report";
 
   return (
     <Card className="space-y-4">
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div>
-          <CardTitle>Actualização automática</CardTitle>
+          <CardTitle>{isReport ? "Envio automático" : "Actualização automática"}</CardTitle>
           <p className="text-[13px] text-mute">
-            O processo da API dispara syncs de conectores, materializações de flows e refresh de conjuntos no horário definido.
+            {isReport
+              ? "A API gera o briefing e envia e-mail / WhatsApp nos destinatários do relatório, no horário definido."
+              : "O processo da API dispara syncs de conectores, materializações de flows e refresh de conjuntos no horário definido."}
           </p>
         </div>
         {schedule ? (
@@ -250,7 +253,7 @@ export function AutoRefreshCard({
                 </Button>
               )}
               <Button variant="secondary" onClick={() => runNow.mutate(schedule.id)} busy={runNow.isPending}>
-                <RefreshCw size={14} /> Sincronizar agora
+                  <RefreshCw size={14} /> {isReport ? "Gerar agora" : "Sincronizar agora"}
               </Button>
               <Button
                 variant="ghost"

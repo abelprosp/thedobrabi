@@ -50,7 +50,29 @@ func TestSQLOutAlias(t *testing.T) {
 	if got := sqlOutAlias("join.salario", "salario"); got != "join_salario" {
 		t.Fatalf("join field: %q", got)
 	}
+	if got := sqlOutAlias("join.1.regiao", "regiao"); got != "join1_regiao" {
+		t.Fatalf("second join field: %q", got)
+	}
 	if got := sqlOutAlias("valor", "valor"); got != "valor" {
 		t.Fatalf("local field: %q", got)
+	}
+}
+
+func TestParseJoinRef(t *testing.T) {
+	idx, raw, ok := parseJoinRef("join.salario")
+	if !ok || idx != 0 || raw != "salario" {
+		t.Fatalf("join.salario → %d %q %v", idx, raw, ok)
+	}
+	idx, raw, ok = parseJoinRef("join.0.salario")
+	if !ok || idx != 0 || raw != "salario" {
+		t.Fatalf("join.0.salario → %d %q %v", idx, raw, ok)
+	}
+	idx, raw, ok = parseJoinRef("join.2.regiao")
+	if !ok || idx != 2 || raw != "regiao" {
+		t.Fatalf("join.2.regiao → %d %q %v", idx, raw, ok)
+	}
+	idx, raw, ok = parseJoinRef("valor")
+	if ok || idx != -1 || raw != "valor" {
+		t.Fatalf("valor → %d %q %v", idx, raw, ok)
 	}
 }

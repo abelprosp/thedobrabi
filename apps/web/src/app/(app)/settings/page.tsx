@@ -3,7 +3,7 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageHeader, PageSkeleton } from "@/components/ui";
 import { ROLE_LABELS, planLabel, roleLabel } from "@/lib/labels";
 import { ThemeSegmented } from "@/components/theme-toggle";
@@ -108,6 +108,7 @@ export default function SettingsPage() {
         <Row k="Organização" v={org.data?.name} />
         <Row k="Plano" v={planLabel(org.data?.plan)} />
       </Box>
+      <BrandBox org={org} />
 
       {membersList.length <= 1 && (
         <div className="rounded-2xl border border-indigo-200 bg-indigo-50/60 p-5 shadow-sm">
@@ -336,6 +337,52 @@ export default function SettingsPage() {
         </div>
       </Box>
     </div>
+  );
+}
+
+function BrandBox({ org }: { org: { data?: any; refetch: () => void } }) {
+  const [name, setName] = useState(org.data?.brand_name || "");
+  const [logo, setLogo] = useState(org.data?.brand_logo_url || "");
+  const [from, setFrom] = useState(org.data?.brand_from_email || "");
+  useEffect(() => {
+    setName(org.data?.brand_name || "");
+    setLogo(org.data?.brand_logo_url || "");
+    setFrom(org.data?.brand_from_email || "");
+  }, [org.data?.brand_name, org.data?.brand_logo_url, org.data?.brand_from_email]);
+  const can = org.data?.whitelabel === true;
+  const save = useMutation({
+    mutationFn: () =>
+      api("/api/v1/organizations/current", {
+        method: "PATCH",
+        body: JSON.stringify({ brand_name: name, brand_logo_url: logo, brand_from_email: from }),
+      }),
+    onSuccess: () => {
+      toast.success("Marca actualizada");
+      org.refetch();
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  return (
+    <Box title="Marca (white-label)">
+      <p className="mb-3 text-[13px] text-mute">
+        {can
+          ? "Nome, logótipo e remetente dos e-mails da organização. Aparece no menu e nos envios agendados."
+          : "White-label está no plano Completo. Pode pré-visualizar os campos, mas só esse plano guarda a marca."}
+      </p>
+      <div className="space-y-2">
+        <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome da marca" disabled={!can} />
+        <input className={inputCls} value={logo} onChange={(e) => setLogo(e.target.value)} placeholder="URL do logótipo" disabled={!can} />
+        <input className={inputCls} value={from} onChange={(e) => setFrom(e.target.value)} placeholder="remetente@empresa.com" disabled={!can} />
+        <button
+          type="button"
+          disabled={!can || save.isPending}
+          onClick={() => save.mutate()}
+          className="rounded-lg bg-primary px-3 py-2 text-sm font-medium text-white disabled:opacity-50"
+        >
+          Guardar marca
+        </button>
+      </div>
+    </Box>
   );
 }
 

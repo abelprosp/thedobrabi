@@ -66,6 +66,7 @@ export const STEP_SUBKINDS = [
   { value: "aggregate", label: "Agregar", kind: "transform" },
   { value: "sql", label: "SQL", kind: "transform" },
   { value: "join", label: "Juntar", kind: "transform" },
+  { value: "append", label: "Acrescentar", kind: "transform" },
   { value: "validate", label: "Validar", kind: "validate" },
   { value: "load", label: "ClickHouse", kind: "load" },
 ] as const;

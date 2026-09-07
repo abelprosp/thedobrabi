@@ -70,6 +70,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 
 	var headers []string
 	var rows []map[string]any
+	extras := map[string][]map[string]any{}
 	loaded := false
 
 	for _, st := range steps {
@@ -80,19 +81,18 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 		if dsID == "" {
 			continue
 		}
-		if loaded {
-			log(st.ID, "info", "Extract adicional registado — o join completo de duas fontes chega numa próxima versão; a usar a primeira origem")
-			continue
-		}
-		var err error
-		headers, rows, err = reader(dsID, 100000)
+		h, rws, err := reader(dsID, 100000)
 		if err != nil {
 			log(st.ID, "error", err.Error())
 			_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), nil)
 			return ResultSummary{}, err
 		}
-		loaded = true
-		log(st.ID, "info", fmt.Sprintf("Extracted %d rows from dataset %s", len(rows), dsID))
+		extras[dsID] = rws
+		if !loaded {
+			headers, rows = h, rws
+			loaded = true
+		}
+		log(st.ID, "info", fmt.Sprintf("Extracted %d rows from dataset %s", len(rws), dsID))
 	}
 
 	if !loaded && flow.SourceDatasetID != nil {
@@ -102,6 +102,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 			_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), nil)
 			return ResultSummary{}, err
 		}
+		extras[flow.SourceDatasetID.String()] = rows
 		log(uuid.Nil, "info", fmt.Sprintf("Extracted %d rows from source dataset", len(rows)))
 	}
 
@@ -110,13 +111,14 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 			continue
 		}
 		if st.Kind == "transform" {
-			out, err := applyTransform(st, headers, rows)
+			out, err := applyTransform(st, headers, rows, extras, reader)
 			if err != nil {
 				log(st.ID, "error", err.Error())
 				_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), int64Ptr(len(rows)))
 				return ResultSummary{}, err
 			}
 			rows = out
+			headers = headersFromRows(headers, rows)
 			log(st.ID, "info", fmt.Sprintf("Transform %s applied: %d rows remaining", st.Subkind, len(rows)))
 			continue
 		}
@@ -178,7 +180,7 @@ type RunCtx struct {
 	WorkspaceID uuid.UUID
 }
 
-func applyTransform(st Step, headers []string, rows []map[string]any) ([]map[string]any, error) {
+func applyTransform(st Step, headers []string, rows []map[string]any, extras map[string][]map[string]any, reader DatasetReader) ([]map[string]any, error) {
 	switch st.Subkind {
 	case "rename":
 		from := stringVal(st.Config["from"])
@@ -307,14 +309,124 @@ func applyTransform(st Step, headers []string, rows []map[string]any) ([]map[str
 		}
 		return out, nil
 	case "append":
-		// Append requires a second dataset source; MVP returns a no-op and logs that external merge is needed.
-		return rows, nil
+		right, err := loadExtra(st, extras, reader)
+		if err != nil {
+			return nil, err
+		}
+		return appendRows(rows, right), nil
 	case "join":
-		// Join is a placeholder in MVP; requires two datasets. Return rows unchanged.
-		return rows, nil
+		right, err := loadExtra(st, extras, reader)
+		if err != nil {
+			return nil, err
+		}
+		leftKey := stringVal(st.Config["left_key"])
+		rightKey := stringVal(st.Config["right_key"])
+		if leftKey == "" {
+			leftKey = "id"
+		}
+		if rightKey == "" {
+			rightKey = leftKey
+		}
+		how := strings.ToLower(stringVal(st.Config["how"]))
+		if how == "" {
+			how = stringVal(st.Config["match"])
+		}
+		return hashJoin(rows, right, leftKey, rightKey, how), nil
 	default:
 		return rows, nil
 	}
+}
+
+func loadExtra(st Step, extras map[string][]map[string]any, reader DatasetReader) ([]map[string]any, error) {
+	dsID := stringVal(st.Config["right_dataset_id"])
+	if dsID == "" {
+		dsID = stringVal(st.Config["dataset_id"])
+	}
+	if dsID == "" {
+		return nil, fmt.Errorf("indique o segundo conjunto (right_dataset_id)")
+	}
+	if extras != nil {
+		if rows, ok := extras[dsID]; ok {
+			return rows, nil
+		}
+	}
+	if reader == nil {
+		return nil, fmt.Errorf("conjunto %s não carregado", dsID)
+	}
+	_, rows, err := reader(dsID, 100000)
+	return rows, err
+}
+
+func appendRows(left, right []map[string]any) []map[string]any {
+	out := make([]map[string]any, 0, len(left)+len(right))
+	out = append(out, left...)
+	out = append(out, right...)
+	return out
+}
+
+func hashJoin(left, right []map[string]any, leftKey, rightKey, how string) []map[string]any {
+	idx := map[string][]map[string]any{}
+	for _, r := range right {
+		k := stringVal(r[rightKey])
+		idx[k] = append(idx[k], r)
+	}
+	leftOnly := how == "left" || how == "all_left"
+	var out []map[string]any
+	for _, l := range left {
+		matches := idx[stringVal(l[leftKey])]
+		if len(matches) == 0 {
+			if leftOnly {
+				out = append(out, cloneRow(l))
+			}
+			continue
+		}
+		for _, r := range matches {
+			merged := cloneRow(l)
+			for k, v := range r {
+				if _, exists := merged[k]; exists {
+					if k == rightKey && k == leftKey {
+						continue
+					}
+					merged[k] = v
+				} else {
+					merged[k] = v
+				}
+			}
+			out = append(out, merged)
+		}
+	}
+	return out
+}
+
+func cloneRow(r map[string]any) map[string]any {
+	out := make(map[string]any, len(r))
+	for k, v := range r {
+		out[k] = v
+	}
+	return out
+}
+
+func headersFromRows(prev []string, rows []map[string]any) []string {
+	seen := map[string]bool{}
+	var out []string
+	for _, h := range prev {
+		if !seen[h] {
+			seen[h] = true
+			out = append(out, h)
+		}
+	}
+	for _, r := range rows {
+		for k := range r {
+			if !seen[k] {
+				seen[k] = true
+				out = append(out, k)
+			}
+		}
+		if len(out) > len(prev)+32 {
+			break
+		}
+	}
+	return out
 }
 
 func applyValidate(st Step, headers []string, rows []map[string]any) (int, error) {

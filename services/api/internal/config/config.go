@@ -51,8 +51,9 @@ type Config struct {
 	SMTPPass     string
 	SMTPFrom     string
 	SlackWebhook string
-	AlertWebhook string
-	AlertEmail   string
+	AlertWebhook     string
+	AlertEmail       string
+	WhatsAppWebhook  string
 }
 
 func Load() Config {
@@ -104,6 +105,7 @@ func Load() Config {
 		SlackWebhook:          os.Getenv("SLACK_WEBHOOK_URL"),
 		AlertWebhook:          os.Getenv("ALERT_WEBHOOK_URL"),
 		AlertEmail:            os.Getenv("ALERT_EMAIL"),
+		WhatsAppWebhook:       os.Getenv("WHATSAPP_WEBHOOK_URL"),
 	}
 }
 

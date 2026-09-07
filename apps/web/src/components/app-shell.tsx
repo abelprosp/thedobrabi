@@ -93,6 +93,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { theme } = useSystemTheme();
   const [me, setMe] = useState<{ name: string; email: string; org_name?: string; role?: string; workspace_id?: string } | null>(null);
+  const [brand, setBrand] = useState<{ brand_name?: string; brand_logo_url?: string }>({});
   const [workspaces, setWorkspaces] = useState<{ id: string; name: string }[]>([]);
   const [wsId, setWsId] = useState("");
   const [open, setOpen] = useState(false);
@@ -112,9 +113,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     Promise.all([
       api<any>("/api/v1/auth/me"),
       api<{ id: string; name: string }[]>("/api/v1/workspaces").catch(() => [] as { id: string; name: string }[]),
+      api<{ brand_name?: string; brand_logo_url?: string }>("/api/v1/organizations/current").catch(() => ({})),
     ])
-      .then(([u, list]) => {
+      .then(([u, list, org]) => {
         setMe(u);
+        setBrand(org || {});
         const ws = Array.isArray(list) ? list : [];
         setWorkspaces(ws);
         const stored = localStorage.getItem("thedobra.workspace") || "";
@@ -244,9 +247,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link
             href="/overview"
             className={`flex items-center ${iconOnly ? "justify-center" : "px-2"}`}
-            aria-label="TheDobra — visão geral"
+            aria-label={`${brand.brand_name || "TheDobra"} — visão geral`}
           >
-            <Logo variant={theme === "dark" ? "dark" : "light"} size={28} markOnly={iconOnly} />
+            <Logo
+              variant={theme === "dark" ? "dark" : "light"}
+              size={28}
+              markOnly={iconOnly}
+              brandName={brand.brand_name}
+              brandLogoUrl={brand.brand_logo_url}
+            />
           </Link>
           {showCollapse && (
             <button

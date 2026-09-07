@@ -56,7 +56,7 @@ function unwrap(json: any) {
 
 function isPublicPath() {
   if (typeof window === "undefined") return true;
-  return /^\/(login|share|apps\/public|auth\/)/.test(window.location.pathname);
+  return /^\/(login|share|embed|apps\/public|auth\/)/.test(window.location.pathname);
 }
 
 function skipRefresh(path: string) {

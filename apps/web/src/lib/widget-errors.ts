@@ -12,11 +12,17 @@ export function isJoinField(name: string) {
 }
 
 export function joinFieldName(name: string) {
-  return name.startsWith(JOIN_PREFIX) ? name.slice(JOIN_PREFIX.length) : name;
+  if (!name.startsWith(JOIN_PREFIX)) return name;
+  const rest = name.slice(JOIN_PREFIX.length);
+  const i = rest.indexOf(".");
+  if (i > 0 && /^\d+$/.test(rest.slice(0, i))) return rest.slice(i + 1);
+  return rest;
 }
 
-export function asJoinField(name: string) {
-  return name.startsWith(JOIN_PREFIX) ? name : `${JOIN_PREFIX}${name}`;
+export function asJoinField(name: string, index = 0) {
+  if (name.startsWith(JOIN_PREFIX)) return name;
+  if (index <= 0) return `${JOIN_PREFIX}${name}`;
+  return `${JOIN_PREFIX}${index}.${name}`;
 }
 
 function preview(raw: unknown) {

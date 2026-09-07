@@ -22,6 +22,12 @@ func saasResources(typ string) []string {
 		return []string{"crm.deal.list", "crm.contact.list"}
 	case "omie":
 		return []string{"clientes", "pedidos"}
+	case "totvs_protheus":
+		return []string{"customers", "orders", "products"}
+	case "sap_b1":
+		return []string{"BusinessPartners", "Orders", "Items"}
+	case "senior":
+		return []string{"employees", "payroll"}
 	case "google_ads":
 		return []string{"campaigns"}
 	case "meta_ads":
@@ -76,6 +82,8 @@ func (e *Engine) fetchSaaS(ctx context.Context, typ string, cfg SQLConfig) ([]st
 		return e.fetchBitrix(ctx, cfg, resource)
 	case "omie":
 		return e.fetchOmie(ctx, cfg, resource)
+	case "totvs_protheus", "sap_b1", "senior":
+		return e.fetchERP(ctx, typ, cfg, resource)
 	case "google_ads":
 		return e.fetchGoogleAds(ctx, cfg)
 	case "meta_ads":

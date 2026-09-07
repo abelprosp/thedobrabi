@@ -20,7 +20,8 @@ export type StoreCategory =
   | "logistica"
   | "saas"
   | "compras"
-  | "atendimento";
+  | "atendimento"
+  | "imobiliario";
 
 export type StoreIcon =
   | "wallet"
@@ -35,7 +36,10 @@ export type StoreIcon =
   | "shopping"
   | "headset"
   | "alert"
-  | "percent";
+  | "percent"
+  | "building"
+  | "home"
+  | "key";
 
 export type TemplateWidget = Omit<Widget, "id">;
 
@@ -65,6 +69,7 @@ export const STORE_CATEGORIES: { id: StoreCategory | "todos"; label: string }[] 
   { id: "saas", label: "SaaS" },
   { id: "compras", label: "Compras" },
   { id: "atendimento", label: "Atendimento" },
+  { id: "imobiliario", label: "Imobiliário" },
 ];
 
 export const CATEGORY_LABEL: Record<StoreCategory, string> = Object.fromEntries(
@@ -122,6 +127,37 @@ const CONTRATOS_MEASURES: SemanticMeasure[] = [
   { name: "Linhas agosto", expression: "SUM(CASE WHEN TOMONTH(data_venda) = '2026-08' THEN 1 ELSE 0 END)", aggregation: "expression" },
   { name: "Clientes julho", expression: "COUNT(DISTINCT CASE WHEN TOMONTH(data_venda) = '2026-07' THEN cliente END)", aggregation: "expression" },
   { name: "Clientes agosto", expression: "COUNT(DISTINCT CASE WHEN TOMONTH(data_venda) = '2026-08' THEN cliente END)", aggregation: "expression" },
+];
+
+const IMOBILIARIO_VENDAS_MEASURES: SemanticMeasure[] = [
+  { name: "VGV", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Unidades", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Ticket médio", expression: "DIVIDE(SUM(valor), COUNT(*))", aggregation: "expression" },
+  { name: "Comissão", expression: "SUM(comissao)", aggregation: "expression" },
+  { name: "Área vendida", expression: "SUM(area_m2)", aggregation: "expression" },
+  { name: "Preço por m²", expression: "DIVIDE(SUM(valor), NULLIF(SUM(area_m2), 0))", aggregation: "expression" },
+];
+
+const IMOBILIARIO_LOCACAO_MEASURES: SemanticMeasure[] = [
+  { name: "Aluguel", expression: "SUM(valor_aluguel)", aggregation: "expression" },
+  { name: "Contratos", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Unidades locadas", expression: "COUNT(DISTINCT imovel)", aggregation: "expression" },
+  { name: "Inadimplência", expression: "SUM(CASE WHEN status IN ('atraso','inadimplente','vencido') THEN valor_aluguel ELSE 0 END)", aggregation: "expression" },
+  { name: "Taxa de ocupação", expression: "DIVIDE(SUM(CASE WHEN status IN ('locado','ocupado','ativo') THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
+];
+
+const IMOBILIARIO_ESTOQUE_MEASURES: SemanticMeasure[] = [
+  { name: "Imóveis", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Valor de estoque", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Dias em estoque", expression: "AVG(dias_estoque)", aggregation: "expression" },
+  { name: "Disponíveis", expression: "SUM(CASE WHEN status IN ('disponivel','ativo','captação','captacao') THEN 1 ELSE 0 END)", aggregation: "expression" },
+];
+
+const IMOBILIARIO_LEADS_MEASURES: SemanticMeasure[] = [
+  { name: "Leads", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Pipeline", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Convertidos", expression: "SUM(CASE WHEN status IN ('ganho','vendido','fechado','locado') THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Conversão", expression: "DIVIDE(SUM(CASE WHEN status IN ('ganho','vendido','fechado','locado') THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
 ];
 
 export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
@@ -427,6 +463,149 @@ export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
       w("bar", "Por status", { x: 0, y: 2, w: 6, h: 5 }, { measures: ["orders"], dimensions: ["status"], limit: 12 }),
       w("line", "Entrada no tempo", { x: 6, y: 2, w: 6, h: 5 }, { measures: ["orders"], dimensions: ["date"], limit: 60 }),
       w("table", "Fila", { x: 0, y: 7, w: 12, h: 5 }, { measures: ["orders"], dimensions: ["customer"], limit: 40 }),
+    ],
+  },
+  {
+    id: "imobiliario-vendas",
+    name: "Vendas e VGV",
+    category: "imobiliario",
+    description: "VGV, unidades, ticket e preço/m² por corretor, tipologia e bairro.",
+    pain: "O VGV fecha no Excel do comercial e a diretoria só vê o consolidado no mês seguinte.",
+    icon: "building",
+    popular: true,
+    needs: ["valor ou VGV", "corretor ou bairro", "tipologia"],
+    measures: IMOBILIARIO_VENDAS_MEASURES,
+    widgets: [
+      w("kpi", "VGV", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["VGV"] }, { config: brl }),
+      w("kpi", "Unidades", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Unidades"] }),
+      w("kpi", "Ticket médio", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Ticket médio"] }, { config: brlTicket }),
+      w("kpi", "Preço por m²", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Preço por m²"] }, { config: brlFull }),
+      w("slicer", "Tipologia", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["tipologia"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Bairro", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["bairro"], measures: [] }, { config: { slicerStyle: "dropdown", slicerSearch: true } }),
+      w("slicer", "Corretor", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["corretor"], measures: [] }, { config: { slicerStyle: "dropdown" } }),
+      w("slicer", "Status", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("area", "VGV no tempo", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["VGV"], dimensions: ["date"], limit: 24 }, { config: brl }),
+      w("pie", "Mix de tipologia", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["VGV"], dimensions: ["tipologia"], limit: 8 }, { config: brl }),
+      w("bar", "Por corretor", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["VGV"], dimensions: ["corretor"], limit: 12 }, { config: brl }),
+      w("bar", "Por bairro", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["VGV"], dimensions: ["bairro"], limit: 12 }, { config: brl }),
+      w("table", "Detalhe das vendas", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["VGV", "Unidades", "Comissão"], dimensions: ["imovel", "corretor", "tipologia"], limit: 50 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "imobiliario-locacao",
+    name: "Locação e ocupação",
+    category: "imobiliario",
+    description: "Aluguel, ocupação, vacância e inadimplência do portfólio locado.",
+    pain: "Unidade vaga e aluguel em atraso só aparecem quando o proprietário liga.",
+    icon: "key",
+    popular: true,
+    needs: ["aluguel ou valor", "status ou imóvel"],
+    measures: IMOBILIARIO_LOCACAO_MEASURES,
+    widgets: [
+      w("kpi", "Aluguel", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Aluguel"] }, { config: brl }),
+      w("kpi", "Contratos", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Contratos"] }),
+      w("kpi", "Ocupação", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Taxa de ocupação"] }, { config: pct1 }),
+      w("kpi", "Inadimplência", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Inadimplência"] }, { config: brl }),
+      w("slicer", "Status", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Tipologia", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["tipologia"], measures: [] }),
+      w("slicer", "Bairro", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["bairro"], measures: [] }),
+      w("line", "Aluguel no tempo", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["Aluguel"], dimensions: ["date"], limit: 24 }, { config: brl }),
+      w("pie", "Por status", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["Contratos"], dimensions: ["status"], limit: 8 }),
+      w("bar", "Por tipologia", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Aluguel"], dimensions: ["tipologia"], limit: 10 }, { config: brl }),
+      w("bar", "Por bairro", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Aluguel"], dimensions: ["bairro"], limit: 12 }, { config: brl }),
+      w("table", "Contratos", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Aluguel", "Inadimplência"], dimensions: ["imovel", "inquilino", "status"], limit: 50 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "imobiliario-estoque",
+    name: "Estoque e captação",
+    category: "imobiliario",
+    description: "Imóveis em carteira, dias em estoque e mix por tipologia e empreendimento.",
+    pain: "Ninguém sabe o que está parado na vitrine e o que precisa de recaptação.",
+    icon: "home",
+    popular: true,
+    needs: ["imóvel ou valor", "status ou tipologia"],
+    measures: IMOBILIARIO_ESTOQUE_MEASURES,
+    widgets: [
+      w("kpi", "Imóveis", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Imóveis"] }),
+      w("kpi", "Valor de estoque", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Valor de estoque"] }, { config: brl }),
+      w("kpi", "Disponíveis", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Disponíveis"] }),
+      w("kpi", "Dias em estoque", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Dias em estoque"] }, { config: { decimals: 0 } }),
+      w("slicer", "Status", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Tipologia", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["tipologia"], measures: [] }),
+      w("slicer", "Empreendimento", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["empreendimento"], measures: [] }),
+      w("bar", "Por tipologia", { x: 0, y: 4, w: 6, h: 5 }, { measures: ["Imóveis"], dimensions: ["tipologia"], limit: 12 }),
+      w("treemap", "Por bairro", { x: 6, y: 4, w: 6, h: 5 }, { measures: ["Valor de estoque"], dimensions: ["bairro"], limit: 20 }, { config: brl }),
+      w("pie", "Por status", { x: 0, y: 9, w: 4, h: 5 }, { measures: ["Imóveis"], dimensions: ["status"], limit: 8 }),
+      w("bar", "Por empreendimento", { x: 4, y: 9, w: 8, h: 5 }, { measures: ["Imóveis"], dimensions: ["empreendimento"], limit: 12 }),
+      w("table", "Carteira", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Valor de estoque", "Dias em estoque"], dimensions: ["imovel", "tipologia", "status"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "imobiliario-leads",
+    name: "Funil de leads",
+    category: "imobiliario",
+    description: "Captação, conversão e valor em pipeline por etapa, canal e corretor.",
+    pain: "Lead esfria no WhatsApp e só o corretor sabe em que etapa está.",
+    icon: "target",
+    needs: ["lead ou valor", "status ou canal"],
+    measures: IMOBILIARIO_LEADS_MEASURES,
+    widgets: [
+      w("kpi", "Leads", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Leads"] }),
+      w("kpi", "Pipeline", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Pipeline"] }, { config: brl }),
+      w("kpi", "Convertidos", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Convertidos"] }),
+      w("kpi", "Conversão", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Conversão"] }, { config: pct1 }),
+      w("slicer", "Etapa", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Canal", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["channel"], measures: [] }),
+      w("slicer", "Corretor", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["corretor"], measures: [] }),
+      w("funnel", "Funil", { x: 0, y: 4, w: 5, h: 6 }, { measures: ["Leads"], dimensions: ["status"], limit: 10 }),
+      w("bar", "Por corretor", { x: 5, y: 4, w: 7, h: 6 }, { measures: ["Pipeline"], dimensions: ["corretor"], limit: 12 }, { config: brl }),
+      w("pie", "Por canal", { x: 0, y: 10, w: 5, h: 5 }, { measures: ["Leads"], dimensions: ["channel"], limit: 8 }),
+      w("line", "Entrada no tempo", { x: 5, y: 10, w: 7, h: 5 }, { measures: ["Leads"], dimensions: ["date"], limit: 60 }),
+      w("table", "Oportunidades", { x: 0, y: 15, w: 12, h: 5 }, { measures: ["Pipeline"], dimensions: ["customer", "corretor", "status"], limit: 40 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "imobiliario-corretores",
+    name: "Performance de corretores",
+    category: "imobiliario",
+    description: "Ranking de VGV, unidades e comissão — o ritual semanal da equipe.",
+    pain: "Cada gerente mede o time com critério diferente e o ranking vira discussão.",
+    icon: "trending",
+    needs: ["valor ou VGV", "corretor"],
+    measures: IMOBILIARIO_VENDAS_MEASURES,
+    widgets: [
+      w("kpi", "VGV", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["VGV"] }, { config: brl }),
+      w("kpi", "Unidades", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Unidades"] }),
+      w("kpi", "Comissão", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Comissão"] }, { config: brl }),
+      w("kpi", "Ticket médio", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Ticket médio"] }, { config: brlTicket }),
+      w("slicer", "Corretor", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["corretor"], measures: [] }),
+      w("slicer", "Equipe", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["department"], measures: [] }),
+      w("slicer", "Período", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["date"], measures: [] }),
+      w("bar", "VGV por corretor", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["VGV"], dimensions: ["corretor"], limit: 15 }, { config: { ...brl, showDataLabels: true } }),
+      w("bar", "Unidades por corretor", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["Unidades"], dimensions: ["corretor"], limit: 15 }),
+      w("line", "Ritmo da equipe", { x: 0, y: 9, w: 8, h: 5 }, { measures: ["VGV"], dimensions: ["date"], limit: 24 }, { config: brl }),
+      w("pie", "Peso da comissão", { x: 8, y: 9, w: 4, h: 5 }, { measures: ["Comissão"], dimensions: ["corretor"], limit: 8 }, { config: brl }),
+      w("table", "Ranking", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["VGV", "Unidades", "Comissão", "Ticket médio"], dimensions: ["corretor"], limit: 40 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "imobiliario-inadimplencia",
+    name: "Inadimplência de aluguel",
+    category: "imobiliario",
+    description: "Atraso, concentração por inquilino e status da cobrança.",
+    pain: "O atraso acumula e a cobrança só entra quando o caixa do proprietário aperta.",
+    icon: "alert",
+    needs: ["aluguel ou valor", "inquilino ou status"],
+    measures: IMOBILIARIO_LOCACAO_MEASURES,
+    widgets: [
+      w("kpi", "Em aberto", { x: 0, y: 0, w: 4, h: 2 }, { measures: ["Inadimplência"] }, { config: brl }),
+      w("kpi", "Contratos", { x: 4, y: 0, w: 4, h: 2 }, { measures: ["Contratos"] }),
+      w("slicer", "Status", { x: 8, y: 0, w: 4, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("bar", "Por inquilino", { x: 0, y: 2, w: 7, h: 5 }, { measures: ["Inadimplência"], dimensions: ["inquilino"], limit: 15 }, { config: brl }),
+      w("pie", "Por status", { x: 7, y: 2, w: 5, h: 5 }, { measures: ["Inadimplência"], dimensions: ["status"], limit: 8 }, { config: brl }),
+      w("bar", "Por bairro", { x: 0, y: 7, w: 6, h: 5 }, { measures: ["Inadimplência"], dimensions: ["bairro"], limit: 12 }, { config: brl }),
+      w("table", "Cobrança", { x: 6, y: 7, w: 6, h: 5 }, { measures: ["Inadimplência", "Aluguel"], dimensions: ["inquilino", "imovel"], limit: 40 }, { config: { ...brlFull, zebra: true } }),
     ],
   },
 ];

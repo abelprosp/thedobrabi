@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, normalizeArray } from "@/lib/api";
+import { api, getAccess, normalizeArray } from "@/lib/api";
 import { useParams, useRouter } from "next/navigation";
 import { Chart } from "@/components/viz";
 import { toast } from "sonner";
-import { Trash2 } from "lucide-react";
+import { Download, Trash2 } from "lucide-react";
 import { Button, Card, CardTitle, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, Td, Textarea, Th, cellValue, isNumericValue } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
 
@@ -57,15 +57,23 @@ export default function DatasetPage() {
         description={`${ds.data.row_count?.toLocaleString("pt-BR")} linhas · qualidade ${ds.data.quality_score ?? "—"}/100 · ${ds.data.clickhouse_table} · ${ds.data.storage_mode || "import"}`}
         crumbs={[{ href: "/data", label: "Dados" }]}
         actions={
-          <Button
-            variant="danger"
-            onClick={() => {
-              if (confirm(`Excluir o conjunto «${ds.data.name}»? Esta acção não se desfaz.`)) remove.mutate();
-            }}
-            busy={remove.isPending}
-          >
-            <Trash2 size={14} /> Excluir conjunto
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button variant="secondary" onClick={() => downloadDataset(id, "csv", ds.data.name)}>
+              <Download size={14} /> CSV
+            </Button>
+            <Button variant="secondary" onClick={() => downloadDataset(id, "xlsx", ds.data.name)}>
+              <Download size={14} /> Excel
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                if (confirm(`Excluir o conjunto «${ds.data.name}»? Esta acção não se desfaz.`)) remove.mutate();
+              }}
+              busy={remove.isPending}
+            >
+              <Trash2 size={14} /> Excluir conjunto
+            </Button>
+          </div>
         }
       />
       {ds.data.source_id && (
@@ -94,6 +102,28 @@ export default function DatasetPage() {
       {tab === "security" && <SecurityTab datasetId={id} />}
     </div>
   );
+}
+
+async function downloadDataset(id: string, format: "csv" | "xlsx", name: string) {
+  const token = getAccess();
+  const ws = typeof window !== "undefined" ? localStorage.getItem("thedobra.workspace") : "";
+  const res = await fetch(`/api/v1/datasets/${id}/export?format=${format}`, {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(ws ? { "X-Workspace-Id": ws } : {}),
+    },
+  });
+  if (!res.ok) {
+    toast.error("Falha ao exportar o conjunto");
+    return;
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${name || "conjunto"}.${format}`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function SchemaTab({ schema, preview }: { schema: any[]; preview: any }) {
@@ -236,15 +266,23 @@ function ModelTab({ datasetId, model, schema }: { datasetId: string; model: any;
 
 function RelationshipsTab({ datasetId, model }: { datasetId: string; model: any }) {
   const qc = useQueryClient();
-  const rels = useQuery({ queryKey: ["relationships", model.id], queryFn: () => api<any>(`/api/v1/semantic-models/${model.id || datasetId}/relationships`), enabled: !!model.id });
+  const modelId = model.id || datasetId;
+  const rels = useQuery({ queryKey: ["relationships", modelId], queryFn: () => api<any>(`/api/v1/semantic-models/${modelId}/relationships`), enabled: !!modelId });
+  const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
   const relsList = normalizeArray(rels.data);
+  const datasetList = normalizeArray<{ id: string; name: string }>(datasets.data).filter((d) => d.id !== datasetId);
   const [toDS, setToDS] = useState("");
   const [fromCol, setFromCol] = useState("");
   const [toCol, setToCol] = useState("");
   const [type, setType] = useState("many_to_one");
   const create = useMutation({
-    mutationFn: () => api(`/api/v1/semantic-models/${model.id || datasetId}/relationships`, { method: "POST", body: JSON.stringify({ to_dataset_id: toDS, from_column: fromCol, to_column: toCol, type }) }),
-    onSuccess: () => { toast.success("Relacionamento adicionado"); qc.invalidateQueries({ queryKey: ["relationships", model.id] }); },
+    mutationFn: () => api(`/api/v1/semantic-models/${modelId}/relationships`, { method: "POST", body: JSON.stringify({ to_dataset_id: toDS, from_column: fromCol, to_column: toCol, type }) }),
+    onSuccess: () => { toast.success("Relacionamento adicionado"); qc.invalidateQueries({ queryKey: ["relationships", modelId] }); setToDS(""); setFromCol(""); setToCol(""); },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  const removeRel = useMutation({
+    mutationFn: (rid: string) => api(`/api/v1/semantic-models/${modelId}/relationships/${rid}`, { method: "DELETE" }),
+    onSuccess: () => { toast.success("Relacionamento removido"); qc.invalidateQueries({ queryKey: ["relationships", modelId] }); },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -254,7 +292,12 @@ function RelationshipsTab({ datasetId, model }: { datasetId: string; model: any 
         <CardTitle>Novo relacionamento</CardTitle>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-4">
           <Input value={fromCol} onChange={(e) => setFromCol(e.target.value)} placeholder="Coluna origem" />
-          <Input value={toDS} onChange={(e) => setToDS(e.target.value)} placeholder="Dataset destino" />
+          <Select value={toDS} onChange={(e) => setToDS(e.target.value)}>
+            <option value="">Conjunto destino</option>
+            {datasetList.map((d) => (
+              <option key={d.id} value={d.id}>{d.name}</option>
+            ))}
+          </Select>
           <Input value={toCol} onChange={(e) => setToCol(e.target.value)} placeholder="Coluna destino" />
           <Select value={type} onChange={(e) => setType(e.target.value)}>
             <option value="many_to_one">muitos-para-um</option>
@@ -270,8 +313,9 @@ function RelationshipsTab({ datasetId, model }: { datasetId: string; model: any 
         <CardTitle>Relacionamentos</CardTitle>
         {relsList.length === 0 && <p className="text-[13px] text-mute">Sem relacionamentos.</p>}
         {relsList.map((r: any) => (
-          <div key={r.id} className="border-t border-line py-2 text-sm first:border-0">
-            {r.from_column} → {r.to_dataset_id}.{r.to_column} ({r.type})
+          <div key={r.id} className="flex items-center justify-between border-t border-line py-2 text-sm first:border-0">
+            <span>{r.from_column} → {datasetList.find((d) => d.id === r.to_dataset_id)?.name || r.to_dataset_id}.{r.to_column} ({r.type})</span>
+            <button type="button" className="text-[12px] text-danger" onClick={() => removeRel.mutate(r.id)}>Remover</button>
           </div>
         ))}
       </Card>

@@ -7,15 +7,16 @@ import (
 )
 
 const (
-	Freq15m    = "15m"
-	FreqHourly = "hourly"
-	FreqDaily  = "daily"
-	FreqWeekly = "weekly"
+	Freq15m     = "15m"
+	FreqHourly  = "hourly"
+	FreqDaily   = "daily"
+	FreqWeekly  = "weekly"
+	FreqMonthly = "monthly"
 )
 
 func ValidFrequency(f string) bool {
 	switch f {
-	case Freq15m, FreqHourly, FreqDaily, FreqWeekly:
+	case Freq15m, FreqHourly, FreqDaily, FreqWeekly, FreqMonthly:
 		return true
 	}
 	return false
@@ -23,7 +24,7 @@ func ValidFrequency(f string) bool {
 
 func ValidKind(k string) bool {
 	switch k {
-	case "connector", "flow", "dataset":
+	case "connector", "flow", "dataset", "report":
 		return true
 	}
 	return false
@@ -86,6 +87,12 @@ func NextRun(from time.Time, freq, tz string, hour, weekday int) (time.Time, err
 		t := time.Date(now.Year(), now.Month(), now.Day(), hour, 0, 0, 0, loc)
 		for int(t.Weekday()) != weekday || !t.After(now) {
 			t = t.AddDate(0, 0, 1)
+		}
+		return t.UTC(), nil
+	case FreqMonthly:
+		t := time.Date(now.Year(), now.Month(), 1, hour, 0, 0, 0, loc)
+		if !t.After(now) {
+			t = t.AddDate(0, 1, 0)
 		}
 		return t.UTC(), nil
 	default:

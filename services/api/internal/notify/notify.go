@@ -49,6 +49,12 @@ func (s *Service) Deliver(ctx context.Context, alertID uuid.UUID, channels []str
 				url = s.cfg.SlackWebhook
 			}
 			err = s.httpJSON(url, map[string]any{"text": msg.Title + "\n" + msg.Body})
+		case ch == "whatsapp" || strings.HasPrefix(ch, "whatsapp:"):
+			to := strings.TrimPrefix(ch, "whatsapp:")
+			if to == "whatsapp" {
+				to = ""
+			}
+			err = s.whatsapp(to, msg)
 		case strings.HasPrefix(ch, "http://") || strings.HasPrefix(ch, "https://") || ch == "webhook":
 			url := ch
 			if ch == "webhook" {
@@ -76,6 +82,14 @@ func (s *Service) SendMail(to, subject, body string) error {
 	return s.email(to, Message{Title: subject, Body: body})
 }
 
+func (s *Service) SendMailFrom(from, to, subject, body string) error {
+	return s.emailFrom(from, to, Message{Title: subject, Body: body})
+}
+
+func (s *Service) SendWhatsApp(to string, msg Message) error {
+	return s.whatsapp(to, msg)
+}
+
 func (s *Service) email(to string, msg Message) error {
 	if to == "" {
 		if s.log != nil {
@@ -89,7 +103,25 @@ func (s *Service) email(to string, msg Message) error {
 		}
 		return nil
 	}
-	from := s.cfg.SMTPFrom
+	return s.emailFrom("", to, msg)
+}
+
+func (s *Service) emailFrom(from, to string, msg Message) error {
+	if to == "" {
+		if s.log != nil {
+			s.log.Info("email (sem destinatário / SMTP)", "title", msg.Title, "body", msg.Body)
+		}
+		return nil
+	}
+	if s.cfg.SMTPHost == "" {
+		if s.log != nil {
+			s.log.Info("email (SMTP não configurado)", "to", to, "title", msg.Title, "body", msg.Body)
+		}
+		return nil
+	}
+	if from == "" {
+		from = s.cfg.SMTPFrom
+	}
 	if from == "" {
 		from = "thedobra@" + s.cfg.SMTPHost
 	}
@@ -101,6 +133,17 @@ func (s *Service) email(to string, msg Message) error {
 	raw := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n%s\n%s\n",
 		from, to, msg.Title, msg.Body, msg.URL))
 	return smtp.SendMail(addr, auth, from, []string{to}, raw)
+}
+
+func (s *Service) whatsapp(to string, msg Message) error {
+	url := s.cfg.WhatsAppWebhook
+	if url == "" {
+		if s.log != nil {
+			s.log.Info("whatsapp (webhook não configurado)", "to", to, "title", msg.Title)
+		}
+		return nil
+	}
+	return s.httpJSON(url, map[string]any{"to": to, "title": msg.Title, "body": msg.Body, "url": msg.URL, "channel": "whatsapp"})
 }
 
 func (s *Service) httpJSON(url string, payload any) error {

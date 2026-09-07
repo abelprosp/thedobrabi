@@ -20,6 +20,7 @@ type Jobs struct {
 	Connector func(ctx context.Context, orgID, wsID, userID, sourceID uuid.UUID, table string, incremental bool) (JobResult, error)
 	Flow      func(ctx context.Context, orgID, wsID, userID, flowID uuid.UUID) (JobResult, error)
 	Dataset   func(ctx context.Context, orgID, wsID, userID, datasetID uuid.UUID, incremental bool) (JobResult, error)
+	Report    func(ctx context.Context, orgID, wsID, userID, reportID uuid.UUID) (JobResult, error)
 }
 
 type Runner struct {
@@ -102,6 +103,12 @@ func (r *Runner) Execute(parent context.Context, sc Schedule, manual bool) {
 	case "dataset":
 		if r.jobs.Dataset != nil {
 			res, err = r.jobs.Dataset(ctx, sc.OrgID, sc.WorkspaceID, uid, sc.TargetID, sc.Incremental)
+		} else {
+			err = errNoJob
+		}
+	case "report":
+		if r.jobs.Report != nil {
+			res, err = r.jobs.Report(ctx, sc.OrgID, sc.WorkspaceID, uid, sc.TargetID)
 		} else {
 			err = errNoJob
 		}

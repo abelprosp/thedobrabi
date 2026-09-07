@@ -87,9 +87,11 @@ func New(deps *platform.Deps) http.Handler {
 		Connector: s.runScheduledConnector,
 		Flow:      s.runScheduledFlow,
 		Dataset:   s.runScheduledDataset,
+		Report:    s.runScheduledReport,
 	})
 	go s.cdc.RunLoop(context.Background())
 	go s.schedRun.RunLoop(context.Background())
+	go s.runAlertLoop(context.Background())
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
@@ -115,6 +117,8 @@ func New(deps *platform.Deps) http.Handler {
 		r.Post("/invites/{token}/accept", s.acceptInvite)
 		r.Get("/public/dashboards/{token}", s.publicDashboard)
 		r.Post("/public/dashboards/{token}/queries", s.publicDashboardQuery)
+		r.Get("/public/embed/{token}", s.publicEmbed)
+		r.Post("/public/embed/{token}/queries", s.publicEmbedQuery)
 		r.Post("/auth/refresh", s.refresh)
 		r.Post("/auth/logout", s.logout)
 		r.Get("/auth/oauth/providers", s.oauthProviders)
@@ -135,6 +139,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Post("/auth/mfa/confirm", s.mfaConfirm)
 			r.Post("/auth/mfa/disable", s.mfaDisable)
 			r.Get("/organizations/current", s.orgCurrent)
+			r.Patch("/organizations/current", s.patchOrgCurrent)
 			r.Get("/members", s.listMembers)
 			r.Post("/members/invite", s.inviteMember)
 			r.Patch("/members/{id}", s.patchMember)
@@ -175,7 +180,8 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/datasets/{id}", s.getDataset)
 			r.Delete("/datasets/{id}", s.deleteDataset)
 			r.Get("/datasets/{id}/preview", s.previewDataset)
-			r.Get("/datasets/{id}/quality", s.datasetQuality)
+			r.Get("/datasets/{id}/export", s.exportDataset)
+			r.Get("/datasets/{id}/quality", s.datasetQuality
 
 			r.Get("/semantic-models", s.listSemantic)
 			r.Get("/semantic-models/{id}", s.getSemantic)
@@ -191,6 +197,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Put("/dashboards/{id}", s.putDashboard)
 			r.Delete("/dashboards/{id}", s.deleteDashboard)
 			r.Post("/dashboards/{id}/share", s.shareDashboard)
+			r.Post("/dashboards/{id}/embed", s.createDashboardEmbed)
 
 			r.Get("/ai/config", s.aiConfig)
 			r.Post("/ai/ask", s.ask)
@@ -482,13 +489,68 @@ func (s *Server) me(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) orgCurrent(w http.ResponseWriter, r *http.Request) {
 	_, org, _, _ := principal(r)
-	var name, slug, plan string
-	err := s.deps.PG.QueryRow(r.Context(), `SELECT name, slug, plan FROM organizations WHERE id=$1`, org).Scan(&name, &slug, &plan)
+	var name, slug, plan, brandName, brandLogo, brandFrom string
+	err := s.deps.PG.QueryRow(r.Context(), `
+		SELECT name, slug, plan, COALESCE(brand_name,''), COALESCE(brand_logo_url,''), COALESCE(brand_from_email,'')
+		FROM organizations WHERE id=$1
+	`, org).Scan(&name, &slug, &plan, &brandName, &brandLogo, &brandFrom)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "organização não encontrada")
 		return
 	}
-	httpx.JSON(w, 200, map[string]any{"id": org, "name": name, "slug": slug, "plan": plan})
+	httpx.JSON(w, 200, map[string]any{
+		"id": org, "name": name, "slug": slug, "plan": plan,
+		"brand_name": brandName, "brand_logo_url": brandLogo, "brand_from_email": brandFrom,
+		"whitelabel": s.ent.Limits(r.Context(), org).Whitelabel,
+	})
+}
+
+func (s *Server) patchOrgCurrent(w http.ResponseWriter, r *http.Request) {
+	_, org, _, role := principal(r)
+	if role != "owner" && role != "admin" {
+		httpx.Error(w, 403, "forbidden", "apenas administradores podem alterar a marca")
+		return
+	}
+	if err := s.ent.Check(r.Context(), org, "whitelabel"); err != nil {
+		httpx.Error(w, 403, "plan", err.Error())
+		return
+	}
+	var body struct {
+		BrandName      *string `json:"brand_name"`
+		BrandLogoURL   *string `json:"brand_logo_url"`
+		BrandFromEmail *string `json:"brand_from_email"`
+	}
+	if err := httpx.Decode(r, &body); err != nil {
+		httpx.Error(w, 400, "invalid", "corpo inválido")
+		return
+	}
+	var name, slug, plan, brandName, brandLogo, brandFrom string
+	_ = s.deps.PG.QueryRow(r.Context(), `
+		SELECT name, slug, plan, COALESCE(brand_name,''), COALESCE(brand_logo_url,''), COALESCE(brand_from_email,'')
+		FROM organizations WHERE id=$1
+	`, org).Scan(&name, &slug, &plan, &brandName, &brandLogo, &brandFrom)
+	if body.BrandName != nil {
+		brandName = strings.TrimSpace(*body.BrandName)
+	}
+	if body.BrandLogoURL != nil {
+		brandLogo = strings.TrimSpace(*body.BrandLogoURL)
+	}
+	if body.BrandFromEmail != nil {
+		brandFrom = strings.TrimSpace(*body.BrandFromEmail)
+	}
+	_, err := s.deps.PG.Exec(r.Context(), `
+		UPDATE organizations SET brand_name=$2, brand_logo_url=$3, brand_from_email=$4 WHERE id=$1
+	`, org, brandName, brandLogo, brandFrom)
+	if err != nil {
+		httpx.Error(w, 400, "save_failed", err.Error())
+		return
+	}
+	s.audit(r, "ORG_BRAND_UPDATED", "organization", org, nil)
+	httpx.JSON(w, 200, map[string]any{
+		"id": org, "name": name, "slug": slug, "plan": plan,
+		"brand_name": brandName, "brand_logo_url": brandLogo, "brand_from_email": brandFrom,
+		"whitelabel": true,
+	})
 }
 
 func (s *Server) workspaces(w http.ResponseWriter, r *http.Request) {

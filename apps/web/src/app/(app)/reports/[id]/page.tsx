@@ -11,6 +11,7 @@ import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { Button, Card, CardTitle, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Textarea, Badge, cn } from "@/components/ui";
+import { AutoRefreshCard } from "@/components/auto-refresh-card";
 import { LineChart, BarChart3, PieChart, Table2, Type, Image as ImageIcon, Plus, Trash2, Eye, EyeOff, Save, FileDown, Calendar, Share2, X, ChevronLeft, Monitor, Printer } from "lucide-react";
 
 const Grid = WidthProvider(GridLayout);
@@ -41,11 +42,13 @@ export default function ReportEditorPage() {
   const [activeTab, setActiveTab] = useState("data");
   const [hydrated, setHydrated] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [emailTo, setEmailTo] = useState("");
+  const [whatsappTo, setWhatsappTo] = useState("");
   const canvasRef = useRef<HTMLDivElement>(null);
 
   const q = useQuery({
     queryKey: ["report", id],
-    queryFn: () => api<{ id: string; name: string; cadence: string; pages: ReportPage[]; last_generated_at?: string }>(`/api/v1/reports/${id}`),
+    queryFn: () => api<{ id: string; name: string; cadence: string; pages: ReportPage[]; last_generated_at?: string; email_to?: string; whatsapp_to?: string }>(`/api/v1/reports/${id}`),
   });
 
   const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
@@ -62,6 +65,8 @@ export default function ReportEditorPage() {
     if (q.data && !hydrated) {
       setName(q.data.name || "");
       setCadence(q.data.cadence || "weekly");
+      setEmailTo(q.data.email_to || "");
+      setWhatsappTo(q.data.whatsapp_to || "");
       setPages(q.data.pages && q.data.pages.length > 0 ? q.data.pages : [{ name: "Página 1", widgets: [] }]);
       setHydrated(true);
     }
@@ -77,7 +82,7 @@ export default function ReportEditorPage() {
   }, [currentDataset, semanticModels]);
 
   const save = useMutation({
-    mutationFn: () => api(`/api/v1/reports/${id}`, { method: "PUT", body: JSON.stringify({ name, cadence, pages }) }),
+    mutationFn: () => api(`/api/v1/reports/${id}`, { method: "PUT", body: JSON.stringify({ name, cadence, pages, email_to: emailTo, whatsapp_to: whatsappTo }) }),
     onSuccess: () => {
       toast.success("Relatório guardado");
       qc.invalidateQueries({ queryKey: ["report", id] });
@@ -361,19 +366,34 @@ export default function ReportEditorPage() {
 
       {scheduleOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <Card className="w-full max-w-md space-y-4">
-            <CardTitle>Agendar geração</CardTitle>
-            <p className="text-[13px] text-mute">A cadência define quando o relatório será regenerado. O envio por email é um placeholder.</p>
-            <FieldLabel label="Cadência">
+          <Card className="w-full max-w-lg space-y-4">
+            <CardTitle>Distribuir relatório</CardTitle>
+            <p className="text-[13px] text-mute">Gera o briefing no servidor e envia para os destinatários. O cron usa a actualização automática abaixo.</p>
+            <FieldLabel label="E-mails (separados por vírgula)">
+              <Input value={emailTo} onChange={(e) => setEmailTo(e.target.value)} placeholder="ana@empresa.com, cfo@empresa.com" />
+            </FieldLabel>
+            <FieldLabel label="WhatsApp (números, separados por vírgula)">
+              <Input value={whatsappTo} onChange={(e) => setWhatsappTo(e.target.value)} placeholder="+5511999999999" />
+            </FieldLabel>
+            <FieldLabel label="Cadência do relatório">
               <Select value={cadence} onChange={(e) => setCadence(e.target.value)}>
                 <option value="daily">Diário</option>
                 <option value="weekly">Semanal</option>
                 <option value="monthly">Mensal</option>
               </Select>
             </FieldLabel>
+            <AutoRefreshCard kind="report" targetId={id} />
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setScheduleOpen(false)}>Fechar</Button>
-              <Button onClick={() => { generateBackend.mutate(); setScheduleOpen(false); }} busy={generateBackend.isPending}>Gerar agora</Button>
+              <Button
+                onClick={() => {
+                  save.mutate();
+                  generateBackend.mutate();
+                }}
+                busy={generateBackend.isPending || save.isPending}
+              >
+                Guardar e gerar agora
+              </Button>
             </div>
           </Card>
         </div>

@@ -69,12 +69,13 @@ func (s *Store) List(ctx context.Context, orgID, wsID uuid.UUID, kind string, ta
 			s.hour_local, s.weekday, s.timezone, s.incremental, s.table_name,
 			s.last_run_at, s.next_run_at, s.last_status, s.last_error, s.last_mode,
 			s.created_by, s.created_at, s.updated_at,
-			COALESCE(ds.name, f.name, d.name, '') AS target_name,
+			COALESCE(ds.name, f.name, d.name, rp.name, '') AS target_name,
 			COALESCE(ds.type, '', '') AS target_type
 		FROM sync_schedules s
 		LEFT JOIN data_sources ds ON ds.id = s.target_id AND s.kind = 'connector'
 		LEFT JOIN flows f ON f.id = s.target_id AND s.kind = 'flow'
 		LEFT JOIN datasets d ON d.id = s.target_id AND s.kind = 'dataset'
+		LEFT JOIN reports rp ON rp.id = s.target_id AND s.kind = 'report'
 		WHERE s.org_id=$1 AND s.workspace_id=$2
 	`
 	args := []any{orgID, wsID}
@@ -111,12 +112,13 @@ func (s *Store) Get(ctx context.Context, orgID, wsID, id uuid.UUID) (Schedule, e
 			s.hour_local, s.weekday, s.timezone, s.incremental, s.table_name,
 			s.last_run_at, s.next_run_at, s.last_status, s.last_error, s.last_mode,
 			s.created_by, s.created_at, s.updated_at,
-			COALESCE(ds.name, f.name, d.name, '') AS target_name,
+			COALESCE(ds.name, f.name, d.name, rp.name, '') AS target_name,
 			COALESCE(ds.type, '', '') AS target_type
 		FROM sync_schedules s
 		LEFT JOIN data_sources ds ON ds.id = s.target_id AND s.kind = 'connector'
 		LEFT JOIN flows f ON f.id = s.target_id AND s.kind = 'flow'
 		LEFT JOIN datasets d ON d.id = s.target_id AND s.kind = 'dataset'
+		LEFT JOIN reports rp ON rp.id = s.target_id AND s.kind = 'report'
 		WHERE s.id=$1 AND s.org_id=$2 AND s.workspace_id=$3
 	`, id, orgID, wsID)
 	return scanSchedule(row)

@@ -856,64 +856,6 @@ func (s *Server) createAlert(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 201, map[string]any{"id": id})
 }
 
-func (s *Server) evalAlert(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, role := principal(r)
-	id, _ := uuid.Parse(chi.URLParam(r, "id"))
-	var cond []byte
-	err := s.deps.PG.QueryRow(r.Context(), `SELECT condition_json FROM alerts WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, org, ws).Scan(&cond)
-	if err != nil {
-		httpx.Error(w, 404, "not_found", "alerta não encontrado")
-		return
-	}
-	var c struct {
-		DatasetID string  `json:"dataset_id"`
-		Measure   string  `json:"measure"`
-		Op        string  `json:"op"`
-		Value     float64 `json:"value"`
-	}
-	_ = json.Unmarshal(cond, &c)
-	res, err := s.query.Execute(r.Context(), org, ws, uid, role, queryeng.Request{DatasetID: c.DatasetID, Measures: []string{c.Measure}, Limit: 1})
-	if err != nil {
-		httpx.Error(w, 400, "eval_failed", err.Error())
-		return
-	}
-	var val float64
-	if len(res.Rows) > 0 {
-		for _, v := range res.Rows[0] {
-			switch t := v.(type) {
-			case float64:
-				val = t
-			case int64:
-				val = float64(t)
-			}
-			break
-		}
-	}
-	triggered := false
-	switch c.Op {
-	case "<":
-		triggered = val < c.Value
-	case ">":
-		triggered = val > c.Value
-	case "<=":
-		triggered = val <= c.Value
-	case ">=":
-		triggered = val >= c.Value
-	}
-	if triggered {
-		_, _ = s.deps.PG.Exec(r.Context(), `UPDATE alerts SET last_triggered_at=now(), last_value=$2 WHERE id=$1`, id, mustJSON(map[string]any{"value": val}))
-		var ch []byte
-		var name string
-		_ = s.deps.PG.QueryRow(r.Context(), `SELECT name, channels FROM alerts WHERE id=$1`, id).Scan(&name, &ch)
-		var channels []string
-		_ = json.Unmarshal(ch, &channels)
-		s.notify.Deliver(r.Context(), id, channels, notify.Message{
-			Title: name, Body: fmt.Sprintf("Alerta disparado: valor=%.2f", val), URL: s.deps.Cfg.WebOrigin + "/alerts",
-		})
-	}
-	httpx.JSON(w, 200, map[string]any{"triggered": triggered, "value": val})
-}
-
 func (s *Server) listReports(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	rows, err := s.deps.PG.Query(r.Context(), `SELECT id, name, cadence, last_generated_at, updated_at FROM reports WHERE org_id=$1 AND workspace_id=$2 ORDER BY updated_at DESC`, org, ws)
@@ -939,13 +881,14 @@ func (s *Server) listReports(w http.ResponseWriter, r *http.Request) {
 func (s *Server) getReport(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
-	var name, cadence string
+	var name, cadence, emailTo, whatsappTo string
 	var pages, lastContent []byte
 	var last, updated *time.Time
 	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT name, cadence, pages_json, last_generated_at, last_content_json, updated_at
+		SELECT name, cadence, pages_json, last_generated_at, last_content_json, updated_at,
+			COALESCE(email_to,''), COALESCE(whatsapp_to,'')
 		FROM reports WHERE id=$1 AND org_id=$2 AND workspace_id=$3
-	`, id, org, ws).Scan(&name, &cadence, &pages, &last, &lastContent, &updated)
+	`, id, org, ws).Scan(&name, &cadence, &pages, &last, &lastContent, &updated, &emailTo, &whatsappTo)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "relatório não encontrado")
 		return
@@ -959,6 +902,8 @@ func (s *Server) getReport(w http.ResponseWriter, r *http.Request) {
 		"last_generated_at": last,
 		"last_content":      json.RawMessage(lastContent),
 		"updated_at":        updated,
+		"email_to":          emailTo,
+		"whatsapp_to":       whatsappTo,
 	})
 }
 
@@ -993,9 +938,11 @@ func (s *Server) updateReport(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
 	var body struct {
-		Name    string          `json:"name"`
-		Cadence string          `json:"cadence"`
-		Pages   json.RawMessage `json:"pages"`
+		Name       string          `json:"name"`
+		Cadence    string          `json:"cadence"`
+		Pages      json.RawMessage `json:"pages"`
+		EmailTo    *string         `json:"email_to"`
+		WhatsappTo *string         `json:"whatsapp_to"`
 	}
 	if err := httpx.Decode(r, &body); err != nil {
 		httpx.Error(w, 400, "invalid", "corpo inválido")
@@ -1004,10 +951,27 @@ func (s *Server) updateReport(w http.ResponseWriter, r *http.Request) {
 	if len(body.Pages) == 0 {
 		body.Pages = []byte("[]")
 	}
+	emailTo, whatsappTo := "", ""
+	if body.EmailTo != nil {
+		emailTo = *body.EmailTo
+	}
+	if body.WhatsappTo != nil {
+		whatsappTo = *body.WhatsappTo
+	}
+	if body.EmailTo == nil || body.WhatsappTo == nil {
+		var curEmail, curWA string
+		_ = s.deps.PG.QueryRow(r.Context(), `SELECT COALESCE(email_to,''), COALESCE(whatsapp_to,'') FROM reports WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, org, ws).Scan(&curEmail, &curWA)
+		if body.EmailTo == nil {
+			emailTo = curEmail
+		}
+		if body.WhatsappTo == nil {
+			whatsappTo = curWA
+		}
+	}
 	ct, err := s.deps.PG.Exec(r.Context(), `
-		UPDATE reports SET name=$1, cadence=$2, pages_json=$3, updated_at=now()
-		WHERE id=$4 AND org_id=$5 AND workspace_id=$6
-	`, body.Name, body.Cadence, body.Pages, id, org, ws)
+		UPDATE reports SET name=$1, cadence=$2, pages_json=$3, email_to=$4, whatsapp_to=$5, updated_at=now()
+		WHERE id=$6 AND org_id=$7 AND workspace_id=$8
+	`, body.Name, body.Cadence, body.Pages, emailTo, whatsappTo, id, org, ws)
 	if err != nil || ct.RowsAffected() == 0 {
 		httpx.Error(w, 404, "not_found", "relatório não encontrado")
 		return
@@ -1030,16 +994,36 @@ func (s *Server) deleteReport(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) generateReport(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
-	id, _ := uuid.Parse(chi.URLParam(r, "id"))
-	var ds uuid.UUID
-	if err := s.deps.PG.QueryRow(r.Context(), `SELECT id FROM datasets WHERE org_id=$1 AND workspace_id=$2 AND status='ready' ORDER BY updated_at DESC LIMIT 1`, org, ws).Scan(&ds); err != nil {
-		httpx.Error(w, 400, "no_dataset", "nenhum conjunto disponível")
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
 		return
 	}
-	brief, err := s.intel.AnalyzeDataset(r.Context(), org, ws, uid, ds, role)
+	content, err := s.generateReportContent(r.Context(), org, ws, uid, role, id)
 	if err != nil {
 		httpx.Error(w, 400, "report_failed", err.Error())
 		return
+	}
+	httpx.JSON(w, 200, content)
+}
+
+func (s *Server) generateReportContent(ctx context.Context, org, ws, uid uuid.UUID, role string, reportID uuid.UUID) (map[string]any, error) {
+	var pages []byte
+	var name, emailTo, whatsappTo string
+	err := s.deps.PG.QueryRow(ctx, `
+		SELECT name, pages_json, COALESCE(email_to,''), COALESCE(whatsapp_to,'')
+		FROM reports WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+	`, reportID, org, ws).Scan(&name, &pages, &emailTo, &whatsappTo)
+	if err != nil {
+		return nil, fmt.Errorf("relatório não encontrado")
+	}
+	ds, err := s.reportDatasetID(ctx, org, ws, pages)
+	if err != nil {
+		return nil, err
+	}
+	brief, err := s.intel.AnalyzeDataset(ctx, org, ws, uid, ds, role)
+	if err != nil {
+		return nil, err
 	}
 	content := map[string]any{
 		"executive_summary":   brief.Headline,
@@ -1050,8 +1034,58 @@ func (s *Server) generateReport(w http.ResponseWriter, r *http.Request) {
 		"generated_at":        time.Now().UTC(),
 	}
 	raw, _ := json.Marshal(content)
-	_, _ = s.deps.PG.Exec(r.Context(), `UPDATE reports SET last_generated_at=now(), last_content_json=$2 WHERE id=$1 AND org_id=$3 AND workspace_id=$4`, id, raw, org, ws)
-	httpx.JSON(w, 200, content)
+	_, _ = s.deps.PG.Exec(ctx, `UPDATE reports SET last_generated_at=now(), last_content_json=$2 WHERE id=$1 AND org_id=$3 AND workspace_id=$4`, reportID, raw, org, ws)
+	s.deliverReport(ctx, org, reportID, name, emailTo, whatsappTo, content)
+	return content, nil
+}
+
+func (s *Server) reportDatasetID(ctx context.Context, org, ws uuid.UUID, pages []byte) (uuid.UUID, error) {
+	var parsed []struct {
+		Widgets []struct {
+			Query struct {
+				DatasetID string `json:"dataset_id"`
+			} `json:"query"`
+		} `json:"widgets"`
+	}
+	if json.Unmarshal(pages, &parsed) == nil {
+		for _, p := range parsed {
+			for _, w := range p.Widgets {
+				if id, err := uuid.Parse(w.Query.DatasetID); err == nil && id != uuid.Nil {
+					return id, nil
+				}
+			}
+		}
+	}
+	var ds uuid.UUID
+	if err := s.deps.PG.QueryRow(ctx, `SELECT id FROM datasets WHERE org_id=$1 AND workspace_id=$2 AND status='ready' ORDER BY updated_at DESC LIMIT 1`, org, ws).Scan(&ds); err != nil {
+		return uuid.Nil, fmt.Errorf("nenhum conjunto disponível")
+	}
+	return ds, nil
+}
+
+func (s *Server) deliverReport(ctx context.Context, org, reportID uuid.UUID, name, emailTo, whatsappTo string, content map[string]any) {
+	body := fmt.Sprintf("%s\n\nResumo: %v\nRiscos: %v\nAcções: %v", name, content["executive_summary"], content["risks"], content["recommended_actions"])
+	url := s.deps.Cfg.WebOrigin + "/reports/" + reportID.String()
+	var from string
+	_ = s.deps.PG.QueryRow(ctx, `SELECT COALESCE(brand_from_email,'') FROM organizations WHERE id=$1`, org).Scan(&from)
+	for _, to := range splitRecipients(emailTo) {
+		_ = s.notify.SendMailFrom(from, to, "Relatório · "+name, body+"\n"+url)
+	}
+	for _, to := range splitRecipients(whatsappTo) {
+		_ = s.notify.SendWhatsApp(to, notify.Message{Title: "Relatório · " + name, Body: body, URL: url})
+	}
+}
+
+func splitRecipients(raw string) []string {
+	parts := strings.FieldsFunc(raw, func(r rune) bool { return r == ',' || r == ';' || r == '\n' })
+	var out []string
+	for _, p := range parts {
+		p = strings.TrimSpace(p)
+		if p != "" {
+			out = append(out, p)
+		}
+	}
+	return out
 }
 
 func (s *Server) metrics(w http.ResponseWriter, r *http.Request) {

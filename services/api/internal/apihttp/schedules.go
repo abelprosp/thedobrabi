@@ -224,6 +224,11 @@ func (s *Server) ensureScheduleTarget(ctx context.Context, org, ws uuid.UUID, ki
 		if n == 0 {
 			return fmt.Errorf("conjunto não encontrado")
 		}
+	case "report":
+		_ = s.deps.PG.QueryRow(ctx, `SELECT COUNT(*) FROM reports WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, target, org, ws).Scan(&n)
+		if n == 0 {
+			return fmt.Errorf("relatório não encontrado")
+		}
 	}
 	return nil
 }
@@ -303,4 +308,15 @@ func (s *Server) runScheduledDataset(ctx context.Context, orgID, wsID, userID, d
 		return scheduler.JobResult{}, err
 	}
 	return s.runScheduledConnector(ctx, orgID, wsID, userID, src, "", incremental)
+}
+
+func (s *Server) runScheduledReport(ctx context.Context, orgID, wsID, userID, reportID uuid.UUID) (scheduler.JobResult, error) {
+	role := "analyst"
+	content, err := s.generateReportContent(ctx, orgID, wsID, userID, role, reportID)
+	if err != nil {
+		return scheduler.JobResult{}, err
+	}
+	n := int64(1)
+	_ = content
+	return scheduler.JobResult{Mode: "full", Rows: &n}, nil
 }

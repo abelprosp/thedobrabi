@@ -7,7 +7,10 @@ import Link from "next/link";
 import { toast } from "sonner";
 import {
   AlertTriangle,
+  Building2,
   Headphones,
+  Home,
+  KeyRound,
   Megaphone,
   Package,
   Percent,
@@ -52,6 +55,9 @@ const ICONS: Record<StoreIcon, typeof Wallet> = {
   headset: Headphones,
   alert: AlertTriangle,
   percent: Percent,
+  building: Building2,
+  home: Home,
+  key: KeyRound,
 };
 
 export default function StorePage() {
