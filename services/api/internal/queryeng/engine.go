@@ -91,6 +91,9 @@ func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, rol
 	if req.Limit <= 0 || req.Limit > e.cfg.QueryRowLimit {
 		req.Limit = 900
 	}
+	if len(req.Joins) == 0 {
+		req.Joins = e.relationshipsForDataset(ctx, orgID, wsID, req.DatasetID)
+	}
 	meta, err := e.planner.loadDataset(ctx, orgID, wsID, req.DatasetID)
 	if err != nil {
 		return Result{}, err
@@ -236,6 +239,40 @@ func filterClauseSimple(model semantic.Model, f Filter) (string, error) {
 	default:
 		return "", fmt.Errorf("unsupported filter op")
 	}
+}
+
+func (e *Engine) relationshipsForDataset(ctx context.Context, orgID, wsID uuid.UUID, datasetID string) []DatasetJoin {
+	ds, err := uuid.Parse(datasetID)
+	if err != nil || e.pg == nil {
+		return nil
+	}
+	rows, err := e.pg.Query(ctx, `
+		SELECT to_dataset_id::text, from_column, to_column, COALESCE(relationship_type,'')
+		FROM semantic_relationships
+		WHERE org_id=$1 AND workspace_id=$2 AND from_dataset_id=$3
+		ORDER BY created_at
+		LIMIT 8
+	`, orgID, wsID, ds)
+	if err != nil {
+		return nil
+	}
+	defer rows.Close()
+	var out []DatasetJoin
+	for rows.Next() {
+		var to, fromCol, toCol, typ string
+		if err := rows.Scan(&to, &fromCol, &toCol, &typ); err != nil {
+			continue
+		}
+		if to == "" || fromCol == "" || toCol == "" {
+			continue
+		}
+		match := "both"
+		if typ == "one_to_many" {
+			match = "all_left"
+		}
+		out = append(out, DatasetJoin{DatasetID: to, FromColumn: fromCol, ToColumn: toCol, Match: match})
+	}
+	return out
 }
 
 func (e *Engine) ReadRows(ctx context.Context, orgID, wsID uuid.UUID, datasetID string, limit int) ([]string, []map[string]any, error) {

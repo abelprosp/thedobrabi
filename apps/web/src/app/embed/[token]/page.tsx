@@ -7,6 +7,7 @@ import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { api } from "@/lib/api";
+import { Logo } from "@/components/brand";
 import { ErrorState, PageSkeleton } from "@/components/ui";
 import { AppearanceScope, parseLayoutTheme } from "@/components/theme-provider";
 import { WidgetView, type DashboardFilter, type Widget } from "@/components/WidgetView";
@@ -20,6 +21,8 @@ type PublicDashboard = {
   name: string;
   description: string;
   layout: { widgets: Widget[]; theme?: string };
+  brand_name?: string;
+  brand_logo_url?: string;
 };
 
 function normalizeWidgets(raw: Widget[] | undefined): Widget[] {
@@ -53,7 +56,7 @@ export default function EmbedPage() {
   const isNarrow = useMediaQuery("(max-width: 767px)");
   const q = useQuery({
     queryKey: ["public-embed", token],
-    queryFn: () => api<PublicDashboard>(`/api/v1/public/embed/${token}`),
+    queryFn: () => api<PublicDashboard>(`/api/v1/public/embed/${encodeURIComponent(token)}`),
   });
 
   useEffect(() => {
@@ -94,13 +97,23 @@ export default function EmbedPage() {
     [widgets, isNarrow],
   );
 
-  const queryPath = `/api/v1/public/embed/${token}/queries`;
+  const queryPath = `/api/v1/public/embed/${encodeURIComponent(token)}/queries`;
 
   if (q.isError) return <ErrorState message="Embed inválido ou expirado." />;
   if (q.isLoading || !q.data) return <div className="p-8"><PageSkeleton /></div>;
 
   return (
     <AppearanceScope appearance={dashTheme} className="min-h-screen bg-bg">
+      {(q.data.brand_name || q.data.brand_logo_url) && (
+        <div className="flex items-center gap-2 border-b border-line px-4 py-2">
+          <Logo
+            variant={dashTheme === "dark" ? "dark" : "light"}
+            size={22}
+            brandName={q.data.brand_name}
+            brandLogoUrl={q.data.brand_logo_url}
+          />
+        </div>
+      )}
       <div className="min-h-screen pb-6">
         {widgets.length === 0 ? (
           <p className="px-6 py-10 text-sm text-mute">Este dashboard ainda não tem widgets.</p>

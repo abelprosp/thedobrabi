@@ -210,7 +210,7 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "share", err.Error())
 		return
 	}
-	httpx.JSON(w, 201, map[string]any{"url": s.deps.Cfg.WebOrigin + "/share/" + tok, "token": tok})
+	httpx.JSON(w, 201, map[string]any{"url": s.orgWebOrigin(r.Context(), org) + "/share/" + tok, "token": tok})
 }
 
 func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
@@ -218,11 +218,12 @@ func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 	var id uuid.UUID
 	var name, desc string
 	var layout []byte
+	var org uuid.UUID
 	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT d.id, d.name, d.description, d.layout_json
+		SELECT d.id, d.name, d.description, d.layout_json, s.org_id
 		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
 		WHERE s.token=$1
-	`, tok).Scan(&id, &name, &desc, &layout)
+	`, tok).Scan(&id, &name, &desc, &layout, &org)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
@@ -231,7 +232,11 @@ func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 	if json.Unmarshal(layout, &parsed) != nil || parsed == nil {
 		parsed = map[string]any{"widgets": []any{}}
 	}
-	httpx.JSON(w, 200, map[string]any{"id": id, "name": name, "description": desc, "layout": parsed})
+	brandName, brandLogo := s.orgBrand(r.Context(), org)
+	httpx.JSON(w, 200, map[string]any{
+		"id": id, "name": name, "description": desc, "layout": parsed,
+		"brand_name": brandName, "brand_logo_url": brandLogo,
+	})
 }
 
 func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {

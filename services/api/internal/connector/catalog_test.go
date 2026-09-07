@@ -11,7 +11,7 @@ func TestCatalogCoverage(t *testing.T) {
 		"bigquery", "databricks", "mongodb", "odbc",
 		"csv", "xlsx", "manual", "google_sheets", "json", "parquet", "pdf",
 		"rest", "odata", "url",
-		"asaas", "conta_azul", "bitrix24", "omie", "google_ads", "meta_ads",
+		"asaas", "conta_azul", "bitrix24", "omie", "totvs_protheus", "sap_b1", "senior", "google_ads", "meta_ads",
 		"instagram", "facebook", "google_business", "salesforce", "mercado_livre",
 		"ibge_censo", "contabilidade", "inflacao", "expectativas", "cambio",
 		"google_analytics", "github", "stripe",

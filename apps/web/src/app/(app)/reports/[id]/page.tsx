@@ -3,8 +3,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, normalizeArray } from "@/lib/api";
+import { api, getAccess, normalizeArray } from "@/lib/api";
 import { WidgetView, type Widget } from "@/components/WidgetView";
+import { modelIdForDataset, relationshipsToJoins } from "@/lib/semantic";
 import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
 import { toast } from "sonner";
 import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
@@ -71,6 +72,49 @@ export default function ReportEditorPage() {
       setHydrated(true);
     }
   }, [q.data, hydrated]);
+
+  useEffect(() => {
+    if (!hydrated || !semanticModels.length) return;
+    let cancelled = false;
+    (async () => {
+      const cache = new Map<string, ReturnType<typeof relationshipsToJoins>>();
+      let changed = false;
+      const nextPages = [];
+      for (const page of pages) {
+        const widgets = [];
+        for (const w of page.widgets) {
+          if (!w.query?.dataset_id || (w.query.joins && w.query.joins.length > 0)) {
+            widgets.push(w);
+            continue;
+          }
+          const modelId = modelIdForDataset(semanticModels, w.query.dataset_id);
+          if (!modelId) {
+            widgets.push(w);
+            continue;
+          }
+          if (!cache.has(modelId)) {
+            try {
+              cache.set(modelId, relationshipsToJoins(await api(`/api/v1/semantic-models/${modelId}/relationships`)));
+            } catch {
+              cache.set(modelId, []);
+            }
+          }
+          const joins = cache.get(modelId) || [];
+          if (!joins.length) {
+            widgets.push(w);
+            continue;
+          }
+          changed = true;
+          widgets.push({ ...w, query: { ...w.query, joins } });
+        }
+        nextPages.push({ ...page, widgets });
+      }
+      if (!cancelled && changed) setPages(nextPages);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated, semanticModels, pages]);
 
   const currentPage = pages[activePage] || { name: "", widgets: [] };
   const widgets = currentPage.widgets;
@@ -216,7 +260,34 @@ export default function ReportEditorPage() {
                 ) : (
                   <Button variant="secondary" onClick={() => setEdit(true)}><EyeOff size={14} /> Editar</Button>
                 )}
-                <Button variant="secondary" onClick={exportPdf}><FileDown size={14} /> PDF</Button>
+                <Button variant="secondary" onClick={exportPdf}><FileDown size={14} /> PDF da página</Button>
+                <Button
+                  variant="secondary"
+                  onClick={async () => {
+                    try {
+                      const token = getAccess();
+                      const ws = localStorage.getItem("thedobra.workspace") || "";
+                      const res = await fetch(`/api/v1/reports/${id}/pdf`, {
+                        headers: {
+                          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                          ...(ws ? { "X-Workspace-Id": ws } : {}),
+                        },
+                      });
+                      if (!res.ok) throw new Error("Falha ao gerar o PDF das páginas");
+                      const blob = await res.blob();
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = `${name || "relatorio"}.pdf`;
+                      a.click();
+                      URL.revokeObjectURL(url);
+                    } catch (e: any) {
+                      toast.error(e.message || "Falha ao descarregar o PDF do servidor");
+                    }
+                  }}
+                >
+                  <FileDown size={14} /> PDF servidor
+                </Button>
                 <Button variant="secondary" onClick={() => window.print()}><Printer size={14} /> Imprimir</Button>
                 <Button variant="secondary" onClick={() => setScheduleOpen(true)}><Calendar size={14} /> Agendar</Button>
                 <Button variant="secondary" onClick={() => { navigator.clipboard?.writeText(window.location.href); toast.success("Link copiado"); }}><Share2 size={14} /> Partilhar</Button>

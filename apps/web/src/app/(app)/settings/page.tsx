@@ -344,17 +344,19 @@ function BrandBox({ org }: { org: { data?: any; refetch: () => void } }) {
   const [name, setName] = useState(org.data?.brand_name || "");
   const [logo, setLogo] = useState(org.data?.brand_logo_url || "");
   const [from, setFrom] = useState(org.data?.brand_from_email || "");
+  const [domain, setDomain] = useState(org.data?.custom_domain || "");
   useEffect(() => {
     setName(org.data?.brand_name || "");
     setLogo(org.data?.brand_logo_url || "");
     setFrom(org.data?.brand_from_email || "");
-  }, [org.data?.brand_name, org.data?.brand_logo_url, org.data?.brand_from_email]);
+    setDomain(org.data?.custom_domain || "");
+  }, [org.data?.brand_name, org.data?.brand_logo_url, org.data?.brand_from_email, org.data?.custom_domain]);
   const can = org.data?.whitelabel === true;
   const save = useMutation({
     mutationFn: () =>
       api("/api/v1/organizations/current", {
         method: "PATCH",
-        body: JSON.stringify({ brand_name: name, brand_logo_url: logo, brand_from_email: from }),
+        body: JSON.stringify({ brand_name: name, brand_logo_url: logo, brand_from_email: from, custom_domain: domain }),
       }),
     onSuccess: () => {
       toast.success("Marca actualizada");
@@ -366,13 +368,15 @@ function BrandBox({ org }: { org: { data?: any; refetch: () => void } }) {
     <Box title="Marca (white-label)">
       <p className="mb-3 text-[13px] text-mute">
         {can
-          ? "Nome, logótipo e remetente dos e-mails da organização. Aparece no menu e nos envios agendados."
+          ? "Nome, logótipo, remetente e domínio próprio. O domínio passa a ser usado em embed, partilha e e-mails."
           : "White-label está no plano Completo. Pode pré-visualizar os campos, mas só esse plano guarda a marca."}
       </p>
       <div className="space-y-2">
         <input className={inputCls} value={name} onChange={(e) => setName(e.target.value)} placeholder="Nome da marca" disabled={!can} />
         <input className={inputCls} value={logo} onChange={(e) => setLogo(e.target.value)} placeholder="URL do logótipo" disabled={!can} />
         <input className={inputCls} value={from} onChange={(e) => setFrom(e.target.value)} placeholder="remetente@empresa.com" disabled={!can} />
+        <input className={inputCls} value={domain} onChange={(e) => setDomain(e.target.value)} placeholder="bi.empresa.com" disabled={!can} />
+        <p className="text-[11px] text-mute">Aponte um CNAME deste domínio para a app TheDobra. Embed e partilha passam a usar https://domínio.</p>
         <button
           type="button"
           disabled={!can || save.isPending}

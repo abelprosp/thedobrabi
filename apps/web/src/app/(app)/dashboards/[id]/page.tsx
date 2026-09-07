@@ -64,6 +64,8 @@ import {
   Plug,
   Database,
   MoreHorizontal,
+  Code2,
+  Ban,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -71,6 +73,7 @@ import {
   modelForDataset,
   modelIdForDataset,
   rebindQueryToLiveDataset,
+  relationshipsToJoins,
   widgetFieldDefaults,
 } from "@/lib/semantic";
 import { DASHBOARD_TEMPLATES, instantiateTemplate, prepareTemplateModel } from "@/lib/dashboard-templates";
@@ -151,6 +154,18 @@ function useDashboardHistory(initial: Widget[]) {
 
 const Grid = WidthProvider(GridLayout);
 
+type EmbedSnippet = {
+  token?: string;
+  jti?: string;
+  url: string;
+  iframe: string;
+  script: string;
+  expires_at?: string;
+  created_at?: string;
+  revoked_at?: string | null;
+  active?: boolean;
+};
+
 
 export default function DashboardEditorPage() {
   return (
@@ -179,6 +194,10 @@ function DashboardEditorInner() {
   const [aiCompleteStep, setAiCompleteStep] = useState(0);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [embedOpen, setEmbedOpen] = useState(false);
+  const [embedSnippet, setEmbedSnippet] = useState<EmbedSnippet | null>(null);
+  const [embedList, setEmbedList] = useState<EmbedSnippet[]>([]);
+  const [embedBusy, setEmbedBusy] = useState(false);
   const isNarrow = useMediaQuery("(max-width: 767px)");
   const mobileView = mobilePreview || isNarrow;
   const phoneFrame = mobilePreview && !isNarrow;
@@ -221,6 +240,58 @@ function DashboardEditorInner() {
   const history = useDashboardHistory(d.data?.layout?.widgets || []);
   const widgets = history.widgets;
 
+  const refreshEmbeds = useCallback(async () => {
+    const list = normalizeArray<EmbedSnippet>(await api(`/api/v1/dashboards/${id}/embed`));
+    setEmbedList(list);
+    return list;
+  }, [id]);
+
+  const openEmbed = useCallback(async () => {
+    setMoreOpen(false);
+    setEmbedOpen(true);
+    try {
+      const list = await refreshEmbeds();
+      const active = list.find((e) => e.active);
+      setEmbedSnippet(active || list[0] || null);
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  }, [refreshEmbeds]);
+
+  const createEmbed = useCallback(async () => {
+    setEmbedBusy(true);
+    try {
+      const emb = await api<EmbedSnippet>(`/api/v1/dashboards/${id}/embed`, {
+        method: "POST",
+        body: JSON.stringify({ expires_days: 90 }),
+      });
+      setEmbedSnippet(emb);
+      await refreshEmbeds();
+      await navigator.clipboard?.writeText(emb.url);
+      toast.success("Token de embed criado · válido 90 dias");
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setEmbedBusy(false);
+    }
+  }, [id, refreshEmbeds]);
+
+  const revokeEmbed = useCallback(async (token?: string) => {
+    if (!token) return;
+    setEmbedBusy(true);
+    try {
+      await api(`/api/v1/dashboards/${id}/embed/${encodeURIComponent(token)}`, { method: "DELETE" });
+      const list = await refreshEmbeds();
+      const active = list.find((e) => e.active);
+      setEmbedSnippet(active || null);
+      toast.success("Embed revogado");
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setEmbedBusy(false);
+    }
+  }, [id, refreshEmbeds]);
+
   useEffect(() => {
     if (d.data && !hydrated) {
       setName(d.data.name);
@@ -262,6 +333,45 @@ function DashboardEditorInner() {
       toast.message(`Visuais ligados ao conjunto «${fallback?.name || datasetList[0].name}».`);
     }
   }, [hydrated, datasets.isLoading, datasetList, semanticModels, preferredDatasetId, widgets, history.set]);
+
+  useEffect(() => {
+    if (!hydrated || !semanticModels.length) return;
+    let cancelled = false;
+    (async () => {
+      const cache = new Map<string, { dataset_id: string; from_column: string; to_column: string; match?: "both" | "all_left" }[]>();
+      let changed = false;
+      const next = [];
+      for (const w of widgets) {
+        if (!w.query?.dataset_id || (w.query.joins && w.query.joins.length > 0) || ["text", "image", "markdown", "iframe"].includes(w.type)) {
+          next.push(w);
+          continue;
+        }
+        const modelId = modelIdForDataset(semanticModels, w.query.dataset_id);
+        if (!modelId) {
+          next.push(w);
+          continue;
+        }
+        if (!cache.has(modelId)) {
+          try {
+            cache.set(modelId, relationshipsToJoins(await api(`/api/v1/semantic-models/${modelId}/relationships`)));
+          } catch {
+            cache.set(modelId, []);
+          }
+        }
+        const joins = cache.get(modelId) || [];
+        if (!joins.length) {
+          next.push(w);
+          continue;
+        }
+        changed = true;
+        next.push({ ...w, query: { ...w.query, joins } });
+      }
+      if (!cancelled && changed) history.set(next);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [hydrated, semanticModels, widgets, history.set]);
 
   const save = useMutation({
     mutationFn: () =>
@@ -590,6 +700,12 @@ function DashboardEditorInner() {
                 >
                   <Share2 size={14} /> Partilhar
                 </button>
+                <button
+                  className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg"
+                  onClick={openEmbed}
+                >
+                  <Code2 size={14} /> Embed
+                </button>
                 {canDelete && (
                   <button
                     className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10"
@@ -862,6 +978,67 @@ function DashboardEditorInner() {
               </>
             )}
           </Card>
+        </div>
+      )}
+
+      {embedOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setEmbedOpen(false)}>
+          <div className="w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
+          <Card className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-[15px] font-semibold text-ink">Embed público</h2>
+              <button type="button" onClick={() => setEmbedOpen(false)} className="text-mute hover:text-ink"><X size={16} /></button>
+            </div>
+            <p className="text-[13px] text-mute">Tokens expiram em 90 dias. Revogue se o iframe deixar de ser necessário.</p>
+            {embedList.length > 0 && (
+              <div className="max-h-28 space-y-1 overflow-auto rounded-xl border border-line p-2">
+                {embedList.map((e) => (
+                  <button
+                    key={e.token || e.url}
+                    type="button"
+                    className={cn(
+                      "flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-left text-[12px]",
+                      embedSnippet?.token === e.token ? "bg-bg text-ink" : "text-mute hover:bg-bg",
+                    )}
+                    onClick={() => setEmbedSnippet(e)}
+                  >
+                    <span className="truncate font-mono">{(e.token || "").slice(0, 10)}…</span>
+                    <span>{e.active ? (e.expires_at ? `até ${new Date(e.expires_at).toLocaleDateString()}` : "activo") : "revogado"}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {embedSnippet ? (
+              <>
+                <FieldLabel label="URL">
+                  <div className="flex gap-2">
+                    <Input readOnly value={embedSnippet.url} />
+                    <Button variant="secondary" onClick={() => { navigator.clipboard?.writeText(embedSnippet.url); toast.success("URL copiada"); }}><Copy size={14} /></Button>
+                  </div>
+                </FieldLabel>
+                <FieldLabel label="Iframe">
+                  <Textarea readOnly value={embedSnippet.iframe} className="min-h-20 font-mono text-[11px]" />
+                </FieldLabel>
+                <FieldLabel label="Script">
+                  <Textarea readOnly value={embedSnippet.script} className="min-h-16 font-mono text-[11px]" />
+                </FieldLabel>
+              </>
+            ) : (
+              <p className="text-[13px] text-mute">Ainda não há tokens. Crie um para gerar o iframe.</p>
+            )}
+            <div className="flex flex-wrap justify-end gap-2">
+              {embedSnippet?.active && embedSnippet.token && (
+                <Button variant="secondary" disabled={embedBusy} onClick={() => revokeEmbed(embedSnippet.jti || embedSnippet.token)}>
+                  <Ban size={14} /> Revogar
+                </Button>
+              )}
+              <Button variant="secondary" disabled={embedBusy} onClick={createEmbed} busy={embedBusy}>
+                <Code2 size={14} /> Novo token
+              </Button>
+              <Button variant="secondary" onClick={() => setEmbedOpen(false)}>Fechar</Button>
+            </div>
+          </Card>
+          </div>
         </div>
       )}
     </div>

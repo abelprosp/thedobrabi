@@ -1,0 +1,3 @@
+ALTER TABLE dashboard_embeds
+    ADD COLUMN IF NOT EXISTS expires_at TIMESTAMPTZ,
+    ADD COLUMN IF NOT EXISTS revoked_at TIMESTAMPTZ;

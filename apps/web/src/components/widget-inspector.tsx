@@ -2,7 +2,8 @@
 
 import type { WidgetConfig } from "@/components/WidgetView";
 import type { DatasetListItem, SemanticModel, SemanticMeasure } from "@/lib/semantic";
-import { dimensionKey, measureKey, modelForDataset, remapQueryToModel } from "@/lib/semantic";
+import { dimensionKey, measureKey, modelForDataset, modelIdForDataset, relationshipsToJoins, remapQueryToModel } from "@/lib/semantic";
+import { api, normalizeArray } from "@/lib/api";
 import { asJoinField } from "@/lib/widget-errors";
 import {
   BRAND_PALETTE,
@@ -695,20 +696,30 @@ function QueryFields({
             const nextId = e.target.value;
             onPreferredDataset(nextId);
             const nextModel = modelForDataset(semanticModels, nextId);
-            onUpdate((w) => ({
-              ...w,
-              query: remapQueryToModel(
-                {
-                  ...w.query,
-                  dataset_id: nextId,
-                  joins: undefined,
-                  measures: (w.query?.measures || []).filter((m) => !m.startsWith("join.")),
-                  dimensions: (w.query?.dimensions || []).filter((d) => !d.startsWith("join.")),
-                },
-                w.type,
-                nextModel,
-              ),
-            }));
+            const modelId = modelIdForDataset(semanticModels, nextId);
+            const apply = (joins?: QueryJoin[]) =>
+              onUpdate((w) => ({
+                ...w,
+                query: remapQueryToModel(
+                  {
+                    ...w.query,
+                    dataset_id: nextId,
+                    joins: joins?.length ? joins : undefined,
+                    measures: (w.query?.measures || []).filter((m) => !m.startsWith("join.")),
+                    dimensions: (w.query?.dimensions || []).filter((d) => !d.startsWith("join.")),
+                  },
+                  w.type,
+                  nextModel,
+                ),
+              }));
+            apply();
+            if (!modelId) return;
+            api<any>(`/api/v1/semantic-models/${modelId}/relationships`)
+              .then((raw) => {
+                const joins = relationshipsToJoins(raw);
+                if (joins.length) apply(joins);
+              })
+              .catch(() => {});
           }}
         >
           <option value="">—</option>

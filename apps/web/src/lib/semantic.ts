@@ -165,6 +165,20 @@ export type RemappedQuery = {
   time_range?: { start?: string; end?: string };
 };
 
+export function relationshipsToJoins(raw: unknown): QueryJoinSpec[] {
+  const rows = Array.isArray(raw) ? raw : Array.isArray((raw as any)?.data) ? (raw as any).data : [];
+  return normalizeJoins(
+    rows
+      .filter((r: any) => r?.to_dataset_id && r?.from_column && r?.to_column)
+      .map((r: any) => ({
+        dataset_id: String(r.to_dataset_id),
+        from_column: String(r.from_column),
+        to_column: String(r.to_column),
+        match: r.type === "one_to_many" || r.relationship_type === "one_to_many" ? "all_left" : "both",
+      })),
+  );
+}
+
 function normalizeJoins(
   joins: { dataset_id?: string; from_column?: string; to_column?: string; match?: string }[] | undefined,
 ): QueryJoinSpec[] {

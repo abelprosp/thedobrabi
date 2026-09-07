@@ -3,6 +3,7 @@ package notify
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"log/slog"
@@ -27,9 +28,12 @@ func New(cfg config.Config, pg *pgxpool.Pool, log *slog.Logger) *Service {
 }
 
 type Message struct {
-	Title string
-	Body  string
-	URL   string
+	Title   string
+	Body    string
+	URL     string
+	HTML    string
+	PDF     []byte
+	PDFName string
 }
 
 func (s *Service) Deliver(ctx context.Context, alertID uuid.UUID, channels []string, msg Message) {
@@ -86,6 +90,10 @@ func (s *Service) SendMailFrom(from, to, subject, body string) error {
 	return s.emailFrom(from, to, Message{Title: subject, Body: body})
 }
 
+func (s *Service) SendMailMessage(from, to string, msg Message) error {
+	return s.emailFrom(from, to, msg)
+}
+
 func (s *Service) SendWhatsApp(to string, msg Message) error {
 	return s.whatsapp(to, msg)
 }
@@ -130,9 +138,43 @@ func (s *Service) emailFrom(from, to string, msg Message) error {
 	if !strings.Contains(addr, ":") {
 		addr += ":587"
 	}
-	raw := []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n%s\n%s\n",
-		from, to, msg.Title, msg.Body, msg.URL))
+	raw := buildMail(from, to, msg)
 	return smtp.SendMail(addr, auth, from, []string{to}, raw)
+}
+
+func buildMail(from, to string, msg Message) []byte {
+	subject := strings.ReplaceAll(msg.Title, "\n", " ")
+	if msg.HTML == "" && len(msg.PDF) == 0 {
+		return []byte(fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n%s\n%s\n",
+			from, to, subject, msg.Body, msg.URL))
+	}
+	boundary := "dobra" + fmt.Sprint(time.Now().UnixNano())
+	var b strings.Builder
+	fmt.Fprintf(&b, "From: %s\r\nTo: %s\r\nSubject: %s\r\nMIME-Version: 1.0\r\nContent-Type: multipart/mixed; boundary=%s\r\n\r\n", from, to, subject, boundary)
+	b.WriteString("--" + boundary + "\r\n")
+	if msg.HTML != "" {
+		b.WriteString("Content-Type: text/html; charset=utf-8\r\n\r\n")
+		b.WriteString(msg.HTML)
+		if msg.URL != "" {
+			b.WriteString(fmt.Sprintf(`<p><a href="%s">Abrir no TheDobra</a></p>`, msg.URL))
+		}
+		b.WriteString("\r\n")
+	} else {
+		b.WriteString("Content-Type: text/plain; charset=utf-8\r\n\r\n")
+		b.WriteString(msg.Body + "\n" + msg.URL + "\r\n")
+	}
+	if len(msg.PDF) > 0 {
+		name := msg.PDFName
+		if name == "" {
+			name = "relatorio.pdf"
+		}
+		b.WriteString("--" + boundary + "\r\n")
+		fmt.Fprintf(&b, "Content-Type: application/pdf\r\nContent-Disposition: attachment; filename=\"%s\"\r\nContent-Transfer-Encoding: base64\r\n\r\n", name)
+		b.WriteString(base64.StdEncoding.EncodeToString(msg.PDF))
+		b.WriteString("\r\n")
+	}
+	b.WriteString("--" + boundary + "--\r\n")
+	return []byte(b.String())
 }
 
 func (s *Service) whatsapp(to string, msg Message) error {

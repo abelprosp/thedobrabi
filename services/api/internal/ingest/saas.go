@@ -23,11 +23,11 @@ func saasResources(typ string) []string {
 	case "omie":
 		return []string{"clientes", "pedidos"}
 	case "totvs_protheus":
-		return []string{"customers", "orders", "products"}
+		return []string{"customers", "orders", "products", "invoices", "vendors"}
 	case "sap_b1":
-		return []string{"BusinessPartners", "Orders", "Items"}
+		return []string{"BusinessPartners", "Orders", "Items", "Invoices", "PurchaseOrders"}
 	case "senior":
-		return []string{"employees", "payroll"}
+		return []string{"employees", "payroll", "vacations", "departments"}
 	case "google_ads":
 		return []string{"campaigns"}
 	case "meta_ads":

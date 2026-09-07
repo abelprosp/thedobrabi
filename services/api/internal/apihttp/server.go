@@ -99,7 +99,7 @@ func New(deps *platform.Deps) http.Handler {
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Timeout(60 * time.Second))
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{deps.Cfg.WebOrigin, "http://localhost:3000", "http://localhost:3001", "http://localhost:3010"},
+		AllowOriginFunc:  func(_ *http.Request, origin string) bool { return s.allowCORSOrigin(origin) },
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-Workspace-Id"},
 		AllowCredentials: true,
@@ -181,7 +181,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Delete("/datasets/{id}", s.deleteDataset)
 			r.Get("/datasets/{id}/preview", s.previewDataset)
 			r.Get("/datasets/{id}/export", s.exportDataset)
-			r.Get("/datasets/{id}/quality", s.datasetQuality
+			r.Get("/datasets/{id}/quality", s.datasetQuality)
 
 			r.Get("/semantic-models", s.listSemantic)
 			r.Get("/semantic-models/{id}", s.getSemantic)
@@ -198,6 +198,8 @@ func New(deps *platform.Deps) http.Handler {
 			r.Delete("/dashboards/{id}", s.deleteDashboard)
 			r.Post("/dashboards/{id}/share", s.shareDashboard)
 			r.Post("/dashboards/{id}/embed", s.createDashboardEmbed)
+			r.Get("/dashboards/{id}/embed", s.listDashboardEmbeds)
+			r.Delete("/dashboards/{id}/embed/{token}", s.revokeDashboardEmbed)
 
 			r.Get("/ai/config", s.aiConfig)
 			r.Post("/ai/ask", s.ask)
@@ -217,6 +219,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Put("/reports/{id}", s.updateReport)
 			r.Delete("/reports/{id}", s.deleteReport)
 			r.Post("/reports/{id}/generate", s.generateReport)
+			r.Get("/reports/{id}/pdf", s.exportReportPDF)
 
 			r.Get("/metrics", s.metrics)
 			r.Get("/audit", s.auditLogs)
@@ -489,11 +492,11 @@ func (s *Server) me(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) orgCurrent(w http.ResponseWriter, r *http.Request) {
 	_, org, _, _ := principal(r)
-	var name, slug, plan, brandName, brandLogo, brandFrom string
+	var name, slug, plan, brandName, brandLogo, brandFrom, customDomain string
 	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT name, slug, plan, COALESCE(brand_name,''), COALESCE(brand_logo_url,''), COALESCE(brand_from_email,'')
+		SELECT name, slug, plan, COALESCE(brand_name,''), COALESCE(brand_logo_url,''), COALESCE(brand_from_email,''), COALESCE(custom_domain,'')
 		FROM organizations WHERE id=$1
-	`, org).Scan(&name, &slug, &plan, &brandName, &brandLogo, &brandFrom)
+	`, org).Scan(&name, &slug, &plan, &brandName, &brandLogo, &brandFrom, &customDomain)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "organização não encontrada")
 		return
@@ -501,7 +504,8 @@ func (s *Server) orgCurrent(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{
 		"id": org, "name": name, "slug": slug, "plan": plan,
 		"brand_name": brandName, "brand_logo_url": brandLogo, "brand_from_email": brandFrom,
-		"whitelabel": s.ent.Limits(r.Context(), org).Whitelabel,
+		"custom_domain": customDomain,
+		"whitelabel":    s.ent.Limits(r.Context(), org).Whitelabel,
 	})
 }
 
@@ -519,16 +523,17 @@ func (s *Server) patchOrgCurrent(w http.ResponseWriter, r *http.Request) {
 		BrandName      *string `json:"brand_name"`
 		BrandLogoURL   *string `json:"brand_logo_url"`
 		BrandFromEmail *string `json:"brand_from_email"`
+		CustomDomain   *string `json:"custom_domain"`
 	}
 	if err := httpx.Decode(r, &body); err != nil {
 		httpx.Error(w, 400, "invalid", "corpo inválido")
 		return
 	}
-	var name, slug, plan, brandName, brandLogo, brandFrom string
+	var name, slug, plan, brandName, brandLogo, brandFrom, customDomain string
 	_ = s.deps.PG.QueryRow(r.Context(), `
-		SELECT name, slug, plan, COALESCE(brand_name,''), COALESCE(brand_logo_url,''), COALESCE(brand_from_email,'')
+		SELECT name, slug, plan, COALESCE(brand_name,''), COALESCE(brand_logo_url,''), COALESCE(brand_from_email,''), COALESCE(custom_domain,'')
 		FROM organizations WHERE id=$1
-	`, org).Scan(&name, &slug, &plan, &brandName, &brandLogo, &brandFrom)
+	`, org).Scan(&name, &slug, &plan, &brandName, &brandLogo, &brandFrom, &customDomain)
 	if body.BrandName != nil {
 		brandName = strings.TrimSpace(*body.BrandName)
 	}
@@ -538,9 +543,12 @@ func (s *Server) patchOrgCurrent(w http.ResponseWriter, r *http.Request) {
 	if body.BrandFromEmail != nil {
 		brandFrom = strings.TrimSpace(*body.BrandFromEmail)
 	}
+	if body.CustomDomain != nil {
+		customDomain = normalizeDomain(*body.CustomDomain)
+	}
 	_, err := s.deps.PG.Exec(r.Context(), `
-		UPDATE organizations SET brand_name=$2, brand_logo_url=$3, brand_from_email=$4 WHERE id=$1
-	`, org, brandName, brandLogo, brandFrom)
+		UPDATE organizations SET brand_name=$2, brand_logo_url=$3, brand_from_email=$4, custom_domain=$5 WHERE id=$1
+	`, org, brandName, brandLogo, brandFrom, customDomain)
 	if err != nil {
 		httpx.Error(w, 400, "save_failed", err.Error())
 		return
@@ -549,7 +557,8 @@ func (s *Server) patchOrgCurrent(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{
 		"id": org, "name": name, "slug": slug, "plan": plan,
 		"brand_name": brandName, "brand_logo_url": brandLogo, "brand_from_email": brandFrom,
-		"whitelabel": true,
+		"custom_domain": customDomain,
+		"whitelabel":    true,
 	})
 }
 

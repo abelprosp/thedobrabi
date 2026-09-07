@@ -135,7 +135,10 @@ export function FlowCanvasEditor({ flow, initialSteps }: { flow: Flow; initialSt
       return { column: "", op: "eq", value: "" };
     }
     if (subkind === "join") {
-      return { left_key: "id", right_key: "id" };
+      return { left_key: "id", right_key: "id", how: "inner" };
+    }
+    if (subkind === "append") {
+      return { right_dataset_id: datasetList.find((d) => d.id !== flow.source_dataset_id)?.id || "" };
     }
     return {};
   };
@@ -445,6 +448,12 @@ function StepConfigFields({
           <FieldLabel label="Chave direita">
             <Input value={str("right_key")} onChange={(e) => update("right_key", e.target.value)} placeholder="id" />
           </FieldLabel>
+          <FieldLabel label="Como juntar">
+            <Select value={str("how") || str("match") || "inner"} onChange={(e) => update("how", e.target.value)}>
+              <option value="inner">Só linhas nos dois</option>
+              <option value="left">Manter todas as da esquerda</option>
+            </Select>
+          </FieldLabel>
           <FieldLabel label="Segundo conjunto">
             <Select value={str("right_dataset_id")} onChange={(e) => update("right_dataset_id", e.target.value)}>
               <option value="">Escolher…</option>
@@ -456,6 +465,19 @@ function StepConfigFields({
             </Select>
           </FieldLabel>
         </>
+      );
+    case "append":
+      return (
+        <FieldLabel label="Conjunto a acrescentar" hint="As linhas deste conjunto são concatenadas às da origem.">
+          <Select value={str("right_dataset_id")} onChange={(e) => update("right_dataset_id", e.target.value)}>
+            <option value="">Escolher…</option>
+            {datasets.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name}
+              </option>
+            ))}
+          </Select>
+        </FieldLabel>
       );
     case "rename":
       return (

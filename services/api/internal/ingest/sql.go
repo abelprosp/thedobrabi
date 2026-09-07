@@ -593,7 +593,7 @@ func looksLikeSelect(s string) bool {
 
 func saasHasNativeURL(typ string) bool {
 	switch typ {
-	case "asaas", "conta_azul", "bitrix24", "omie", "salesforce", "instagram", "facebook", "google_business", "mercado_livre", "ibge_censo", "inflacao", "expectativas", "cambio", "contabilidade", "google_sheets":
+	case "asaas", "conta_azul", "bitrix24", "omie", "salesforce", "instagram", "facebook", "google_business", "mercado_livre", "ibge_censo", "inflacao", "expectativas", "cambio", "contabilidade", "google_sheets", "totvs_protheus", "sap_b1", "senior":
 		return true
 	}
 	return false

@@ -1035,7 +1035,7 @@ func (s *Server) generateReportContent(ctx context.Context, org, ws, uid uuid.UU
 	}
 	raw, _ := json.Marshal(content)
 	_, _ = s.deps.PG.Exec(ctx, `UPDATE reports SET last_generated_at=now(), last_content_json=$2 WHERE id=$1 AND org_id=$3 AND workspace_id=$4`, reportID, raw, org, ws)
-	s.deliverReport(ctx, org, reportID, name, emailTo, whatsappTo, content)
+	s.deliverReport(ctx, org, ws, uid, role, reportID, name, emailTo, whatsappTo, pages, content)
 	return content, nil
 }
 
@@ -1063,17 +1063,43 @@ func (s *Server) reportDatasetID(ctx context.Context, org, ws uuid.UUID, pages [
 	return ds, nil
 }
 
-func (s *Server) deliverReport(ctx context.Context, org, reportID uuid.UUID, name, emailTo, whatsappTo string, content map[string]any) {
+func (s *Server) deliverReport(ctx context.Context, org, ws, uid uuid.UUID, role string, reportID uuid.UUID, name, emailTo, whatsappTo string, pages []byte, content map[string]any) {
 	body := fmt.Sprintf("%s\n\nResumo: %v\nRiscos: %v\nAcções: %v", name, content["executive_summary"], content["risks"], content["recommended_actions"])
-	url := s.deps.Cfg.WebOrigin + "/reports/" + reportID.String()
+	url := s.orgWebOrigin(ctx, org) + "/reports/" + reportID.String()
 	var from string
 	_ = s.deps.PG.QueryRow(ctx, `SELECT COALESCE(brand_from_email,'') FROM organizations WHERE id=$1`, org).Scan(&from)
+	pdf := s.renderReportVisualPDF(ctx, org, ws, uid, role, name, pages)
+	html := reportHTML(name, content)
 	for _, to := range splitRecipients(emailTo) {
-		_ = s.notify.SendMailFrom(from, to, "Relatório · "+name, body+"\n"+url)
+		_ = s.notify.SendMailMessage(from, to, notify.Message{
+			Title: "Relatório · " + name, Body: body, URL: url, HTML: html, PDF: pdf, PDFName: slugFile(name) + ".pdf",
+		})
 	}
 	for _, to := range splitRecipients(whatsappTo) {
 		_ = s.notify.SendWhatsApp(to, notify.Message{Title: "Relatório · " + name, Body: body, URL: url})
 	}
+}
+
+func (s *Server) exportReportPDF(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, role := principal(r)
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	var name string
+	var pages []byte
+	err = s.deps.PG.QueryRow(r.Context(), `
+		SELECT name, pages_json FROM reports WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+	`, id, org, ws).Scan(&name, &pages)
+	if err != nil {
+		httpx.Error(w, 404, "not_found", "relatório não encontrado")
+		return
+	}
+	pdf := s.renderReportVisualPDF(r.Context(), org, ws, uid, role, name, pages)
+	w.Header().Set("Content-Type", "application/pdf")
+	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s.pdf"`, slugFile(name)))
+	w.Write(pdf)
 }
 
 func splitRecipients(raw string) []string {

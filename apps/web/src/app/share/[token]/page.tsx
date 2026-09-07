@@ -22,6 +22,8 @@ type PublicDashboard = {
   name: string;
   description: string;
   layout: { widgets: Widget[]; theme?: string };
+  brand_name?: string;
+  brand_logo_url?: string;
 };
 
 function normalizeWidgets(raw: Widget[] | undefined): Widget[] {
@@ -106,7 +108,12 @@ export default function SharePage() {
       <div className="border-b border-line px-4 py-3 sm:px-6 sm:py-4">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Logo variant={dashTheme === "dark" ? "dark" : "light"} size={28} />
+            <Logo
+              variant={dashTheme === "dark" ? "dark" : "light"}
+              size={28}
+              brandName={q.data.brand_name}
+              brandLogoUrl={q.data.brand_logo_url}
+            />
             <span className="text-sm text-mute">· partilha</span>
           </div>
           <ThemeSegmented

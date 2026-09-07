@@ -4,11 +4,12 @@ import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Chart, Kpi } from "@/components/viz";
 import { AdvancedChart, Sparkline, KpiGoal, MetricGroup, DecompositionTree, IframeWidget, formatNumber } from "@/components/AdvancedViz";
-import { api } from "@/lib/api";
+import { api, getAccess } from "@/lib/api";
+import { toast } from "sonner";
 import { cn } from "@/lib/cn";
 import { DEFAULT_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
-import { AlertCircle, Image as ImageIcon } from "lucide-react";
+import { AlertCircle, Download, Image as ImageIcon } from "lucide-react";
 
 export type GridPos = { x: number; y: number; w: number; h: number };
 
@@ -436,12 +437,34 @@ function TableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; colu
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
-      {cfg.showTitle !== false && (
+      {(cfg.showTitle !== false || rows.length > 0) && (
         <div className={cn("flex items-center justify-between border-b border-line px-3 py-2", titleAlignClass(cfg.titleAlign))}>
-          <span className="text-[13px] font-medium text-ink">{w.title}</span>
-          {w.hierarchy && w.hierarchy.length > 1 && w.drillPath && w.drillPath.length > 0 && (
-            <button className="text-xs text-accent" onClick={() => onDrill(w.id, "up")}>Subir</button>
-          )}
+          {cfg.showTitle !== false ? <span className="text-[13px] font-medium text-ink">{w.title}</span> : <span />}
+          <div className="flex items-center gap-2">
+            {(rows.length > 0 || w.query?.dataset_id) && (
+              <>
+                {rows.length > 0 && (
+                  <button type="button" className="text-[11px] text-mute hover:text-ink" onClick={() => downloadRows(w.title, columns, rows, "csv")}>
+                    <Download size={12} className="inline" /> CSV
+                  </button>
+                )}
+                {w.query?.dataset_id && (
+                  <button
+                    type="button"
+                    className="text-[11px] text-mute hover:text-ink"
+                    onClick={() => {
+                      downloadDatasetXlsx(w.query!.dataset_id!, w.title).catch((e: Error) => toast.error(e.message || "Falha ao exportar Excel"));
+                    }}
+                  >
+                    <Download size={12} className="inline" /> Excel
+                  </button>
+                )}
+              </>
+            )}
+            {w.hierarchy && w.hierarchy.length > 1 && w.drillPath && w.drillPath.length > 0 && (
+              <button className="text-xs text-accent" onClick={() => onDrill(w.id, "up")}>Subir</button>
+            )}
+          </div>
         </div>
       )}
       <div className="flex-1 overflow-auto p-3">
@@ -584,6 +607,40 @@ function SlicerView({
       )}
     </div>
   );
+}
+
+function downloadRows(title: string, columns: string[], rows: any[], format: "csv" | "xlsx") {
+  const name = (title || "tabela").replace(/[^\w\-]+/g, "_");
+  const esc = (v: unknown) => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const body = [columns.map(esc).join(","), ...rows.map((r) => columns.map((c) => esc(r[c])).join(","))].join("\n");
+  const blob = new Blob(["\uFEFF" + body], { type: "text/csv;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name}.csv`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  void format;
+}
+
+async function downloadDatasetXlsx(datasetId: string, title: string) {
+  const token = getAccess();
+  const ws = typeof window !== "undefined" ? localStorage.getItem("thedobra.workspace") : "";
+  const res = await fetch(`/api/v1/datasets/${datasetId}/export?format=xlsx`, {
+    headers: {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(ws ? { "X-Workspace-Id": ws } : {}),
+    },
+  });
+  if (!res.ok) {
+    throw new Error("Falha ao exportar o conjunto");
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${(title || "conjunto").replace(/[^\w\-]+/g, "_")}.xlsx`;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 function renderMarkdown(md: string) {
