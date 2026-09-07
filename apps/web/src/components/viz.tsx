@@ -98,7 +98,8 @@ export function EChart({
 }
 
 export function Chart({ type = "bar", columns = [], rows = [], height, onClick, config = {} }: ChartProps) {
-  const chrome = chartChrome();
+  const { theme } = useTheme();
+  const chrome = chartChrome(theme);
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const rawCatsAll = rows.map((r) => String(r[dim] ?? ""));
   const numericCols = columns.filter((c) => c !== dim && typeof rows[0]?.[c] === "number");
@@ -132,7 +133,7 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
     }
   };
 
-  const legend = legendOption(showLegend, legendPos);
+  const legend = legendOption(showLegend, legendPos, theme);
   const legendPad = showLegend && (legendPos === "top" || legendPos === "bottom") ? 28 : 0;
   const sidePad = showLegend && (legendPos === "left" || legendPos === "right") ? 80 : 0;
 
@@ -143,7 +144,7 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
           animationDuration: 450,
           tooltip: showTooltip
             ? {
-                ...echartsTooltip(),
+                ...echartsTooltip(theme),
                 trigger: "item",
                 formatter: (p: any) =>
                   `<div style="font-weight:600;margin-bottom:2px">${p.name}</div>${formatNumber(p.value, config)} · ${p.percent}%`,
@@ -251,7 +252,7 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
             animationDuration: 450,
             tooltip: showTooltip
               ? {
-                  ...echartsTooltip(),
+                  ...echartsTooltip(theme),
                   trigger: "axis",
                   axisPointer: { type: type === "bar" ? "shadow" : "line", shadowStyle: { color: "rgba(37,99,235,0.08)" } },
                   formatter: (params: any) => {

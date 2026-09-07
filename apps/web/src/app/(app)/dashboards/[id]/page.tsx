@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, apiStatus, normalizeArray } from "@/lib/api";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -63,6 +63,7 @@ import {
   AppWindow,
   Plug,
   Database,
+  MoreHorizontal,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -75,8 +76,17 @@ import {
 import { DASHBOARD_TEMPLATES, instantiateTemplate, prepareTemplateModel } from "@/lib/dashboard-templates";
 import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
 import { ThemeSegmented } from "@/components/theme-toggle";
-import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
-import { readStoredAppearance, type Appearance } from "@/lib/theme";
+import { AppearanceScope, parseLayoutTheme } from "@/components/theme-provider";
+import { readStoredDashboardAppearance, writeStoredDashboardAppearance, type Appearance } from "@/lib/theme";
+import { useMediaQuery } from "@/lib/use-media-query";
+import {
+  MOBILE_COLS,
+  applyDesktopLayoutChange,
+  applyMobileLayoutChange,
+  mobileHeightFor,
+  resolveDesktopLayout,
+  resolveMobileLayout,
+} from "@/lib/dashboard-layout";
 const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description: string; defaultW: number; defaultH: number }[] = [
   { type: "kpi", label: "KPI", icon: Monitor, description: "Métrica principal", defaultW: 3, defaultH: 2 },
   { type: "kpi_goal", label: "KPI com meta", icon: Target, description: "Valor, meta e progresso", defaultW: 4, defaultH: 3 },
@@ -168,10 +178,14 @@ function DashboardEditorInner() {
   const [aiCompleteDataset, setAiCompleteDataset] = useState("");
   const [aiCompleteStep, setAiCompleteStep] = useState(0);
   const [mobilePreview, setMobilePreview] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const isNarrow = useMediaQuery("(max-width: 767px)");
+  const mobileView = mobilePreview || isNarrow;
+  const phoneFrame = mobilePreview && !isNarrow;
+  const skipLayoutRef = useRef(true);
   const [hydrated, setHydrated] = useState(false);
   const [preferredDatasetId, setPreferredDatasetId] = useState(searchParams.get("dataset_id") || "");
   const [sourceFilter, setSourceFilter] = useState("");
-  const { theme, setTheme } = useTheme();
   const [dashTheme, setDashTheme] = useState<Appearance>("light");
 
   const me = useQuery({ queryKey: ["me"], queryFn: () => api<{ role?: string }>("/api/v1/auth/me") });
@@ -213,9 +227,7 @@ function DashboardEditorInner() {
       setDescription(d.data.description || "");
       history.set(d.data.layout?.widgets || []);
       const saved = parseLayoutTheme(d.data.layout);
-      const next = saved || readStoredAppearance();
-      setDashTheme(next);
-      if (saved) setTheme(saved);
+      setDashTheme(saved || readStoredDashboardAppearance());
       setHydrated(true);
     }
     const ws = d.data?.workspace_id;
@@ -223,11 +235,6 @@ function DashboardEditorInner() {
       localStorage.setItem("thedobra.workspace", ws);
     }
   }, [d.data, hydrated, history]);
-
-  useEffect(() => {
-    if (!hydrated) return;
-    setDashTheme(theme);
-  }, [theme, hydrated]);
 
   useEffect(() => {
     if (!d.isError) return;
@@ -366,15 +373,23 @@ function DashboardEditorInner() {
     }
   };
 
-  const layout = useMemo<Layout[]>(() => widgets.map((w) => ({ i: w.id, x: w.layout.x, y: w.layout.y, w: w.layout.w, h: w.layout.h, minW: 2, minH: 2 })), [widgets]);
+  useEffect(() => {
+    skipLayoutRef.current = true;
+    const t = window.setTimeout(() => {
+      skipLayoutRef.current = false;
+    }, 280);
+    return () => window.clearTimeout(t);
+  }, [mobileView, id]);
+
+  const layout = useMemo<Layout[]>(
+    () => (mobileView ? resolveMobileLayout(widgets) : resolveDesktopLayout(widgets)),
+    [widgets, mobileView],
+  );
 
   const onLayoutChange = useCallback((next: Layout[]) => {
-    const mapped = widgets.map((w) => {
-      const l = next.find((x) => x.i === w.id);
-      return l ? { ...w, layout: { x: l.x, y: l.y, w: l.w, h: l.h } } : w;
-    });
-    history.push(mapped);
-  }, [history, widgets]);
+    if (skipLayoutRef.current) return;
+    history.push(mobileView ? applyMobileLayoutChange(widgets, next) : applyDesktopLayoutChange(widgets, next));
+  }, [history, widgets, mobileView]);
 
   const addWidget = (type: WidgetType) => {
     const ds = preferredDatasetId || visibleDatasets[0]?.id || datasetList[0]?.id;
@@ -392,6 +407,14 @@ function DashboardEditorInner() {
       type,
       title: catalog.label,
       layout: { x, y: 100, w: catalog.defaultW, h: catalog.defaultH },
+      layoutMobile: mobileView
+        ? {
+            x: 0,
+            y: widgets.reduce((max, item) => Math.max(max, (item.layoutMobile?.y ?? 0) + (item.layoutMobile?.h ?? mobileHeightFor(item.type, item.layout.h))), 0),
+            w: MOBILE_COLS,
+            h: mobileHeightFor(type, catalog.defaultH),
+          }
+        : undefined,
       query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
       hierarchy: type === "decomposition_tree" ? fields.dimensions : undefined,
@@ -467,7 +490,7 @@ function DashboardEditorInner() {
   return (
     <div className="-m-4 flex h-[calc(100vh-3.5rem)] min-h-0 flex-col bg-surface-2 sm:-m-6">
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
-        <nav className="flex min-w-0 items-center gap-1.5 text-[12px] text-mute">
+        <nav className="hidden min-w-0 items-center gap-1.5 text-[12px] text-mute sm:flex">
           <Link href="/dashboards" className="hover:text-ink">Dashboards</Link>
           <span className="text-line">/</span>
         </nav>
@@ -476,10 +499,10 @@ function DashboardEditorInner() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Nome do dashboard"
-            className="h-8 max-w-[260px] border-0 bg-transparent px-1 text-[15px] font-semibold shadow-none"
+            className="h-8 min-w-0 flex-1 border-0 bg-transparent px-1 text-[15px] font-semibold shadow-none sm:max-w-[260px] sm:flex-none"
           />
         ) : (
-          <h1 className="truncate text-[15px] font-semibold text-ink">{name || "Dashboard"}</h1>
+          <h1 className="min-w-0 flex-1 truncate text-[15px] font-semibold text-ink sm:flex-none">{name || "Dashboard"}</h1>
         )}
         {edit && (
           <Input
@@ -489,14 +512,17 @@ function DashboardEditorInner() {
             className="hidden h-8 max-w-xs border-0 bg-transparent px-1 text-[12px] text-mute shadow-none lg:block"
           />
         )}
-        <div className="ml-auto flex flex-wrap items-center gap-1.5">
-          <ThemeSegmented
-            value={dashTheme}
-            onChange={(next) => {
-              setDashTheme(next);
-              setTheme(next);
-            }}
-          />
+        <div className="ml-auto flex flex-wrap items-center justify-end gap-1.5">
+          <div className="hidden md:block">
+            <ThemeSegmented
+              label="Tema do dashboard"
+              value={dashTheme}
+              onChange={(next) => {
+                setDashTheme(next);
+                writeStoredDashboardAppearance(next);
+              }}
+            />
+          </div>
           {edit && (
             <>
               <Button variant="ghost" size="icon" onClick={history.undo} disabled={!history.canUndo} title="Desfazer">
@@ -506,47 +532,80 @@ function DashboardEditorInner() {
                 <Redo2 size={16} />
               </Button>
               <Button variant="secondary" size="sm" onClick={() => setEdit(false)}>
-                <Eye size={14} /> Pré-visualizar
+                <Eye size={14} /> <span className="hidden sm:inline">Pré-visualizar</span>
               </Button>
             </>
           )}
           {!edit && (
             <Button variant="secondary" size="sm" onClick={() => setEdit(true)}>
-              <Settings2 size={14} /> Editar
+              <Settings2 size={14} /> <span className="hidden sm:inline">Editar</span>
             </Button>
           )}
-          <Button variant="secondary" size="sm" onClick={() => setAiOpen(!aiOpen)}>
-            <Wand2 size={14} /> Gerar
-          </Button>
-          <Button variant="secondary" size="sm" onClick={() => setAiCompleteOpen(true)}>
-            <Sparkles size={14} /> Completar
-          </Button>
-          <Button variant="secondary" size="sm" onClick={async () => {
-            try {
-              const d = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, { method: "POST" });
-              await navigator.clipboard?.writeText(d.url);
-              toast.success("Ligação de partilha copiada");
-            } catch (e: any) { toast.error(e.message); }
-          }}>
-            <Share2 size={14} /> Partilhar
-          </Button>
-          {canDelete && (
+          {!isNarrow && (
             <Button
-              variant="danger"
+              variant={mobilePreview ? "primary" : "secondary"}
               size="sm"
-              onClick={() => {
-                if (confirm(`Excluir o dashboard «${name || d.data?.name}»? Esta ação não pode ser desfeita.`)) {
-                  remove.mutate();
-                }
-              }}
-              busy={remove.isPending}
+              onClick={() => setMobilePreview((v) => !v)}
+              title={mobilePreview ? "Ver desktop" : "Ver telemóvel"}
             >
-              <Trash2 size={14} /> Excluir
+              {mobilePreview ? <Monitor size={14} /> : <Smartphone size={14} />}
+              <span className="hidden sm:inline">{mobilePreview ? "Desktop" : "Telemóvel"}</span>
             </Button>
           )}
           <Button size="sm" onClick={() => save.mutate()} busy={save.isPending}>
-            <Save size={14} /> Guardar
+            <Save size={14} /> <span className="hidden sm:inline">Guardar</span>
           </Button>
+          <div className="relative">
+            <Button variant="secondary" size="icon" onClick={() => setMoreOpen((v) => !v)} title="Mais acções" aria-expanded={moreOpen}>
+              <MoreHorizontal size={16} />
+            </Button>
+            {moreOpen && (
+              <div className="absolute right-0 z-30 mt-1 w-48 overflow-hidden rounded-xl border border-line bg-surface py-1 shadow-lg">
+                <div className="border-b border-line px-3 py-2 md:hidden">
+                  <ThemeSegmented
+                    label="Tema do dashboard"
+                    value={dashTheme}
+                    onChange={(next) => {
+                      setDashTheme(next);
+                      writeStoredDashboardAppearance(next);
+                    }}
+                  />
+                </div>
+                <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setAiOpen((v) => !v); setMoreOpen(false); }}>
+                  <Wand2 size={14} /> Gerar
+                </button>
+                <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setAiCompleteOpen(true); setMoreOpen(false); }}>
+                  <Sparkles size={14} /> Completar
+                </button>
+                <button
+                  className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg"
+                  onClick={async () => {
+                    setMoreOpen(false);
+                    try {
+                      const shared = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, { method: "POST" });
+                      await navigator.clipboard?.writeText(shared.url);
+                      toast.success("Ligação de partilha copiada");
+                    } catch (e: any) { toast.error(e.message); }
+                  }}
+                >
+                  <Share2 size={14} /> Partilhar
+                </button>
+                {canDelete && (
+                  <button
+                    className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                    onClick={() => {
+                      setMoreOpen(false);
+                      if (confirm(`Excluir o dashboard «${name || d.data?.name}»? Esta ação não pode ser desfeita.`)) {
+                        remove.mutate();
+                      }
+                    }}
+                  >
+                    <Trash2 size={14} /> Excluir
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
@@ -561,7 +620,7 @@ function DashboardEditorInner() {
                 type="button"
                 title={t.description}
                 onClick={() => addWidget(t.type)}
-                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-2 py-1 text-[11px] text-ink transition hover:border-primary hover:bg-primary/5"
+                className="flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-2.5 text-[11px] text-ink transition hover:border-primary hover:bg-primary/5"
               >
                 <Icon size={13} className="text-primary" />
                 {t.label}
@@ -585,16 +644,20 @@ function DashboardEditorInner() {
       )}
 
       <div className="flex shrink-0 flex-wrap items-end gap-2 border-b border-line bg-surface px-3 py-1.5 sm:px-4">
-        <FieldLabel label="Período início">
-          <Input type="date" value={timeRange.start || ""} onChange={(e) => setTimeRange({ ...timeRange, start: e.target.value })} className="h-8 w-[10.5rem]" />
-        </FieldLabel>
-        <FieldLabel label="Período fim">
-          <Input type="date" value={timeRange.end || ""} onChange={(e) => setTimeRange({ ...timeRange, end: e.target.value })} className="h-8 w-[10.5rem]" />
-        </FieldLabel>
-        {edit && (
-          <Button variant={mobilePreview ? "primary" : "secondary"} size="sm" onClick={() => setMobilePreview(!mobilePreview)}>
-            <Smartphone size={14} /> Mobile
-          </Button>
+        <div className="min-w-0 flex-1 sm:flex-none">
+          <FieldLabel label="Período início">
+            <Input type="date" value={timeRange.start || ""} onChange={(e) => setTimeRange({ ...timeRange, start: e.target.value })} className="h-8 w-full sm:w-[10.5rem]" />
+          </FieldLabel>
+        </div>
+        <div className="min-w-0 flex-1 sm:flex-none">
+          <FieldLabel label="Período fim">
+            <Input type="date" value={timeRange.end || ""} onChange={(e) => setTimeRange({ ...timeRange, end: e.target.value })} className="h-8 w-full sm:w-[10.5rem]" />
+          </FieldLabel>
+        </div>
+        {mobileView && (
+          <p className="w-full text-[11px] text-mute sm:w-auto">
+            {edit ? "A editar o layout do telemóvel. O desktop mantém-se." : "A ver o layout do telemóvel."}
+          </p>
         )}
         {globalFilters.length > 0 && (
           <div className="flex flex-wrap items-center gap-1 pb-0.5">
@@ -628,10 +691,21 @@ function DashboardEditorInner() {
       )}
 
       <div className="relative min-h-0 flex-1">
+        <AppearanceScope
+          appearance={dashTheme}
+          className={cn(
+            "h-full min-h-0",
+            phoneFrame ? "overflow-auto bg-surface-2" : "overflow-auto bg-bg pb-10",
+            edit && current && !mobileView && "pr-80",
+          )}
+        >
         <div
-          className={cn("h-full overflow-auto pb-10", edit && current && "pr-80")}
+          className={cn("h-full", phoneFrame && "flex justify-center px-4 py-6")}
           onClick={() => edit && setSelected(null)}
         >
+          <div className={cn(phoneFrame ? "phone-preview" : "h-full min-h-full w-full")}>
+            {phoneFrame && <div className="phone-preview-notch" aria-hidden />}
+            <div className={phoneFrame ? "phone-preview-screen" : "h-full"}>
           {widgets.length === 0 ? (
             <EmptyState
               icon={LayoutDashboard}
@@ -659,12 +733,13 @@ function DashboardEditorInner() {
             />
           ) : (
             <Grid
+              key={mobileView ? "mobile" : "desktop"}
               className="layout min-h-full"
               layout={layout}
-              cols={mobilePreview ? 4 : 12}
-              rowHeight={mobilePreview ? 110 : 96}
-              margin={[14, 14]}
-              containerPadding={[12, 12]}
+              cols={mobileView ? MOBILE_COLS : 12}
+              rowHeight={mobileView ? (phoneFrame ? 72 : 88) : 96}
+              margin={mobileView ? [10, 10] : [14, 14]}
+              containerPadding={mobileView ? [10, 10] : [12, 12]}
               isDraggable={edit}
               isResizable={edit}
               onLayoutChange={onLayoutChange}
@@ -681,14 +756,18 @@ function DashboardEditorInner() {
                   }}
                 >
                   {edit && (
-                    <div className="absolute right-2 top-2 z-10 flex items-center gap-1">
-                      <div className="drag-handle flex h-8 cursor-move items-center gap-1 rounded-lg bg-surface/95 px-2 text-[10px] text-mute shadow-sm">
-                        <Maximize2 size={12} /> Mover
+                    <div className={cn("absolute right-1.5 top-1.5 z-10 flex items-center gap-1", mobileView && "right-1 top-1")}>
+                      <div className={cn(
+                        "drag-handle flex cursor-move items-center justify-center gap-1 rounded-lg bg-surface/95 text-mute shadow-sm",
+                        mobileView ? "h-10 min-w-10 px-2 text-[11px]" : "h-8 px-2 text-[10px]",
+                      )}>
+                        <Maximize2 size={mobileView ? 14 : 12} />
+                        <span className={mobileView ? "hidden sm:inline" : ""}>Mover</span>
                       </div>
-                      <button className="flex h-8 items-center rounded-lg bg-surface/95 p-2 text-mute shadow-sm hover:text-accent" onClick={() => duplicateWidget(w.id)} title="Duplicar">
+                      <button className={cn("flex items-center justify-center rounded-lg bg-surface/95 text-mute shadow-sm hover:text-accent", mobileView ? "h-10 w-10" : "h-8 p-2")} onClick={() => duplicateWidget(w.id)} title="Duplicar">
                         <Copy size={12} />
                       </button>
-                      <button className="flex h-8 items-center rounded-lg bg-surface/95 p-2 text-mute shadow-sm hover:text-danger" onClick={() => removeWidget(w.id)} title="Remover">
+                      <button className={cn("flex items-center justify-center rounded-lg bg-surface/95 text-mute shadow-sm hover:text-danger", mobileView ? "h-10 w-10" : "h-8 p-2")} onClick={() => removeWidget(w.id)} title="Remover">
                         <Trash2 size={12} />
                       </button>
                     </div>
@@ -698,10 +777,13 @@ function DashboardEditorInner() {
               ))}
             </Grid>
           )}
+            </div>
+          </div>
         </div>
+        </AppearanceScope>
 
         {edit && current && (
-          <div className="absolute inset-y-0 right-0 z-20">
+          <div className={mobileView ? "absolute inset-x-0 bottom-0 z-20" : "absolute inset-y-0 right-0 z-20"}>
             <WidgetInspector
               widget={current}
               catalog={WIDGET_CATALOG}
@@ -716,6 +798,7 @@ function DashboardEditorInner() {
               onUpdate={(fn) => updateWidgets((p) => p.map((w) => (w.id === current.id ? fn(w) : w)))}
               onDrillUp={() => drill(current.id, "up")}
               onClose={() => setSelected(null)}
+              variant={mobileView ? "sheet" : "side"}
             />
           </div>
         )}

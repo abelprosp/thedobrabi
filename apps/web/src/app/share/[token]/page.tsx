@@ -10,8 +10,11 @@ import { api } from "@/lib/api";
 import { Logo } from "@/components/brand";
 import { ErrorState, PageSkeleton } from "@/components/ui";
 import { ThemeSegmented } from "@/components/theme-toggle";
-import { parseLayoutTheme, useTheme } from "@/components/theme-provider";
+import { AppearanceScope, parseLayoutTheme } from "@/components/theme-provider";
 import { WidgetView, type DashboardFilter, type Widget } from "@/components/WidgetView";
+import { readStoredDashboardAppearance, writeStoredDashboardAppearance, type Appearance } from "@/lib/theme";
+import { useMediaQuery } from "@/lib/use-media-query";
+import { MOBILE_COLS, resolveDesktopLayout, resolveMobileLayout } from "@/lib/dashboard-layout";
 
 const Grid = WidthProvider(GridLayout);
 
@@ -33,26 +36,32 @@ function normalizeWidgets(raw: Widget[] | undefined): Widget[] {
       w: Math.max(2, Number(w.layout?.w ?? 6)),
       h: Math.max(2, Number(w.layout?.h ?? 4)),
     },
+    layoutMobile: w.layoutMobile
+      ? {
+          x: Number(w.layoutMobile.x ?? 0),
+          y: Number(w.layoutMobile.y ?? 0),
+          w: Math.max(2, Number(w.layoutMobile.w ?? MOBILE_COLS)),
+          h: Math.max(2, Number(w.layoutMobile.h ?? 3)),
+        }
+      : undefined,
   }));
 }
 
 export default function SharePage() {
   const { token } = useParams<{ token: string }>();
-  const { theme, setTheme } = useTheme();
+  const [dashTheme, setDashTheme] = useState<Appearance>("light");
   const [globalFilters, setGlobalFilters] = useState<DashboardFilter[]>([]);
   const [widgets, setWidgets] = useState<Widget[]>([]);
+  const isNarrow = useMediaQuery("(max-width: 767px)");
   const q = useQuery({
     queryKey: ["public-dash", token],
     queryFn: () => api<PublicDashboard>(`/api/v1/public/dashboards/${token}`),
   });
 
   useEffect(() => {
-    const saved = parseLayoutTheme(q.data?.layout);
-    if (saved) setTheme(saved);
-  }, [q.data, setTheme]);
-
-  useEffect(() => {
     if (!q.data) return;
+    const saved = parseLayoutTheme(q.data.layout);
+    setDashTheme(saved || readStoredDashboardAppearance());
     setWidgets(normalizeWidgets(q.data.layout?.widgets));
     setGlobalFilters([]);
   }, [q.data]);
@@ -83,8 +92,8 @@ export default function SharePage() {
   }, []);
 
   const layout = useMemo<Layout[]>(
-    () => widgets.map((w) => ({ i: w.id, x: w.layout.x, y: w.layout.y, w: w.layout.w, h: w.layout.h, minW: 2, minH: 2 })),
-    [widgets],
+    () => (isNarrow ? resolveMobileLayout(widgets) : resolveDesktopLayout(widgets)),
+    [widgets, isNarrow],
   );
 
   const queryPath = `/api/v1/public/dashboards/${token}/queries`;
@@ -93,14 +102,21 @@ export default function SharePage() {
   if (q.isLoading || !q.data) return <div className="p-8"><PageSkeleton /></div>;
 
   return (
-    <div className="min-h-screen bg-bg">
-      <div className="border-b border-line px-6 py-4">
+    <AppearanceScope appearance={dashTheme} className="min-h-screen bg-bg">
+      <div className="border-b border-line px-4 py-3 sm:px-6 sm:py-4">
         <div className="mb-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Logo variant={theme === "dark" ? "dark" : "light"} size={28} />
+            <Logo variant={dashTheme === "dark" ? "dark" : "light"} size={28} />
             <span className="text-sm text-mute">· partilha</span>
           </div>
-          <ThemeSegmented value={theme} onChange={setTheme} />
+          <ThemeSegmented
+            label="Tema do dashboard"
+            value={dashTheme}
+            onChange={(next) => {
+              setDashTheme(next);
+              writeStoredDashboardAppearance(next);
+            }}
+          />
         </div>
         <h1 className="text-2xl font-semibold text-ink">{q.data.name}</h1>
         {q.data.description && <p className="mt-1 text-sm text-mute">{q.data.description}</p>}
@@ -128,12 +144,13 @@ export default function SharePage() {
           <p className="px-6 py-10 text-sm text-mute">Este dashboard ainda não tem widgets.</p>
         ) : (
           <Grid
+            key={isNarrow ? "mobile" : "desktop"}
             className="layout min-h-full"
             layout={layout}
-            cols={12}
-            rowHeight={96}
-            margin={[14, 14]}
-            containerPadding={[16, 16]}
+            cols={isNarrow ? MOBILE_COLS : 12}
+            rowHeight={isNarrow ? 88 : 96}
+            margin={isNarrow ? [10, 10] : [14, 14]}
+            containerPadding={isNarrow ? [12, 12] : [16, 16]}
             isDraggable={false}
             isResizable={false}
             compactType="vertical"
@@ -152,6 +169,6 @@ export default function SharePage() {
           </Grid>
         )}
       </div>
-    </div>
+    </AppearanceScope>
   );
 }

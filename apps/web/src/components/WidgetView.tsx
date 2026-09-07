@@ -10,11 +10,14 @@ import { DEFAULT_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
 import { AlertCircle, Image as ImageIcon } from "lucide-react";
 
+export type GridPos = { x: number; y: number; w: number; h: number };
+
 export type Widget = {
   id: string;
   type: WidgetType;
   title: string;
-  layout: { x: number; y: number; w: number; h: number };
+  layout: GridPos;
+  layoutMobile?: GridPos;
   query?: QuerySpec;
   text?: string;
   hierarchy?: string[];

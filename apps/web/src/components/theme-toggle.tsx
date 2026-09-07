@@ -1,7 +1,7 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "@/components/theme-provider";
+import { useSystemTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/cn";
 import type { Appearance } from "@/lib/theme";
 
@@ -12,7 +12,7 @@ export function ThemeToggle({
   className?: string;
   withLabel?: boolean;
 }) {
-  const { theme, toggle } = useTheme();
+  const { theme, toggle } = useSystemTheme();
   const dark = theme === "dark";
   return (
     <button
@@ -35,12 +35,14 @@ export function ThemeToggle({
 export function ThemeSegmented({
   value,
   onChange,
+  label = "Tema",
 }: {
   value: Appearance;
   onChange: (theme: Appearance) => void;
+  label?: string;
 }) {
   return (
-    <div className="inline-flex rounded-xl border border-line bg-surface p-0.5" role="group" aria-label="Tema do dashboard">
+    <div className="inline-flex rounded-xl border border-line bg-surface p-0.5" role="group" aria-label={label}>
       <button
         type="button"
         onClick={() => onChange("light")}

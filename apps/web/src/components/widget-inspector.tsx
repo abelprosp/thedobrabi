@@ -37,6 +37,7 @@ export function WidgetInspector({
   onUpdate,
   onDrillUp,
   onClose,
+  variant = "side",
 }: {
   widget: Widget;
   catalog: CatalogItem[];
@@ -52,6 +53,7 @@ export function WidgetInspector({
   onUpdate: (fn: (w: Widget) => Widget) => void;
   onDrillUp: () => void;
   onClose?: () => void;
+  variant?: "side" | "sheet";
 }) {
   const caps = inspectorCaps(widget.type);
   const cfg = widget.config || {};
@@ -72,7 +74,14 @@ export function WidgetInspector({
           }}
         />
       )}
-      <aside className="flex h-full w-[min(20rem,100vw)] min-h-0 shrink-0 flex-col overflow-y-auto border-l border-line bg-surface p-4 shadow-[-16px_0_40px_rgba(15,23,42,0.08)]">
+      <aside
+        className={cn(
+          "flex min-h-0 flex-col overflow-y-auto border-line bg-surface p-4",
+          variant === "sheet"
+            ? "h-auto max-h-[min(72vh,34rem)] w-full rounded-t-2xl border-t shadow-[0_-16px_40px_rgba(15,23,42,0.16)]"
+            : "h-full w-[min(20rem,100vw)] shrink-0 border-l shadow-[-16px_0_40px_rgba(15,23,42,0.08)]",
+        )}
+      >
         <div className="mb-2 flex items-center justify-between gap-2">
           <span className="text-[13px] font-semibold text-ink">Propriedades</span>
           <div className="flex items-center gap-1">

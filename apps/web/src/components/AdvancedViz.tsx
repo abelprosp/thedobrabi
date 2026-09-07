@@ -45,8 +45,8 @@ export function AdvancedChart({
 }) {
   const { theme } = useTheme();
   const option = useMemo(() => {
-    const chrome = chartChrome();
-    const tooltip = echartsTooltip();
+    const chrome = chartChrome(theme);
+    const tooltip = echartsTooltip(theme);
     const palette = chartPalette(config.color);
     const showTooltip = config.showTooltip !== false;
     const showLabels = ["funnel", "treemap", "heatmap"].includes(type) ? config.showDataLabels !== false : !!config.showDataLabels;
@@ -189,7 +189,7 @@ export function AdvancedChart({
         backgroundColor: "transparent",
         animationDuration: 450,
         tooltip: showTooltip ? { ...tooltip, trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
-        legend: legendOption(!!config.showLegend, config.legendPosition || "top"),
+        legend: legendOption(!!config.showLegend, config.legendPosition || "top", theme),
         color: palette,
         series: [
           {
@@ -361,7 +361,7 @@ export function Sparkline({ rows = [], columns = [], height, config = {} }: { ro
   const meas = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[1] || columns[0];
   const data = rows.map((r) => Number(r[meas] ?? 0));
   const color = config.color || PALETTE[0];
-  const tooltip = echartsTooltip();
+  const tooltip = echartsTooltip(theme);
   const option = {
     backgroundColor: "transparent",
     animationDuration: 350,

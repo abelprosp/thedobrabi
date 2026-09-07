@@ -95,22 +95,24 @@ const LIGHT_CHROME: ChartChrome = {
   surface2: "#f1f5f9",
 };
 
-export function chartChrome(): ChartChrome {
+const DARK_CHROME: ChartChrome = {
+  ink: "#f1f5f9",
+  mute: "#94a3b8",
+  line: "#334155",
+  surface: "#111827",
+  surface2: "#1e293b",
+};
+
+export function chartChrome(theme?: "light" | "dark"): ChartChrome {
+  if (theme === "dark") return DARK_CHROME;
+  if (theme === "light") return LIGHT_CHROME;
   if (typeof window === "undefined") return LIGHT_CHROME;
-  const s = getComputedStyle(document.documentElement);
-  const v = (name: string, fb: string) => s.getPropertyValue(name).trim() || fb;
-  return {
-    ink: v("--color-ink", LIGHT_CHROME.ink),
-    mute: v("--color-mute", LIGHT_CHROME.mute),
-    line: v("--color-line", LIGHT_CHROME.line),
-    surface: v("--color-surface", LIGHT_CHROME.surface),
-    surface2: v("--color-surface-2", LIGHT_CHROME.surface2),
-  };
+  return document.documentElement.classList.contains("dark") ? DARK_CHROME : LIGHT_CHROME;
 }
 
-export function legendOption(show: boolean, position: LegendPosition = "top") {
+export function legendOption(show: boolean, position: LegendPosition = "top", theme?: "light" | "dark") {
   if (!show) return undefined;
-  const c = chartChrome();
+  const c = chartChrome(theme);
   const base = { textStyle: { color: c.mute, fontSize: 11 } };
   if (position === "bottom") return { ...base, bottom: 0, left: "center" };
   if (position === "left") return { ...base, left: 0, top: "middle", orient: "vertical" };
@@ -170,8 +172,8 @@ export function inspectorCaps(type: string): InspectorCaps {
   };
 }
 
-export function echartsTooltip() {
-  const c = chartChrome();
+export function echartsTooltip(theme?: "light" | "dark") {
+  const c = chartChrome(theme);
   return {
     backgroundColor: c.surface,
     borderColor: c.line,

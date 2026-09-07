@@ -32,7 +32,7 @@ import { api, setTokens, clearTokens, getAccess } from "@/lib/api";
 import { CommandPalette } from "@/components/command-palette";
 import { Logo } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { useTheme } from "@/components/theme-provider";
+import { useSystemTheme } from "@/components/theme-provider";
 
 const OnboardingModal = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingModal })));
 const OnboardingSpotlight = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingSpotlight })));
@@ -91,7 +91,7 @@ function groupIdForPath(path: string) {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const router = useRouter();
-  const { theme } = useTheme();
+  const { theme } = useSystemTheme();
   const [me, setMe] = useState<{ name: string; email: string; org_name?: string; role?: string; workspace_id?: string } | null>(null);
   const [workspaces, setWorkspaces] = useState<{ id: string; name: string }[]>([]);
   const [wsId, setWsId] = useState("");

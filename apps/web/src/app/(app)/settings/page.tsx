@@ -7,13 +7,14 @@ import { useState } from "react";
 import { PageHeader, PageSkeleton } from "@/components/ui";
 import { ROLE_LABELS, planLabel, roleLabel } from "@/lib/labels";
 import { ThemeSegmented } from "@/components/theme-toggle";
-import { useTheme } from "@/components/theme-provider";
+import { useDashboardThemePreference, useSystemTheme } from "@/components/theme-provider";
 
 const inputCls = "w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-accent/50";
 const selectCls = "rounded-lg border border-line bg-surface px-2 text-sm text-ink outline-none";
 
 export default function SettingsPage() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useSystemTheme();
+  const dashboardTheme = useDashboardThemePreference();
   const me = useQuery({ queryKey: ["me"], queryFn: () => api<any>("/api/v1/auth/me") });
   const org = useQuery({ queryKey: ["org"], queryFn: () => api<any>("/api/v1/organizations/current") });
   const sso = useQuery({ queryKey: ["sso"], queryFn: () => api<any>("/api/v1/sso/connections") });
@@ -92,9 +93,13 @@ export default function SettingsPage() {
     <div className="mx-auto max-w-2xl space-y-6">
       <PageHeader title="Definições" description="Organização, membros, espaços de trabalho e autenticação." />
       {me.isLoading && <PageSkeleton cards={2} />}
-      <Box title="Aparência">
-        <p className="mb-3 text-[13px] text-mute">Escolha se o dashboard e a aplicação aparecem em tema claro ou escuro.</p>
-        <ThemeSegmented value={theme} onChange={setTheme} />
+      <Box title="Aparência da aplicação">
+        <p className="mb-3 text-[13px] text-mute">Menus, navegação e restantes páginas. Não muda o canvas dos dashboards.</p>
+        <ThemeSegmented label="Tema da aplicação" value={theme} onChange={setTheme} />
+      </Box>
+      <Box title="Aparência dos dashboards">
+        <p className="mb-3 text-[13px] text-mute">Pré-definição do canvas. Cada dashboard pode guardar o seu próprio tema ao clicar em Guardar.</p>
+        <ThemeSegmented label="Tema dos dashboards" value={dashboardTheme.theme} onChange={dashboardTheme.setTheme} />
       </Box>
       <Box title="Organização">
         <Row k="Utilizador" v={me.data?.name} />
