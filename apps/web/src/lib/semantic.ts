@@ -5,6 +5,8 @@ export type SemanticMeasure = {
   column?: string;
   aggregation?: string;
   expression?: string;
+  editor_mode?: "sql" | "blocks";
+  expression_blocks?: unknown;
 };
 
 export type SemanticDimension = {

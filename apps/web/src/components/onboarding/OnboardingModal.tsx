@@ -101,9 +101,9 @@ export function OnboardingModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
       <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={close} />
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-line bg-white shadow-2xl">
+      <div className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-line bg-white shadow-2xl sm:rounded-3xl">
         <div className="brand-gradient p-6 text-white">
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">

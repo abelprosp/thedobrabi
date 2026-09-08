@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api, getAccess, normalizeArray } from "@/lib/api";
 import { useParams, useRouter } from "next/navigation";
@@ -9,6 +9,8 @@ import { toast } from "sonner";
 import { Download, Trash2 } from "lucide-react";
 import { Button, Card, CardTitle, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, Td, Textarea, Th, cellValue, isNumericValue } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
+import { CustomMeasureModal } from "@/components/custom-measure-modal";
+import type { SemanticModel } from "@/lib/semantic";
 
 export default function DatasetPage() {
   const { id } = useParams<{ id: string }>();
@@ -85,7 +87,7 @@ export default function DatasetPage() {
             <button
               key={t.key}
               onClick={() => setTab(t.key as any)}
-              className={`rounded-t-lg px-3 py-2 text-[13px] font-medium transition ${
+              className={`min-h-10 shrink-0 rounded-t-lg px-3 py-2 text-[13px] font-medium transition ${
                 tab === t.key ? "border-b-2 border-primary text-primary-600" : "text-mute hover:text-ink"
               }`}
             >
@@ -230,7 +232,7 @@ function ModelTab({ datasetId, model, schema }: { datasetId: string; model: any;
       <Card className="space-y-3">
         <CardTitle>Dimensões</CardTitle>
         {dims.map((d: any, i: number) => (
-          <div key={i} className="grid grid-cols-3 gap-2">
+          <div key={i} className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <Input value={d.name} placeholder="Nome" onChange={(e) => { const copy = [...dims]; copy[i].name = e.target.value; setDims(copy); }} />
             <Select value={d.column} onChange={(e) => { const copy = [...dims]; copy[i].column = e.target.value; setDims(copy); }}>
               {schema.map((c: any) => <option key={c.name} value={c.name}>{c.name}</option>)}
@@ -325,18 +327,47 @@ function RelationshipsTab({ datasetId, model }: { datasetId: string; model: any 
 
 function MeasuresTab({ datasetId, model }: { datasetId: string; model: any }) {
   const qc = useQueryClient();
+  const [open, setOpen] = useState(false);
   const [expr, setExpr] = useState("");
   const [result, setResult] = useState<any>(null);
+  const semantic = useQuery({ queryKey: ["semantic"], queryFn: () => api<any>("/api/v1/semantic-models") });
+  const semanticRow = useMemo(() => {
+    const list = Array.isArray(semantic.data) ? semantic.data : Array.isArray(semantic.data?.data) ? semantic.data.data : [];
+    return list.find((m: any) => m.dataset_id === datasetId || m.id === model.id) || null;
+  }, [semantic.data, datasetId, model.id]);
+  const semanticModelId = semanticRow?.id || model.id || datasetId;
+  const semanticModel = (semanticRow?.model || model) as SemanticModel;
   const validate = useMutation({
-    mutationFn: () => api<any>(`/api/v1/semantic-models/${model.id || datasetId}/validate-measure`, { method: "POST", body: JSON.stringify({ expression: expr }) }),
+    mutationFn: () => api<any>(`/api/v1/semantic-models/${semanticModelId}/validate-measure`, { method: "POST", body: JSON.stringify({ expression: expr }) }),
     onSuccess: (d) => { setResult(d); toast.success(d.valid ? "Válida" : "Inválida"); },
     onError: (e: Error) => toast.error(e.message),
   });
 
   return (
     <div className="space-y-4">
+      {open && (
+        <CustomMeasureModal
+          semanticModelId={semanticModelId}
+          model={semanticModel}
+          onClose={() => setOpen(false)}
+          onAdded={() => {
+            toast.success("Medida criada");
+            qc.invalidateQueries({ queryKey: ["dataset", datasetId] });
+            qc.invalidateQueries({ queryKey: ["semantic"] });
+          }}
+        />
+      )}
       <Card className="space-y-3">
-        <CardTitle>Validador DAX-like</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle>Criar medida</CardTitle>
+          <Button size="sm" onClick={() => setOpen(true)}>
+            Nova medida
+          </Button>
+        </div>
+        <p className="text-[13px] text-mute">Escolha SQL ou monte a lógica com blocos (agregar, calcular, filtrar e procurar noutros conjuntos).</p>
+      </Card>
+      <Card className="space-y-3">
+        <CardTitle>Validador SQL</CardTitle>
         <Textarea value={expr} onChange={(e) => setExpr(e.target.value)} placeholder="SUM(revenue) / COUNT(*)" />
         <Button onClick={() => validate.mutate()} busy={validate.isPending} disabled={!expr.trim()}>
           Validar
@@ -349,7 +380,7 @@ function MeasuresTab({ datasetId, model }: { datasetId: string; model: any }) {
       </Card>
       <Card>
         <CardTitle>Medidas existentes</CardTitle>
-        {(model.measures || []).map((m: any) => (
+        {(model.measures || semanticModel.measures || []).map((m: any) => (
           <div key={m.name} className="border-t border-line py-2 text-sm first:border-0">
             <div className="font-medium">{m.name}</div>
             <div className="font-mono text-[11px] text-accent">{m.expression || `${m.aggregation}(${m.column})`}</div>

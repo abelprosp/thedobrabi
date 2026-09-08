@@ -1,6 +1,7 @@
 package semantic
 
 import (
+	"encoding/json"
 	"strings"
 
 	"github.com/thedobra/thedobra/services/api/internal/schemax"
@@ -25,13 +26,15 @@ type Dimension struct {
 }
 
 type Measure struct {
-	Name        string `json:"name"`
-	Column      string `json:"column"`
-	Aggregation string `json:"aggregation"` // sum, avg, count, min, max, count_distinct, expression
-	Expression  string `json:"expression"`
-	Format      string `json:"format,omitempty"`
-	Description string `json:"description,omitempty"`
-	IsDAX       bool   `json:"is_dax,omitempty"`
+	Name             string          `json:"name"`
+	Column           string          `json:"column"`
+	Aggregation      string          `json:"aggregation"` // sum, avg, count, min, max, count_distinct, expression
+	Expression       string          `json:"expression"`
+	Format           string          `json:"format,omitempty"`
+	Description      string          `json:"description,omitempty"`
+	IsDAX            bool            `json:"is_dax,omitempty"`
+	EditorMode       string          `json:"editor_mode,omitempty"`
+	ExpressionBlocks json.RawMessage `json:"expression_blocks,omitempty"`
 }
 
 type Hierarchy struct {

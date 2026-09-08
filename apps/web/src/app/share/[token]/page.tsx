@@ -106,8 +106,8 @@ export default function SharePage() {
   return (
     <AppearanceScope appearance={dashTheme} className="min-h-screen bg-bg">
       <div className="border-b border-line px-4 py-3 sm:px-6 sm:py-4">
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex min-w-0 items-center gap-2">
             <Logo
               variant={dashTheme === "dark" ? "dark" : "light"}
               size={28}
@@ -146,7 +146,7 @@ export default function SharePage() {
           </div>
         )}
       </div>
-      <div className="min-h-[calc(100vh-8rem)] pb-10">
+      <div className="min-h-[calc(100dvh-8rem)] pb-10">
         {widgets.length === 0 ? (
           <p className="px-6 py-10 text-sm text-mute">Este dashboard ainda não tem widgets.</p>
         ) : (

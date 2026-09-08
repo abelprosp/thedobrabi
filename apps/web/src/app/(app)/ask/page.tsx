@@ -135,8 +135,8 @@ export default function AskPage() {
   });
 
   return (
-    <div className="mx-auto flex h-[calc(100vh-7rem)] max-w-3xl flex-col">
-      <div className="mb-4 flex items-start justify-between gap-3">
+    <div className="mx-auto flex h-[calc(100dvh-7rem)] max-w-3xl flex-col">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight text-ink">Perguntar à TheDobra</h1>
           <p className="mt-1 text-[13px] text-mute">Respostas com as métricas do seu conjunto — sem inventar fórmulas.</p>
@@ -146,7 +146,7 @@ export default function AskPage() {
             aria-label="Conjunto"
             value={activeId}
             onChange={(e) => setDatasetId(e.target.value)}
-            className="max-w-[220px] shrink-0"
+            className="w-full shrink-0 sm:max-w-[220px]"
           >
             {datasetList.map((d) => (
               <option key={d.id} value={d.id}>

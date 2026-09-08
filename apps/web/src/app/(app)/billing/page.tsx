@@ -38,7 +38,7 @@ export default function BillingPage() {
         title="Faturação"
         description={`Plano ${planLabel(st.data?.plan || u?.plan || "starter")}${cfg.data?.enabled ? " · Stripe ligado" : " · defina STRIPE_SECRET_KEY para checkout vivo"}`}
       />
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
         <Kpi label="Consultas" value={fmtUsage(u?.queries, u?.limits?.queries)} />
         <Kpi label="Conjuntos" value={fmtUsage(u?.datasets, u?.limits?.datasets)} />
         <Kpi label="Mensagens IA" value={fmtUsage(u?.ai_messages, u?.limits?.ai)} />

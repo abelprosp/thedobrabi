@@ -16,7 +16,7 @@ import {
   type TitleAlign,
 } from "@/lib/widget-config";
 import { Badge, FieldLabel, Input, Select, Textarea, Toggle, Button, cn } from "@/components/ui";
-import { ChevronDown, Plus, Trash2, Code2, X } from "lucide-react";
+import { ChevronDown, Plus, Trash2, Blocks, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Widget, WidgetType, QueryJoin } from "@/components/WidgetView";
 import { CustomMeasureModal } from "@/components/custom-measure-modal";
@@ -77,13 +77,14 @@ export function WidgetInspector({
       )}
       <aside
         className={cn(
-          "flex min-h-0 flex-col overflow-y-auto border-line bg-surface p-4",
+          "relative flex min-h-0 flex-col overflow-y-auto border-line bg-surface p-4",
           variant === "sheet"
-            ? "h-auto max-h-[min(72vh,34rem)] w-full rounded-t-2xl border-t shadow-[0_-16px_40px_rgba(15,23,42,0.16)]"
+            ? "h-auto max-h-[min(70dvh,36rem)] w-full rounded-t-2xl border-t pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-16px_40px_rgba(15,23,42,0.16)]"
             : "h-full w-[min(20rem,100vw)] shrink-0 border-l shadow-[-16px_0_40px_rgba(15,23,42,0.08)]",
         )}
       >
         <div className="mb-2 flex items-center justify-between gap-2">
+          {variant === "sheet" && <span className="absolute left-1/2 top-1.5 h-1 w-10 -translate-x-1/2 rounded-full bg-line" aria-hidden />}
           <span className="text-[13px] font-semibold text-ink">Propriedades</span>
           <div className="flex items-center gap-1">
             <Badge tone="accent">{catalog.find((t) => t.type === widget.type)?.label || widget.type}</Badge>
@@ -91,11 +92,11 @@ export function WidgetInspector({
               <button
                 type="button"
                 onClick={onClose}
-                className="rounded-lg p-1 text-mute hover:bg-surface-2 hover:text-ink"
+                className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 hover:text-ink"
                 title="Fechar painel"
                 aria-label="Fechar painel"
               >
-                <X size={14} />
+                <X size={16} />
               </button>
             )}
           </div>
@@ -333,7 +334,7 @@ export function WidgetInspector({
               <FieldLabel label="Etiqueta do medidor">
                 <Input value={cfg.gaugeLabel || ""} onChange={(e) => setCfg({ gaugeLabel: e.target.value })} placeholder="Valor" />
               </FieldLabel>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                 <FieldLabel label="Mín.">
                   <Input type="number" value={cfg.min ?? 0} onChange={(e) => setCfg({ min: Number(e.target.value) })} />
                 </FieldLabel>
@@ -878,8 +879,8 @@ function QueryFields({
           className="inline-flex items-center gap-1.5 text-[12px] font-medium text-primary hover:underline"
           onClick={onOpenCustomMeasure}
         >
-          <Code2 size={13} />
-          + Nova medida SQL
+          <Blocks size={13} />
+          + Nova medida
         </button>
       )}
 

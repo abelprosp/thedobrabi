@@ -91,7 +91,9 @@ body {
   background: var(--color-bg);
   color: var(--color-ink);
   min-height: 100%;
+  min-height: 100dvh;
   font-family: var(--font-sans);
+  overflow-x: clip;
 }
 
 * {
@@ -190,6 +192,16 @@ a {
   .react-resizable-handle {
     width: 22px !important;
     height: 22px !important;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .page-actions {
+    width: 100%;
   }
 }
 

@@ -1,15 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
+import { useMemo, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { api, normalizeArray } from "@/lib/api";
 import { Button, FieldLabel, Input, Textarea, cn } from "@/components/ui";
-import { CheckCircle2, XCircle, Loader2, X, Code2 } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, X, Code2, Blocks } from "lucide-react";
 import type { SemanticModel, SemanticMeasure } from "@/lib/semantic";
+import { MeasureBlockBuilder } from "@/components/measure-block-builder";
+import { compileBlock, type MeasureBlock } from "@/lib/measure-blocks";
 
 type ValidationResult =
   | { valid: true; sql: string; func: string }
   | { valid: false; error: string };
+
+type EditorMode = "blocks" | "sql";
 
 export function CustomMeasureModal({
   semanticModelId,
@@ -24,14 +28,47 @@ export function CustomMeasureModal({
 }) {
   const qc = useQueryClient();
   const [name, setName] = useState("");
+  const [mode, setMode] = useState<EditorMode>("blocks");
   const [expression, setExpression] = useState("");
+  const [blocks, setBlocks] = useState<MeasureBlock | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
+
+  const datasets = useQuery({
+    queryKey: ["datasets"],
+    queryFn: () => api<any>("/api/v1/datasets"),
+  });
+  const tables = normalizeArray<{ id: string; name: string }>(datasets.data).map((d) => ({ name: d.name }));
+
+  const columns = useMemo(() => {
+    const seen = new Set<string>();
+    const out: { name: string }[] = [];
+    for (const m of model.measures || []) {
+      const col = (m.column || "").trim();
+      if (col && col !== "*" && !seen.has(col)) {
+        seen.add(col);
+        out.push({ name: col });
+      }
+    }
+    for (const d of model.dimensions || []) {
+      const col = (d.column || d.name || "").trim();
+      if (col && !seen.has(col)) {
+        seen.add(col);
+        out.push({ name: col });
+      }
+    }
+    return out;
+  }, [model.measures, model.dimensions]);
+
+  const existingMeasures = (model.measures || []).filter((m) => (m.name || "").trim());
+
+  const expressionFromBlocks = compileBlock(blocks);
+  const activeExpression = mode === "blocks" ? expressionFromBlocks : expression;
 
   const validate = useMutation({
     mutationFn: () =>
       api<ValidationResult>(`/api/v1/semantic-models/${semanticModelId}/validate-measure`, {
         method: "POST",
-        body: JSON.stringify({ expression }),
+        body: JSON.stringify({ expression: activeExpression }),
       }),
     onSuccess: (res) => setValidation(res),
     onError: (e: Error) => setValidation({ valid: false, error: e.message }),
@@ -41,8 +78,10 @@ export function CustomMeasureModal({
     mutationFn: async () => {
       const newMeasure: SemanticMeasure = {
         name: name.trim(),
-        expression,
+        expression: activeExpression,
         aggregation: "expression",
+        editor_mode: mode,
+        expression_blocks: mode === "blocks" ? blocks || undefined : undefined,
       };
       const updatedModel: SemanticModel = {
         ...model,
@@ -56,54 +95,122 @@ export function CustomMeasureModal({
     },
     onSuccess: (newMeasure) => {
       qc.invalidateQueries({ queryKey: ["semantic"] });
+      qc.invalidateQueries({ queryKey: ["datasets"] });
       onAdded(newMeasure);
       onClose();
     },
   });
 
-  const canValidate = expression.trim().length > 0;
+  const canValidate = activeExpression.trim().length > 0;
   const canSave = validation?.valid === true && name.trim().length > 0 && !save.isPending;
 
-  const handleExpressionChange = (v: string) => {
+  const handleSqlChange = (v: string) => {
     setExpression(v);
     setValidation(null);
   };
 
+  const handleBlocksChange = (next: MeasureBlock | null) => {
+    setBlocks(next);
+    setValidation(null);
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={onClose}>
       <div
-        className="w-full max-w-lg rounded-2xl border border-line bg-surface p-5 shadow-xl"
+        className="flex max-h-[92dvh] w-full max-w-4xl flex-col overflow-hidden rounded-t-2xl border border-line bg-surface shadow-xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-start justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Code2 size={18} className="text-primary" />
-            <div>
-              <h3 className="text-[15px] font-semibold text-ink">Nova medida SQL</h3>
-              <p className="text-[11px] text-mute">Escreva uma expressão SQL agregada para criar uma métrica personalizada.</p>
-            </div>
+        <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
+          <div>
+            <h3 className="text-[15px] font-semibold text-ink">Nova medida</h3>
+            <p className="text-[12px] text-mute">Escolha se quer escrever SQL ou montar a lógica com blocos.</p>
           </div>
-          <button onClick={onClose} className="rounded-lg p-1 text-mute hover:bg-surface-2 hover:text-ink">
+          <button type="button" onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 hover:text-ink" aria-label="Fechar">
             <X size={16} />
           </button>
         </div>
 
-        <div className="space-y-4">
-          <FieldLabel label="Nome da medida" hint="Ex: Ticket Médio, Receita Líquida">
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Ticket Médio" />
+        <div className="space-y-4 overflow-y-auto px-5 py-4">
+          <FieldLabel label="Nome da medida" hint="Ex: Ticket médio, Receita líquida">
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Ticket médio" />
           </FieldLabel>
 
-          <FieldLabel
-            label="Expressão SQL"
-            hint="Só a expressão — sem SELECT, FROM ou AS. SUM, AVG, COUNT, COUNT DISTINCT, MIN, MAX, DIVIDE, NULLIF, CASE WHEN, TOMONTH, YOY, CALCULATE"
-          >
-            <Textarea
-              value={expression}
-              onChange={(e) => handleExpressionChange(e.target.value)}
-              placeholder={"Exemplos:\nSUM(valor_mensal)\nDIVIDE(SUM(valor_mensal), COUNT(DISTINCT cliente))\nSUM(CASE WHEN TOMONTH(data_venda) = '2026-07' THEN valor_mensal ELSE 0 END)\nCALCULATE(SUM(valor_mensal), vendedor = 'ANA')"}
-              className="min-h-[120px] font-mono text-[12px]"
-            />
-          </FieldLabel>
+          <div className="inline-flex rounded-xl border border-line bg-bg p-1">
+            <button
+              type="button"
+              onClick={() => {
+                setMode("blocks");
+                setValidation(null);
+              }}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium",
+                mode === "blocks" ? "bg-surface text-ink shadow-sm" : "text-mute hover:text-ink",
+              )}
+            >
+              <Blocks size={14} /> Blocos
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setMode("sql");
+                setValidation(null);
+              }}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium",
+                mode === "sql" ? "bg-surface text-ink shadow-sm" : "text-mute hover:text-ink",
+              )}
+            >
+              <Code2 size={14} /> SQL
+            </button>
+          </div>
+
+          {mode === "blocks" ? (
+            <div className="space-y-2">
+              <p className="text-[12px] text-mute">
+                Arraste agregações, contas e buscas para o canvas. A medida é compilada para a mesma linguagem do motor.
+              </p>
+              <MeasureBlockBuilder
+                value={blocks}
+                onChange={handleBlocksChange}
+                columns={columns}
+                measures={existingMeasures.map((m) => ({ name: m.name }))}
+                dimensions={model.dimensions || []}
+                tables={tables}
+              />
+            </div>
+          ) : (
+            <>
+              <FieldLabel
+                label="Expressão SQL"
+                hint="Só a expressão — sem SELECT, FROM ou AS. SUM, AVG, COUNT, DIVIDE, CASE WHEN, CALCULATE, LOOKUPVALUE, RELATED"
+              >
+                <Textarea
+                  value={expression}
+                  onChange={(e) => handleSqlChange(e.target.value)}
+                  placeholder={"Exemplos:\nSUM(valor_mensal)\nDIVIDE(SUM(valor_mensal), COUNT(DISTINCT cliente))\nLOOKUPVALUE(Clientes[região], Clientes[id], cliente_id)"}
+                  className="min-h-[120px] font-mono text-[12px]"
+                />
+              </FieldLabel>
+              {columns.length > 0 && (
+                <div className="rounded-xl border border-line bg-surface-2/60 p-3">
+                  <p className="mb-1.5 text-[11px] font-medium text-mute">Colunas (clique para inserir):</p>
+                  <div className="flex flex-wrap gap-1">
+                    {columns.map((c) => (
+                      <code
+                        key={c.name}
+                        className="cursor-pointer rounded bg-surface px-1.5 py-0.5 text-[10px] text-ink hover:bg-primary/10 hover:text-primary"
+                        onClick={() =>
+                          handleSqlChange(expression + (expression && !expression.endsWith(" ") ? " " : "") + c.name)
+                        }
+                      >
+                        {c.name}
+                      </code>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
           {validation && (
             <div
@@ -134,30 +241,9 @@ export function CustomMeasureModal({
               </div>
             </div>
           )}
-
-          {(model.measures || []).length > 0 && (
-            <div className="rounded-xl border border-line bg-surface-2/60 p-3">
-              <p className="mb-1.5 text-[11px] font-medium text-mute">Colunas numéricas disponíveis (clique para inserir):</p>
-              <div className="flex flex-wrap gap-1">
-                {(model.measures || []).map((m) => (
-                  <code
-                    key={m.name}
-                    className="cursor-pointer rounded bg-surface px-1.5 py-0.5 text-[10px] text-ink hover:bg-primary/10 hover:text-primary"
-                    onClick={() =>
-                      handleExpressionChange(
-                        expression + (expression && !expression.endsWith(" ") ? " " : "") + (m.column || m.name || ""),
-                      )
-                    }
-                  >
-                    {m.column || m.name}
-                  </code>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
-        <div className="mt-5 flex justify-end gap-2">
+        <div className="flex flex-col-reverse gap-2 border-t border-line px-5 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:flex-row sm:justify-end">
           <Button variant="secondary" onClick={onClose}>
             Cancelar
           </Button>

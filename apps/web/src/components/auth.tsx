@@ -23,7 +23,7 @@ export function AuthFormShell({
 }) {
   return (
     <AuthSplit>
-      <div className="flex min-h-screen flex-col px-8 py-8 sm:px-12 lg:px-16">
+      <div className="flex min-h-[100dvh] flex-col px-5 py-6 sm:px-12 sm:py-8 lg:px-16">
         <Link href="/login" aria-label="TheDobra" className="inline-flex w-fit">
           <Logo variant="light" size={32} />
         </Link>

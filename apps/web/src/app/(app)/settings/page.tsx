@@ -180,14 +180,14 @@ export default function SettingsPage() {
       </Box>
 
       <Box title="Espaços de trabalho">
-        <div className="mb-3 flex gap-2">
+        <div className="mb-3 flex flex-col gap-2 sm:flex-row">
           <input
             className={`flex-1 ${inputCls}`}
             placeholder="Nome do espaço"
             value={wsName}
             onChange={(e) => setWsName(e.target.value)}
           />
-          <button onClick={() => createWs.mutate()} className="rounded-lg border border-line px-3 py-2 text-sm hover:bg-bg">
+          <button onClick={() => createWs.mutate()} className="min-h-11 rounded-lg border border-line px-3 py-2 text-sm hover:bg-bg sm:min-h-0">
             Criar
           </button>
         </div>
@@ -246,7 +246,7 @@ export default function SettingsPage() {
           </div>
         )}
         {me.data?.mfa_enabled && (
-          <div className="mt-2 flex gap-2">
+          <div className="mt-2 flex flex-col gap-2 sm:flex-row">
             <input
               className={`flex-1 ${inputCls}`}
               placeholder="Código para desactivar"
@@ -306,14 +306,14 @@ export default function SettingsPage() {
         <p className="mb-3 text-[12px] text-mute">
           Instale o agente gateway numa VM local para aceder a bases PostgreSQL/MySQL/SQL Server sem expô-las à Internet.
         </p>
-        <div className="mb-3 flex gap-2">
+        <div className="mb-3 flex flex-col gap-2 sm:flex-row">
           <input
             className={`flex-1 ${inputCls}`}
             placeholder="Nome do gateway (ex. fabrica-lisboa)"
             value={gwName}
             onChange={(e) => setGwName(e.target.value)}
           />
-          <button onClick={() => generateGatewayToken.mutate()} className="rounded-lg bg-accent px-3 py-2 text-sm text-white hover:bg-accent-2">
+          <button onClick={() => generateGatewayToken.mutate()} className="min-h-11 rounded-lg bg-accent px-3 py-2 text-sm text-white hover:bg-accent-2 sm:min-h-0">
             Gerar token
           </button>
         </div>

@@ -345,9 +345,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {mobile && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div className="absolute inset-0 bg-ink/30" onClick={() => setMobile(false)} />
-          <aside className="relative z-10 flex h-full min-h-0 w-64 flex-col overflow-hidden bg-surface shadow-xl">
+          <aside className="relative z-10 flex h-full min-h-0 w-[min(18rem,88vw)] flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] shadow-xl">
             <button
-              className="absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2"
+              className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2"
               onClick={() => setMobile(false)}
               aria-label="Fechar menu"
             >
@@ -358,10 +358,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 items-center justify-between border-b border-line bg-surface px-4 print:hidden sm:px-6">
+        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-line bg-surface px-3 print:hidden sm:px-6">
           <div className="flex min-w-0 items-center gap-2 text-[13px] text-mute">
             <button
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2 lg:hidden"
+              className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 lg:hidden"
               onClick={() => setMobile(true)}
               aria-label="Abrir menu"
             >
@@ -372,7 +372,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             {workspaces.length > 0 ? (
               <select
                 aria-label="Espaço de trabalho"
-                className="max-w-[160px] rounded-lg border border-line bg-surface px-2 py-1.5 text-[13px] text-ink outline-none"
+                className="max-w-[7.5rem] rounded-lg border border-line bg-surface px-2 py-1.5 text-[13px] text-ink outline-none sm:max-w-[160px]"
                 value={wsId || workspaces[0].id}
                 onChange={async (e) => {
                   const id = e.target.value;
@@ -405,15 +405,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <button
               onClick={() => setOpen(true)}
               aria-label="Procurar"
-              className="flex h-9 items-center gap-2 rounded-lg border border-line bg-bg px-2.5 text-[12px] text-mute sm:px-3"
+              className="flex h-10 items-center gap-2 rounded-lg border border-line bg-bg px-2.5 text-[12px] text-mute sm:h-9 sm:px-3"
             >
               <Search size={14} />
               <span className="hidden sm:inline">Procurar</span>
               <kbd className="ml-2 hidden text-[10px] text-slate-400 sm:inline">⌘K</kbd>
             </button>
             <ThemeToggle />
-            <Link href="/ask" className="flex h-9 items-center rounded-lg bg-primary px-3 text-[12px] font-medium text-white hover:bg-primary-600">
-              Perguntar
+            <Link href="/ask" className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white hover:bg-primary-600 sm:h-9 sm:w-auto sm:px-3 sm:text-[12px] sm:font-medium">
+              <MessageSquare size={16} className="sm:hidden" />
+              <span className="hidden sm:inline">Perguntar</span>
             </Link>
             <Link
               href="/alerts"
@@ -454,7 +455,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="min-w-0 flex-1 p-4 sm:p-6">{children}</main>
+        <main className="min-w-0 flex-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-6">{children}</main>
       </div>
       <CommandPalette open={open} onClose={() => setOpen(false)} />
       <Suspense fallback={null}>

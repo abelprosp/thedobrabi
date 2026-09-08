@@ -49,7 +49,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
   }
 
   return (
-    <div className="fixed inset-0 z-50 bg-ink/30 p-6 sm:p-24" onClick={onClose}>
+    <div className="fixed inset-0 z-50 bg-ink/30 p-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:p-24" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"

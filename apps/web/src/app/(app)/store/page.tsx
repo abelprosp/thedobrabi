@@ -258,7 +258,7 @@ export default function StorePage() {
       </div>
 
       {picked && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 p-4" onClick={() => !activate.isPending && setPicked(null)}>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-0 sm:items-center sm:p-4" onClick={() => !activate.isPending && setPicked(null)}>
           <div
             role="dialog"
             aria-modal="true"

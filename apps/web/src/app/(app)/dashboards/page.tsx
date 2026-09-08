@@ -203,8 +203,8 @@ function DashboardsPageInner() {
       )}
 
       {aiOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <Card className="w-full max-w-lg space-y-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <Card className="max-h-[92dvh] w-full max-w-lg space-y-4 overflow-y-auto rounded-b-none pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:rounded-2xl sm:pb-5">
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="text-lg font-medium text-ink">Novo dashboard com IA</h3>

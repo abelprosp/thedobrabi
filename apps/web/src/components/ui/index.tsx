@@ -30,10 +30,10 @@ export function Button({
     danger: "border border-line bg-surface text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10",
   };
   const sizes = {
-    sm: "min-h-9 px-3 text-[12px]",
-    md: "min-h-10 px-4 text-sm",
+    sm: "min-h-10 px-3 text-[12px] sm:min-h-9",
+    md: "min-h-11 px-4 text-sm sm:min-h-10",
     lg: "min-h-11 px-5 text-sm",
-    icon: "h-9 w-9 min-h-9 p-0",
+    icon: "h-10 w-10 min-h-10 p-0 sm:h-9 sm:w-9 sm:min-h-9",
   };
   return (
     <button
@@ -55,7 +55,7 @@ export function Button({
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-2xl border border-line bg-surface p-5 shadow-sm", className)}>{children}</div>;
+  return <div className={cn("rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5", className)}>{children}</div>;
 }
 
 export function CardTitle({ children }: { children: ReactNode }) {
@@ -63,7 +63,7 @@ export function CardTitle({ children }: { children: ReactNode }) {
 }
 
 const fieldCls =
-  "w-full min-h-10 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink placeholder:text-mute outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 disabled:bg-bg";
+  "w-full min-h-11 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink placeholder:text-mute outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 disabled:bg-bg sm:min-h-10";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldCls, className)} {...props} />;
@@ -116,7 +116,7 @@ export function PageHeader({
   crumbs?: { href: string; label: string }[];
 }) {
   return (
-    <div className="flex flex-wrap items-start justify-between gap-3">
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
       <div className="min-w-0">
         {crumbs && crumbs.length > 0 && (
           <nav aria-label="Navegação estrutural" className="mb-1.5 flex flex-wrap items-center gap-1.5 text-[12px] text-mute">
@@ -132,10 +132,10 @@ export function PageHeader({
             <span className="truncate text-ink">{title}</span>
           </nav>
         )}
-        <h1 className="text-2xl font-semibold tracking-tight text-ink">{title}</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">{title}</h1>
         {description && <p className="mt-1 max-w-2xl text-sm text-mute">{description}</p>}
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {actions && <div className="page-actions flex flex-wrap items-center gap-2 sm:justify-end">{actions}</div>}
     </div>
   );
 }
@@ -217,7 +217,7 @@ export function Toggle({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
-        "relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition",
+        "relative inline-flex h-7 w-11 shrink-0 items-center rounded-full transition sm:h-5 sm:w-9",
         focusRing,
         checked ? "bg-primary" : "bg-slate-300",
         disabled && "cursor-not-allowed opacity-50",
@@ -225,8 +225,8 @@ export function Toggle({
     >
       <span
         className={cn(
-          "inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform",
-          checked ? "translate-x-4" : "translate-x-0.5",
+          "inline-block h-5 w-5 rounded-full bg-white shadow-sm transition-transform sm:h-4 sm:w-4",
+          checked ? "translate-x-5 sm:translate-x-4" : "translate-x-1 sm:translate-x-0.5",
         )}
       />
     </button>
@@ -251,7 +251,7 @@ export function Badge({
 }
 
 export function TableWrap({ children }: { children: ReactNode }) {
-  return <div className="overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">{children}</div>;
+  return <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-sm">{children}</div>;
 }
 
 export function Table({ children, className }: { children: ReactNode; className?: string }) {

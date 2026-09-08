@@ -105,7 +105,7 @@ export default function WelcomePage() {
             </div>
           )}
           <div className="flex justify-end">
-            <Button onClick={() => setStep(2)} disabled={!dataset}>
+            <Button className="w-full sm:w-auto" onClick={() => setStep(2)} disabled={!dataset}>
               Próximo <ArrowRight size={14} />
             </Button>
           </div>
@@ -127,9 +127,9 @@ export default function WelcomePage() {
               </button>
             ))}
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <input
-              className="min-h-10 flex-1 rounded-xl border border-line bg-white px-3.5 text-sm text-ink outline-none focus:border-primary/50"
+              className="min-h-11 flex-1 rounded-xl border border-line bg-white px-3.5 text-sm text-ink outline-none focus:border-primary/50"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
               placeholder="Pergunte sobre os dados…"

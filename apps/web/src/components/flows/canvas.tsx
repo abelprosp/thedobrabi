@@ -239,7 +239,7 @@ export function FlowCanvasEditor({ flow, initialSteps }: { flow: Flow; initialSt
         )}
         <div
           ref={canvasRef}
-          className="relative h-[28rem] w-full overflow-hidden rounded-xl border border-line bg-slate-50"
+          className="relative h-[22rem] w-full overflow-auto rounded-xl border border-line bg-slate-50 sm:h-[28rem]"
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseUp}

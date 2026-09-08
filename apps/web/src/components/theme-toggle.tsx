@@ -21,8 +21,8 @@ export function ThemeToggle({
       aria-label={dark ? "Mudar para tema claro" : "Mudar para tema escuro"}
       title={dark ? "Tema claro" : "Tema escuro"}
       className={cn(
-        "flex h-9 items-center justify-center gap-1.5 rounded-lg text-mute hover:bg-surface-2 hover:text-ink",
-        withLabel ? "px-2.5 text-[12px]" : "w-9",
+        "flex h-10 items-center justify-center gap-1.5 rounded-lg text-mute hover:bg-surface-2 hover:text-ink sm:h-9",
+        withLabel ? "px-2.5 text-[12px]" : "w-10 sm:w-9",
         className,
       )}
     >
@@ -47,7 +47,7 @@ export function ThemeSegmented({
         type="button"
         onClick={() => onChange("light")}
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition",
+          "inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition sm:min-h-0",
           value === "light" ? "bg-primary text-white shadow-sm" : "text-mute hover:text-ink",
         )}
         aria-pressed={value === "light"}
@@ -59,7 +59,7 @@ export function ThemeSegmented({
         type="button"
         onClick={() => onChange("dark")}
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition",
+          "inline-flex min-h-10 items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium transition sm:min-h-0",
           value === "dark" ? "bg-primary text-white shadow-sm" : "text-mute hover:text-ink",
         )}
         aria-pressed={value === "dark"}

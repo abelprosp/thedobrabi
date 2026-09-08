@@ -598,7 +598,7 @@ function DashboardEditorInner() {
   if (!d.data && widgets.length === 0) return <PageSkeleton />;
 
   return (
-    <div className="-m-4 flex h-[calc(100vh-3.5rem)] min-h-0 flex-col bg-surface-2 sm:-m-6">
+    <div className="-m-4 flex h-[calc(100dvh-3.5rem)] min-h-0 flex-col bg-surface-2 sm:-m-6">
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
         <nav className="hidden min-w-0 items-center gap-1.5 text-[12px] text-mute sm:flex">
           <Link href="/dashboards" className="hover:text-ink">Dashboards</Link>
@@ -736,7 +736,7 @@ function DashboardEditorInner() {
                 type="button"
                 title={t.description}
                 onClick={() => addWidget(t.type)}
-                className="flex h-9 shrink-0 items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-2.5 text-[11px] text-ink transition hover:border-primary hover:bg-primary/5"
+                className="flex h-10 shrink-0 items-center gap-1.5 rounded-lg border border-line bg-surface-2 px-2.5 text-[11px] text-ink transition hover:border-primary hover:bg-primary/5 sm:h-9"
               >
                 <Icon size={13} className="text-primary" />
                 {t.label}
@@ -799,9 +799,9 @@ function DashboardEditorInner() {
 
       {aiOpen && (
         <div className="shrink-0 border-b border-line bg-surface px-4 py-2">
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row">
             <Input value={aiPrompt} onChange={(e) => setAiPrompt(e.target.value)} placeholder="Ex.: vendas por região em barras" />
-            <Button size="sm" onClick={() => aiWidget.mutate()} busy={aiWidget.isPending} disabled={!aiPrompt.trim()}>Gerar</Button>
+            <Button size="sm" className="sm:shrink-0" onClick={() => aiWidget.mutate()} busy={aiWidget.isPending} disabled={!aiPrompt.trim()}>Gerar</Button>
           </div>
         </div>
       )}
@@ -922,8 +922,8 @@ function DashboardEditorInner() {
 
 
       {aiCompleteOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <Card className="w-full max-w-lg space-y-4">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
+          <Card className="max-h-[92dvh] w-full max-w-lg space-y-4 overflow-y-auto rounded-b-none pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:rounded-2xl sm:pb-5">
             <div className="flex items-start justify-between">
               <div>
                 <h3 className="text-lg font-medium text-ink">Completar com IA</h3>
@@ -982,7 +982,7 @@ function DashboardEditorInner() {
       )}
 
       {embedOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setEmbedOpen(false)}>
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={() => setEmbedOpen(false)}>
           <div className="w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
           <Card className="space-y-3">
             <div className="flex items-center justify-between">

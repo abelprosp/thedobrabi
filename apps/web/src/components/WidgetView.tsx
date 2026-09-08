@@ -444,14 +444,14 @@ function TableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; colu
             {(rows.length > 0 || w.query?.dataset_id) && (
               <>
                 {rows.length > 0 && (
-                  <button type="button" className="text-[11px] text-mute hover:text-ink" onClick={() => downloadRows(w.title, columns, rows, "csv")}>
+                  <button type="button" className="inline-flex min-h-9 items-center gap-1 px-1 text-[11px] text-mute hover:text-ink sm:min-h-0" onClick={() => downloadRows(w.title, columns, rows, "csv")}>
                     <Download size={12} className="inline" /> CSV
                   </button>
                 )}
                 {w.query?.dataset_id && (
                   <button
                     type="button"
-                    className="text-[11px] text-mute hover:text-ink"
+                    className="inline-flex min-h-9 items-center gap-1 px-1 text-[11px] text-mute hover:text-ink sm:min-h-0"
                     onClick={() => {
                       downloadDatasetXlsx(w.query!.dataset_id!, w.title).catch((e: Error) => toast.error(e.message || "Falha ao exportar Excel"));
                     }}
