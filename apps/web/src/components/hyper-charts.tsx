@@ -1,13 +1,12 @@
 "use client";
 
 import { useId, useMemo } from "react";
-import { chartChrome, hexToRgba } from "@/lib/widget-config";
+import { chartChrome, formatAxisTick, formatNumber, hexToRgba } from "@/lib/widget-config";
 import { chartTooltip } from "@/lib/chartjs";
 import { ChartJsCanvas } from "@/components/chartjs-canvas";
 import { formatCategory, pivotSeries } from "@/components/viz";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/cn";
-import { formatNumber } from "@/lib/widget-config";
 
 type Rows = Record<string, any>[];
 type Cfg = Record<string, any>;
@@ -287,7 +286,7 @@ function RidgePlot({
         plugins: { legend: { display: false }, tooltip: { ...chartTooltip(theme), callbacks: { label: (c: any) => `${c.dataset.label}: ${formatNumber(Math.abs(Number(c.parsed?.y ?? 0)), config)}` } } },
         scales: {
           x: { ticks: { color: chrome.mute, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
-          y: { ticks: { color: chrome.mute, callback: (v: any) => formatNumber(Math.abs(Number(v)), { ...config, decimals: 0 }) }, grid: { color: chrome.line }, border: { display: false } },
+          y: { ticks: { color: chrome.mute, callback: (v: any) => formatAxisTick(Math.abs(Number(v)), config) }, grid: { color: chrome.line }, border: { display: false } },
         },
       }}
     />

@@ -5,6 +5,7 @@ import { cn } from "@/lib/cn";
 import {
   chartChrome,
   chartPalette,
+  formatAxisTick,
   formatNumber,
   hexToRgba,
   type LegendPosition,
@@ -93,7 +94,7 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
   const horizontal = !!config.horizontal && type === "bar";
   const smooth = config.smooth !== false && (type === "line" || type === "area");
   const legendPos = (config.legendPosition || "top") as LegendPosition;
-  const axisFmt = (v: string | number) => formatNumber(Number(v), { ...config, decimals: config.decimals ?? 0 });
+  const axisFmt = (v: string | number) => formatAxisTick(v, config);
 
   const chartType: ChartType = type === "pie" ? "doughnut" : type === "area" ? "line" : type;
   const data: any =
@@ -159,6 +160,7 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
         ? undefined
         : {
             x: {
+              type: horizontal ? "linear" : "category",
               display: horizontal ? showY : showX,
               stacked,
               title: { display: !!config.xAxisLabel, text: config.xAxisLabel || "", color: chrome.mute, font: { size: 11 } },
@@ -166,18 +168,19 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
                 color: chrome.mute,
                 maxRotation: horizontal ? 0 : Number(config.xAxisRotate ?? 0),
                 minRotation: horizontal ? 0 : Number(config.xAxisRotate ?? 0),
-                callback: horizontal ? (v: any) => axisFmt(v as number) : undefined,
+                ...(horizontal ? { callback: (v: any) => axisFmt(v as number) } : {}),
               },
               grid: { display: horizontal ? showGrid : false, color: chrome.line },
               border: { display: false },
             },
             y: {
+              type: horizontal ? "category" : "linear",
               display: horizontal ? showX : showY,
               stacked,
               title: { display: !!config.yAxisLabel, text: config.yAxisLabel || "", color: chrome.mute, font: { size: 11 } },
               ticks: {
                 color: chrome.mute,
-                callback: horizontal ? undefined : (v: any) => axisFmt(v as number),
+                ...(horizontal ? {} : { callback: (v: any) => axisFmt(v as number) }),
               },
               grid: { display: horizontal ? false : showGrid, color: chrome.line },
               border: { display: false },

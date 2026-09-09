@@ -63,6 +63,20 @@ export function formatNumber(value: any, config?: Record<string, any> | null) {
   return `${prefix}${s}${suffix}`;
 }
 
+/** Tick labels for numeric axes — keeps fractions visible instead of rounding 0.1–0.9 to 0/1. */
+export function formatAxisTick(value: unknown, config?: Record<string, any> | null) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return String(value ?? "");
+  const abs = Math.abs(n);
+  const requested = config?.decimals;
+  let decimals: number;
+  if (abs === 0) decimals = 0;
+  else if (abs < 1) decimals = Math.max(2, Number(requested) || 0);
+  else if (abs < 10) decimals = requested == null ? 1 : Number(requested);
+  else decimals = requested == null ? 0 : Number(requested);
+  return formatNumber(n, { ...config, decimals, compact: config?.compact || (abs >= 1000 ? "auto" : "none") });
+}
+
 export function hexToRgba(hex: string, alpha: number) {
   const raw = (hex || "#2563EB").replace("#", "");
   const full = raw.length === 3 ? raw.split("").map((c) => c + c).join("") : raw.padEnd(6, "0").slice(0, 6);

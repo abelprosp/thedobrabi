@@ -1,15 +1,37 @@
 "use client";
 
-import { Chart as ChartJS } from "chart.js/auto";
+import { Chart as ChartJS, Animation } from "chart.js/auto";
 import { chartChrome, type LegendPosition } from "@/lib/widget-config";
 
 let registered = false;
 
+function fallbackInterpolate(from: unknown, to: unknown, factor: number) {
+  if (typeof from === "number" && typeof to === "number") {
+    return from + (to - from) * factor;
+  }
+  return factor < 1 ? from : to;
+}
+
+function patchAnimationTicker() {
+  const proto = Animation.prototype as Animation & { _fn?: unknown; tick: (date: number) => void };
+  const original = proto.tick;
+  if ((original as { _dobraPatched?: boolean })._dobraPatched) return;
+  function tick(this: { _fn?: unknown }, date: number) {
+    if (typeof this._fn !== "function") this._fn = fallbackInterpolate;
+    return original.call(this, date);
+  }
+  (tick as { _dobraPatched?: boolean })._dobraPatched = true;
+  proto.tick = tick;
+}
+
 export function registerCharts() {
   if (registered) return;
+  patchAnimationTicker();
   ChartJS.defaults.font.family = "Inter, ui-sans-serif, system-ui, sans-serif";
   ChartJS.defaults.font.size = 11;
-  ChartJS.defaults.animation = { duration: 450 };
+  if (ChartJS.defaults.animation && typeof ChartJS.defaults.animation === "object") {
+    ChartJS.defaults.animation.duration = 450;
+  }
   registered = true;
 }
 

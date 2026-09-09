@@ -3,7 +3,7 @@
 import { Card } from "@/components/ui";
 import { useMemo } from "react";
 import { BarChart3, Globe, Layers } from "lucide-react";
-import { chartChrome, chartPalette, formatNumber, hexToRgba } from "@/lib/widget-config";
+import { chartChrome, chartPalette, formatAxisTick, formatNumber, hexToRgba } from "@/lib/widget-config";
 import { chartTooltip } from "@/lib/chartjs";
 import { ChartJsCanvas } from "@/components/chartjs-canvas";
 import { useTheme } from "@/components/theme-provider";
@@ -52,7 +52,7 @@ export function AdvancedChart({
   const showGrid = config.showGrid !== false;
   const showX = config.showXAxis !== false;
   const showY = config.showYAxis !== false;
-  const axisFmt = (v: string | number) => formatNumber(Number(v), config);
+  const axisFmt = (v: string | number) => formatAxisTick(v, config);
   const tip = showTooltip ? chartTooltip(theme) : { enabled: false };
 
   if (type === "gauge") {
