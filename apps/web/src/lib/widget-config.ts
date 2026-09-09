@@ -20,6 +20,21 @@ export type CompactMode = "none" | "auto" | "k" | "m" | "b";
 export type CurrencyCode = "" | "BRL" | "USD" | "EUR";
 export type LegendPosition = "top" | "bottom" | "left" | "right";
 export type TitleAlign = "left" | "center" | "right";
+export type CrossBy = "columns" | "measures";
+
+/** How a chart splits series: extra dimensions (columns) or extra measures. */
+export function widgetCrossBy(
+  type: string,
+  config?: { crossBy?: string },
+  query?: { measures?: string[]; dimensions?: string[] },
+): CrossBy {
+  if (config?.crossBy === "columns" || config?.crossBy === "measures") return config.crossBy;
+  const measureKeep = type === "scatter" ? 2 : 1;
+  if ((query?.measures?.length || 0) > measureKeep) return "measures";
+  const dimKeep = type === "heatmap" ? 2 : 1;
+  if ((query?.dimensions?.length || 0) > dimKeep) return "columns";
+  return "columns";
+}
 
 const CURRENCY_PREFIX: Record<string, string> = {
   BRL: "R$ ",
@@ -157,6 +172,7 @@ export type InspectorCaps = {
   pie: boolean;
   scatter: boolean;
   spark: boolean;
+  ranking: boolean;
 };
 
 const NO_QUERY = new Set(["text", "image", "markdown", "iframe", "data_intelligence"]);
@@ -185,6 +201,7 @@ export function inspectorCaps(type: string): InspectorCaps {
     pie: type === "pie",
     scatter: type === "scatter",
     spark: type === "stat_spark",
+    ranking: type === "ranking",
   };
 }
 

@@ -18,10 +18,10 @@ import {
 import { api, getAccess } from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/cn";
-import { DEFAULT_QUERY_LIMIT, MAX_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
+import { DEFAULT_QUERY_LIMIT, MAX_QUERY_LIMIT, titleAlignClass, widgetCrossBy } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
 import { AlertCircle, ChevronLeft, ChevronRight, Download, Image as ImageIcon } from "lucide-react";
-import { DataIntelligenceCard } from "@/components/data-intelligence-card";
+import { RankingCard } from "@/components/ranking-card";
 
 export type GridPos = { x: number; y: number; w: number; h: number };
 
@@ -70,7 +70,8 @@ export type WidgetType =
   | "stat_spark"
   | "bubble"
   | "hexmap"
-  | "data_intelligence";
+  | "data_intelligence"
+  | "ranking";
 
 export type QuerySpec = {
   dataset_id?: string;
@@ -80,6 +81,7 @@ export type QuerySpec = {
   limit?: number;
   time_range?: { start?: string; end?: string };
   joins?: QueryJoin[];
+  order_by?: { field: string; dir: "asc" | "desc" | "ASC" | "DESC" }[];
 };
 
 export type QueryJoin = {
@@ -144,6 +146,9 @@ export type WidgetConfig = {
   slicerStyle?: "list" | "dropdown" | "buttons";
   icon?: string;
   focusPrompt?: string;
+  crossBy?: "columns" | "measures";
+  rankOrder?: "asc" | "desc";
+  rankLimit?: number;
 };
 
 export type DashboardFilter = { dimension: string; op: "eq" | "in"; value: any; dataset_id?: string };
@@ -203,6 +208,21 @@ export function WidgetView({
     if (KPI_TYPES.includes(w.type)) {
       b.dimensions = [];
     }
+    if (!KPI_TYPES.includes(w.type) && w.type !== "slicer" && w.type !== "scatter" && w.type !== "ranking") {
+      const crossBy = widgetCrossBy(w.type, cfg, w.query);
+      if (crossBy === "columns") {
+        b.measures = (b.measures || []).slice(0, 1);
+      } else {
+        const dimKeep = w.type === "heatmap" ? 2 : 1;
+        b.dimensions = (b.dimensions || []).slice(0, dimKeep);
+      }
+    }
+    if (w.type === "ranking") {
+      const field = (b.measures || [])[0];
+      if (field) b.order_by = [{ field, dir: cfg.rankOrder === "asc" ? "ASC" : "DESC" }];
+      const n = Number(cfg.rankLimit || 10);
+      b.limit = Math.max(3, Math.min(50, Number.isFinite(n) ? n : 10));
+    }
     const joins = (b.joins || []).filter((j) => j.dataset_id && j.from_column && j.to_column);
     if (joins.length) {
       b.joins = joins;
@@ -238,7 +258,7 @@ export function WidgetView({
         columns,
         measures: w.query?.measures,
         dimensions: w.query?.dimensions,
-        kind: KPI_TYPES.includes(w.type) ? "kpi" : w.type === "table" || w.type === "big_table" || w.type === "slicer" ? "table" : "chart",
+        kind: KPI_TYPES.includes(w.type) ? "kpi" : w.type === "table" || w.type === "big_table" || w.type === "slicer" || w.type === "ranking" ? "table" : "chart",
       })
     : null;
 
@@ -328,6 +348,22 @@ export function WidgetView({
           icon={cfg.icon}
           goalLabel={!issue && goal != null ? `Meta: ${formatNumber(goal, cfg)}` : undefined}
           progress={!issue ? progress : undefined}
+        />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "ranking") {
+    return (
+      <div className="relative h-full">
+        <RankingCard
+          title={w.title}
+          rows={rows}
+          columns={columns}
+          measures={w.query?.measures}
+          config={cfg}
+          showTitle={showTitle}
+          onSelect={(dim, value) => emitFilter(dim, value)}
         />
         {issue && <IssueHint issue={issue} />}
       </div>
@@ -486,6 +522,7 @@ export function WidgetView({
         type={w.type === "line" || w.type === "area" ? w.type : w.type === "pie" ? "pie" : "bar"}
         columns={columns}
         rows={rows}
+        measures={w.query?.measures}
         config={cfg}
         onClick={({ value, dimension }) => {
           if (w.hierarchy) onDrill(w.id, value);

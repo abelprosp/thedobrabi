@@ -368,7 +368,7 @@ func (p *parser) parseArgs(parentFn string) ([]Expr, error) {
 		if parentFn == "IF" && len(args) == 0 {
 			arg, err = p.parseBoolExpr()
 		} else {
-			arg, err = p.parseArg(parentFn)
+			arg, err = p.parseArg(parentFn, len(args))
 		}
 		if err != nil {
 			return nil, err
@@ -389,8 +389,9 @@ func (p *parser) parseArgs(parentFn string) ([]Expr, error) {
 	return args, nil
 }
 
-// parseArg parses a function argument. For CALCULATE/FILTER the second+ args are predicates.
-func (p *parser) parseArg(parentFn string) (Expr, error) {
+// parseArg parses a function argument. For CALCULATE the first arg is the
+// expression (SUM, DIVIDE, [Medida], …) and the rest are filter predicates.
+func (p *parser) parseArg(parentFn string, argIndex int) (Expr, error) {
 	p.skipSpace()
 	if p.peek() == '*' {
 		p.pos++
@@ -412,10 +413,10 @@ func (p *parser) parseArg(parentFn string) (Expr, error) {
 	if p.peek() == '[' {
 		return p.parseBracketRef()
 	}
-	if parentFn == "CALCULATE" && len(p.input) > p.pos+1 && p.input[p.pos] != '[' {
+	if parentFn == "CALCULATE" && argIndex > 0 {
 		return p.parsePredicateArg()
 	}
-	if parentFn == "FILTER" && p.input[p.pos] != '[' {
+	if parentFn == "FILTER" {
 		return p.parsePredicateArg()
 	}
 	if p.peek() == '\'' || p.peek() == '"' {
@@ -590,6 +591,16 @@ func (e Expr) toSQLWithContext(q func(string) string, ctx *evalContext) (string,
 		return q(e.Column), nil
 	case "LITERAL":
 		return e.Column, nil
+	case "RAW":
+		inner, err := Parse(e.Column)
+		if err == nil && inner.Func != "RAW" {
+			return inner.toSQLWithContext(q, ctx)
+		}
+		sql, predErr := rawPredicateToSQL(e.Column, q)
+		if predErr != nil {
+			return "", fmt.Errorf("filtro ou expressão não suportada: %s", e.Column)
+		}
+		return sql, nil
 	case "OP":
 		left, err := e.Left.toSQLWithContext(q, ctx)
 		if err != nil {

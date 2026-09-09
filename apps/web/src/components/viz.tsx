@@ -21,6 +21,7 @@ type ChartProps = {
   title?: string;
   columns?: string[];
   rows?: Record<string, any>[];
+  measures?: string[];
   height?: number | string;
   config?: Record<string, any>;
   onClick?: (payload: { dimension: string; value: string }) => void;
@@ -72,19 +73,24 @@ export function pivotSeries(rows: Record<string, any>[], catCol: string, seriesC
   };
 }
 
-export function Chart({ type = "bar", columns = [], rows = [], height, onClick, config = {} }: ChartProps) {
+export function Chart({ type = "bar", columns = [], rows = [], measures, height, onClick, config = {} }: ChartProps) {
   const { theme } = useTheme();
   const chrome = chartChrome(theme);
-  const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
+  const stringDim = columns.find((c) => typeof rows[0]?.[c] === "string");
+  const dim = stringDim || columns[0];
   const rawCatsAll = rows.map((r) => String(r[dim] ?? ""));
-  const numericCols = columns.filter((c) => c !== dim && typeof rows[0]?.[c] === "number");
-  const measCols = numericCols.length ? numericCols : [columns.find((c) => c !== dim) || columns[1] || columns[0]].filter(Boolean);
-  const seriesDim = type === "pie" ? undefined : columns.find((c) => c !== dim && !measCols.includes(c));
+  const measCols = resolveMeasureColumns(columns, rows, stringDim, measures);
+  const pieByMeasures = type === "pie" && measCols.length > 1 && (!stringDim || rows.length <= 1);
+  const seriesDim = type === "pie" || pieByMeasures ? undefined : columns.find((c) => c !== dim && !measCols.includes(c));
   const pivoted = seriesDim && measCols[0] ? pivotSeries(rows, dim, seriesDim, measCols[0]) : null;
-  const rawCats = pivoted ? pivoted.rawCats : rawCatsAll;
-  const cats = (pivoted ? pivoted.cats : rawCatsAll).map((s) => formatCategory(s));
-  const seriesNames = pivoted ? pivoted.series : measCols;
-  const seriesValues = pivoted ? pivoted.values : measCols.map((m) => rows.map((r) => Number(r[m] ?? 0)));
+  const rawCats = pieByMeasures ? measCols : pivoted ? pivoted.rawCats : rawCatsAll;
+  const cats = pieByMeasures ? measCols : (pivoted ? pivoted.cats : rawCatsAll).map((s) => formatCategory(s));
+  const seriesNames = pieByMeasures ? measCols : pivoted ? pivoted.series : measCols;
+  const seriesValues = pieByMeasures
+    ? [measCols.map((m) => rows.reduce((s, r) => s + Number(r[m] ?? 0), 0))]
+    : pivoted
+      ? pivoted.values
+      : measCols.map((m) => rows.map((r) => Number(r[m] ?? 0)));
   const palette = chartPalette(config.color);
   const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1;
   const showTooltip = config.showTooltip !== false;
@@ -98,21 +104,36 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
   const axisFmt = (v: string | number) => formatAxisTick(v, config);
 
   const chartType: ChartType = type === "pie" ? "doughnut" : type === "area" ? "line" : type;
+  const pieTotals = pieByMeasures ? seriesValues[0] || [] : [];
   const data: any =
     type === "pie"
-      ? {
-          labels: cats,
-          datasets: [
-            {
-              data: cats.map((_, i) => Number(rows[i]?.[measCols[0]] ?? 0)),
-              backgroundColor: cats.map((_, i) => palette[i % palette.length]),
+      ? pieByMeasures
+        ? {
+            labels: cats,
+            datasets: [
+              {
+                data: pieTotals,
+                backgroundColor: cats.map((_, i) => palette[i % palette.length]),
+                borderColor: chrome.surface,
+                borderWidth: 2,
+                hoverOffset: 6,
+                cutout: "62%",
+              },
+            ],
+          }
+        : {
+            labels: cats,
+            datasets: measCols.map((m, di) => ({
+              label: String(m),
+              data: cats.map((_, i) => Number(rows[i]?.[m] ?? 0)),
+              backgroundColor: cats.map((_, i) => palette[(di + i) % palette.length]),
               borderColor: chrome.surface,
               borderWidth: 2,
-              hoverOffset: 6,
-              cutout: "62%",
-            },
-          ],
-        }
+              hoverOffset: di === 0 ? 6 : 4,
+              cutout: measCols.length > 1 ? "32%" : "62%",
+              weight: 1,
+            })),
+          }
       : {
           labels: cats,
           datasets: seriesNames.map((name, i) => {
@@ -148,7 +169,8 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
                 if (type === "pie") {
                   const total = (ctx.dataset.data as number[]).reduce((s, x) => s + Number(x || 0), 0);
                   const pct = total ? Math.round((n / total) * 100) : 0;
-                  return `${formatNumber(n, config)} · ${pct}%`;
+                  const name = pieByMeasures ? cats[ctx.dataIndex] : ctx.dataset.label;
+                  return `${name ? `${name}: ` : ""}${formatNumber(n, config)} · ${pct}%`;
                 }
                 return `${ctx.dataset.label}: ${formatNumber(n, config)}`;
               },
@@ -191,8 +213,10 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
       ? (_evt: any, elements: any) => {
           if (!elements.length) return;
           const idx = elements[0].index;
-          if (type === "pie") onClick({ dimension: dim, value: rawCats[idx] ?? cats[idx] ?? "" });
-          else onClick({ dimension: dim, value: rawCats[idx] ?? "" });
+          if (type === "pie") {
+            if (pieByMeasures) return;
+            onClick({ dimension: dim, value: rawCats[idx] ?? cats[idx] ?? "" });
+          } else onClick({ dimension: dim, value: rawCats[idx] ?? "" });
         }
       : undefined,
   } as any;
@@ -202,6 +226,23 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
       <ChartJsCanvas type={chartType} data={data} options={options} />
     </div>
   );
+}
+
+function resolveMeasureColumns(
+  columns: string[],
+  rows: Record<string, any>[],
+  dim: string | undefined,
+  preferred?: string[],
+) {
+  const row = rows[0] || {};
+  const keys = columns.length ? columns : Object.keys(row);
+  const match = (name: string) =>
+    keys.find((c) => c === name) || keys.find((c) => c.toLowerCase() === name.toLowerCase().replace(/\s+/g, "_"));
+  const fromPref = (preferred || []).map(match).filter((c): c is string => !!c && c !== dim);
+  if (fromPref.length) return [...new Set(fromPref)];
+  const numericCols = keys.filter((c) => c !== dim && typeof row[c] === "number");
+  if (numericCols.length) return numericCols;
+  return [keys.find((c) => c !== dim) || keys[1] || keys[0]].filter(Boolean);
 }
 
 const KPI_SIZE = { sm: "text-2xl", md: "text-[28px]", lg: "text-4xl" } as const;

@@ -10,6 +10,7 @@ import {
   DEFAULT_QUERY_LIMIT,
   MAX_QUERY_LIMIT,
   inspectorCaps,
+  widgetCrossBy,
   type CompactMode,
   type CurrencyCode,
   type LegendPosition,
@@ -383,6 +384,25 @@ export function WidgetInspector({
               />
             </FieldLabel>
           )}
+          {caps.ranking && (
+            <>
+              <FieldLabel label="Ordem" hint="Maior primeiro é o top clássico. Menor primeiro serve para custos ou tempo.">
+                <Select value={cfg.rankOrder || "desc"} onChange={(e) => setCfg({ rankOrder: e.target.value as "asc" | "desc" })}>
+                  <option value="desc">Maior primeiro</option>
+                  <option value="asc">Menor primeiro</option>
+                </Select>
+              </FieldLabel>
+              <FieldLabel label="Top N">
+                <Input
+                  type="number"
+                  min={3}
+                  max={50}
+                  value={cfg.rankLimit ?? 10}
+                  onChange={(e) => setCfg({ rankLimit: Number(e.target.value) })}
+                />
+              </FieldLabel>
+            </>
+          )}
           {caps.table && (
             <>
               <ToggleRow label="Linha de totais" checked={!!cfg.showTotals} onChange={(v) => setCfg({ showTotals: v })} />
@@ -691,13 +711,17 @@ function QueryFields({
   const measureLabel =
     widget.type === "scatter"
       ? "Métrica X"
-      : widget.type === "funnel" || widget.type === "treemap" || widget.type === "waterfall"
+      : widget.type === "ranking"
+        ? "Métrica do ranking"
+        : widget.type === "funnel" || widget.type === "treemap" || widget.type === "waterfall"
         ? "Medida"
         : "Métrica";
   const dimLabel =
     widget.type === "slicer"
       ? "Dimensão do slicer"
-      : widget.type === "heatmap"
+      : widget.type === "ranking"
+        ? "Categoria do ranking"
+        : widget.type === "heatmap"
         ? "Dimensão X"
         : widget.type === "sparkline"
           ? "Dimensão temporal"
@@ -710,8 +734,12 @@ function QueryFields({
   }));
   const relatedDatasets = visibleDatasets.filter((d) => d.id && d.id !== widget.query?.dataset_id);
   const extraStart = widget.type === "heatmap" ? 2 : 1;
-  const canBreak = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer"].includes(widget.type);
+  const canBreak = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "ranking"].includes(widget.type);
   const extraDims = (widget.query?.dimensions || []).slice(extraStart);
+  const canExtraMeasures = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "scatter", "waterfall"].includes(widget.type);
+  const extraMeasures = (widget.query?.measures || []).slice(1);
+  const canCross = canBreak && canExtraMeasures;
+  const crossBy = widgetCrossBy(widget.type, widget.config, widget.query);
   const primaryCols = modelColumns(model);
   const setJoins = (next: QueryJoin[] | null, removedIndex?: number) => patchJoins(onUpdate, next, removedIndex);
 
@@ -895,10 +923,10 @@ function QueryFields({
                     ...base,
                     dataset_id: liveId || base?.dataset_id,
                     measures: e.target.value
-                      ? ["scatter"].includes(widget.type)
-                        ? [e.target.value, ...(base?.measures || []).slice(1)]
+                      ? widget.type === "scatter" || canExtraMeasures
+                        ? [e.target.value, ...(base?.measures || []).slice(1).filter((m) => m !== e.target.value)]
                         : [e.target.value]
-                      : ["scatter"].includes(widget.type)
+                      : widget.type === "scatter" || canExtraMeasures
                         ? (base?.measures || []).slice(1)
                         : [],
                   },
@@ -1019,14 +1047,55 @@ function QueryFields({
           </Select>
         </FieldLabel>
       )}
+      {canCross && (
+        <FieldLabel
+          label="Cruzar por"
+          hint={
+            widget.type === "pie"
+              ? "Colunas: fatias por dimensão. Medidas: comparar métricas (anéis ou fatias)."
+              : "Colunas: outra dimensão vira séries. Medidas: várias métricas no mesmo visual."
+          }
+        >
+          <div className="grid grid-cols-2 gap-1 rounded-xl border border-line bg-surface-2 p-1">
+            {([
+              ["columns", "Colunas"],
+              ["measures", "Medidas"],
+            ] as const).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                className={cn(
+                  "rounded-lg px-2 py-1.5 text-[12px] font-medium transition",
+                  crossBy === value ? "bg-surface text-ink shadow-sm" : "text-mute hover:text-ink",
+                )}
+                onClick={() => {
+                  if (crossBy === value) return;
+                  onUpdate((w) => {
+                    const query = { ...w.query };
+                    if (value === "columns") {
+                      query.measures = (query.measures || []).slice(0, 1);
+                    } else {
+                      query.dimensions = (query.dimensions || []).slice(0, extraStart);
+                    }
+                    return { ...w, query, config: { ...w.config, crossBy: value } };
+                  });
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </FieldLabel>
+      )}
       {canBreak &&
+        crossBy === "columns" &&
         extraDims.map((dim, i) => {
           const idx = extraStart + i;
           return (
             <FieldLabel
               key={`break-${idx}`}
-              label={i === 0 ? "Quebrar também por" : `Quebra ${i + 2}`}
-              hint={i === 0 ? "No gráfico de barras ou linhas, esta dimensão vira séries." : undefined}
+              label={i === 0 ? "Cruzar também por" : `Coluna ${i + 2}`}
+              hint={i === 0 ? "Esta coluna vira séries no gráfico." : undefined}
             >
               <div className="flex items-center gap-1.5">
                 <Select
@@ -1046,7 +1115,7 @@ function QueryFields({
                 <button
                   type="button"
                   className="rounded-lg p-1.5 text-mute hover:bg-surface-2 hover:text-danger"
-                  title="Remover quebra"
+                  title="Remover coluna"
                   onClick={() =>
                     onUpdate((w) => {
                       const dims = [...(w.query?.dimensions || [])];
@@ -1061,7 +1130,10 @@ function QueryFields({
             </FieldLabel>
           );
         })}
-      {canBreak && (widget.query?.dimensions?.length || 0) >= extraStart && (widget.query?.dimensions?.length || 0) < extraStart + 3 && (
+      {canBreak &&
+        crossBy === "columns" &&
+        (widget.query?.dimensions?.length || 0) >= extraStart &&
+        (widget.query?.dimensions?.length || 0) < extraStart + 3 && (
         <button
           type="button"
           className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
@@ -1073,13 +1145,88 @@ function QueryFields({
               .find((k) => k && !used.has(k));
             const next = local || related;
             if (!next) return;
-            onUpdate((w) => ({ ...w, query: { ...w.query, dimensions: [...(w.query?.dimensions || []), next] } }));
+            onUpdate((w) => ({
+              ...w,
+              config: { ...w.config, crossBy: "columns" },
+              query: { ...w.query, dimensions: [...(w.query?.dimensions || []), next] },
+            }));
           }}
         >
-          <Plus size={14} /> Adicionar quebra
+          <Plus size={14} /> Adicionar coluna
         </button>
       )}
-      {!["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer"].includes(widget.type) && (
+      {canExtraMeasures &&
+        (crossBy === "measures" || widget.type === "ranking") &&
+        extraMeasures.map((meas, i) => {
+          const idx = 1 + i;
+          return (
+            <FieldLabel
+              key={`metric-${idx}`}
+              label={i === 0 ? "Cruzar também com" : `Métrica ${i + 2}`}
+              hint={
+                i === 0
+                  ? widget.type === "pie"
+                    ? "Na pizza, métricas extra viram anéis. Sem dimensão, as fatias são as próprias métricas."
+                    : "Cada métrica extra vira uma série."
+                  : undefined
+              }
+            >
+              <div className="flex items-center gap-1.5">
+                <Select
+                  className="flex-1"
+                  value={meas}
+                  onChange={(e) =>
+                    onUpdate((w) => {
+                      const ms = [...(w.query?.measures || [])];
+                      ms[idx] = e.target.value;
+                      return { ...w, query: { ...w.query, measures: ms.filter(Boolean) } };
+                    })
+                  }
+                >
+                  <option value="">—</option>
+                  <MeasureOptions model={model} joins={joinOpts} />
+                </Select>
+                <button
+                  type="button"
+                  className="rounded-lg p-1.5 text-mute hover:bg-surface-2 hover:text-danger"
+                  title="Remover métrica"
+                  onClick={() =>
+                    onUpdate((w) => {
+                      const ms = [...(w.query?.measures || [])];
+                      ms.splice(idx, 1);
+                      return { ...w, query: { ...w.query, measures: ms } };
+                    })
+                  }
+                >
+                  <Trash2 size={14} />
+                </button>
+              </div>
+            </FieldLabel>
+          );
+        })}
+      {canExtraMeasures && (crossBy === "measures" || widget.type === "ranking") && extraMeasures.length < 5 && (
+        <button
+          type="button"
+          className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
+          onClick={() => {
+            const used = new Set(widget.query?.measures || []);
+            const local = (model?.measures || []).map(measureKey).find((k) => k && !used.has(k));
+            const related = joinOpts
+              .flatMap((j) => (j.model?.measures || []).map((m) => asJoinField(measureKey(m), j.index)))
+              .find((k) => k && !used.has(k));
+            const next = local || related;
+            if (!next) return;
+            onUpdate((w) => ({
+              ...w,
+              config: { ...w.config, crossBy: "measures" },
+              query: { ...w.query, measures: [...(w.query?.measures || []), next] },
+            }));
+          }}
+        >
+          <Plus size={14} /> Adicionar métrica
+        </button>
+      )}
+      {!["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "ranking"].includes(widget.type) && (
         <FieldLabel
           label={widget.type === "decomposition_tree" ? "Hierarquia (níveis separados por vírgula)" : "Hierarquia de drill-down"}
           hint="Ex.: regiao, cidade, loja"

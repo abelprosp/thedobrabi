@@ -6,14 +6,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, getAccess, normalizeArray } from "@/lib/api";
 import { WidgetView, type Widget } from "@/components/WidgetView";
 import { modelIdForDataset, relationshipsToJoins } from "@/lib/semantic";
-import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
+import { DEFAULT_QUERY_LIMIT, widgetCrossBy } from "@/lib/widget-config";
 import { toast } from "sonner";
 import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { Button, Card, CardTitle, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Textarea, Badge, cn } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
-import { LineChart, BarChart3, PieChart, Table2, Type, Image as ImageIcon, Plus, Trash2, Eye, EyeOff, Save, FileDown, Calendar, Share2, X, ChevronLeft, Monitor, Printer, MoreHorizontal } from "lucide-react";
+import { LineChart, BarChart3, PieChart, Table2, Type, Image as ImageIcon, Plus, Trash2, Eye, EyeOff, Save, FileDown, Calendar, Share2, X, ChevronLeft, Monitor, Printer, MoreHorizontal, Trophy } from "lucide-react";
 import { useMediaQuery } from "@/lib/use-media-query";
 
 const Grid = WidthProvider(GridLayout);
@@ -26,6 +26,7 @@ const WIDGET_CATALOG: { type: Widget["type"]; label: string; icon: any; defaultW
   { type: "bar", label: "Barras", icon: BarChart3, defaultW: 6, defaultH: 4 },
   { type: "area", label: "Área", icon: LineChart, defaultW: 6, defaultH: 4 },
   { type: "pie", label: "Pizza", icon: PieChart, defaultW: 4, defaultH: 4 },
+  { type: "ranking", label: "Ranking", icon: Trophy, defaultW: 4, defaultH: 5 },
   { type: "table", label: "Tabela", icon: Table2, defaultW: 6, defaultH: 4 },
   { type: "big_table", label: "Tabela grande", icon: Table2, defaultW: 12, defaultH: 6 },
   { type: "text", label: "Texto", icon: Type, defaultW: 4, defaultH: 2 },
@@ -228,9 +229,9 @@ export default function ReportEditorPage() {
       type,
       title: catalog.label,
       layout: { x: (widgets.length * 4) % 12, y: 100, w: catalog.defaultW, h: catalog.defaultH },
-      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: type === "big_table" ? 10000 : DEFAULT_QUERY_LIMIT } : undefined,
+      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: type === "big_table" ? 10000 : type === "ranking" ? 10 : DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
-      config: type === "image" ? { imageUrl: "" } : type === "markdown" ? { markdown: "## Nota\nEdite aqui." } : type === "big_table" ? { pageSize: 50, zebra: true, freezeHeader: true } : undefined,
+      config: type === "image" ? { imageUrl: "" } : type === "markdown" ? { markdown: "## Nota\nEdite aqui." } : type === "big_table" ? { pageSize: 50, zebra: true, freezeHeader: true } : type === "ranking" ? { color: "#2563EB", rankOrder: "desc", rankLimit: 10 } : undefined,
     };
     updateWidgets((prev) => [...prev, w]);
     setSelected(w.id);
@@ -480,17 +481,157 @@ export default function ReportEditorPage() {
                     </Select>
                   </FieldLabel>
                   <FieldLabel label="Métrica">
-                    <Select value={current.query?.measures?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: e.target.value ? [e.target.value] : [] } } : w)))}>
+                    <Select value={current.query?.measures?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: e.target.value ? [e.target.value, ...(w.query?.measures || []).slice(1).filter((m) => m !== e.target.value)] : (w.query?.measures || []).slice(1) } } : w)))}>
                       <option value="">—</option>
                       {(model?.measures || []).map((m: any) => <option key={m.name} value={m.name}>{m.name}</option>)}
                     </Select>
                   </FieldLabel>
                   <FieldLabel label="Dimensão">
-                    <Select value={current.query?.dimensions?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, dimensions: e.target.value ? [e.target.value] : [] } } : w)))}>
+                    <Select value={current.query?.dimensions?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, dimensions: e.target.value ? [e.target.value, ...(w.query?.dimensions || []).slice(1)] : (w.query?.dimensions || []).slice(1) } } : w)))}>
                       <option value="">Nenhuma</option>
                       {(model?.dimensions || []).map((d: any) => <option key={d.column || d.name} value={d.column || d.name}>{d.name || d.column}</option>)}
                     </Select>
                   </FieldLabel>
+                  {current.type !== "kpi" && (
+                    <FieldLabel label="Cruzar por" hint="Colunas partem por outra dimensão. Medidas comparam várias métricas.">
+                      <div className="grid grid-cols-2 gap-1 rounded-xl border border-line bg-surface-2 p-1">
+                        {([
+                          ["columns", "Colunas"],
+                          ["measures", "Medidas"],
+                        ] as const).map(([value, label]) => (
+                          <button
+                            key={value}
+                            type="button"
+                            className={cn(
+                              "rounded-lg px-2 py-1.5 text-[12px] font-medium transition",
+                              widgetCrossBy(current.type, current.config, current.query) === value ? "bg-surface text-ink shadow-sm" : "text-mute hover:text-ink",
+                            )}
+                            onClick={() =>
+                              updateWidgets((p) =>
+                                p.map((w) => {
+                                  if (w.id !== current.id) return w;
+                                  const query = { ...w.query };
+                                  if (value === "columns") query.measures = (query.measures || []).slice(0, 1);
+                                  else query.dimensions = (query.dimensions || []).slice(0, 1);
+                                  return { ...w, query, config: { ...w.config, crossBy: value } };
+                                }),
+                              )
+                            }
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                    </FieldLabel>
+                  )}
+                  {current.type !== "kpi" &&
+                    widgetCrossBy(current.type, current.config, current.query) === "columns" &&
+                    (current.query?.dimensions || []).slice(1).map((dim, i) => (
+                      <FieldLabel key={`d-${i}`} label={i === 0 ? "Cruzar também por" : `Coluna ${i + 2}`}>
+                        <div className="flex items-center gap-1.5">
+                          <Select
+                            className="flex-1"
+                            value={dim}
+                            onChange={(e) =>
+                              updateWidgets((p) =>
+                                p.map((w) => {
+                                  if (w.id !== current.id) return w;
+                                  const dims = [...(w.query?.dimensions || [])];
+                                  dims[i + 1] = e.target.value;
+                                  return { ...w, query: { ...w.query, dimensions: dims.filter(Boolean) } };
+                                }),
+                              )
+                            }
+                          >
+                            <option value="">Nenhuma</option>
+                            {(model?.dimensions || []).map((d: any) => <option key={d.column || d.name} value={d.column || d.name}>{d.name || d.column}</option>)}
+                          </Select>
+                          <button
+                            type="button"
+                            className="rounded-lg p-1.5 text-mute hover:text-danger"
+                            onClick={() =>
+                              updateWidgets((p) =>
+                                p.map((w) => {
+                                  if (w.id !== current.id) return w;
+                                  const dims = [...(w.query?.dimensions || [])];
+                                  dims.splice(i + 1, 1);
+                                  return { ...w, query: { ...w.query, dimensions: dims } };
+                                }),
+                              )
+                            }
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </FieldLabel>
+                    ))}
+                  {current.type !== "kpi" &&
+                    widgetCrossBy(current.type, current.config, current.query) === "columns" &&
+                    (current.query?.dimensions?.length || 0) >= 1 &&
+                    (current.query?.dimensions?.length || 0) < 4 && (
+                      <button
+                        type="button"
+                        className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
+                        onClick={() => {
+                          const used = new Set(current.query?.dimensions || []);
+                          const next = (model?.dimensions || []).map((d: any) => d.column || d.name).find((k: string) => k && !used.has(k));
+                          if (!next) return;
+                          updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, crossBy: "columns" }, query: { ...w.query, dimensions: [...(w.query?.dimensions || []), next] } } : w)));
+                        }}
+                      >
+                        <Plus size={14} /> Adicionar coluna
+                      </button>
+                    )}
+                  {current.type !== "kpi" &&
+                    widgetCrossBy(current.type, current.config, current.query) === "measures" &&
+                    (current.query?.measures || []).slice(1).map((meas, i) => (
+                    <FieldLabel key={`m-${i}`} label={i === 0 ? "Cruzar também com" : `Métrica ${i + 2}`}>
+                      <div className="flex items-center gap-1.5">
+                        <Select
+                          className="flex-1"
+                          value={meas}
+                          onChange={(e) => updateWidgets((p) => p.map((w) => {
+                            if (w.id !== current.id) return w;
+                            const ms = [...(w.query?.measures || [])];
+                            ms[i + 1] = e.target.value;
+                            return { ...w, query: { ...w.query, measures: ms.filter(Boolean) } };
+                          }))}
+                        >
+                          <option value="">—</option>
+                          {(model?.measures || []).map((m: any) => <option key={m.name} value={m.name}>{m.name}</option>)}
+                        </Select>
+                        <button
+                          type="button"
+                          className="rounded-lg p-1.5 text-mute hover:text-danger"
+                          onClick={() => updateWidgets((p) => p.map((w) => {
+                            if (w.id !== current.id) return w;
+                            const ms = [...(w.query?.measures || [])];
+                            ms.splice(i + 1, 1);
+                            return { ...w, query: { ...w.query, measures: ms } };
+                          }))}
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    </FieldLabel>
+                  ))}
+                  {current.type !== "kpi" &&
+                    widgetCrossBy(current.type, current.config, current.query) === "measures" &&
+                    (current.query?.measures || []).length < 6 &&
+                    (model?.measures || []).some((m: any) => !(current.query?.measures || []).includes(m.name)) && (
+                    <button
+                      type="button"
+                      className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
+                      onClick={() => {
+                        const used = new Set(current.query?.measures || []);
+                        const next = (model?.measures || []).map((m: any) => m.name).find((k: string) => k && !used.has(k));
+                        if (!next) return;
+                        updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, config: { ...w.config, crossBy: "measures" }, query: { ...w.query, measures: [...(w.query?.measures || []), next] } } : w)));
+                      }}
+                    >
+                      <Plus size={14} /> Adicionar métrica
+                    </button>
+                  )}
                 </>
               )}
             </TabsContent>

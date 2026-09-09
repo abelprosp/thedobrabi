@@ -89,6 +89,8 @@ func (s *Server) widgetToPDFBlock(ctx context.Context, org, ws, uid uuid.UUID, r
 	if req.Limit <= 0 || req.Limit > 80 {
 		if w.Type == "big_table" {
 			req.Limit = 80
+		} else if w.Type == "ranking" {
+			req.Limit = 20
 		} else {
 			req.Limit = 40
 		}

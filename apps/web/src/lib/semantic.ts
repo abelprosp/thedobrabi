@@ -141,6 +141,8 @@ export function widgetFieldDefaults(type: string, model: SemanticModel | null | 
       return { measures: measuresAll.slice(0, 4), dimensions: pickDimensions(model, 6) };
     case "scatter":
       return { measures: [m0, m1].filter(Boolean), dimensions: cat ? [cat] : [] };
+    case "ranking":
+      return { measures: m0 ? [m0] : [], dimensions: cat ? [cat] : [] };
     default:
       return { measures: m0 ? [m0] : [], dimensions: cat ? [cat] : [] };
   }

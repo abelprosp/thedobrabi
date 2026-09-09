@@ -75,6 +75,7 @@ import {
   Sheet,
   Sparkle,
   Brain,
+  Trophy,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -106,6 +107,7 @@ const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description:
   { type: "data_intelligence", label: "Inteligência dados", icon: Brain, description: "Insights e alertas com IA sobre os visuais deste dashboard", defaultW: 6, defaultH: 5 },
   { type: "line", label: "Linha", icon: LineChart, description: "Tendência ao longo do tempo", defaultW: 6, defaultH: 4 },
   { type: "bar", label: "Barras", icon: BarChart3, description: "Comparar categorias", defaultW: 6, defaultH: 4 },
+  { type: "ranking", label: "Ranking", icon: Trophy, description: "Top N com posição e barra", defaultW: 4, defaultH: 5 },
   { type: "area", label: "Área", icon: LineChart, description: "Volume acumulado", defaultW: 6, defaultH: 4 },
   { type: "pie", label: "Pizza", icon: PieChart, description: "Partes de um todo", defaultW: 4, defaultH: 4 },
   { type: "gauge", label: "Gauge", icon: Gauge, description: "Medidor circular", defaultW: 4, defaultH: 4 },
@@ -545,7 +547,7 @@ function DashboardEditorInner() {
             h: mobileHeightFor(type, catalog.defaultH),
           }
         : undefined,
-      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: type === "big_table" ? 10000 : DEFAULT_QUERY_LIMIT } : undefined,
+      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: type === "big_table" ? 10000 : type === "ranking" ? 10 : DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
       hierarchy: type === "decomposition_tree" ? fields.dimensions : undefined,
       config: (() => {
@@ -560,6 +562,7 @@ function DashboardEditorInner() {
         if (type === "stat_spark") return { color: "#8B5CF6", sparkStyle: "area" };
         if (type === "ridgeline") return { color: "#8B5CF6", mirrored: true };
         if (type === "big_table") return { pageSize: 50, zebra: true, freezeHeader: true };
+        if (type === "ranking") return { color: "#2563EB", rankOrder: "desc", rankLimit: 10 };
         return {};
       })(),
     };

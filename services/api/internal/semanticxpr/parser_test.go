@@ -61,6 +61,43 @@ func TestDependentMeasure(t *testing.T) {
 	}
 }
 
+func TestCalculateSumExpression(t *testing.T) {
+	expr, err := Parse("CALCULATE(SUM(revenue), Regiao = 'Norte')")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	if expr.Func != "CALCULATE" {
+		t.Fatalf("func: %s", expr.Func)
+	}
+	if len(expr.Args) < 2 {
+		t.Fatalf("args: %d", len(expr.Args))
+	}
+	if expr.Args[0].Func != "SUM" {
+		t.Fatalf("first arg should be SUM, got %s", expr.Args[0].Func)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if !strings.Contains(sql, "sumIf") || !strings.Contains(sql, "`Regiao` = 'Norte'") {
+		t.Fatalf("unexpected sql: %s", sql)
+	}
+}
+
+func TestCalculateSumWithoutFilter(t *testing.T) {
+	expr, err := Parse("CALCULATE(SUM(revenue))")
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	sql, err := expr.ToSQL(q)
+	if err != nil {
+		t.Fatalf("sql: %v", err)
+	}
+	if sql != "SUM(toFloat64OrZero(toString(`revenue`)))" {
+		t.Fatalf("unexpected sql: %s", sql)
+	}
+}
+
 func TestCalculatePredicate(t *testing.T) {
 	expr, err := Parse("CALCULATE([Receita], Regiao = 'Norte')")
 	if err != nil {
