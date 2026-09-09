@@ -100,6 +100,8 @@ func TestCanonicalAliases(t *testing.T) {
 		"postgres":        "postgres",
 		"supabase.co":     "supabase",
 		"ibge":            "ibge_censo",
+		"pnad":            "ibge_censo",
+		"sidra":           "ibge_censo",
 		"ipca":            "inflacao",
 		"ml":              "mercado_livre",
 		"gmb":             "google_business",
@@ -142,7 +144,7 @@ func TestRequestedLabels(t *testing.T) {
 		"facebook":        "Facebook",
 		"google_business": "Google Meu Negócio",
 		"mercado_livre":   "Mercado Livre",
-		"ibge_censo":      "Censo IBGE",
+		"ibge_censo":      "IBGE",
 		"inflacao":        "Inflação (IPCA)",
 		"expectativas":    "Expectativa de mercado",
 		"cambio":          "Câmbio em tempo real",
@@ -180,5 +182,34 @@ func TestGoogleSheetsLinkOnly(t *testing.T) {
 		if !keys[k] {
 			t.Fatalf("google_sheets sem campo %s", k)
 		}
+	}
+}
+
+func TestIBGECatalogResources(t *testing.T) {
+	it := ByID("ibge_censo")
+	if it == nil {
+		t.Fatal("falta ibge_censo")
+	}
+	var table *Field
+	for i := range it.Fields {
+		if it.Fields[i].Key == "table" {
+			table = &it.Fields[i]
+			break
+		}
+	}
+	if table == nil {
+		t.Fatal("IBGE sem campo table")
+	}
+	got := map[string]bool{}
+	for _, o := range table.Options {
+		got[o.Value] = true
+	}
+	for _, id := range []string{"horas", "rendimento", "desocupacao", "informalidade", "sexo", "setor", "pib_estados", "pib_municipios", "pib_per_capita", "valor_adicionado", "crescimento_populacional"} {
+		if !got[id] {
+			t.Fatalf("catálogo IBGE sem recurso %s", id)
+		}
+	}
+	if !strings.Contains(strings.ToLower(it.Description), "pnad") {
+		t.Fatalf("descrição deveria mencionar PNAD: %q", it.Description)
 	}
 }

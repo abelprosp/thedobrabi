@@ -46,6 +46,17 @@ func TestLiveIBGEPopulacao(t *testing.T) {
 	}
 }
 
+func TestLiveIBGEDesocupacao(t *testing.T) {
+	e := livePublic(t)
+	h, rows, err := e.fetchIBGE(t.Context(), SQLConfig{Limit: 400}, "desocupacao")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rows) < 27 || !contains(h, "valor") || !contains(h, "periodo") {
+		t.Fatalf("headers=%v n=%d", h, len(rows))
+	}
+}
+
 func TestLiveIPCA(t *testing.T) {
 	e := livePublic(t)
 	h, rows, err := e.fetchInflacao(t.Context(), SQLConfig{Series: "433", Limit: 2000})

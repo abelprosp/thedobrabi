@@ -114,12 +114,24 @@ export function widgetFieldDefaults(type: string, model: SemanticModel | null | 
     case "slicer":
       return { measures: [], dimensions: cat ? [cat] : [] };
     case "sparkline":
+    case "stat_spark":
+    case "ridgeline":
+    case "radar":
+    case "radial":
+    case "hexmap":
     case "line":
     case "area":
       return { measures: m0 ? [m0] : [], dimensions: time ? [time] : cat ? [cat] : [] };
     case "heatmap":
     case "decomposition_tree":
+    case "sankey":
+    case "bubble":
       return { measures: m0 ? [m0] : [], dimensions: [cat, cat2].filter(Boolean) };
+    case "sales_report":
+    case "network_sales":
+      return { measures: measuresAll.slice(0, 3), dimensions: cat ? [cat] : [] };
+    case "big_table":
+      return { measures: measuresAll.slice(0, 4), dimensions: pickDimensions(model, 6) };
     case "scatter":
       return { measures: [m0, m1].filter(Boolean), dimensions: cat ? [cat] : [] };
     default:

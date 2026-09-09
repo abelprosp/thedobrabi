@@ -4,12 +4,23 @@ import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Chart, Kpi } from "@/components/viz";
 import { AdvancedChart, Sparkline, KpiGoal, MetricGroup, DecompositionTree, IframeWidget, formatNumber } from "@/components/AdvancedViz";
+import {
+  BubbleCard,
+  HexmapCard,
+  NetworkSalesCard,
+  RadarCard,
+  RadialCard,
+  RidgelineCard,
+  SalesReportCard,
+  SankeyCard,
+  StatSparkCard,
+} from "@/components/hyper-charts";
 import { api, getAccess } from "@/lib/api";
 import { toast } from "sonner";
 import { cn } from "@/lib/cn";
-import { DEFAULT_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
+import { DEFAULT_QUERY_LIMIT, MAX_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
-import { AlertCircle, Download, Image as ImageIcon } from "lucide-react";
+import { AlertCircle, ChevronLeft, ChevronRight, Download, Image as ImageIcon } from "lucide-react";
 
 export type GridPos = { x: number; y: number; w: number; h: number };
 
@@ -33,6 +44,7 @@ export type WidgetType =
   | "area"
   | "pie"
   | "table"
+  | "big_table"
   | "text"
   | "slicer"
   | "image"
@@ -47,7 +59,16 @@ export type WidgetType =
   | "sparkline"
   | "decomposition_tree"
   | "metric_group"
-  | "iframe";
+  | "iframe"
+  | "radar"
+  | "sankey"
+  | "ridgeline"
+  | "sales_report"
+  | "network_sales"
+  | "radial"
+  | "stat_spark"
+  | "bubble"
+  | "hexmap";
 
 export type QuerySpec = {
   dataset_id?: string;
@@ -113,6 +134,9 @@ export type WidgetConfig = {
   zebra?: boolean;
   freezeHeader?: boolean;
   rowLimit?: number;
+  pageSize?: number;
+  sparkStyle?: "area" | "candle";
+  mirrored?: boolean;
   multiSelect?: boolean;
   slicerSearch?: boolean;
   slicerStyle?: "list" | "dropdown" | "buttons";
@@ -181,7 +205,7 @@ export function WidgetView({
     }
     if (filters.length > 0) b.filters = filters;
     else delete b.filters;
-    if (!b.limit || b.limit <= 0) b.limit = DEFAULT_QUERY_LIMIT;
+    if (!b.limit || b.limit <= 0) b.limit = w.type === "big_table" ? MAX_QUERY_LIMIT : DEFAULT_QUERY_LIMIT;
     return b;
   }, [w, scopedFilters, timeRange]);
 
@@ -206,7 +230,7 @@ export function WidgetView({
         columns,
         measures: w.query?.measures,
         dimensions: w.query?.dimensions,
-        kind: KPI_TYPES.includes(w.type) ? "kpi" : w.type === "table" || w.type === "slicer" ? "table" : "chart",
+        kind: KPI_TYPES.includes(w.type) ? "kpi" : w.type === "table" || w.type === "big_table" || w.type === "slicer" ? "table" : "chart",
       })
     : null;
 
@@ -295,6 +319,14 @@ export function WidgetView({
       </div>
     );
   }
+  if (w.type === "big_table") {
+    return (
+      <div className="relative h-full">
+        <BigTableView w={w} rows={rows} columns={columns} onDrill={onDrill} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
 
   if (w.type === "kpi_goal") {
     const picked = firstNumericEntry(rows[0], w.query?.measures);
@@ -340,6 +372,78 @@ export function WidgetView({
     );
   }
 
+  if (w.type === "stat_spark") {
+    return (
+      <div className="relative h-full">
+        <StatSparkCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "radar") {
+    return (
+      <div className="relative h-full">
+        <RadarCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "ridgeline") {
+    return (
+      <div className="relative h-full">
+        <RidgelineCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "sankey") {
+    return (
+      <div className="relative h-full">
+        <SankeyCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "sales_report") {
+    return (
+      <div className="relative h-full">
+        <SalesReportCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "network_sales") {
+    return (
+      <div className="relative h-full">
+        <NetworkSalesCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "bubble") {
+    return (
+      <div className="relative h-full">
+        <BubbleCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "hexmap") {
+    return (
+      <div className="relative h-full">
+        <HexmapCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
+  if (w.type === "radial") {
+    return (
+      <div className="relative h-full">
+        <RadialCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        {issue && <IssueHint issue={issue} />}
+      </div>
+    );
+  }
   if (["gauge", "waterfall", "funnel", "scatter", "treemap", "heatmap"].includes(w.type)) {
     return (
       <ChartCard title={w.title} showTitle={showTitle} align={cfg.titleAlign} drill={drillChrome(w, onDrill)} issue={issue}>
@@ -419,6 +523,151 @@ function drillChrome(w: Widget, onDrill: (id: string, value: string) => void) {
     <button className="text-xs text-accent" onClick={() => onDrill(w.id, "up")}>
       Subir
     </button>
+  );
+}
+
+function BigTableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; columns: string[]; onDrill: (id: string, value: string) => void }) {
+  const cfg = w.config || {};
+  const [page, setPage] = useState(0);
+  const [q, setQ] = useState("");
+  const [sort, setSort] = useState<{ col: string; dir: "asc" | "desc" } | null>(null);
+  const [pageSize, setPageSize] = useState(() => Math.max(10, Math.min(200, Number(cfg.pageSize || cfg.rowLimit || 50))));
+
+  const numeric = useMemo(
+    () => new Set(columns.filter((c) => rows.some((r) => typeof r[c] === "number" && Number.isFinite(r[c])))),
+    [columns, rows],
+  );
+
+  const filtered = useMemo(() => {
+    const term = q.trim().toLowerCase();
+    let next = rows;
+    if (term) {
+      next = rows.filter((r) => columns.some((c) => String(r[c] ?? "").toLowerCase().includes(term)));
+    }
+    if (sort) {
+      const { col, dir } = sort;
+      const mul = dir === "asc" ? 1 : -1;
+      next = [...next].sort((a, b) => {
+        const av = a[col];
+        const bv = b[col];
+        if (typeof av === "number" && typeof bv === "number") return (av - bv) * mul;
+        return String(av ?? "").localeCompare(String(bv ?? ""), "pt", { numeric: true }) * mul;
+      });
+    }
+    return next;
+  }, [rows, columns, q, sort]);
+
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const safePage = Math.min(page, pages - 1);
+  const start = safePage * pageSize;
+  const visible = filtered.slice(start, start + pageSize);
+  const totals = cfg.showTotals
+    ? Object.fromEntries(columns.map((c) => [c, numeric.has(c) ? filtered.reduce((s, r) => s + Number(r[c] ?? 0), 0) : ""]))
+    : null;
+
+  return (
+    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+      <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2">
+        {cfg.showTitle !== false ? <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-ink">{w.title}</span> : <span className="flex-1" />}
+        <input
+          value={q}
+          onChange={(e) => { setQ(e.target.value); setPage(0); }}
+          placeholder="Pesquisar na tabela…"
+          className="h-9 w-full max-w-[14rem] rounded-lg border border-line bg-surface px-2.5 text-[12px] text-ink outline-none focus:border-primary/50 sm:w-44"
+        />
+        {rows.length > 0 && (
+          <button type="button" className="inline-flex min-h-9 items-center gap-1 px-1 text-[11px] text-mute hover:text-ink" onClick={() => downloadRows(w.title, columns, filtered, "csv")}>
+            <Download size={12} /> CSV
+          </button>
+        )}
+        {w.query?.dataset_id && (
+          <button
+            type="button"
+            className="inline-flex min-h-9 items-center gap-1 px-1 text-[11px] text-mute hover:text-ink"
+            onClick={() => downloadDatasetXlsx(w.query!.dataset_id!, w.title).catch((e: Error) => toast.error(e.message || "Falha ao exportar Excel"))}
+          >
+            <Download size={12} /> Excel
+          </button>
+        )}
+      </div>
+      <div className="min-h-0 flex-1 overflow-auto">
+        <table className="w-full min-w-max text-left text-[12px]">
+          <thead className={cfg.freezeHeader !== false ? "sticky top-0 z-[1] bg-surface" : undefined}>
+            <tr className="text-mute">
+              {columns.map((c) => (
+                <th key={c} className={cn("whitespace-nowrap px-3 py-2 font-medium", numeric.has(c) && "text-right")}>
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1 hover:text-ink"
+                    onClick={() => setSort((s) => s?.col === c ? { col: c, dir: s.dir === "asc" ? "desc" : "asc" } : { col: c, dir: numeric.has(c) ? "desc" : "asc" })}
+                  >
+                    {c}
+                    {sort?.col === c ? (sort.dir === "asc" ? " ↑" : " ↓") : ""}
+                  </button>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {visible.length === 0 ? (
+              <tr><td colSpan={Math.max(columns.length, 1)} className="px-3 py-8 text-center text-mute">Sem linhas nesta página.</td></tr>
+            ) : (
+              visible.map((r: any, i: number) => (
+                <tr key={start + i} className={cn("border-t border-line hover:bg-surface-2", cfg.zebra && i % 2 === 1 && "bg-surface-2/80")}>
+                  {columns.map((c: string, ci: number) => (
+                    <td key={c} className={cn("whitespace-nowrap px-3 py-1.5", numeric.has(c) && "text-right tabular-nums")}>
+                      {ci === 0 && w.hierarchy ? (
+                        <button className="text-accent hover:underline" onClick={() => onDrill(w.id, String(r[c]))}>{String(r[c] ?? "")}</button>
+                      ) : numeric.has(c) ? (
+                        formatNumber(r[c], cfg)
+                      ) : (
+                        String(r[c] ?? "")
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+          {totals && (
+            <tfoot>
+              <tr className="border-t-2 border-line font-medium text-ink">
+                {columns.map((c, i) => (
+                  <td key={c} className={cn("px-3 py-2", numeric.has(c) && "text-right tabular-nums")}>
+                    {i === 0 && !numeric.has(c) ? "Total" : numeric.has(c) ? formatNumber(totals[c], cfg) : ""}
+                  </td>
+                ))}
+              </tr>
+            </tfoot>
+          )}
+        </table>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line px-3 py-2 text-[12px] text-mute">
+        <span>
+          {filtered.length === 0 ? "0 linhas" : `${start + 1}–${Math.min(start + pageSize, filtered.length)} de ${filtered.length.toLocaleString("pt-BR")}`}
+          {rows.length >= (w.query?.limit || MAX_QUERY_LIMIT) ? " (limite da consulta)" : ""}
+        </span>
+        <div className="flex items-center gap-1">
+          <select
+            className="h-9 rounded-lg border border-line bg-surface px-2 text-[12px] text-ink"
+            value={pageSize}
+            onChange={(e) => { setPageSize(Number(e.target.value)); setPage(0); }}
+            aria-label="Linhas por página"
+          >
+            {[25, 50, 100, 200].map((n) => (
+              <option key={n} value={n}>{n} / página</option>
+            ))}
+          </select>
+          <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-surface-2 disabled:opacity-40" disabled={safePage <= 0} onClick={() => setPage((p) => Math.max(0, p - 1))} aria-label="Página anterior">
+            <ChevronLeft size={16} />
+          </button>
+          <span className="min-w-[4.5rem] text-center tabular-nums">{safePage + 1} / {pages}</span>
+          <button type="button" className="flex h-9 w-9 items-center justify-center rounded-lg hover:bg-surface-2 disabled:opacity-40" disabled={safePage >= pages - 1} onClick={() => setPage((p) => p + 1)} aria-label="Página seguinte">
+            <ChevronRight size={16} />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

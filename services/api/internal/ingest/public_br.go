@@ -43,18 +43,6 @@ func publicGET(ctx context.Context, cfg SQLConfig, official string) ([]byte, err
 	return nil, last
 }
 
-func ibgeOfficialURL(resource string) string {
-	switch resource {
-	case "estados":
-		return "https://servicodados.ibge.gov.br/api/v1/localidades/estados"
-	case "populacao":
-		// 6579 = população residente estimada. "all" evita o período 2022, que a SIDRA já não publica.
-		return "https://servicodados.ibge.gov.br/api/v3/agregados/6579/periodos/all/variaveis/9324?localidades=N3[all]"
-	default:
-		return "https://servicodados.ibge.gov.br/api/v1/localidades/municipios"
-	}
-}
-
 func focusOfficialURL(resource string, top int) string {
 	if top <= 0 || top > 10000 {
 		top = 10000
@@ -67,101 +55,6 @@ func focusOfficialURL(resource string, top int) string {
 		"https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/%s?$top=%d&$orderby=Data%%20desc&$format=json",
 		entity, top,
 	)
-}
-
-func (e *Engine) fetchIBGE(ctx context.Context, cfg SQLConfig, resource string) ([]string, [][]string, error) {
-	if resource == "" {
-		resource = "municipios"
-	}
-	raw, err := publicGET(ctx, cfg, ibgeOfficialURL(resource))
-	if err != nil {
-		return nil, nil, err
-	}
-	if resource == "populacao" {
-		return flattenSIDRA(raw, cfg.RowLimit())
-	}
-	page, err := pickJSONArray(raw, "data")
-	if err != nil {
-		return nil, nil, err
-	}
-	return mapsToRows(mapsLimited(flattenNested(page), cfg.RowLimit()))
-}
-
-func flattenNested(in []map[string]any) []map[string]any {
-	out := make([]map[string]any, 0, len(in))
-	for _, m := range in {
-		row := map[string]any{}
-		for k, v := range m {
-			switch t := v.(type) {
-			case map[string]any:
-				if nome, ok := t["nome"]; ok {
-					row[k] = nome
-					if id, ok := t["id"]; ok {
-						row[k+"_id"] = id
-					}
-					if sigla, ok := t["sigla"]; ok {
-						row[k+"_sigla"] = sigla
-					}
-				} else {
-					b, _ := json.Marshal(t)
-					row[k] = string(b)
-				}
-			default:
-				row[k] = v
-			}
-		}
-		out = append(out, row)
-	}
-	return out
-}
-
-func flattenSIDRA(raw []byte, limit int) ([]string, [][]string, error) {
-	var root []map[string]any
-	if err := json.Unmarshal(raw, &root); err != nil {
-		page, err2 := pickJSONArray(raw, "data", "resultados")
-		if err2 != nil {
-			return nil, nil, err
-		}
-		return mapsToRows(mapsLimited(page, limit))
-	}
-	var maps []map[string]any
-	for _, block := range root {
-		resultados, _ := block["resultados"].([]any)
-		for _, r := range resultados {
-			rm, _ := r.(map[string]any)
-			series, _ := rm["series"].([]any)
-			for _, s := range series {
-				sm, _ := s.(map[string]any)
-				loc, _ := sm["localidade"].(map[string]any)
-				serie, _ := sm["serie"].(map[string]any)
-				row := map[string]any{
-					"localidade_id":   loc["id"],
-					"localidade_nome": loc["nome"],
-					"agregado":        block["id"],
-				}
-				if len(serie) == 0 {
-					maps = append(maps, row)
-					continue
-				}
-				for period, val := range serie {
-					item := map[string]any{}
-					for k, v := range row {
-						item[k] = v
-					}
-					item["periodo"] = period
-					item["valor"] = val
-					maps = append(maps, item)
-					if limit > 0 && len(maps) >= limit {
-						return mapsToRows(maps)
-					}
-				}
-			}
-		}
-	}
-	if len(maps) == 0 {
-		return nil, nil, fmt.Errorf("SIDRA sem séries")
-	}
-	return mapsToRows(maps)
 }
 
 func sgsOfficialURL(seriesID string) string {

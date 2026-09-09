@@ -27,6 +27,7 @@ const WIDGET_CATALOG: { type: Widget["type"]; label: string; icon: any; defaultW
   { type: "area", label: "Área", icon: LineChart, defaultW: 6, defaultH: 4 },
   { type: "pie", label: "Pizza", icon: PieChart, defaultW: 4, defaultH: 4 },
   { type: "table", label: "Tabela", icon: Table2, defaultW: 6, defaultH: 4 },
+  { type: "big_table", label: "Tabela grande", icon: Table2, defaultW: 12, defaultH: 6 },
   { type: "text", label: "Texto", icon: Type, defaultW: 4, defaultH: 2 },
   { type: "image", label: "Imagem", icon: ImageIcon, defaultW: 4, defaultH: 3 },
   { type: "markdown", label: "Markdown", icon: Type, defaultW: 4, defaultH: 3 },
@@ -227,9 +228,9 @@ export default function ReportEditorPage() {
       type,
       title: catalog.label,
       layout: { x: (widgets.length * 4) % 12, y: 100, w: catalog.defaultW, h: catalog.defaultH },
-      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: DEFAULT_QUERY_LIMIT } : undefined,
+      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: type === "big_table" ? 10000 : DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
-      config: type === "image" ? { imageUrl: "" } : type === "markdown" ? { markdown: "## Nota\nEdite aqui." } : undefined,
+      config: type === "image" ? { imageUrl: "" } : type === "markdown" ? { markdown: "## Nota\nEdite aqui." } : type === "big_table" ? { pageSize: 50, zebra: true, freezeHeader: true } : undefined,
     };
     updateWidgets((prev) => [...prev, w]);
     setSelected(w.id);

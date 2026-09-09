@@ -3,9 +3,12 @@
 import { Card } from "@/components/ui";
 import { useMemo } from "react";
 import { BarChart3, Globe, Layers } from "lucide-react";
-import { chartChrome, chartPalette, echartsTooltip, formatNumber, hexToRgba, legendOption } from "@/lib/widget-config";
+import { chartChrome, chartPalette, formatNumber, hexToRgba } from "@/lib/widget-config";
+import { chartTooltip } from "@/lib/chartjs";
+import { ChartJsCanvas } from "@/components/chartjs-canvas";
 import { useTheme } from "@/components/theme-provider";
-import { EChart, formatCategory } from "@/components/viz";
+import { formatCategory } from "@/components/viz";
+import type { ChartType } from "chart.js";
 
 export type Rows = Record<string, any>[];
 export type Config = Record<string, any>;
@@ -22,8 +25,8 @@ function pickColumns(rows: Rows, columns: string[], config?: Config) {
   return { dim, measure, numericCols };
 }
 
-function ChartFill({ option, height }: { option: Record<string, unknown>; height?: number }) {
-  const chart = <EChart option={option} />;
+function Fill({ type, data, options, height }: { type: ChartType; data: any; options?: any; height?: number }) {
+  const chart = <ChartJsCanvas type={type} data={data} options={options} />;
   if (height == null) return chart;
   return <div style={{ height }}>{chart}</div>;
 }
@@ -34,7 +37,6 @@ export function AdvancedChart({
   columns = [],
   height,
   config = {},
-  title: _title,
 }: {
   type: "gauge" | "waterfall" | "funnel" | "scatter" | "treemap" | "heatmap";
   rows?: Rows;
@@ -44,359 +46,310 @@ export function AdvancedChart({
   title?: string;
 }) {
   const { theme } = useTheme();
-  const option = useMemo(() => {
-    const chrome = chartChrome(theme);
-    const tooltip = echartsTooltip(theme);
-    const palette = chartPalette(config.color);
-    const showTooltip = config.showTooltip !== false;
-    const showLabels = ["funnel", "treemap", "heatmap"].includes(type) ? config.showDataLabels !== false : !!config.showDataLabels;
-    const showGrid = config.showGrid !== false;
-    const showX = config.showXAxis !== false;
-    const showY = config.showYAxis !== false;
-    const axisFmt = (v: number) => formatNumber(v, config);
-    const dashed = { color: chrome.line, type: "dashed" as const };
+  const chrome = chartChrome(theme);
+  const palette = chartPalette(config.color);
+  const showTooltip = config.showTooltip !== false;
+  const showGrid = config.showGrid !== false;
+  const showX = config.showXAxis !== false;
+  const showY = config.showYAxis !== false;
+  const axisFmt = (v: string | number) => formatNumber(Number(v), config);
+  const tip = showTooltip ? chartTooltip(theme) : { enabled: false };
 
-    if (type === "gauge") {
-      const { measure } = pickColumns(rows, columns, config);
-      const val = rows[0] ? Number(rows[0][measure ?? columns[0]] ?? 0) : 0;
-      const min = Number(config.min ?? 0);
-      const max = Number(config.max ?? Math.max(val * 1.2, 100));
-      const target = Number(config.target ?? max * 0.8);
-      const color = config.color || PALETTE[0];
-      return {
-        backgroundColor: "transparent",
-        animationDuration: 450,
-        series: [
-          {
-            type: "gauge",
-            startAngle: 210,
-            endAngle: -30,
-            min,
-            max,
-            splitNumber: 5,
-            itemStyle: { color },
-            progress: { show: true, width: 18, roundCap: true, itemStyle: { color } },
-            pointer: { show: true, length: "58%", width: 5, itemStyle: { color } },
-            axisLine: { roundCap: true, lineStyle: { width: 18, color: [[1, chrome.line]] } },
-            axisTick: { show: false },
-            splitLine: { length: 10, distance: 8, lineStyle: { color: chrome.mute, width: 1 } },
-            axisLabel: { show: showX, distance: 22, color: chrome.mute, fontSize: 10, formatter: axisFmt },
-            anchor: { show: true, size: 12, itemStyle: { color, borderColor: chrome.surface, borderWidth: 2 } },
-            title: { show: true, offsetCenter: [0, "38%"], color: chrome.mute, fontSize: 11 },
-            detail: {
-              valueAnimation: true,
-              fontSize: 24,
-              fontWeight: 600,
-              offsetCenter: [0, "62%"],
-              formatter: (v: number) => formatNumber(v, config),
-              color: chrome.ink,
-            },
-            data: [{ value: val, name: config.gaugeLabel || "Valor" }],
-            markLine:
-              target != null
-                ? {
-                    silent: true,
-                    data: [{ yAxis: target }],
-                    lineStyle: { color: "#F59E0B", width: 2, type: "dashed" },
-                    symbol: ["none", "none"],
-                  }
-                : undefined,
-          },
-        ],
-      };
-    }
-
-    if (type === "waterfall") {
-      const { dim, measure } = pickColumns(rows, columns, config);
-      const negatives = new Set((config.waterfallNegativeCategories || "").split(",").map((s: string) => s.trim()).filter(Boolean));
-      const cats = rows.map((r) => formatCategory(r[dim ?? columns[0]] ?? ""));
-      const values = rows.map((r) => Number(r[measure ?? columns[1]] ?? 0));
-      let sum = 0;
-      const helper: number[] = [];
-      const series: number[] = [];
-      const colors: string[] = [];
-      const pos = config.color || "#10B981";
-      const neg = config.colorNegative || "#EF4444";
-      values.forEach((v, i) => {
-        const isNeg = v < 0 || negatives.has(cats[i]);
-        const val = isNeg ? -Math.abs(v) : Math.abs(v);
-        helper.push(sum);
-        series.push(val);
-        colors.push(isNeg ? neg : pos);
-        sum += val;
-      });
-      helper.push(sum);
-      series.push(0);
-      colors.push("transparent");
-      cats.push("Total");
-      return {
-        backgroundColor: "transparent",
-        animationDuration: 450,
-        tooltip: showTooltip
-          ? {
-              ...tooltip,
-              trigger: "axis",
-              axisPointer: { type: "shadow", shadowStyle: { color: "rgba(37,99,235,0.08)" } },
-              formatter: (params: any) => {
-                const p = params[0];
-                const i = p.dataIndex;
-                return `<div style="font-weight:600;margin-bottom:2px">${cats[i]}</div><div>${formatNumber(series[i], config)}</div>`;
+  if (type === "gauge") {
+    const { measure } = pickColumns(rows, columns, config);
+    const val = rows[0] ? Number(rows[0][measure ?? columns[0]] ?? 0) : 0;
+    const min = Number(config.min ?? 0);
+    const max = Number(config.max ?? Math.max(val * 1.2, 100));
+    const color = config.color || PALETTE[0];
+    const span = Math.max(max - min, 1);
+    const filled = Math.min(span, Math.max(0, val - min));
+    const rest = Math.max(0, span - filled);
+    return (
+      <div className="relative h-full w-full" style={height ? { height } : undefined}>
+        <ChartJsCanvas
+          type="doughnut"
+          data={{
+            labels: [config.gaugeLabel || "Valor", "Restante"],
+            datasets: [
+              {
+                data: [filled, rest],
+                backgroundColor: [color, chrome.line],
+                borderWidth: 0,
+                circumference: 270,
+                rotation: 225,
+                cutout: "72%",
               },
-            }
-          : { show: false },
-        grid: { containLabel: true, left: 8, right: 12, top: 16, bottom: 8 },
-        xAxis: {
-          type: "category",
-          show: showX,
-          data: cats,
-          name: config.xAxisLabel,
-          nameTextStyle: { color: chrome.mute, fontSize: 11 },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { color: chrome.mute, fontSize: 11, rotate: config.xAxisRotate ?? 0, hideOverlap: true },
-        },
-        yAxis: {
-          type: "value",
-          show: showY,
-          name: config.yAxisLabel,
-          nameTextStyle: { color: chrome.mute, fontSize: 11 },
-          splitLine: { show: showGrid, lineStyle: dashed },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt },
-        },
-        series: [
-          { type: "bar", stack: "Total", itemStyle: { borderColor: "transparent", color: "transparent" }, emphasis: { itemStyle: { borderColor: "transparent", color: "transparent" } }, data: helper },
-          {
-            type: "bar",
-            stack: "Total",
-            data: series,
-            itemStyle: { color: (p: any) => colors[p.dataIndex], borderRadius: [8, 8, 2, 2] },
-            barMaxWidth: 48,
-            barCategoryGap: "32%",
-            label: { show: showLabels, position: "top", fontSize: 10, color: chrome.ink, formatter: (p: any) => formatNumber(p.value, config) },
+            ],
+          }}
+          options={{
+            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+          }}
+        />
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center pt-4">
+          <div className="text-[11px] text-mute">{config.gaugeLabel || "Valor"}</div>
+          <div className="text-2xl font-semibold text-ink">{formatNumber(val, config)}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (type === "waterfall") {
+    const { dim, measure } = pickColumns(rows, columns, config);
+    const negatives = new Set((config.waterfallNegativeCategories || "").split(",").map((s: string) => s.trim()).filter(Boolean));
+    const cats = rows.map((r) => formatCategory(r[dim ?? columns[0]] ?? ""));
+    const values = rows.map((r) => Number(r[measure ?? columns[1]] ?? 0));
+    let sum = 0;
+    const helper: number[] = [];
+    const series: number[] = [];
+    const colors: string[] = [];
+    const pos = config.color || "#10B981";
+    const neg = config.colorNegative || "#EF4444";
+    values.forEach((v, i) => {
+      const isNeg = v < 0 || negatives.has(cats[i]);
+      const val = isNeg ? -Math.abs(v) : Math.abs(v);
+      helper.push(isNeg ? sum + val : sum);
+      series.push(Math.abs(val));
+      colors.push(isNeg ? neg : pos);
+      sum += val;
+    });
+    helper.push(0);
+    series.push(Math.abs(sum));
+    colors.push("#6366F1");
+    cats.push("Total");
+    return (
+      <Fill
+        height={height}
+        type="bar"
+        data={{
+          labels: cats,
+          datasets: [
+            { label: "base", data: helper, backgroundColor: "transparent", stack: "wf", borderWidth: 0 },
+            { label: "valor", data: series, backgroundColor: colors, stack: "wf", borderRadius: 6, maxBarThickness: 48 },
+          ],
+        }}
+        options={{
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              ...tip,
+              callbacks: { label: (ctx: any) => (ctx.datasetIndex === 0 ? "" : formatNumber(ctx.parsed.y, config)) },
+            },
           },
-        ],
-      };
-    }
-
-    if (type === "funnel") {
-      const { dim, measure } = pickColumns(rows, columns, config);
-      const data = rows
-        .map((r) => ({ name: formatCategory(r[dim ?? columns[0]] ?? ""), value: Number(r[measure ?? columns[1]] ?? 0) }))
-        .sort((a, b) => b.value - a.value);
-      return {
-        backgroundColor: "transparent",
-        animationDuration: 450,
-        tooltip: showTooltip ? { ...tooltip, trigger: "item", formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
-        legend: legendOption(!!config.showLegend, config.legendPosition || "top", theme),
-        color: palette,
-        series: [
-          {
-            type: "funnel",
-            left: "8%",
-            top: 28,
-            bottom: 16,
-            width: "84%",
-            minSize: "8%",
-            maxSize: "100%",
-            sort: "descending",
-            gap: 6,
-            label: { show: showLabels, color: chrome.ink, fontSize: 11, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` },
-            labelLine: { length: 12, lineStyle: { width: 1 } },
-            itemStyle: { borderColor: chrome.surface, borderWidth: 2, borderRadius: 6 },
-            emphasis: { label: { fontSize: 12 } },
-            data,
+          scales: {
+            x: { stacked: true, display: showX, ticks: { color: chrome.mute, maxRotation: config.xAxisRotate ?? 0 }, grid: { display: false }, border: { display: false } },
+            y: { stacked: true, display: showY, ticks: { color: chrome.mute, callback: (v: any) => axisFmt(v as number) }, grid: { display: showGrid, color: chrome.line }, border: { display: false } },
           },
-        ],
-      };
-    }
+        }}
+      />
+    );
+  }
 
-    if (type === "scatter") {
-      const xCol = columns.includes(config.xMeasure) ? config.xMeasure : config.xMeasure || columns.find((c) => typeof rows[0]?.[c] === "number") || columns[0];
-      const yCol = columns.includes(config.yMeasure) ? config.yMeasure : config.yMeasure || columns.find((c) => c !== xCol && typeof rows[0]?.[c] === "number") || columns[1] || xCol;
-      const dim = config.dimension || columns.find((c) => typeof rows[0]?.[c] === "string" && c !== xCol && c !== yCol);
-      const color = config.color || PALETTE[0];
-      const data = rows.map((r) => [Number(r[xCol] ?? 0), Number(r[yCol] ?? 0), dim ? String(r[dim]) : ""]);
-      return {
-        backgroundColor: "transparent",
-        animationDuration: 450,
-        tooltip: showTooltip
-          ? {
-              ...tooltip,
-              trigger: "item",
-              formatter: (p: any) =>
-                `<div style="font-weight:600;margin-bottom:2px">${p.data[2] || p.name}</div><div>${xCol}: ${formatNumber(p.data[0], config)}</div><div>${yCol}: ${formatNumber(p.data[1], config)}</div>`,
-            }
-          : { show: false },
-        grid: { containLabel: true, left: 8, right: 16, top: 16, bottom: 8 },
-        xAxis: {
-          type: "value",
-          show: showX,
-          name: config.xAxisLabel || xCol,
-          splitLine: { show: showGrid, lineStyle: dashed },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt },
-          nameTextStyle: { color: chrome.mute, fontSize: 11 },
-        },
-        yAxis: {
-          type: "value",
-          show: showY,
-          name: config.yAxisLabel || yCol,
-          splitLine: { show: showGrid, lineStyle: dashed },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt },
-          nameTextStyle: { color: chrome.mute, fontSize: 11 },
-        },
-        series: [
-          {
-            type: "scatter",
-            symbolSize: 14,
-            itemStyle: { color: hexToRgba(color, 0.78), borderColor: color, borderWidth: 1.5, shadowBlur: 8, shadowColor: hexToRgba(color, 0.25) },
-            emphasis: { scale: 1.2 },
-            label: { show: showLabels, fontSize: 10, color: chrome.ink, formatter: (p: any) => p.data[2] || formatNumber(p.data[1], config) },
-            data,
+  if (type === "funnel") {
+    const { dim, measure } = pickColumns(rows, columns, config);
+    const items = rows
+      .map((r) => ({ name: formatCategory(r[dim ?? columns[0]] ?? ""), value: Number(r[measure ?? columns[1]] ?? 0) }))
+      .sort((a, b) => b.value - a.value);
+    const max = Math.max(...items.map((d) => d.value), 1);
+    return (
+      <Fill
+        height={height}
+        type="bar"
+        data={{
+          labels: items.map((d) => d.name),
+          datasets: [
+            { label: "pad", data: items.map((d) => (max - d.value) / 2), backgroundColor: "transparent", stack: "fn", borderWidth: 0 },
+            {
+              label: "valor",
+              data: items.map((d) => d.value),
+              backgroundColor: items.map((_, i) => palette[i % palette.length]),
+              stack: "fn",
+              borderRadius: 6,
+            },
+          ],
+        }}
+        options={{
+          indexAxis: "y",
+          plugins: {
+            legend: { display: false },
+            tooltip: { ...tip, callbacks: { label: (ctx: any) => (ctx.datasetIndex === 0 ? "" : formatNumber(ctx.parsed.x, config)) } },
           },
-        ],
-      };
-    }
-
-    if (type === "treemap") {
-      const { dim, measure } = pickColumns(rows, columns, config);
-      const data = rows.map((r) => ({ name: formatCategory(r[dim ?? columns[0]] ?? ""), value: Number(r[measure ?? columns[1]] ?? 0) }));
-      return {
-        backgroundColor: "transparent",
-        animationDuration: 450,
-        tooltip: showTooltip ? { ...tooltip, formatter: (p: any) => `${p.name}: ${formatNumber(p.value, config)}` } : { show: false },
-        color: palette,
-        series: [
-          {
-            type: "treemap",
-            width: "100%",
-            height: "100%",
-            roam: false,
-            nodeClick: false,
-            breadcrumb: { show: false },
-            label: { show: showLabels, fontSize: 11, formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}` },
-            itemStyle: { borderColor: chrome.surface, borderWidth: 3, gapWidth: 4, borderRadius: 8 },
-            data,
+          scales: {
+            x: { stacked: true, display: false, border: { display: false }, grid: { display: false } },
+            y: { stacked: true, ticks: { color: chrome.mute }, grid: { display: false }, border: { display: false } },
           },
-        ],
-      };
-    }
+        }}
+      />
+    );
+  }
 
-    if (type === "heatmap") {
-      const xCol = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
-      const yCol = columns.find((c) => c !== xCol && typeof rows[0]?.[c] === "string") || columns[1] || xCol;
-      const valCol = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[2] || columns[0];
-      const xSet = Array.from(new Set(rows.map((r) => formatCategory(r[xCol]))));
-      const ySet = Array.from(new Set(rows.map((r) => formatCategory(r[yCol]))));
-      const data = rows.map((r) => [xSet.indexOf(formatCategory(r[xCol])), ySet.indexOf(formatCategory(r[yCol])), Number(r[valCol] ?? 0)]);
-      const max = Math.max(...data.map((d) => d[2]), 0);
-      const accent = config.color || "#0ea5e9";
-      return {
-        backgroundColor: "transparent",
-        animationDuration: 450,
-        tooltip: showTooltip
-          ? {
-              ...tooltip,
-              position: "top",
-              formatter: (p: any) =>
-                `<div style="font-weight:600;margin-bottom:2px">${xSet[p.data[0]]} / ${ySet[p.data[1]]}</div><div>${formatNumber(p.data[2], config)}</div>`,
-            }
-          : { show: false },
-        grid: { containLabel: true, left: 8, right: 16, top: 12, bottom: 36 },
-        xAxis: {
-          type: "category",
-          show: showX,
-          data: xSet,
-          name: config.xAxisLabel,
-          splitArea: { show: true },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { color: chrome.mute, fontSize: 10, rotate: config.xAxisRotate ?? 30 },
-        },
-        yAxis: {
-          type: "category",
-          show: showY,
-          data: ySet,
-          name: config.yAxisLabel,
-          splitArea: { show: true },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          axisLabel: { color: chrome.mute, fontSize: 10 },
-        },
-        visualMap: {
-          min: 0,
-          max,
-          calculable: true,
-          orient: "horizontal",
-          left: "center",
-          bottom: 0,
-          inRange: { color: ["#e0f2fe", accent, "#1e40af"] },
-          textStyle: { color: chrome.mute, fontSize: 10 },
-        },
-        series: [
-          {
-            type: "heatmap",
-            itemStyle: { borderRadius: 4, borderColor: chrome.surface, borderWidth: 2 },
-            label: { show: showLabels, fontSize: 10, formatter: (p: any) => formatNumber(p.data[2], config) },
-            data,
+  if (type === "scatter") {
+    const xCol = columns.includes(config.xMeasure) ? config.xMeasure : config.xMeasure || columns.find((c) => typeof rows[0]?.[c] === "number") || columns[0];
+    const yCol = columns.includes(config.yMeasure) ? config.yMeasure : config.yMeasure || columns.find((c) => c !== xCol && typeof rows[0]?.[c] === "number") || columns[1] || xCol;
+    const dim = config.dimension || columns.find((c) => typeof rows[0]?.[c] === "string" && c !== xCol && c !== yCol);
+    const color = config.color || PALETTE[0];
+    return (
+      <Fill
+        height={height}
+        type="scatter"
+        data={{
+          datasets: [
+            {
+              label: yCol,
+              data: rows.map((r) => ({ x: Number(r[xCol] ?? 0), y: Number(r[yCol] ?? 0), label: dim ? String(r[dim]) : "" })),
+              backgroundColor: hexToRgba(color, 0.78),
+              borderColor: color,
+              pointRadius: 6,
+            },
+          ],
+        }}
+        options={{
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              ...tip,
+              callbacks: {
+                label: (ctx: any) => {
+                  const p = ctx.raw as { x: number; y: number; label?: string };
+                  return `${p.label || ""} ${xCol}: ${formatNumber(p.x, config)} · ${yCol}: ${formatNumber(p.y, config)}`;
+                },
+              },
+            },
           },
-        ],
-      };
-    }
+          scales: {
+            x: {
+              display: showX,
+              title: { display: true, text: config.xAxisLabel || xCol, color: chrome.mute },
+              ticks: { color: chrome.mute, callback: (v: any) => axisFmt(v as number) },
+              grid: { display: showGrid, color: chrome.line },
+              border: { display: false },
+            },
+            y: {
+              display: showY,
+              title: { display: true, text: config.yAxisLabel || yCol, color: chrome.mute },
+              ticks: { color: chrome.mute, callback: (v: any) => axisFmt(v as number) },
+              grid: { display: showGrid, color: chrome.line },
+              border: { display: false },
+            },
+          },
+        }}
+      />
+    );
+  }
 
-    return {};
-  }, [type, rows, columns, config, theme]);
+  if (type === "treemap") {
+    const { dim, measure } = pickColumns(rows, columns, config);
+    const items = rows.map((r) => ({ name: formatCategory(r[dim ?? columns[0]] ?? ""), value: Number(r[measure ?? columns[1]] ?? 0) }));
+    const total = items.reduce((s, d) => s + d.value, 0) || 1;
+    return (
+      <div className="grid h-full min-h-[8rem] grid-cols-6 grid-rows-4 gap-1" style={height ? { height } : undefined}>
+        {items.slice(0, 12).map((d, i) => {
+          const share = d.value / total;
+          const span = Math.max(1, Math.round(share * 12));
+          return (
+            <div
+              key={`${d.name}-${i}`}
+              className="flex flex-col justify-end overflow-hidden rounded-xl p-2 text-white"
+              style={{
+                backgroundColor: palette[i % palette.length],
+                gridColumn: `span ${Math.min(3, Math.max(1, Math.ceil(span / 2)))}`,
+                gridRow: `span ${span > 4 ? 2 : 1}`,
+              }}
+            >
+              <span className="truncate text-[11px] font-medium">{d.name}</span>
+              <span className="text-[10px] opacity-90">{formatNumber(d.value, config)}</span>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
 
-  return <ChartFill option={option} height={height} />;
+  if (type === "heatmap") {
+    const xCol = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
+    const yCol = columns.find((c) => c !== xCol && typeof rows[0]?.[c] === "string") || columns[1] || xCol;
+    const valCol = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[2] || columns[0];
+    const xSet = Array.from(new Set(rows.map((r) => formatCategory(r[xCol]))));
+    const ySet = Array.from(new Set(rows.map((r) => formatCategory(r[yCol]))));
+    const max = Math.max(...rows.map((r) => Number(r[valCol] ?? 0)), 1);
+    const accent = config.color || "#0ea5e9";
+    return (
+      <Fill
+        height={height}
+        type="bubble"
+        data={{
+          datasets: [
+            {
+              label: valCol,
+              data: rows.map((r) => ({
+                x: xSet.indexOf(formatCategory(r[xCol])),
+                y: ySet.indexOf(formatCategory(r[yCol])),
+                r: 6 + (Number(r[valCol] ?? 0) / max) * 14,
+                v: Number(r[valCol] ?? 0),
+                xl: formatCategory(r[xCol]),
+                yl: formatCategory(r[yCol]),
+              })),
+              backgroundColor: hexToRgba(accent, 0.7),
+              borderColor: accent,
+            },
+          ],
+        }}
+        options={{
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              ...tip,
+              callbacks: {
+                label: (ctx: any) => {
+                  const p = ctx.raw as { xl: string; yl: string; v: number };
+                  return `${p.xl} / ${p.yl}: ${formatNumber(p.v, config)}`;
+                },
+              },
+            },
+          },
+          scales: {
+            x: { type: "linear", min: -0.5, max: Math.max(xSet.length - 0.5, 0.5), ticks: { color: chrome.mute, callback: (v: any) => xSet[Number(v)] || "" }, grid: { color: chrome.line }, border: { display: false } },
+            y: { type: "linear", min: -0.5, max: Math.max(ySet.length - 0.5, 0.5), ticks: { color: chrome.mute, callback: (v: any) => ySet[Number(v)] || "" }, grid: { color: chrome.line }, border: { display: false } },
+          },
+        }}
+      />
+    );
+  }
+
+  return null;
 }
 
 export function Sparkline({ rows = [], columns = [], height, config = {} }: { rows?: Rows; columns?: string[]; height?: number; config?: Config }) {
   const { theme } = useTheme();
-  const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const meas = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[1] || columns[0];
-  const data = rows.map((r) => Number(r[meas] ?? 0));
+  const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
   const color = config.color || PALETTE[0];
-  const tooltip = echartsTooltip(theme);
-  const option = {
-    backgroundColor: "transparent",
-    animationDuration: 350,
-    grid: { left: 4, right: 4, top: 8, bottom: 4 },
-    xAxis: { type: "category", show: false, data: rows.map((r) => formatCategory(r[dim ?? ""])) },
-    yAxis: { type: "value", show: false },
-    tooltip:
-      config.showTooltip === false
-        ? { show: false }
-        : { ...tooltip, trigger: "axis", formatter: (p: any) => formatNumber(p?.[0]?.value, config) },
-    series: [
-      {
-        type: "line",
-        data,
-        smooth: config.smooth !== false,
-        showSymbol: false,
-        lineStyle: { color, width: 2.5 },
-        areaStyle: {
-          color: {
-            type: "linear",
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [
-              { offset: 0, color: hexToRgba(color, 0.28) },
-              { offset: 1, color: hexToRgba(color, 0.02) },
-            ],
+  return (
+    <Fill
+      height={height}
+      type="line"
+      data={{
+        labels: rows.map((r) => formatCategory(r[dim ?? ""])),
+        datasets: [
+          {
+            data: rows.map((r) => Number(r[meas] ?? 0)),
+            borderColor: color,
+            backgroundColor: hexToRgba(color, 0.28),
+            fill: true,
+            tension: config.smooth !== false ? 0.4 : 0,
+            pointRadius: 0,
+            borderWidth: 2.5,
           },
+        ],
+      }}
+      options={{
+        plugins: {
+          legend: { display: false },
+          tooltip: config.showTooltip === false ? { enabled: false } : { ...chartTooltip(theme), callbacks: { label: (ctx: any) => formatNumber(ctx.parsed.y, config) } },
         },
-      },
-    ],
-  };
-  void theme;
-  return <ChartFill option={option} height={height} />;
+        scales: { x: { display: false }, y: { display: false } },
+      }}
+    />
+  );
 }
 
 export function KpiGoal({ label, value, goal, variance, config = {} }: { label: string; value: any; goal?: any; variance?: any; config?: Config }) {
@@ -497,10 +450,7 @@ export function DecompositionTree({
               className="relative flex w-full items-center justify-between overflow-hidden rounded-lg px-2 py-1.5 text-left hover:bg-surface-2"
               onClick={() => onDrill?.(name)}
             >
-              <span
-                className="absolute inset-y-0 left-0 bg-primary/10"
-                style={{ width: `${Math.max(4, (val / max) * 100)}%` }}
-              />
+              <span className="absolute inset-y-0 left-0 bg-primary/10" style={{ width: `${Math.max(4, (val / max) * 100)}%` }} />
               <div className="relative z-[1] flex items-center gap-2">
                 {drillPath.length < hierarchy.length - 1 ? <Layers size={14} className="text-primary" /> : <BarChart3 size={14} className="text-mute" />}
                 <span className="text-[12px] text-ink">{name}</span>

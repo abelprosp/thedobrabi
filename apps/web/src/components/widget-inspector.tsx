@@ -207,6 +207,17 @@ export function WidgetInspector({
         {(widget.type === "line" || widget.type === "area") && (
           <ToggleRow label="Linha suave" checked={cfg.smooth !== false} onChange={(v) => setCfg({ smooth: v })} />
         )}
+        {caps.spark && (
+          <FieldLabel label="Mini gráfico">
+            <Select value={cfg.sparkStyle || "area"} onChange={(e) => setCfg({ sparkStyle: e.target.value as "area" | "candle" })}>
+              <option value="area">Área</option>
+              <option value="candle">Velas</option>
+            </Select>
+          </FieldLabel>
+        )}
+        {widget.type === "ridgeline" && (
+          <ToggleRow label="Curvas espelhadas" checked={cfg.mirrored !== false} onChange={(v) => setCfg({ mirrored: v })} />
+        )}
         {caps.table && (
           <>
             <ToggleRow label="Linhas zebradas" checked={!!cfg.zebra} onChange={(v) => setCfg({ zebra: v })} />
@@ -359,6 +370,17 @@ export function WidgetInspector({
           {caps.table && (
             <>
               <ToggleRow label="Linha de totais" checked={!!cfg.showTotals} onChange={(v) => setCfg({ showTotals: v })} />
+          {caps.table && widget.type === "big_table" && (
+            <FieldLabel label="Linhas por página">
+              <Select value={String(cfg.pageSize || cfg.rowLimit || 50)} onChange={(e) => setCfg({ pageSize: Number(e.target.value) })}>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+              </Select>
+            </FieldLabel>
+          )}
+          {caps.table && widget.type === "table" && (
               <FieldLabel label="Limite de linhas visíveis">
                 <Input
                   type="number"
@@ -368,6 +390,7 @@ export function WidgetInspector({
                   onChange={(e) => setCfg({ rowLimit: Number(e.target.value) })}
                 />
               </FieldLabel>
+          )}
             </>
           )}
           <FieldLabel label="Moeda">

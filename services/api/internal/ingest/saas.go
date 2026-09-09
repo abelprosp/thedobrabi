@@ -49,7 +49,7 @@ func saasResources(typ string) []string {
 	case "mercado_livre":
 		return []string{"me", "orders"}
 	case "ibge_censo":
-		return []string{"municipios", "populacao", "estados"}
+		return ibgeResourceNames()
 	case "contabilidade":
 		return []string{"sgs"}
 	case "inflacao":

@@ -142,12 +142,13 @@ export type InspectorCaps = {
   cartesian: boolean;
   pie: boolean;
   scatter: boolean;
+  spark: boolean;
 };
 
 const NO_QUERY = new Set(["text", "image", "markdown", "iframe"]);
-const NO_COLOR = new Set(["text", "markdown", "iframe", "decomposition_tree", "table", "image"]);
-const AXES = new Set(["bar", "line", "area", "scatter", "waterfall", "heatmap"]);
-const LEGEND = new Set(["bar", "line", "area", "pie", "funnel", "treemap"]);
+const NO_COLOR = new Set(["text", "markdown", "iframe", "decomposition_tree", "table", "big_table", "image"]);
+const AXES = new Set(["bar", "line", "area", "scatter", "waterfall", "heatmap", "ridgeline", "bubble"]);
+const LEGEND = new Set(["bar", "line", "area", "pie", "funnel", "treemap", "radar"]);
 const DATA_LABELS = new Set(["bar", "line", "area", "pie", "funnel", "treemap", "heatmap", "waterfall", "scatter"]);
 const NO_FORMAT = new Set(["text", "image", "markdown", "iframe", "slicer"]);
 const CARTESIAN = new Set(["bar", "line", "area"]);
@@ -162,17 +163,22 @@ export function inspectorCaps(type: string): InspectorCaps {
     format: !NO_FORMAT.has(type),
     interaction: !NO_QUERY.has(type),
     kpi: type === "kpi" || type === "kpi_goal",
-    table: type === "table",
+    table: type === "table" || type === "big_table",
     slicer: type === "slicer",
     gauge: type === "gauge",
     waterfall: type === "waterfall",
     cartesian: CARTESIAN.has(type),
     pie: type === "pie",
     scatter: type === "scatter",
+    spark: type === "stat_spark",
   };
 }
 
 export function echartsTooltip(theme?: "light" | "dark") {
+  return chartJsTooltip(theme);
+}
+
+export function chartJsTooltip(theme?: "light" | "dark") {
   const c = chartChrome(theme);
   return {
     backgroundColor: c.surface,

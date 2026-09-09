@@ -1,18 +1,18 @@
 "use client";
 
-import ReactECharts from "echarts-for-react";
 import { Card } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import {
   chartChrome,
   chartPalette,
-  echartsTooltip,
   formatNumber,
   hexToRgba,
-  legendOption,
   type LegendPosition,
 } from "@/lib/widget-config";
+import { chartLegend, chartTooltip } from "@/lib/chartjs";
+import { ChartJsCanvas } from "@/components/chartjs-canvas";
 import { useTheme } from "@/components/theme-provider";
+import type { ChartType } from "chart.js";
 
 type ChartProps = {
   type?: "line" | "bar" | "area" | "pie";
@@ -43,12 +43,7 @@ export function formatCategory(v: unknown) {
   return d.toLocaleDateString("pt-BR", hasTime ? { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" } : { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
-function pivotSeries(
-  rows: Record<string, any>[],
-  catCol: string,
-  seriesCol: string,
-  valueCol: string,
-) {
+export function pivotSeries(rows: Record<string, any>[], catCol: string, seriesCol: string, valueCol: string) {
   const cats: string[] = [];
   const catSeen = new Set<string>();
   const series: string[] = [];
@@ -75,28 +70,6 @@ function pivotSeries(
   };
 }
 
-export function EChart({
-  option,
-  onEvents,
-}: {
-  option: Record<string, unknown>;
-  onEvents?: Record<string, (params: any) => void>;
-}) {
-  const { theme } = useTheme();
-  return (
-    <ReactECharts
-      key={theme}
-      option={option}
-      notMerge
-      lazyUpdate
-      style={{ height: "100%", width: "100%" }}
-      opts={{ renderer: "canvas" }}
-      autoResize
-      onEvents={onEvents}
-    />
-  );
-}
-
 export function Chart({ type = "bar", columns = [], rows = [], height, onClick, config = {} }: ChartProps) {
   const { theme } = useTheme();
   const chrome = chartChrome(theme);
@@ -112,7 +85,6 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
   const seriesValues = pivoted ? pivoted.values : measCols.map((m) => rows.map((r) => Number(r[m] ?? 0)));
   const palette = chartPalette(config.color);
   const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1;
-  const showLabels = type === "pie" ? config.showDataLabels !== false : !!config.showDataLabels;
   const showTooltip = config.showTooltip !== false;
   const showGrid = config.showGrid !== false;
   const showX = config.showXAxis !== false;
@@ -121,169 +93,109 @@ export function Chart({ type = "bar", columns = [], rows = [], height, onClick, 
   const horizontal = !!config.horizontal && type === "bar";
   const smooth = config.smooth !== false && (type === "line" || type === "area");
   const legendPos = (config.legendPosition || "top") as LegendPosition;
-  const axisFmt = (v: number) => formatNumber(v, { ...config, decimals: config.decimals ?? 0 });
+  const axisFmt = (v: string | number) => formatNumber(Number(v), { ...config, decimals: config.decimals ?? 0 });
 
-  const handleClick = (params: any) => {
-    if (!onClick) return;
-    if (type === "pie") {
-      onClick({ dimension: dim, value: params?.name ?? "" });
-    } else {
-      const idx = params?.dataIndex ?? 0;
-      onClick({ dimension: dim, value: rawCats[idx] ?? "" });
-    }
-  };
-
-  const legend = legendOption(showLegend, legendPos, theme);
-  const legendPad = showLegend && (legendPos === "top" || legendPos === "bottom") ? 28 : 0;
-  const sidePad = showLegend && (legendPos === "left" || legendPos === "right") ? 80 : 0;
-
-  const option =
+  const chartType: ChartType = type === "pie" ? "doughnut" : type === "area" ? "line" : type;
+  const data: any =
     type === "pie"
       ? {
-          backgroundColor: "transparent",
-          animationDuration: 450,
-          tooltip: showTooltip
-            ? {
-                ...echartsTooltip(theme),
-                trigger: "item",
-                formatter: (p: any) =>
-                  `<div style="font-weight:600;margin-bottom:2px">${p.name}</div>${formatNumber(p.value, config)} · ${p.percent}%`,
-              }
-            : { show: false },
-          legend,
-          color: palette,
-          series: [
+          labels: cats,
+          datasets: [
             {
-              type: "pie",
-              radius: ["52%", "74%"],
-              padAngle: 2,
-              itemStyle: { borderRadius: 8, borderColor: chrome.surface, borderWidth: 2 },
-              label: {
-                show: showLabels,
-                fontSize: 11,
-                color: chrome.ink,
-                formatter: (p: any) => `${p.name}\n${formatNumber(p.value, config)}`,
-              },
-              emphasis: { scale: true, scaleSize: 6 },
-              data: cats.map((n, i) => ({ name: n, value: Number(rows[i]?.[measCols[0]] ?? 0) })),
+              data: cats.map((_, i) => Number(rows[i]?.[measCols[0]] ?? 0)),
+              backgroundColor: cats.map((_, i) => palette[i % palette.length]),
+              borderColor: chrome.surface,
+              borderWidth: 2,
+              hoverOffset: 6,
+              cutout: "62%",
             },
           ],
         }
-      : (() => {
-          const categoryAxis = {
-            type: "category" as const,
-            show: horizontal ? showY : showX,
-            data: cats,
-            name: config.xAxisLabel || undefined,
-            nameLocation: "middle" as const,
-            nameGap: 30,
-            nameTextStyle: { color: chrome.mute, fontSize: 11 },
-            axisLine: { show: false },
-            axisTick: { show: false },
-            axisLabel: {
-              color: chrome.mute,
-              fontSize: 11,
-              hideOverlap: true,
-              rotate: horizontal ? 0 : (config.xAxisRotate ?? 0),
-            },
-          };
-          const valueAxis = {
-            type: "value" as const,
-            show: horizontal ? showX : showY,
-            name: config.yAxisLabel || undefined,
-            nameLocation: "middle" as const,
-            nameGap: 44,
-            nameTextStyle: { color: chrome.mute, fontSize: 11 },
-            splitLine: {
-              show: showGrid,
-              lineStyle: { color: chrome.line, type: "dashed" as const },
-            },
-            axisLine: { show: false },
-            axisTick: { show: false },
-            axisLabel: { color: chrome.mute, fontSize: 11, formatter: axisFmt },
-          };
-          const series = seriesNames.map((m, i) => {
+      : {
+          labels: cats,
+          datasets: seriesNames.map((name, i) => {
             const c = palette[i % palette.length];
-            const isBar = type === "bar";
             return {
-              name: m,
-              type: type === "area" ? "line" : type,
+              label: String(name),
               data: seriesValues[i] || [],
-              stack: stacked ? "total" : undefined,
-              smooth,
-              showSymbol: type !== "bar",
-              symbol: "circle",
-              symbolSize: 7,
-              barMaxWidth: 52,
-              barCategoryGap: "32%",
-              emphasis: { focus: "series" },
-              label: {
-                show: showLabels,
-                position: horizontal ? "right" : "top",
-                fontSize: 10,
-                color: chrome.ink,
-                formatter: (p: any) => formatNumber(p.value, config),
-              },
-              areaStyle:
-                type === "area" || type === "line"
-                  ? {
-                      color: {
-                        type: "linear",
-                        x: 0,
-                        y: 0,
-                        x2: 0,
-                        y2: 1,
-                        colorStops: [
-                          { offset: 0, color: hexToRgba(c, type === "area" ? 0.32 : 0.16) },
-                          { offset: 1, color: hexToRgba(c, 0.02) },
-                        ],
-                      },
-                    }
-                  : undefined,
-              lineStyle: { color: c, width: 2.5 },
-              itemStyle: {
-                color: c,
-                borderRadius: isBar ? (horizontal ? [0, 8, 8, 0] : [8, 8, 2, 2]) : 0,
-              },
+              backgroundColor: type === "bar" ? c : hexToRgba(c, type === "area" ? 0.32 : 0.16),
+              borderColor: c,
+              borderWidth: type === "bar" ? 0 : 2.5,
+              fill: type === "area" || type === "line",
+              tension: smooth ? 0.35 : 0,
+              pointRadius: type === "bar" ? 0 : 3,
+              pointHoverRadius: 5,
+              borderRadius: type === "bar" ? 6 : 0,
+              maxBarThickness: 52,
             };
-          });
-          return {
-            backgroundColor: "transparent",
-            animationDuration: 450,
-            tooltip: showTooltip
-              ? {
-                  ...echartsTooltip(theme),
-                  trigger: "axis",
-                  axisPointer: { type: type === "bar" ? "shadow" : "line", shadowStyle: { color: "rgba(37,99,235,0.08)" } },
-                  formatter: (params: any) => {
-                    const list = Array.isArray(params) ? params : [params];
-                    const head = list[0]?.axisValueLabel ?? list[0]?.name ?? "";
-                    const lines = list.map(
-                      (p: any) =>
-                        `<div style="display:flex;gap:8px;align-items:center;margin-top:4px">${p.marker}<span>${p.seriesName}</span><span style="margin-left:auto;font-weight:600">${formatNumber(p.value, config)}</span></div>`,
-                    );
-                    return `<div style="font-weight:600;margin-bottom:4px">${head}</div>${lines.join("")}`;
-                  },
-                }
-              : { show: false },
-            legend,
-            grid: {
-              containLabel: true,
-              left: 8 + (legendPos === "left" ? sidePad : 0),
-              right: 12 + (legendPos === "right" ? sidePad : 0),
-              top: 10 + (legendPos === "top" ? legendPad : 0),
-              bottom: 8 + (legendPos === "bottom" ? legendPad : 0),
-            },
-            xAxis: horizontal ? valueAxis : categoryAxis,
-            yAxis: horizontal ? categoryAxis : valueAxis,
-            series,
-          };
-        })();
+          }),
+        };
 
-  const chart = <EChart option={option} onEvents={onClick ? { click: handleClick } : undefined} />;
+  const options: any = {
+    indexAxis: horizontal ? "y" : "x",
+    interaction: { mode: type === "pie" ? "nearest" : "index", intersect: type === "pie" },
+    plugins: {
+      legend: chartLegend(showLegend, legendPos, theme),
+      tooltip: showTooltip
+        ? {
+            ...chartTooltip(theme),
+            callbacks: {
+              label: (ctx: any) => {
+                const parsed = ctx.parsed as number | { x?: number; y?: number };
+                const n = typeof parsed === "number" ? parsed : Number((horizontal ? parsed.x : parsed.y) ?? 0);
+                if (type === "pie") {
+                  const total = (ctx.dataset.data as number[]).reduce((s, x) => s + Number(x || 0), 0);
+                  const pct = total ? Math.round((n / total) * 100) : 0;
+                  return `${formatNumber(n, config)} · ${pct}%`;
+                }
+                return `${ctx.dataset.label}: ${formatNumber(n, config)}`;
+              },
+            },
+          }
+        : { enabled: false },
+    },
+    scales:
+      type === "pie"
+        ? undefined
+        : {
+            x: {
+              display: horizontal ? showY : showX,
+              stacked,
+              title: { display: !!config.xAxisLabel, text: config.xAxisLabel || "", color: chrome.mute, font: { size: 11 } },
+              ticks: {
+                color: chrome.mute,
+                maxRotation: horizontal ? 0 : Number(config.xAxisRotate ?? 0),
+                minRotation: horizontal ? 0 : Number(config.xAxisRotate ?? 0),
+                callback: horizontal ? (v: any) => axisFmt(v as number) : undefined,
+              },
+              grid: { display: horizontal ? showGrid : false, color: chrome.line },
+              border: { display: false },
+            },
+            y: {
+              display: horizontal ? showX : showY,
+              stacked,
+              title: { display: !!config.yAxisLabel, text: config.yAxisLabel || "", color: chrome.mute, font: { size: 11 } },
+              ticks: {
+                color: chrome.mute,
+                callback: horizontal ? undefined : (v: any) => axisFmt(v as number),
+              },
+              grid: { display: horizontal ? false : showGrid, color: chrome.line },
+              border: { display: false },
+            },
+          },
+    onClick: onClick
+      ? (_evt: any, elements: any) => {
+          if (!elements.length) return;
+          const idx = elements[0].index;
+          if (type === "pie") onClick({ dimension: dim, value: rawCats[idx] ?? cats[idx] ?? "" });
+          else onClick({ dimension: dim, value: rawCats[idx] ?? "" });
+        }
+      : undefined,
+  } as any;
+
   return (
     <div className="h-full w-full min-h-0" style={height == null ? undefined : { height }}>
-      {chart}
+      <ChartJsCanvas type={chartType} data={data} options={options} />
     </div>
   );
 }

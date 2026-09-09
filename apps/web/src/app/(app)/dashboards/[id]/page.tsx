@@ -66,6 +66,14 @@ import {
   MoreHorizontal,
   Code2,
   Ban,
+  Radar,
+  Workflow,
+  Mountain,
+  FileBarChart,
+  Hexagon,
+  CircleDot,
+  Sheet,
+  Sparkle,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -102,11 +110,21 @@ const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description:
   { type: "waterfall", label: "Cascata", icon: ArrowDownUp, description: "Receitas e despesas", defaultW: 6, defaultH: 4 },
   { type: "funnel", label: "Funil", icon: Funnel, description: "Etapas e valores", defaultW: 4, defaultH: 5 },
   { type: "scatter", label: "Dispersão", icon: ScatterChart, description: "Correlação X/Y", defaultW: 6, defaultH: 4 },
+  { type: "radar", label: "Radar", icon: Radar, description: "Comparar eixos", defaultW: 5, defaultH: 5 },
+  { type: "ridgeline", label: "Relevo", icon: Mountain, description: "Curvas espelhadas por período", defaultW: 8, defaultH: 5 },
+  { type: "sankey", label: "Fluxo", icon: Workflow, description: "Origem e destino", defaultW: 6, defaultH: 5 },
+  { type: "sales_report", label: "Relatório de vendas", icon: FileBarChart, description: "KPIs, relevo e tabela", defaultW: 8, defaultH: 7 },
+  { type: "network_sales", label: "Rede de vendas", icon: Network, description: "KPIs com rede e tabela", defaultW: 7, defaultH: 6 },
+  { type: "radial", label: "Radial", icon: CircleDot, description: "Medidor polar", defaultW: 4, defaultH: 5 },
+  { type: "stat_spark", label: "Cartão estatístico", icon: Signal, description: "Valor, variação e sparkline", defaultW: 5, defaultH: 3 },
+  { type: "bubble", label: "Bolhas", icon: Sparkle, description: "Categorias ao longo da semana", defaultW: 6, defaultH: 5 },
+  { type: "hexmap", label: "Mapa hexagonal", icon: Hexagon, description: "Grelha de intensidade", defaultW: 4, defaultH: 4 },
   { type: "treemap", label: "Treemap", icon: LayoutGrid, description: "Hierarquia proporcional", defaultW: 5, defaultH: 4 },
   { type: "heatmap", label: "Heatmap", icon: Grid2X2, description: "Duas dimensões e medida", defaultW: 6, defaultH: 4 },
   { type: "sparkline", label: "Sparkline", icon: Signal, description: "Mini gráfico compacto", defaultW: 3, defaultH: 2 },
   { type: "decomposition_tree", label: "Árvore de decomposição", icon: Network, description: "Explorar hierarquias", defaultW: 5, defaultH: 5 },
   { type: "table", label: "Tabela", icon: Table2, description: "Dados tabulares", defaultW: 6, defaultH: 4 },
+  { type: "big_table", label: "Tabela grande", icon: Sheet, description: "Muitas linhas com paginação", defaultW: 12, defaultH: 6 },
   { type: "text", label: "Texto", icon: Type, description: "Título ou anotação", defaultW: 4, defaultH: 2 },
   { type: "slicer", label: "Slicer", icon: Filter, description: "Filtro interativo", defaultW: 3, defaultH: 3 },
   { type: "image", label: "Imagem", icon: ImageIcon, description: "Logótipo ou ilustração", defaultW: 4, defaultH: 3 },
@@ -525,7 +543,7 @@ function DashboardEditorInner() {
             h: mobileHeightFor(type, catalog.defaultH),
           }
         : undefined,
-      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: DEFAULT_QUERY_LIMIT } : undefined,
+      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: type === "big_table" ? 10000 : DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
       hierarchy: type === "decomposition_tree" ? fields.dimensions : undefined,
       config: (() => {
@@ -537,6 +555,9 @@ function DashboardEditorInner() {
         if (type === "kpi_goal") return { goal: 100, color: "#2563EB" };
         if (type === "sparkline") return { color: "#2563EB" };
         if (type === "iframe") return { url: "" };
+        if (type === "stat_spark") return { color: "#8B5CF6", sparkStyle: "area" };
+        if (type === "ridgeline") return { color: "#8B5CF6", mirrored: true };
+        if (type === "big_table") return { pageSize: 50, zebra: true, freezeHeader: true };
         return {};
       })(),
     };

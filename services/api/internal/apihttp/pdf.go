@@ -85,7 +85,11 @@ func (s *Server) widgetToPDFBlock(ctx context.Context, org, ws, uid uuid.UUID, r
 	}
 	req := w.Query
 	if req.Limit <= 0 || req.Limit > 80 {
-		req.Limit = 40
+		if w.Type == "big_table" {
+			req.Limit = 80
+		} else {
+			req.Limit = 40
+		}
 	}
 	if w.Type == "kpi" || w.Type == "kpi_goal" || w.Type == "metric_group" || w.Type == "gauge" {
 		req.Dimensions = nil
