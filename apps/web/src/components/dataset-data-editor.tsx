@@ -291,7 +291,9 @@ export function DatasetDataEditor({ dataset }: { dataset: Dataset }) {
                   {cols.map((c) => (
                     <Th key={c.name}>{c.source_name || c.name}</Th>
                   ))}
-                  <Th></Th>
+                  <Th>
+                    <span className="sr-only">Ações</span>
+                  </Th>
                 </tr>
               </thead>
               <tbody>
