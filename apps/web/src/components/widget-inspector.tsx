@@ -975,7 +975,7 @@ function QueryFields({
       {widget.type === "bubble" && (
         <FieldLabel label="Tamanho da bolha" hint="Opcional. Se vazio, usa a métrica Y.">
           <Select
-            value={widget.query?.measures?.[2] || cfg.measure || ""}
+            value={widget.query?.measures?.[2] || widget.config?.measure || ""}
             onChange={(e) => {
               const x = widget.query?.measures?.[0] || "";
               const y = widget.query?.measures?.[1] || "";
