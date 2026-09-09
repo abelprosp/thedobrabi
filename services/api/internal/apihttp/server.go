@@ -269,6 +269,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Post("/ai/generate-sql", s.generateSQL)
 			r.Post("/ai/generate-measure", s.generateMeasure)
 			r.Post("/ai/generate-visual", s.generateVisual)
+			r.Post("/ai/analyze-dashboard-widgets", s.analyzeDashboardWidgets)
 
 			r.Get("/apps", s.listApps)
 			r.Post("/apps", s.createApp)

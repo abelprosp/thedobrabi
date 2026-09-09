@@ -117,7 +117,7 @@ export function WidgetInspector({
               onChange={(e) => onUpdate((w) => ({ ...w, type: e.target.value as WidgetType }))}
             >
               {catalog
-                .filter((t) => !["text", "image", "markdown", "iframe"].includes(t.type))
+                .filter((t) => !["text", "image", "markdown", "iframe", "data_intelligence"].includes(t.type))
                 .map((t) => (
                   <option key={t.type} value={t.type}>
                     {t.label}
@@ -144,6 +144,15 @@ export function WidgetInspector({
         {widget.type === "markdown" && (
           <FieldLabel label="Markdown">
             <Textarea value={cfg.markdown || ""} onChange={(e) => setCfg({ markdown: e.target.value })} />
+          </FieldLabel>
+        )}
+        {widget.type === "data_intelligence" && (
+          <FieldLabel label="Foco da análise" hint="Opcional. Este cartão lê os outros visuais do dashboard e gera insights e alertas com IA.">
+            <Textarea
+              value={cfg.focusPrompt || ""}
+              onChange={(e) => setCfg({ focusPrompt: e.target.value })}
+              placeholder="Ex.: concentre-se em quedas de receita e concentração de clientes"
+            />
           </FieldLabel>
         )}
         {caps.query && (

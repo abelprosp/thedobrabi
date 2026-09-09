@@ -21,6 +21,7 @@ import { cn } from "@/lib/cn";
 import { DEFAULT_QUERY_LIMIT, MAX_QUERY_LIMIT, titleAlignClass } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
 import { AlertCircle, ChevronLeft, ChevronRight, Download, Image as ImageIcon } from "lucide-react";
+import { DataIntelligenceCard } from "@/components/data-intelligence-card";
 
 export type GridPos = { x: number; y: number; w: number; h: number };
 
@@ -68,7 +69,8 @@ export type WidgetType =
   | "radial"
   | "stat_spark"
   | "bubble"
-  | "hexmap";
+  | "hexmap"
+  | "data_intelligence";
 
 export type QuerySpec = {
   dataset_id?: string;
@@ -141,11 +143,12 @@ export type WidgetConfig = {
   slicerSearch?: boolean;
   slicerStyle?: "list" | "dropdown" | "buttons";
   icon?: string;
+  focusPrompt?: string;
 };
 
 export type DashboardFilter = { dimension: string; op: "eq" | "in"; value: any; dataset_id?: string };
 
-const NO_QUERY = ["text", "image", "markdown", "iframe"];
+const NO_QUERY = ["text", "image", "markdown", "iframe", "data_intelligence"];
 const KPI_TYPES = ["kpi", "kpi_goal", "gauge", "metric_group"];
 
 export function WidgetView({
@@ -156,6 +159,8 @@ export function WidgetView({
   onDrill,
   isPreview,
   queryPath,
+  siblingWidgets,
+  dashboardId,
 }: {
   w: Widget;
   globalFilters: DashboardFilter[];
@@ -164,6 +169,8 @@ export function WidgetView({
   onDrill: (widgetId: string, value: string) => void;
   isPreview?: boolean;
   queryPath?: string;
+  siblingWidgets?: Widget[];
+  dashboardId?: string;
 }) {
   void isPreview;
   const queriesURL = queryPath || "/api/v1/queries";
@@ -261,6 +268,19 @@ export function WidgetView({
   }
   if (w.type === "iframe") {
     return <IframeWidget url={cfg.url} title={w.title} />;
+  }
+  if (w.type === "data_intelligence") {
+    return (
+      <DataIntelligenceCard
+        title={w.title}
+        focusPrompt={cfg.focusPrompt}
+        siblings={siblingWidgets || []}
+        dashboardId={dashboardId}
+        globalFilters={globalFilters}
+        timeRange={timeRange}
+        isPublic={isPublicQuery}
+      />
+    );
   }
 
   if (w.query && !w.query.dataset_id) {

@@ -74,6 +74,7 @@ import {
   CircleDot,
   Sheet,
   Sparkle,
+  Brain,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -102,6 +103,7 @@ const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description:
   { type: "kpi", label: "KPI", icon: Monitor, description: "Métrica principal", defaultW: 3, defaultH: 2 },
   { type: "kpi_goal", label: "KPI com meta", icon: Target, description: "Valor, meta e progresso", defaultW: 4, defaultH: 3 },
   { type: "metric_group", label: "Grupo de KPIs", icon: LayoutTemplate, description: "2–4 métricas pequenas", defaultW: 4, defaultH: 3 },
+  { type: "data_intelligence", label: "Inteligência dados", icon: Brain, description: "Insights e alertas com IA sobre os visuais deste dashboard", defaultW: 6, defaultH: 5 },
   { type: "line", label: "Linha", icon: LineChart, description: "Tendência ao longo do tempo", defaultW: 6, defaultH: 4 },
   { type: "bar", label: "Barras", icon: BarChart3, description: "Comparar categorias", defaultW: 6, defaultH: 4 },
   { type: "area", label: "Área", icon: LineChart, description: "Volume acumulado", defaultW: 6, defaultH: 4 },
@@ -338,7 +340,7 @@ function DashboardEditorInner() {
     const liveIds = new Set(datasetList.map((ds) => ds.id));
     let changed = false;
     const next = widgets.map((w) => {
-      if (!w.query || ["text", "image", "markdown", "iframe"].includes(w.type)) return w;
+      if (!w.query || ["text", "image", "markdown", "iframe", "data_intelligence"].includes(w.type)) return w;
       if (w.query.dataset_id && liveIds.has(w.query.dataset_id)) return w;
       const query = rebindQueryToLiveDataset(w.query, w.type, datasetList, semanticModels, preferredDatasetId);
       if (!query || query.dataset_id === w.query.dataset_id) return w;
@@ -360,7 +362,7 @@ function DashboardEditorInner() {
       let changed = false;
       const next = [];
       for (const w of widgets) {
-        if (!w.query?.dataset_id || (w.query.joins && w.query.joins.length > 0) || ["text", "image", "markdown", "iframe"].includes(w.type)) {
+        if (!w.query?.dataset_id || (w.query.joins && w.query.joins.length > 0) || ["text", "image", "markdown", "iframe", "data_intelligence"].includes(w.type)) {
           next.push(w);
           continue;
         }
@@ -523,7 +525,7 @@ function DashboardEditorInner() {
     const ds = preferredDatasetId || visibleDatasets[0]?.id || datasetList[0]?.id;
     const catalog = WIDGET_CATALOG.find((t) => t.type === type)!;
     const x = (widgets.length * 4) % 12;
-    const noQueryTypes = ["text", "image", "markdown", "iframe"];
+    const noQueryTypes = ["text", "image", "markdown", "iframe", "data_intelligence"];
     const mdl = modelForDataset(semanticModels, ds);
     const fields = widgetFieldDefaults(type, mdl);
     if (!ds && !noQueryTypes.includes(type)) {
@@ -909,7 +911,15 @@ function DashboardEditorInner() {
                       </button>
                     </div>
                   )}
-                  <WidgetView w={w} globalFilters={globalFilters} timeRange={timeRange} onFilter={(dim, value, op) => applyFilter(dim, value, op, w.query?.dataset_id)} onDrill={drill} />
+                  <WidgetView
+                    w={w}
+                    globalFilters={globalFilters}
+                    timeRange={timeRange}
+                    onFilter={(dim, value, op) => applyFilter(dim, value, op, w.query?.dataset_id)}
+                    onDrill={drill}
+                    siblingWidgets={widgets.filter((x) => x.id !== w.id)}
+                    dashboardId={id}
+                  />
                 </div>
               ))}
             </Grid>

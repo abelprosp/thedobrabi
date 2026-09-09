@@ -113,6 +113,12 @@ export function widgetFieldDefaults(type: string, model: SemanticModel | null | 
       return { measures: measuresAll.slice(0, 4), dimensions: [] };
     case "slicer":
       return { measures: [], dimensions: cat ? [cat] : [] };
+    case "data_intelligence":
+    case "text":
+    case "image":
+    case "markdown":
+    case "iframe":
+      return { measures: [], dimensions: [] };
     case "sparkline":
     case "stat_spark":
     case "ridgeline":

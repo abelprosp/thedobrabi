@@ -13,7 +13,7 @@ import (
 )
 
 type reportPageIn struct {
-	Name    string          `json:"name"`
+	Name    string           `json:"name"`
 	Widgets []reportWidgetIn `json:"widgets"`
 }
 
@@ -79,6 +79,8 @@ func (s *Server) widgetToPDFBlock(ctx context.Context, org, ws, uid uuid.UUID, r
 		return pdfBlock{Title: title, Kind: "text", Text: txt}
 	case "image", "iframe":
 		return pdfBlock{Title: title, Kind: "text", Text: "Visual de " + w.Type}
+	case "data_intelligence":
+		return pdfBlock{Title: title, Kind: "text", Text: "Análise com IA dos visuais deste dashboard."}
 	}
 	if strings.TrimSpace(w.Query.DatasetID) == "" {
 		return pdfBlock{Title: title, Kind: "text", Text: "Sem conjunto de dados."}

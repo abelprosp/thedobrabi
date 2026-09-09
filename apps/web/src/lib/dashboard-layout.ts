@@ -14,6 +14,7 @@ export function mobileHeightFor(type: WidgetType | string, desktopH: number) {
   if (type === "table" || type === "big_table" || type === "sales_report") return Math.max(5, desktopH);
   if (type === "radar" || type === "radial" || type === "hexmap") return Math.max(4, Math.min(6, desktopH));
   if (type === "text" || type === "markdown") return Math.max(2, desktopH);
+  if (type === "data_intelligence") return Math.max(5, desktopH);
   return Math.max(3, Math.min(5, desktopH));
 }
 

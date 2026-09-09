@@ -679,6 +679,26 @@ func (s *Server) generateMeasure(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, out)
 }
 
+func (s *Server) analyzeDashboardWidgets(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, role := principal(r)
+	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
+	var req aiagent.AnalyzeDashboardRequest
+	if err := httpx.Decode(r, &req); err != nil {
+		httpx.Error(w, 400, "invalid", "pedido inválido")
+		return
+	}
+	out, err := s.ai.AnalyzeDashboardWidgets(r.Context(), org, ws, uid, role, req)
+	if err != nil {
+		httpx.Error(w, 400, "analyze_failed", err.Error())
+		return
+	}
+	s.audit(r, "AI_DASHBOARD_ANALYZED", "ai", uuid.Nil, map[string]any{"widgets": out.AnalyzedWidgets, "source": out.Source})
+	httpx.JSON(w, 200, out)
+}
+
 func (s *Server) generateVisual(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {

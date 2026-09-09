@@ -159,12 +159,12 @@ export type InspectorCaps = {
   spark: boolean;
 };
 
-const NO_QUERY = new Set(["text", "image", "markdown", "iframe"]);
-const NO_COLOR = new Set(["text", "markdown", "iframe", "decomposition_tree", "table", "big_table", "image"]);
+const NO_QUERY = new Set(["text", "image", "markdown", "iframe", "data_intelligence"]);
+const NO_COLOR = new Set(["text", "markdown", "iframe", "decomposition_tree", "table", "big_table", "image", "data_intelligence"]);
 const AXES = new Set(["bar", "line", "area", "scatter", "waterfall", "heatmap", "ridgeline", "bubble"]);
 const LEGEND = new Set(["bar", "line", "area", "pie", "funnel", "treemap", "radar"]);
 const DATA_LABELS = new Set(["bar", "line", "area", "pie", "funnel", "treemap", "heatmap", "waterfall", "scatter"]);
-const NO_FORMAT = new Set(["text", "image", "markdown", "iframe", "slicer"]);
+const NO_FORMAT = new Set(["text", "image", "markdown", "iframe", "slicer", "data_intelligence"]);
 const CARTESIAN = new Set(["bar", "line", "area"]);
 
 export function inspectorCaps(type: string): InspectorCaps {

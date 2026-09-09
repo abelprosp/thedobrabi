@@ -415,7 +415,13 @@ export default function ReportEditorPage() {
                       <button className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/95 text-mute shadow-sm hover:text-danger sm:h-8 sm:w-8" onClick={() => removeWidget(w.id)}><Trash2 size={12} /></button>
                     </div>
                   )}
-                  <WidgetView w={w} globalFilters={[]} onFilter={() => {}} onDrill={() => {}} />
+                  <WidgetView
+                    w={w}
+                    globalFilters={[]}
+                    onFilter={() => {}}
+                    onDrill={() => {}}
+                    siblingWidgets={widgets.filter((x) => x.id !== w.id)}
+                  />
                 </div>
               ))}
             </Grid>

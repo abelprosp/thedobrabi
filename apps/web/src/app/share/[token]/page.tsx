@@ -170,6 +170,7 @@ export default function SharePage() {
                   onFilter={(dim, value, op) => applyFilter(dim, value, op, w.query?.dataset_id)}
                   onDrill={drill}
                   queryPath={queryPath}
+                  siblingWidgets={widgets.filter((x) => x.id !== w.id)}
                 />
               </div>
             ))}
