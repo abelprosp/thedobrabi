@@ -77,7 +77,7 @@ export default function DataPage() {
     <div className="mx-auto max-w-5xl space-y-5">
       <PageHeader
         title="Dados"
-        description="Conjuntos, qualidade, lake e modelo semântico. Ligue fontes no hub de conectores."
+        description="Conjuntos, qualidade, lake e modelo semântico. Abra um conjunto para acrescentar linhas ou actualizar o ficheiro."
         actions={
           <>
             <Link href="/connectors">

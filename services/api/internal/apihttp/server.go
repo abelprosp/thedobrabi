@@ -182,6 +182,9 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/datasets/{id}", s.getDataset)
 			r.Delete("/datasets/{id}", s.deleteDataset)
 			r.Get("/datasets/{id}/preview", s.previewDataset)
+			r.Get("/datasets/{id}/rows", s.listDatasetRows)
+			r.Post("/datasets/{id}/rows", s.updateDatasetRows)
+			r.Post("/datasets/{id}/file", s.updateDatasetFile)
 			r.Get("/datasets/{id}/export", s.exportDataset)
 			r.Get("/datasets/{id}/quality", s.datasetQuality)
 

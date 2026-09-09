@@ -52,28 +52,9 @@ func (e *Engine) IngestFile(ctx context.Context, orgID, wsID, userID uuid.UUID, 
 	if err != nil {
 		return Result{}, err
 	}
-	kind := detectKind(filename, raw)
-	var rows [][]string
-	var headers []string
-	switch kind {
-	case "xlsx":
-		headers, rows, err = parseXLSX(raw)
-	case "json":
-		headers, rows, err = parseJSON(raw)
-	case "parquet":
-		headers, rows, err = parseParquet(raw)
-	case "pdf":
-		headers, rows, err = parsePDF(raw)
-	case "ofx":
-		headers, rows, err = parseOFX(raw)
-	default:
-		headers, rows, err = parseCSV(raw)
-	}
+	kind, headers, rows, err := parseUploadedBytes(filename, raw)
 	if err != nil {
 		return Result{}, err
-	}
-	if len(headers) == 0 {
-		return Result{}, fmt.Errorf("no columns detected")
 	}
 
 	cols := make([]schemax.Column, len(headers))
@@ -318,6 +299,31 @@ func parseXLSX(raw []byte) ([]string, [][]string, error) {
 		return nil, nil, fmt.Errorf("empty sheet")
 	}
 	return data[0], data[1:], nil
+}
+
+func parseUploadedBytes(filename string, raw []byte) (kind string, headers []string, rows [][]string, err error) {
+	kind = detectKind(filename, raw)
+	switch kind {
+	case "xlsx":
+		headers, rows, err = parseXLSX(raw)
+	case "json":
+		headers, rows, err = parseJSON(raw)
+	case "parquet":
+		headers, rows, err = parseParquet(raw)
+	case "pdf":
+		headers, rows, err = parsePDF(raw)
+	case "ofx":
+		headers, rows, err = parseOFX(raw)
+	default:
+		headers, rows, err = parseCSV(raw)
+	}
+	if err != nil {
+		return kind, nil, nil, err
+	}
+	if len(headers) == 0 {
+		return kind, nil, nil, fmt.Errorf("nenhuma coluna detectada")
+	}
+	return kind, headers, rows, nil
 }
 
 func detectKind(filename string, raw []byte) string {

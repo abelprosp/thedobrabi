@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { Download, Trash2 } from "lucide-react";
 import { Button, Card, CardTitle, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, Td, Textarea, Th, cellValue, isNumericValue } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
+import { DatasetDataEditor } from "@/components/dataset-data-editor";
 import { CustomMeasureModal } from "@/components/custom-measure-modal";
 import { CustomDimensionModal } from "@/components/custom-dimension-modal";
 import type { SemanticModel } from "@/lib/semantic";
@@ -17,7 +18,7 @@ export default function DatasetPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"schema" | "quality" | "model" | "relationships" | "measures" | "security">("schema");
+  const [tab, setTab] = useState<"data" | "schema" | "quality" | "model" | "relationships" | "measures" | "security">("data");
   const ds = useQuery({
     queryKey: ["dataset", id],
     queryFn: () => api<any>(`/api/v1/datasets/${id}`),
@@ -45,6 +46,7 @@ export default function DatasetPage() {
   const model = ds.data.semantic_model || {};
 
   const tabs = [
+    { key: "data", label: "Dados" },
     { key: "schema", label: "Esquema" },
     { key: "quality", label: "Qualidade" },
     { key: "model", label: "Modelo Semântico" },
@@ -97,6 +99,7 @@ export default function DatasetPage() {
           ))}
         </div>
       </div>
+      {tab === "data" && <DatasetDataEditor dataset={{ ...ds.data, id, schema }} />}
       {tab === "schema" && <SchemaTab schema={schema} preview={preview} />}
       {tab === "quality" && <QualityTab quality={quality} />}
       {tab === "model" && <ModelTab datasetId={id} model={model} schema={schema} />}
