@@ -1263,7 +1263,7 @@ function QueryFields({
         </button>
       )}
       {canExtraMeasures &&
-        (crossBy === "measures" || widget.type === "ranking" || cfg.overlayLine === "measure") &&
+        (crossBy === "measures" || widget.type === "ranking" || widget.config?.overlayLine === "measure") &&
         extraMeasures.map((meas, i) => {
           const idx = 1 + i;
           return (
@@ -1311,7 +1311,7 @@ function QueryFields({
             </FieldLabel>
           );
         })}
-      {canExtraMeasures && (crossBy === "measures" || widget.type === "ranking" || cfg.overlayLine === "measure") && extraMeasures.length < 5 && (
+      {canExtraMeasures && (crossBy === "measures" || widget.type === "ranking" || widget.config?.overlayLine === "measure") && extraMeasures.length < 5 && (
         <button
           type="button"
           className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
