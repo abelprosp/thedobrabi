@@ -38,6 +38,63 @@ func TestDimensionExprLeavesDateColumn(t *testing.T) {
 	}
 }
 
+func TestLooksLikeTimeName(t *testing.T) {
+	for _, ok := range []string{"mes", "mês", "data_venda", "ano", "TOMONTH", "year_month"} {
+		d := semantic.Dimension{Name: ok, Column: ok}
+		if ok == "TOMONTH" {
+			d = semantic.Dimension{Name: "Grupo", Expression: "TOMONTH(data_venda)"}
+		}
+		if !isTimeDimension(d, "data_venda") {
+			t.Fatalf("expected time dimension: %+v", d)
+		}
+	}
+	if isTimeDimension(semantic.Dimension{Name: "Empresa", Column: "empresa"}, "data_venda") {
+		t.Fatal("empresa should not be a time dimension")
+	}
+}
+
+func TestRequestToSimpleSQLOrdersTimeDimension(t *testing.T) {
+	meta := datasetInfo{
+		Name:  "vendas",
+		Table: "vendas",
+		Model: semantic.Model{
+			TimeColumn: "data_venda",
+			Dimensions: []semantic.Dimension{{Name: "Mês", Column: "mes"}},
+			Measures:   []semantic.Measure{{Name: "Receita", Expression: "SUM(valor)"}},
+		},
+	}
+	sql, _ := requestToSimpleSQL(meta, Request{Dimensions: []string{"mes"}, Measures: []string{"Receita"}, Limit: 50})
+	if !strings.Contains(sql, "ORDER BY `mes` DESC") {
+		t.Fatalf("expected chronological time order, got %s", sql)
+	}
+	if strings.Contains(sql, "ORDER BY `Receita`") {
+		t.Fatalf("time charts should not order by the metric, got %s", sql)
+	}
+
+	company, _ := requestToSimpleSQL(meta, Request{
+		Dimensions: []string{"empresa"},
+		Measures:   []string{"Receita"},
+		Limit:      50,
+	})
+	if strings.Contains(company, "ORDER BY `mes`") {
+		t.Fatalf("company dimension should not order by month, got %s", company)
+	}
+}
+
+func TestTimeDimensionOrderField(t *testing.T) {
+	model := semantic.Model{
+		TimeColumn: "data_venda",
+		Dimensions: []semantic.Dimension{{Name: "Mês", Column: "mes"}, {Name: "Empresa", Column: "empresa"}},
+	}
+	got := timeDimensionOrderField(Request{Dimensions: []string{"mes"}, Measures: []string{"Receita"}}, model)
+	if got == "" {
+		t.Fatal("expected order field for month")
+	}
+	if timeDimensionOrderField(Request{Dimensions: []string{"empresa"}, Measures: []string{"Receita"}}, model) != "" {
+		t.Fatal("company chart should not switch to time order")
+	}
+}
+
 func TestCompileDimensionSQLCase(t *testing.T) {
 	d := semantic.Dimension{Name: "Grupo", Expression: "CASE WHEN empresa = 'VIVO' THEN 'Telecom' ELSE 'Outros' END"}
 	got, err := compileDimensionSQL(d)

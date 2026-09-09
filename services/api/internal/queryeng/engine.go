@@ -128,6 +128,9 @@ func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, rol
 		return Result{}, fmt.Errorf("query failed: %w", err)
 	}
 	out = Result{Columns: cols, Rows: data, SQL: sql, Evidence: evidence, Fingerprint: fp, RowCount: len(data), Planner: plan.SourceType}
+	if len(req.OrderBy) == 0 && timeDimensionOrderField(req, meta.Model) != "" {
+		reverseRowMaps(out.Rows)
+	}
 	out.BytesRead = estimateBytes(cols, data)
 	out.DurationMs = time.Since(start).Milliseconds()
 	out.Fingerprint = fp
@@ -153,6 +156,9 @@ func (e *Engine) executeDuckDB(ctx context.Context, meta datasetInfo, plan plan,
 			predsSQL := strings.Join(preds, " AND ")
 			res.Rows = filterRows(res.Rows, parsePredicates(predsSQL))
 		}
+	}
+	if len(req.OrderBy) == 0 && timeDimensionOrderField(req, meta.Model) != "" {
+		reverseRowMaps(res.Rows)
 	}
 	return Result{Columns: res.Columns, Rows: res.Rows, SQL: sql, Evidence: ev, RowCount: len(res.Rows), BytesRead: estimateBytes(res.Columns, res.Rows), Planner: plan.SourceType}, nil
 }
@@ -216,6 +222,8 @@ func requestToSimpleSQL(meta datasetInfo, req Request) (string, Evidence) {
 			dir = "DESC"
 		}
 		sql += fmt.Sprintf(" ORDER BY `%s` %s", req.OrderBy[0].Field, dir)
+	} else if field := timeDimensionOrderField(req, meta.Model); field != "" {
+		sql += " ORDER BY `" + field + "` DESC"
 	}
 	if req.Limit > 0 {
 		sql += fmt.Sprintf(" LIMIT %d", req.Limit)
@@ -549,7 +557,7 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		ords := make([]string, 0, len(req.OrderBy))
 		for _, o := range req.OrderBy {
 			field := sqlOutAlias(o.Field, o.Field)
-			if !identOK(field) {
+			if !orderIdentOK(field) {
 				continue
 			}
 			dir := "ASC"
@@ -562,6 +570,8 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 			b.WriteString(" ORDER BY ")
 			b.WriteString(strings.Join(ords, ", "))
 		}
+	} else if field := timeDimensionOrderField(req, model); field != "" {
+		b.WriteString(" ORDER BY `" + field + "` DESC")
 	} else if len(req.Measures) > 0 {
 		b.WriteString(" ORDER BY " + fmt.Sprintf("`%s` DESC", sqlOutAlias(req.Measures[0], req.Measures[0])))
 	}
@@ -601,6 +611,84 @@ func compileDimensionSQL(d semantic.Dimension) (string, error) {
 		return "", fmt.Errorf("dimensão %q: %w", d.Name, err)
 	}
 	return sql, nil
+}
+
+func orderIdentOK(s string) bool {
+	return s != "" && !strings.ContainsAny(s, "`;'\"\\")
+}
+
+func reverseRowMaps(rows []map[string]any) {
+	for i, j := 0, len(rows)-1; i < j; i, j = i+1, j-1 {
+		rows[i], rows[j] = rows[j], rows[i]
+	}
+}
+
+func foldTimeToken(s string) string {
+	s = strings.ToLower(strings.TrimSpace(s))
+	repl := strings.NewReplacer(
+		"á", "a", "à", "a", "â", "a", "ã", "a",
+		"é", "e", "ê", "e", "í", "i",
+		"ó", "o", "ô", "o", "õ", "o",
+		"ú", "u", "ç", "c",
+		" ", "_", "-", "_",
+	)
+	return repl.Replace(s)
+}
+
+func looksLikeTimeName(s string) bool {
+	n := foldTimeToken(s)
+	if n == "" {
+		return false
+	}
+	parts := strings.FieldsFunc(n, func(r rune) bool { return r == '_' })
+	for _, p := range parts {
+		switch p {
+		case "date", "data", "datetime", "timestamp", "time",
+			"mes", "month", "ano", "year", "dia", "day",
+			"semana", "week", "trimestre", "quarter", "periodo", "period":
+			return true
+		}
+	}
+	return false
+}
+
+func isTimeDimension(d semantic.Dimension, timeCol string) bool {
+	t := strings.ToLower(strings.TrimSpace(d.Type))
+	if t == "date" || t == "datetime" || t == "timestamp" {
+		return true
+	}
+	if timeCol != "" && (strings.EqualFold(d.Column, timeCol) || strings.EqualFold(d.Name, timeCol)) {
+		return true
+	}
+	expr := strings.ToUpper(d.Expression)
+	if strings.Contains(expr, "TOMONTH") || strings.Contains(expr, "YEARMONTH") || strings.Contains(expr, "TODATE") ||
+		strings.Contains(expr, "TOYYYYMM") || strings.Contains(expr, "TOSTARTOFMONTH") {
+		return true
+	}
+	if strings.Contains(expr, "YEAR(") {
+		return true
+	}
+	return looksLikeTimeName(d.Name) || looksLikeTimeName(d.Column)
+}
+
+func timeDimensionOrderField(req Request, model semantic.Model) string {
+	if len(req.Dimensions) == 0 {
+		return ""
+	}
+	dname := req.Dimensions[0]
+	_, raw, _ := parseJoinRef(dname)
+	d, ok := semantic.ResolveDimension(model, raw)
+	if !ok {
+		d = semantic.Dimension{Name: raw, Column: raw}
+	}
+	if !isTimeDimension(d, model.TimeColumn) {
+		return ""
+	}
+	field := sqlOutAlias(dname, d.Name)
+	if !orderIdentOK(field) {
+		return ""
+	}
+	return field
 }
 
 func timeFilterSQL(colSQL, start, end string) []string {

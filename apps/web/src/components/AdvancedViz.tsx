@@ -8,7 +8,7 @@ import { chartTooltip } from "@/lib/chartjs";
 import { ChartJsCanvas } from "@/components/chartjs-canvas";
 import { KpiIconBadge } from "@/components/kpi-icon";
 import { useTheme } from "@/components/theme-provider";
-import { formatCategory } from "@/components/viz";
+import { formatCategory, sortRowsByTimeCategory } from "@/components/viz";
 import type { ChartType } from "chart.js";
 
 export type Rows = Record<string, any>[];
@@ -323,16 +323,17 @@ export function Sparkline({ rows = [], columns = [], height, config = {} }: { ro
   const { theme } = useTheme();
   const meas = columns.find((c) => typeof rows[0]?.[c] === "number") || columns[1] || columns[0];
   const dim = columns.find((c) => typeof rows[0]?.[c] === "string") || columns[0];
+  const chartRows = sortRowsByTimeCategory(rows, dim);
   const color = config.color || PALETTE[0];
   return (
     <Fill
       height={height}
       type="line"
       data={{
-        labels: rows.map((r) => formatCategory(r[dim ?? ""])),
+        labels: chartRows.map((r) => formatCategory(r[dim ?? ""])),
         datasets: [
           {
-            data: rows.map((r) => Number(r[meas] ?? 0)),
+            data: chartRows.map((r) => Number(r[meas] ?? 0)),
             borderColor: color,
             backgroundColor: hexToRgba(color, 0.28),
             fill: true,

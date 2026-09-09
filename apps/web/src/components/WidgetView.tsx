@@ -2,7 +2,7 @@
 
 import { useMemo, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Chart, Kpi } from "@/components/viz";
+import { Chart, Kpi, compareTimeCategory, sortRowsByTimeCategory, timeSortKey } from "@/components/viz";
 import { AdvancedChart, Sparkline, KpiGoal, MetricGroup, DecompositionTree, IframeWidget, formatNumber } from "@/components/AdvancedViz";
 import {
   BubbleCard,
@@ -254,8 +254,13 @@ export function WidgetView({
     refetchOnWindowFocus: false,
   });
 
-  const rows = q.data?.rows || [];
   const columns = q.data?.columns || [];
+  const rows = useMemo(() => {
+    const raw = q.data?.rows || [];
+    if (w.type === "ranking") return raw;
+    const dim = w.query?.dimensions?.[0] || (q.data?.columns || [])[0];
+    return sortRowsByTimeCategory(raw, dim);
+  }, [q.data?.rows, q.data?.columns, w.type, w.query?.dimensions]);
   const showTitle = cfg.showTitle !== false;
   const issue = !NO_QUERY.includes(w.type) && !q.isLoading && !q.isError
     ? diagnoseQueryValue({
@@ -616,7 +621,10 @@ function BigTableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; c
         const av = a[col];
         const bv = b[col];
         if (typeof av === "number" && typeof bv === "number") return (av - bv) * mul;
-        return String(av ?? "").localeCompare(String(bv ?? ""), "pt", { numeric: true }) * mul;
+        const ka = timeSortKey(av);
+        const kb = timeSortKey(bv);
+        if (ka != null && kb != null && ka !== kb) return (ka - kb) * mul;
+        return compareTimeCategory(String(av ?? ""), String(bv ?? "")) * mul;
       });
     }
     return next;
@@ -843,7 +851,7 @@ function SlicerView({
   const values = useMemo(() => {
     const set = new Set<string>();
     rows.forEach((r) => { if (r[dim] != null) set.add(String(r[dim])); });
-    return Array.from(set).slice(0, 2000).sort((a, b) => a.localeCompare(b, "pt"));
+    return Array.from(set).slice(0, 2000).sort(compareTimeCategory);
   }, [rows, dim]);
   const current = globalFilters.find((f) => f.dimension === dim && (!f.dataset_id || f.dataset_id === w.query?.dataset_id));
   const selected = useMemo(() => {

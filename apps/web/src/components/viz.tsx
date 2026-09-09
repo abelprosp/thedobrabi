@@ -27,8 +27,68 @@ type ChartProps = {
   onClick?: (payload: { dimension: string; value: string }) => void;
 };
 
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?)?$/;
-const YEAR_MONTH = /^(\d{4})-(\d{2})$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})?)?$/;
+const YEAR_MONTH = /^(\d{4})[-/](\d{2})$/;
+const MONTH_YEAR = /^(\d{2})[-/](\d{4})$/;
+const YEAR_MONTH_COMPACT = /^(\d{4})(\d{2})$/;
+const YEAR_ONLY = /^\d{4}$/;
+const PT_MONTH: Record<string, number> = {
+  janeiro: 1, jan: 1, fevereiro: 2, fev: 2, marco: 3, março: 3, mar: 3,
+  abril: 4, abr: 4, maio: 5, mai: 5, junho: 6, jun: 6, julho: 7, jul: 7,
+  agosto: 8, ago: 8, setembro: 9, set: 9, outubro: 10, out: 10, novembro: 11, nov: 11, dezembro: 12, dez: 12,
+};
+
+function utcMonth(year: number, month: number): number | null {
+  if (month < 1 || month > 12 || year < 1900 || year > 2100) return null;
+  return Date.UTC(year, month - 1, 1);
+}
+
+export function timeSortKey(v: unknown): number | null {
+  if (v instanceof Date && !Number.isNaN(v.getTime())) return v.getTime();
+  if (typeof v === "number" && Number.isFinite(v)) {
+    if (v >= 1900 && v <= 2100) return Date.UTC(v, 0, 1);
+    if (v >= 190001 && v <= 210012) {
+      const compact = utcMonth(Math.floor(v / 100), v % 100);
+      if (compact != null) return compact;
+    }
+    if (v > 1e11) return v;
+  }
+  const s = String(v ?? "").trim();
+  if (!s) return null;
+  const ym = YEAR_MONTH.exec(s);
+  if (ym) return utcMonth(Number(ym[1]), Number(ym[2]));
+  const myNum = MONTH_YEAR.exec(s);
+  if (myNum) return utcMonth(Number(myNum[2]), Number(myNum[1]));
+  const compact = YEAR_MONTH_COMPACT.exec(s);
+  if (compact) return utcMonth(Number(compact[1]), Number(compact[2]));
+  if (YEAR_ONLY.test(s)) return Date.UTC(Number(s), 0, 1);
+  if (ISO_DATE.test(s)) {
+    const t = Date.parse(s.includes("T") || s.includes("Z") || s.includes("+") ? s : s.replace(" ", "T"));
+    return Number.isNaN(t) ? null : t;
+  }
+  const monthYear = s.toLowerCase().replace(/\./g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  const my = monthYear.match(/^([a-z]+)[\s\-/]*(?:de\s*)?(\d{4})$/);
+  if (my && PT_MONTH[my[1]]) return utcMonth(Number(my[2]), PT_MONTH[my[1]]);
+  if (PT_MONTH[monthYear]) return PT_MONTH[monthYear];
+  return null;
+}
+
+export function compareTimeCategory(a: string, b: string): number {
+  const ka = timeSortKey(a);
+  const kb = timeSortKey(b);
+  if (ka != null && kb != null && ka !== kb) return ka - kb;
+  if (ka != null && kb == null) return -1;
+  if (ka == null && kb != null) return 1;
+  return a.localeCompare(b, "pt", { numeric: true });
+}
+
+export function sortRowsByTimeCategory(rows: Record<string, any>[], dim?: string) {
+  if (!dim || rows.length < 2) return rows;
+  const sample = rows.slice(0, Math.min(12, rows.length));
+  const hits = sample.filter((r) => timeSortKey(r[dim]) != null).length;
+  if (hits < Math.ceil(sample.length * 0.6)) return rows;
+  return [...rows].sort((a, b) => compareTimeCategory(String(a[dim] ?? ""), String(b[dim] ?? "")));
+}
 
 export function formatCategory(v: unknown) {
   const s = String(v ?? "");
@@ -65,32 +125,37 @@ export function pivotSeries(rows: Record<string, any>[], catCol: string, seriesC
     }
     map.set(`${cat}\0${ser}`, Number(r[valueCol] ?? 0));
   }
+  const orderedCats =
+    cats.filter((c) => timeSortKey(c) != null).length >= Math.ceil(cats.length * 0.6)
+      ? [...cats].sort(compareTimeCategory)
+      : cats;
   return {
-    rawCats: cats,
-    cats,
+    rawCats: orderedCats,
+    cats: orderedCats,
     series,
-    values: series.map((s) => cats.map((c) => map.get(`${c}\0${s}`) ?? 0)),
+    values: series.map((s) => orderedCats.map((c) => map.get(`${c}\0${s}`) ?? 0)),
   };
 }
 
 export function Chart({ type = "bar", columns = [], rows = [], measures, height, onClick, config = {} }: ChartProps) {
   const { theme } = useTheme();
   const chrome = chartChrome(theme);
-  const stringDim = columns.find((c) => typeof rows[0]?.[c] === "string");
+  const stringDim = columns.find((c) => typeof rows[0]?.[c] === "string" || rows[0]?.[c] instanceof Date);
   const dim = stringDim || columns[0];
-  const rawCatsAll = rows.map((r) => String(r[dim] ?? ""));
-  const measCols = resolveMeasureColumns(columns, rows, stringDim, measures);
-  const pieByMeasures = type === "pie" && measCols.length > 1 && (!stringDim || rows.length <= 1);
+  const chartRows = sortRowsByTimeCategory(rows, dim);
+  const rawCatsAll = chartRows.map((r) => String(r[dim] ?? ""));
+  const measCols = resolveMeasureColumns(columns, chartRows, stringDim, measures);
+  const pieByMeasures = type === "pie" && measCols.length > 1 && (!stringDim || chartRows.length <= 1);
   const seriesDim = type === "pie" || pieByMeasures ? undefined : columns.find((c) => c !== dim && !measCols.includes(c));
-  const pivoted = seriesDim && measCols[0] ? pivotSeries(rows, dim, seriesDim, measCols[0]) : null;
+  const pivoted = seriesDim && measCols[0] ? pivotSeries(chartRows, dim, seriesDim, measCols[0]) : null;
   const rawCats = pieByMeasures ? measCols : pivoted ? pivoted.rawCats : rawCatsAll;
   const cats = pieByMeasures ? measCols : (pivoted ? pivoted.cats : rawCatsAll).map((s) => formatCategory(s));
   const seriesNames = pieByMeasures ? measCols : pivoted ? pivoted.series : measCols;
   const seriesValues = pieByMeasures
-    ? [measCols.map((m) => rows.reduce((s, r) => s + Number(r[m] ?? 0), 0))]
+    ? [measCols.map((m) => chartRows.reduce((s, r) => s + Number(r[m] ?? 0), 0))]
     : pivoted
       ? pivoted.values
-      : measCols.map((m) => rows.map((r) => Number(r[m] ?? 0)));
+      : measCols.map((m) => chartRows.map((r) => Number(r[m] ?? 0)));
   const palette = chartPalette(config.color);
   const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1;
   const showTooltip = config.showTooltip !== false;
