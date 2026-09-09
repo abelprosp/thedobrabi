@@ -6,6 +6,7 @@ import { BarChart3, Globe, Layers } from "lucide-react";
 import { chartChrome, chartPalette, formatAxisTick, formatNumber, hexToRgba } from "@/lib/widget-config";
 import { chartTooltip } from "@/lib/chartjs";
 import { ChartJsCanvas } from "@/components/chartjs-canvas";
+import { KpiIconBadge } from "@/components/kpi-icon";
 import { useTheme } from "@/components/theme-provider";
 import { formatCategory } from "@/components/viz";
 import type { ChartType } from "chart.js";
@@ -359,12 +360,24 @@ export function KpiGoal({ label, value, goal, variance, config = {} }: { label: 
   const pct = g > 0 ? Math.min(100, Math.max(0, (val / g) * 100)) : 0;
   const positive = v >= 0;
   const size = config.fontSize === "sm" ? "text-2xl" : config.fontSize === "lg" ? "text-4xl" : "text-3xl";
-  return (
-    <Card className={`flex h-full flex-col justify-between p-4 ${config.kpiAlign === "center" ? "text-center" : ""}`}>
+  const body = (
+    <>
       {config.showTitle !== false && <div className="text-[12px] uppercase tracking-wide text-mute">{label}</div>}
       <div className={`mt-2 font-semibold tracking-tight text-ink ${size}`} style={config.color ? { color: config.color } : undefined}>
         {formatNumber(value, config)}
       </div>
+    </>
+  );
+  return (
+    <Card className={`flex h-full flex-col justify-between p-4 ${config.kpiAlign === "center" ? "text-center" : ""}`}>
+      {config.icon ? (
+        <div className={`flex items-start gap-3 ${config.kpiAlign === "center" ? "flex-col items-center" : ""}`}>
+          <KpiIconBadge value={config.icon} color={config.color} align={config.kpiAlign === "center" ? "center" : "left"} />
+          <div className="min-w-0 flex-1">{body}</div>
+        </div>
+      ) : (
+        body
+      )}
       <div className="mt-3 space-y-1.5">
         <div className={`flex items-center justify-between text-[11px] text-mute ${config.kpiAlign === "center" ? "justify-center gap-3" : ""}`}>
           <span>Meta: {formatNumber(g, config)}</span>
@@ -389,7 +402,10 @@ export function MetricGroup({ label, rows = [], columns = [], config = {} }: { l
   if (cols.length === 0 && rows.length) cols.push(columns[0]);
   return (
     <Card className="flex h-full flex-col p-4">
-      <div className="text-[12px] uppercase tracking-wide text-mute">{label}</div>
+      <div className="flex items-center gap-2">
+        {config.icon && <KpiIconBadge value={config.icon} color={config.color} size={18} />}
+        <div className="text-[12px] uppercase tracking-wide text-mute">{label}</div>
+      </div>
       <div className="mt-3 grid grid-cols-2 gap-3">
         {cols.map((c) => (
           <div key={c}>

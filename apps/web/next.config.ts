@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  transpilePackages: ["lucide-react"],
   // Evita o Next tratar o lockfile vazio da raiz do monorepo como workspace root.
   outputFileTracingRoot: path.join(__dirname),
   async rewrites() {

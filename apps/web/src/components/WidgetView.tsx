@@ -140,6 +140,7 @@ export type WidgetConfig = {
   multiSelect?: boolean;
   slicerSearch?: boolean;
   slicerStyle?: "list" | "dropdown" | "buttons";
+  icon?: string;
 };
 
 export type DashboardFilter = { dimension: string; op: "eq" | "in"; value: any; dataset_id?: string };
@@ -304,6 +305,7 @@ export function WidgetView({
           fontSize={cfg.fontSize}
           showTitle={showTitle}
           color={cfg.color}
+          icon={cfg.icon}
           goalLabel={!issue && goal != null ? `Meta: ${formatNumber(goal, cfg)}` : undefined}
           progress={!issue ? progress : undefined}
         />

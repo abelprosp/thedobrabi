@@ -12,6 +12,7 @@ import {
 } from "@/lib/widget-config";
 import { chartLegend, chartTooltip } from "@/lib/chartjs";
 import { ChartJsCanvas } from "@/components/chartjs-canvas";
+import { KpiIconBadge } from "@/components/kpi-icon";
 import { useTheme } from "@/components/theme-provider";
 import type { ChartType } from "chart.js";
 
@@ -216,6 +217,7 @@ export function Kpi({
   color,
   goalLabel,
   progress,
+  icon,
 }: {
   label: string;
   value: string;
@@ -227,10 +229,11 @@ export function Kpi({
   color?: string;
   goalLabel?: string;
   progress?: number;
+  icon?: string;
 }) {
   const pos = delta === undefined ? null : delta >= 0;
-  return (
-    <Card className={cn("flex h-full flex-col justify-between gap-1 p-4", align === "center" && "text-center")}>
+  const body = (
+    <>
       {showTitle !== false && <div className="text-[11px] font-medium uppercase tracking-wide text-mute">{label}</div>}
       <div className={cn("font-semibold tracking-tight text-ink", KPI_SIZE[fontSize || "md"])} style={color ? { color } : undefined}>
         {value}
@@ -246,6 +249,18 @@ export function Kpi({
           {pos ? "+" : ""}
           {delta.toFixed(1)}% {comparisonLabel || "vs. período anterior"}
         </div>
+      )}
+    </>
+  );
+  return (
+    <Card className={cn("flex h-full flex-col justify-between gap-1 p-4", align === "center" && "text-center")}>
+      {icon ? (
+        <div className={cn("flex items-start gap-3", align === "center" && "flex-col items-center")}>
+          <KpiIconBadge value={icon} color={color} align={align} />
+          <div className="min-w-0 flex-1 space-y-1">{body}</div>
+        </div>
+      ) : (
+        body
       )}
     </Card>
   );

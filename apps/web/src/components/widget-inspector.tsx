@@ -20,6 +20,7 @@ import { ChevronDown, Plus, Trash2, Blocks, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Widget, WidgetType, QueryJoin } from "@/components/WidgetView";
 import { CustomMeasureModal } from "@/components/custom-measure-modal";
+import { KpiIconPicker } from "@/components/kpi-icon-picker";
 
 
 type CatalogItem = { type: WidgetType; label: string };
@@ -180,6 +181,11 @@ export function WidgetInspector({
         {caps.waterfall && (
           <FieldLabel label="Cor negativa">
             <ColorSwatches value={cfg.colorNegative || "#EF4444"} onChange={(colorNegative) => setCfg({ colorNegative })} />
+          </FieldLabel>
+        )}
+        {(caps.kpi || widget.type === "metric_group") && (
+          <FieldLabel label="Ícone" hint="Biblioteca pronta, emoji ou URL da sua imagem">
+            <KpiIconPicker value={cfg.icon} onChange={(icon) => setCfg({ icon })} />
           </FieldLabel>
         )}
         {caps.kpi && (
