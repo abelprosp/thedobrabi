@@ -209,7 +209,7 @@ export function WidgetView({
     if (KPI_TYPES.includes(w.type)) {
       b.dimensions = [];
     }
-    if (!KPI_TYPES.includes(w.type) && w.type !== "slicer" && w.type !== "scatter" && w.type !== "ranking") {
+    if (!KPI_TYPES.includes(w.type) && w.type !== "slicer" && w.type !== "scatter" && w.type !== "bubble" && w.type !== "ranking") {
       const crossBy = widgetCrossBy(w.type, cfg, w.query);
       if (crossBy === "columns") {
         b.measures = (b.measures || []).slice(0, 1);
@@ -217,6 +217,10 @@ export function WidgetView({
         const dimKeep = w.type === "heatmap" ? 2 : 1;
         b.dimensions = (b.dimensions || []).slice(0, dimKeep);
       }
+    }
+    if (w.type === "bubble") {
+      const nMeas = (b.measures || []).length;
+      b.dimensions = (b.dimensions || []).slice(0, nMeas >= 2 ? 1 : 2);
     }
     if (w.type === "ranking") {
       const field = (b.measures || [])[0];
@@ -482,7 +486,7 @@ export function WidgetView({
   if (w.type === "bubble") {
     return (
       <div className="relative h-full">
-        <BubbleCard title={w.title} rows={rows} columns={columns} config={cfg} />
+        <BubbleCard title={w.title} rows={rows} columns={columns} config={cfg} measures={w.query?.measures} />
         {issue && <IssueHint issue={issue} />}
       </div>
     );

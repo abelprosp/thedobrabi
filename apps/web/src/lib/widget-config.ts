@@ -29,7 +29,7 @@ export function widgetCrossBy(
   query?: { measures?: string[]; dimensions?: string[] },
 ): CrossBy {
   if (config?.crossBy === "columns" || config?.crossBy === "measures") return config.crossBy;
-  const measureKeep = type === "scatter" ? 2 : 1;
+  const measureKeep = type === "scatter" || type === "bubble" ? 2 : 1;
   if ((query?.measures?.length || 0) > measureKeep) return "measures";
   const dimKeep = type === "heatmap" ? 2 : 1;
   if ((query?.dimensions?.length || 0) > dimKeep) return "columns";

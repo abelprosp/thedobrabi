@@ -121,7 +121,7 @@ const WIDGET_CATALOG: { type: WidgetType; label: string; icon: any; description:
   { type: "network_sales", label: "Rede de vendas", icon: Network, description: "KPIs com rede e tabela", defaultW: 7, defaultH: 6 },
   { type: "radial", label: "Radial", icon: CircleDot, description: "Medidor polar", defaultW: 4, defaultH: 5 },
   { type: "stat_spark", label: "Cartão estatístico", icon: Signal, description: "Valor, variação e sparkline", defaultW: 5, defaultH: 3 },
-  { type: "bubble", label: "Bolhas", icon: Sparkle, description: "Categorias ao longo da semana", defaultW: 6, defaultH: 5 },
+  { type: "bubble", label: "Bolhas", icon: Sparkle, description: "Duas métricas em X e Y", defaultW: 6, defaultH: 5 },
   { type: "hexmap", label: "Mapa hexagonal", icon: Hexagon, description: "Grelha de intensidade", defaultW: 4, defaultH: 4 },
   { type: "treemap", label: "Treemap", icon: LayoutGrid, description: "Hierarquia proporcional", defaultW: 5, defaultH: 4 },
   { type: "heatmap", label: "Heatmap", icon: Grid2X2, description: "Duas dimensões e medida", defaultW: 6, defaultH: 4 },
@@ -556,6 +556,7 @@ function DashboardEditorInner() {
         if (type === "gauge") return { min: 0, max: 100, target: 80, color: "#2563EB", gaugeLabel: "Valor" };
         if (type === "waterfall") return { waterfallNegativeCategories: "" };
         if (type === "scatter") return { xMeasure: fields.measures[1], yMeasure: fields.measures[0], dimension: fields.dimensions[0] };
+        if (type === "bubble") return { color: "#F97316", xMeasure: fields.measures[0], yMeasure: fields.measures[1], dimension: fields.dimensions[0] };
         if (type === "kpi_goal") return { goal: 100, color: "#2563EB" };
         if (type === "sparkline") return { color: "#2563EB" };
         if (type === "iframe") return { url: "" };

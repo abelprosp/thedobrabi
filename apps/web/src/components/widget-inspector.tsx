@@ -709,7 +709,7 @@ function QueryFields({
   onDrillUp: () => void;
 }) {
   const measureLabel =
-    widget.type === "scatter"
+    widget.type === "scatter" || widget.type === "bubble"
       ? "Métrica X"
       : widget.type === "ranking"
         ? "Métrica do ranking"
@@ -721,6 +721,8 @@ function QueryFields({
       ? "Dimensão do slicer"
       : widget.type === "ranking"
         ? "Categoria do ranking"
+        : widget.type === "bubble"
+          ? "Etiqueta das bolhas"
         : widget.type === "heatmap"
         ? "Dimensão X"
         : widget.type === "sparkline"
@@ -734,9 +736,9 @@ function QueryFields({
   }));
   const relatedDatasets = visibleDatasets.filter((d) => d.id && d.id !== widget.query?.dataset_id);
   const extraStart = widget.type === "heatmap" ? 2 : 1;
-  const canBreak = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "ranking"].includes(widget.type);
+  const canBreak = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "ranking", "bubble"].includes(widget.type);
   const extraDims = (widget.query?.dimensions || []).slice(extraStart);
-  const canExtraMeasures = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "scatter", "waterfall"].includes(widget.type);
+  const canExtraMeasures = !["kpi", "kpi_goal", "metric_group", "gauge", "sparkline", "slicer", "scatter", "waterfall", "bubble"].includes(widget.type);
   const extraMeasures = (widget.query?.measures || []).slice(1);
   const canCross = canBreak && canExtraMeasures;
   const crossBy = widgetCrossBy(widget.type, widget.config, widget.query);
@@ -904,7 +906,7 @@ function QueryFields({
         </div>
       )}
       {widget.type !== "slicer" && widget.type !== "metric_group" && (
-        <FieldLabel label={measureLabel}>
+        <FieldLabel label={measureLabel} hint={widget.type === "bubble" ? "Eixo horizontal. Ex.: faturamento, receita." : undefined}>
           <Select
             value={widget.query?.measures?.[0] || ""}
             onChange={(e) => {
@@ -923,14 +925,14 @@ function QueryFields({
                     ...base,
                     dataset_id: liveId || base?.dataset_id,
                     measures: e.target.value
-                      ? widget.type === "scatter" || canExtraMeasures
+                      ? widget.type === "scatter" || widget.type === "bubble" || canExtraMeasures
                         ? [e.target.value, ...(base?.measures || []).slice(1).filter((m) => m !== e.target.value)]
                         : [e.target.value]
-                      : widget.type === "scatter" || canExtraMeasures
+                      : widget.type === "scatter" || widget.type === "bubble" || canExtraMeasures
                         ? (base?.measures || []).slice(1)
                         : [],
                   },
-                  config: widget.type === "scatter" ? { ...w.config, xMeasure: e.target.value } : w.config,
+                  config: widget.type === "scatter" || widget.type === "bubble" ? { ...w.config, xMeasure: e.target.value } : w.config,
                 };
               });
             }}
@@ -951,20 +953,40 @@ function QueryFields({
         </button>
       )}
 
-      {widget.type === "scatter" && (
-        <FieldLabel label="Métrica Y">
+      {(widget.type === "scatter" || widget.type === "bubble") && (
+        <FieldLabel label="Métrica Y" hint={widget.type === "bubble" ? "Eixo vertical. Ex.: linhas, quantidade." : undefined}>
           <Select
             value={widget.query?.measures?.[1] || ""}
             onChange={(e) => {
               const first = widget.query?.measures?.[0] || "";
+              const rest = (widget.query?.measures || []).slice(2);
               onUpdate((w) => ({
                 ...w,
-                query: { ...w.query, measures: [first, e.target.value].filter(Boolean) },
+                query: { ...w.query, measures: [first, e.target.value, ...rest].filter(Boolean) },
                 config: { ...w.config, xMeasure: first, yMeasure: e.target.value },
               }));
             }}
           >
             <option value="">—</option>
+            <MeasureOptions model={model} joins={joinOpts} />
+          </Select>
+        </FieldLabel>
+      )}
+      {widget.type === "bubble" && (
+        <FieldLabel label="Tamanho da bolha" hint="Opcional. Se vazio, usa a métrica Y.">
+          <Select
+            value={widget.query?.measures?.[2] || cfg.measure || ""}
+            onChange={(e) => {
+              const x = widget.query?.measures?.[0] || "";
+              const y = widget.query?.measures?.[1] || "";
+              onUpdate((w) => ({
+                ...w,
+                query: { ...w.query, measures: [x, y, e.target.value].filter(Boolean) },
+                config: { ...w.config, measure: e.target.value || undefined },
+              }));
+            }}
+          >
+            <option value="">Igual à métrica Y</option>
             <MeasureOptions model={model} joins={joinOpts} />
           </Select>
         </FieldLabel>
@@ -1013,7 +1035,10 @@ function QueryFields({
           </div>
         </FieldLabel>
       )}
-      <FieldLabel label={dimLabel}>
+      <FieldLabel
+        label={dimLabel}
+        hint={widget.type === "bubble" ? "Quem rotula cada bolha (empresa, produto…). Métricas não entram nesta lista." : undefined}
+      >
         <Select
           value={widget.query?.dimensions?.[0] || ""}
           onChange={(e) =>
@@ -1021,8 +1046,16 @@ function QueryFields({
               ...w,
               query: {
                 ...w.query,
-                dimensions: e.target.value ? [e.target.value, ...(w.query?.dimensions || []).slice(1)] : (w.query?.dimensions || []).slice(1),
+                dimensions:
+                  widget.type === "bubble"
+                    ? e.target.value
+                      ? [e.target.value]
+                      : []
+                    : e.target.value
+                      ? [e.target.value, ...(w.query?.dimensions || []).slice(1)]
+                      : (w.query?.dimensions || []).slice(1),
               },
+              config: widget.type === "bubble" || widget.type === "scatter" ? { ...w.config, dimension: e.target.value || undefined } : w.config,
             }))
           }
         >

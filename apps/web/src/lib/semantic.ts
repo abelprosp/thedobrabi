@@ -133,7 +133,7 @@ export function widgetFieldDefaults(type: string, model: SemanticModel | null | 
     case "sankey":
       return { measures: m0 ? [m0] : [], dimensions: [cat, cat2].filter(Boolean) };
     case "bubble":
-      return { measures: m0 ? [m0] : [], dimensions: [time || cat, cat2 || cat].filter(Boolean) };
+      return { measures: [m0, m1].filter(Boolean), dimensions: cat ? [cat] : [] };
     case "sales_report":
     case "network_sales":
       return { measures: measuresAll.slice(0, 3), dimensions: [time, cat].filter(Boolean) };

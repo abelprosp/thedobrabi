@@ -493,28 +493,140 @@ export function NetworkSalesCard({ title, rows = [], columns = [], config = {} }
   );
 }
 
-export function BubbleCard({ title, rows = [], columns = [], config = {} }: { title: string; rows?: Rows; columns?: string[]; config?: Cfg }) {
+export function BubbleCard({
+  title,
+  rows = [],
+  columns = [],
+  config = {},
+  measures,
+}: {
+  title: string;
+  rows?: Rows;
+  columns?: string[];
+  config?: Cfg;
+  measures?: string[];
+}) {
   const { theme } = useTheme();
   const chrome = chartChrome(theme);
-  const meas = measureOf(rows, columns, config);
-  const dims = strCols(rows, columns);
-  const xCol = dims[0] || columns[0];
-  const yCol = dims[1] || dims[0];
-  const xSet = Array.from(new Set(rows.map((r) => formatCategory(r[xCol]))));
-  const ySet = Array.from(new Set(rows.map((r) => formatCategory(r[yCol]))));
-  const max = Math.max(...rows.map((r) => Number(r[meas] ?? 0)), 1);
+  const nums = numCols(rows, columns);
+  const requested = (measures || []).filter((m) => m && columns.includes(m));
+  const xCol =
+    (config.xMeasure && columns.includes(config.xMeasure) ? config.xMeasure : "") || requested[0] || nums[0] || "";
+  const yCol =
+    (config.yMeasure && columns.includes(config.yMeasure) && config.yMeasure !== xCol ? config.yMeasure : "") ||
+    requested.find((m) => m !== xCol) ||
+    nums.find((c) => c !== xCol) ||
+    "";
+  const xyMode = Boolean(xCol && yCol && nums.includes(xCol) && nums.includes(yCol));
+  const sizeCandidate =
+    (config.measure && columns.includes(config.measure) ? config.measure : "") || requested[2] || "";
+  const sizeCol = sizeCandidate && nums.includes(sizeCandidate) ? sizeCandidate : yCol || measureOf(rows, columns, config);
+  const dim =
+    (config.dimension && columns.includes(config.dimension) ? config.dimension : "") || strCols(rows, columns)[0] || "";
   const color = config.color || "#F97316";
   const kpis = measureKpis(rows, columns, config);
-  const cats = summarize(rows, yCol || xCol, meas).slice(0, 8);
   if (!rows.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
 
+  if (xyMode) {
+    const maxSize = Math.max(...rows.map((r) => Math.abs(Number(r[sizeCol] ?? 0))), 1);
+    const points = rows.map((r) => ({
+      x: Number(r[xCol] ?? 0),
+      y: Number(r[yCol] ?? 0),
+      r: 6 + (Math.abs(Number(r[sizeCol] ?? 0)) / maxSize) * 22,
+      v: Number(r[sizeCol] ?? 0),
+      label: dim ? formatCategory(r[dim]) : "",
+    }));
+    const cats = dim ? summarize(rows, dim, sizeCol).slice(0, 5) : [];
+    return (
+      <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
+        {config.showTitle !== false && <div className="text-[13px] font-medium text-ink">{title}</div>}
+        <div className="min-h-0 flex-1">
+          <ChartJsCanvas
+            type="bubble"
+            data={{
+              datasets: [{
+                label: yCol,
+                data: points,
+                backgroundColor: hexToRgba(color, 0.55),
+                borderColor: color,
+              }],
+            }}
+            options={{
+              plugins: {
+                legend: { display: false },
+                tooltip: {
+                  ...chartTooltip(theme),
+                  callbacks: {
+                    label: (ctx: any) => {
+                      const p = ctx.raw as { x: number; y: number; v: number; label?: string };
+                      const bits = [
+                        p.label,
+                        `${xCol}: ${formatNumber(p.x, config)}`,
+                        `${yCol}: ${formatNumber(p.y, config)}`,
+                      ];
+                      if (sizeCol && sizeCol !== xCol && sizeCol !== yCol) bits.push(`${sizeCol}: ${formatNumber(p.v, config)}`);
+                      return bits.filter(Boolean).join(" · ");
+                    },
+                  },
+                },
+              },
+              scales: {
+                x: {
+                  title: { display: true, text: config.xAxisLabel || xCol, color: chrome.mute },
+                  ticks: { color: chrome.mute, callback: (v: any) => formatAxisTick(v, config) },
+                  grid: { color: chrome.line, display: config.showGrid !== false },
+                  border: { display: false },
+                },
+                y: {
+                  title: { display: true, text: config.yAxisLabel || yCol, color: chrome.mute },
+                  ticks: { color: chrome.mute, callback: (v: any) => formatAxisTick(v, config) },
+                  grid: { color: chrome.line, display: config.showGrid !== false },
+                  border: { display: false },
+                },
+              },
+            }}
+          />
+        </div>
+        <div className="mt-2 grid grid-cols-2 gap-2 text-[12px]">
+          {kpis.slice(0, 2).map((k) => (
+            <div key={k.label}>
+              <div className="text-mute">{k.label}</div>
+              <div className="flex items-baseline gap-1.5">
+                <span className="font-semibold">{formatNumber(k.value, config)}</span>
+                {k.prev != null && <Delta v={pctDelta(k.value, k.prev)} />}
+              </div>
+            </div>
+          ))}
+        </div>
+        {cats.length > 0 && (
+          <div className="mt-2 space-y-1 border-t border-line pt-2">
+            {cats.map((r) => (
+              <div key={r.name} className="flex items-center justify-between text-[12px]">
+                <span className="truncate text-ink">{r.name}</span>
+                <span className="tabular-nums text-mute">{formatNumber(r.value, config)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  const meas = sizeCol || measureOf(rows, columns, config);
+  const dims = strCols(rows, columns);
+  const catX = dims[0] || columns[0];
+  const catY = dims[1] || dims[0];
+  const xSet = Array.from(new Set(rows.map((r) => formatCategory(r[catX]))));
+  const ySet = Array.from(new Set(rows.map((r) => formatCategory(r[catY]))));
+  const max = Math.max(...rows.map((r) => Number(r[meas] ?? 0)), 1);
+  const cats = summarize(rows, catY || catX, meas).slice(0, 8);
   const points = rows.map((r) => ({
-    x: xSet.indexOf(formatCategory(r[xCol])),
-    y: ySet.indexOf(formatCategory(r[yCol])),
+    x: xSet.indexOf(formatCategory(r[catX])),
+    y: ySet.indexOf(formatCategory(r[catY])),
     r: 4 + (Number(r[meas] ?? 0) / max) * 14,
     v: Number(r[meas] ?? 0),
-    xl: formatCategory(r[xCol]),
-    yl: formatCategory(r[yCol]),
+    xl: formatCategory(r[catX]),
+    yl: formatCategory(r[catY]),
   }));
 
   return (

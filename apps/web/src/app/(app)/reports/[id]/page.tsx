@@ -480,19 +480,43 @@ export default function ReportEditorPage() {
                       {datasetList.map((ds) => <option key={ds.id} value={ds.id}>{ds.name}</option>)}
                     </Select>
                   </FieldLabel>
-                  <FieldLabel label="Métrica">
-                    <Select value={current.query?.measures?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: e.target.value ? [e.target.value, ...(w.query?.measures || []).slice(1).filter((m) => m !== e.target.value)] : (w.query?.measures || []).slice(1) } } : w)))}>
+                  <FieldLabel label={current.type === "scatter" || current.type === "bubble" ? "Métrica X" : "Métrica"}>
+                    <Select value={current.query?.measures?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, measures: e.target.value ? [e.target.value, ...(w.query?.measures || []).slice(1).filter((m) => m !== e.target.value)] : (w.query?.measures || []).slice(1) }, config: current.type === "scatter" || current.type === "bubble" ? { ...w.config, xMeasure: e.target.value } : w.config } : w)))}>
                       <option value="">—</option>
                       {(model?.measures || []).map((m: any) => <option key={m.name} value={m.name}>{m.name}</option>)}
                     </Select>
                   </FieldLabel>
-                  <FieldLabel label="Dimensão">
-                    <Select value={current.query?.dimensions?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, dimensions: e.target.value ? [e.target.value, ...(w.query?.dimensions || []).slice(1)] : (w.query?.dimensions || []).slice(1) } } : w)))}>
+                  {(current.type === "scatter" || current.type === "bubble") && (
+                    <FieldLabel label="Métrica Y">
+                      <Select
+                        value={current.query?.measures?.[1] || ""}
+                        onChange={(e) =>
+                          updateWidgets((p) =>
+                            p.map((w) => {
+                              if (w.id !== current.id) return w;
+                              const first = w.query?.measures?.[0] || "";
+                              const rest = (w.query?.measures || []).slice(2);
+                              return {
+                                ...w,
+                                query: { ...w.query, measures: [first, e.target.value, ...rest].filter(Boolean) },
+                                config: { ...w.config, xMeasure: first, yMeasure: e.target.value },
+                              };
+                            }),
+                          )
+                        }
+                      >
+                        <option value="">—</option>
+                        {(model?.measures || []).map((m: any) => <option key={m.name} value={m.name}>{m.name}</option>)}
+                      </Select>
+                    </FieldLabel>
+                  )}
+                  <FieldLabel label={current.type === "bubble" ? "Etiqueta das bolhas" : "Dimensão"}>
+                    <Select value={current.query?.dimensions?.[0] || ""} onChange={(e) => updateWidgets((p) => p.map((w) => (w.id === current.id ? { ...w, query: { ...w.query, dimensions: current.type === "bubble" ? (e.target.value ? [e.target.value] : []) : e.target.value ? [e.target.value, ...(w.query?.dimensions || []).slice(1)] : (w.query?.dimensions || []).slice(1) }, config: current.type === "bubble" || current.type === "scatter" ? { ...w.config, dimension: e.target.value || undefined } : w.config } : w)))}>
                       <option value="">Nenhuma</option>
                       {(model?.dimensions || []).map((d: any) => <option key={d.column || d.name} value={d.column || d.name}>{d.name || d.column}</option>)}
                     </Select>
                   </FieldLabel>
-                  {current.type !== "kpi" && (
+                  {!["kpi", "scatter", "bubble", "ranking", "slicer", "gauge", "metric_group"].includes(current.type) && (
                     <FieldLabel label="Cruzar por" hint="Colunas partem por outra dimensão. Medidas comparam várias métricas.">
                       <div className="grid grid-cols-2 gap-1 rounded-xl border border-line bg-surface-2 p-1">
                         {([
@@ -524,7 +548,7 @@ export default function ReportEditorPage() {
                       </div>
                     </FieldLabel>
                   )}
-                  {current.type !== "kpi" &&
+                  {!["kpi", "scatter", "bubble", "ranking", "slicer", "gauge", "metric_group"].includes(current.type) &&
                     widgetCrossBy(current.type, current.config, current.query) === "columns" &&
                     (current.query?.dimensions || []).slice(1).map((dim, i) => (
                       <FieldLabel key={`d-${i}`} label={i === 0 ? "Cruzar também por" : `Coluna ${i + 2}`}>
@@ -565,7 +589,7 @@ export default function ReportEditorPage() {
                         </div>
                       </FieldLabel>
                     ))}
-                  {current.type !== "kpi" &&
+                  {!["kpi", "scatter", "bubble", "ranking", "slicer", "gauge", "metric_group"].includes(current.type) &&
                     widgetCrossBy(current.type, current.config, current.query) === "columns" &&
                     (current.query?.dimensions?.length || 0) >= 1 &&
                     (current.query?.dimensions?.length || 0) < 4 && (
@@ -582,7 +606,7 @@ export default function ReportEditorPage() {
                         <Plus size={14} /> Adicionar coluna
                       </button>
                     )}
-                  {current.type !== "kpi" &&
+                  {!["kpi", "scatter", "bubble", "ranking", "slicer", "gauge", "metric_group"].includes(current.type) &&
                     widgetCrossBy(current.type, current.config, current.query) === "measures" &&
                     (current.query?.measures || []).slice(1).map((meas, i) => (
                     <FieldLabel key={`m-${i}`} label={i === 0 ? "Cruzar também com" : `Métrica ${i + 2}`}>
@@ -615,7 +639,7 @@ export default function ReportEditorPage() {
                       </div>
                     </FieldLabel>
                   ))}
-                  {current.type !== "kpi" &&
+                  {!["kpi", "scatter", "bubble", "ranking", "slicer", "gauge", "metric_group"].includes(current.type) &&
                     widgetCrossBy(current.type, current.config, current.query) === "measures" &&
                     (current.query?.measures || []).length < 6 &&
                     (model?.measures || []).some((m: any) => !(current.query?.measures || []).includes(m.name)) && (
