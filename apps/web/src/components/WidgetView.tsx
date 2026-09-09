@@ -21,6 +21,7 @@ import { cn } from "@/lib/cn";
 import { DEFAULT_QUERY_LIMIT, MAX_QUERY_LIMIT, titleAlignClass, widgetCrossBy } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
 import { AlertCircle, ChevronLeft, ChevronRight, Download, Image as ImageIcon } from "lucide-react";
+import { DataIntelligenceCard } from "@/components/data-intelligence-card";
 import { RankingCard } from "@/components/ranking-card";
 
 export type GridPos = { x: number; y: number; w: number; h: number };
