@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"math"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/thedobra/thedobra/services/api/internal/queryeng"
+	"github.com/thedobra/thedobra/services/api/internal/schemax"
 	"github.com/thedobra/thedobra/services/api/internal/semantic"
 )
 
@@ -24,13 +26,13 @@ func New(pg *pgxpool.Pool, q *queryeng.Engine) *Engine {
 }
 
 type Brief struct {
-	Headline      string     `json:"headline"`
-	GeneratedAt   string     `json:"generated_at"`
-	MajorChanges  []Insight  `json:"major_changes"`
-	Risks         []Insight  `json:"risks"`
-	Opportunities []Insight  `json:"opportunities"`
-	Actions       []string   `json:"recommended_actions"`
-	DatasetID     string     `json:"dataset_id,omitempty"`
+	Headline      string    `json:"headline"`
+	GeneratedAt   string    `json:"generated_at"`
+	MajorChanges  []Insight `json:"major_changes"`
+	Risks         []Insight `json:"risks"`
+	Opportunities []Insight `json:"opportunities"`
+	Actions       []string  `json:"recommended_actions"`
+	DatasetID     string    `json:"dataset_id,omitempty"`
 }
 
 type Insight struct {
@@ -42,188 +44,169 @@ type Insight struct {
 }
 
 func (e *Engine) AnalyzeDataset(ctx context.Context, orgID, wsID, userID, datasetID uuid.UUID, role string) (Brief, error) {
-	var modelJSON []byte
+	var modelJSON, schemaJSON []byte
 	var name string
 	err := e.pg.QueryRow(ctx, `
-		SELECT d.name, s.model_json FROM datasets d
-		JOIN semantic_models s ON s.dataset_id = d.id
+		SELECT d.name, COALESCE(s.model_json, '{}'::jsonb), COALESCE(d.schema_json, '[]'::jsonb)
+		FROM datasets d
+		LEFT JOIN semantic_models s ON s.dataset_id = d.id
 		WHERE d.id=$1 AND d.org_id=$2 AND d.workspace_id=$3
-	`, datasetID, orgID, wsID).Scan(&name, &modelJSON)
+	`, datasetID, orgID, wsID).Scan(&name, &modelJSON, &schemaJSON)
 	if err != nil {
 		return Brief{}, fmt.Errorf("conjunto ainda não está pronto para análise")
 	}
 	var model semantic.Model
 	_ = json.Unmarshal(modelJSON, &model)
-
-	measure := "revenue"
-	if _, ok := semantic.ResolveMeasure(model, measure); !ok {
-		if len(model.Measures) == 0 {
-			return Brief{}, fmt.Errorf("não há dados suficientes para analisar com fiabilidade")
+	if len(model.Measures) == 0 {
+		var cols []schemax.Column
+		_ = json.Unmarshal(schemaJSON, &cols)
+		if len(cols) > 0 {
+			model = semantic.Suggest(name, cols)
 		}
-		measure = model.Measures[0].Name
 	}
-
+	measure := semantic.PrimaryMeasure(model)
+	if measure == "" {
+		return Brief{}, fmt.Errorf("não há métrica no modelo para analisar")
+	}
+	timeDim := pickTimeDimension(model)
+	catDims := pickCategoryDimensions(model, timeDim, 3)
+	dsID := datasetID.String()
 	now := time.Now().UTC()
-	curStart := now.AddDate(0, 0, -30).Format("2006-01-02")
-	curEnd := now.Format("2006-01-02")
-	prevStart := now.AddDate(0, 0, -60).Format("2006-01-02")
-	prevEnd := curStart
+	brief := Brief{GeneratedAt: now.Format(time.RFC3339), DatasetID: dsID}
 
-	cur, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
-		DatasetID: datasetID.String(), Measures: []string{measure}, Limit: 1,
-		TimeRange: &queryeng.TimeRange{Start: curStart, End: curEnd},
-	})
-	if err != nil {
-		return Brief{}, err
+	var curV, prevV, delta float64
+	var trendFromSeries bool
+	if timeDim != "" {
+		series, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
+			DatasetID: dsID, Measures: []string{measure}, Dimensions: []string{timeDim}, Limit: 36,
+		})
+		if err != nil {
+			return Brief{}, err
+		}
+		vals := seriesValues(series.Rows, measure)
+		if len(vals) >= 2 {
+			trendFromSeries = true
+			prevV, curV = vals[len(vals)-2], vals[len(vals)-1]
+			if prevV != 0 {
+				delta = (curV - prevV) / math.Abs(prevV) * 100
+			}
+			n := min(3, len(vals)/2)
+			if n >= 1 && len(vals) >= n*2 {
+				var recent, older float64
+				for i := 0; i < n; i++ {
+					recent += vals[len(vals)-1-i]
+					older += vals[len(vals)-1-n-i]
+				}
+				if older != 0 {
+					delta = (recent - older) / math.Abs(older) * 100
+					curV, prevV = recent, older
+				}
+			}
+		}
 	}
-	prev, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
-		DatasetID: datasetID.String(), Measures: []string{measure}, Limit: 1,
-		TimeRange: &queryeng.TimeRange{Start: prevStart, End: prevEnd},
-	})
-	if err != nil {
-		return Brief{}, err
+	if !trendFromSeries {
+		tot, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
+			DatasetID: dsID, Measures: []string{measure}, Limit: 1,
+		})
+		if err != nil {
+			return Brief{}, err
+		}
+		curV = measureValue(first(tot.Rows), measure)
 	}
 
-	curV := num(first(cur.Rows), alias(measure))
-	prevV := num(first(prev.Rows), alias(measure))
-	delta := 0.0
-	if prevV != 0 {
-		delta = (curV - prevV) / prevV * 100
-	}
-
-	brief := Brief{
-		GeneratedAt: now.Format(time.RFC3339),
-		DatasetID:   datasetID.String(),
-	}
-	if delta < 0 {
-		brief.Headline = fmt.Sprintf("Analisei %s. %s caiu %.1f%% nos últimos 30 dias.", name, measure, math.Abs(delta))
+	if trendFromSeries {
+		if delta < 0 {
+			brief.Headline = fmt.Sprintf("Analisei %s. %s caiu %.1f%% no recorte recente da série temporal.", name, measure, math.Abs(delta))
+		} else {
+			brief.Headline = fmt.Sprintf("Analisei %s. %s subiu %.1f%% no recorte recente da série temporal.", name, measure, delta)
+		}
+		brief.MajorChanges = append(brief.MajorChanges, Insight{
+			Kind: "trend", Severity: sev(delta),
+			Title:    fmt.Sprintf("%s mudou %.1f%%", measure, delta),
+			Body:     fmt.Sprintf("Período recente: %s vs. período anterior: %s.", fmtNum(curV), fmtNum(prevV)),
+			Evidence: map[string]any{"metric": measure, "current": curV, "previous": prevV, "delta_pct": delta, "dimension": timeDim},
+		})
 	} else {
-		brief.Headline = fmt.Sprintf("Analisei %s. %s subiu %.1f%% nos últimos 30 dias.", name, measure, delta)
+		brief.Headline = fmt.Sprintf("Analisei %s. %s totaliza %s no conjunto.", name, measure, fmtNum(curV))
+		brief.MajorChanges = append(brief.MajorChanges, Insight{
+			Kind: "trend", Severity: "info",
+			Title:    fmt.Sprintf("%s está em %s", measure, fmtNum(curV)),
+			Body:     "Não há dimensão de tempo fiável neste modelo, por isso a leitura é o total visível — não uma variação de período.",
+			Evidence: map[string]any{"metric": measure, "current": curV},
+		})
 	}
 
-	brief.MajorChanges = append(brief.MajorChanges, Insight{
-		Kind: "trend", Severity: sev(delta),
-		Title: fmt.Sprintf("%s mudou %.1f%%", measure, delta),
-		Body:  fmt.Sprintf("Últimos 30 dias: %.2f vs. 30 dias anteriores: %.2f.", curV, prevV),
-		Evidence: map[string]any{"metric": measure, "current": curV, "previous": prevV, "delta_pct": delta, "period": curStart + " → " + curEnd},
-	})
-
-	dims := []string{"region", "product", "segment", "channel"}
-	var drivers []struct {
-		Dim, Val string
-		Delta    float64
-		Cur      float64
-	}
-	for _, d := range dims {
-		if _, ok := semantic.ResolveDimension(model, d); !ok {
-			continue
-		}
-		crows, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
-			DatasetID: datasetID.String(), Measures: []string{measure}, Dimensions: []string{d}, Limit: 50,
-			TimeRange: &queryeng.TimeRange{Start: curStart, End: curEnd},
+	for _, d := range catDims {
+		rows, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
+			DatasetID: dsID, Measures: []string{measure}, Dimensions: []string{d}, Limit: 40,
 		})
-		if err != nil {
+		if err != nil || len(rows.Rows) == 0 {
 			continue
 		}
-		prows, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
-			DatasetID: datasetID.String(), Measures: []string{measure}, Dimensions: []string{d}, Limit: 50,
-			TimeRange: &queryeng.TimeRange{Start: prevStart, End: prevEnd},
-		})
-		if err != nil {
-			continue
+		var total float64
+		type pair struct {
+			Val string
+			Cur float64
 		}
-		prevMap := map[string]float64{}
-		for _, r := range prows.Rows {
-			prevMap[str(r[d])] = num(r, alias(measure))
-		}
-		for _, r := range crows.Rows {
-			k := str(r[d])
-			cv := num(r, alias(measure))
-			pv := prevMap[k]
-			if pv == 0 {
+		var parts []pair
+		for _, r := range rows.Rows {
+			k := dimValue(r, d)
+			if k == "" {
 				continue
 			}
-			dlt := (cv - pv) / pv * 100
-			drivers = append(drivers, struct {
-				Dim, Val string
-				Delta    float64
-				Cur      float64
-			}{d, k, dlt, cv})
+			cv := measureValue(r, measure)
+			parts = append(parts, pair{k, cv})
+			total += cv
 		}
-	}
-	sort.Slice(drivers, func(i, j int) bool { return math.Abs(drivers[i].Delta) > math.Abs(drivers[j].Delta) })
-	for i, d := range drivers {
-		if i >= 3 {
-			break
-		}
-		kind := "anomaly"
-		if d.Delta > 0 {
-			kind = "opportunity"
-			brief.Opportunities = append(brief.Opportunities, Insight{
-				Kind: kind, Severity: "info",
-				Title: fmt.Sprintf("%s · %s cresceu %.1f%%", d.Dim, d.Val, d.Delta),
-				Body:  fmt.Sprintf("Esta fatia contribui agora com %.2f de %s.", d.Cur, measure),
-				Evidence: map[string]any{"dimension": d.Dim, "value": d.Val, "delta_pct": d.Delta, "current": d.Cur},
-			})
-		} else {
-			brief.MajorChanges = append(brief.MajorChanges, Insight{
-				Kind: kind, Severity: "warn",
-				Title: fmt.Sprintf("%s · %s caiu %.1f%%", d.Dim, d.Val, math.Abs(d.Delta)),
-				Body:  fmt.Sprintf("Investigue preço, mix e churn em %s=%s.", d.Dim, d.Val),
-				Evidence: map[string]any{"dimension": d.Dim, "value": d.Val, "delta_pct": d.Delta, "current": d.Cur},
-			})
-		}
-	}
-
-	if _, ok := semantic.ResolveDimension(model, "customer"); ok {
-		cust, err := e.query.Execute(ctx, orgID, wsID, userID, role, queryeng.Request{
-			DatasetID: datasetID.String(), Measures: []string{measure}, Dimensions: []string{"customer"}, Limit: 20,
-			TimeRange: &queryeng.TimeRange{Start: curStart, End: curEnd},
-		})
-		if err == nil && len(cust.Rows) > 0 {
-			var total, top float64
-			n := min(5, len(cust.Rows))
-			for i, r := range cust.Rows {
-				v := num(r, alias(measure))
-				total += v
-				if i < n {
-					top += v
-				}
+		sort.Slice(parts, func(i, j int) bool { return parts[i].Cur > parts[j].Cur })
+		if total != 0 && len(parts) > 0 {
+			top := parts[0]
+			n := min(5, len(parts))
+			var topN float64
+			for i := 0; i < n; i++ {
+				topN += parts[i].Cur
 			}
-			if total > 0 {
-				share := top / total * 100
-				if share >= 30 {
-					brief.Risks = append(brief.Risks, Insight{
-						Kind: "risk", Severity: "warn",
-						Title: fmt.Sprintf("Os %d maiores clientes representam %.0f%% de %s", n, share, measure),
-						Body:  "Risco de concentração: um número pequeno de clientes domina o volume.",
-						Evidence: map[string]any{"share_pct": share, "customers": n, "metric": measure},
-					})
-				}
+			share := topN / math.Abs(total) * 100
+			if share >= 55 && len(parts) >= 3 {
+				brief.Risks = append(brief.Risks, Insight{
+					Kind: "risk", Severity: "warn",
+					Title:    fmt.Sprintf("%s concentra %.0f%% nos %d maiores valores de %s", measure, share, n, d),
+					Body:     fmt.Sprintf("A fatia maior é «%s» com %s. Vale confirmar se essa dependência é intencional.", top.Val, fmtNum(top.Cur)),
+					Evidence: map[string]any{"dimension": d, "value": top.Val, "share_pct": share, "metric": measure},
+				})
+			}
+			if len(parts) >= 2 {
+				best, worst := parts[0], parts[len(parts)-1]
+				brief.Opportunities = append(brief.Opportunities, Insight{
+					Kind: "opportunity", Severity: "info",
+					Title:    fmt.Sprintf("%s lidera em %s", best.Val, d),
+					Body:     fmt.Sprintf("«%s» soma %s. O menor valor visível é «%s» (%s) — compare mix, preço e volume.", best.Val, fmtNum(best.Cur), worst.Val, fmtNum(worst.Cur)),
+					Evidence: map[string]any{"dimension": d, "leader": best.Val, "laggard": worst.Val},
+				})
 			}
 		}
 	}
 
-	if len(brief.Risks) == 0 && delta < -10 {
+	if len(brief.Risks) == 0 && trendFromSeries && delta < -10 {
 		brief.Risks = append(brief.Risks, Insight{
 			Kind: "risk", Severity: "warn",
-			Title: fmt.Sprintf("A queda de %s pode persistir", measure),
-			Body:  "A variação de 30 dias é grande o suficiente para uma revisão executiva de pipeline e churn.",
+			Title:    fmt.Sprintf("A queda de %s pode persistir", measure),
+			Body:     "A variação recente da série é grande o suficiente para revisão de volume, preço e mix.",
 			Evidence: map[string]any{"delta_pct": delta},
 		})
 	}
 
 	actions := []string{}
-	if delta < 0 {
-		actions = append(actions, "Investigue as fatias com maior queda e confirme se é volume, preço ou mix.")
+	if trendFromSeries && delta < 0 {
+		actions = append(actions, "Abra a série temporal e confirme se a queda é de volume, preço ou mix.")
 	}
 	if len(brief.Opportunities) > 0 {
-		actions = append(actions, "Dobre a aposta nas fatias que crescem: replique o playbook nas regiões em atraso.")
+		actions = append(actions, "Compare as fatias que lideram com as que ficam atrás e replique o que funciona.")
 	}
 	if len(brief.Risks) > 0 {
-		actions = append(actions, "Reduza concentração: alargue o pipeline para além das maiores contas.")
+		actions = append(actions, "Reduza concentração: não deixe o resultado depender de poucas categorias.")
 	}
-	actions = append(actions, "Crie um alerta de variação semanal de "+measure+" acima de 10%.")
+	actions = append(actions, "Crie um alerta se "+measure+" variar mais de 10% entre períodos.")
 	brief.Actions = actions
 
 	e.persist(ctx, orgID, wsID, datasetID, brief)
@@ -326,6 +309,126 @@ func semanticAlias(s string) string {
 		}
 	}
 	return out
+}
+
+func foldIdent(s string) string {
+	s = strings.ToLower(strings.TrimSpace(s))
+	repl := strings.NewReplacer(
+		"á", "a", "à", "a", "â", "a", "ã", "a",
+		"é", "e", "ê", "e", "í", "i",
+		"ó", "o", "ô", "o", "õ", "o",
+		"ú", "u", "ç", "c",
+		" ", "_", "-", "_",
+	)
+	return repl.Replace(s)
+}
+
+func dimLooksTime(d semantic.Dimension, timeCol string) bool {
+	t := strings.ToLower(strings.TrimSpace(d.Type))
+	if t == "date" || t == "datetime" || t == "timestamp" {
+		return true
+	}
+	if timeCol != "" && (strings.EqualFold(d.Column, timeCol) || strings.EqualFold(d.Name, timeCol)) {
+		return true
+	}
+	blob := strings.ToUpper(d.Expression)
+	if strings.Contains(blob, "TOMONTH") || strings.Contains(blob, "YEARMONTH") || strings.Contains(blob, "TODATE") || strings.Contains(blob, "YEAR(") {
+		return true
+	}
+	parts := strings.FieldsFunc(foldIdent(d.Name+"_"+d.Column), func(r rune) bool { return r == '_' })
+	for _, p := range parts {
+		switch p {
+		case "date", "data", "datetime", "mes", "month", "ano", "year", "dia", "day", "semana", "week":
+			return true
+		}
+	}
+	return false
+}
+
+func pickTimeDimension(model semantic.Model) string {
+	if model.TimeColumn != "" {
+		if d, ok := semantic.ResolveDimension(model, model.TimeColumn); ok {
+			if d.Name != "" {
+				return d.Name
+			}
+			return d.Column
+		}
+		return model.TimeColumn
+	}
+	for _, d := range model.Dimensions {
+		if dimLooksTime(d, model.TimeColumn) {
+			if d.Name != "" {
+				return d.Name
+			}
+			return d.Column
+		}
+	}
+	return ""
+}
+
+func pickCategoryDimensions(model semantic.Model, timeDim string, maxN int) []string {
+	out := make([]string, 0, maxN)
+	for _, d := range model.Dimensions {
+		key := d.Name
+		if key == "" {
+			key = d.Column
+		}
+		if key == "" || strings.EqualFold(key, timeDim) || dimLooksTime(d, model.TimeColumn) {
+			continue
+		}
+		out = append(out, key)
+		if len(out) >= maxN {
+			break
+		}
+	}
+	return out
+}
+
+func measureValue(row map[string]any, measure string) float64 {
+	if row == nil || measure == "" {
+		return 0
+	}
+	if v, ok := row[measure]; ok {
+		return toF(v)
+	}
+	want := foldIdent(measure)
+	for k, v := range row {
+		if foldIdent(k) == want {
+			return toF(v)
+		}
+	}
+	return 0
+}
+
+func dimValue(row map[string]any, dim string) string {
+	if row == nil {
+		return ""
+	}
+	if v, ok := row[dim]; ok {
+		return strings.TrimSpace(str(v))
+	}
+	want := foldIdent(dim)
+	for k, v := range row {
+		if foldIdent(k) == want {
+			return strings.TrimSpace(str(v))
+		}
+	}
+	return ""
+}
+
+func seriesValues(rows []map[string]any, measure string) []float64 {
+	out := make([]float64, 0, len(rows))
+	for _, r := range rows {
+		out = append(out, measureValue(r, measure))
+	}
+	return out
+}
+
+func fmtNum(v float64) string {
+	if math.Abs(v) >= 1000 {
+		return fmt.Sprintf("%.0f", v)
+	}
+	return fmt.Sprintf("%.2f", v)
 }
 
 func sev(delta float64) string {

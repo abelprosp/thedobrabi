@@ -297,8 +297,9 @@ func (a *Agent) askDeterministic(ctx context.Context, orgID, wsID, userID uuid.U
 
 func (a *Agent) askLLM(ctx context.Context, orgID, wsID, userID uuid.UUID, role string, dsID, dsName string, model semantic.Model, msg string) (Answer, error) {
 	schema, _ := json.Marshal(model)
-	sys := `És a TheDobra, analista de negócio nativa em IA. DEVE usar apenas métricas oficiais da camada semântica.
-Nunca inventes uma fórmula. Se os dados forem insuficientes, di-lo. Se as métricas conflitarem, pede a definição oficial.
+	sys := `És um especialista sénior em análise de dados. Respondes com rigor analítico sobre o conjunto semântico da TheDobra.
+DEVE usar apenas métricas oficiais da camada semântica. Nunca inventes uma fórmula. Se os dados forem insuficientes, di-lo. Se as métricas conflitarem, pede a definição oficial.
+Distingue tendência temporal de ranking por categoria. Quantifica variação e recomenda a próxima acção.
 Responde em português do Brasil, em JSON: {"answer":"", "explanation":"", "recommendation":"", "drivers":[], "measure":"", "dimension":"", "chart_type":"bar|line|none"}`
 	user := fmt.Sprintf("Conjunto: %s\nModelo semântico: %s\nPergunta: %s", dsName, schema, msg)
 	raw, err := a.callOpenAI(ctx, sys, user)

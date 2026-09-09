@@ -128,7 +128,10 @@ export type WidgetConfig = {
   xAxisLabel?: string;
   yAxisLabel?: string;
   xAxisRotate?: number;
-  horizontal?: boolean;
+  overlayLine?: "off" | "value" | "average" | "measure";
+  overlayLineValue?: number;
+  overlayLineLabel?: string;
+  overlayLineColor?: string;
   smooth?: boolean;
   showDataLabels?: boolean;
   showTooltip?: boolean;
@@ -210,8 +213,12 @@ export function WidgetView({
       b.dimensions = [];
     }
     if (!KPI_TYPES.includes(w.type) && w.type !== "slicer" && w.type !== "scatter" && w.type !== "bubble" && w.type !== "ranking") {
+      const overlayMeasure = w.type === "bar" && cfg.overlayLine === "measure";
       const crossBy = widgetCrossBy(w.type, cfg, w.query);
-      if (crossBy === "columns") {
+      if (overlayMeasure) {
+        b.measures = (b.measures || []).slice(0, Math.max(2, (b.measures || []).length));
+        b.dimensions = (b.dimensions || []).slice(0, 1);
+      } else if (crossBy === "columns") {
         b.measures = (b.measures || []).slice(0, 1);
       } else {
         const dimKeep = w.type === "heatmap" ? 2 : 1;

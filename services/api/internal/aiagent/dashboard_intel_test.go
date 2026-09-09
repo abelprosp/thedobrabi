@@ -88,6 +88,32 @@ func TestAsFloat(t *testing.T) {
 	}
 }
 
+func TestAnalyzeDashboardFallbackRankingIsNotTrend(t *testing.T) {
+	rows := []map[string]any{
+		{"empresa": "VIVO", "receita": 100.0},
+		{"empresa": "TIM", "receita": 40.0},
+	}
+	st := computeSeriesStats([]string{"empresa", "receita"}, rows, []string{"receita"})
+	if st == nil || st.TimeSeries {
+		t.Fatalf("expected ranking stats, got %#v", st)
+	}
+	out := analyzeDashboardFallback([]widgetSnapshot{{
+		ID: "w2", Title: "Por empresa", Type: "bar", Measures: []string{"receita"},
+		Columns: []string{"empresa", "receita"}, Rows: rows, Stats: st,
+	}}, "")
+	for _, in := range out.Insights {
+		if in.Kind == "risk" {
+			t.Fatalf("ranking should not be a time drop: %#v", out.Insights)
+		}
+	}
+}
+
+func TestLabelLooksTime(t *testing.T) {
+	if !labelLooksTime("mes") || !labelLooksTime("Mês") || labelLooksTime("empresa") {
+		t.Fatal("time tokens")
+	}
+}
+
 func TestNormalizeAlertOp(t *testing.T) {
 	if normalizeAlertOp(">") != ">" {
 		t.Fatal(">")

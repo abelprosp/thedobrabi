@@ -119,6 +119,13 @@ export function DataIntelligenceCard({
             type: w.type,
             title: w.title,
             query: slimQuery(w.query),
+            config: {
+              overlayLine: w.config?.overlayLine,
+              overlayLineValue: w.config?.overlayLineValue,
+              overlayLineLabel: w.config?.overlayLineLabel,
+              overlayLineColor: w.config?.overlayLineColor,
+              goal: w.config?.goal,
+            },
           })),
         }),
       }),

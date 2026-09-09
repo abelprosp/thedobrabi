@@ -15,8 +15,8 @@ import (
 
 const (
 	maxIntelWidgets = 12
-	maxIntelRows    = 24
-	maxIntelPayload = 12
+	maxIntelRows    = 36
+	maxIntelPayload = 16
 )
 
 var skipIntelTypes = map[string]bool{
@@ -46,10 +46,11 @@ type AnalyzeDashboardRequest struct {
 
 // DashboardWidgetSpec is a sibling visual to analyse.
 type DashboardWidgetSpec struct {
-	ID    string           `json:"id"`
-	Type  string           `json:"type"`
-	Title string           `json:"title"`
-	Query queryeng.Request `json:"query"`
+	ID     string           `json:"id"`
+	Type   string           `json:"type"`
+	Title  string           `json:"title"`
+	Query  queryeng.Request `json:"query"`
+	Config map[string]any   `json:"config,omitempty"`
 }
 
 // DashboardIntelResult is insights + alert suggestions for the dashboard canvas.
@@ -100,6 +101,7 @@ type widgetSnapshot struct {
 	Columns    []string         `json:"columns,omitempty"`
 	Rows       []map[string]any `json:"rows,omitempty"`
 	Stats      *seriesStats     `json:"stats,omitempty"`
+	Overlay    *overlayInfo     `json:"overlay,omitempty"`
 	Error      string           `json:"error,omitempty"`
 }
 
@@ -115,6 +117,13 @@ type seriesStats struct {
 	TopCategory string  `json:"top_category,omitempty"`
 	TopShare    float64 `json:"top_share,omitempty"`
 	LabelColumn string  `json:"label_column,omitempty"`
+	TimeSeries  bool    `json:"time_series,omitempty"`
+}
+
+type overlayInfo struct {
+	Kind  string   `json:"kind,omitempty"`
+	Label string   `json:"label,omitempty"`
+	Value *float64 `json:"value,omitempty"`
 }
 
 // AnalyzeDashboardWidgets re-runs sibling widget queries and returns insights/alerts.
@@ -164,6 +173,7 @@ func (a *Agent) AnalyzeDashboardWidgets(ctx context.Context, orgID, wsID, userID
 		snap.Columns = res.Columns
 		snap.Rows = compactIntelRows(res.Rows, res.Columns, maxIntelPayload)
 		snap.Stats = computeSeriesStats(res.Columns, res.Rows, q.Measures)
+		snap.Overlay = overlayFromConfig(spec.Config, snap.Stats)
 		snaps = append(snaps, snap)
 	}
 
@@ -232,15 +242,23 @@ func (a *Agent) analyzeDashboardWithLLM(ctx context.Context, snaps []widgetSnaps
 		"required": []string{"headline", "insights"},
 	}
 	payload, _ := json.Marshal(snaps)
-	sys := `És a TheDobra, analista de um dashboard de BI. Recebes um resumo dos visuais já colocados no ecrã (KPIs, gráficos, tabelas) e devolves JSON.
-Regras:
-- Fala em português, de forma concreta e executiva. Não inventes números que não estejam no resumo.
-- Cada insight deve citar o visual (widget_id) quando fizer sentido.
+	sys := `És um especialista sénior em análise de dados (analytics), não um assistente genérico de chat. Analisas um dashboard de BI da TheDobra.
+
+Método:
+1. Usa só os números do resumo (stats + amostra de linhas). Nunca inventes valores, períodos ou categorias.
+2. Distingue série temporal (mês, data, ano) de ranking (empresa, produto, canal). Em ranking, o primeiro e o último ponto NÃO são tendência — são categorias.
+3. Se o visual tiver overlay (meta, média ou linha complementar), compara as barras com esse limiar: quantos períodos ficaram abaixo, desvio percentual, se a meta é realista.
+4. Quantifica: variação %, concentração, pico, mínimo, anomalia. Explica o «então o quê» em linguagem de negócio.
+5. Recomenda a próxima acção concreta (filtro, alerta, investigação de mix/preço/volume).
+
+Regras de formato:
+- Português do Brasil, concreto e executivo.
+- Cada insight deve citar widget_id quando fizer sentido.
 - kind: trend, risk, opportunity, anomaly, concentration ou alert.
 - severity: low, medium, high ou critical.
 - Máximo 8 insights e 4 alert_suggestions.
-- alert_suggestions: limiares acionáveis (dataset_id, measure, op < ou >, value) com base nos valores observados. Preferir alertas de queda (op "<") quando a métrica desce.
-- recommended_actions: 2 a 4 frases curtas do que fazer a seguir.
+- alert_suggestions: limiares acionáveis (dataset_id, measure, op < ou >, value) com base nos valores observados. Preferir alerta de queda (op "<") quando a métrica desce.
+- recommended_actions: 2 a 4 frases curtas.
 - headline: uma frase a resumir o estado do dashboard.`
 	user := fmt.Sprintf("Visuais do dashboard:\n%s", string(payload))
 	if strings.TrimSpace(focus) != "" {
@@ -388,15 +406,35 @@ func analyzeDashboardFallback(snaps []widgetSnapshot, focus string) DashboardInt
 			continue
 		}
 		label := s.Title
-		if st.RowCount <= 1 {
-			out.Insights = append(out.Insights, DashboardInsight{
-				Kind:     "trend",
-				Title:    label + " está em " + formatIntelNum(st.Last),
-				Body:     fmt.Sprintf("Valor actual de %s: %s.", measureLabel(st, s), formatIntelNum(st.Last)),
-				Severity: "low",
-				WidgetID: s.ID,
-				Evidence: map[string]any{"value": st.Last, "measure": st.Measure},
-			})
+		if st.RowCount <= 1 || !st.TimeSeries {
+			if st.RowCount <= 1 {
+				out.Insights = append(out.Insights, DashboardInsight{
+					Kind:     "trend",
+					Title:    label + " está em " + formatIntelNum(st.Last),
+					Body:     fmt.Sprintf("Valor actual de %s: %s.", measureLabel(st, s), formatIntelNum(st.Last)),
+					Severity: "low",
+					WidgetID: s.ID,
+					Evidence: map[string]any{"value": st.Last, "measure": st.Measure},
+				})
+			} else if st.TopCategory != "" {
+				out.Insights = append(out.Insights, DashboardInsight{
+					Kind:     "concentration",
+					Title:    fmt.Sprintf("%s: %s lidera", label, st.TopCategory),
+					Body:     fmt.Sprintf("«%s» é a maior fatia visível de %s (%.0f%% do total). Isto é um ranking, não uma tendência no tempo.", st.TopCategory, measureLabel(st, s), st.TopShare*100),
+					Severity: "medium",
+					WidgetID: s.ID,
+					Evidence: map[string]any{"category": st.TopCategory, "share": st.TopShare},
+				})
+			}
+			if s.Overlay != nil && s.Overlay.Value != nil && st.Last < *s.Overlay.Value {
+				out.Insights = append(out.Insights, DashboardInsight{
+					Kind:     "alert",
+					Title:    label + " abaixo da linha complementar",
+					Body:     fmt.Sprintf("O valor actual (%s) ficou abaixo de %s (%s).", formatIntelNum(st.Last), overlayLabel(s.Overlay), formatIntelNum(*s.Overlay.Value)),
+					Severity: "high",
+					WidgetID: s.ID,
+				})
+			}
 			continue
 		}
 		sev := "low"
@@ -425,15 +463,24 @@ func analyzeDashboardFallback(snaps []widgetSnapshot, focus string) DashboardInt
 			WidgetID: s.ID,
 			Evidence: map[string]any{"change_pct": st.ChangePct, "first": st.First, "last": st.Last, "measure": st.Measure},
 		})
-		if st.TopCategory != "" && st.TopShare >= 0.55 {
-			out.Insights = append(out.Insights, DashboardInsight{
-				Kind:     "concentration",
-				Title:    fmt.Sprintf("%s concentra %.0f%% em %s", label, st.TopShare*100, st.TopCategory),
-				Body:     fmt.Sprintf("A categoria «%s» representa %.0f%% do total visível. Vale a pena confirmar se a dependência é intencional.", st.TopCategory, st.TopShare*100),
-				Severity: "medium",
-				WidgetID: s.ID,
-				Evidence: map[string]any{"category": st.TopCategory, "share": st.TopShare},
-			})
+		if s.Overlay != nil && s.Overlay.Value != nil {
+			below := 0
+			if st.Last < *s.Overlay.Value {
+				below = 1
+			}
+			if st.Max < *s.Overlay.Value {
+				below = st.RowCount
+			}
+			if st.Last < *s.Overlay.Value || st.Max < *s.Overlay.Value {
+				out.Insights = append(out.Insights, DashboardInsight{
+					Kind:     "alert",
+					Title:    label + " vs " + overlayLabel(s.Overlay),
+					Body:     fmt.Sprintf("A linha complementar está em %s. O último ponto da série é %s.", formatIntelNum(*s.Overlay.Value), formatIntelNum(st.Last)),
+					Severity: "high",
+					WidgetID: s.ID,
+					Evidence: map[string]any{"overlay": *s.Overlay.Value, "last": st.Last, "below": below},
+				})
+			}
 		}
 		if st.ChangePct <= -10 && s.DatasetID != "" && st.Measure != "" {
 			threshold := st.Last
@@ -533,7 +580,66 @@ func computeSeriesStats(columns []string, rows []map[string]any, measures []stri
 	if len(measures) > 0 && strings.TrimSpace(measures[0]) != "" {
 		st.Measure = measures[0]
 	}
+	st.TimeSeries = labelLooksTime(labelKey)
 	return st
+}
+
+func labelLooksTime(key string) bool {
+	n := strings.ToLower(strings.TrimSpace(key))
+	n = strings.NewReplacer("á", "a", "é", "e", "í", "i", "ó", "o", "ú", "u", "ã", "a", "ê", "e", "ç", "c", " ", "_", "-", "_").Replace(n)
+	if n == "" {
+		return false
+	}
+	parts := strings.FieldsFunc(n, func(r rune) bool { return r == '_' })
+	for _, p := range parts {
+		switch p {
+		case "date", "data", "datetime", "mes", "month", "ano", "year", "dia", "day", "semana", "week", "periodo", "period":
+			return true
+		}
+	}
+	return false
+}
+
+func overlayFromConfig(cfg map[string]any, st *seriesStats) *overlayInfo {
+	if len(cfg) == 0 {
+		return nil
+	}
+	kind, _ := cfg["overlayLine"].(string)
+	kind = strings.ToLower(strings.TrimSpace(kind))
+	if kind == "" || kind == "off" {
+		return nil
+	}
+	label, _ := cfg["overlayLineLabel"].(string)
+	info := &overlayInfo{Kind: kind, Label: strings.TrimSpace(label)}
+	switch kind {
+	case "value":
+		if v, ok := asFloat(cfg["overlayLineValue"]); ok {
+			info.Value = &v
+		}
+		if info.Label == "" {
+			info.Label = "Meta"
+		}
+	case "average":
+		if st != nil && st.RowCount > 0 {
+			avg := st.Sum / float64(st.RowCount)
+			info.Value = &avg
+		}
+		if info.Label == "" {
+			info.Label = "Média"
+		}
+	default:
+		if info.Label == "" {
+			info.Label = "Linha complementar"
+		}
+	}
+	return info
+}
+
+func overlayLabel(o *overlayInfo) string {
+	if o == nil || strings.TrimSpace(o.Label) == "" {
+		return "a linha complementar"
+	}
+	return o.Label
 }
 
 func firstNumericKey(columns []string, rows []map[string]any, measures []string) string {

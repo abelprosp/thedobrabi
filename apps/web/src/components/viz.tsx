@@ -157,7 +157,9 @@ export function Chart({ type = "bar", columns = [], rows = [], measures, height,
       ? pivoted.values
       : measCols.map((m) => chartRows.map((r) => Number(r[m] ?? 0)));
   const palette = chartPalette(config.color);
-  const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1;
+  const overlayKind = type === "bar" ? String(config.overlayLine || "off") : "off";
+  const overlayColor = config.overlayLineColor || "#EF4444";
+  const showLegend = type === "pie" ? config.showLegend !== false : !!config.showLegend || seriesNames.length > 1 || overlayKind !== "off";
   const showTooltip = config.showTooltip !== false;
   const showGrid = config.showGrid !== false;
   const showX = config.showXAxis !== false;
@@ -170,6 +172,34 @@ export function Chart({ type = "bar", columns = [], rows = [], measures, height,
 
   const chartType: ChartType = type === "pie" ? "doughnut" : type === "area" ? "line" : type;
   const pieTotals = pieByMeasures ? seriesValues[0] || [] : [];
+  const cartesianDatasets =
+    type === "pie"
+      ? []
+      : seriesNames.map((name, i) => {
+          const c = palette[i % palette.length];
+          const asLine = overlayKind === "measure" && !pivoted && i === 1;
+          if (asLine) {
+            return overlayLineDataset(config.overlayLineLabel || String(name), seriesValues[i] || [], overlayColor);
+          }
+          return {
+            label: String(name),
+            data: seriesValues[i] || [],
+            backgroundColor: type === "bar" ? c : hexToRgba(c, type === "area" ? 0.32 : 0.16),
+            borderColor: c,
+            borderWidth: type === "bar" ? 0 : 2.5,
+            fill: type === "area" || type === "line",
+            tension: smooth ? 0.35 : 0,
+            pointRadius: type === "bar" ? 0 : 3,
+            pointHoverRadius: 5,
+            borderRadius: type === "bar" ? 6 : 0,
+            maxBarThickness: 52,
+            order: 1,
+          };
+        });
+  if (type === "bar" && cats.length) {
+    const extra = constantOverlayLine(overlayKind, config, cats, seriesValues[0] || [], overlayColor);
+    if (extra) cartesianDatasets.push(extra);
+  }
   const data: any =
     type === "pie"
       ? pieByMeasures
@@ -201,22 +231,7 @@ export function Chart({ type = "bar", columns = [], rows = [], measures, height,
           }
       : {
           labels: cats,
-          datasets: seriesNames.map((name, i) => {
-            const c = palette[i % palette.length];
-            return {
-              label: String(name),
-              data: seriesValues[i] || [],
-              backgroundColor: type === "bar" ? c : hexToRgba(c, type === "area" ? 0.32 : 0.16),
-              borderColor: c,
-              borderWidth: type === "bar" ? 0 : 2.5,
-              fill: type === "area" || type === "line",
-              tension: smooth ? 0.35 : 0,
-              pointRadius: type === "bar" ? 0 : 3,
-              pointHoverRadius: 5,
-              borderRadius: type === "bar" ? 6 : 0,
-              maxBarThickness: 52,
-            };
-          }),
+          datasets: cartesianDatasets,
         };
 
   const options: any = {
@@ -291,6 +306,44 @@ export function Chart({ type = "bar", columns = [], rows = [], measures, height,
       <ChartJsCanvas type={chartType} data={data} options={options} />
     </div>
   );
+}
+
+function overlayLineDataset(label: string, data: number[], color: string) {
+  return {
+    type: "line" as const,
+    label,
+    data,
+    borderColor: color,
+    backgroundColor: "transparent",
+    borderWidth: 2.25,
+    pointRadius: 0,
+    pointHoverRadius: 4,
+    fill: false,
+    tension: 0,
+    order: 2,
+    stack: "overlay",
+  };
+}
+
+function constantOverlayLine(
+  kind: string,
+  config: Record<string, any>,
+  cats: string[],
+  values: number[],
+  color: string,
+) {
+  if (kind === "value") {
+    const v = Number(config.overlayLineValue);
+    if (!Number.isFinite(v)) return null;
+    return overlayLineDataset(config.overlayLineLabel || "Meta", cats.map(() => v), color);
+  }
+  if (kind === "average") {
+    const nums = values.map(Number).filter((n) => Number.isFinite(n));
+    if (!nums.length) return null;
+    const avg = nums.reduce((a, b) => a + b, 0) / nums.length;
+    return overlayLineDataset(config.overlayLineLabel || "Média", cats.map(() => avg), color);
+  }
+  return null;
 }
 
 function resolveMeasureColumns(

@@ -227,6 +227,59 @@ export function WidgetInspector({
         {caps.cartesian && widget.type === "bar" && (
           <ToggleRow label="Barras horizontais" checked={!!cfg.horizontal} onChange={(v) => setCfg({ horizontal: v })} />
         )}
+        {caps.cartesian && widget.type === "bar" && (
+          <>
+            <FieldLabel label="Linha complementar" hint="Meta, média ou outra medida desenhada por cima das barras.">
+              <Select
+                value={cfg.overlayLine || "off"}
+                onChange={(e) => {
+                  const overlayLine = e.target.value as WidgetConfig["overlayLine"];
+                  onUpdate((w) => ({
+                    ...w,
+                    config: {
+                      ...w.config,
+                      overlayLine,
+                      overlayLineColor: w.config?.overlayLineColor || "#EF4444",
+                      ...(overlayLine === "measure" ? { crossBy: "measures" as const } : {}),
+                    },
+                  }));
+                }}
+              >
+                <option value="off">Nenhuma</option>
+                <option value="value">Valor / meta</option>
+                <option value="average">Média das barras</option>
+                <option value="measure">Outra medida</option>
+              </Select>
+            </FieldLabel>
+            {cfg.overlayLine === "value" && (
+              <FieldLabel label="Valor da linha">
+                <Input
+                  type="number"
+                  value={cfg.overlayLineValue ?? ""}
+                  onChange={(e) => setCfg({ overlayLineValue: e.target.value === "" ? undefined : Number(e.target.value) })}
+                  placeholder="Ex.: 425000"
+                />
+              </FieldLabel>
+            )}
+            {cfg.overlayLine && cfg.overlayLine !== "off" && (
+              <>
+                <FieldLabel label="Nome da linha">
+                  <Input
+                    value={cfg.overlayLineLabel || ""}
+                    onChange={(e) => setCfg({ overlayLineLabel: e.target.value })}
+                    placeholder={cfg.overlayLine === "average" ? "Média" : cfg.overlayLine === "measure" ? "Linha" : "Meta"}
+                  />
+                </FieldLabel>
+                <FieldLabel label="Cor da linha">
+                  <ColorSwatches value={cfg.overlayLineColor || "#EF4444"} onChange={(overlayLineColor) => setCfg({ overlayLineColor })} />
+                </FieldLabel>
+              </>
+            )}
+            {cfg.overlayLine === "measure" && (
+              <p className="text-[12px] text-mute">Adicione uma segunda métrica em Dados — ela aparece como linha sobre as barras.</p>
+            )}
+          </>
+        )}
         {caps.cartesian && (
           <ToggleRow label="Empilhado" checked={!!cfg.stacked} onChange={(v) => setCfg({ stacked: v })} />
         )}
@@ -1210,7 +1263,7 @@ function QueryFields({
         </button>
       )}
       {canExtraMeasures &&
-        (crossBy === "measures" || widget.type === "ranking") &&
+        (crossBy === "measures" || widget.type === "ranking" || cfg.overlayLine === "measure") &&
         extraMeasures.map((meas, i) => {
           const idx = 1 + i;
           return (
@@ -1258,7 +1311,7 @@ function QueryFields({
             </FieldLabel>
           );
         })}
-      {canExtraMeasures && (crossBy === "measures" || widget.type === "ranking") && extraMeasures.length < 5 && (
+      {canExtraMeasures && (crossBy === "measures" || widget.type === "ranking" || cfg.overlayLine === "measure") && extraMeasures.length < 5 && (
         <button
           type="button"
           className="inline-flex items-center gap-1 text-[12px] font-medium text-accent"
