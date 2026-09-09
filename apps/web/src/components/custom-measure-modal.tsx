@@ -2,12 +2,13 @@
 
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { api, normalizeArray } from "@/lib/api";
 import { Button, FieldLabel, Input, Textarea, cn } from "@/components/ui";
-import { CheckCircle2, XCircle, Loader2, X, Code2, Blocks } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, X, Code2, Blocks, Sparkles } from "lucide-react";
 import type { SemanticModel, SemanticMeasure } from "@/lib/semantic";
 import { MeasureBlockBuilder } from "@/components/measure-block-builder";
-import { compileBlock, type MeasureBlock } from "@/lib/measure-blocks";
+import { compileBlock, expressionToBlocks, type MeasureBlock } from "@/lib/measure-blocks";
 
 type ValidationResult =
   | { valid: true; sql: string; func: string }
@@ -18,11 +19,13 @@ type EditorMode = "blocks" | "sql";
 export function CustomMeasureModal({
   semanticModelId,
   model,
+  datasetId,
   onClose,
   onAdded,
 }: {
   semanticModelId: string;
   model: SemanticModel;
+  datasetId?: string;
   onClose: () => void;
   onAdded: (measure: SemanticMeasure) => void;
 }) {
@@ -32,10 +35,17 @@ export function CustomMeasureModal({
   const [expression, setExpression] = useState("");
   const [blocks, setBlocks] = useState<MeasureBlock | null>(null);
   const [validation, setValidation] = useState<ValidationResult | null>(null);
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiNote, setAiNote] = useState<string | null>(null);
+  const resolvedDatasetId = datasetId || model.dataset_id;
 
   const datasets = useQuery({
     queryKey: ["datasets"],
     queryFn: () => api<any>("/api/v1/datasets"),
+  });
+  const aiConfig = useQuery({
+    queryKey: ["ai-config"],
+    queryFn: () => api<{ openai_configured: boolean }>("/api/v1/ai/config"),
   });
   const tables = normalizeArray<{ id: string; name: string }>(datasets.data).map((d) => ({ name: d.name }));
 
@@ -101,6 +111,33 @@ export function CustomMeasureModal({
     },
   });
 
+  const generate = useMutation({
+    mutationFn: (prompt: string) =>
+      api<{ name: string; expression: string; explanation: string; source?: string }>("/api/v1/ai/generate-measure", {
+        method: "POST",
+        body: JSON.stringify({ prompt, dataset_id: resolvedDatasetId || undefined }),
+      }),
+    onSuccess: (res) => {
+      const expr = (res.expression || "").trim();
+      if (res.name?.trim()) setName(res.name.trim());
+      setExpression(expr);
+      setValidation(null);
+      const tree = expressionToBlocks(expr);
+      const compiled = tree ? compileBlock(tree) : "";
+      const norm = (s: string) => s.replace(/\s/g, "").replace(/\bAVERAGE\b/gi, "AVG").toUpperCase();
+      if (tree && compiled && norm(compiled) === norm(expr)) {
+        setBlocks(tree);
+        setMode("blocks");
+      } else {
+        setBlocks(null);
+        setMode("sql");
+      }
+      setAiNote(res.explanation || "Medida preenchida. Valide antes de guardar.");
+      toast.success("Medida gerada — reveja e valide.");
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const canValidate = activeExpression.trim().length > 0;
   const canSave = validation?.valid === true && name.trim().length > 0 && !save.isPending;
 
@@ -123,7 +160,7 @@ export function CustomMeasureModal({
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
           <div>
             <h3 className="text-[15px] font-semibold text-ink">Nova medida</h3>
-            <p className="text-[12px] text-mute">Escolha se quer escrever SQL ou montar a lógica com blocos.</p>
+            <p className="text-[12px] text-mute">Escreva SQL, monte com blocos, ou peça à IA para preencher a fórmula.</p>
           </div>
           <button type="button" onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 hover:text-ink" aria-label="Fechar">
             <X size={16} />
@@ -131,6 +168,43 @@ export function CustomMeasureModal({
         </div>
 
         <div className="space-y-4 overflow-y-auto px-5 py-4">
+          <div className="space-y-3 rounded-xl border border-line bg-surface-2/50 p-3">
+            <div className="flex items-center gap-2 text-[13px] font-medium text-ink">
+              <Sparkles size={14} className="text-primary" />
+              Criar com IA
+            </div>
+            <Textarea
+              value={aiPrompt}
+              onChange={(e) => setAiPrompt(e.target.value)}
+              placeholder="Ex: ticket médio por cliente, receita líquida, variação face ao ano anterior"
+              className="min-h-[72px] text-[13px]"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  const prompt = aiPrompt.trim();
+                  if (prompt && !generate.isPending) generate.mutate(prompt);
+                }
+              }}
+            />
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <p className="text-[11px] text-mute">
+                {aiConfig.data?.openai_configured === false
+                  ? "Sem chave OpenAI usa as colunas deste conjunto para uma sugestão. Valide sempre."
+                  : "A IA preenche o nome e a expressão. Valide antes de guardar."}
+              </p>
+              <Button
+                size="sm"
+                variant="secondary"
+                onClick={() => generate.mutate(aiPrompt.trim())}
+                disabled={!aiPrompt.trim()}
+                busy={generate.isPending}
+              >
+                <Sparkles size={14} /> Gerar com IA
+              </Button>
+            </div>
+            {aiNote && <p className="text-[12px] text-ink">{aiNote}</p>}
+          </div>
+
           <FieldLabel label="Nome da medida" hint="Ex: Ticket médio, Receita líquida">
             <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Ticket médio" />
           </FieldLabel>
@@ -139,6 +213,10 @@ export function CustomMeasureModal({
             <button
               type="button"
               onClick={() => {
+                if (!blocks && expression) {
+                  const tree = expressionToBlocks(expression);
+                  if (tree) setBlocks(tree);
+                }
                 setMode("blocks");
                 setValidation(null);
               }}
@@ -152,6 +230,7 @@ export function CustomMeasureModal({
             <button
               type="button"
               onClick={() => {
+                if (mode === "blocks" && expressionFromBlocks) setExpression(expressionFromBlocks);
                 setMode("sql");
                 setValidation(null);
               }}

@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"github.com/thedobra/thedobra/services/api/internal/aiagent"
 	"github.com/thedobra/thedobra/services/api/internal/apps"
 	"github.com/thedobra/thedobra/services/api/internal/cryptoenc"
 	"github.com/thedobra/thedobra/services/api/internal/flow"
@@ -664,42 +665,18 @@ func (s *Server) generateMeasure(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
 	}
-	var body struct {
-		Prompt    string `json:"prompt"`
-		DatasetID string `json:"dataset_id"`
-	}
-	if err := httpx.Decode(r, &body); err != nil || body.Prompt == "" {
+	var req aiagent.GenerateMeasureRequest
+	if err := httpx.Decode(r, &req); err != nil || strings.TrimSpace(req.Prompt) == "" {
 		httpx.Error(w, 400, "invalid", "prompt obrigatório")
 		return
 	}
-	model, _, err := s.ai.LoadModel(r.Context(), org, ws, body.DatasetID)
+	out, err := s.ai.GenerateMeasure(r.Context(), org, ws, uid, req)
 	if err != nil {
-		httpx.Error(w, 400, "no_model", err.Error())
+		httpx.Error(w, 400, "generate_failed", err.Error())
 		return
 	}
-	q := strings.ToLower(body.Prompt)
-	expr := "SUM(revenue)"
-	name := "Nova métrica"
-	if strings.Contains(q, "média") || strings.Contains(q, "average") || strings.Contains(q, "ticket") {
-		expr = "AVERAGE(revenue)"
-		name = "Média"
-	} else if strings.Contains(q, "cont") || strings.Contains(q, "count") || strings.Contains(q, "número") {
-		expr = "COUNT(*)"
-		name = "Contagem"
-	} else if strings.Contains(q, "diferença") || strings.Contains(q, "yoy") || strings.Contains(q, "ano") {
-		expr = "YOY(revenue)"
-		name = "YoY"
-	} else {
-		for _, m := range model.Measures {
-			if strings.Contains(q, strings.ToLower(m.Column)) || strings.Contains(q, strings.ToLower(m.Name)) {
-				expr = "SUM(" + m.Column + ")"
-				name = m.Name
-				break
-			}
-		}
-	}
-	_ = uid
-	httpx.JSON(w, 200, map[string]any{"name": name, "expression": expr, "explanation": "Medida DAX-like gerada a partir do pedido e das colunas disponíveis."})
+	s.audit(r, "AI_MEASURE_GENERATED", "ai", uuid.Nil, map[string]any{"dataset_id": out.DatasetID, "source": out.Source})
+	httpx.JSON(w, 200, out)
 }
 
 func (s *Server) generateVisual(w http.ResponseWriter, r *http.Request) {

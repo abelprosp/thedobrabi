@@ -125,11 +125,12 @@ export function widgetFieldDefaults(type: string, model: SemanticModel | null | 
     case "heatmap":
     case "decomposition_tree":
     case "sankey":
-    case "bubble":
       return { measures: m0 ? [m0] : [], dimensions: [cat, cat2].filter(Boolean) };
+    case "bubble":
+      return { measures: m0 ? [m0] : [], dimensions: [time || cat, cat2 || cat].filter(Boolean) };
     case "sales_report":
     case "network_sales":
-      return { measures: measuresAll.slice(0, 3), dimensions: cat ? [cat] : [] };
+      return { measures: measuresAll.slice(0, 3), dimensions: [time, cat].filter(Boolean) };
     case "big_table":
       return { measures: measuresAll.slice(0, 4), dimensions: pickDimensions(model, 6) };
     case "scatter":

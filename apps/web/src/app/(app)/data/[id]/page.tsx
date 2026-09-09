@@ -349,6 +349,7 @@ function MeasuresTab({ datasetId, model }: { datasetId: string; model: any }) {
         <CustomMeasureModal
           semanticModelId={semanticModelId}
           model={semanticModel}
+          datasetId={datasetId}
           onClose={() => setOpen(false)}
           onAdded={() => {
             toast.success("Medida criada");
@@ -364,7 +365,7 @@ function MeasuresTab({ datasetId, model }: { datasetId: string; model: any }) {
             Nova medida
           </Button>
         </div>
-        <p className="text-[13px] text-mute">Escolha SQL ou monte a lógica com blocos (agregar, calcular, filtrar e procurar noutros conjuntos).</p>
+        <p className="text-[13px] text-mute">Escolha SQL, monte a lógica com blocos, ou descreva a medida e deixe a IA preencher a fórmula.</p>
       </Card>
       <Card className="space-y-3">
         <CardTitle>Validador SQL</CardTitle>

@@ -313,3 +313,254 @@ export function patchBlock(root: MeasureBlock | null, id: string, patch: Partial
 export function containsId(root: MeasureBlock | null, id: string): boolean {
   return !!findBlock(root, id);
 }
+
+const FN_TO_KIND: Record<string, BlockKind> = {
+  SUM: "sum",
+  AVG: "avg",
+  AVERAGE: "avg",
+  COUNT: "count",
+  DISTINCTCOUNT: "distinctcount",
+  MIN: "min",
+  MAX: "max",
+  DIVIDE: "divide",
+  NULLIF: "nullif",
+  YOY: "yoy",
+  TOMONTH: "tomonth",
+  CALCULATE: "calculate",
+  LOOKUPVALUE: "lookup",
+  RELATED: "related",
+};
+
+/** Turns a DAX-like expression into a block tree so the canvas can show AI-generated measures. */
+export function expressionToBlocks(src: string): MeasureBlock | null {
+  const text = src.trim();
+  if (!text) return null;
+  try {
+    const p = new ExprParser(text);
+    const tree = p.parseExpr();
+    p.skipSpace();
+    if (p.pos < p.input.length) return null;
+    return tree;
+  } catch {
+    return null;
+  }
+}
+
+class ExprParser {
+  input: string;
+  pos = 0;
+
+  constructor(input: string) {
+    this.input = input;
+  }
+
+  skipSpace() {
+    while (this.pos < this.input.length && /\s/.test(this.input[this.pos])) this.pos++;
+  }
+
+  peek() {
+    return this.input[this.pos] || "";
+  }
+
+  parseExpr(): MeasureBlock {
+    this.skipSpace();
+    if (/^case\b/i.test(this.input.slice(this.pos))) return this.parseCase();
+    return this.parseComparison();
+  }
+
+  parseCase(): MeasureBlock {
+    this.consumeWord("CASE");
+    this.consumeWord("WHEN");
+    const cond = this.parseExpr();
+    this.consumeWord("THEN");
+    const thenB = this.parseExpr();
+    let elseB: MeasureBlock | null = null;
+    this.skipSpace();
+    if (/^else\b/i.test(this.input.slice(this.pos))) {
+      this.consumeWord("ELSE");
+      elseB = this.parseExpr();
+    }
+    this.consumeWord("END");
+    return createBlock("if", { cond, then: thenB, else: elseB });
+  }
+
+  parseComparison(): MeasureBlock {
+    const left = this.parseAdd();
+    this.skipSpace();
+    if (this.input.startsWith(">=", this.pos) || this.input.startsWith("<=", this.pos)) {
+      throw new Error("unsupported comparison");
+    }
+    const ops: [string, BlockKind][] = [
+      ["<>", "neq"],
+      ["!=", "neq"],
+      ["=", "eq"],
+      [">", "gt"],
+      ["<", "lt"],
+    ];
+    for (const [op, kind] of ops) {
+      if (this.input.startsWith(op, this.pos)) {
+        this.pos += op.length;
+        return createBlock(kind, { left, right: this.parseAdd() });
+      }
+    }
+    return left;
+  }
+
+  parseAdd(): MeasureBlock {
+    let left = this.parseMul();
+    for (;;) {
+      this.skipSpace();
+      const ch = this.peek();
+      if (ch !== "+" && ch !== "-") break;
+      this.pos++;
+      const right = this.parseMul();
+      left = createBlock(ch === "+" ? "add" : "sub", { left, right });
+    }
+    return left;
+  }
+
+  parseMul(): MeasureBlock {
+    let left = this.parsePrimary();
+    for (;;) {
+      this.skipSpace();
+      const ch = this.peek();
+      if (ch !== "*" && ch !== "/") break;
+      this.pos++;
+      const right = this.parsePrimary();
+      left = createBlock(ch === "*" ? "mul" : "divide", { left, right });
+    }
+    return left;
+  }
+
+  parsePrimary(): MeasureBlock {
+    this.skipSpace();
+    if (this.peek() === "(") {
+      this.pos++;
+      const inner = this.parseExpr();
+      this.skipSpace();
+      if (this.peek() !== ")") throw new Error("expected )");
+      this.pos++;
+      return inner;
+    }
+    if (this.peek() === "*") {
+      this.pos++;
+      return createBlock("star");
+    }
+    if (this.peek() === "[") {
+      this.pos++;
+      const start = this.pos;
+      while (this.pos < this.input.length && this.input[this.pos] !== "]") this.pos++;
+      const name = this.input.slice(start, this.pos);
+      if (this.peek() !== "]") throw new Error("expected ]");
+      this.pos++;
+      return createBlock("measure", { name });
+    }
+    if (this.peek() === "'" || this.peek() === '"') {
+      const quote = this.peek();
+      this.pos++;
+      let value = "";
+      while (this.pos < this.input.length && this.input[this.pos] !== quote) {
+        if (this.input[this.pos] === "'" && this.input[this.pos + 1] === "'") {
+          value += "'";
+          this.pos += 2;
+          continue;
+        }
+        value += this.input[this.pos];
+        this.pos++;
+      }
+      if (this.peek() !== quote) throw new Error("unterminated string");
+      this.pos++;
+      return createBlock("text", { value });
+    }
+    if (/[0-9]/.test(this.peek())) {
+      const start = this.pos;
+      while (/[0-9.]/.test(this.peek())) this.pos++;
+      return createBlock("number", { value: this.input.slice(start, this.pos) });
+    }
+    const ident = this.readIdent();
+    if (!ident) throw new Error("expected expression");
+    this.skipSpace();
+    if (this.peek() === "(") {
+      return this.parseCall(ident);
+    }
+    if (this.peek() === "[") {
+      this.pos++;
+      const start = this.pos;
+      while (this.pos < this.input.length && this.input[this.pos] !== "]") this.pos++;
+      const col = this.input.slice(start, this.pos);
+      if (this.peek() !== "]") throw new Error("expected ]");
+      this.pos++;
+      return createBlock("column", { name: `${ident}[${col}]` });
+    }
+    return createBlock("column", { name: ident });
+  }
+
+  parseCall(name: string): MeasureBlock {
+    this.pos++;
+    const args: MeasureBlock[] = [];
+    this.skipSpace();
+    if (this.peek() !== ")") {
+      args.push(this.parseExpr());
+      this.skipSpace();
+      while (this.peek() === ",") {
+        this.pos++;
+        args.push(this.parseExpr());
+        this.skipSpace();
+      }
+    }
+    if (this.peek() !== ")") throw new Error("expected )");
+    this.pos++;
+    const fn = name.toUpperCase();
+    const kind = FN_TO_KIND[fn];
+    if (!kind) throw new Error("unknown function");
+    if (kind === "lookup") {
+      const result = this.splitTableCol(args[0]);
+      const match = this.splitTableCol(args[1]);
+      return createBlock("lookup", {
+        table: result.table || match.table || "Tabela",
+        column: result.column,
+        matchCol: match.column,
+        matchVal: args[2] || null,
+      });
+    }
+    if (kind === "related") {
+      const ref = this.splitTableCol(args[0]);
+      return createBlock("related", { table: ref.table || "Tabela", column: ref.column });
+    }
+    if (kind === "calculate") {
+      const filter = args[1];
+      return createBlock("calculate", {
+        expr: args[0] || null,
+        filterCol: filter?.left || null,
+        filterVal: filter?.right || null,
+      });
+    }
+    if (kind === "divide" || kind === "nullif") {
+      return createBlock(kind, { left: args[0] || null, right: args[1] || null });
+    }
+    return createBlock(kind, { arg: args[0] || null });
+  }
+
+  splitTableCol(block?: MeasureBlock | null): { table: string; column: MeasureBlock } {
+    const raw = block?.name || "";
+    const m = raw.match(/^(.+)\[(.+)\]$/);
+    if (m) return { table: m[1], column: createBlock("column", { name: m[2] }) };
+    return { table: "", column: block || createBlock("column") };
+  }
+
+  readIdent(): string {
+    this.skipSpace();
+    if (!/[A-Za-z_]/.test(this.peek())) return "";
+    const start = this.pos;
+    while (/[A-Za-z0-9_.]/.test(this.peek())) this.pos++;
+    return this.input.slice(start, this.pos);
+  }
+
+  consumeWord(word: string) {
+    this.skipSpace();
+    const got = this.input.slice(this.pos, this.pos + word.length);
+    if (got.toUpperCase() !== word.toUpperCase()) throw new Error(`expected ${word}`);
+    this.pos += word.length;
+    if (/[A-Za-z0-9_]/.test(this.peek())) throw new Error(`expected ${word}`);
+  }
+}

@@ -68,6 +68,7 @@ export function WidgetInspector({
         <CustomMeasureModal
           semanticModelId={semanticModelId}
           model={model}
+          datasetId={widget.query?.dataset_id || model.dataset_id}
           onClose={() => setMeasureModalOpen(false)}
           onAdded={(_measure: SemanticMeasure) => {
             // The queryClient invalidation inside the modal refreshes semanticModels

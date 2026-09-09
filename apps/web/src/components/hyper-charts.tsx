@@ -1,19 +1,18 @@
 "use client";
 
 import { useId, useMemo } from "react";
-import { Crown, Diamond, Target, User, Check, Sparkles } from "lucide-react";
-import { chartChrome, chartPalette, formatNumber, hexToRgba } from "@/lib/widget-config";
-import { chartTooltip, WEEKDAYS_PT } from "@/lib/chartjs";
+import { chartChrome, hexToRgba } from "@/lib/widget-config";
+import { chartTooltip } from "@/lib/chartjs";
 import { ChartJsCanvas } from "@/components/chartjs-canvas";
-import { formatCategory } from "@/components/viz";
+import { formatCategory, pivotSeries } from "@/components/viz";
 import { useTheme } from "@/components/theme-provider";
 import { cn } from "@/lib/cn";
+import { formatNumber } from "@/lib/widget-config";
 
 type Rows = Record<string, any>[];
 type Cfg = Record<string, any>;
 
 const RAINBOW = ["#EF4444", "#F97316", "#F59E0B", "#84CC16", "#10B981", "#06B6D4", "#6366F1", "#8B5CF6"];
-const NODE_ICONS = [Crown, Check, Diamond, Target, User, Sparkles];
 
 function numCols(rows: Rows, columns: string[]) {
   return columns.filter((c) => rows.length && typeof rows[0][c] === "number");
@@ -27,8 +26,8 @@ function measureOf(rows: Rows, columns: string[], cfg: Cfg) {
 function dimOf(rows: Rows, columns: string[], cfg: Cfg) {
   return cfg.dimension || strCols(rows, columns)[0] || columns[0];
 }
-function pctDelta(curr: number, prev: number) {
-  if (!prev) return curr ? 100 : 0;
+function pctDelta(curr: number, prev?: number) {
+  if (prev == null || !Number.isFinite(prev) || prev === 0) return curr ? 100 : 0;
   return ((curr - prev) / Math.abs(prev)) * 100;
 }
 function Delta({ v }: { v: number }) {
@@ -39,6 +38,68 @@ function Delta({ v }: { v: number }) {
       {v.toFixed(1)}%
     </span>
   );
+}
+
+function EmptyViz() {
+  return <div className="flex h-full min-h-[6rem] items-center justify-center text-[12px] text-mute">Sem dados para este visual.</div>;
+}
+
+function seriesByDim(rows: Rows, dim: string, meas: string) {
+  const order: string[] = [];
+  const map = new Map<string, number>();
+  for (const r of rows) {
+    const k = String(r[dim] ?? "");
+    if (!map.has(k)) order.push(k);
+    map.set(k, (map.get(k) || 0) + Number(r[meas] ?? 0));
+  }
+  return { labels: order.map((k) => formatCategory(k)), raw: order, values: order.map((k) => map.get(k) || 0) };
+}
+
+/** Last n periods vs the n periods immediately before — only when those windows exist in the data. */
+function trailingWindows(values: number[]) {
+  const sum = (n: number, offset: number) => {
+    const end = values.length - offset;
+    const start = end - n;
+    if (start < 0 || end <= 0) return null;
+    return values.slice(start, end).reduce((s, v) => s + v, 0);
+  };
+  const out: { label: string; value: number; prev?: number }[] = [];
+  const last = sum(1, 0);
+  const prev1 = sum(1, 1);
+  if (last != null) out.push({ label: "Último período", value: last, prev: prev1 ?? undefined });
+  if (values.length >= 6) {
+    const a = sum(3, 0);
+    const b = sum(3, 3);
+    if (a != null) out.push({ label: "3 períodos", value: a, prev: b ?? undefined });
+  }
+  if (values.length >= 24) {
+    const a = sum(12, 0);
+    const b = sum(12, 12);
+    if (a != null) out.push({ label: "12 períodos", value: a, prev: b ?? undefined });
+  }
+  return out;
+}
+
+function measureKpis(rows: Rows, columns: string[], cfg: Cfg) {
+  const measures = numCols(rows, columns);
+  const dim = dimOf(rows, columns, cfg);
+  const timeish = strCols(rows, columns).includes(dim) && rows.length > 1;
+  if (measures.length >= 2) {
+    return measures.slice(0, 3).map((m) => {
+      const s = seriesByDim(rows, dim, m);
+      const last = s.values[s.values.length - 1] || 0;
+      const prev = s.values.length > 1 ? s.values[s.values.length - 2] : undefined;
+      return { label: m, value: last, prev };
+    });
+  }
+  const meas = measures[0] || measureOf(rows, columns, cfg);
+  const s = seriesByDim(rows, dim, meas);
+  if (timeish && s.values.length > 1) {
+    return trailingWindows(s.values).map((w) => ({ ...w, last: w.value }));
+  }
+  const last = s.values[s.values.length - 1] || 0;
+  const prev = s.values.length > 1 ? s.values[s.values.length - 2] : undefined;
+  return [{ label: meas || "Valor", value: last, prev }];
 }
 
 export function StatSparkCard({
@@ -55,13 +116,13 @@ export function StatSparkCard({
   const { theme } = useTheme();
   const meas = measureOf(rows, columns, config);
   const dim = dimOf(rows, columns, config);
-  const values = rows.map((r) => Number(r[meas] ?? 0));
-  const last = values[values.length - 1] || 0;
-  const prev = values[values.length - 2] || last;
-  const avg = values.length ? values.reduce((s, n) => s + n, 0) / values.length : 0;
+  const s = seriesByDim(rows, dim, meas);
+  const last = s.values[s.values.length - 1] || 0;
+  const prev = s.values.length > 1 ? s.values[s.values.length - 2] : undefined;
+  const avg = s.values.length ? s.values.reduce((n, v) => n + v, 0) / s.values.length : 0;
   const color = config.color || "#8B5CF6";
   const candle = config.sparkStyle === "candle";
-  const labels = rows.map((r) => formatCategory(r[dim] ?? ""));
+  if (!rows.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
 
   return (
     <div className="flex h-full min-h-0 items-stretch gap-3 overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
@@ -69,26 +130,22 @@ export function StatSparkCard({
         {config.showTitle !== false && <div className="text-[13px] font-medium text-ink">{title}</div>}
         <div className="mt-1 flex items-baseline gap-2">
           <span className="text-2xl font-semibold tracking-tight text-ink">{formatNumber(last, config)}</span>
-          <Delta v={pctDelta(last, prev)} />
+          {prev != null && <Delta v={pctDelta(last, prev)} />}
         </div>
-        <p className="mt-1 text-[11px] text-mute">Média de pontos {formatNumber(avg, config)}</p>
+        <p className="mt-1 text-[11px] text-mute">Média {formatNumber(avg, config)}</p>
       </div>
       <div className="h-[4.5rem] w-[7.5rem] shrink-0">
         {candle ? (
-          <MiniCandles values={values} color={color} />
+          <MiniCandles values={s.values} />
         ) : (
           <ChartJsCanvas
             type="line"
             data={{
-              labels,
-              datasets: [
-                { data: values.map((n) => n * 1.28), borderWidth: 0, pointRadius: 0, tension: 0.45, fill: "+1", backgroundColor: hexToRgba(color, 0.12), borderColor: "transparent" },
-                { data: values, borderColor: color, backgroundColor: hexToRgba(color, 0.32), fill: "+1", tension: 0.45, pointRadius: 0, borderWidth: 2 },
-                { data: values.map((n) => n * 0.55), borderWidth: 0, pointRadius: 0, tension: 0.45, fill: true, backgroundColor: hexToRgba(color, 0.1), borderColor: "transparent" },
-              ],
+              labels: s.labels,
+              datasets: [{ data: s.values, borderColor: color, backgroundColor: hexToRgba(color, 0.28), fill: true, tension: 0.45, pointRadius: 0, borderWidth: 2 }],
             }}
             options={{
-              plugins: { legend: { display: false }, tooltip: { ...chartTooltip(theme), callbacks: { label: (c: any) => (c.datasetIndex === 1 ? formatNumber(c.parsed.y, config) : "") } } },
+              plugins: { legend: { display: false }, tooltip: { ...chartTooltip(theme), callbacks: { label: (c: any) => formatNumber(c.parsed.y, config) } } },
               scales: { x: { display: false }, y: { display: false } },
             }}
           />
@@ -98,7 +155,7 @@ export function StatSparkCard({
   );
 }
 
-function MiniCandles({ values }: { values: number[]; color?: string }) {
+function MiniCandles({ values }: { values: number[] }) {
   const slice = values.slice(-10);
   const min = Math.min(...slice, 0);
   const max = Math.max(...slice, 1);
@@ -132,11 +189,13 @@ export function RadarCard({ title, rows = [], columns = [], config = {} }: { tit
   const chrome = chartChrome(theme);
   const meas = measureOf(rows, columns, config);
   const dim = dimOf(rows, columns, config);
-  const labels = rows.slice(0, 8).map((r) => formatCategory(r[dim] ?? ""));
-  const data = rows.slice(0, 8).map((r) => Number(r[meas] ?? 0));
-  const last = data[data.length - 1] || data[0] || 0;
-  const prev = data[0] || last;
+  const s = seriesByDim(rows, dim, meas);
+  const labels = s.labels.slice(0, 12);
+  const data = s.values.slice(0, 12);
+  const last = data[data.length - 1] || 0;
+  const prev = data.length > 1 ? data[data.length - 2] : undefined;
   const color = config.color || "#8B5CF6";
+  if (!data.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
       <HeaderBlock title={title} value={last} prev={prev} config={config} showTitle={config.showTitle !== false} />
@@ -164,58 +223,74 @@ export function RadarCard({ title, rows = [], columns = [], config = {} }: { tit
   );
 }
 
+function ridgeGroups(rows: Rows, columns: string[], cfg: Cfg) {
+  const meas = measureOf(rows, columns, cfg);
+  const dim = dimOf(rows, columns, cfg);
+  const seriesCol = strCols(rows, columns).find((c) => c !== dim);
+  if (!seriesCol) {
+    const s = seriesByDim(rows, dim, meas);
+    return { labels: s.labels, groups: [{ name: meas, data: s.values }] };
+  }
+  const pivoted = pivotSeries(rows, dim, seriesCol, meas);
+  return {
+    labels: pivoted.cats.map((c) => formatCategory(c)),
+    groups: pivoted.series.slice(0, 6).map((name, i) => ({ name, data: pivoted.values[i] || [] })),
+  };
+}
+
 export function RidgelineCard({ title, rows = [], columns = [], config = {} }: { title: string; rows?: Rows; columns?: string[]; config?: Cfg }) {
   const { theme } = useTheme();
   const chrome = chartChrome(theme);
-  const meas = measureOf(rows, columns, config);
-  const dim = dimOf(rows, columns, config);
-  const seriesCol = strCols(rows, columns).find((c) => c !== dim);
-  const groups = useMemo(() => {
-    if (!seriesCol) {
-      const vals = rows.map((r) => Number(r[meas] ?? 0));
-      return [{ name: meas, data: vals, labels: rows.map((r) => formatCategory(r[dim] ?? "")) }];
-    }
-    const map = new Map<string, { labels: string[]; data: number[] }>();
-    for (const r of rows) {
-      const g = String(r[seriesCol] ?? "Série");
-      const rec = map.get(g) || { labels: [], data: [] };
-      rec.labels.push(formatCategory(r[dim] ?? ""));
-      rec.data.push(Number(r[meas] ?? 0));
-      map.set(g, rec);
-    }
-    return Array.from(map.entries()).slice(0, 6).map(([name, v]) => ({ name, ...v }));
-  }, [rows, meas, dim, seriesCol]);
-  const labels = groups[0]?.labels.slice(0, 12) || WEEKDAYS_PT;
+  const { labels, groups } = useMemo(() => ridgeGroups(rows, columns, config), [rows, columns, config]);
   const last = groups[0]?.data[groups[0].data.length - 1] || 0;
-  const prev = groups[0]?.data[0] || last;
+  const prev = (groups[0]?.data.length || 0) > 1 ? groups[0].data[groups[0].data.length - 2] : undefined;
   const mirrored = config.mirrored !== false;
-
+  if (!groups.length || !labels.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
       <HeaderBlock title={title} value={last} prev={prev} config={config} showTitle={config.showTitle !== false} />
       <div className="min-h-0 flex-1">
-        <ChartJsCanvas
-          type="line"
-          data={{
-            labels: labels.length ? labels : WEEKDAYS_PT,
-            datasets: groups.flatMap((g, i) => {
-              const c = RAINBOW[i % RAINBOW.length];
-              const data = g.data.slice(0, labels.length);
-              const up = { label: g.name, data, borderColor: c, backgroundColor: hexToRgba(c, 0.22), fill: true, tension: 0.45, pointRadius: 0, borderWidth: 2 };
-              if (!mirrored) return [up];
-              return [up, { ...up, label: `${g.name} ·`, data: data.map((n) => -n), fill: true }];
-            }),
-          }}
-          options={{
-            plugins: { legend: { display: false }, tooltip: { ...chartTooltip(theme), callbacks: { label: (c: any) => `${c.dataset.label}: ${formatNumber(Math.abs(Number(c.parsed?.y ?? 0)), config)}` } } },
-            scales: {
-              x: { ticks: { color: chrome.mute }, grid: { display: false }, border: { display: false } },
-              y: { ticks: { color: chrome.mute, callback: (v: any) => formatNumber(Math.abs(Number(v)), { ...config, decimals: 0 }) }, grid: { color: chrome.line }, border: { display: false } },
-            },
-          }}
-        />
+        <RidgePlot labels={labels} groups={groups} mirrored={mirrored} config={config} chrome={chrome} theme={theme} />
       </div>
     </div>
+  );
+}
+
+function RidgePlot({
+  labels,
+  groups,
+  mirrored,
+  config,
+  chrome,
+  theme,
+}: {
+  labels: string[];
+  groups: { name: string; data: number[] }[];
+  mirrored: boolean;
+  config: Cfg;
+  chrome: ReturnType<typeof chartChrome>;
+  theme: "light" | "dark" | undefined;
+}) {
+  return (
+    <ChartJsCanvas
+      type="line"
+      data={{
+        labels,
+        datasets: groups.flatMap((g, i) => {
+          const c = RAINBOW[i % RAINBOW.length];
+          const up = { label: g.name, data: g.data, borderColor: c, backgroundColor: hexToRgba(c, 0.22), fill: true, tension: 0.45, pointRadius: 0, borderWidth: 2 };
+          if (!mirrored) return [up];
+          return [up, { ...up, label: `${g.name} (espelho)`, data: g.data.map((n) => -n) }];
+        }),
+      }}
+      options={{
+        plugins: { legend: { display: false }, tooltip: { ...chartTooltip(theme), callbacks: { label: (c: any) => `${c.dataset.label}: ${formatNumber(Math.abs(Number(c.parsed?.y ?? 0)), config)}` } } },
+        scales: {
+          x: { ticks: { color: chrome.mute, maxRotation: 0 }, grid: { display: false }, border: { display: false } },
+          y: { ticks: { color: chrome.mute, callback: (v: any) => formatNumber(Math.abs(Number(v)), { ...config, decimals: 0 }) }, grid: { color: chrome.line }, border: { display: false } },
+        },
+      }}
+    />
   );
 }
 
@@ -224,21 +299,39 @@ export function SankeyCard({ title, rows = [], columns = [], config = {} }: { ti
   const dims = strCols(rows, columns);
   const meas = measureOf(rows, columns, config);
   const leftKey = dims[0] || columns[0];
-  const rightKey = dims[1] || dims[0] || columns[0];
-  const left = summarize(rows, leftKey, meas).slice(0, 3);
-  const right = summarize(rows, rightKey, meas).slice(0, 2);
+  const rightKey = dims[1] || "";
+  const pairs = useMemo(() => {
+    if (!rightKey || rightKey === leftKey) return [];
+    const map = new Map<string, { left: string; right: string; value: number }>();
+    for (const r of rows) {
+      const left = formatCategory(r[leftKey] ?? "Origem");
+      const right = formatCategory(r[rightKey] ?? "Destino");
+      const k = `${left}\0${right}`;
+      map.set(k, { left, right, value: (map.get(k)?.value || 0) + Number(r[meas] ?? 0) });
+    }
+    return Array.from(map.values()).sort((a, b) => b.value - a.value).slice(0, 16);
+  }, [rows, leftKey, rightKey, meas]);
+  const left = summarize(rows, leftKey, meas).slice(0, 6);
+  const right = rightKey ? summarize(rows, rightKey, meas).slice(0, 6) : [];
   const last = left.reduce((s, x) => s + x.value, 0);
-  const prev = last / 1.025;
   const maxL = Math.max(...left.map((x) => x.value), 1);
   const maxR = Math.max(...right.map((x) => x.value), 1);
   const h = 160;
   const leftBars = layoutBars(left, maxL, h, 18);
   const rightBars = layoutBars(right, maxR, h, 240);
+  const leftPos = new Map(leftBars.map((b) => [b.item.name, b]));
+  const rightPos = new Map(rightBars.map((b) => [b.item.name, b]));
+  const maxFlow = Math.max(...pairs.map((p) => p.value), 1);
+
+  if (!rows.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
       {config.showTitle !== false && <div className="text-[13px] font-medium text-ink">{title}</div>}
       <div className="min-h-0 flex-1">
+        {!rightKey || rightKey === leftKey ? (
+          <p className="p-2 text-[12px] text-mute">Defina duas dimensões (origem e destino) para o fluxo. A mostrar totais da dimensão actual.</p>
+        ) : null}
         <svg viewBox="0 0 280 170" className="h-full w-full">
           <defs>
             <linearGradient id={`flow-${gid}`} x1="0" x2="1">
@@ -247,17 +340,17 @@ export function SankeyCard({ title, rows = [], columns = [], config = {} }: { ti
               <stop offset="1" stopColor="#34d399" />
             </linearGradient>
           </defs>
-          {leftBars.map((a, i) =>
-            rightBars.map((b, j) => {
-              const flow = Math.min(a.item.value, b.item.value) / ((i + j) * 0.4 + 2);
-              const p = `M ${a.x + 10} ${a.y + a.h / 2} C 110 ${a.y + a.h / 2}, 150 ${b.y + b.h / 2}, ${b.x} ${b.y + b.h / 2}`;
-              return <path key={`${i}-${j}`} d={p} fill="none" stroke={`url(#flow-${gid})`} strokeWidth={Math.max(6, flow / (maxL / 22))} opacity="0.42" />;
-            }),
-          )}
+          {pairs.map((p, i) => {
+            const a = leftPos.get(p.left);
+            const b = rightPos.get(p.right);
+            if (!a || !b) return null;
+            const d = `M ${a.x + 10} ${a.y + a.h / 2} C 110 ${a.y + a.h / 2}, 150 ${b.y + b.h / 2}, ${b.x} ${b.y + b.h / 2}`;
+            return <path key={i} d={d} fill="none" stroke={`url(#flow-${gid})`} strokeWidth={Math.max(2, (p.value / maxFlow) * 18)} opacity="0.45" />;
+          })}
           {leftBars.map((b) => (
             <g key={`l-${b.item.name}`}>
               <rect x={b.x} y={b.y} width="10" height={b.h} rx="3" fill="#22c55e" />
-              <text x={b.x + 16} y={b.y + b.h / 2 + 4} fontSize="10" fill="#64748b">{formatNumber(b.item.value, { ...config, compact: "auto" })}</text>
+              <text x={b.x + 16} y={b.y + b.h / 2 + 4} fontSize="10" fill="#64748b">{b.item.name.slice(0, 12)} {formatNumber(b.item.value, { ...config, compact: "auto" })}</text>
             </g>
           ))}
           {rightBars.map((b) => (
@@ -269,55 +362,56 @@ export function SankeyCard({ title, rows = [], columns = [], config = {} }: { ti
         </svg>
       </div>
       <div className="mt-1">
-        <div className="text-[11px] text-mute">Anual</div>
+        <div className="text-[11px] text-mute">Total</div>
         <div className="flex items-baseline gap-2">
           <span className="text-xl font-semibold text-ink">{formatNumber(last, config)}</span>
-          <Delta v={pctDelta(last, prev)} />
         </div>
-        <p className="text-[11px] text-mute">{formatNumber(prev, config)}</p>
       </div>
     </div>
   );
 }
 
 export function SalesReportCard({ title, rows = [], columns = [], config = {} }: { title: string; rows?: Rows; columns?: string[]; config?: Cfg }) {
-  const measures = numCols(rows, columns).slice(0, 3);
+  const { theme } = useTheme();
+  const chrome = chartChrome(theme);
   const dim = dimOf(rows, columns, config);
-  const weekly = sumCol(rows, measures[0]);
-  const monthly = sumCol(rows, measures[1] || measures[0]);
-  const yearly = sumCol(rows, measures[2] || measures[0]);
-  const kpis = [
-    { label: "Semanal", value: weekly, prev: weekly / 1.196, compare: "Comparado a {p} na semana anterior" },
-    { label: "Mensal", value: monthly, prev: monthly / 1.019, compare: "Comparado a {p} no mês anterior" },
-    { label: "Anual", value: yearly, prev: yearly / 1.22, compare: "Comparado a {p} no ano anterior" },
-  ];
+  const measures = numCols(rows, columns);
+  const kpis = measureKpis(rows, columns, config);
   const cols = measures.length ? measures : [measureOf(rows, columns, config)];
-  const tableRows = summarizeMany(rows, dim, cols).slice(0, 3);
+  const tableRows = summarizeMany(rows, dim, cols).slice(0, 8);
+  const ridge = ridgeGroups(rows, columns, config);
+  if (!rows.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      {config.showTitle !== false && <div className="text-[15px] font-semibold text-ink">{title || "Relatório de vendas"}</div>}
-      <div className="mt-3 grid grid-cols-3 gap-2">
+      {config.showTitle !== false && <div className="text-[15px] font-semibold text-ink">{title || "Relatório"}</div>}
+      <div className={cn("mt-3 grid gap-2", kpis.length === 1 ? "grid-cols-1" : kpis.length === 2 ? "grid-cols-2" : "grid-cols-3")}>
         {kpis.map((k) => (
           <div key={k.label}>
             <div className="text-[11px] text-mute">{k.label}</div>
             <div className="mt-0.5 flex flex-wrap items-baseline gap-1.5">
               <span className="text-lg font-semibold text-ink">{formatNumber(k.value, config)}</span>
-              <Delta v={pctDelta(k.value, k.prev)} />
+              {k.prev != null && <Delta v={pctDelta(k.value, k.prev)} />}
             </div>
-            <p className="mt-0.5 text-[10px] text-mute">{k.compare.replace("{p}", formatNumber(k.prev, config))}</p>
+            {k.prev != null && (
+              <p className="mt-0.5 text-[10px] text-mute">Comparado a {formatNumber(k.prev, config)} no período anterior</p>
+            )}
           </div>
         ))}
       </div>
       <div className="mt-2 min-h-0 flex-1">
-        <RidgelineInner rows={rows} columns={columns} config={config} />
+        {ridge.labels.length ? (
+          <RidgePlot labels={ridge.labels} groups={ridge.groups} mirrored={config.mirrored !== false} config={config} chrome={chrome} theme={theme} />
+        ) : (
+          <EmptyViz />
+        )}
       </div>
       <div className="mt-2 space-y-1 border-t border-line pt-2">
         {tableRows.map((r) => (
-          <div key={r.name} className="grid grid-cols-4 gap-2 text-[12px]">
+          <div key={r.name} className={cn("grid gap-2 text-[12px]", `grid-cols-${Math.min(cols.length + 1, 4)}`)} style={{ gridTemplateColumns: `minmax(0,1.4fr) repeat(${cols.length}, minmax(0,1fr))` }}>
             <span className="truncate text-ink">{r.name}</span>
-            {(r.values.length >= 3 ? r.values.slice(0, 3) : [r.values[0], (r.values[0] || 0) * 0.42, (r.values[0] || 0) * 0.18]).map((v, i) => (
-              <span key={i} className="text-right tabular-nums text-mute">{formatNumber(v, config)}</span>
+            {r.values.map((v, i) => (
+              <span key={cols[i] || i} className="text-right tabular-nums text-mute">{formatNumber(v, config)}</span>
             ))}
           </div>
         ))}
@@ -326,99 +420,72 @@ export function SalesReportCard({ title, rows = [], columns = [], config = {} }:
   );
 }
 
-function RidgelineInner({ rows, columns, config }: { rows: Rows; columns: string[]; config: Cfg }) {
-  const { theme } = useTheme();
-  const chrome = chartChrome(theme);
-  const meas = measureOf(rows, columns, config);
-  const raw = rows.slice(0, 7).map((r) => Number(r[meas] ?? 0));
-  const values = raw.some((n) => n) ? raw : [120, 190, 280, 360, 250, 150, 80];
-  const top = ["#EF4444", "#F97316", "#A855F7", "#3B82F6"];
-  const bot = ["#8B5CF6", "#6366F1", "#06B6D4", "#22C55E"];
-  const ridge = (colors: string[], sign: 1 | -1) =>
-    colors.map((c, i) => ({
-      label: `s${sign}-${i}`,
-      data: values.map((n, idx) => sign * n * (0.38 + i * 0.14) * (0.72 + 0.28 * Math.sin((idx + i) * 0.7))),
-      borderColor: c,
-      backgroundColor: hexToRgba(c, 0.16),
-      fill: true,
-      tension: 0.5,
-      pointRadius: 0,
-      borderWidth: 1.6,
-    }));
-  return (
-    <ChartJsCanvas
-      type="line"
-      data={{
-        labels: WEEKDAYS_PT,
-        datasets: [...ridge(top, 1), ...ridge(bot, -1)],
-      }}
-      options={{
-        plugins: { legend: { display: false }, tooltip: { enabled: false } },
-        scales: {
-          x: { ticks: { color: chrome.mute, font: { size: 10 } }, grid: { display: false }, border: { display: false } },
-          y: {
-            ticks: { color: chrome.mute, font: { size: 10 }, callback: (v: any) => formatNumber(Math.abs(Number(v)), { ...config, decimals: 0 }) },
-            grid: { color: chrome.line },
-            border: { display: false },
-          },
-        },
-      }}
-    />
-  );
-}
-
 export function NetworkSalesCard({ title, rows = [], columns = [], config = {} }: { title: string; rows?: Rows; columns?: string[]; config?: Cfg }) {
-  const measures = numCols(rows, columns).slice(0, 3);
-  const dim = dimOf(rows, columns, config);
-  const tableRows = summarize(rows, dim, measures[0] || measureOf(rows, columns, config)).slice(0, 2);
-  const nodes = tableRows.length ? tableRows.map((r) => r.name) : ["Meta", "Equipa", "Clientes", "Região"];
+  const dims = strCols(rows, columns);
+  const measures = numCols(rows, columns);
+  const meas = measures[0] || measureOf(rows, columns, config);
+  const dim = dims[0] || dimOf(rows, columns, config);
+  const kpis = measureKpis(rows, columns, config);
+  const tableRows = summarizeMany(rows, dim, measures.length ? measures : [meas]).slice(0, 6);
+  const left = summarize(rows, dims[0] || dim, meas).slice(0, 4);
+  const right = dims[1] ? summarize(rows, dims[1], meas).slice(0, 4) : [];
+  const pairs = dims[1]
+    ? (() => {
+        const map = new Map<string, number>();
+        for (const r of rows) {
+          const a = formatCategory(r[dims[0]]);
+          const b = formatCategory(r[dims[1]]);
+          map.set(`${a}\0${b}`, (map.get(`${a}\0${b}`) || 0) + Number(r[meas] ?? 0));
+        }
+        return Array.from(map.entries()).map(([k, value]) => {
+          const [a, b] = k.split("\0");
+          return { a, b, value };
+        });
+      })()
+    : [];
+  if (!rows.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
+
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
-      {config.showTitle !== false && <div className="text-[15px] font-semibold text-ink">{title || "Relatório de vendas"}</div>}
-      <div className="mt-2 grid grid-cols-3 gap-2">
-        {[
-          { l: "Semanal", v: sumCol(rows, measures[0]), p: 19.6 },
-          { l: "Mensal", v: sumCol(rows, measures[1] || measures[0]), p: 1.9 },
-          { l: "Anual", v: sumCol(rows, measures[2] || measures[0]), p: 22 },
-        ].map((k) => (
-          <div key={k.l}>
-            <div className="text-[11px] text-mute">{k.l}</div>
+      {config.showTitle !== false && <div className="text-[15px] font-semibold text-ink">{title}</div>}
+      <div className={cn("mt-2 grid gap-2", kpis.length >= 3 ? "grid-cols-3" : kpis.length === 2 ? "grid-cols-2" : "grid-cols-1")}>
+        {kpis.slice(0, 3).map((k) => (
+          <div key={k.label}>
+            <div className="text-[11px] text-mute">{k.label}</div>
             <div className="flex items-baseline gap-1">
-              <span className="text-base font-semibold">{formatNumber(k.v, config)}</span>
-              <Delta v={k.p} />
+              <span className="text-base font-semibold">{formatNumber(k.value, config)}</span>
+              {k.prev != null && <Delta v={pctDelta(k.value, k.prev)} />}
             </div>
           </div>
         ))}
       </div>
-      <div className="relative mx-auto my-2 h-28 w-full max-w-[240px]">
-        <svg viewBox="0 0 240 112" className="absolute inset-0 h-full w-full">
-          <line x1="40" y1="56" x2="200" y2="28" stroke="#c4b5fd" strokeWidth="2" />
-          <line x1="40" y1="56" x2="200" y2="84" stroke="#c4b5fd" strokeWidth="2" />
-          <line x1="120" y1="20" x2="120" y2="92" stroke="#ddd6fe" strokeWidth="2" />
-        </svg>
-        {nodes.slice(0, 6).map((n, i) => {
-          const Icon = NODE_ICONS[i % NODE_ICONS.length];
-          const pos = [
-            [8, 40],
-            [100, 4],
-            [188, 12],
-            [100, 72],
-            [188, 68],
-            [8, 72],
-          ][i];
-          return (
-            <div key={n} className="absolute flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-violet-600 shadow-sm" style={{ left: pos[0], top: pos[1] }} title={n}>
-              <Icon size={14} />
-            </div>
-          );
+      <svg viewBox="0 0 280 120" className="mx-auto my-2 h-28 w-full max-w-[280px]">
+        {pairs.slice(0, 12).map((p, i) => {
+          const li = Math.max(0, left.findIndex((x) => x.name === p.a));
+          const ri = Math.max(0, right.findIndex((x) => x.name === p.b));
+          const y1 = 18 + li * 24;
+          const y2 = 18 + ri * 24;
+          return <line key={i} x1="70" y1={y1} x2="210" y2={y2} stroke="#c4b5fd" strokeWidth={Math.max(1, (p.value / Math.max(...pairs.map((x) => x.value), 1)) * 6)} />;
         })}
-      </div>
+        {left.map((n, i) => (
+          <g key={`l-${n.name}`}>
+            <circle cx="48" cy={18 + i * 24} r="10" fill="#ede9fe" />
+            <text x="8" y={22 + i * 24} fontSize="9" fill="#64748b">{n.name.slice(0, 10)}</text>
+          </g>
+        ))}
+        {right.map((n, i) => (
+          <g key={`r-${n.name}`}>
+            <circle cx="232" cy={18 + i * 24} r="10" fill="#ede9fe" />
+            <text x="246" y={22 + i * 24} fontSize="9" fill="#64748b">{n.name.slice(0, 10)}</text>
+          </g>
+        ))}
+      </svg>
       <div className="space-y-1 border-t border-line pt-2">
         {tableRows.map((r) => (
-          <div key={r.name} className="grid grid-cols-4 gap-2 text-[11px]">
+          <div key={r.name} className="grid gap-2 text-[11px]" style={{ gridTemplateColumns: `minmax(0,1.3fr) repeat(${r.values.length}, minmax(0,1fr))` }}>
             <span className="truncate text-ink">{r.name}</span>
-            {measures.slice(0, 3).map((m) => (
-              <span key={m} className="text-right tabular-nums text-mute">{formatNumber(r.value, config)}</span>
+            {r.values.map((v, i) => (
+              <span key={i} className="text-right tabular-nums text-mute">{formatNumber(v, config)}</span>
             ))}
           </div>
         ))}
@@ -431,11 +498,26 @@ export function BubbleCard({ title, rows = [], columns = [], config = {} }: { ti
   const { theme } = useTheme();
   const chrome = chartChrome(theme);
   const meas = measureOf(rows, columns, config);
-  const dim = dimOf(rows, columns, config);
-  const cats = summarize(rows, dim, meas).slice(0, 6);
-  const max = Math.max(...cats.map((c) => c.value), 1);
+  const dims = strCols(rows, columns);
+  const xCol = dims[0] || columns[0];
+  const yCol = dims[1] || dims[0];
+  const xSet = Array.from(new Set(rows.map((r) => formatCategory(r[xCol]))));
+  const ySet = Array.from(new Set(rows.map((r) => formatCategory(r[yCol]))));
+  const max = Math.max(...rows.map((r) => Number(r[meas] ?? 0)), 1);
   const color = config.color || "#F97316";
-  const measures = numCols(rows, columns);
+  const kpis = measureKpis(rows, columns, config);
+  const cats = summarize(rows, yCol || xCol, meas).slice(0, 8);
+  if (!rows.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
+
+  const points = rows.map((r) => ({
+    x: xSet.indexOf(formatCategory(r[xCol])),
+    y: ySet.indexOf(formatCategory(r[yCol])),
+    r: 4 + (Number(r[meas] ?? 0) / max) * 14,
+    v: Number(r[meas] ?? 0),
+    xl: formatCategory(r[xCol]),
+    yl: formatCategory(r[yCol]),
+  }));
+
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
       {config.showTitle !== false && <div className="text-[13px] font-medium text-ink">{title}</div>}
@@ -443,44 +525,38 @@ export function BubbleCard({ title, rows = [], columns = [], config = {} }: { ti
         <ChartJsCanvas
           type="bubble"
           data={{
-            datasets: cats.map((c, i) => ({
-              label: c.name,
-              data: Array.from({ length: 7 }, (_, d) => ({
-                x: d,
-                y: i,
-                r: 4 + ((c.value * ((d % 3) + 1)) / max) * 10,
-              })),
-              backgroundColor: hexToRgba(color, 0.35 + (i % 3) * 0.15),
+            datasets: [{
+              label: meas,
+              data: points,
+              backgroundColor: hexToRgba(color, 0.55),
               borderColor: color,
-            })),
+            }],
           }}
           options={{
-            plugins: { legend: { display: false }, tooltip: chartTooltip(theme) },
+            plugins: {
+              legend: { display: false },
+              tooltip: { ...chartTooltip(theme), callbacks: { label: (ctx: any) => `${ctx.raw.xl} / ${ctx.raw.yl}: ${formatNumber(ctx.raw.v, config)}` } },
+            },
             scales: {
-              x: { min: -0.5, max: 6.5, ticks: { color: chrome.mute, callback: (v: any) => WEEKDAYS_PT[Number(v)] || "" }, grid: { color: chrome.line }, border: { display: false } },
-              y: { min: -0.5, max: Math.max(cats.length - 0.5, 0.5), ticks: { color: chrome.mute, callback: (v: any) => cats[Number(v)]?.name || "" }, grid: { color: chrome.line }, border: { display: false } },
+              x: { min: -0.5, max: Math.max(xSet.length - 0.5, 0.5), ticks: { color: chrome.mute, callback: (v: any) => xSet[Number(v)] || "" }, grid: { color: chrome.line }, border: { display: false } },
+              y: { min: -0.5, max: Math.max(ySet.length - 0.5, 0.5), ticks: { color: chrome.mute, callback: (v: any) => ySet[Number(v)] || "" }, grid: { color: chrome.line }, border: { display: false } },
             },
           }}
         />
       </div>
       <div className="mt-2 grid grid-cols-2 gap-2 text-[12px]">
-        <div>
-          <div className="text-mute">Mensal</div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-semibold">{formatNumber(sumCol(rows, measures[0]), config)}</span>
-            <Delta v={1.9} />
+        {kpis.slice(0, 2).map((k) => (
+          <div key={k.label}>
+            <div className="text-mute">{k.label}</div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-semibold">{formatNumber(k.value, config)}</span>
+              {k.prev != null && <Delta v={pctDelta(k.value, k.prev)} />}
+            </div>
           </div>
-        </div>
-        <div>
-          <div className="text-mute">Anual</div>
-          <div className="flex items-baseline gap-1.5">
-            <span className="font-semibold">{formatNumber(sumCol(rows, measures[1] || measures[0]), config)}</span>
-            <Delta v={22} />
-          </div>
-        </div>
+        ))}
       </div>
       <div className="mt-2 space-y-1 border-t border-line pt-2">
-        {cats.slice(0, 3).map((r) => (
+        {cats.slice(0, 5).map((r) => (
           <div key={r.name} className="flex items-center justify-between text-[12px]">
             <span className="truncate text-ink">{r.name}</span>
             <span className="tabular-nums text-mute">{formatNumber(r.value, config)}</span>
@@ -493,19 +569,27 @@ export function BubbleCard({ title, rows = [], columns = [], config = {} }: { ti
 
 export function HexmapCard({ title, rows = [], columns = [], config = {} }: { title: string; rows?: Rows; columns?: string[]; config?: Cfg }) {
   const meas = measureOf(rows, columns, config);
-  const values = rows.map((r) => Number(r[meas] ?? 0));
-  const max = Math.max(...values, 1);
+  const dim = dimOf(rows, columns, config);
+  const cats = summarize(rows, dim, meas).slice(0, 19);
+  const max = Math.max(...cats.map((c) => c.value), 1);
   const colors = ["#93C5FD", "#A78BFA", "#C084FC", "#F472B6", "#FB7185", "#FB923C"];
-  const cells = hexLayout(Math.max(values.length, 19));
+  const cells = hexLayout(cats.length || 1);
+  if (!cats.length) return <div className="rounded-2xl border border-line bg-surface p-3 shadow-sm"><EmptyViz /></div>;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-3 shadow-sm">
       {config.showTitle !== false && <div className="mb-1 text-[12px] font-medium text-ink">{title}</div>}
       <svg viewBox="0 0 200 180" className="min-h-0 flex-1">
         {cells.map((c, i) => {
-          const v = values[i % Math.max(values.length, 1)] || 0;
-          const heat = 1 - Math.min(1, Math.hypot(c.x - 100, c.y - 90) / 78);
-          const t = Math.min(1, heat * 0.7 + (v / max) * 0.3);
-          return <polygon key={i} points={hexPoints(c.x, c.y, 12)} fill={colors[Math.min(colors.length - 1, Math.floor(t * (colors.length - 1)))]} opacity="0.95" />;
+          const item = cats[i];
+          if (!item) return null;
+          const t = item.value / max;
+          return (
+            <g key={item.name}>
+              <polygon points={hexPoints(c.x, c.y, 12)} fill={colors[Math.min(colors.length - 1, Math.floor(t * (colors.length - 1)))]} opacity="0.95">
+                <title>{`${item.name}: ${item.value}`}</title>
+              </polygon>
+            </g>
+          );
         })}
       </svg>
     </div>
@@ -515,18 +599,21 @@ export function HexmapCard({ title, rows = [], columns = [], config = {} }: { ti
 export function RadialCard({ title, rows = [], columns = [], config = {} }: { title: string; rows?: Rows; columns?: string[]; config?: Cfg }) {
   const { theme } = useTheme();
   const meas = measureOf(rows, columns, config);
-  const values = rows.slice(0, 8).map((r) => Number(r[meas] ?? 0));
-  const last = values.reduce((s, n) => s + n, 0);
-  const prev = last / 1.025;
+  const dim = dimOf(rows, columns, config);
+  const s = seriesByDim(rows, dim, meas);
+  const labels = s.labels.slice(0, 10);
+  const values = s.values.slice(0, 10);
+  const last = values.reduce((n, v) => n + v, 0);
   const color = config.color || "#8B5CF6";
+  if (!values.length) return <div className="rounded-2xl border border-line bg-surface p-4 shadow-sm"><EmptyViz /></div>;
   return (
     <div className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-4 shadow-sm">
       <div className="relative min-h-0 flex-1">
         <ChartJsCanvas
           type="polarArea"
           data={{
-            labels: rows.slice(0, 8).map((r, i) => formatCategory(r[dimOf(rows, columns, config)] ?? "") || `S${i + 1}`),
-            datasets: [{ data: values.length ? values : [12, 9, 14, 8, 11], backgroundColor: values.map((_, i) => hexToRgba(color, 0.15 + (i % 5) * 0.1)), borderColor: color, borderWidth: 1 }],
+            labels,
+            datasets: [{ data: values, backgroundColor: values.map((_, i) => hexToRgba(color, 0.18 + (i % 5) * 0.12)), borderColor: color, borderWidth: 1 }],
           }}
           options={{
             plugins: { legend: { display: false }, tooltip: chartTooltip(theme) },
@@ -534,23 +621,23 @@ export function RadialCard({ title, rows = [], columns = [], config = {} }: { ti
           }}
         />
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="text-2xl font-semibold text-ink">{formatNumber(values[0] ?? last, { ...config, compact: "auto", decimals: 0 })}</div>
+          <div className="text-2xl font-semibold text-ink">{formatNumber(last, { ...config, compact: "auto", decimals: 0 })}</div>
         </div>
       </div>
-      <HeaderBlock title={title} value={last} prev={prev} config={config} showTitle={config.showTitle !== false} />
+      {config.showTitle !== false && <div className="mt-1 text-[13px] font-medium text-ink">{title}</div>}
     </div>
   );
 }
 
-function HeaderBlock({ title, value, prev, config, showTitle }: { title: string; value: number; prev: number; config: Cfg; showTitle: boolean }) {
+function HeaderBlock({ title, value, prev, config, showTitle }: { title: string; value: number; prev?: number; config: Cfg; showTitle: boolean }) {
   return (
     <div className="mb-1">
       {showTitle && <div className="text-[13px] font-medium text-ink">{title}</div>}
       <div className="flex items-baseline gap-2">
         <span className="text-2xl font-semibold tracking-tight text-ink">{formatNumber(value, config)}</span>
-        <Delta v={pctDelta(value, prev)} />
+        {prev != null && <Delta v={pctDelta(value, prev)} />}
       </div>
-      <p className="text-[11px] text-mute">Comparado a {formatNumber(prev, config)} no período anterior</p>
+      {prev != null && <p className="text-[11px] text-mute">Comparado a {formatNumber(prev, config)} no período anterior</p>}
     </div>
   );
 }
@@ -577,14 +664,10 @@ function summarizeMany(rows: Rows, key: string, measures: string[]) {
     .map(([name, values]) => ({ name, values }))
     .sort((a, b) => (b.values[0] || 0) - (a.values[0] || 0));
 }
-function sumCol(rows: Rows, col?: string) {
-  if (!col) return 0;
-  return rows.reduce((s, r) => s + Number(r[col] ?? 0), 0);
-}
 function layoutBars(items: { name: string; value: number }[], max: number, height: number, x: number) {
   let y = 8;
   return items.map((item) => {
-    const h = Math.max(12, (item.value / max) * (height / items.length));
+    const h = Math.max(12, (item.value / max) * (height / Math.max(items.length, 1)));
     const bar = { item, x, y, h };
     y += h + 8;
     return bar;
@@ -598,18 +681,18 @@ function hexPoints(cx: number, cy: number, r: number) {
 }
 function hexLayout(n: number) {
   const out: { x: number; y: number }[] = [];
-  const rings = 3;
   out.push({ x: 100, y: 90 });
-  for (let ring = 1; ring <= rings && out.length < n; ring++) {
+  for (let ring = 1; ring <= 3 && out.length < n; ring++) {
     for (let i = 0; i < 6; i++) {
       for (let j = 0; j < ring && out.length < n; j++) {
         const a = (Math.PI / 3) * i - Math.PI / 6;
         const step = (Math.PI / 3) * (i + 2);
-        const x = 100 + Math.cos(a) * 22 * ring + Math.cos(step) * 22 * j;
-        const y = 90 + Math.sin(a) * 22 * ring + Math.sin(step) * 22 * j;
-        out.push({ x, y });
+        out.push({
+          x: 100 + Math.cos(a) * 22 * ring + Math.cos(step) * 22 * j,
+          y: 90 + Math.sin(a) * 22 * ring + Math.sin(step) * 22 * j,
+        });
       }
     }
   }
-  return out;
+  return out.slice(0, n);
 }
