@@ -72,6 +72,7 @@ export function DataIntelligenceCard({
   globalFilters,
   timeRange,
   isPublic,
+  analyzePath,
 }: {
   title: string;
   focusPrompt?: string;
@@ -80,14 +81,17 @@ export function DataIntelligenceCard({
   globalFilters: DashboardFilter[];
   timeRange?: { start?: string; end?: string };
   isPublic?: boolean;
+  analyzePath?: string;
 }) {
   const targets = useMemo(() => analyzableWidgets(siblings), [siblings]);
   const [created, setCreated] = useState<Set<string>>(new Set());
+  const analyzeURL = analyzePath || "/api/v1/ai/analyze-dashboard-widgets";
 
   const analysis = useQuery({
     queryKey: [
       "data-intelligence",
       dashboardId,
+      analyzeURL,
       focusPrompt,
       timeRange,
       globalFilters,
@@ -101,9 +105,9 @@ export function DataIntelligenceCard({
         filters: w.query?.filters,
       })),
     ],
-    enabled: !isPublic && targets.length > 0,
+    enabled: targets.length > 0,
     queryFn: () =>
-      api<DashboardIntelResult>("/api/v1/ai/analyze-dashboard-widgets", {
+      api<DashboardIntelResult>(analyzeURL, {
         method: "POST",
         body: JSON.stringify({
           dashboard_id: dashboardId,
@@ -156,30 +160,24 @@ export function DataIntelligenceCard({
           </div>
           <div className="mt-0.5 truncate text-sm font-semibold text-ink">{title || "Inteligência dados"}</div>
         </div>
-        {!isPublic && (
-          <Button
-            size="sm"
-            variant="secondary"
-            className="shrink-0"
-            busy={analysis.isFetching}
-            onClick={() => analysis.refetch()}
-          >
-            <RefreshCw size={12} />
-            Analisar
-          </Button>
-        )}
+        <Button
+          size="sm"
+          variant="secondary"
+          className="shrink-0"
+          busy={analysis.isFetching}
+          onClick={() => analysis.refetch()}
+        >
+          <RefreshCw size={12} />
+          Analisar
+        </Button>
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto px-4 py-3">
-        {isPublic && (
-          <p className="text-[13px] text-mute">A análise com IA está disponível no dashboard autenticado.</p>
-        )}
-
-        {!isPublic && analysis.isLoading && (
+        {analysis.isLoading && (
           <p className="text-[13px] text-mute">A analisar os visuais deste dashboard…</p>
         )}
 
-        {!isPublic && analysis.isError && (
+        {analysis.isError && (
           <div className="rounded-xl border border-rose-100 bg-rose-50 px-3 py-2 text-[13px] text-danger">
             {apiStatus(analysis.error) === 402
               ? "A quota de IA deste espaço esgotou. Tente mais tarde."
@@ -187,13 +185,15 @@ export function DataIntelligenceCard({
           </div>
         )}
 
-        {!isPublic && !analysis.isLoading && !analysis.isError && targets.length === 0 && (
+        {!analysis.isLoading && !analysis.isError && targets.length === 0 && (
           <p className="text-[13px] text-mute">
-            Adicione KPIs, gráficos ou tabelas a este dashboard. Este cartão analisa os visuais que estão ao lado e gera insights e alertas.
+            {isPublic
+              ? "Não há visuais suficientes neste dashboard para analisar."
+              : "Adicione KPIs, gráficos ou tabelas a este dashboard. Este cartão analisa os visuais que estão ao lado e gera insights e alertas."}
           </p>
         )}
 
-        {!isPublic && !analysis.isLoading && !analysis.isError && data && (
+        {!analysis.isLoading && !analysis.isError && data && (
           <div className="space-y-3">
             <p className="text-[13px] font-medium leading-snug text-ink">{data.headline}</p>
             <div className="flex flex-wrap items-center gap-1.5">
@@ -241,17 +241,19 @@ export function DataIntelligenceCard({
                     <div key={al.name} className="rounded-xl border border-amber-100 bg-amber-50/70 px-3 py-2 dark:border-amber-500/20 dark:bg-amber-500/10">
                       <div className="text-[13px] font-medium text-ink">{al.name}</div>
                       {al.rationale && <p className="mt-0.5 text-[12px] text-mute">{al.rationale}</p>}
-                      <div className="mt-2">
-                        <Button
-                          size="sm"
-                          variant={done ? "ghost" : "secondary"}
-                          disabled={done || createAlert.isPending}
-                          busy={createAlert.isPending && createAlert.variables?.name === al.name}
-                          onClick={() => createAlert.mutate(al)}
-                        >
-                          {done ? "Alerta criado" : "Criar alerta"}
-                        </Button>
-                      </div>
+                      {!isPublic && (
+                        <div className="mt-2">
+                          <Button
+                            size="sm"
+                            variant={done ? "ghost" : "secondary"}
+                            disabled={done || createAlert.isPending}
+                            busy={createAlert.isPending && createAlert.variables?.name === al.name}
+                            onClick={() => createAlert.mutate(al)}
+                          >
+                            {done ? "Alerta criado" : "Criar alerta"}
+                          </Button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}

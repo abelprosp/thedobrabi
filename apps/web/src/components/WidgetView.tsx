@@ -304,6 +304,7 @@ export function WidgetView({
         globalFilters={globalFilters}
         timeRange={timeRange}
         isPublic={isPublicQuery}
+        analyzePath={isPublicQuery ? queriesURL.replace(/\/queries$/, "/analyze") : undefined}
       />
     );
   }

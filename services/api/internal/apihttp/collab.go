@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
+	"github.com/thedobra/thedobra/services/api/internal/aiagent"
 	"github.com/thedobra/thedobra/services/api/internal/cryptoenc"
 	"github.com/thedobra/thedobra/services/api/internal/httpx"
 	"github.com/thedobra/thedobra/services/api/internal/queryeng"
@@ -281,6 +282,72 @@ func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	httpx.JSON(w, 200, res)
+}
+
+func (s *Server) publicDashboardAnalyze(w http.ResponseWriter, r *http.Request) {
+	tok := chi.URLParam(r, "token")
+	var org, ws uuid.UUID
+	var layout []byte
+	err := s.deps.PG.QueryRow(r.Context(), `
+		SELECT s.org_id, s.workspace_id, d.layout_json
+		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
+		WHERE s.token=$1
+	`, tok).Scan(&org, &ws, &layout)
+	if err != nil {
+		httpx.Error(w, 404, "not_found", "partilha não encontrada")
+		return
+	}
+	s.analyzePublicDashboard(w, r, org, ws, layout)
+}
+
+func (s *Server) analyzePublicDashboard(w http.ResponseWriter, r *http.Request, org, ws uuid.UUID, layout []byte) {
+	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
+	var req aiagent.AnalyzeDashboardRequest
+	if err := httpx.Decode(r, &req); err != nil {
+		httpx.Error(w, 400, "invalid", "pedido inválido")
+		return
+	}
+	allowed := allowedDatasetIDs(layout)
+	kept := make([]aiagent.DashboardWidgetSpec, 0, len(req.Widgets))
+	for _, spec := range req.Widgets {
+		if widgetQueryAllowed(spec.Query, allowed) {
+			kept = append(kept, spec)
+		}
+	}
+	req.Widgets = kept
+	if len(req.Widgets) == 0 {
+		httpx.Error(w, 400, "invalid", "sem visuais para analisar nesta partilha")
+		return
+	}
+	out, err := s.ai.AnalyzeDashboardWidgets(r.Context(), org, ws, uuid.Nil, "viewer", req)
+	if err != nil {
+		httpx.Error(w, 400, "analyze_failed", err.Error())
+		return
+	}
+	out.AlertSuggestions = nil
+	s.audit(r, "AI_DASHBOARD_ANALYZED", "ai", uuid.Nil, map[string]any{"widgets": out.AnalyzedWidgets, "source": out.Source, "public": true})
+	httpx.JSON(w, 200, out)
+}
+
+func widgetQueryAllowed(q queryeng.Request, allowed map[string]struct{}) bool {
+	if q.DatasetID == "" {
+		return false
+	}
+	if _, ok := allowed[q.DatasetID]; !ok {
+		return false
+	}
+	for _, j := range q.Joins {
+		if j.DatasetID == "" {
+			continue
+		}
+		if _, ok := allowed[j.DatasetID]; !ok {
+			return false
+		}
+	}
+	return true
 }
 
 func allowedDatasetIDs(layout []byte) map[string]struct{} {

@@ -251,6 +251,16 @@ func (s *Server) publicEmbedQuery(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, res)
 }
 
+func (s *Server) publicEmbedAnalyze(w http.ResponseWriter, r *http.Request) {
+	tok := chi.URLParam(r, "token")
+	org, ws, _, layout, _, _, err := s.lookupEmbed(r.Context(), tok)
+	if err != nil {
+		httpx.Error(w, 404, "not_found", "embed não encontrado")
+		return
+	}
+	s.analyzePublicDashboard(w, r, org, ws, layout)
+}
+
 func (s *Server) orgBrand(ctx context.Context, org uuid.UUID) (string, string) {
 	var name, logo string
 	_ = s.deps.PG.QueryRow(ctx, `SELECT COALESCE(brand_name,''), COALESCE(brand_logo_url,'') FROM organizations WHERE id=$1`, org).Scan(&name, &logo)
