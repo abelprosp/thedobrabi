@@ -23,6 +23,8 @@ type Dimension struct {
 	Column      string `json:"column"`
 	Type        string `json:"type"`
 	Description string `json:"description,omitempty"`
+	Expression  string `json:"expression,omitempty"`
+	EditorMode  string `json:"editor_mode,omitempty"`
 }
 
 type Measure struct {

@@ -313,3 +313,27 @@ func TestEvaluateDependent(t *testing.T) {
 		t.Fatalf("expected 180, got %f", val)
 	}
 }
+
+func TestIsAggregate(t *testing.T) {
+	agg, err := Parse("SUM(valor)")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !agg.IsAggregate() {
+		t.Fatal("SUM should be aggregate")
+	}
+	dim, err := Parse("CASE WHEN empresa = 'VIVO' THEN 'Telecom' ELSE 'Outros' END")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if dim.IsAggregate() {
+		t.Fatal("CASE WHEN should not be aggregate")
+	}
+	month, err := Parse("TOMONTH(data_venda)")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if month.IsAggregate() {
+		t.Fatal("TOMONTH should not be aggregate")
+	}
+}

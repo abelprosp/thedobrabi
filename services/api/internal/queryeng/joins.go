@@ -57,6 +57,13 @@ func filterClauseQualifiedN(model semantic.Model, joins []datasetInfo, f Filter,
 		return clause, err
 	}
 	d, ok := semantic.ResolveDimension(src, raw)
+	if ok && strings.TrimSpace(d.Expression) != "" {
+		qIdx := -1
+		if isJoin {
+			qIdx = idx
+		}
+		return qualifyIdentExpr(clause, joinAlias(qIdx)), nil
+	}
 	col := raw
 	if ok {
 		col = d.Column

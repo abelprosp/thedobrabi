@@ -10,6 +10,7 @@ import { Download, Trash2 } from "lucide-react";
 import { Button, Card, CardTitle, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Table, Td, Textarea, Th, cellValue, isNumericValue } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
 import { CustomMeasureModal } from "@/components/custom-measure-modal";
+import { CustomDimensionModal } from "@/components/custom-dimension-modal";
 import type { SemanticModel } from "@/lib/semantic";
 
 export default function DatasetPage() {
@@ -197,6 +198,14 @@ function ModelTab({ datasetId, model, schema }: { datasetId: string; model: any;
   const [timeCol, setTimeCol] = useState(model.time_column || "");
   const [dims, setDims] = useState<any[]>(model.dimensions || []);
   const [measures, setMeasures] = useState<any[]>(model.measures || []);
+  const [dimModal, setDimModal] = useState(false);
+  const semantic = useQuery({ queryKey: ["semantic"], queryFn: () => api<any>("/api/v1/semantic-models") });
+  const semanticRow = useMemo(() => {
+    const list = Array.isArray(semantic.data) ? semantic.data : Array.isArray(semantic.data?.data) ? semantic.data.data : [];
+    return list.find((m: any) => m.dataset_id === datasetId || m.id === model.id) || null;
+  }, [semantic.data, datasetId, model.id]);
+  const semanticModelId = semanticRow?.id || model.id || datasetId;
+  const semanticModel = (semanticRow?.model || model) as SemanticModel;
   const save = useMutation({
     mutationFn: () =>
       api(`/api/v1/semantic-models/${model.id || datasetId}`, {
@@ -218,6 +227,20 @@ function ModelTab({ datasetId, model, schema }: { datasetId: string; model: any;
 
   return (
     <div className="space-y-4">
+      {dimModal && (
+        <CustomDimensionModal
+          semanticModelId={semanticModelId}
+          model={semanticModel}
+          datasetId={datasetId}
+          onClose={() => setDimModal(false)}
+          onAdded={(d) => {
+            toast.success("Dimensão criada");
+            setDims((prev) => [...prev, d]);
+            qc.invalidateQueries({ queryKey: ["dataset", datasetId] });
+            qc.invalidateQueries({ queryKey: ["semantic"] });
+          }}
+        />
+      )}
       <Card className="space-y-3">
         <CardTitle>Coluna de tempo</CardTitle>
         <Select value={timeCol} onChange={(e) => setTimeCol(e.target.value)}>
@@ -230,18 +253,29 @@ function ModelTab({ datasetId, model, schema }: { datasetId: string; model: any;
         </Select>
       </Card>
       <Card className="space-y-3">
-        <CardTitle>Dimensões</CardTitle>
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle>Dimensões</CardTitle>
+          <Button variant="secondary" size="sm" onClick={() => setDimModal(true)}>
+            Nova dimensão (SQL / IA)
+          </Button>
+        </div>
         {dims.map((d: any, i: number) => (
           <div key={i} className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             <Input value={d.name} placeholder="Nome" onChange={(e) => { const copy = [...dims]; copy[i].name = e.target.value; setDims(copy); }} />
-            <Select value={d.column} onChange={(e) => { const copy = [...dims]; copy[i].column = e.target.value; setDims(copy); }}>
-              {schema.map((c: any) => <option key={c.name} value={c.name}>{c.name}</option>)}
-            </Select>
-            <Input value={d.type || ""} placeholder="tipo" onChange={(e) => { const copy = [...dims]; copy[i].type = e.target.value; setDims(copy); }} />
+            {d.expression ? (
+              <code className="col-span-2 truncate rounded-lg border border-line bg-bg px-2 py-2 font-mono text-[11px] text-mute">{d.expression}</code>
+            ) : (
+              <>
+                <Select value={d.column} onChange={(e) => { const copy = [...dims]; copy[i].column = e.target.value; setDims(copy); }}>
+                  {schema.map((c: any) => <option key={c.name} value={c.name}>{c.name}</option>)}
+                </Select>
+                <Input value={d.type || ""} placeholder="tipo" onChange={(e) => { const copy = [...dims]; copy[i].type = e.target.value; setDims(copy); }} />
+              </>
+            )}
           </div>
         ))}
         <Button variant="secondary" size="sm" onClick={() => setDims([...dims, { name: "", column: "", type: "string" }])}>
-          + Dimensão
+          + Dimensão de coluna
         </Button>
       </Card>
       <Card className="space-y-3">

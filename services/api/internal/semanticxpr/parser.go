@@ -540,6 +540,29 @@ func (e Expr) UsesTimeIntel() bool {
 	return false
 }
 
+// IsAggregate reports whether the expression uses a measure aggregation.
+// Calculated dimensions must stay row-level (CASE, TOMONTH, coluna).
+func (e Expr) IsAggregate() bool {
+	switch strings.ToUpper(e.Func) {
+	case "SUM", "AVG", "AVERAGE", "COUNT", "COUNTROWS", "DISTINCTCOUNT", "MIN", "MAX",
+		"MEDIAN", "SUMX", "CALCULATE", "YOY", "MTD", "YTD",
+		"SAMEPERIODLASTYEAR", "DATEADD", "TOTALYTD", "TOTALMTD", "TOTALQTD", "MEASURE":
+		return true
+	}
+	if e.Left != nil && e.Left.IsAggregate() {
+		return true
+	}
+	if e.Right != nil && e.Right.IsAggregate() {
+		return true
+	}
+	for _, a := range e.Args {
+		if a.IsAggregate() {
+			return true
+		}
+	}
+	return false
+}
+
 func (ctx *evalContext) collectDependencies(e Expr, resolve MeasureResolver) error {
 	if e.Func == "MEASURE" {
 		name := e.Column

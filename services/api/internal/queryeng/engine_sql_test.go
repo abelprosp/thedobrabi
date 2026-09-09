@@ -38,6 +38,24 @@ func TestDimensionExprLeavesDateColumn(t *testing.T) {
 	}
 }
 
+func TestCompileDimensionSQLCase(t *testing.T) {
+	d := semantic.Dimension{Name: "Grupo", Expression: "CASE WHEN empresa = 'VIVO' THEN 'Telecom' ELSE 'Outros' END"}
+	got, err := compileDimensionSQL(d)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(got, "CASE") || !strings.Contains(got, "`empresa`") {
+		t.Fatalf("unexpected sql %s", got)
+	}
+}
+
+func TestCompileDimensionSQLRejectsAggregate(t *testing.T) {
+	d := semantic.Dimension{Name: "Total", Expression: "SUM(valor)"}
+	if _, err := compileDimensionSQL(d); err == nil {
+		t.Fatal("expected aggregate dimension to fail")
+	}
+}
+
 func TestDimensionExprTruncatesDateTime(t *testing.T) {
 	d := semantic.Dimension{Name: "Data", Column: "data_venda", Type: "datetime"}
 	got := dimensionExpr(d, "data_venda", "a.`data_venda`")

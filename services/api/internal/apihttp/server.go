@@ -267,9 +267,11 @@ func New(deps *platform.Deps) http.Handler {
 			r.Post("/semantic-models/{id}/relationships", s.createRelationship)
 			r.Delete("/semantic-models/{id}/relationships/{rid}", s.deleteRelationship)
 			r.Post("/semantic-models/{id}/validate-measure", s.validateMeasure)
+			r.Post("/semantic-models/{id}/validate-dimension", s.validateDimension)
 
 			r.Post("/ai/generate-sql", s.generateSQL)
 			r.Post("/ai/generate-measure", s.generateMeasure)
+			r.Post("/ai/generate-dimension", s.generateDimension)
 			r.Post("/ai/generate-visual", s.generateVisual)
 			r.Post("/ai/analyze-dashboard-widgets", s.analyzeDashboardWidgets)
 

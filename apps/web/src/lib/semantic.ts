@@ -13,6 +13,8 @@ export type SemanticDimension = {
   name: string;
   column?: string;
   type?: string;
+  expression?: string;
+  editor_mode?: "sql";
 };
 
 export type SemanticModel = {
@@ -41,6 +43,7 @@ export function measureKey(m: SemanticMeasure) {
 }
 
 export function dimensionKey(d: SemanticDimension) {
+  if (d.expression) return (d.name || d.column || "").trim();
   return (d.column || d.name || "").trim();
 }
 

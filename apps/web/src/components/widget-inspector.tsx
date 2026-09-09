@@ -1,7 +1,7 @@
 "use client";
 
 import type { WidgetConfig } from "@/components/WidgetView";
-import type { DatasetListItem, SemanticModel, SemanticMeasure } from "@/lib/semantic";
+import type { DatasetListItem, SemanticModel, SemanticMeasure, SemanticDimension } from "@/lib/semantic";
 import { dimensionKey, measureKey, modelForDataset, modelIdForDataset, relationshipsToJoins, remapQueryToModel } from "@/lib/semantic";
 import { api, normalizeArray } from "@/lib/api";
 import { asJoinField } from "@/lib/widget-errors";
@@ -21,6 +21,7 @@ import { ChevronDown, Plus, Trash2, Blocks, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Widget, WidgetType, QueryJoin } from "@/components/WidgetView";
 import { CustomMeasureModal } from "@/components/custom-measure-modal";
+import { CustomDimensionModal } from "@/components/custom-dimension-modal";
 import { KpiIconPicker } from "@/components/kpi-icon-picker";
 
 
@@ -63,6 +64,7 @@ export function WidgetInspector({
   const setCfg = (partial: Partial<WidgetConfig>) =>
     onUpdate((w) => ({ ...w, config: { ...w.config, ...partial } }));
   const [measureModalOpen, setMeasureModalOpen] = useState(false);
+  const [dimensionModalOpen, setDimensionModalOpen] = useState(false);
 
   return (
     <>
@@ -72,10 +74,16 @@ export function WidgetInspector({
           model={model}
           datasetId={widget.query?.dataset_id || model.dataset_id}
           onClose={() => setMeasureModalOpen(false)}
-          onAdded={(_measure: SemanticMeasure) => {
-            // The queryClient invalidation inside the modal refreshes semanticModels
-            // automatically. Nothing extra needed here.
-          }}
+          onAdded={(_measure: SemanticMeasure) => {}}
+        />
+      )}
+      {dimensionModalOpen && semanticModelId && model && (
+        <CustomDimensionModal
+          semanticModelId={semanticModelId}
+          model={model}
+          datasetId={widget.query?.dataset_id || model.dataset_id}
+          onClose={() => setDimensionModalOpen(false)}
+          onAdded={(_dimension: SemanticDimension) => {}}
         />
       )}
       <aside
@@ -168,6 +176,7 @@ export function WidgetInspector({
             semanticModels={semanticModels}
             semanticModelId={semanticModelId}
             onOpenCustomMeasure={() => setMeasureModalOpen(true)}
+            onOpenCustomDimension={() => setDimensionModalOpen(true)}
             onUpdate={onUpdate}
             onDrillUp={onDrillUp}
           />
@@ -625,7 +634,7 @@ function DimensionOptions({
       <optgroup label="Este conjunto">
         {(model?.dimensions || []).map((d) => (
           <option key={dimensionKey(d)} value={dimensionKey(d)}>
-            {d.name || d.column}
+            {d.name || d.column}{d.expression ? " (SQL)" : ""}
           </option>
         ))}
       </optgroup>
@@ -634,7 +643,7 @@ function DimensionOptions({
           <optgroup key={j.index} label={j.name || `Conjunto cruzado ${j.index + 1}`}>
             {(j.model.dimensions || []).map((d) => (
               <option key={asJoinField(dimensionKey(d), j.index)} value={asJoinField(dimensionKey(d), j.index)}>
-                {d.name || d.column}
+                {d.name || d.column}{d.expression ? " (SQL)" : ""}
               </option>
             ))}
           </optgroup>
@@ -692,6 +701,7 @@ function QueryFields({
   semanticModels,
   semanticModelId,
   onOpenCustomMeasure,
+  onOpenCustomDimension,
   onUpdate,
   onDrillUp,
 }: {
@@ -705,6 +715,7 @@ function QueryFields({
   semanticModels: any[];
   semanticModelId?: string | null;
   onOpenCustomMeasure: () => void;
+  onOpenCustomDimension: () => void;
   onUpdate: (fn: (w: Widget) => Widget) => void;
   onDrillUp: () => void;
 }) {
@@ -1063,6 +1074,16 @@ function QueryFields({
           <DimensionOptions model={model} joins={joinOpts} />
         </Select>
       </FieldLabel>
+      {widget.query?.dataset_id && semanticModelId && (
+        <button
+          type="button"
+          className="inline-flex items-center gap-1.5 text-[12px] font-medium text-primary hover:underline"
+          onClick={onOpenCustomDimension}
+        >
+          <Blocks size={13} />
+          + Nova dimensão
+        </button>
+      )}
       {widget.type === "heatmap" && (
         <FieldLabel label="Dimensão Y">
           <Select

@@ -622,6 +622,36 @@ func (s *Server) validateMeasure(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{"valid": true, "sql": sql, "func": expr.Func})
 }
 
+func (s *Server) validateDimension(w http.ResponseWriter, r *http.Request) {
+	principal(r)
+	if _, err := uuid.Parse(chi.URLParam(r, "id")); err != nil {
+		httpx.Error(w, 400, "invalid", "bad id")
+		return
+	}
+	var body struct {
+		Expression string `json:"expression"`
+	}
+	if err := httpx.Decode(r, &body); err != nil || body.Expression == "" {
+		httpx.Error(w, 400, "invalid", "expression obrigatória")
+		return
+	}
+	expr, err := semanticxpr.Parse(body.Expression)
+	if err != nil {
+		httpx.JSON(w, 200, map[string]any{"valid": false, "error": err.Error()})
+		return
+	}
+	if expr.IsAggregate() {
+		httpx.JSON(w, 200, map[string]any{"valid": false, "error": "dimensão não pode usar agregações (SUM, COUNT…). Use CASE, TOMONTH ou uma coluna."})
+		return
+	}
+	sql, err := expr.ToSQL(func(col string) string { return "`" + col + "`" })
+	if err != nil {
+		httpx.JSON(w, 200, map[string]any{"valid": false, "error": err.Error()})
+		return
+	}
+	httpx.JSON(w, 200, map[string]any{"valid": true, "sql": sql, "func": expr.Func})
+}
+
 // ================= AI generation endpoints =================
 
 func (s *Server) generateSQL(w http.ResponseWriter, r *http.Request) {
@@ -676,6 +706,26 @@ func (s *Server) generateMeasure(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.audit(r, "AI_MEASURE_GENERATED", "ai", uuid.Nil, map[string]any{"dataset_id": out.DatasetID, "source": out.Source})
+	httpx.JSON(w, 200, out)
+}
+
+func (s *Server) generateDimension(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, _ := principal(r)
+	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
+	var req aiagent.GenerateDimensionRequest
+	if err := httpx.Decode(r, &req); err != nil || strings.TrimSpace(req.Prompt) == "" {
+		httpx.Error(w, 400, "invalid", "prompt obrigatório")
+		return
+	}
+	out, err := s.ai.GenerateDimension(r.Context(), org, ws, uid, req)
+	if err != nil {
+		httpx.Error(w, 400, "generate_failed", err.Error())
+		return
+	}
+	s.audit(r, "AI_DIMENSION_GENERATED", "ai", uuid.Nil, map[string]any{"dataset_id": out.DatasetID, "source": out.Source})
 	httpx.JSON(w, 200, out)
 }
 

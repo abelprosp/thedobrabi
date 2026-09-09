@@ -3,6 +3,7 @@ package queryeng
 import (
 	"context"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/thedobra/thedobra/services/api/internal/semantic"
@@ -138,6 +139,19 @@ func TestFilterClauseAppliesKnownDimension(t *testing.T) {
 		t.Fatal("expected SQL clause for known dimension")
 	}
 	if clause != "`categoria` = 'ops'" {
+		t.Fatalf("unexpected clause %q", clause)
+	}
+}
+
+func TestFilterClauseCalculatedDimension(t *testing.T) {
+	model := semantic.Model{
+		Dimensions: []semantic.Dimension{{Name: "Grupo", Expression: "CASE WHEN empresa = 'VIVO' THEN 'Telecom' ELSE 'Outros' END"}},
+	}
+	clause, err := filterClause(model, Filter{Dimension: "Grupo", Op: "eq", Value: "Telecom"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(clause, "CASE") || !strings.Contains(clause, "'Telecom'") {
 		t.Fatalf("unexpected clause %q", clause)
 	}
 }

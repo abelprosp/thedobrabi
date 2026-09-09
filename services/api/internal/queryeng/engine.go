@@ -15,6 +15,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/thedobra/thedobra/services/api/internal/config"
 	"github.com/thedobra/thedobra/services/api/internal/semantic"
+	"github.com/thedobra/thedobra/services/api/internal/semanticxpr"
 )
 
 type Engine struct {
@@ -161,6 +162,17 @@ func requestToSimpleSQL(meta datasetInfo, req Request) (string, Evidence) {
 	var parts []string
 	var groups []string
 	for _, d := range req.Dimensions {
+		dim, ok := semantic.ResolveDimension(meta.Model, d)
+		if ok && strings.TrimSpace(dim.Expression) != "" {
+			expr, err := compileDimensionSQL(dim)
+			if err != nil {
+				continue
+			}
+			alias := sqlOutAlias(d, dim.Name)
+			parts = append(parts, fmt.Sprintf("%s AS `%s`", expr, alias))
+			groups = append(groups, fmt.Sprintf("`%s`", alias))
+			continue
+		}
 		parts = append(parts, fmt.Sprintf("`%s`", d))
 		groups = append(groups, fmt.Sprintf("`%s`", d))
 	}
@@ -400,15 +412,24 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 				return "", ev, fmt.Errorf("dimensão desconhecida %q", dname)
 			}
 		}
-		if !identOK(d.Column) {
-			return "", ev, fmt.Errorf("coluna de dimensão inválida")
-		}
 		qIdx := -1
 		if joinField {
 			qIdx = jIdx
 		}
-		colSQL := qualify(qIdx, d.Column)
-		expr := dimensionExpr(d, src.TimeColumn, colSQL)
+		var expr string
+		if strings.TrimSpace(d.Expression) != "" {
+			compiled, err := compileDimensionSQL(d)
+			if err != nil {
+				return "", ev, err
+			}
+			expr = qualifyIdentExpr(compiled, joinAlias(qIdx))
+		} else {
+			if !identOK(d.Column) {
+				return "", ev, fmt.Errorf("coluna de dimensão inválida")
+			}
+			colSQL := qualify(qIdx, d.Column)
+			expr = dimensionExpr(d, src.TimeColumn, colSQL)
+		}
 		alias := sqlOutAlias(dname, d.Name)
 		selects = append(selects, fmt.Sprintf("%s AS `%s`", expr, alias))
 		groups = append(groups, fmt.Sprintf("%d", len(selects)))
@@ -563,6 +584,25 @@ func dimensionExpr(d semantic.Dimension, timeCol, colSQL string) string {
 	return colSQL
 }
 
+func compileDimensionSQL(d semantic.Dimension) (string, error) {
+	src := strings.TrimSpace(d.Expression)
+	if src == "" {
+		return "", fmt.Errorf("dimensão %q sem expressão", d.Name)
+	}
+	expr, err := semanticxpr.Parse(src)
+	if err != nil {
+		return "", fmt.Errorf("dimensão %q: %w", d.Name, err)
+	}
+	if expr.IsAggregate() {
+		return "", fmt.Errorf("dimensão %q não pode usar agregações (SUM, COUNT…). Use CASE, TOMONTH ou uma coluna", d.Name)
+	}
+	sql, err := expr.ToSQL(func(col string) string { return "`" + col + "`" })
+	if err != nil {
+		return "", fmt.Errorf("dimensão %q: %w", d.Name, err)
+	}
+	return sql, nil
+}
+
 func timeFilterSQL(colSQL, start, end string) []string {
 	var w []string
 	if start != "" {
@@ -634,6 +674,13 @@ func qualifyIdentExpr(expr, tableAlias string) string {
 
 func filterClause(model semantic.Model, f Filter) (string, error) {
 	d, ok := semantic.ResolveDimension(model, f.Dimension)
+	if ok && strings.TrimSpace(d.Expression) != "" {
+		expr, err := compileDimensionSQL(d)
+		if err != nil {
+			return "", err
+		}
+		return filterSQLOnExpr(expr, f.Op, f.Value)
+	}
 	if !ok && !columnExists(model, f.Dimension) {
 		return "", nil
 	}
@@ -645,6 +692,35 @@ func filterClause(model semantic.Model, f Filter) (string, error) {
 		return "", nil
 	}
 	return filterSQL(col, f.Op, f.Value)
+}
+
+func filterSQLOnExpr(expr, op string, value any) (string, error) {
+	left := "(" + expr + ")"
+	switch strings.ToLower(op) {
+	case "eq", "=":
+		return fmt.Sprintf("%s = %s", left, literal(value)), nil
+	case "neq", "!=":
+		return fmt.Sprintf("%s != %s", left, literal(value)), nil
+	case "gt":
+		return fmt.Sprintf("%s > %s", left, literal(value)), nil
+	case "gte":
+		return fmt.Sprintf("%s >= %s", left, literal(value)), nil
+	case "lt":
+		return fmt.Sprintf("%s < %s", left, literal(value)), nil
+	case "lte":
+		return fmt.Sprintf("%s <= %s", left, literal(value)), nil
+	case "in":
+		vs := toSlice(value)
+		parts := make([]string, len(vs))
+		for i, v := range vs {
+			parts[i] = literal(v)
+		}
+		return fmt.Sprintf("%s IN (%s)", left, strings.Join(parts, ", ")), nil
+	case "contains":
+		return fmt.Sprintf("positionCaseInsensitiveUTF8(toString(%s), %s) > 0", left, literal(value)), nil
+	default:
+		return "", fmt.Errorf("unsupported filter op")
+	}
 }
 
 func filterSQL(col, op string, value any) (string, error) {
