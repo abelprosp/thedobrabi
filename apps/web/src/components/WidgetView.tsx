@@ -128,6 +128,7 @@ export type WidgetConfig = {
   xAxisLabel?: string;
   yAxisLabel?: string;
   xAxisRotate?: number;
+  horizontal?: boolean;
   overlayLine?: "off" | "value" | "average" | "measure";
   overlayLineValue?: number;
   overlayLineLabel?: string;
