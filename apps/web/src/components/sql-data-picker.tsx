@@ -390,7 +390,7 @@ export function SqlDataPicker({
                   left_column: ta?.columns[0]?.name || "id",
                   right_table: b,
                   right_column: tb?.columns.find((c) => c.name.toLowerCase() === "id")?.name || tb?.columns[0]?.name || "id",
-                  match: "both",
+                  match: "all_left",
                 },
               ]);
             }}
@@ -527,12 +527,12 @@ function JoinCard({
       </div>
       <div className="mt-3 space-y-1.5">
         <label className="flex items-center gap-2 text-[13px] text-ink">
-          <input type="radio" checked={join.match !== "all_left"} onChange={() => onChange({ ...join, match: "both" })} />
-          Só quando existe nos dois
-        </label>
-        <label className="flex items-center gap-2 text-[13px] text-ink">
           <input type="radio" checked={join.match === "all_left"} onChange={() => onChange({ ...join, match: "all_left" })} />
           Manter todos os {left?.label || "da primeira lista"}, mesmo sem correspondência
+        </label>
+        <label className="flex items-center gap-2 text-[13px] text-ink">
+          <input type="radio" checked={join.match !== "all_left"} onChange={() => onChange({ ...join, match: "both" })} />
+          Só quando existe nos dois
         </label>
       </div>
     </div>

@@ -162,6 +162,42 @@ func applySelection(typ string, cfg SQLConfig) (SQLConfig, error) {
 	return cfg, nil
 }
 
+func selectionHasInnerJoin(sel *SourceSelection) bool {
+	if sel == nil {
+		return false
+	}
+	for _, j := range sel.Joins {
+		m := strings.ToLower(strings.TrimSpace(j.Match))
+		if m != "all_left" && m != "left" {
+			return true
+		}
+	}
+	return false
+}
+
+func withLeftJoins(cfg SQLConfig) SQLConfig {
+	if cfg.Selection == nil {
+		return cfg
+	}
+	sel := *cfg.Selection
+	joins := make([]SelectedJoin, len(sel.Joins))
+	copy(joins, sel.Joins)
+	for i := range joins {
+		joins[i].Match = "all_left"
+	}
+	sel.Joins = joins
+	cfg.Selection = &sel
+	cfg.Query = ""
+	return cfg
+}
+
+func emptyFetchError(sel *SourceSelection) error {
+	if sel != nil && len(sel.Joins) > 0 {
+		return fmt.Errorf("o cruzamento não devolveu linhas — as listas podem estar vazias ou as chaves não coincidem")
+	}
+	return fmt.Errorf("nenhuma linha devolvida — a ligação funciona, mas a lista está vazia (sem dados, RLS ou filtros)")
+}
+
 func buildSelectionSQL(typ string, sel SourceSelection, limit int) (string, error) {
 	if len(sel.Tables) == 0 {
 		return "", fmt.Errorf("escolha pelo menos uma lista de dados")
@@ -329,19 +365,12 @@ func ternary(cond bool, a, b string) string {
 }
 
 func joinInMemory(leftHeaders []string, leftRows [][]string, leftCol string, rightHeaders []string, rightRows [][]string, rightCol string, allLeft bool) ([]string, [][]string, error) {
-	li, ri := -1, -1
-	for i, h := range leftHeaders {
-		if h == leftCol {
-			li = i
-			break
-		}
-	}
-	for i, h := range rightHeaders {
-		if h == rightCol {
-			ri = i
-			break
-		}
-	}
+	return joinInMemoryNamed(leftHeaders, leftRows, leftCol, "", rightHeaders, rightRows, rightCol, "", allLeft)
+}
+
+func joinInMemoryNamed(leftHeaders []string, leftRows [][]string, leftCol, leftTable string, rightHeaders []string, rightRows [][]string, rightCol, rightTable string, allLeft bool) ([]string, [][]string, error) {
+	li := joinColIndex(leftHeaders, leftCol, leftTable)
+	ri := joinColIndex(rightHeaders, rightCol, rightTable)
 	if li < 0 || ri < 0 {
 		return nil, nil, fmt.Errorf("campo de cruzamento não encontrado")
 	}
@@ -350,7 +379,10 @@ func joinInMemory(leftHeaders []string, leftRows [][]string, leftCol string, rig
 		if ri >= len(row) {
 			continue
 		}
-		k := row[ri]
+		k := strings.TrimSpace(row[ri])
+		if k == "" {
+			continue
+		}
 		idx[k] = append(idx[k], i)
 	}
 	headers := append(append([]string{}, leftHeaders...), rightHeaders...)
@@ -358,10 +390,10 @@ func joinInMemory(leftHeaders []string, leftRows [][]string, leftCol string, rig
 	for _, lrow := range leftRows {
 		key := ""
 		if li < len(lrow) {
-			key = lrow[li]
+			key = strings.TrimSpace(lrow[li])
 		}
 		matches := idx[key]
-		if len(matches) == 0 {
+		if key == "" || len(matches) == 0 {
 			if allLeft {
 				rec := make([]string, len(headers))
 				copy(rec, lrow)
@@ -377,6 +409,55 @@ func joinInMemory(leftHeaders []string, leftRows [][]string, leftCol string, rig
 		}
 	}
 	return headers, out, nil
+}
+
+func prefixHeaders(table string, headers []string) []string {
+	alias := sqlAlias(tableBaseName(table))
+	out := make([]string, len(headers))
+	for i, h := range headers {
+		if alias != "" && strings.HasPrefix(strings.ToLower(h), alias+"_") {
+			out[i] = h
+			continue
+		}
+		out[i] = alias + "_" + h
+	}
+	return out
+}
+
+func tableBaseName(key string) string {
+	_, name := splitTableKey(key)
+	if name == "" {
+		return key
+	}
+	return name
+}
+
+func joinColIndex(headers []string, col, table string) int {
+	col = strings.TrimSpace(col)
+	if col == "" {
+		return -1
+	}
+	var candidates []string
+	if table != "" {
+		alias := sqlAlias(tableBaseName(table))
+		candidates = append(candidates, alias+"_"+col, alias+"_"+sqlAlias(col))
+	}
+	candidates = append(candidates, col)
+	for _, want := range candidates {
+		for i, h := range headers {
+			if h == want {
+				return i
+			}
+		}
+	}
+	for _, want := range candidates {
+		for i, h := range headers {
+			if strings.EqualFold(h, want) {
+				return i
+			}
+		}
+	}
+	return -1
 }
 
 func padRow(row []string, n int) []string {

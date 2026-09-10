@@ -115,6 +115,44 @@ func TestApplySelectionNoop(t *testing.T) {
 	}
 }
 
+func TestWithLeftJoins(t *testing.T) {
+	cfg := SQLConfig{
+		Query: "SELECT 1",
+		Selection: &SourceSelection{
+			Joins: []SelectedJoin{{LeftTable: "a", LeftColumn: "id", RightTable: "b", RightColumn: "id", Match: "both"}},
+		},
+	}
+	if !selectionHasInnerJoin(cfg.Selection) {
+		t.Fatal("expected inner join")
+	}
+	got := withLeftJoins(cfg)
+	if got.Query != "" {
+		t.Fatal("query should be rebuilt")
+	}
+	if got.Selection.Joins[0].Match != "all_left" {
+		t.Fatalf("match=%s", got.Selection.Joins[0].Match)
+	}
+	if cfg.Selection.Joins[0].Match != "both" {
+		t.Fatal("original selection mutated")
+	}
+}
+
+func TestJoinInMemoryPrefixedColumns(t *testing.T) {
+	leftH := prefixHeaders("orders", []string{"id", "customer_id"})
+	rightH := prefixHeaders("customers", []string{"id", "name"})
+	headers, rows, err := joinInMemoryNamed(
+		leftH, [][]string{{"1", "10"}, {"2", "99"}}, "customer_id", "orders",
+		rightH, [][]string{{"10", "Ana"}}, "id", "customers",
+		true,
+	)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rows) != 2 || rows[0][3] != "Ana" || rows[1][3] != "" {
+		t.Fatalf("headers=%v rows=%v", headers, rows)
+	}
+}
+
 func TestJoinInMemory(t *testing.T) {
 	headers, rows, err := joinInMemory(
 		[]string{"id", "customer_id"},

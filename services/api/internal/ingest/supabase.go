@@ -250,6 +250,7 @@ func (e *Engine) fetchSupabaseRESTSelection(ctx context.Context, cfg SQLConfig) 
 		if err != nil {
 			return nil, nil, err
 		}
+		headers = prefixHeaders(t.Name, headers)
 		p := packed{key: t.Key(), headers: headers, rows: rows}
 		order = append(order, p)
 		byKey[p.key] = p
@@ -282,10 +283,10 @@ func (e *Engine) fetchSupabaseRESTSelection(ctx context.Context, cfg SQLConfig) 
 			var err error
 			var add packed
 			if leftIn {
-				headers, rows, err = joinInMemory(left.headers, left.rows, j.LeftColumn, rp.headers, rp.rows, j.RightColumn, allLeft)
+				headers, rows, err = joinInMemoryNamed(left.headers, left.rows, j.LeftColumn, j.LeftTable, rp.headers, rp.rows, j.RightColumn, j.RightTable, allLeft)
 				add = rp
 			} else {
-				headers, rows, err = joinInMemory(left.headers, left.rows, j.RightColumn, lp.headers, lp.rows, j.LeftColumn, allLeft)
+				headers, rows, err = joinInMemoryNamed(left.headers, left.rows, j.RightColumn, j.RightTable, lp.headers, lp.rows, j.LeftColumn, j.LeftTable, allLeft)
 				add = lp
 			}
 			if err != nil {

@@ -168,7 +168,7 @@ export function suggestJoins(tables: InspectTable[], fks: InspectFK[], selectedK
         left_column: fk.from_column,
         right_table: fk.to_table,
         right_column: fk.to_column,
-        match: "both",
+        match: "all_left",
         reason: "fk",
       });
     }
@@ -191,7 +191,7 @@ export function suggestJoins(tables: InspectTable[], fks: InspectFK[], selectedK
           left_column: col.name,
           right_table: b.full_name,
           right_column: right.name,
-          match: "both",
+          match: "all_left",
           reason: "name",
         });
       }

@@ -396,6 +396,12 @@ func (e *Engine) SyncSourceWithSelection(ctx context.Context, orgID, wsID, userI
 	if err != nil {
 		return Result{}, err
 	}
+	if len(headers) == 0 {
+		return Result{}, fmt.Errorf("nenhuma coluna devolvida — verifique o recurso e as credenciais")
+	}
+	if len(rows) == 0 {
+		return Result{}, emptyFetchError(cfg.Selection)
+	}
 	return e.finishSync(ctx, orgID, wsID, userID, sourceID, typ, name, headers, rows)
 }
 
@@ -440,6 +446,23 @@ func (e *Engine) SaveSelection(ctx context.Context, orgID, wsID, sourceID uuid.U
 }
 
 func (e *Engine) fetchSourceRows(ctx context.Context, typ string, cfg SQLConfig) ([]string, [][]string, error) {
+	headers, rows, err := e.fetchSourceRowsOnce(ctx, typ, cfg)
+	if err != nil {
+		return nil, nil, err
+	}
+	if len(rows) > 0 || !selectionHasInnerJoin(cfg.Selection) {
+		return headers, rows, nil
+	}
+	// INNER JOIN across several lists often yields zero rows even when each
+	// list has data. Retry as LEFT JOIN so the first list is kept.
+	h2, r2, err2 := e.fetchSourceRowsOnce(ctx, typ, withLeftJoins(cfg))
+	if err2 != nil || len(r2) == 0 {
+		return headers, rows, nil
+	}
+	return h2, r2, nil
+}
+
+func (e *Engine) fetchSourceRowsOnce(ctx context.Context, typ string, cfg SQLConfig) ([]string, [][]string, error) {
 	if GuidedSQLType(typ) && cfg.Selection != nil && !cfg.Selection.empty() && typ != "supabase" {
 		applied, err := applySelection(typ, cfg)
 		if err != nil {
@@ -571,7 +594,7 @@ func (e *Engine) RefreshSource(ctx context.Context, orgID, wsID, userID, sourceI
 		return RefreshResult{}, fmt.Errorf("nenhuma coluna devolvida — verifique o recurso e as credenciais")
 	}
 	if len(rows) == 0 {
-		return RefreshResult{}, fmt.Errorf("nenhuma linha devolvida — verifique credenciais, permissões e o recurso escolhido")
+		return RefreshResult{}, emptyFetchError(cfg.Selection)
 	}
 	if existing, err := e.LatestDatasetForSource(ctx, orgID, wsID, sourceID); err == nil && existing != uuid.Nil {
 		n, err := e.ReplaceDataset(ctx, orgID, wsID, existing, headers, rows)
@@ -605,7 +628,7 @@ func (e *Engine) finishSync(ctx context.Context, orgID, wsID, userID, sourceID u
 		return Result{}, fmt.Errorf("nenhuma coluna devolvida — verifique o recurso e as credenciais")
 	}
 	if len(rows) == 0 {
-		return Result{}, fmt.Errorf("nenhuma linha devolvida — verifique credenciais, permissões e o recurso escolhido")
+		return Result{}, emptyFetchError(nil)
 	}
 	res, err := e.ingestRows(ctx, orgID, wsID, userID, name, typ, headers, rows)
 	if err != nil {
