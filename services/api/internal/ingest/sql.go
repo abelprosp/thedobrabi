@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"unicode"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
@@ -815,17 +816,108 @@ func mysqlDSN(c SQLConfig) string {
 }
 
 func safeSelect(q string) bool {
-	s := strings.TrimSpace(strings.ToLower(q))
-	if !strings.HasPrefix(s, "select") {
+	s := strings.TrimSpace(q)
+	if s == "" {
 		return false
 	}
-	banned := []string{"insert", "update", "delete", "drop", "alter", "truncate", "grant", "revoke", "copy ", ";"}
-	for _, b := range banned {
-		if strings.Contains(s, b) {
+	s = strings.TrimSpace(strings.TrimSuffix(s, ";"))
+	masked := strings.ToLower(maskSQLLiterals(s))
+	if strings.Contains(masked, ";") {
+		return false
+	}
+	tokens := sqlIdentTokens(masked)
+	if len(tokens) == 0 || tokens[0] != "select" {
+		return false
+	}
+	banned := map[string]struct{}{
+		"insert": {}, "update": {}, "delete": {}, "drop": {},
+		"alter": {}, "truncate": {}, "grant": {}, "revoke": {}, "copy": {},
+	}
+	for _, tok := range tokens[1:] {
+		if _, bad := banned[tok]; bad {
 			return false
 		}
 	}
 	return true
+}
+
+// maskSQLLiterals replaces comments, quoted identifiers and string literals
+// with spaces so keyword checks do not look inside names or values.
+func maskSQLLiterals(s string) string {
+	var b strings.Builder
+	b.Grow(len(s))
+	i := 0
+	for i < len(s) {
+		if i+1 < len(s) && s[i] == '-' && s[i+1] == '-' {
+			for i < len(s) && s[i] != '\n' {
+				b.WriteByte(' ')
+				i++
+			}
+			continue
+		}
+		if i+1 < len(s) && s[i] == '/' && s[i+1] == '*' {
+			b.WriteString("  ")
+			i += 2
+			for i < len(s) {
+				if i+1 < len(s) && s[i] == '*' && s[i+1] == '/' {
+					b.WriteString("  ")
+					i += 2
+					break
+				}
+				if s[i] == '\n' {
+					b.WriteByte('\n')
+				} else {
+					b.WriteByte(' ')
+				}
+				i++
+			}
+			continue
+		}
+		if s[i] == '\'' || s[i] == '"' || s[i] == '`' {
+			quote := s[i]
+			b.WriteByte(' ')
+			i++
+			for i < len(s) {
+				if s[i] == quote {
+					if i+1 < len(s) && s[i+1] == quote {
+						b.WriteString("  ")
+						i += 2
+						continue
+					}
+					b.WriteByte(' ')
+					i++
+					break
+				}
+				b.WriteByte(' ')
+				i++
+			}
+			continue
+		}
+		b.WriteByte(s[i])
+		i++
+	}
+	return b.String()
+}
+
+func sqlIdentTokens(s string) []string {
+	var tokens []string
+	var cur strings.Builder
+	flush := func() {
+		if cur.Len() == 0 {
+			return
+		}
+		tokens = append(tokens, cur.String())
+		cur.Reset()
+	}
+	for _, r := range s {
+		if unicode.IsLetter(r) || unicode.IsDigit(r) || r == '_' {
+			cur.WriteRune(unicode.ToLower(r))
+			continue
+		}
+		flush()
+	}
+	flush()
+	return tokens
 }
 
 func tableIdentOK(s string) bool {
