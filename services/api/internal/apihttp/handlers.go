@@ -685,6 +685,26 @@ func (s *Server) generateDashboard(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 201, map[string]any{"id": id, "name": gen.Name, "url": "/dashboards/" + id.String(), "source": gen.Source})
 }
 
+func (s *Server) dobraCompose(w http.ResponseWriter, r *http.Request) {
+	uid, org, ws, _ := principal(r)
+	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
+	var req aiagent.DobraRequest
+	if err := httpx.Decode(r, &req); err != nil {
+		httpx.Error(w, 400, "invalid", "corpo inválido")
+		return
+	}
+	out, err := s.ai.DobraCompose(r.Context(), org, ws, uid, req)
+	if err != nil {
+		httpx.Error(w, 400, "dobra_failed", err.Error())
+		return
+	}
+	s.audit(r, "AI_DOBRA_COMPOSE", "dashboard", uuid.Nil, map[string]any{"conversation_id": out.ConversationID, "apply": out.Apply, "widgets": len(out.Widgets)})
+	httpx.JSON(w, 200, out)
+}
+
 func autoWidgets(datasetID string, model semantic.Model) []map[string]any {
 	meas := []string{}
 	for i, m := range model.Measures {

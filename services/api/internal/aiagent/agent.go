@@ -622,6 +622,30 @@ func (a *Agent) generateDashboardFallback(prompt, dsID, dsName string, model sem
 	return out
 }
 
+func widgetNeedsQuery(typ string) bool {
+	switch typ {
+	case "text", "markdown", "image", "iframe", "data_intelligence":
+		return false
+	}
+	return true
+}
+
+func asStringSlice(v any) []string {
+	switch t := v.(type) {
+	case []string:
+		return t
+	case []any:
+		out := make([]string, 0, len(t))
+		for _, x := range t {
+			if s, ok := x.(string); ok && s != "" {
+				out = append(out, s)
+			}
+		}
+		return out
+	}
+	return nil
+}
+
 func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semantic.Model) map[string]any {
 	typ, _ := w["type"].(string)
 	if typ == "" {
@@ -638,39 +662,40 @@ func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semant
 	query["dataset_id"] = dsID
 
 	measures := []string{}
-	if raw, ok := query["measures"].([]any); ok && len(raw) > 0 {
-		for _, m := range raw {
-			name, _ := m.(string)
-			if name == "" {
-				continue
-			}
-			if _, ok := semantic.ResolveMeasure(model, name); ok {
-				measures = append(measures, name)
-			} else if found := a.findClosestMeasure(model, name); found != "" {
-				measures = append(measures, found)
-			}
+	for _, name := range asStringSlice(query["measures"]) {
+		if _, ok := semantic.ResolveMeasure(model, name); ok {
+			measures = append(measures, name)
+		} else if found := a.findClosestMeasure(model, name); found != "" {
+			measures = append(measures, found)
 		}
 	}
-	if len(measures) == 0 && len(model.Measures) > 0 {
-		measures = []string{model.Measures[0].Name}
+	if widgetNeedsQuery(typ) && typ != "slicer" && len(measures) == 0 && len(model.Measures) > 0 {
+		if p := semantic.PrimaryMeasure(model); p != "" {
+			measures = []string{p}
+		} else {
+			measures = []string{model.Measures[0].Name}
+		}
 	}
 	query["measures"] = measures
 
 	dimensions := []string{}
-	if raw, ok := query["dimensions"].([]any); ok && len(raw) > 0 {
-		for _, d := range raw {
-			name, _ := d.(string)
-			if name == "" {
-				continue
-			}
-			if _, ok := semantic.ResolveDimension(model, name); ok {
-				dimensions = append(dimensions, name)
-			} else if found := a.findClosestDimension(model, name); found != "" {
-				dimensions = append(dimensions, found)
-			}
+	for _, name := range asStringSlice(query["dimensions"]) {
+		if _, ok := semantic.ResolveDimension(model, name); ok {
+			dimensions = append(dimensions, name)
+		} else if found := a.findClosestDimension(model, name); found != "" {
+			dimensions = append(dimensions, found)
 		}
 	}
 	query["dimensions"] = dimensions
+
+	if typ == "ranking" && len(measures) > 0 {
+		if query["order_by"] == nil {
+			query["order_by"] = []map[string]string{{"field": measures[0], "dir": "desc"}}
+		}
+		if query["limit"] == nil {
+			query["limit"] = 10
+		}
+	}
 
 	layout, ok := w["layout"].(map[string]any)
 	if !ok {
@@ -690,17 +715,22 @@ func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semant
 	layout["x"] = ensureInt("x", 0)
 	layout["y"] = ensureInt("y", 0)
 	layout["w"] = max(2, min(12, ensureInt("w", 6)))
-	layout["h"] = max(2, min(8, ensureInt("h", 4)))
+	layout["h"] = max(2, min(10, ensureInt("h", 4)))
 
 	out := map[string]any{
 		"id":     w["id"],
 		"type":   typ,
 		"title":  title,
 		"layout": layout,
-		"query":  query,
 	}
-	if typ == "text" {
+	if widgetNeedsQuery(typ) {
+		out["query"] = query
+	}
+	if typ == "text" || typ == "markdown" {
 		out["text"] = w["text"]
+	}
+	if cfg, ok := w["config"].(map[string]any); ok {
+		out["config"] = cfg
 	}
 	if out["id"] == nil || out["id"] == "" {
 		out["id"] = uuid.New().String()

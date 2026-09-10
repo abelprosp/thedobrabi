@@ -209,6 +209,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/ai/config", s.aiConfig)
 			r.Post("/ai/ask", s.ask)
 			r.Post("/ai/generate-dashboard", s.generateDashboard)
+			r.Post("/ai/dobra", s.dobraCompose)
 			r.Get("/ai/conversations", s.conversations)
 
 			r.Get("/insights", s.insights)

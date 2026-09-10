@@ -88,6 +88,7 @@ import {
 } from "@/lib/semantic";
 import { DASHBOARD_TEMPLATES, instantiateTemplate, prepareTemplateModel } from "@/lib/dashboard-templates";
 import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
+import { DobraAIChat } from "@/components/dobra-ai-chat";
 import { ThemeSegmented } from "@/components/theme-toggle";
 import { AppearanceScope, parseLayoutTheme } from "@/components/theme-provider";
 import { readStoredDashboardAppearance, writeStoredDashboardAppearance, type Appearance } from "@/lib/theme";
@@ -214,6 +215,7 @@ function DashboardEditorInner() {
   const [aiCompletePrompt, setAiCompletePrompt] = useState("");
   const [aiCompleteDataset, setAiCompleteDataset] = useState("");
   const [aiCompleteStep, setAiCompleteStep] = useState(0);
+  const [dobraOpen, setDobraOpen] = useState(false);
   const [mobilePreview, setMobilePreview] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [embedOpen, setEmbedOpen] = useState(false);
@@ -662,6 +664,17 @@ function DashboardEditorInner() {
           </div>
           {edit && (
             <>
+              <Button
+                variant={dobraOpen ? "primary" : "secondary"}
+                size="sm"
+                onClick={() => {
+                  setDobraOpen((v) => !v);
+                  setSelected(null);
+                }}
+                title="DobraAI — monta o dashboard"
+              >
+                <Sparkles size={14} /> <span className="hidden sm:inline">DobraAI</span>
+              </Button>
               <Button variant="ghost" size="icon" onClick={history.undo} disabled={!history.canUndo} title="Desfazer">
                 <Undo2 size={16} />
               </Button>
@@ -839,7 +852,8 @@ function DashboardEditorInner() {
           className={cn(
             "h-full min-h-0",
             phoneFrame ? "overflow-auto bg-surface-2" : "overflow-auto bg-bg pb-10",
-            edit && current && !mobileView && "pr-80",
+            edit && current && !mobileView && !dobraOpen && "pr-80",
+            edit && dobraOpen && !mobileView && "pr-[24rem]",
           )}
         >
         <div
@@ -856,8 +870,8 @@ function DashboardEditorInner() {
               description={
                 datasetList.length === 0
                   ? "Primeiro precisa de dados. Sincronize um conector ou carregue a demo."
-                  : edit
-                    ? "Escolha um componente na faixa acima para começar."
+                    : edit
+                    ? "Peça à DobraAI um plano (gráficos, filtros, análises) ou escolha um componente na faixa acima."
                     : "Este dashboard ainda não tem widgets."
               }
               action={
@@ -868,8 +882,13 @@ function DashboardEditorInner() {
                     </Button>
                   </Link>
                 ) : edit ? (
-                  <Button onClick={() => addWidget("kpi")}>
-                    <Plus size={14} /> Adicionar KPI
+                  <Button
+                    onClick={() => {
+                      setDobraOpen(true);
+                      setSelected(null);
+                    }}
+                  >
+                    <Sparkles size={14} /> Pedir à DobraAI
                   </Button>
                 ) : undefined
               }
@@ -933,7 +952,7 @@ function DashboardEditorInner() {
         </div>
         </AppearanceScope>
 
-        {edit && current && (
+        {edit && current && !dobraOpen && (
           <div className={mobileView ? "absolute inset-x-0 bottom-0 z-20" : "absolute inset-y-0 right-0 z-20"}>
             <WidgetInspector
               widget={current}
@@ -952,6 +971,26 @@ function DashboardEditorInner() {
               variant={mobileView ? "sheet" : "side"}
             />
           </div>
+        )}
+        {edit && (
+          <DobraAIChat
+            open={dobraOpen}
+            onClose={() => setDobraOpen(false)}
+            dashboardName={name}
+            dashboardId={id}
+            widgets={widgets}
+            datasets={visibleDatasets.length ? visibleDatasets : datasetList}
+            datasetId={preferredDatasetId}
+            onDatasetId={setPreferredDatasetId}
+            onApply={({ widgets: next, replace, name: nextName, filters, timeRange: tr }) => {
+              history.push(replace ? next : [...widgets, ...next]);
+              setSelected(null);
+              if (nextName) setName(nextName);
+              if (filters && filters.length) setGlobalFilters(filters);
+              if (tr && (tr.start || tr.end)) setTimeRange({ start: tr.start, end: tr.end });
+              toast.success(replace ? `${next.length} visuais montados no dashboard` : `${next.length} visuais adicionados`);
+            }}
+          />
         )}
       </div>
 
