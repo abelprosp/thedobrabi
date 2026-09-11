@@ -7,6 +7,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import {
   AlertTriangle,
+  ArrowRight,
   Building2,
   Headphones,
   Home,
@@ -167,7 +168,7 @@ export default function StorePage() {
                   <button
                     key={t.id}
                     type="button"
-                    onClick={() => openActivate(t)}
+                    onClick={() => router.push(`/store/${t.id}`)}
                     className="flex w-full items-center gap-3 rounded-xl bg-white px-3 py-2.5 text-left text-ink shadow-sm transition hover:bg-indigo-50"
                   >
                     <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -179,7 +180,7 @@ export default function StorePage() {
                         {CATEGORY_LABEL[t.category]} · {t.needs[0]}
                       </span>
                     </span>
-                    <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">Ativar</span>
+                    <span className="rounded-lg bg-primary/10 px-2.5 py-1 text-[11px] font-medium text-primary">Ver modelo</span>
                   </button>
                 );
               })}
@@ -227,7 +228,11 @@ export default function StorePage() {
         {filtered.map((t) => {
           const Icon = ICONS[t.icon];
           return (
-            <Card key={t.id} className="flex h-full flex-col gap-3 transition hover:border-primary/30">
+            <Card
+              key={t.id}
+              className="group flex h-full cursor-pointer flex-col gap-3 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              onClick={() => router.push(`/store/${t.id}`)}
+            >
               <div className="flex items-start gap-3">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <Icon size={18} />
@@ -249,8 +254,8 @@ export default function StorePage() {
                   </span>
                 ))}
               </div>
-              <Button className="w-full" onClick={() => openActivate(t)} disabled={!canActivate}>
-                <Zap size={14} /> Ativar
+              <Button className="w-full" variant="secondary" onClick={() => router.push(`/store/${t.id}`)}>
+                Ver detalhes <ArrowRight size={14} />
               </Button>
             </Card>
           );

@@ -16,9 +16,13 @@ import {
 import {
   AlertTriangle,
   ArrowUp,
+  BarChart3,
+  Calculator,
   CheckCircle2,
   Database,
+  Lightbulb,
   Loader2,
+  MessageCircle,
   RotateCcw,
   Sparkles,
   Wand2,
@@ -242,17 +246,24 @@ export default function AskPage() {
   }
 
   return (
-    <div className="mx-auto flex h-[calc(100dvh-7rem)] max-w-3xl flex-col">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-xl font-semibold tracking-tight text-ink">
-            Perguntar à TheDobra
-          </h1>
-          <p className="mt-1 text-[13px] text-mute">
-            Respostas com as métricas do seu conjunto — sem inventar fórmulas.
-          </p>
-        </div>
-        <div className="flex w-full gap-2 sm:w-auto">
+    <div className="mx-auto flex h-[calc(100dvh-7rem)] max-w-5xl flex-col">
+      <div className="mb-4 overflow-hidden rounded-3xl border border-primary/15 bg-gradient-to-br from-primary/[0.08] via-surface to-accent/[0.06] p-5 shadow-sm sm:p-6">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
+              <Sparkles size={20} />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h1 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">Analisar com IA</h1>
+                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700">Dados verificados</span>
+              </div>
+              <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-mute">
+                Faça perguntas em linguagem natural. A DobraAI encontra métricas, explica variações e mostra de onde veio cada número.
+              </p>
+            </div>
+          </div>
+          <div className="flex w-full gap-2 lg:w-auto">
           {datasetList.length > 0 && (
             <Select
               aria-label="Conjunto"
@@ -285,9 +296,15 @@ export default function AskPage() {
               <RotateCcw size={15} />
             </Button>
           )}
+          </div>
+        </div>
+        <div className="mt-5 grid grid-cols-1 gap-2 border-t border-primary/10 pt-4 sm:grid-cols-3">
+          <Capability icon={BarChart3} title="Explore" text="Veja tendências e comparações" />
+          <Capability icon={Calculator} title="Calcule" text="Crie métricas sem SQL" />
+          <Capability icon={Lightbulb} title="Decida" text="Encontre os próximos passos" />
         </div>
       </div>
-      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-primary/10 bg-primary/[0.045] px-3 py-2 text-[11px] text-mute">
+      <div className="mb-4 flex items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-[11px] text-mute shadow-sm">
         <CheckCircle2 size={13} className="text-emerald-600" />
         <span>
           Respostas calculadas com métricas oficiais e evidências do conjunto
@@ -300,27 +317,19 @@ export default function AskPage() {
       <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
         {msgs.length === 0 && (
           <div className="flex min-h-full flex-col items-center justify-center px-2 py-8 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-              <Sparkles size={26} />
+            <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary ring-8 ring-primary/[0.035]">
+              <MessageCircle size={28} />
             </div>
-            <h2 className="mt-4 text-lg font-medium text-ink">
-              O analista do seu negócio
-            </h2>
+            <h2 className="mt-4 text-lg font-semibold tracking-tight text-ink">Por onde começamos?</h2>
             <p className="mt-2 max-w-md text-[13px] leading-relaxed text-mute">
-              Pergunte em português. A TheDobra usa o modelo semântico do
-              conjunto
-              {activeName ? ` «${activeName}»` : ""} e devolve números com
-              evidência.
+              Pergunte em português sobre <strong className="font-medium text-ink">{activeName || "o seu negócio"}</strong>. Comece por uma sugestão ou escreva a sua própria pergunta.
             </p>
-            <div className="mt-6 flex max-w-lg flex-wrap justify-center gap-2">
-              {examplesForData.map((ex) => (
-                <button
-                  key={ex}
-                  type="button"
-                  onClick={() => ask(ex)}
-                  className="rounded-full border border-line bg-surface px-3.5 py-2 text-[12px] text-ink shadow-sm transition hover:-translate-y-px hover:border-primary/40 hover:text-primary"
-                >
-                  {ex}
+            <div className="mt-6 grid w-full max-w-2xl gap-2 sm:grid-cols-2">
+              {examplesForData.slice(0, 4).map((ex) => (
+                <button key={ex} type="button" onClick={() => ask(ex)} className="group flex items-center gap-3 rounded-xl border border-line bg-surface px-3.5 py-3 text-left text-[12px] text-ink shadow-sm transition hover:-translate-y-px hover:border-primary/35 hover:shadow-md">
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary/8 text-primary"><Lightbulb size={14} /></span>
+                  <span className="flex-1">{ex}</span>
+                  <ArrowUp size={13} className="-rotate-45 text-mute transition group-hover:text-primary" />
                 </button>
               ))}
             </div>
@@ -528,6 +537,15 @@ export default function AskPage() {
           </Button>
         </div>
       </form>
+    </div>
+  );
+}
+
+function Capability({ icon: Icon, title, text }: { icon: typeof BarChart3; title: string; text: string }) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-xl px-2 py-1.5">
+      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Icon size={15} /></div>
+      <div><p className="text-[12px] font-medium text-ink">{title}</p><p className="text-[11px] text-mute">{text}</p></div>
     </div>
   );
 }

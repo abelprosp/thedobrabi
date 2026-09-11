@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { AlertCircle, Inbox, Loader2, type LucideIcon } from "lucide-react";
 import { cn, formatPt, isNumericValue } from "@/lib/cn";
-import type { ButtonHTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, HTMLAttributes, InputHTMLAttributes, ReactNode, SelectHTMLAttributes, TextareaHTMLAttributes } from "react";
 
 export { cn, formatPt, isNumericValue };
 
@@ -54,8 +54,8 @@ export function Button({
   );
 }
 
-export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-[1.125rem] border border-line/90 bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5", className)}>{children}</div>;
+export function Card({ className, children, ...props }: HTMLAttributes<HTMLDivElement> & { children: ReactNode }) {
+  return <div className={cn("rounded-[1.125rem] border border-line/90 bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5", className)} {...props}>{children}</div>;
 }
 
 export function CardTitle({ children }: { children: ReactNode }) {

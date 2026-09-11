@@ -8,6 +8,17 @@ import { PageHeader, PageSkeleton } from "@/components/ui";
 import { ROLE_LABELS, planLabel, roleLabel } from "@/lib/labels";
 import { ThemeSegmented } from "@/components/theme-toggle";
 import { useDashboardThemePreference, useSystemTheme } from "@/components/theme-provider";
+import {
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  Palette,
+  PlugZap,
+  ShieldCheck,
+  UserRound,
+  Users,
+  Workflow,
+} from "lucide-react";
 
 const inputCls = "w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-accent/50";
 const selectCls = "rounded-lg border border-line bg-surface px-2 text-sm text-ink outline-none";
@@ -90,25 +101,40 @@ export default function SettingsPage() {
   const slug = org.data?.slug;
   const publicURL = oauth.data?.public_url || "http://localhost:8080";
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <PageHeader title="Definições" description="Organização, membros, espaços de trabalho e autenticação." />
+    <div className="mx-auto max-w-6xl space-y-6 pb-8">
+      <PageHeader
+        title="Definições"
+        description="Personalize a sua conta, organize a equipa e mantenha o acesso seguro."
+        actions={
+          <div className="hidden items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-[12px] text-mute shadow-sm sm:flex">
+            <span className="h-2 w-2 rounded-full bg-emerald-500" />
+            Conta ativa
+          </div>
+        }
+      />
+      <AccountOverview me={me.data} org={org.data} />
+      <div className="overflow-x-auto lg:hidden">
+        <SettingsNav mobile />
+      </div>
+      <div className="grid gap-6 lg:grid-cols-[210px_minmax(0,1fr)] lg:items-start">
+        <SettingsNav />
+        <div className="min-w-0 space-y-5">
       {me.isLoading && <PageSkeleton cards={2} />}
-      <Box title="Aparência da aplicação">
+      <Box id="aparencia" title="Aparência" icon={Palette} description="Defina como a TheDobra e os seus dashboards aparecem para si.">
         <p className="mb-3 text-[13px] text-mute">Menus, navegação e restantes páginas. Não muda o canvas dos dashboards.</p>
         <ThemeSegmented label="Tema da aplicação" value={theme} onChange={setTheme} />
-      </Box>
-      <Box title="Aparência dos dashboards">
+        <div className="my-4 border-t border-line" />
         <p className="mb-3 text-[13px] text-mute">Pré-definição do canvas. Cada dashboard pode guardar o seu próprio tema ao clicar em Guardar.</p>
         <ThemeSegmented label="Tema dos dashboards" value={dashboardTheme.theme} onChange={dashboardTheme.setTheme} />
       </Box>
-      <Box title="Organização">
+      <Box id="organizacao" title="Organização" icon={Building2} description="Informação da organização e do plano atual.">
         <Row k="Utilizador" v={me.data?.name} />
         <Row k="E-mail" v={me.data?.email} />
         <Row k="Função" v={roleLabel(me.data?.role)} />
         <Row k="Organização" v={org.data?.name} />
         <Row k="Plano" v={planLabel(org.data?.plan)} />
       </Box>
-      <BrandBox org={org} />
+      <div id="marca"><BrandBox org={org} /></div>
 
       {membersList.length <= 1 && (
         <div className="rounded-2xl border border-indigo-200 bg-indigo-50/60 p-5 shadow-sm">
@@ -135,7 +161,7 @@ export default function SettingsPage() {
         </div>
       )}
 
-      <Box title="Membros">
+      <Box id="membros" title="Membros" icon={Users} description="Convide pessoas e controle o nível de acesso aos dados.">
         <div className="mb-3 flex flex-wrap gap-2">
           <input
             className={`flex-1 ${inputCls}`}
@@ -170,7 +196,7 @@ export default function SettingsPage() {
                 }
               }}
             >
-              <option value="owner">{ROLE_LABELS.owner}</option>
+              {m.role === "owner" && <option value="owner" disabled>{ROLE_LABELS.owner}</option>}
               <option value="admin">{ROLE_LABELS.admin}</option>
               <option value="analyst">{ROLE_LABELS.analyst}</option>
               <option value="viewer">{ROLE_LABELS.viewer}</option>
@@ -179,7 +205,7 @@ export default function SettingsPage() {
         ))}
       </Box>
 
-      <Box title="Espaços de trabalho">
+      <Box id="espacos" title="Espaços de trabalho" icon={Workflow} description="Separe equipas, projetos e permissões por espaço.">
         <div className="mb-3 flex flex-col gap-2 sm:flex-row">
           <input
             className={`flex-1 ${inputCls}`}
@@ -198,7 +224,7 @@ export default function SettingsPage() {
         ))}
       </Box>
 
-      <Box title="Autenticação em dois factores">
+      <Box id="seguranca" title="Segurança da conta" icon={ShieldCheck} description="Proteja o login e administre os métodos de autenticação.">
         <p className="mb-2 text-[12px] text-mute">
           {me.data?.mfa_enabled ? "MFA activo nesta conta." : "Proteja o login com uma app autenticadora (TOTP)."}
         </p>
@@ -271,7 +297,7 @@ export default function SettingsPage() {
         )}
       </Box>
 
-      <Box title="SSO · SAML 2.0">
+      <Box id="sso" title="SSO · SAML 2.0" icon={ShieldCheck} description="Centralize o acesso da equipa com o provedor de identidade da empresa.">
         <p className="mb-3 text-[12px] text-mute">
           ACS: {publicURL}/api/v1/auth/saml/{slug || "…"}/acs
           <br />
@@ -295,14 +321,14 @@ export default function SettingsPage() {
           ))}
         </div>
       </Box>
-      <Box title="SCIM 2.0">
+      <Box id="scim" title="SCIM 2.0" icon={Users} description="Automatize o provisionamento de utilizadores.">
         <p className="mb-3 text-[12px] text-mute">Provisioning de utilizadores (Okta, Entra, Google Workspace).</p>
         <button onClick={() => scim.mutate()} className="rounded-xl border border-line px-3 py-2 text-sm hover:bg-bg">
           Gerar token SCIM
         </button>
       </Box>
 
-      <Box title="Gateway on-premise">
+      <Box id="gateway" title="Gateway on-premise" icon={PlugZap} description="Ligue fontes privadas sem expor a base de dados à Internet.">
         <p className="mb-3 text-[12px] text-mute">
           Instale o agente gateway numa VM local para aceder a bases PostgreSQL/MySQL/SQL Server sem expô-las à Internet.
         </p>
@@ -336,7 +362,71 @@ export default function SettingsPage() {
           ))}
         </div>
       </Box>
+        </div>
+      </div>
     </div>
+  );
+}
+
+function AccountOverview({ me, org }: { me?: any; org?: any }) {
+  const initials = (me?.name || me?.email || "TD")
+    .split(/\s+/)
+    .map((part: string) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+  return (
+    <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-[var(--shadow-card)]">
+      <div className="h-20 bg-gradient-to-r from-primary/15 via-accent/10 to-transparent" />
+      <div className="-mt-7 flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end sm:justify-between sm:px-7">
+        <div className="flex min-w-0 items-end gap-3">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-surface bg-primary text-lg font-semibold text-white shadow-md">
+            {initials || <UserRound size={22} />}
+          </div>
+          <div className="min-w-0 pb-0.5">
+            <p className="truncate text-lg font-semibold tracking-tight text-ink">{me?.name || "A sua conta"}</p>
+            <p className="truncate text-[13px] text-mute">{me?.email || "Carregando dados da conta…"}</p>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2 text-[12px]">
+          <StatusPill icon={CheckCircle2} label={planLabel(org?.plan)} tone="primary" />
+          <StatusPill icon={Building2} label={org?.name || "A sua organização"} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusPill({ icon: Icon, label, tone = "neutral" }: { icon: typeof CheckCircle2; label: string; tone?: "primary" | "neutral" }) {
+  return (
+    <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 font-medium ${tone === "primary" ? "border-primary/15 bg-primary/8 text-primary" : "border-line bg-bg text-mute"}`}>
+      <Icon size={13} />
+      {label}
+    </span>
+  );
+}
+
+function SettingsNav({ mobile = false }: { mobile?: boolean }) {
+  const links = [
+    { href: "#aparencia", label: "Aparência", icon: Palette },
+    { href: "#organizacao", label: "Organização", icon: Building2 },
+    { href: "#membros", label: "Membros", icon: Users },
+    { href: "#seguranca", label: "Segurança", icon: ShieldCheck },
+    { href: "#sso", label: "Acesso empresarial", icon: ShieldCheck },
+    { href: "#gateway", label: "Integrações", icon: PlugZap },
+  ];
+  return (
+    <nav aria-label="Secções das definições" className={mobile ? "w-max" : "hidden lg:sticky lg:top-5 lg:block"}>
+      {!mobile && <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-mute">Nesta página</p>}
+      <div className={mobile ? "flex gap-1 pb-1" : "space-y-1"}>
+        {links.map(({ href, label, icon: Icon }) => (
+          <a key={href} href={href} className="group flex items-center justify-between rounded-xl border border-line bg-surface px-3 py-2.5 text-[13px] text-mute shadow-sm transition hover:bg-surface-2 hover:text-ink lg:border-transparent lg:bg-transparent lg:shadow-none">
+            <span className="flex items-center gap-2.5"><Icon size={15} />{label}</span>
+            <ArrowRight size={14} className="opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
+          </a>
+        ))}
+      </div>
+    </nav>
   );
 }
 
@@ -390,12 +480,30 @@ function BrandBox({ org }: { org: { data?: any; refetch: () => void } }) {
   );
 }
 
-function Box({ title, children }: { title: string; children: React.ReactNode }) {
+function Box({
+  id,
+  title,
+  description,
+  icon: Icon,
+  children,
+}: {
+  id?: string;
+  title: string;
+  description?: string;
+  icon?: typeof Palette;
+  children: React.ReactNode;
+}) {
   return (
-    <div className="space-y-2 rounded-2xl border border-line bg-surface p-5 text-sm shadow-sm">
-      <h2 className="mb-2 text-[13px] text-mute">{title}</h2>
+    <section id={id} className="scroll-mt-5 space-y-2 rounded-2xl border border-line bg-surface p-5 text-sm shadow-sm sm:p-6">
+      <div className="mb-4 flex items-start gap-3">
+        {Icon && <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon size={17} /></div>}
+        <div>
+          <h2 className="text-sm font-semibold tracking-tight text-ink">{title}</h2>
+          {description && <p className="mt-1 text-[12px] leading-relaxed text-mute">{description}</p>}
+        </div>
+      </div>
       {children}
-    </div>
+    </section>
   );
 }
 function Row({ k, v }: { k: string; v?: string }) {

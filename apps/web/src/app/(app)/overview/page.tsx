@@ -37,31 +37,29 @@ export default function OverviewPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <section className="panel-gradient relative overflow-hidden rounded-[1.75rem] px-6 py-7 text-white shadow-2xl shadow-slate-950/10 sm:px-8 sm:py-9">
-        <div className="grid-fade pointer-events-none absolute inset-0 opacity-50" />
-        <div className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-sky-500/20 blur-3xl" />
+      <section className="relative overflow-hidden rounded-[1.75rem] border border-line bg-surface px-6 py-7 shadow-[var(--shadow-card)] sm:px-8 sm:py-9">
+        <div className="pointer-events-none absolute right-0 top-0 h-48 w-48 rounded-full bg-primary/[0.06] blur-3xl" />
         <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-200/90">Resumo executivo</p>
-            <h1 className="mt-3 text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
-              {brief?.headline || "Analisei o seu negócio. Eis o que importa."}
+            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">Visão geral</p>
+            <h1 className="mt-3 text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-4xl">
+              {brief?.headline || "Seu negócio em um só lugar"}
             </h1>
-            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/75">Métricas oficiais, riscos e oportunidades reunidos num só lugar — sem fórmulas inventadas.</p>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-mute">Acompanhe os principais números, entenda o que mudou e escolha o próximo passo.</p>
           </div>
           {(!q.data?.datasets || q.data.datasets === 0) && (
             <Button
               onClick={() => demo.mutate()}
               busy={demo.isPending}
-              className="shrink-0 bg-white text-panel hover:bg-white/90"
+              className="shrink-0"
             >
-              {demo.isPending ? "A ingerir…" : "Carregar dados de demonstração"}
+              {demo.isPending ? "A preparar…" : "Adicionar dados de demonstração"}
             </Button>
           )}
         </div>
         <div className="relative z-10 mt-6 grid gap-3 sm:grid-cols-3">
-          <GlassStat label="Mudanças" value={String(brief?.major_changes?.length ?? 0)} />
-          <GlassStat label="Riscos" value={String(brief?.risks?.length ?? 0)} />
+          <GlassStat label="Alterações" value={String(brief?.major_changes?.length ?? 0)} />
+          <GlassStat label="Pontos de atenção" value={String(brief?.risks?.length ?? 0)} />
           <GlassStat label="Oportunidades" value={String(brief?.opportunities?.length ?? 0)} />
         </div>
       </section>
@@ -72,10 +70,10 @@ export default function OverviewPage() {
           <span className="text-[11px] text-mute">Acesso rápido</span>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <QuickAction href="/dashboards" icon={LayoutDashboard} title="Criar dashboard" description="Monte um painel com a DobraAI." />
-          <QuickAction href="/ask" icon={MessageSquare} title="Analisar dados" description="Pergunte usando métricas oficiais." />
-          <QuickAction href="/connectors" icon={Plug} title="Conectar uma fonte" description="Bases, ficheiros, APIs e ERPs." />
-          <QuickAction href="/store" icon={Store} title="Usar um modelo" description="Comece com um painel pronto." />
+          <QuickAction href="/dashboards" icon={LayoutDashboard} title="Criar dashboard" description="Monte um painel para acompanhar o que importa." />
+          <QuickAction href="/ask" icon={MessageSquare} title="Perguntar aos dados" description="Encontre respostas usando os seus números." />
+          <QuickAction href="/connectors" icon={Plug} title="Adicionar dados" description="Ligue bases, ficheiros, APIs ou ERPs." />
+          <QuickAction href="/store" icon={Store} title="Explorar modelos" description="Comece com um painel pronto para adaptar." />
         </div>
       </section>
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -116,9 +114,9 @@ export default function OverviewPage() {
 
 function GlassStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="glass-card rounded-2xl px-4 py-3">
-      <div className="text-[11px] uppercase tracking-wide text-white/70">{label}</div>
-      <div className="mt-1 text-2xl font-semibold">{value}</div>
+    <div className="rounded-2xl border border-line bg-bg px-4 py-3">
+      <div className="text-[11px] uppercase tracking-wide text-mute">{label}</div>
+      <div className="mt-1 text-2xl font-semibold text-ink">{value}</div>
     </div>
   );
 }

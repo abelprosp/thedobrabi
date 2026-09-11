@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, getAccess, normalizeArray } from "@/lib/api";
 import { WidgetView, type Widget } from "@/components/WidgetView";
-import { modelIdForDataset, relationshipsToJoins } from "@/lib/semantic";
+import { modelIdForDataset, relationshipsToJoins, widgetFieldDefaults, modelForDataset } from "@/lib/semantic";
 import { DEFAULT_QUERY_LIMIT, widgetCrossBy } from "@/lib/widget-config";
 import { toast } from "sonner";
 import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
@@ -13,7 +13,7 @@ import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import { Button, Card, CardTitle, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select, Textarea, Badge, cn } from "@/components/ui";
 import { AutoRefreshCard } from "@/components/auto-refresh-card";
-import { LineChart, BarChart3, PieChart, Table2, Type, Image as ImageIcon, Plus, Trash2, Eye, EyeOff, Save, FileDown, Calendar, Share2, X, ChevronLeft, Monitor, Printer, MoreHorizontal, Trophy } from "lucide-react";
+import { ArrowDownUp, AppWindow, BarChart3, Brain, Calendar, ChevronLeft, CircleDot, Eye, EyeOff, FileBarChart, FileDown, Filter, Funnel, Gauge, Grid2X2, Hexagon, Image as ImageIcon, LayoutGrid, LayoutTemplate, LineChart, Mountain, MoreHorizontal, Monitor, Network, PieChart, Plus, Printer, Radar, Save, ScatterChart, Sheet, Share2, Signal, Table2, Target, Trash2, Trophy, Type, Workflow, X } from "lucide-react";
 import { useMediaQuery } from "@/lib/use-media-query";
 
 const Grid = WidthProvider(GridLayout);
@@ -22,16 +22,38 @@ type ReportPage = { name: string; widgets: Widget[] };
 
 const WIDGET_CATALOG: { type: Widget["type"]; label: string; icon: any; defaultW: number; defaultH: number }[] = [
   { type: "kpi", label: "KPI", icon: Monitor, defaultW: 3, defaultH: 2 },
+  { type: "kpi_goal", label: "KPI com meta", icon: Target, defaultW: 4, defaultH: 3 },
+  { type: "metric_group", label: "Grupo de KPIs", icon: LayoutTemplate, defaultW: 4, defaultH: 3 },
+  { type: "data_intelligence", label: "Inteligência dados", icon: Brain, defaultW: 6, defaultH: 5 },
   { type: "line", label: "Linha", icon: LineChart, defaultW: 6, defaultH: 4 },
   { type: "bar", label: "Barras", icon: BarChart3, defaultW: 6, defaultH: 4 },
+  { type: "ranking", label: "Ranking", icon: Trophy, defaultW: 4, defaultH: 5 },
   { type: "area", label: "Área", icon: LineChart, defaultW: 6, defaultH: 4 },
   { type: "pie", label: "Pizza", icon: PieChart, defaultW: 4, defaultH: 4 },
-  { type: "ranking", label: "Ranking", icon: Trophy, defaultW: 4, defaultH: 5 },
+  { type: "gauge", label: "Gauge", icon: Gauge, defaultW: 4, defaultH: 4 },
+  { type: "waterfall", label: "Cascata", icon: ArrowDownUp, defaultW: 6, defaultH: 4 },
+  { type: "funnel", label: "Funil", icon: Funnel, defaultW: 4, defaultH: 5 },
+  { type: "scatter", label: "Dispersão", icon: ScatterChart, defaultW: 6, defaultH: 4 },
+  { type: "radar", label: "Radar", icon: Radar, defaultW: 5, defaultH: 5 },
+  { type: "ridgeline", label: "Relevo", icon: Mountain, defaultW: 8, defaultH: 5 },
+  { type: "sankey", label: "Fluxo", icon: Workflow, defaultW: 6, defaultH: 5 },
+  { type: "sales_report", label: "Relatório de vendas", icon: FileBarChart, defaultW: 8, defaultH: 7 },
+  { type: "network_sales", label: "Rede de vendas", icon: Network, defaultW: 7, defaultH: 6 },
+  { type: "radial", label: "Radial", icon: CircleDot, defaultW: 4, defaultH: 5 },
+  { type: "stat_spark", label: "Cartão estatístico", icon: Signal, defaultW: 5, defaultH: 3 },
+  { type: "bubble", label: "Bolhas", icon: Signal, defaultW: 6, defaultH: 5 },
+  { type: "hexmap", label: "Mapa hexagonal", icon: Hexagon, defaultW: 4, defaultH: 4 },
+  { type: "treemap", label: "Treemap", icon: LayoutGrid, defaultW: 5, defaultH: 4 },
+  { type: "heatmap", label: "Heatmap", icon: Grid2X2, defaultW: 6, defaultH: 4 },
+  { type: "sparkline", label: "Sparkline", icon: Signal, defaultW: 3, defaultH: 2 },
+  { type: "decomposition_tree", label: "Árvore de decomposição", icon: Network, defaultW: 5, defaultH: 5 },
   { type: "table", label: "Tabela", icon: Table2, defaultW: 6, defaultH: 4 },
   { type: "big_table", label: "Tabela grande", icon: Table2, defaultW: 12, defaultH: 6 },
   { type: "text", label: "Texto", icon: Type, defaultW: 4, defaultH: 2 },
   { type: "image", label: "Imagem", icon: ImageIcon, defaultW: 4, defaultH: 3 },
   { type: "markdown", label: "Markdown", icon: Type, defaultW: 4, defaultH: 3 },
+  { type: "slicer", label: "Slicer", icon: Filter, defaultW: 3, defaultH: 3 },
+  { type: "iframe", label: "Iframe", icon: AppWindow, defaultW: 6, defaultH: 4 },
 ];
 
 export default function ReportEditorPage() {
@@ -224,14 +246,32 @@ export default function ReportEditorPage() {
   const addWidget = (type: Widget["type"]) => {
     const catalog = WIDGET_CATALOG.find((t) => t.type === type)!;
     const ds = datasetList[0]?.id;
+    const noQueryTypes = ["text", "image", "markdown", "iframe", "data_intelligence"];
+    const fields = widgetFieldDefaults(type, modelForDataset(semanticModels, ds));
     const w: Widget = {
       id: crypto.randomUUID(),
       type,
       title: catalog.label,
       layout: { x: (widgets.length * 4) % 12, y: 100, w: catalog.defaultW, h: catalog.defaultH },
-      query: ds && !["text", "image", "markdown"].includes(type) ? { dataset_id: ds, measures: ["revenue"], dimensions: type === "kpi" ? [] : ["region"], limit: type === "big_table" ? 10000 : type === "ranking" ? 10 : DEFAULT_QUERY_LIMIT } : undefined,
+      query: ds && !noQueryTypes.includes(type) ? { dataset_id: ds, measures: fields.measures, dimensions: fields.dimensions, limit: type === "big_table" ? 10000 : type === "ranking" ? 10 : DEFAULT_QUERY_LIMIT } : undefined,
       text: type === "text" ? "Novo texto" : undefined,
-      config: type === "image" ? { imageUrl: "" } : type === "markdown" ? { markdown: "## Nota\nEdite aqui." } : type === "big_table" ? { pageSize: 50, zebra: true, freezeHeader: true } : type === "ranking" ? { color: "#2563EB", rankOrder: "desc", rankLimit: 10 } : undefined,
+      hierarchy: type === "decomposition_tree" ? fields.dimensions : undefined,
+      config: (() => {
+        if (type === "image") return { imageUrl: "" };
+        if (type === "markdown") return { markdown: "## Nota\nEdite aqui." };
+        if (type === "iframe") return { url: "" };
+        if (type === "gauge") return { min: 0, max: 100, target: 80, color: "#2563EB", gaugeLabel: "Valor" };
+        if (type === "waterfall") return { waterfallNegativeCategories: "" };
+        if (type === "scatter") return { xMeasure: fields.measures[1], yMeasure: fields.measures[0], dimension: fields.dimensions[0] };
+        if (type === "bubble") return { color: "#F97316", xMeasure: fields.measures[0], yMeasure: fields.measures[1], dimension: fields.dimensions[0] };
+        if (type === "kpi_goal") return { goal: 100, color: "#2563EB" };
+        if (type === "sparkline") return { color: "#2563EB" };
+        if (type === "stat_spark") return { color: "#8B5CF6", sparkStyle: "area" };
+        if (type === "ridgeline") return { color: "#8B5CF6", mirrored: true };
+        if (type === "big_table") return { pageSize: 50, zebra: true, freezeHeader: true };
+        if (type === "ranking") return { color: "#2563EB", rankOrder: "desc", rankLimit: 10 };
+        return {};
+      })(),
     };
     updateWidgets((prev) => [...prev, w]);
     setSelected(w.id);
