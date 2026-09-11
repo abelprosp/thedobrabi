@@ -694,6 +694,76 @@ def atendimento() -> tuple[list[str], list[dict]]:
     return headers, rows
 
 
+def advocacia_processos() -> tuple[list[str], list[dict]]:
+    areas = ["Cível", "Trabalhista", "Empresarial", "Tributário", "Família", "Contratos"]
+    statuses = ["Ativo", "Suspenso", "Encerrado", "Acordo"]
+    fases = ["Inicial", "Contestação", "Instrução", "Sentença", "Recurso", "Execução"]
+    tribunais = ["TJSP", "TJRJ", "TRT-2", "TRF-3", "TJMG"]
+    advogados = ["Mariana Costa", "Rafael Mendes", "Juliana Alves", "Carlos Nogueira", "Fernanda Lima"]
+    resultados = ["Em andamento", "Ganho", "Perdido", "Acordo"]
+    rows = []
+    start = date(2024, 1, 1)
+    for i in range(180):
+        distribuicao = random_day(start, date(2026, 8, 20))
+        area = random.choice(areas)
+        valor = random.choice([35000, 78000, 125000, 240000, 480000, 920000]) * random.uniform(0.75, 1.3)
+        resultado = random.choices(resultados, weights=[58, 18, 8, 16])[0]
+        status = "Encerrado" if resultado in ("Ganho", "Perdido") else random.choices(statuses, weights=[72, 8, 10, 10])[0]
+        previsto = valor * random.uniform(0.04, 0.12)
+        recebido = previsto * random.uniform(0.15, 0.95) if status != "Suspenso" else previsto * 0.1
+        rows.append({
+            "data": distribuicao.isoformat(), "mes": MESES[distribuicao.month], "ano": distribuicao.year,
+            "processo": f"{1000000 + i:07d}-{random.randint(10, 99)}.2026.8.26.{random.randint(1000, 9999)}",
+            "cliente": random.choice(CLIENTES), "area": area, "status": status, "fase": random.choice(fases),
+            "tribunal": random.choice(tribunais), "advogado": random.choice(advogados), "risco": random.choices(["Baixo", "Médio", "Alto"], weights=[50, 35, 15])[0],
+            "resultado": resultado, "valor_causa": money(valor), "honorarios_previstos": money(previsto),
+            "honorarios_recebidos": money(recebido), "horas_trabalhadas": round(random.uniform(4, 140), 1),
+            "data_distribuicao": distribuicao.isoformat(), "empresa": "Dobra Legal",
+        })
+    headers = ["data", "mes", "ano", "processo", "cliente", "area", "status", "fase", "tribunal", "advogado", "risco", "resultado", "valor_causa", "honorarios_previstos", "honorarios_recebidos", "horas_trabalhadas", "data_distribuicao", "empresa"]
+    return headers, rows
+
+
+def advocacia_prazos() -> tuple[list[str], list[dict]]:
+    areas = ["Cível", "Trabalhista", "Empresarial", "Tributário", "Família", "Contratos"]
+    responsaveis = ["Mariana Costa", "Rafael Mendes", "Juliana Alves", "Carlos Nogueira", "Fernanda Lima"]
+    rows = []
+    start = date(2026, 6, 1)
+    for i in range(240):
+        data_prazo = random_day(start, date(2026, 10, 31))
+        status = random.choices(["Concluído", "Pendente", "Próximo", "Vencido"], weights=[48, 25, 18, 9])[0]
+        rows.append({
+            "data": date(2026, 8, 28).isoformat(), "data_prazo": data_prazo.isoformat(),
+            "mes": MESES[data_prazo.month], "ano": data_prazo.year, "processo": f"{2000000 + i:07d}-55.2026.8.26.{random.randint(1000, 9999)}",
+            "cliente": random.choice(CLIENTES), "area": random.choice(areas), "responsavel": random.choice(responsaveis),
+            "risco": random.choices(["Baixo", "Médio", "Alto"], weights=[52, 32, 16])[0],
+            "status_prazo": status, "valor_causa": money(random.choice([25000, 80000, 160000, 350000, 750000]) * random.uniform(0.8, 1.2)),
+            "empresa": "Dobra Legal",
+        })
+    headers = ["data", "data_prazo", "mes", "ano", "processo", "cliente", "area", "responsavel", "risco", "status_prazo", "valor_causa", "empresa"]
+    return headers, rows
+
+
+def advocacia_financeiro() -> tuple[list[str], list[dict]]:
+    areas = ["Cível", "Trabalhista", "Empresarial", "Tributário", "Família", "Contratos"]
+    advogados = ["Mariana Costa", "Rafael Mendes", "Juliana Alves", "Carlos Nogueira", "Fernanda Lima"]
+    rows = []
+    for dt in month_starts(14, date(2026, 8, 1)):
+        for cliente in CLIENTES:
+            previsto = random.choice([2800, 4500, 7800, 12500, 22000]) * random.uniform(0.8, 1.25)
+            recebido = previsto * random.uniform(0.55, 1.0)
+            rows.append({
+                "data": dt.isoformat(), "mes": MESES[dt.month], "ano": dt.year, "cliente": cliente,
+                "processo": f"{3000000 + len(rows):07d}-44.2026.8.26.{random.randint(1000, 9999)}",
+                "area": random.choice(areas), "advogado": random.choice(advogados),
+                "status_recebimento": random.choices(["Recebido", "Parcial", "Em aberto"], weights=[55, 25, 20])[0],
+                "honorarios_previstos": money(previsto), "honorarios_recebidos": money(recebido),
+                "horas_trabalhadas": round(random.uniform(8, 95), 1), "valor": money(previsto), "empresa": "Dobra Legal",
+            })
+    headers = ["data", "mes", "ano", "cliente", "processo", "area", "advogado", "status_recebimento", "honorarios_previstos", "honorarios_recebidos", "horas_trabalhadas", "valor", "empresa"]
+    return headers, rows
+
+
 DATASETS = [
     ("redorai-financeiro-dre.csv", "P&L sob controlo", financeiro_dre),
     ("redorai-financeiro-inadimplencia.csv", "Inadimplência sob controlo", financeiro_inadimplencia),
@@ -710,6 +780,9 @@ DATASETS = [
     ("redorai-saas.csv", "SaaS e recorrência", saas),
     ("redorai-compras.csv", "Compras e fornecedores", compras),
     ("redorai-atendimento.csv", "Atendimento e CS", atendimento),
+    ("redorai-advocacia-processos.csv", "Carteira processual", advocacia_processos),
+    ("redorai-advocacia-prazos.csv", "Prazos e riscos jurídicos", advocacia_prazos),
+    ("redorai-advocacia-financeiro.csv", "Financeiro do escritório", advocacia_financeiro),
 ]
 
 

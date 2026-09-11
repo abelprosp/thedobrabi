@@ -1,0 +1,181 @@
+data,mes,ano,processo,cliente,area,status,fase,tribunal,advogado,risco,resultado,valor_causa,honorarios_previstos,honorarios_recebidos,horas_trabalhadas,data_distribuicao,empresa
+2025-10-16,Outubro,2025,1000000-79.2026.8.26.2424,Boa Vista,Cível,Ativo,Sentença,TJSP,Mariana Costa,Baixo,Em andamento,40524.85,1953.28,1450.38,35.6,2025-10-16,Dobra Legal
+2025-09-08,Setembro,2025,1000001-85.2026.8.26.5557,Atlas Ltda,Cível,Encerrado,Contestação,TRF-3,Juliana Alves,Baixo,Ganho,412493.14,34482.50,11253.45,33.3,2025-09-08,Dobra Legal
+2026-02-20,Fevereiro,2026,1000002-68.2026.8.26.9785,Helix Saúde,Empresarial,Encerrado,Sentença,TJSP,Fernanda Lima,Baixo,Em andamento,28035.36,2475.47,1969.74,89.5,2026-02-20,Dobra Legal
+2026-06-25,Junho,2026,1000003-39.2026.8.26.2654,Serra Café,Empresarial,Ativo,Instrução,TRF-3,Juliana Alves,Baixo,Em andamento,410764.19,41834.47,39248.15,52.3,2026-06-25,Dobra Legal
+2025-11-17,Novembro,2025,1000004-41.2026.8.26.3677,Céu Soft,Empresarial,Encerrado,Sentença,TRT-2,Fernanda Lima,Baixo,Ganho,1163947.22,103277.60,29631.47,48.1,2025-11-17,Dobra Legal
+2026-02-25,Fevereiro,2026,1000005-82.2026.8.26.6155,Lumen Tech,Cível,Encerrado,Execução,TRF-3,Carlos Nogueira,Alto,Perdido,93755.33,6759.12,1371.77,91.4,2026-02-25,Dobra Legal
+2024-05-26,Maio,2024,1000006-61.2026.8.26.6930,Verde Agro,Empresarial,Ativo,Contestação,TJMG,Carlos Nogueira,Baixo,Em andamento,69080.32,5993.88,5204.24,10.4,2024-05-26,Dobra Legal
+2024-04-22,Abril,2024,1000007-86.2026.8.26.8668,Casa Norte,Trabalhista,Encerrado,Instrução,TJMG,Mariana Costa,Médio,Ganho,770950.89,67622.20,30958.38,19.6,2024-04-22,Dobra Legal
+2026-06-25,Junho,2026,1000008-43.2026.8.26.9201,Pulse Varejo,Família,Ativo,Recurso,TJSP,Juliana Alves,Médio,Em andamento,146591.16,7718.41,1177.80,73.0,2026-06-25,Dobra Legal
+2024-07-22,Julho,2024,1000009-10.2026.8.26.6310,Rio Branco,Trabalhista,Suspenso,Inicial,TJSP,Juliana Alves,Alto,Em andamento,146172.62,12048.76,1204.88,117.1,2024-07-22,Dobra Legal
+2024-11-10,Novembro,2024,1000010-78.2026.8.26.3060,Orbit Educação,Trabalhista,Ativo,Execução,TRF-3,Fernanda Lima,Baixo,Em andamento,30886.78,3043.97,2443.76,75.8,2024-11-10,Dobra Legal
+2025-09-13,Setembro,2025,1000011-61.2026.8.26.7118,Céu Soft,Tributário,Encerrado,Recurso,TRF-3,Mariana Costa,Baixo,Ganho,98350.39,9361.92,6743.94,12.7,2025-09-13,Dobra Legal
+2024-01-22,Janeiro,2024,1000012-14.2026.8.26.6413,Forge Engenharia,Família,Ativo,Recurso,TJRJ,Juliana Alves,Médio,Em andamento,420750.29,38072.95,12684.13,33.1,2024-01-22,Dobra Legal
+2024-05-15,Maio,2024,1000013-94.2026.8.26.8062,Pampa Alimentos,Contratos,Ativo,Sentença,TRF-3,Carlos Nogueira,Alto,Em andamento,512119.88,37161.87,8378.54,11.4,2024-05-15,Dobra Legal
+2025-10-31,Outubro,2025,1000014-34.2026.8.26.4116,Sul Minas,Contratos,Encerrado,Sentença,TJRJ,Carlos Nogueira,Baixo,Ganho,27416.79,2852.65,677.26,66.9,2025-10-31,Dobra Legal
+2026-06-14,Junho,2026,1000015-11.2026.8.26.2528,Verde Agro,Cível,Ativo,Contestação,TRF-3,Carlos Nogueira,Baixo,Acordo,286658.94,26421.81,15389.92,121.6,2026-06-14,Dobra Legal
+2026-07-13,Julho,2026,1000016-64.2026.8.26.8973,Orbit Educação,Cível,Ativo,Contestação,TRT-2,Rafael Mendes,Alto,Acordo,74757.95,7679.56,3947.34,82.8,2026-07-13,Dobra Legal
+2025-07-09,Julho,2025,1000017-17.2026.8.26.9320,Forge Engenharia,Cível,Ativo,Contestação,TJSP,Fernanda Lima,Baixo,Em andamento,848684.03,96368.90,55402.57,121.2,2025-07-09,Dobra Legal
+2025-02-17,Fevereiro,2025,1000018-84.2026.8.26.9565,Aurora Moda,Cível,Encerrado,Instrução,TJRJ,Juliana Alves,Baixo,Ganho,425000.85,38059.05,18473.10,57.8,2025-02-17,Dobra Legal
+2025-11-18,Novembro,2025,1000019-82.2026.8.26.2638,Forge Engenharia,Contratos,Acordo,Recurso,TJRJ,Fernanda Lima,Baixo,Acordo,125184.19,5100.66,3299.76,130.9,2025-11-18,Dobra Legal
+2026-06-21,Junho,2026,1000020-93.2026.8.26.9666,Atlas Ltda,Cível,Encerrado,Execução,TJMG,Juliana Alves,Alto,Em andamento,74352.71,7158.92,4577.00,18.1,2026-06-21,Dobra Legal
+2026-06-18,Junho,2026,1000021-53.2026.8.26.4335,Costa Farma,Trabalhista,Ativo,Recurso,TRF-3,Juliana Alves,Alto,Em andamento,101685.72,6282.94,3982.53,119.1,2026-06-18,Dobra Legal
+2024-04-04,Abril,2024,1000022-30.2026.8.26.8239,Sul Minas,Contratos,Ativo,Execução,TRF-3,Fernanda Lima,Baixo,Em andamento,289473.95,14608.47,13641.95,14.2,2024-04-04,Dobra Legal
+2026-06-23,Junho,2026,1000023-26.2026.8.26.1685,Delta Log,Contratos,Encerrado,Instrução,TJSP,Juliana Alves,Baixo,Perdido,81905.82,7093.11,1904.32,37.9,2026-06-23,Dobra Legal
+2024-04-15,Abril,2024,1000024-30.2026.8.26.3900,Maré Energia,Empresarial,Ativo,Inicial,TJRJ,Juliana Alves,Médio,Em andamento,593411.56,31073.56,27776.81,60.0,2024-04-15,Dobra Legal
+2025-11-16,Novembro,2025,1000025-70.2026.8.26.4644,Lumen Tech,Contratos,Encerrado,Sentença,TRT-2,Juliana Alves,Médio,Perdido,69945.96,3402.71,2884.59,122.5,2025-11-16,Dobra Legal
+2024-08-16,Agosto,2024,1000026-92.2026.8.26.9346,Serra Café,Cível,Encerrado,Execução,TJMG,Juliana Alves,Alto,Em andamento,787723.67,92440.26,34507.95,19.7,2024-08-16,Dobra Legal
+2024-09-24,Setembro,2024,1000027-50.2026.8.26.8149,Terra Nova,Trabalhista,Ativo,Recurso,TJSP,Carlos Nogueira,Alto,Em andamento,614109.06,45913.93,33647.38,29.9,2024-09-24,Dobra Legal
+2024-02-15,Fevereiro,2024,1000028-95.2026.8.26.4228,Pampa Alimentos,Contratos,Ativo,Sentença,TJSP,Juliana Alves,Médio,Acordo,180223.25,17581.57,13072.95,94.2,2024-02-15,Dobra Legal
+2024-05-07,Maio,2024,1000029-80.2026.8.26.3085,Lumen Tech,Contratos,Encerrado,Sentença,TRF-3,Rafael Mendes,Médio,Ganho,128614.67,8500.74,6016.54,44.9,2024-05-07,Dobra Legal
+2025-07-15,Julho,2025,1000030-66.2026.8.26.4501,Casa Norte,Cível,Ativo,Sentença,TJRJ,Mariana Costa,Baixo,Em andamento,113475.32,10482.45,5471.74,94.3,2025-07-15,Dobra Legal
+2025-09-26,Setembro,2025,1000031-35.2026.8.26.3414,Atlas Ltda,Empresarial,Encerrado,Inicial,TJRJ,Carlos Nogueira,Médio,Ganho,42004.65,3941.03,1299.41,108.5,2025-09-26,Dobra Legal
+2025-04-11,Abril,2025,1000032-28.2026.8.26.1090,Helix Saúde,Tributário,Encerrado,Sentença,TJRJ,Rafael Mendes,Médio,Ganho,981289.48,69395.10,32596.43,98.6,2025-04-11,Dobra Legal
+2025-04-20,Abril,2025,1000033-81.2026.8.26.6198,Céu Soft,Cível,Ativo,Recurso,TJMG,Carlos Nogueira,Médio,Acordo,425788.35,44330.24,30324.64,78.5,2025-04-20,Dobra Legal
+2026-07-07,Julho,2026,1000034-45.2026.8.26.9540,Rio Branco,Trabalhista,Suspenso,Execução,TJRJ,Juliana Alves,Baixo,Em andamento,1125916.42,120685.89,12068.59,101.0,2026-07-07,Dobra Legal
+2024-08-28,Agosto,2024,1000035-37.2026.8.26.2052,Maré Energia,Empresarial,Ativo,Sentença,TRT-2,Fernanda Lima,Baixo,Em andamento,115730.03,6770.31,4774.15,12.5,2024-08-28,Dobra Legal
+2026-05-02,Maio,2026,1000036-83.2026.8.26.7232,Rio Branco,Tributário,Encerrado,Inicial,TRT-2,Juliana Alves,Médio,Ganho,299438.68,28638.87,23924.50,120.1,2026-05-02,Dobra Legal
+2026-05-05,Maio,2026,1000037-65.2026.8.26.8956,Atlas Ltda,Tributário,Ativo,Sentença,TRT-2,Carlos Nogueira,Médio,Em andamento,557344.14,32127.04,10458.55,118.3,2026-05-05,Dobra Legal
+2026-07-30,Julho,2026,1000038-64.2026.8.26.3223,Céu Soft,Trabalhista,Ativo,Contestação,TJSP,Juliana Alves,Baixo,Acordo,501008.64,46613.83,10122.57,32.8,2026-07-30,Dobra Legal
+2024-11-30,Novembro,2024,1000039-79.2026.8.26.1853,Pampa Alimentos,Empresarial,Ativo,Contestação,TJSP,Mariana Costa,Médio,Acordo,216729.87,23145.21,12180.06,133.1,2024-11-30,Dobra Legal
+2024-07-23,Julho,2024,1000040-99.2026.8.26.5198,Pampa Alimentos,Cível,Ativo,Contestação,TJMG,Fernanda Lima,Alto,Em andamento,400228.94,34066.51,11050.21,101.7,2024-07-23,Dobra Legal
+2026-03-07,Março,2026,1000041-60.2026.8.26.4249,Forge Engenharia,Trabalhista,Ativo,Recurso,TJRJ,Mariana Costa,Médio,Em andamento,101181.79,9530.09,8734.69,45.0,2026-03-07,Dobra Legal
+2025-12-01,Dezembro,2025,1000042-18.2026.8.26.9289,Aurora Moda,Família,Ativo,Inicial,TRF-3,Carlos Nogueira,Baixo,Em andamento,41577.37,3435.11,2333.18,134.7,2025-12-01,Dobra Legal
+2025-10-12,Outubro,2025,1000043-78.2026.8.26.8921,Céu Soft,Tributário,Ativo,Sentença,TJMG,Juliana Alves,Baixo,Em andamento,767413.52,70630.13,45396.09,37.4,2025-10-12,Dobra Legal
+2026-08-15,Agosto,2026,1000044-13.2026.8.26.9098,Aurora Moda,Cível,Ativo,Contestação,TRF-3,Rafael Mendes,Baixo,Em andamento,154362.14,13711.45,6213.91,39.1,2026-08-15,Dobra Legal
+2024-10-13,Outubro,2024,1000045-62.2026.8.26.9004,Sul Minas,Família,Ativo,Contestação,TRF-3,Carlos Nogueira,Baixo,Em andamento,1135334.32,62766.41,21534.20,6.3,2024-10-13,Dobra Legal
+2024-10-28,Outubro,2024,1000046-64.2026.8.26.6419,Pampa Alimentos,Trabalhista,Ativo,Execução,TRF-3,Juliana Alves,Baixo,Em andamento,271315.90,21124.88,12141.26,35.4,2024-10-28,Dobra Legal
+2026-01-08,Janeiro,2026,1000047-37.2026.8.26.8933,Costa Farma,Trabalhista,Suspenso,Execução,TJMG,Fernanda Lima,Médio,Em andamento,101969.39,5589.14,558.91,137.3,2026-01-08,Dobra Legal
+2026-05-02,Maio,2026,1000048-16.2026.8.26.5786,Orbit Educação,Trabalhista,Ativo,Execução,TRF-3,Mariana Costa,Alto,Em andamento,109389.47,9049.88,3343.47,82.1,2026-05-02,Dobra Legal
+2025-04-25,Abril,2025,1000049-18.2026.8.26.7565,Rio Branco,Tributário,Ativo,Inicial,TJMG,Mariana Costa,Baixo,Acordo,224973.18,24508.09,5913.06,114.3,2025-04-25,Dobra Legal
+2024-11-07,Novembro,2024,1000050-38.2026.8.26.9561,Serra Café,Cível,Encerrado,Sentença,TRF-3,Juliana Alves,Alto,Perdido,63581.57,5627.31,4403.89,138.6,2024-11-07,Dobra Legal
+2024-11-08,Novembro,2024,1000051-43.2026.8.26.2330,Pulse Varejo,Família,Ativo,Contestação,TJRJ,Fernanda Lima,Baixo,Acordo,375900.80,37973.11,24698.17,4.4,2024-11-08,Dobra Legal
+2025-04-06,Abril,2025,1000052-19.2026.8.26.4824,Costa Farma,Contratos,Ativo,Execução,TJMG,Rafael Mendes,Baixo,Em andamento,484056.89,30310.42,25390.59,78.1,2025-04-06,Dobra Legal
+2025-10-25,Outubro,2025,1000053-82.2026.8.26.5728,Céu Soft,Trabalhista,Ativo,Inicial,TRF-3,Juliana Alves,Médio,Em andamento,150580.89,9728.87,7288.54,132.2,2025-10-25,Dobra Legal
+2025-05-27,Maio,2025,1000054-87.2026.8.26.5102,Atlas Ltda,Família,Encerrado,Inicial,TJRJ,Fernanda Lima,Médio,Ganho,237784.17,26430.62,19495.94,6.8,2025-05-27,Dobra Legal
+2026-02-22,Fevereiro,2026,1000055-66.2026.8.26.5557,Pulse Varejo,Contratos,Encerrado,Recurso,TRF-3,Carlos Nogueira,Alto,Perdido,133366.98,7203.85,4071.41,67.9,2026-02-22,Dobra Legal
+2025-02-22,Fevereiro,2025,1000056-61.2026.8.26.1601,Céu Soft,Empresarial,Ativo,Inicial,TRT-2,Juliana Alves,Baixo,Acordo,139821.68,13352.12,5081.47,135.9,2025-02-22,Dobra Legal
+2025-02-17,Fevereiro,2025,1000057-73.2026.8.26.8242,Nimbus SA,Família,Ativo,Contestação,TRT-2,Fernanda Lima,Baixo,Em andamento,38909.96,2140.30,940.50,43.2,2025-02-17,Dobra Legal
+2026-06-20,Junho,2026,1000058-80.2026.8.26.1224,Sul Minas,Contratos,Ativo,Sentença,TJSP,Rafael Mendes,Alto,Acordo,196028.24,11593.85,3208.05,128.2,2026-06-20,Dobra Legal
+2025-04-17,Abril,2025,1000059-71.2026.8.26.8736,Verde Agro,Cível,Ativo,Sentença,TJMG,Rafael Mendes,Baixo,Em andamento,1111064.45,89673.75,33066.29,129.4,2025-04-17,Dobra Legal
+2025-06-04,Junho,2025,1000060-74.2026.8.26.5377,Atlas Ltda,Contratos,Suspenso,Instrução,TRT-2,Fernanda Lima,Médio,Em andamento,95566.76,6995.05,699.50,93.8,2025-06-04,Dobra Legal
+2026-06-05,Junho,2026,1000061-51.2026.8.26.4090,Verde Agro,Trabalhista,Ativo,Recurso,TRF-3,Rafael Mendes,Alto,Em andamento,251092.64,20959.81,10779.12,59.9,2026-06-05,Dobra Legal
+2024-11-21,Novembro,2024,1000062-93.2026.8.26.3492,Rio Branco,Contratos,Encerrado,Inicial,TJRJ,Fernanda Lima,Alto,Perdido,273090.08,19358.35,13182.09,49.2,2024-11-21,Dobra Legal
+2024-04-12,Abril,2024,1000063-93.2026.8.26.3529,Forge Engenharia,Tributário,Suspenso,Sentença,TRT-2,Juliana Alves,Médio,Em andamento,36374.56,2648.01,264.80,58.1,2024-04-12,Dobra Legal
+2024-03-23,Março,2024,1000064-79.2026.8.26.1588,Terra Nova,Empresarial,Ativo,Inicial,TJRJ,Juliana Alves,Alto,Em andamento,1124827.15,109667.72,83075.65,105.6,2024-03-23,Dobra Legal
+2025-03-20,Março,2025,1000065-51.2026.8.26.1919,Delta Log,Cível,Ativo,Instrução,TRT-2,Carlos Nogueira,Baixo,Em andamento,1046168.76,66910.12,11586.01,76.2,2025-03-20,Dobra Legal
+2025-08-02,Agosto,2025,1000066-84.2026.8.26.3344,Verde Agro,Contratos,Encerrado,Sentença,TRT-2,Carlos Nogueira,Baixo,Em andamento,65792.30,5893.47,2019.48,5.3,2025-08-02,Dobra Legal
+2026-04-03,Abril,2026,1000067-91.2026.8.26.7951,Costa Farma,Tributário,Ativo,Sentença,TRT-2,Rafael Mendes,Alto,Em andamento,140335.75,9493.05,5886.23,120.1,2026-04-03,Dobra Legal
+2024-04-19,Abril,2024,1000068-94.2026.8.26.7484,Costa Farma,Trabalhista,Acordo,Inicial,TJMG,Mariana Costa,Alto,Em andamento,255493.80,16254.12,15154.62,105.3,2024-04-19,Dobra Legal
+2026-05-02,Maio,2026,1000069-94.2026.8.26.3240,Helix Saúde,Empresarial,Ativo,Execução,TJSP,Juliana Alves,Médio,Em andamento,84543.09,7581.09,5247.72,8.5,2026-05-02,Dobra Legal
+2025-01-08,Janeiro,2025,1000070-26.2026.8.26.9837,Pampa Alimentos,Contratos,Suspenso,Recurso,TJMG,Juliana Alves,Médio,Em andamento,62366.72,3371.00,337.10,38.9,2025-01-08,Dobra Legal
+2026-04-24,Abril,2026,1000071-38.2026.8.26.7511,Sul Minas,Tributário,Ativo,Instrução,TJSP,Carlos Nogueira,Baixo,Em andamento,145075.96,16978.45,4458.64,77.0,2026-04-24,Dobra Legal
+2025-04-10,Abril,2025,1000072-96.2026.8.26.4830,Rio Branco,Empresarial,Ativo,Inicial,TJMG,Fernanda Lima,Baixo,Em andamento,1068999.87,97368.72,43541.24,87.0,2025-04-10,Dobra Legal
+2025-10-25,Outubro,2025,1000073-14.2026.8.26.5986,Rio Branco,Cível,Ativo,Inicial,TJSP,Rafael Mendes,Alto,Acordo,1106870.81,80429.29,21058.13,22.5,2025-10-25,Dobra Legal
+2025-04-09,Abril,2025,1000074-29.2026.8.26.7797,Helix Saúde,Empresarial,Encerrado,Sentença,TJMG,Carlos Nogueira,Alto,Ganho,1170386.67,97394.19,60371.96,42.0,2025-04-09,Dobra Legal
+2025-12-07,Dezembro,2025,1000075-79.2026.8.26.6876,Nimbus SA,Empresarial,Encerrado,Sentença,TRT-2,Rafael Mendes,Alto,Acordo,77521.13,3717.01,2596.50,133.1,2025-12-07,Dobra Legal
+2026-04-23,Abril,2026,1000076-52.2026.8.26.4990,Orbit Educação,Tributário,Encerrado,Recurso,TJRJ,Mariana Costa,Médio,Ganho,39008.30,3423.82,572.07,79.4,2026-04-23,Dobra Legal
+2025-08-23,Agosto,2025,1000077-28.2026.8.26.3129,Sul Minas,Trabalhista,Acordo,Instrução,TJRJ,Mariana Costa,Médio,Em andamento,72595.20,2920.28,2443.47,7.5,2025-08-23,Dobra Legal
+2024-01-16,Janeiro,2024,1000078-24.2026.8.26.2041,Rio Branco,Empresarial,Ativo,Sentença,TRT-2,Fernanda Lima,Médio,Em andamento,83761.79,4199.87,2044.37,65.5,2024-01-16,Dobra Legal
+2024-08-14,Agosto,2024,1000079-13.2026.8.26.1996,Rio Branco,Família,Ativo,Sentença,TRF-3,Mariana Costa,Baixo,Acordo,40249.43,2581.21,1715.66,127.7,2024-08-14,Dobra Legal
+2024-03-16,Março,2024,1000080-51.2026.8.26.7240,Terra Nova,Cível,Ativo,Recurso,TRT-2,Carlos Nogueira,Médio,Em andamento,135570.45,12288.94,7234.31,62.5,2024-03-16,Dobra Legal
+2026-03-23,Março,2026,1000081-37.2026.8.26.8046,Céu Soft,Contratos,Encerrado,Contestação,TRF-3,Juliana Alves,Médio,Ganho,42666.26,4331.35,3147.47,58.2,2026-03-23,Dobra Legal
+2026-01-17,Janeiro,2026,1000082-70.2026.8.26.2099,Forge Engenharia,Cível,Encerrado,Inicial,TJSP,Carlos Nogueira,Baixo,Ganho,123090.03,8609.42,2342.72,104.5,2026-01-17,Dobra Legal
+2026-04-11,Abril,2026,1000083-95.2026.8.26.7929,Nimbus SA,Trabalhista,Ativo,Instrução,TJMG,Juliana Alves,Baixo,Acordo,375834.98,35178.55,16838.11,82.6,2026-04-11,Dobra Legal
+2024-08-05,Agosto,2024,1000084-45.2026.8.26.4705,Maré Energia,Trabalhista,Ativo,Recurso,TJMG,Fernanda Lima,Médio,Acordo,933987.83,78923.13,19092.16,79.7,2024-08-05,Dobra Legal
+2025-09-15,Setembro,2025,1000085-10.2026.8.26.3972,Orbit Educação,Contratos,Ativo,Recurso,TRF-3,Mariana Costa,Baixo,Em andamento,825328.55,53414.25,22533.32,90.1,2025-09-15,Dobra Legal
+2024-02-01,Fevereiro,2024,1000086-51.2026.8.26.2391,Nimbus SA,Cível,Ativo,Contestação,TJRJ,Fernanda Lima,Baixo,Em andamento,958424.24,50406.16,20127.68,15.1,2024-02-01,Dobra Legal
+2025-03-29,Março,2025,1000087-65.2026.8.26.2816,Delta Log,Contratos,Ativo,Execução,TJMG,Carlos Nogueira,Médio,Em andamento,244107.35,24507.27,5907.57,45.9,2025-03-29,Dobra Legal
+2024-08-13,Agosto,2024,1000088-47.2026.8.26.6375,Helix Saúde,Tributário,Acordo,Inicial,TRF-3,Carlos Nogueira,Baixo,Em andamento,374462.44,37965.98,28904.59,55.7,2024-08-13,Dobra Legal
+2025-12-21,Dezembro,2025,1000089-15.2026.8.26.8147,Atlas Ltda,Trabalhista,Encerrado,Sentença,TJSP,Juliana Alves,Médio,Ganho,507503.02,34679.39,16218.06,82.0,2025-12-21,Dobra Legal
+2025-12-27,Dezembro,2025,1000090-68.2026.8.26.6928,Forge Engenharia,Contratos,Acordo,Sentença,TJSP,Rafael Mendes,Baixo,Em andamento,218216.01,11729.08,10651.08,58.5,2025-12-27,Dobra Legal
+2024-03-21,Março,2024,1000091-91.2026.8.26.2868,Casa Norte,Tributário,Suspenso,Recurso,TJRJ,Juliana Alves,Baixo,Em andamento,145024.08,6687.11,668.71,134.3,2024-03-21,Dobra Legal
+2025-10-22,Outubro,2025,1000092-19.2026.8.26.3902,Rio Branco,Trabalhista,Ativo,Sentença,TJMG,Fernanda Lima,Baixo,Em andamento,62910.31,3285.78,2488.39,129.7,2025-10-22,Dobra Legal
+2025-08-01,Agosto,2025,1000093-70.2026.8.26.8245,Delta Log,Contratos,Acordo,Instrução,TJMG,Mariana Costa,Baixo,Em andamento,1189185.17,77643.22,38962.16,14.1,2025-08-01,Dobra Legal
+2025-04-17,Abril,2025,1000094-21.2026.8.26.9307,Serra Café,Tributário,Encerrado,Sentença,TJMG,Fernanda Lima,Alto,Perdido,27345.13,1261.66,1061.56,104.5,2025-04-17,Dobra Legal
+2024-02-12,Fevereiro,2024,1000095-23.2026.8.26.6626,Forge Engenharia,Tributário,Ativo,Recurso,TJRJ,Mariana Costa,Baixo,Em andamento,532085.09,27705.08,5527.13,63.5,2024-02-12,Dobra Legal
+2025-03-25,Março,2025,1000096-96.2026.8.26.1857,Aurora Moda,Família,Acordo,Inicial,TRT-2,Mariana Costa,Médio,Em andamento,520988.63,36986.71,28463.93,56.6,2025-03-25,Dobra Legal
+2024-09-15,Setembro,2024,1000097-94.2026.8.26.3317,Pampa Alimentos,Contratos,Encerrado,Instrução,TRF-3,Rafael Mendes,Médio,Ganho,1177991.47,61290.74,13189.86,131.6,2024-09-15,Dobra Legal
+2024-11-13,Novembro,2024,1000098-97.2026.8.26.9624,Forge Engenharia,Família,Ativo,Execução,TRF-3,Fernanda Lima,Baixo,Em andamento,264941.11,25494.35,23140.89,53.3,2024-11-13,Dobra Legal
+2024-07-03,Julho,2024,1000099-22.2026.8.26.9317,Sul Minas,Trabalhista,Ativo,Execução,TJMG,Mariana Costa,Médio,Em andamento,158902.19,8104.84,1716.06,123.2,2024-07-03,Dobra Legal
+2025-09-24,Setembro,2025,1000100-31.2026.8.26.8170,Nimbus SA,Trabalhista,Encerrado,Sentença,TRT-2,Rafael Mendes,Alto,Em andamento,459454.05,46720.88,37247.52,87.0,2025-09-24,Dobra Legal
+2026-02-09,Fevereiro,2026,1000101-34.2026.8.26.7026,Boa Vista,Contratos,Acordo,Sentença,TRF-3,Juliana Alves,Médio,Em andamento,210888.39,21668.70,18920.67,72.4,2026-02-09,Dobra Legal
+2025-03-04,Março,2025,1000102-80.2026.8.26.2680,Casa Norte,Trabalhista,Ativo,Inicial,TRT-2,Mariana Costa,Médio,Em andamento,92874.02,8478.87,7201.05,41.1,2025-03-04,Dobra Legal
+2026-07-16,Julho,2026,1000103-13.2026.8.26.7797,Nimbus SA,Família,Acordo,Sentença,TJMG,Juliana Alves,Baixo,Em andamento,94151.90,9917.61,8506.37,139.3,2026-07-16,Dobra Legal
+2025-01-18,Janeiro,2025,1000104-14.2026.8.26.5700,Rio Branco,Trabalhista,Ativo,Execução,TJRJ,Carlos Nogueira,Baixo,Em andamento,32384.68,2164.05,577.45,4.7,2025-01-18,Dobra Legal
+2024-03-22,Março,2024,1000105-46.2026.8.26.4893,Delta Log,Cível,Acordo,Inicial,TJSP,Rafael Mendes,Baixo,Em andamento,108576.26,9631.84,4706.16,112.0,2024-03-22,Dobra Legal
+2025-04-13,Abril,2025,1000106-28.2026.8.26.5772,Maré Energia,Cível,Ativo,Inicial,TJMG,Juliana Alves,Baixo,Em andamento,42356.24,3835.63,2339.88,60.7,2025-04-13,Dobra Legal
+2025-11-11,Novembro,2025,1000107-74.2026.8.26.1333,Serra Café,Contratos,Acordo,Sentença,TJSP,Carlos Nogueira,Alto,Em andamento,36327.08,3034.28,2364.09,38.5,2025-11-11,Dobra Legal
+2024-01-17,Janeiro,2024,1000108-52.2026.8.26.3185,Nimbus SA,Empresarial,Encerrado,Instrução,TJMG,Juliana Alves,Médio,Ganho,32887.45,2968.44,2277.39,27.8,2024-01-17,Dobra Legal
+2026-03-08,Março,2026,1000109-68.2026.8.26.1605,Delta Log,Contratos,Ativo,Contestação,TJSP,Rafael Mendes,Alto,Em andamento,309468.13,15717.33,11361.05,46.9,2026-03-08,Dobra Legal
+2024-11-13,Novembro,2024,1000110-55.2026.8.26.1783,Aurora Moda,Família,Ativo,Instrução,TJSP,Juliana Alves,Baixo,Em andamento,310564.20,31138.18,9431.22,58.4,2024-11-13,Dobra Legal
+2025-03-26,Março,2025,1000111-20.2026.8.26.7955,Forge Engenharia,Tributário,Ativo,Sentença,TJMG,Rafael Mendes,Médio,Em andamento,160693.50,18310.19,10352.96,47.7,2025-03-26,Dobra Legal
+2024-03-22,Março,2024,1000112-67.2026.8.26.1693,Pampa Alimentos,Empresarial,Ativo,Recurso,TRF-3,Juliana Alves,Médio,Em andamento,839593.81,44776.87,22617.99,111.6,2024-03-22,Dobra Legal
+2024-02-28,Fevereiro,2024,1000113-28.2026.8.26.8179,Nimbus SA,Cível,Encerrado,Contestação,TJSP,Rafael Mendes,Médio,Em andamento,1012581.34,95539.93,87154.54,53.8,2024-02-28,Dobra Legal
+2025-01-27,Janeiro,2025,1000114-19.2026.8.26.3255,Casa Norte,Família,Encerrado,Instrução,TRF-3,Juliana Alves,Médio,Ganho,37898.08,4392.61,1966.18,37.9,2025-01-27,Dobra Legal
+2024-04-26,Abril,2024,1000115-67.2026.8.26.4515,Terra Nova,Cível,Acordo,Instrução,TRF-3,Rafael Mendes,Baixo,Em andamento,784140.31,38752.90,29838.64,120.0,2024-04-26,Dobra Legal
+2025-04-07,Abril,2025,1000116-54.2026.8.26.2063,Sul Minas,Trabalhista,Ativo,Recurso,TRT-2,Juliana Alves,Alto,Em andamento,915226.26,98516.51,39965.21,100.8,2025-04-07,Dobra Legal
+2026-08-07,Agosto,2026,1000117-40.2026.8.26.9094,Atlas Ltda,Contratos,Ativo,Instrução,TJMG,Fernanda Lima,Baixo,Em andamento,778090.05,92445.35,72445.03,113.3,2026-08-07,Dobra Legal
+2025-07-18,Julho,2025,1000118-62.2026.8.26.7708,Boa Vista,Trabalhista,Ativo,Inicial,TJRJ,Juliana Alves,Médio,Em andamento,593441.06,57774.27,30789.76,65.2,2025-07-18,Dobra Legal
+2025-11-27,Novembro,2025,1000119-26.2026.8.26.8088,Casa Norte,Família,Encerrado,Inicial,TJSP,Fernanda Lima,Baixo,Perdido,102573.00,8626.83,5350.61,26.4,2025-11-27,Dobra Legal
+2024-11-26,Novembro,2024,1000120-91.2026.8.26.5496,Orbit Educação,Contratos,Encerrado,Execução,TRT-2,Fernanda Lima,Médio,Acordo,73344.39,7897.33,2767.89,72.3,2024-11-26,Dobra Legal
+2024-06-21,Junho,2024,1000121-82.2026.8.26.1674,Atlas Ltda,Família,Encerrado,Inicial,TJSP,Fernanda Lima,Baixo,Ganho,400707.29,39129.32,24812.33,32.7,2024-06-21,Dobra Legal
+2025-08-08,Agosto,2025,1000122-71.2026.8.26.5012,Serra Café,Tributário,Ativo,Instrução,TRF-3,Mariana Costa,Médio,Em andamento,528693.67,33399.55,30571.28,25.5,2025-08-08,Dobra Legal
+2025-03-01,Março,2025,1000123-54.2026.8.26.7532,Orbit Educação,Tributário,Encerrado,Instrução,TJMG,Fernanda Lima,Baixo,Ganho,206931.04,13451.88,9748.45,36.9,2025-03-01,Dobra Legal
+2024-05-05,Maio,2024,1000124-41.2026.8.26.3616,Aurora Moda,Empresarial,Ativo,Recurso,TRT-2,Rafael Mendes,Médio,Em andamento,212725.29,15046.48,9664.39,71.8,2024-05-05,Dobra Legal
+2025-06-11,Junho,2025,1000125-40.2026.8.26.4524,Boa Vista,Tributário,Ativo,Instrução,TJSP,Mariana Costa,Baixo,Em andamento,296037.99,21154.69,10911.26,85.3,2025-06-11,Dobra Legal
+2026-05-13,Maio,2026,1000126-56.2026.8.26.7606,Pampa Alimentos,Contratos,Encerrado,Inicial,TRF-3,Mariana Costa,Médio,Em andamento,928116.95,69120.79,59164.95,30.5,2026-05-13,Dobra Legal
+2025-07-20,Julho,2025,1000127-88.2026.8.26.2946,Orbit Educação,Empresarial,Ativo,Inicial,TRF-3,Juliana Alves,Médio,Em andamento,33687.21,3571.68,2316.57,50.1,2025-07-20,Dobra Legal
+2026-08-19,Agosto,2026,1000128-52.2026.8.26.8761,Casa Norte,Empresarial,Ativo,Sentença,TJRJ,Fernanda Lima,Alto,Em andamento,67039.58,2924.55,759.30,23.0,2026-08-19,Dobra Legal
+2026-08-11,Agosto,2026,1000129-53.2026.8.26.9311,Casa Norte,Família,Suspenso,Recurso,TRF-3,Fernanda Lima,Baixo,Acordo,104922.02,6708.58,670.86,114.9,2026-08-11,Dobra Legal
+2025-01-12,Janeiro,2025,1000130-90.2026.8.26.1436,Terra Nova,Empresarial,Ativo,Sentença,TRT-2,Fernanda Lima,Médio,Em andamento,745459.92,83417.99,70711.70,102.1,2025-01-12,Dobra Legal
+2025-08-20,Agosto,2025,1000131-97.2026.8.26.4968,Nimbus SA,Tributário,Encerrado,Recurso,TJSP,Rafael Mendes,Baixo,Ganho,80989.57,8258.38,3750.56,46.7,2025-08-20,Dobra Legal
+2024-06-04,Junho,2024,1000132-17.2026.8.26.3262,Casa Norte,Tributário,Ativo,Contestação,TJMG,Juliana Alves,Alto,Em andamento,793169.19,61651.80,51090.95,69.1,2024-06-04,Dobra Legal
+2025-01-20,Janeiro,2025,1000133-97.2026.8.26.5331,Terra Nova,Empresarial,Ativo,Sentença,TJRJ,Rafael Mendes,Baixo,Em andamento,78219.57,7358.07,6211.12,44.6,2025-01-20,Dobra Legal
+2024-10-31,Outubro,2024,1000134-45.2026.8.26.5715,Helix Saúde,Empresarial,Encerrado,Recurso,TJMG,Carlos Nogueira,Alto,Ganho,794882.56,51956.12,22291.38,57.7,2024-10-31,Dobra Legal
+2024-12-19,Dezembro,2024,1000135-71.2026.8.26.4505,Lumen Tech,Trabalhista,Ativo,Recurso,TRT-2,Fernanda Lima,Médio,Acordo,96642.07,11009.54,7428.99,22.7,2024-12-19,Dobra Legal
+2025-09-22,Setembro,2025,1000136-22.2026.8.26.7771,Aurora Moda,Contratos,Acordo,Execução,TRF-3,Mariana Costa,Médio,Em andamento,423170.47,24566.62,8261.00,22.7,2025-09-22,Dobra Legal
+2025-07-17,Julho,2025,1000137-46.2026.8.26.6262,Delta Log,Trabalhista,Ativo,Execução,TJSP,Mariana Costa,Médio,Acordo,266181.85,24500.20,18491.01,35.6,2025-07-17,Dobra Legal
+2026-01-26,Janeiro,2026,1000138-60.2026.8.26.9116,Pulse Varejo,Contratos,Encerrado,Execução,TRT-2,Mariana Costa,Baixo,Em andamento,43829.67,2369.57,2098.74,81.2,2026-01-26,Dobra Legal
+2024-04-19,Abril,2024,1000139-27.2026.8.26.9261,Céu Soft,Empresarial,Encerrado,Instrução,TJRJ,Mariana Costa,Baixo,Ganho,124986.50,10242.08,8822.61,103.4,2024-04-19,Dobra Legal
+2025-10-25,Outubro,2025,1000140-34.2026.8.26.3875,Terra Nova,Empresarial,Encerrado,Execução,TRF-3,Carlos Nogueira,Médio,Ganho,784216.73,80979.33,48929.73,15.8,2025-10-25,Dobra Legal
+2025-11-16,Novembro,2025,1000141-67.2026.8.26.5374,Aurora Moda,Cível,Acordo,Instrução,TJMG,Fernanda Lima,Baixo,Em andamento,100614.29,4079.55,1863.78,92.9,2025-11-16,Dobra Legal
+2025-12-10,Dezembro,2025,1000142-49.2026.8.26.2923,Delta Log,Trabalhista,Ativo,Instrução,TJMG,Rafael Mendes,Baixo,Em andamento,39104.88,3710.50,3296.72,22.2,2025-12-10,Dobra Legal
+2024-06-05,Junho,2024,1000143-95.2026.8.26.4578,Verde Agro,Tributário,Ativo,Execução,TJMG,Mariana Costa,Médio,Em andamento,1190352.01,134538.05,101694.68,75.8,2024-06-05,Dobra Legal
+2025-01-05,Janeiro,2025,1000144-78.2026.8.26.3455,Pulse Varejo,Cível,Encerrado,Instrução,TJMG,Carlos Nogueira,Baixo,Perdido,389623.12,43727.81,13631.07,31.9,2025-01-05,Dobra Legal
+2025-08-20,Agosto,2025,1000145-82.2026.8.26.1945,Sul Minas,Tributário,Ativo,Sentença,TRT-2,Mariana Costa,Baixo,Em andamento,43553.62,2201.88,1062.05,115.0,2025-08-20,Dobra Legal
+2026-02-02,Fevereiro,2026,1000146-18.2026.8.26.8734,Nimbus SA,Trabalhista,Ativo,Instrução,TRF-3,Rafael Mendes,Médio,Em andamento,379279.79,31591.38,6261.55,108.2,2026-02-02,Dobra Legal
+2026-01-16,Janeiro,2026,1000147-20.2026.8.26.9835,Orbit Educação,Contratos,Ativo,Execução,TRT-2,Mariana Costa,Baixo,Acordo,229428.84,26010.17,11756.52,77.1,2026-01-16,Dobra Legal
+2025-06-25,Junho,2025,1000148-69.2026.8.26.9920,Maré Energia,Trabalhista,Encerrado,Recurso,TRF-3,Rafael Mendes,Baixo,Perdido,1185234.53,119109.38,111104.34,51.1,2025-06-25,Dobra Legal
+2024-10-09,Outubro,2024,1000149-12.2026.8.26.4943,Lumen Tech,Trabalhista,Ativo,Inicial,TJSP,Fernanda Lima,Baixo,Em andamento,1077337.90,96091.92,86385.71,85.3,2024-10-09,Dobra Legal
+2025-12-21,Dezembro,2025,1000150-17.2026.8.26.3295,Casa Norte,Cível,Ativo,Instrução,TJRJ,Fernanda Lima,Baixo,Em andamento,90269.21,5179.79,4356.12,85.3,2025-12-21,Dobra Legal
+2025-11-19,Novembro,2025,1000151-17.2026.8.26.3869,Maré Energia,Empresarial,Ativo,Recurso,TRF-3,Mariana Costa,Alto,Em andamento,71445.69,4121.23,1608.93,132.1,2025-11-19,Dobra Legal
+2025-11-18,Novembro,2025,1000152-70.2026.8.26.4948,Verde Agro,Tributário,Ativo,Instrução,TJRJ,Carlos Nogueira,Alto,Em andamento,444145.90,31142.10,23466.59,80.5,2025-11-18,Dobra Legal
+2025-03-02,Março,2025,1000153-57.2026.8.26.2514,Sul Minas,Família,Ativo,Execução,TJRJ,Mariana Costa,Baixo,Em andamento,395400.49,36272.64,32202.16,95.6,2025-03-02,Dobra Legal
+2025-09-09,Setembro,2025,1000154-71.2026.8.26.4422,Aurora Moda,Cível,Encerrado,Instrução,TJSP,Rafael Mendes,Alto,Perdido,29872.14,2925.81,1746.94,134.8,2025-09-09,Dobra Legal
+2024-04-30,Abril,2024,1000155-40.2026.8.26.6269,Delta Log,Contratos,Encerrado,Sentença,TRF-3,Fernanda Lima,Médio,Ganho,300706.25,28958.46,13532.45,45.9,2024-04-30,Dobra Legal
+2025-01-03,Janeiro,2025,1000156-50.2026.8.26.4328,Pampa Alimentos,Família,Encerrado,Instrução,TRF-3,Mariana Costa,Médio,Perdido,241512.54,23618.26,17933.42,34.1,2025-01-03,Dobra Legal
+2024-05-29,Maio,2024,1000157-35.2026.8.26.6404,Verde Agro,Cível,Encerrado,Sentença,TJMG,Rafael Mendes,Baixo,Ganho,131790.17,12862.85,4967.04,93.0,2024-05-29,Dobra Legal
+2025-12-02,Dezembro,2025,1000158-68.2026.8.26.3756,Pampa Alimentos,Empresarial,Suspenso,Contestação,TJRJ,Fernanda Lima,Baixo,Em andamento,146231.04,14501.37,1450.14,128.7,2025-12-02,Dobra Legal
+2025-07-09,Julho,2025,1000159-16.2026.8.26.1104,Maré Energia,Contratos,Encerrado,Contestação,TJRJ,Mariana Costa,Médio,Perdido,36335.93,1669.51,1342.95,5.2,2025-07-09,Dobra Legal
+2025-06-01,Junho,2025,1000160-94.2026.8.26.8993,Atlas Ltda,Tributário,Encerrado,Inicial,TJMG,Fernanda Lima,Baixo,Ganho,97905.95,11231.02,9885.55,6.3,2025-06-01,Dobra Legal
+2026-01-09,Janeiro,2026,1000161-32.2026.8.26.2753,Helix Saúde,Empresarial,Encerrado,Recurso,TJRJ,Rafael Mendes,Baixo,Em andamento,618054.55,58049.31,46145.38,75.6,2026-01-09,Dobra Legal
+2026-04-14,Abril,2026,1000162-99.2026.8.26.4700,Delta Log,Empresarial,Acordo,Execução,TJSP,Mariana Costa,Baixo,Em andamento,148401.87,11385.36,3923.01,55.6,2026-04-14,Dobra Legal
+2025-07-19,Julho,2025,1000163-92.2026.8.26.6427,Boa Vista,Tributário,Encerrado,Inicial,TJMG,Mariana Costa,Baixo,Ganho,38507.40,1795.02,1483.16,126.6,2025-07-19,Dobra Legal
+2025-12-09,Dezembro,2025,1000164-94.2026.8.26.1539,Pulse Varejo,Família,Ativo,Instrução,TJSP,Rafael Mendes,Médio,Acordo,215784.55,13471.39,7873.01,106.3,2025-12-09,Dobra Legal
+2025-12-30,Dezembro,2025,1000165-79.2026.8.26.6435,Serra Café,Tributário,Ativo,Execução,TJRJ,Mariana Costa,Médio,Em andamento,32011.08,3455.77,2390.11,136.5,2025-12-30,Dobra Legal
+2024-02-24,Fevereiro,2024,1000166-51.2026.8.26.1485,Costa Farma,Cível,Ativo,Sentença,TRF-3,Rafael Mendes,Baixo,Em andamento,210643.01,18770.23,11759.31,132.0,2024-02-24,Dobra Legal
+2025-03-18,Março,2025,1000167-41.2026.8.26.2204,Forge Engenharia,Trabalhista,Suspenso,Instrução,TJRJ,Carlos Nogueira,Médio,Em andamento,986452.81,62768.35,6276.83,90.2,2025-03-18,Dobra Legal
+2026-01-27,Janeiro,2026,1000168-23.2026.8.26.3170,Forge Engenharia,Tributário,Acordo,Contestação,TRF-3,Carlos Nogueira,Médio,Em andamento,118548.14,8959.73,6801.13,73.7,2026-01-27,Dobra Legal
+2024-04-15,Abril,2024,1000169-47.2026.8.26.7779,Serra Café,Cível,Ativo,Inicial,TJMG,Rafael Mendes,Médio,Em andamento,33062.85,2180.64,999.15,27.1,2024-04-15,Dobra Legal
+2025-01-24,Janeiro,2025,1000170-48.2026.8.26.8933,Forge Engenharia,Trabalhista,Ativo,Instrução,TRT-2,Rafael Mendes,Médio,Em andamento,70036.62,3738.32,1386.05,71.4,2025-01-24,Dobra Legal
+2025-09-23,Setembro,2025,1000171-52.2026.8.26.8212,Aurora Moda,Trabalhista,Acordo,Sentença,TJMG,Rafael Mendes,Baixo,Em andamento,194120.35,12924.02,8350.91,86.0,2025-09-23,Dobra Legal
+2025-12-12,Dezembro,2025,1000172-72.2026.8.26.4971,Aurora Moda,Trabalhista,Acordo,Sentença,TRT-2,Carlos Nogueira,Baixo,Acordo,221472.19,14022.70,9899.55,130.8,2025-12-12,Dobra Legal
+2024-07-23,Julho,2024,1000173-36.2026.8.26.8183,Delta Log,Família,Encerrado,Execução,TJSP,Carlos Nogueira,Médio,Perdido,407500.78,17177.50,12569.99,22.9,2024-07-23,Dobra Legal
+2024-11-06,Novembro,2024,1000174-86.2026.8.26.8851,Boa Vista,Trabalhista,Encerrado,Sentença,TJMG,Fernanda Lima,Alto,Ganho,139033.08,14337.94,2999.10,122.3,2024-11-06,Dobra Legal
+2025-03-04,Março,2025,1000175-20.2026.8.26.2791,Verde Agro,Família,Encerrado,Execução,TRT-2,Rafael Mendes,Médio,Em andamento,41471.38,3440.15,2272.37,10.0,2025-03-04,Dobra Legal
+2025-10-22,Outubro,2025,1000176-11.2026.8.26.2615,Costa Farma,Contratos,Encerrado,Contestação,TJMG,Fernanda Lima,Médio,Ganho,892206.58,104617.77,51719.31,97.5,2025-10-22,Dobra Legal
+2024-08-14,Agosto,2024,1000177-54.2026.8.26.1402,Rio Branco,Tributário,Encerrado,Inicial,TRT-2,Carlos Nogueira,Alto,Perdido,120640.47,10506.24,5782.35,15.7,2024-08-14,Dobra Legal
+2026-05-01,Maio,2026,1000178-54.2026.8.26.8801,Helix Saúde,Contratos,Suspenso,Sentença,TRF-3,Juliana Alves,Baixo,Em andamento,73443.30,5999.52,599.95,10.1,2026-05-01,Dobra Legal
+2025-12-28,Dezembro,2025,1000179-41.2026.8.26.9454,Pulse Varejo,Cível,Encerrado,Recurso,TJRJ,Juliana Alves,Médio,Ganho,42596.72,4011.38,1129.14,134.4,2025-12-28,Dobra Legal

@@ -21,7 +21,8 @@ export type StoreCategory =
   | "saas"
   | "compras"
   | "atendimento"
-  | "imobiliario";
+  | "imobiliario"
+  | "advocacia";
 
 export type StoreIcon =
   | "wallet"
@@ -39,7 +40,8 @@ export type StoreIcon =
   | "percent"
   | "building"
   | "home"
-  | "key";
+  | "key"
+  | "scale";
 
 export type TemplateWidget = Omit<Widget, "id">;
 
@@ -70,6 +72,7 @@ export const STORE_CATEGORIES: { id: StoreCategory | "todos"; label: string }[] 
   { id: "compras", label: "Compras" },
   { id: "atendimento", label: "Atendimento" },
   { id: "imobiliario", label: "Imobiliário" },
+  { id: "advocacia", label: "Advocacia" },
 ];
 
 export const CATEGORY_LABEL: Record<StoreCategory, string> = Object.fromEntries(
@@ -158,6 +161,33 @@ const IMOBILIARIO_LEADS_MEASURES: SemanticMeasure[] = [
   { name: "Pipeline", expression: "SUM(valor)", aggregation: "expression" },
   { name: "Convertidos", expression: "SUM(CASE WHEN status IN ('ganho','vendido','fechado','locado') THEN 1 ELSE 0 END)", aggregation: "expression" },
   { name: "Conversão", expression: "DIVIDE(SUM(CASE WHEN status IN ('ganho','vendido','fechado','locado') THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
+];
+
+const ADVOCACIA_PROCESSOS_MEASURES: SemanticMeasure[] = [
+  { name: "Processos", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Clientes", expression: "DISTINCTCOUNT(cliente)", aggregation: "expression" },
+  { name: "Valor da causa", expression: "SUM(valor_causa)", aggregation: "expression" },
+  { name: "Honorários previstos", expression: "SUM(honorarios_previstos)", aggregation: "expression" },
+  { name: "Honorários recebidos", expression: "SUM(honorarios_recebidos)", aggregation: "expression" },
+  { name: "Horas trabalhadas", expression: "SUM(horas_trabalhadas)", aggregation: "expression" },
+  { name: "Taxa de êxito", expression: "DIVIDE(SUM(CASE WHEN resultado = 'Ganho' THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
+];
+
+const ADVOCACIA_PRAZOS_MEASURES: SemanticMeasure[] = [
+  { name: "Prazos", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Prazos vencidos", expression: "SUM(CASE WHEN status_prazo = 'Vencido' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Prazos próximos", expression: "SUM(CASE WHEN status_prazo = 'Próximo' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Valor em risco", expression: "SUM(CASE WHEN risco = 'Alto' THEN valor_causa ELSE 0 END)", aggregation: "expression" },
+  { name: "Taxa de cumprimento", expression: "DIVIDE(SUM(CASE WHEN status_prazo = 'Concluído' THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
+];
+
+const ADVOCACIA_FINANCEIRO_MEASURES: SemanticMeasure[] = [
+  { name: "Honorários previstos", expression: "SUM(honorarios_previstos)", aggregation: "expression" },
+  { name: "Honorários recebidos", expression: "SUM(honorarios_recebidos)", aggregation: "expression" },
+  { name: "Em aberto", expression: "SUM(honorarios_previstos) - SUM(honorarios_recebidos)", aggregation: "expression" },
+  { name: "Clientes faturados", expression: "DISTINCTCOUNT(cliente)", aggregation: "expression" },
+  { name: "Horas trabalhadas", expression: "SUM(horas_trabalhadas)", aggregation: "expression" },
+  { name: "Ticket médio", expression: "DIVIDE(SUM(honorarios_previstos), COUNT(*))", aggregation: "expression" },
 ];
 
 export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
@@ -606,6 +636,81 @@ export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
       w("pie", "Por status", { x: 7, y: 2, w: 5, h: 5 }, { measures: ["Inadimplência"], dimensions: ["status"], limit: 8 }, { config: brl }),
       w("bar", "Por bairro", { x: 0, y: 7, w: 6, h: 5 }, { measures: ["Inadimplência"], dimensions: ["bairro"], limit: 12 }, { config: brl }),
       w("table", "Cobrança", { x: 6, y: 7, w: 6, h: 5 }, { measures: ["Inadimplência", "Aluguel"], dimensions: ["inquilino", "imovel"], limit: 40 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "advocacia-processos",
+    name: "Carteira processual",
+    category: "advocacia",
+    description: "Visão executiva da carteira: processos, clientes, valor da causa, êxito e carga de trabalho.",
+    pain: "A carteira está espalhada entre sistemas e a gestão não consegue priorizar os casos.",
+    icon: "scale",
+    popular: true,
+    needs: ["cliente", "processo", "status ou fase", "valor da causa"],
+    measures: ADVOCACIA_PROCESSOS_MEASURES,
+    widgets: [
+      w("kpi", "Processos", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Processos"] }),
+      w("kpi", "Clientes", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Clientes"] }),
+      w("kpi", "Valor da causa", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Valor da causa"] }, { config: brl }),
+      w("kpi", "Taxa de êxito", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Taxa de êxito"] }, { config: pct1 }),
+      w("slicer", "Área jurídica", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["area"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Fase", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["fase"], measures: [] }),
+      w("slicer", "Risco", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["risco"], measures: [] }),
+      w("slicer", "Advogado", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["advogado"], measures: [] }),
+      w("line", "Processos distribuídos", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Processos"], dimensions: ["data_distribuicao"], limit: 24 }),
+      w("pie", "Por área", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["Processos"], dimensions: ["area"], limit: 10 }),
+      w("bar", "Valor por advogado", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Valor da causa"], dimensions: ["advogado"], limit: 12 }, { config: brl }),
+      w("bar", "Processos por status", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Processos"], dimensions: ["status"], limit: 10 }),
+      w("table", "Detalhe da carteira", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Valor da causa", "Honorários previstos", "Horas trabalhadas"], dimensions: ["processo", "cliente", "advogado", "status"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "advocacia-prazos-riscos",
+    name: "Prazos e riscos jurídicos",
+    category: "advocacia",
+    description: "Controle de prazos, tarefas críticas e exposição financeira por processo e responsável.",
+    pain: "Um prazo perdido pode gerar custo, risco para o cliente e desgaste para o escritório.",
+    icon: "alert",
+    popular: true,
+    needs: ["processo", "prazo", "responsável", "risco ou status do prazo"],
+    measures: ADVOCACIA_PRAZOS_MEASURES,
+    widgets: [
+      w("kpi", "Prazos", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Prazos"] }),
+      w("kpi", "Vencidos", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Prazos vencidos"] }),
+      w("kpi", "Próximos", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Prazos próximos"] }),
+      w("kpi", "Valor em risco", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Valor em risco"] }, { config: brl }),
+      w("slicer", "Status do prazo", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["status_prazo"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Responsável", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["responsavel"], measures: [] }),
+      w("slicer", "Risco", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["risco"], measures: [] }),
+      w("bar", "Prazos por responsável", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Prazos"], dimensions: ["responsavel"], limit: 15 }),
+      w("pie", "Por status", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["Prazos"], dimensions: ["status_prazo"], limit: 8 }),
+      w("line", "Agenda de prazos", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Prazos"], dimensions: ["data_prazo"], limit: 60 }),
+      w("bar", "Exposição por área", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Valor em risco"], dimensions: ["area"], limit: 12 }, { config: brl }),
+      w("table", "Prazos críticos", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Valor em risco"], dimensions: ["processo", "cliente", "data_prazo", "responsavel", "risco"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "advocacia-financeiro",
+    name: "Financeiro do escritório",
+    category: "advocacia",
+    description: "Honorários previstos, recebimentos, horas trabalhadas e rentabilidade por cliente e área.",
+    pain: "O escritório fatura, mas não sabe quais clientes e áreas geram margem de verdade.",
+    icon: "wallet",
+    needs: ["cliente", "honorários", "recebimentos", "horas trabalhadas"],
+    measures: ADVOCACIA_FINANCEIRO_MEASURES,
+    widgets: [
+      w("kpi", "Honorários previstos", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Honorários previstos"] }, { config: brl }),
+      w("kpi", "Honorários recebidos", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Honorários recebidos"] }, { config: brl }),
+      w("kpi", "Em aberto", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Em aberto"] }, { config: brl }),
+      w("kpi", "Horas trabalhadas", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Horas trabalhadas"] }),
+      w("slicer", "Cliente", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["cliente"], measures: [] }, { config: { slicerStyle: "dropdown", slicerSearch: true } }),
+      w("slicer", "Área", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["area"], measures: [] }),
+      w("slicer", "Status de recebimento", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["status_recebimento"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("bar", "Honorários por cliente", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Honorários previstos"], dimensions: ["cliente"], limit: 15 }, { config: brl }),
+      w("pie", "Por área", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["Honorários previstos"], dimensions: ["area"], limit: 10 }, { config: brl }),
+      w("line", "Previsto x recebido", { x: 0, y: 9, w: 8, h: 5 }, { measures: ["Honorários previstos", "Honorários recebidos"], dimensions: ["mes"], limit: 24 }, { config: brl }),
+      w("bar", "Horas por advogado", { x: 8, y: 9, w: 4, h: 5 }, { measures: ["Horas trabalhadas"], dimensions: ["advogado"], limit: 12 }),
+      w("table", "Carteira financeira", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Honorários previstos", "Honorários recebidos", "Horas trabalhadas", "Ticket médio"], dimensions: ["cliente", "processo", "advogado"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
     ],
   },
 ];

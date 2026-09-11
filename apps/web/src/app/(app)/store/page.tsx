@@ -17,6 +17,7 @@ import {
   Percent,
   Repeat,
   Search,
+  Scale,
   ShoppingBag,
   ShoppingCart,
   Store,
@@ -59,6 +60,7 @@ const ICONS: Record<StoreIcon, typeof Wallet> = {
   building: Building2,
   home: Home,
   key: KeyRound,
+  scale: Scale,
 };
 
 export default function StorePage() {

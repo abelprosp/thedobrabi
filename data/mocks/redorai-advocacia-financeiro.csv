@@ -1,0 +1,281 @@
+data,mes,ano,cliente,processo,area,advogado,status_recebimento,honorarios_previstos,honorarios_recebidos,horas_trabalhadas,valor,empresa
+2025-07-01,Julho,2025,Atlas Ltda,3000000-44.2026.8.26.6914,Empresarial,Fernanda Lima,Parcial,2806.82,1966.44,78.5,2806.82,Dobra Legal
+2025-07-01,Julho,2025,Nimbus SA,3000001-44.2026.8.26.4259,Família,Fernanda Lima,Parcial,6309.62,3814.53,54.8,6309.62,Dobra Legal
+2025-07-01,Julho,2025,Forge Engenharia,3000002-44.2026.8.26.8987,Contratos,Carlos Nogueira,Em aberto,7486.43,6385.45,41.2,7486.43,Dobra Legal
+2025-07-01,Julho,2025,Helix Saúde,3000003-44.2026.8.26.3745,Contratos,Juliana Alves,Recebido,7867.77,7714.09,61.3,7867.77,Dobra Legal
+2025-07-01,Julho,2025,Orbit Educação,3000004-44.2026.8.26.3654,Empresarial,Rafael Mendes,Recebido,14775.07,8600.64,64.8,14775.07,Dobra Legal
+2025-07-01,Julho,2025,Pulse Varejo,3000005-44.2026.8.26.8289,Empresarial,Fernanda Lima,Recebido,8364.90,6089.27,47.2,8364.90,Dobra Legal
+2025-07-01,Julho,2025,Lumen Tech,3000006-44.2026.8.26.4844,Contratos,Juliana Alves,Em aberto,3972.37,2226.10,69.0,3972.37,Dobra Legal
+2025-07-01,Julho,2025,Verde Agro,3000007-44.2026.8.26.2565,Cível,Carlos Nogueira,Recebido,2505.32,1825.55,10.3,2505.32,Dobra Legal
+2025-07-01,Julho,2025,Costa Farma,3000008-44.2026.8.26.2702,Empresarial,Fernanda Lima,Recebido,12947.40,12924.18,65.0,12947.40,Dobra Legal
+2025-07-01,Julho,2025,Delta Log,3000009-44.2026.8.26.5655,Tributário,Rafael Mendes,Recebido,11740.21,7764.13,81.0,11740.21,Dobra Legal
+2025-07-01,Julho,2025,Aurora Moda,3000010-44.2026.8.26.6328,Tributário,Carlos Nogueira,Em aberto,2284.30,1623.17,55.0,2284.30,Dobra Legal
+2025-07-01,Julho,2025,Pampa Alimentos,3000011-44.2026.8.26.9835,Trabalhista,Fernanda Lima,Parcial,8165.39,4987.44,62.9,8165.39,Dobra Legal
+2025-07-01,Julho,2025,Serra Café,3000012-44.2026.8.26.9745,Empresarial,Juliana Alves,Recebido,21906.28,18355.35,27.8,21906.28,Dobra Legal
+2025-07-01,Julho,2025,Maré Energia,3000013-44.2026.8.26.5256,Trabalhista,Juliana Alves,Recebido,2796.74,1998.56,53.5,2796.74,Dobra Legal
+2025-07-01,Julho,2025,Céu Soft,3000014-44.2026.8.26.1136,Contratos,Carlos Nogueira,Em aberto,4296.37,3270.13,49.5,4296.37,Dobra Legal
+2025-07-01,Julho,2025,Rio Branco,3000015-44.2026.8.26.4788,Cível,Fernanda Lima,Recebido,3205.00,2913.61,43.8,3205.00,Dobra Legal
+2025-07-01,Julho,2025,Casa Norte,3000016-44.2026.8.26.7385,Tributário,Rafael Mendes,Recebido,21927.35,14525.85,44.7,21927.35,Dobra Legal
+2025-07-01,Julho,2025,Sul Minas,3000017-44.2026.8.26.5454,Empresarial,Fernanda Lima,Em aberto,4646.14,4227.90,43.9,4646.14,Dobra Legal
+2025-07-01,Julho,2025,Boa Vista,3000018-44.2026.8.26.8460,Família,Carlos Nogueira,Recebido,2469.83,1680.27,62.2,2469.83,Dobra Legal
+2025-07-01,Julho,2025,Terra Nova,3000019-44.2026.8.26.9764,Cível,Rafael Mendes,Em aberto,4249.30,2628.05,32.5,4249.30,Dobra Legal
+2025-08-01,Agosto,2025,Atlas Ltda,3000020-44.2026.8.26.4814,Cível,Rafael Mendes,Recebido,5048.27,4428.33,26.9,5048.27,Dobra Legal
+2025-08-01,Agosto,2025,Nimbus SA,3000021-44.2026.8.26.7084,Tributário,Mariana Costa,Recebido,11752.62,10692.04,81.4,11752.62,Dobra Legal
+2025-08-01,Agosto,2025,Forge Engenharia,3000022-44.2026.8.26.2169,Família,Carlos Nogueira,Recebido,3713.48,3338.58,85.9,3713.48,Dobra Legal
+2025-08-01,Agosto,2025,Helix Saúde,3000023-44.2026.8.26.2998,Contratos,Rafael Mendes,Recebido,9108.55,8404.58,92.8,9108.55,Dobra Legal
+2025-08-01,Agosto,2025,Orbit Educação,3000024-44.2026.8.26.8550,Contratos,Mariana Costa,Recebido,5093.68,2878.33,93.4,5093.68,Dobra Legal
+2025-08-01,Agosto,2025,Pulse Varejo,3000025-44.2026.8.26.6293,Trabalhista,Mariana Costa,Parcial,12188.82,11976.08,55.8,12188.82,Dobra Legal
+2025-08-01,Agosto,2025,Lumen Tech,3000026-44.2026.8.26.4255,Empresarial,Mariana Costa,Em aberto,2559.17,2142.88,26.9,2559.17,Dobra Legal
+2025-08-01,Agosto,2025,Verde Agro,3000027-44.2026.8.26.1246,Trabalhista,Juliana Alves,Parcial,2537.32,1891.25,42.4,2537.32,Dobra Legal
+2025-08-01,Agosto,2025,Costa Farma,3000028-44.2026.8.26.8786,Contratos,Fernanda Lima,Recebido,3618.08,2058.32,75.1,3618.08,Dobra Legal
+2025-08-01,Agosto,2025,Delta Log,3000029-44.2026.8.26.6544,Contratos,Mariana Costa,Recebido,3919.34,2316.84,64.1,3919.34,Dobra Legal
+2025-08-01,Agosto,2025,Aurora Moda,3000030-44.2026.8.26.4812,Empresarial,Fernanda Lima,Parcial,25435.52,15429.75,73.8,25435.52,Dobra Legal
+2025-08-01,Agosto,2025,Pampa Alimentos,3000031-44.2026.8.26.7189,Empresarial,Rafael Mendes,Recebido,14124.19,7904.02,11.4,14124.19,Dobra Legal
+2025-08-01,Agosto,2025,Serra Café,3000032-44.2026.8.26.9029,Trabalhista,Fernanda Lima,Recebido,13144.51,10439.77,38.2,13144.51,Dobra Legal
+2025-08-01,Agosto,2025,Maré Energia,3000033-44.2026.8.26.3627,Cível,Fernanda Lima,Recebido,11548.70,10672.24,33.7,11548.70,Dobra Legal
+2025-08-01,Agosto,2025,Céu Soft,3000034-44.2026.8.26.9289,Tributário,Rafael Mendes,Em aberto,8141.04,6141.07,61.9,8141.04,Dobra Legal
+2025-08-01,Agosto,2025,Rio Branco,3000035-44.2026.8.26.2037,Contratos,Fernanda Lima,Em aberto,8963.82,5893.30,24.5,8963.82,Dobra Legal
+2025-08-01,Agosto,2025,Casa Norte,3000036-44.2026.8.26.5638,Empresarial,Carlos Nogueira,Parcial,14307.25,8861.33,17.6,14307.25,Dobra Legal
+2025-08-01,Agosto,2025,Sul Minas,3000037-44.2026.8.26.3126,Trabalhista,Mariana Costa,Recebido,24123.02,13742.88,50.2,24123.02,Dobra Legal
+2025-08-01,Agosto,2025,Boa Vista,3000038-44.2026.8.26.7366,Contratos,Carlos Nogueira,Recebido,2280.09,1912.51,69.0,2280.09,Dobra Legal
+2025-08-01,Agosto,2025,Terra Nova,3000039-44.2026.8.26.2161,Cível,Rafael Mendes,Parcial,6412.29,4163.66,88.8,6412.29,Dobra Legal
+2025-09-01,Setembro,2025,Atlas Ltda,3000040-44.2026.8.26.6913,Família,Carlos Nogueira,Em aberto,2829.75,2369.95,77.1,2829.75,Dobra Legal
+2025-09-01,Setembro,2025,Nimbus SA,3000041-44.2026.8.26.1666,Contratos,Mariana Costa,Em aberto,3277.79,2194.86,14.8,3277.79,Dobra Legal
+2025-09-01,Setembro,2025,Forge Engenharia,3000042-44.2026.8.26.4784,Família,Carlos Nogueira,Recebido,5545.19,3292.20,53.8,5545.19,Dobra Legal
+2025-09-01,Setembro,2025,Helix Saúde,3000043-44.2026.8.26.7802,Contratos,Mariana Costa,Parcial,4754.31,4641.99,58.2,4754.31,Dobra Legal
+2025-09-01,Setembro,2025,Orbit Educação,3000044-44.2026.8.26.2705,Trabalhista,Rafael Mendes,Recebido,13951.85,10354.83,51.9,13951.85,Dobra Legal
+2025-09-01,Setembro,2025,Pulse Varejo,3000045-44.2026.8.26.6772,Empresarial,Fernanda Lima,Em aberto,4681.15,3838.36,36.2,4681.15,Dobra Legal
+2025-09-01,Setembro,2025,Lumen Tech,3000046-44.2026.8.26.6299,Família,Rafael Mendes,Parcial,7687.32,6418.60,26.6,7687.32,Dobra Legal
+2025-09-01,Setembro,2025,Verde Agro,3000047-44.2026.8.26.8412,Tributário,Carlos Nogueira,Recebido,26768.85,17783.62,11.0,26768.85,Dobra Legal
+2025-09-01,Setembro,2025,Costa Farma,3000048-44.2026.8.26.5945,Cível,Juliana Alves,Em aberto,8331.13,6522.64,26.7,8331.13,Dobra Legal
+2025-09-01,Setembro,2025,Delta Log,3000049-44.2026.8.26.5521,Família,Fernanda Lima,Parcial,6316.17,5810.08,88.6,6316.17,Dobra Legal
+2025-09-01,Setembro,2025,Aurora Moda,3000050-44.2026.8.26.3557,Trabalhista,Juliana Alves,Recebido,3790.93,2870.37,58.6,3790.93,Dobra Legal
+2025-09-01,Setembro,2025,Pampa Alimentos,3000051-44.2026.8.26.7550,Família,Rafael Mendes,Parcial,4118.89,2822.00,71.0,4118.89,Dobra Legal
+2025-09-01,Setembro,2025,Serra Café,3000052-44.2026.8.26.2562,Família,Juliana Alves,Recebido,10972.58,10111.97,78.3,10972.58,Dobra Legal
+2025-09-01,Setembro,2025,Maré Energia,3000053-44.2026.8.26.6478,Empresarial,Carlos Nogueira,Recebido,10441.44,6005.55,83.5,10441.44,Dobra Legal
+2025-09-01,Setembro,2025,Céu Soft,3000054-44.2026.8.26.1187,Contratos,Carlos Nogueira,Recebido,5114.05,4767.65,53.6,5114.05,Dobra Legal
+2025-09-01,Setembro,2025,Rio Branco,3000055-44.2026.8.26.9231,Contratos,Rafael Mendes,Recebido,8135.15,5021.92,66.6,8135.15,Dobra Legal
+2025-09-01,Setembro,2025,Casa Norte,3000056-44.2026.8.26.9269,Cível,Rafael Mendes,Recebido,15462.10,13742.38,76.4,15462.10,Dobra Legal
+2025-09-01,Setembro,2025,Sul Minas,3000057-44.2026.8.26.1807,Família,Carlos Nogueira,Recebido,3867.68,2270.89,42.7,3867.68,Dobra Legal
+2025-09-01,Setembro,2025,Boa Vista,3000058-44.2026.8.26.3209,Tributário,Fernanda Lima,Recebido,14352.77,8736.08,42.4,14352.77,Dobra Legal
+2025-09-01,Setembro,2025,Terra Nova,3000059-44.2026.8.26.9589,Trabalhista,Rafael Mendes,Recebido,19541.38,16164.60,75.6,19541.38,Dobra Legal
+2025-10-01,Outubro,2025,Atlas Ltda,3000060-44.2026.8.26.2843,Contratos,Carlos Nogueira,Recebido,8643.43,6994.33,38.3,8643.43,Dobra Legal
+2025-10-01,Outubro,2025,Nimbus SA,3000061-44.2026.8.26.5994,Trabalhista,Juliana Alves,Parcial,7449.28,6294.16,94.1,7449.28,Dobra Legal
+2025-10-01,Outubro,2025,Forge Engenharia,3000062-44.2026.8.26.4825,Trabalhista,Juliana Alves,Recebido,13505.40,10104.86,71.4,13505.40,Dobra Legal
+2025-10-01,Outubro,2025,Helix Saúde,3000063-44.2026.8.26.3419,Empresarial,Mariana Costa,Recebido,2381.59,1368.32,78.0,2381.59,Dobra Legal
+2025-10-01,Outubro,2025,Orbit Educação,3000064-44.2026.8.26.4424,Contratos,Fernanda Lima,Recebido,7819.72,4380.89,55.5,7819.72,Dobra Legal
+2025-10-01,Outubro,2025,Pulse Varejo,3000065-44.2026.8.26.3315,Contratos,Mariana Costa,Recebido,8166.29,6781.03,86.8,8166.29,Dobra Legal
+2025-10-01,Outubro,2025,Lumen Tech,3000066-44.2026.8.26.5653,Trabalhista,Fernanda Lima,Recebido,18030.47,11298.68,48.5,18030.47,Dobra Legal
+2025-10-01,Outubro,2025,Verde Agro,3000067-44.2026.8.26.6901,Cível,Mariana Costa,Recebido,2323.91,1968.74,84.9,2323.91,Dobra Legal
+2025-10-01,Outubro,2025,Costa Farma,3000068-44.2026.8.26.2631,Empresarial,Carlos Nogueira,Em aberto,11300.32,8151.10,54.2,11300.32,Dobra Legal
+2025-10-01,Outubro,2025,Delta Log,3000069-44.2026.8.26.1352,Cível,Rafael Mendes,Em aberto,4002.72,3942.91,34.5,4002.72,Dobra Legal
+2025-10-01,Outubro,2025,Aurora Moda,3000070-44.2026.8.26.6681,Contratos,Juliana Alves,Recebido,12212.87,7579.95,34.3,12212.87,Dobra Legal
+2025-10-01,Outubro,2025,Pampa Alimentos,3000071-44.2026.8.26.5221,Tributário,Mariana Costa,Em aberto,20331.19,11749.49,90.6,20331.19,Dobra Legal
+2025-10-01,Outubro,2025,Serra Café,3000072-44.2026.8.26.3248,Cível,Carlos Nogueira,Recebido,3907.21,3726.42,67.0,3907.21,Dobra Legal
+2025-10-01,Outubro,2025,Maré Energia,3000073-44.2026.8.26.7987,Empresarial,Fernanda Lima,Recebido,4445.10,3590.77,55.2,4445.10,Dobra Legal
+2025-10-01,Outubro,2025,Céu Soft,3000074-44.2026.8.26.4314,Trabalhista,Juliana Alves,Parcial,4921.26,3993.42,86.2,4921.26,Dobra Legal
+2025-10-01,Outubro,2025,Rio Branco,3000075-44.2026.8.26.3378,Contratos,Fernanda Lima,Em aberto,4470.88,4287.80,35.6,4470.88,Dobra Legal
+2025-10-01,Outubro,2025,Casa Norte,3000076-44.2026.8.26.4016,Empresarial,Rafael Mendes,Parcial,22876.32,19988.14,74.6,22876.32,Dobra Legal
+2025-10-01,Outubro,2025,Sul Minas,3000077-44.2026.8.26.5485,Trabalhista,Rafael Mendes,Recebido,15406.73,10576.82,24.1,15406.73,Dobra Legal
+2025-10-01,Outubro,2025,Boa Vista,3000078-44.2026.8.26.4783,Família,Rafael Mendes,Recebido,23707.77,19500.16,10.3,23707.77,Dobra Legal
+2025-10-01,Outubro,2025,Terra Nova,3000079-44.2026.8.26.9230,Família,Carlos Nogueira,Parcial,3107.06,2375.26,40.5,3107.06,Dobra Legal
+2025-11-01,Novembro,2025,Atlas Ltda,3000080-44.2026.8.26.4166,Trabalhista,Mariana Costa,Recebido,12764.38,7810.28,92.3,12764.38,Dobra Legal
+2025-11-01,Novembro,2025,Nimbus SA,3000081-44.2026.8.26.4323,Trabalhista,Mariana Costa,Recebido,9575.20,6225.31,91.1,9575.20,Dobra Legal
+2025-11-01,Novembro,2025,Forge Engenharia,3000082-44.2026.8.26.6323,Tributário,Rafael Mendes,Recebido,14877.60,11462.81,75.5,14877.60,Dobra Legal
+2025-11-01,Novembro,2025,Helix Saúde,3000083-44.2026.8.26.6126,Tributário,Fernanda Lima,Em aberto,24879.78,17942.51,57.8,24879.78,Dobra Legal
+2025-11-01,Novembro,2025,Orbit Educação,3000084-44.2026.8.26.1630,Família,Mariana Costa,Recebido,22799.78,21525.33,79.9,22799.78,Dobra Legal
+2025-11-01,Novembro,2025,Pulse Varejo,3000085-44.2026.8.26.9812,Tributário,Mariana Costa,Parcial,3346.00,2210.28,52.9,3346.00,Dobra Legal
+2025-11-01,Novembro,2025,Lumen Tech,3000086-44.2026.8.26.5989,Empresarial,Carlos Nogueira,Recebido,2479.21,1853.95,33.6,2479.21,Dobra Legal
+2025-11-01,Novembro,2025,Verde Agro,3000087-44.2026.8.26.8595,Contratos,Carlos Nogueira,Recebido,3109.34,2974.56,51.6,3109.34,Dobra Legal
+2025-11-01,Novembro,2025,Costa Farma,3000088-44.2026.8.26.9952,Trabalhista,Carlos Nogueira,Recebido,5176.93,5032.13,47.2,5176.93,Dobra Legal
+2025-11-01,Novembro,2025,Delta Log,3000089-44.2026.8.26.4308,Tributário,Mariana Costa,Recebido,4518.70,4308.48,68.2,4518.70,Dobra Legal
+2025-11-01,Novembro,2025,Aurora Moda,3000090-44.2026.8.26.2870,Contratos,Carlos Nogueira,Parcial,5054.71,3061.11,15.4,5054.71,Dobra Legal
+2025-11-01,Novembro,2025,Pampa Alimentos,3000091-44.2026.8.26.3619,Tributário,Fernanda Lima,Recebido,14088.67,13931.38,74.8,14088.67,Dobra Legal
+2025-11-01,Novembro,2025,Serra Café,3000092-44.2026.8.26.3459,Trabalhista,Rafael Mendes,Recebido,8224.88,6964.73,69.9,8224.88,Dobra Legal
+2025-11-01,Novembro,2025,Maré Energia,3000093-44.2026.8.26.8311,Empresarial,Rafael Mendes,Recebido,11732.85,10308.16,19.4,11732.85,Dobra Legal
+2025-11-01,Novembro,2025,Céu Soft,3000094-44.2026.8.26.1200,Tributário,Carlos Nogueira,Em aberto,3607.15,3226.34,55.3,3607.15,Dobra Legal
+2025-11-01,Novembro,2025,Rio Branco,3000095-44.2026.8.26.4553,Família,Carlos Nogueira,Recebido,3006.06,2320.86,46.4,3006.06,Dobra Legal
+2025-11-01,Novembro,2025,Casa Norte,3000096-44.2026.8.26.9967,Empresarial,Fernanda Lima,Parcial,23541.01,15539.91,79.4,23541.01,Dobra Legal
+2025-11-01,Novembro,2025,Sul Minas,3000097-44.2026.8.26.6718,Cível,Rafael Mendes,Em aberto,3699.06,2281.27,66.0,3699.06,Dobra Legal
+2025-11-01,Novembro,2025,Boa Vista,3000098-44.2026.8.26.1803,Cível,Carlos Nogueira,Em aberto,20554.57,19818.17,22.0,20554.57,Dobra Legal
+2025-11-01,Novembro,2025,Terra Nova,3000099-44.2026.8.26.3906,Tributário,Fernanda Lima,Recebido,8384.93,7220.94,11.1,8384.93,Dobra Legal
+2025-12-01,Dezembro,2025,Atlas Ltda,3000100-44.2026.8.26.2108,Tributário,Fernanda Lima,Recebido,7373.10,7033.12,49.0,7373.10,Dobra Legal
+2025-12-01,Dezembro,2025,Nimbus SA,3000101-44.2026.8.26.9635,Tributário,Fernanda Lima,Recebido,3115.22,2098.06,26.2,3115.22,Dobra Legal
+2025-12-01,Dezembro,2025,Forge Engenharia,3000102-44.2026.8.26.9666,Cível,Carlos Nogueira,Parcial,2377.72,2088.54,60.6,2377.72,Dobra Legal
+2025-12-01,Dezembro,2025,Helix Saúde,3000103-44.2026.8.26.5254,Família,Fernanda Lima,Em aberto,7738.96,7208.91,38.8,7738.96,Dobra Legal
+2025-12-01,Dezembro,2025,Orbit Educação,3000104-44.2026.8.26.9154,Tributário,Rafael Mendes,Em aberto,4843.94,3746.20,28.2,4843.94,Dobra Legal
+2025-12-01,Dezembro,2025,Pulse Varejo,3000105-44.2026.8.26.1392,Tributário,Mariana Costa,Parcial,9677.19,5329.34,26.0,9677.19,Dobra Legal
+2025-12-01,Dezembro,2025,Lumen Tech,3000106-44.2026.8.26.6468,Empresarial,Fernanda Lima,Em aberto,27489.97,20241.37,26.5,27489.97,Dobra Legal
+2025-12-01,Dezembro,2025,Verde Agro,3000107-44.2026.8.26.2111,Empresarial,Juliana Alves,Recebido,4997.28,3320.64,36.2,4997.28,Dobra Legal
+2025-12-01,Dezembro,2025,Costa Farma,3000108-44.2026.8.26.7488,Contratos,Fernanda Lima,Parcial,2383.43,1668.35,10.5,2383.43,Dobra Legal
+2025-12-01,Dezembro,2025,Delta Log,3000109-44.2026.8.26.8849,Tributário,Mariana Costa,Parcial,3992.88,3694.30,49.9,3992.88,Dobra Legal
+2025-12-01,Dezembro,2025,Aurora Moda,3000110-44.2026.8.26.6490,Tributário,Carlos Nogueira,Em aberto,15017.83,11888.64,12.9,15017.83,Dobra Legal
+2025-12-01,Dezembro,2025,Pampa Alimentos,3000111-44.2026.8.26.6169,Família,Fernanda Lima,Recebido,20563.50,18018.44,58.2,20563.50,Dobra Legal
+2025-12-01,Dezembro,2025,Serra Café,3000112-44.2026.8.26.6793,Cível,Rafael Mendes,Recebido,9046.37,8590.55,10.7,9046.37,Dobra Legal
+2025-12-01,Dezembro,2025,Maré Energia,3000113-44.2026.8.26.7382,Trabalhista,Fernanda Lima,Recebido,13524.12,12565.03,76.1,13524.12,Dobra Legal
+2025-12-01,Dezembro,2025,Céu Soft,3000114-44.2026.8.26.1518,Empresarial,Carlos Nogueira,Recebido,8715.48,6026.97,84.3,8715.48,Dobra Legal
+2025-12-01,Dezembro,2025,Rio Branco,3000115-44.2026.8.26.4541,Família,Juliana Alves,Recebido,7826.19,7652.66,40.6,7826.19,Dobra Legal
+2025-12-01,Dezembro,2025,Casa Norte,3000116-44.2026.8.26.8270,Família,Mariana Costa,Parcial,3220.02,3094.46,86.7,3220.02,Dobra Legal
+2025-12-01,Dezembro,2025,Sul Minas,3000117-44.2026.8.26.9579,Empresarial,Juliana Alves,Recebido,3985.18,3848.23,83.8,3985.18,Dobra Legal
+2025-12-01,Dezembro,2025,Boa Vista,3000118-44.2026.8.26.1598,Tributário,Carlos Nogueira,Parcial,24299.50,14815.96,53.4,24299.50,Dobra Legal
+2025-12-01,Dezembro,2025,Terra Nova,3000119-44.2026.8.26.2426,Empresarial,Carlos Nogueira,Em aberto,2631.84,1499.66,17.0,2631.84,Dobra Legal
+2026-01-01,Janeiro,2026,Atlas Ltda,3000120-44.2026.8.26.4438,Empresarial,Rafael Mendes,Recebido,6318.91,5632.18,32.1,6318.91,Dobra Legal
+2026-01-01,Janeiro,2026,Nimbus SA,3000121-44.2026.8.26.5467,Trabalhista,Rafael Mendes,Recebido,8952.48,7627.57,9.3,8952.48,Dobra Legal
+2026-01-01,Janeiro,2026,Forge Engenharia,3000122-44.2026.8.26.9888,Empresarial,Fernanda Lima,Recebido,23140.30,13793.21,20.3,23140.30,Dobra Legal
+2026-01-01,Janeiro,2026,Helix Saúde,3000123-44.2026.8.26.6101,Família,Juliana Alves,Recebido,8255.03,5176.51,12.4,8255.03,Dobra Legal
+2026-01-01,Janeiro,2026,Orbit Educação,3000124-44.2026.8.26.2735,Tributário,Mariana Costa,Recebido,2833.13,2419.41,42.1,2833.13,Dobra Legal
+2026-01-01,Janeiro,2026,Pulse Varejo,3000125-44.2026.8.26.8304,Família,Juliana Alves,Recebido,26423.63,22017.80,79.1,26423.63,Dobra Legal
+2026-01-01,Janeiro,2026,Lumen Tech,3000126-44.2026.8.26.8629,Família,Rafael Mendes,Recebido,18377.60,17739.03,77.8,18377.60,Dobra Legal
+2026-01-01,Janeiro,2026,Verde Agro,3000127-44.2026.8.26.8625,Tributário,Rafael Mendes,Em aberto,10547.10,7274.09,20.5,10547.10,Dobra Legal
+2026-01-01,Janeiro,2026,Costa Farma,3000128-44.2026.8.26.4004,Contratos,Juliana Alves,Parcial,20154.72,14381.45,84.8,20154.72,Dobra Legal
+2026-01-01,Janeiro,2026,Delta Log,3000129-44.2026.8.26.2849,Empresarial,Carlos Nogueira,Recebido,12742.23,7383.03,22.9,12742.23,Dobra Legal
+2026-01-01,Janeiro,2026,Aurora Moda,3000130-44.2026.8.26.2686,Tributário,Mariana Costa,Recebido,8361.59,5078.22,64.5,8361.59,Dobra Legal
+2026-01-01,Janeiro,2026,Pampa Alimentos,3000131-44.2026.8.26.7773,Trabalhista,Fernanda Lima,Recebido,8109.94,5923.23,21.8,8109.94,Dobra Legal
+2026-01-01,Janeiro,2026,Serra Café,3000132-44.2026.8.26.8063,Tributário,Fernanda Lima,Parcial,12158.97,8551.66,55.4,12158.97,Dobra Legal
+2026-01-01,Janeiro,2026,Maré Energia,3000133-44.2026.8.26.8972,Cível,Fernanda Lima,Parcial,3950.50,3363.15,36.3,3950.50,Dobra Legal
+2026-01-01,Janeiro,2026,Céu Soft,3000134-44.2026.8.26.7648,Cível,Fernanda Lima,Recebido,3275.75,2061.36,78.8,3275.75,Dobra Legal
+2026-01-01,Janeiro,2026,Rio Branco,3000135-44.2026.8.26.2007,Cível,Rafael Mendes,Em aberto,11841.67,9949.91,85.2,11841.67,Dobra Legal
+2026-01-01,Janeiro,2026,Casa Norte,3000136-44.2026.8.26.8421,Família,Juliana Alves,Recebido,3193.92,2706.52,58.3,3193.92,Dobra Legal
+2026-01-01,Janeiro,2026,Sul Minas,3000137-44.2026.8.26.5910,Família,Juliana Alves,Em aberto,4016.46,3794.92,89.5,4016.46,Dobra Legal
+2026-01-01,Janeiro,2026,Boa Vista,3000138-44.2026.8.26.9362,Tributário,Rafael Mendes,Em aberto,9715.92,7891.53,13.4,9715.92,Dobra Legal
+2026-01-01,Janeiro,2026,Terra Nova,3000139-44.2026.8.26.6885,Cível,Juliana Alves,Em aberto,27182.21,14960.53,28.5,27182.21,Dobra Legal
+2026-02-01,Fevereiro,2026,Atlas Ltda,3000140-44.2026.8.26.7271,Tributário,Carlos Nogueira,Recebido,21503.26,14905.14,26.4,21503.26,Dobra Legal
+2026-02-01,Fevereiro,2026,Nimbus SA,3000141-44.2026.8.26.7301,Empresarial,Carlos Nogueira,Recebido,4561.61,2895.27,94.8,4561.61,Dobra Legal
+2026-02-01,Fevereiro,2026,Forge Engenharia,3000142-44.2026.8.26.1257,Trabalhista,Carlos Nogueira,Parcial,3871.91,2254.56,92.8,3871.91,Dobra Legal
+2026-02-01,Fevereiro,2026,Helix Saúde,3000143-44.2026.8.26.7813,Tributário,Fernanda Lima,Em aberto,3771.44,3164.28,62.2,3771.44,Dobra Legal
+2026-02-01,Fevereiro,2026,Orbit Educação,3000144-44.2026.8.26.8373,Tributário,Juliana Alves,Recebido,12865.46,10272.07,45.0,12865.46,Dobra Legal
+2026-02-01,Fevereiro,2026,Pulse Varejo,3000145-44.2026.8.26.4878,Contratos,Fernanda Lima,Recebido,2968.20,2763.58,88.6,2968.20,Dobra Legal
+2026-02-01,Fevereiro,2026,Lumen Tech,3000146-44.2026.8.26.8917,Contratos,Juliana Alves,Recebido,21233.00,21025.03,49.9,21233.00,Dobra Legal
+2026-02-01,Fevereiro,2026,Verde Agro,3000147-44.2026.8.26.5578,Tributário,Fernanda Lima,Recebido,2419.03,2126.53,85.4,2419.03,Dobra Legal
+2026-02-01,Fevereiro,2026,Costa Farma,3000148-44.2026.8.26.2279,Contratos,Fernanda Lima,Parcial,2548.99,2125.34,35.2,2548.99,Dobra Legal
+2026-02-01,Fevereiro,2026,Delta Log,3000149-44.2026.8.26.1176,Tributário,Carlos Nogueira,Recebido,3378.52,2671.61,48.8,3378.52,Dobra Legal
+2026-02-01,Fevereiro,2026,Aurora Moda,3000150-44.2026.8.26.5827,Empresarial,Rafael Mendes,Recebido,7717.77,7580.87,88.3,7717.77,Dobra Legal
+2026-02-01,Fevereiro,2026,Pampa Alimentos,3000151-44.2026.8.26.2006,Contratos,Carlos Nogueira,Parcial,8791.67,7065.58,57.8,8791.67,Dobra Legal
+2026-02-01,Fevereiro,2026,Serra Café,3000152-44.2026.8.26.5699,Tributário,Mariana Costa,Recebido,9079.22,7544.31,14.7,9079.22,Dobra Legal
+2026-02-01,Fevereiro,2026,Maré Energia,3000153-44.2026.8.26.5509,Empresarial,Mariana Costa,Parcial,7124.70,5892.90,60.5,7124.70,Dobra Legal
+2026-02-01,Fevereiro,2026,Céu Soft,3000154-44.2026.8.26.7058,Trabalhista,Juliana Alves,Parcial,24915.78,21094.19,28.5,24915.78,Dobra Legal
+2026-02-01,Fevereiro,2026,Rio Branco,3000155-44.2026.8.26.6617,Cível,Rafael Mendes,Parcial,5218.73,4894.68,79.5,5218.73,Dobra Legal
+2026-02-01,Fevereiro,2026,Casa Norte,3000156-44.2026.8.26.7277,Trabalhista,Carlos Nogueira,Parcial,14234.28,10473.96,22.6,14234.28,Dobra Legal
+2026-02-01,Fevereiro,2026,Sul Minas,3000157-44.2026.8.26.5331,Cível,Mariana Costa,Recebido,24870.17,17540.54,42.7,24870.17,Dobra Legal
+2026-02-01,Fevereiro,2026,Boa Vista,3000158-44.2026.8.26.9724,Trabalhista,Carlos Nogueira,Parcial,7911.69,7727.46,41.9,7911.69,Dobra Legal
+2026-02-01,Fevereiro,2026,Terra Nova,3000159-44.2026.8.26.1194,Empresarial,Carlos Nogueira,Recebido,6749.48,6355.48,35.5,6749.48,Dobra Legal
+2026-03-01,Março,2026,Atlas Ltda,3000160-44.2026.8.26.9704,Contratos,Juliana Alves,Em aberto,24360.48,13847.91,45.6,24360.48,Dobra Legal
+2026-03-01,Março,2026,Nimbus SA,3000161-44.2026.8.26.2610,Empresarial,Fernanda Lima,Recebido,7415.74,4969.95,75.3,7415.74,Dobra Legal
+2026-03-01,Março,2026,Forge Engenharia,3000162-44.2026.8.26.4193,Família,Juliana Alves,Parcial,5086.98,4145.52,94.4,5086.98,Dobra Legal
+2026-03-01,Março,2026,Helix Saúde,3000163-44.2026.8.26.2113,Cível,Carlos Nogueira,Recebido,8162.12,6960.34,17.0,8162.12,Dobra Legal
+2026-03-01,Março,2026,Orbit Educação,3000164-44.2026.8.26.5127,Trabalhista,Mariana Costa,Recebido,11977.28,10496.44,16.0,11977.28,Dobra Legal
+2026-03-01,Março,2026,Pulse Varejo,3000165-44.2026.8.26.2995,Contratos,Mariana Costa,Recebido,24100.39,22315.92,60.6,24100.39,Dobra Legal
+2026-03-01,Março,2026,Lumen Tech,3000166-44.2026.8.26.4027,Cível,Rafael Mendes,Recebido,13692.22,13075.44,48.6,13692.22,Dobra Legal
+2026-03-01,Março,2026,Verde Agro,3000167-44.2026.8.26.5528,Tributário,Juliana Alves,Recebido,3044.86,2938.94,75.9,3044.86,Dobra Legal
+2026-03-01,Março,2026,Costa Farma,3000168-44.2026.8.26.6450,Cível,Juliana Alves,Em aberto,8967.64,6476.97,31.0,8967.64,Dobra Legal
+2026-03-01,Março,2026,Delta Log,3000169-44.2026.8.26.4287,Família,Carlos Nogueira,Recebido,10390.37,10294.15,50.8,10390.37,Dobra Legal
+2026-03-01,Março,2026,Aurora Moda,3000170-44.2026.8.26.2740,Tributário,Juliana Alves,Recebido,4694.78,3493.22,14.3,4694.78,Dobra Legal
+2026-03-01,Março,2026,Pampa Alimentos,3000171-44.2026.8.26.1307,Tributário,Rafael Mendes,Parcial,24802.70,22316.39,8.1,24802.70,Dobra Legal
+2026-03-01,Março,2026,Serra Café,3000172-44.2026.8.26.6403,Tributário,Fernanda Lima,Recebido,3077.40,2061.54,69.6,3077.40,Dobra Legal
+2026-03-01,Março,2026,Maré Energia,3000173-44.2026.8.26.2148,Família,Rafael Mendes,Recebido,12689.53,9285.70,91.0,12689.53,Dobra Legal
+2026-03-01,Março,2026,Céu Soft,3000174-44.2026.8.26.6880,Empresarial,Juliana Alves,Recebido,10681.77,8448.07,63.0,10681.77,Dobra Legal
+2026-03-01,Março,2026,Rio Branco,3000175-44.2026.8.26.6571,Cível,Carlos Nogueira,Parcial,2700.35,2522.14,33.2,2700.35,Dobra Legal
+2026-03-01,Março,2026,Casa Norte,3000176-44.2026.8.26.7294,Contratos,Rafael Mendes,Recebido,3957.65,2246.76,41.9,3957.65,Dobra Legal
+2026-03-01,Março,2026,Sul Minas,3000177-44.2026.8.26.2390,Contratos,Carlos Nogueira,Parcial,3034.58,2159.61,20.2,3034.58,Dobra Legal
+2026-03-01,Março,2026,Boa Vista,3000178-44.2026.8.26.4907,Tributário,Carlos Nogueira,Recebido,3651.36,3645.42,55.0,3651.36,Dobra Legal
+2026-03-01,Março,2026,Terra Nova,3000179-44.2026.8.26.8361,Cível,Mariana Costa,Recebido,7993.89,7867.82,37.4,7993.89,Dobra Legal
+2026-04-01,Abril,2026,Atlas Ltda,3000180-44.2026.8.26.9570,Tributário,Fernanda Lima,Recebido,2750.94,1775.06,58.4,2750.94,Dobra Legal
+2026-04-01,Abril,2026,Nimbus SA,3000181-44.2026.8.26.1312,Tributário,Fernanda Lima,Recebido,2286.47,1403.24,69.0,2286.47,Dobra Legal
+2026-04-01,Abril,2026,Forge Engenharia,3000182-44.2026.8.26.6035,Cível,Carlos Nogueira,Parcial,3629.09,3029.19,80.7,3629.09,Dobra Legal
+2026-04-01,Abril,2026,Helix Saúde,3000183-44.2026.8.26.9145,Família,Fernanda Lima,Recebido,3270.43,1955.22,78.0,3270.43,Dobra Legal
+2026-04-01,Abril,2026,Orbit Educação,3000184-44.2026.8.26.7586,Empresarial,Mariana Costa,Em aberto,11897.55,11018.96,58.1,11897.55,Dobra Legal
+2026-04-01,Abril,2026,Pulse Varejo,3000185-44.2026.8.26.4493,Cível,Fernanda Lima,Recebido,4251.22,4183.67,13.5,4251.22,Dobra Legal
+2026-04-01,Abril,2026,Lumen Tech,3000186-44.2026.8.26.7060,Família,Rafael Mendes,Recebido,6735.74,4963.03,88.5,6735.74,Dobra Legal
+2026-04-01,Abril,2026,Verde Agro,3000187-44.2026.8.26.7162,Trabalhista,Mariana Costa,Em aberto,2408.05,2181.63,15.0,2408.05,Dobra Legal
+2026-04-01,Abril,2026,Costa Farma,3000188-44.2026.8.26.5648,Tributário,Carlos Nogueira,Parcial,2466.06,1455.26,25.9,2466.06,Dobra Legal
+2026-04-01,Abril,2026,Delta Log,3000189-44.2026.8.26.3859,Família,Mariana Costa,Parcial,8076.03,5939.23,70.4,8076.03,Dobra Legal
+2026-04-01,Abril,2026,Aurora Moda,3000190-44.2026.8.26.5934,Empresarial,Carlos Nogueira,Recebido,27007.95,22477.00,28.5,27007.95,Dobra Legal
+2026-04-01,Abril,2026,Pampa Alimentos,3000191-44.2026.8.26.6929,Família,Fernanda Lima,Recebido,3483.12,3446.74,75.0,3483.12,Dobra Legal
+2026-04-01,Abril,2026,Serra Café,3000192-44.2026.8.26.3444,Contratos,Carlos Nogueira,Recebido,4159.76,2650.49,21.9,4159.76,Dobra Legal
+2026-04-01,Abril,2026,Maré Energia,3000193-44.2026.8.26.4433,Tributário,Juliana Alves,Recebido,2308.07,1647.70,78.0,2308.07,Dobra Legal
+2026-04-01,Abril,2026,Céu Soft,3000194-44.2026.8.26.9804,Trabalhista,Rafael Mendes,Parcial,10243.66,9047.07,50.2,10243.66,Dobra Legal
+2026-04-01,Abril,2026,Rio Branco,3000195-44.2026.8.26.8287,Família,Fernanda Lima,Recebido,2329.28,1527.74,25.3,2329.28,Dobra Legal
+2026-04-01,Abril,2026,Casa Norte,3000196-44.2026.8.26.4731,Cível,Rafael Mendes,Parcial,7047.52,4225.41,83.7,7047.52,Dobra Legal
+2026-04-01,Abril,2026,Sul Minas,3000197-44.2026.8.26.8936,Cível,Carlos Nogueira,Recebido,15013.93,8754.45,88.7,15013.93,Dobra Legal
+2026-04-01,Abril,2026,Boa Vista,3000198-44.2026.8.26.8499,Contratos,Rafael Mendes,Parcial,11001.59,7899.89,92.9,11001.59,Dobra Legal
+2026-04-01,Abril,2026,Terra Nova,3000199-44.2026.8.26.1977,Empresarial,Rafael Mendes,Recebido,4280.18,2415.92,48.5,4280.18,Dobra Legal
+2026-05-01,Maio,2026,Atlas Ltda,3000200-44.2026.8.26.5835,Família,Rafael Mendes,Parcial,10963.01,7724.64,63.5,10963.01,Dobra Legal
+2026-05-01,Maio,2026,Nimbus SA,3000201-44.2026.8.26.4763,Cível,Carlos Nogueira,Em aberto,26565.22,21521.94,50.6,26565.22,Dobra Legal
+2026-05-01,Maio,2026,Forge Engenharia,3000202-44.2026.8.26.5573,Cível,Carlos Nogueira,Parcial,4797.95,4446.00,29.5,4797.95,Dobra Legal
+2026-05-01,Maio,2026,Helix Saúde,3000203-44.2026.8.26.3440,Família,Mariana Costa,Recebido,7764.21,5047.38,11.8,7764.21,Dobra Legal
+2026-05-01,Maio,2026,Orbit Educação,3000204-44.2026.8.26.7974,Família,Carlos Nogueira,Recebido,14125.80,10974.30,77.4,14125.80,Dobra Legal
+2026-05-01,Maio,2026,Pulse Varejo,3000205-44.2026.8.26.1203,Contratos,Carlos Nogueira,Em aberto,2810.08,1849.68,19.5,2810.08,Dobra Legal
+2026-05-01,Maio,2026,Lumen Tech,3000206-44.2026.8.26.1260,Tributário,Juliana Alves,Recebido,7079.11,7075.77,48.0,7079.11,Dobra Legal
+2026-05-01,Maio,2026,Verde Agro,3000207-44.2026.8.26.8452,Tributário,Rafael Mendes,Em aberto,24998.14,14023.61,43.3,24998.14,Dobra Legal
+2026-05-01,Maio,2026,Costa Farma,3000208-44.2026.8.26.1022,Contratos,Mariana Costa,Recebido,8440.11,7315.51,68.1,8440.11,Dobra Legal
+2026-05-01,Maio,2026,Delta Log,3000209-44.2026.8.26.5420,Contratos,Fernanda Lima,Recebido,17923.87,13293.35,77.1,17923.87,Dobra Legal
+2026-05-01,Maio,2026,Aurora Moda,3000210-44.2026.8.26.1898,Família,Juliana Alves,Em aberto,3021.77,2118.45,17.7,3021.77,Dobra Legal
+2026-05-01,Maio,2026,Pampa Alimentos,3000211-44.2026.8.26.7003,Trabalhista,Fernanda Lima,Parcial,7873.39,4475.18,56.8,7873.39,Dobra Legal
+2026-05-01,Maio,2026,Serra Café,3000212-44.2026.8.26.9841,Cível,Carlos Nogueira,Parcial,3880.27,2718.98,73.4,3880.27,Dobra Legal
+2026-05-01,Maio,2026,Maré Energia,3000213-44.2026.8.26.6250,Empresarial,Juliana Alves,Recebido,5125.18,4573.70,44.8,5125.18,Dobra Legal
+2026-05-01,Maio,2026,Céu Soft,3000214-44.2026.8.26.8966,Família,Fernanda Lima,Em aberto,2319.85,1636.31,48.9,2319.85,Dobra Legal
+2026-05-01,Maio,2026,Rio Branco,3000215-44.2026.8.26.5788,Tributário,Fernanda Lima,Recebido,24315.25,19203.82,66.6,24315.25,Dobra Legal
+2026-05-01,Maio,2026,Casa Norte,3000216-44.2026.8.26.2430,Cível,Carlos Nogueira,Em aberto,2477.33,2347.99,33.1,2477.33,Dobra Legal
+2026-05-01,Maio,2026,Sul Minas,3000217-44.2026.8.26.3424,Tributário,Rafael Mendes,Em aberto,2377.80,1603.05,53.3,2377.80,Dobra Legal
+2026-05-01,Maio,2026,Boa Vista,3000218-44.2026.8.26.9870,Trabalhista,Carlos Nogueira,Recebido,2609.39,2573.67,46.6,2609.39,Dobra Legal
+2026-05-01,Maio,2026,Terra Nova,3000219-44.2026.8.26.4806,Família,Juliana Alves,Recebido,2607.31,1507.88,37.8,2607.31,Dobra Legal
+2026-06-01,Junho,2026,Atlas Ltda,3000220-44.2026.8.26.9686,Família,Carlos Nogueira,Recebido,7946.38,6751.52,57.4,7946.38,Dobra Legal
+2026-06-01,Junho,2026,Nimbus SA,3000221-44.2026.8.26.8933,Empresarial,Juliana Alves,Parcial,6842.80,4564.17,12.1,6842.80,Dobra Legal
+2026-06-01,Junho,2026,Forge Engenharia,3000222-44.2026.8.26.3634,Contratos,Fernanda Lima,Recebido,7238.18,7095.56,92.7,7238.18,Dobra Legal
+2026-06-01,Junho,2026,Helix Saúde,3000223-44.2026.8.26.6187,Família,Rafael Mendes,Recebido,3926.54,2366.18,40.2,3926.54,Dobra Legal
+2026-06-01,Junho,2026,Orbit Educação,3000224-44.2026.8.26.6192,Empresarial,Rafael Mendes,Recebido,4739.04,2680.45,55.0,4739.04,Dobra Legal
+2026-06-01,Junho,2026,Pulse Varejo,3000225-44.2026.8.26.1408,Tributário,Carlos Nogueira,Parcial,4680.63,2830.24,90.5,4680.63,Dobra Legal
+2026-06-01,Junho,2026,Lumen Tech,3000226-44.2026.8.26.9948,Família,Juliana Alves,Parcial,6787.75,6696.57,33.7,6787.75,Dobra Legal
+2026-06-01,Junho,2026,Verde Agro,3000227-44.2026.8.26.3409,Família,Carlos Nogueira,Recebido,9643.32,8576.50,17.8,9643.32,Dobra Legal
+2026-06-01,Junho,2026,Costa Farma,3000228-44.2026.8.26.2914,Empresarial,Mariana Costa,Recebido,15063.48,9230.00,81.2,15063.48,Dobra Legal
+2026-06-01,Junho,2026,Delta Log,3000229-44.2026.8.26.4197,Família,Fernanda Lima,Recebido,12010.34,8369.58,89.4,12010.34,Dobra Legal
+2026-06-01,Junho,2026,Aurora Moda,3000230-44.2026.8.26.8298,Contratos,Mariana Costa,Em aberto,6926.96,4070.39,42.3,6926.96,Dobra Legal
+2026-06-01,Junho,2026,Pampa Alimentos,3000231-44.2026.8.26.1918,Contratos,Juliana Alves,Recebido,11787.39,9692.59,70.3,11787.39,Dobra Legal
+2026-06-01,Junho,2026,Serra Café,3000232-44.2026.8.26.5663,Empresarial,Juliana Alves,Recebido,12079.17,8670.11,46.8,12079.17,Dobra Legal
+2026-06-01,Junho,2026,Maré Energia,3000233-44.2026.8.26.8278,Contratos,Carlos Nogueira,Em aberto,18467.23,16205.62,33.1,18467.23,Dobra Legal
+2026-06-01,Junho,2026,Céu Soft,3000234-44.2026.8.26.2410,Trabalhista,Rafael Mendes,Recebido,14098.41,10381.89,94.0,14098.41,Dobra Legal
+2026-06-01,Junho,2026,Rio Branco,3000235-44.2026.8.26.7156,Cível,Mariana Costa,Recebido,27367.72,15866.49,87.6,27367.72,Dobra Legal
+2026-06-01,Junho,2026,Casa Norte,3000236-44.2026.8.26.3243,Trabalhista,Rafael Mendes,Em aberto,10983.77,8325.19,33.2,10983.77,Dobra Legal
+2026-06-01,Junho,2026,Sul Minas,3000237-44.2026.8.26.5979,Tributário,Fernanda Lima,Parcial,10237.56,9437.10,27.5,10237.56,Dobra Legal
+2026-06-01,Junho,2026,Boa Vista,3000238-44.2026.8.26.8742,Cível,Juliana Alves,Recebido,2434.07,1667.52,50.8,2434.07,Dobra Legal
+2026-06-01,Junho,2026,Terra Nova,3000239-44.2026.8.26.9078,Cível,Fernanda Lima,Parcial,3657.60,3270.34,58.6,3657.60,Dobra Legal
+2026-07-01,Julho,2026,Atlas Ltda,3000240-44.2026.8.26.8799,Contratos,Mariana Costa,Recebido,21917.08,14598.09,71.8,21917.08,Dobra Legal
+2026-07-01,Julho,2026,Nimbus SA,3000241-44.2026.8.26.1958,Trabalhista,Juliana Alves,Recebido,3305.05,2059.98,68.3,3305.05,Dobra Legal
+2026-07-01,Julho,2026,Forge Engenharia,3000242-44.2026.8.26.7873,Contratos,Juliana Alves,Recebido,6813.21,4583.26,33.4,6813.21,Dobra Legal
+2026-07-01,Julho,2026,Helix Saúde,3000243-44.2026.8.26.4002,Cível,Fernanda Lima,Parcial,2887.47,2584.00,55.3,2887.47,Dobra Legal
+2026-07-01,Julho,2026,Orbit Educação,3000244-44.2026.8.26.5932,Empresarial,Juliana Alves,Recebido,9142.15,7846.11,58.5,9142.15,Dobra Legal
+2026-07-01,Julho,2026,Pulse Varejo,3000245-44.2026.8.26.7111,Tributário,Carlos Nogueira,Recebido,3626.12,2839.89,87.2,3626.12,Dobra Legal
+2026-07-01,Julho,2026,Lumen Tech,3000246-44.2026.8.26.4087,Família,Fernanda Lima,Parcial,2514.52,1952.58,90.9,2514.52,Dobra Legal
+2026-07-01,Julho,2026,Verde Agro,3000247-44.2026.8.26.2867,Tributário,Carlos Nogueira,Em aberto,24654.22,21351.02,18.1,24654.22,Dobra Legal
+2026-07-01,Julho,2026,Costa Farma,3000248-44.2026.8.26.6104,Contratos,Juliana Alves,Recebido,5469.90,4188.76,46.4,5469.90,Dobra Legal
+2026-07-01,Julho,2026,Delta Log,3000249-44.2026.8.26.3821,Contratos,Juliana Alves,Recebido,22778.90,22472.53,78.9,22778.90,Dobra Legal
+2026-07-01,Julho,2026,Aurora Moda,3000250-44.2026.8.26.4712,Empresarial,Rafael Mendes,Recebido,3860.65,3329.46,93.4,3860.65,Dobra Legal
+2026-07-01,Julho,2026,Pampa Alimentos,3000251-44.2026.8.26.2273,Cível,Carlos Nogueira,Parcial,13885.85,12536.33,11.7,13885.85,Dobra Legal
+2026-07-01,Julho,2026,Serra Café,3000252-44.2026.8.26.1971,Tributário,Mariana Costa,Em aberto,2281.32,1932.06,11.8,2281.32,Dobra Legal
+2026-07-01,Julho,2026,Maré Energia,3000253-44.2026.8.26.3028,Família,Rafael Mendes,Parcial,8583.23,7635.19,25.4,8583.23,Dobra Legal
+2026-07-01,Julho,2026,Céu Soft,3000254-44.2026.8.26.5544,Família,Juliana Alves,Recebido,6342.70,3903.94,82.4,6342.70,Dobra Legal
+2026-07-01,Julho,2026,Rio Branco,3000255-44.2026.8.26.2623,Família,Mariana Costa,Recebido,19994.04,16127.31,70.3,19994.04,Dobra Legal
+2026-07-01,Julho,2026,Casa Norte,3000256-44.2026.8.26.1070,Contratos,Mariana Costa,Em aberto,6842.92,6085.47,88.1,6842.92,Dobra Legal
+2026-07-01,Julho,2026,Sul Minas,3000257-44.2026.8.26.8203,Contratos,Mariana Costa,Recebido,12061.35,9832.67,38.9,12061.35,Dobra Legal
+2026-07-01,Julho,2026,Boa Vista,3000258-44.2026.8.26.7677,Cível,Juliana Alves,Recebido,12385.52,9678.20,17.6,12385.52,Dobra Legal
+2026-07-01,Julho,2026,Terra Nova,3000259-44.2026.8.26.5723,Família,Mariana Costa,Recebido,4604.03,3280.66,51.0,4604.03,Dobra Legal
+2026-08-01,Agosto,2026,Atlas Ltda,3000260-44.2026.8.26.6111,Contratos,Carlos Nogueira,Recebido,11595.31,9510.19,43.4,11595.31,Dobra Legal
+2026-08-01,Agosto,2026,Nimbus SA,3000261-44.2026.8.26.8793,Contratos,Juliana Alves,Recebido,11061.92,6430.56,94.9,11061.92,Dobra Legal
+2026-08-01,Agosto,2026,Forge Engenharia,3000262-44.2026.8.26.9563,Contratos,Mariana Costa,Recebido,13780.54,10037.28,42.3,13780.54,Dobra Legal
+2026-08-01,Agosto,2026,Helix Saúde,3000263-44.2026.8.26.3764,Cível,Juliana Alves,Em aberto,27277.95,24104.01,37.5,27277.95,Dobra Legal
+2026-08-01,Agosto,2026,Orbit Educação,3000264-44.2026.8.26.4815,Tributário,Carlos Nogueira,Recebido,25955.89,18997.90,70.1,25955.89,Dobra Legal
+2026-08-01,Agosto,2026,Pulse Varejo,3000265-44.2026.8.26.7557,Empresarial,Carlos Nogueira,Parcial,23477.13,20902.55,90.7,23477.13,Dobra Legal
+2026-08-01,Agosto,2026,Lumen Tech,3000266-44.2026.8.26.8448,Cível,Mariana Costa,Recebido,12876.71,7936.15,51.3,12876.71,Dobra Legal
+2026-08-01,Agosto,2026,Verde Agro,3000267-44.2026.8.26.2117,Tributário,Mariana Costa,Em aberto,3660.19,3228.32,41.3,3660.19,Dobra Legal
+2026-08-01,Agosto,2026,Costa Farma,3000268-44.2026.8.26.2578,Cível,Fernanda Lima,Parcial,6776.11,5623.39,77.0,6776.11,Dobra Legal
+2026-08-01,Agosto,2026,Delta Log,3000269-44.2026.8.26.9270,Empresarial,Fernanda Lima,Recebido,4194.46,3246.74,82.8,4194.46,Dobra Legal
+2026-08-01,Agosto,2026,Aurora Moda,3000270-44.2026.8.26.8051,Cível,Carlos Nogueira,Recebido,17774.94,15886.96,82.2,17774.94,Dobra Legal
+2026-08-01,Agosto,2026,Pampa Alimentos,3000271-44.2026.8.26.5965,Contratos,Rafael Mendes,Recebido,12585.57,7108.16,19.7,12585.57,Dobra Legal
+2026-08-01,Agosto,2026,Serra Café,3000272-44.2026.8.26.9037,Contratos,Fernanda Lima,Parcial,12741.93,7635.25,57.8,12741.93,Dobra Legal
+2026-08-01,Agosto,2026,Maré Energia,3000273-44.2026.8.26.1913,Tributário,Juliana Alves,Recebido,13162.69,8165.34,92.5,13162.69,Dobra Legal
+2026-08-01,Agosto,2026,Céu Soft,3000274-44.2026.8.26.5660,Empresarial,Mariana Costa,Recebido,24297.23,21743.88,11.9,24297.23,Dobra Legal
+2026-08-01,Agosto,2026,Rio Branco,3000275-44.2026.8.26.1440,Contratos,Juliana Alves,Recebido,7464.56,6598.11,45.2,7464.56,Dobra Legal
+2026-08-01,Agosto,2026,Casa Norte,3000276-44.2026.8.26.5001,Trabalhista,Rafael Mendes,Parcial,7685.87,4422.47,59.6,7685.87,Dobra Legal
+2026-08-01,Agosto,2026,Sul Minas,3000277-44.2026.8.26.3781,Cível,Fernanda Lima,Recebido,3334.86,2005.96,48.1,3334.86,Dobra Legal
+2026-08-01,Agosto,2026,Boa Vista,3000278-44.2026.8.26.5368,Cível,Carlos Nogueira,Parcial,13195.28,12609.86,93.8,13195.28,Dobra Legal
+2026-08-01,Agosto,2026,Terra Nova,3000279-44.2026.8.26.2601,Tributário,Mariana Costa,Parcial,13208.24,9180.91,25.9,13208.24,Dobra Legal

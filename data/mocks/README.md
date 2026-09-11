@@ -19,3 +19,6 @@ Carregue o CSV em **Dados** e ative o painel correspondente em **Loja**.
 | `redorai-saas.csv` | SaaS e recorrência |
 | `redorai-compras.csv` | Compras e fornecedores |
 | `redorai-atendimento.csv` | Atendimento e CS |
+| `redorai-advocacia-processos.csv` | Carteira processual |
+| `redorai-advocacia-prazos.csv` | Prazos e riscos jurídicos |
+| `redorai-advocacia-financeiro.csv` | Financeiro do escritório |
