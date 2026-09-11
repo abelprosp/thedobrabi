@@ -1141,10 +1141,10 @@ func (s *Server) gatewayHeartbeat(w http.ResponseWriter, r *http.Request) {
 	if body.Status == "" {
 		body.Status = "online"
 	}
-	// Try heartbeat first; if not found, register as a new instance.
 	tokenHash := gateway.HashToken(body.Token)
 	if err := s.gateway.Heartbeat(r.Context(), tokenHash, body.Status, body.Version); err != nil {
-		_, _ = s.gateway.Register(r.Context(), nil, body.Name, tokenHash, body.Version, body.Meta)
+		httpx.Error(w, 401, "invalid_gateway", "token do gateway inválido")
+		return
 	}
 	httpx.JSON(w, 200, map[string]any{"status": "ok", "server_time": time.Now().UTC()})
 }

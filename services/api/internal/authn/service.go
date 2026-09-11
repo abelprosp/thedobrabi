@@ -233,7 +233,7 @@ func (s *Service) principalForUser(ctx context.Context, userID, workspaceID uuid
 		JOIN organization_members om ON om.user_id = u.id
 		JOIN organizations o ON o.id = om.org_id
 		JOIN workspaces w ON w.org_id = o.id
-		WHERE u.id = $1
+		WHERE u.id = $1 AND COALESCE(u.active, TRUE)
 	`
 	args := []any{userID}
 	if workspaceID != uuid.Nil {

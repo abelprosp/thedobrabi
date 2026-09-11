@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -46,14 +47,14 @@ type Config struct {
 	StripePriceBusiness   string
 	StripePriceEnterprise string
 
-	SMTPHost     string
-	SMTPUser     string
-	SMTPPass     string
-	SMTPFrom     string
-	SlackWebhook string
-	AlertWebhook     string
-	AlertEmail       string
-	WhatsAppWebhook  string
+	SMTPHost        string
+	SMTPUser        string
+	SMTPPass        string
+	SMTPFrom        string
+	SlackWebhook    string
+	AlertWebhook    string
+	AlertEmail      string
+	WhatsAppWebhook string
 }
 
 func Load() Config {
@@ -107,6 +108,24 @@ func Load() Config {
 		AlertEmail:            os.Getenv("ALERT_EMAIL"),
 		WhatsAppWebhook:       os.Getenv("WHATSAPP_WEBHOOK_URL"),
 	}
+}
+
+// Validate prevents the API from starting with credentials that are safe only
+// for local development.
+func (c Config) Validate() error {
+	if c.Env != "production" {
+		return nil
+	}
+	if string(c.JWTSecret) == "thedobra-dev-jwt-secret-change-me-32b" || len(c.JWTSecret) < 32 {
+		return fmt.Errorf("JWT_SECRET must be a strong production secret")
+	}
+	if string(c.EncryptionKey) == "thedobra-dev-enc-key-32bytes-ok!" {
+		return fmt.Errorf("ENCRYPTION_KEY must be a strong production secret")
+	}
+	if c.StripeSecret != "" && c.StripeWebhookSecret == "" {
+		return fmt.Errorf("STRIPE_WEBHOOK_SECRET is required when Stripe is enabled")
+	}
+	return nil
 }
 
 func getenv(k, def string) string {

@@ -57,6 +57,11 @@ func (s *Server) runAlertLoop(ctx context.Context) {
 }
 
 func (s *Server) tickAlerts(ctx context.Context) {
+	locked, err := s.deps.Redis.SetNX(ctx, "thedobra:leader:alerts", "api", 55*time.Second).Result()
+	if err != nil || !locked {
+		return
+	}
+	defer s.deps.Redis.Del(ctx, "thedobra:leader:alerts")
 	rows, err := s.deps.PG.Query(ctx, `
 		SELECT id, org_id, workspace_id FROM alerts
 		WHERE enabled AND (last_triggered_at IS NULL OR last_triggered_at < now() - interval '15 minutes')

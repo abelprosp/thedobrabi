@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -68,12 +69,36 @@ func (a *Agent) Query(ctx context.Context, req QueryRequest) (QueryResponse, err
 	if req.Limit > 10000 {
 		req.Limit = 10000
 	}
-	rows, err := db.QueryContext(ctx, req.SQL)
+	sqlText, err := safeSelect(req.SQL, req.Limit)
+	if err != nil {
+		return QueryResponse{}, err
+	}
+	rows, err := db.QueryContext(ctx, sqlText)
 	if err != nil {
 		return QueryResponse{}, err
 	}
 	defer rows.Close()
 	return collectRows(rows, req.Limit)
+}
+
+func safeSelect(query string, limit int) (string, error) {
+	q := strings.TrimSpace(query)
+	if q == "" || len(q) > 100000 {
+		return "", fmt.Errorf("query inválida")
+	}
+	lower := strings.ToLower(q)
+	if !strings.HasPrefix(lower, "select ") && lower != "select" {
+		return "", fmt.Errorf("apenas consultas SELECT são permitidas")
+	}
+	for _, forbidden := range []string{";", "--", "/*", "*/", " insert ", " update ", " delete ", " drop ", " alter ", " create ", " grant ", " revoke "} {
+		if strings.Contains(lower, forbidden) {
+			return "", fmt.Errorf("SQL não permitido")
+		}
+	}
+	if limit <= 0 || strings.Contains(lower, " limit ") {
+		limit = 10000
+	}
+	return q + fmt.Sprintf(" LIMIT %d", limit), nil
 }
 
 func (a *Agent) getDB(ctx context.Context, src Source) (*sql.DB, error) {

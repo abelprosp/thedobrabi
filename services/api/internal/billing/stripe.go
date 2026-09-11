@@ -92,14 +92,13 @@ func (s *Service) HandleWebhook(r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	if s.cfg.StripeWebhookSecret == "" {
+		return fmt.Errorf("webhook do Stripe não configurado")
+	}
 	var event stripe.Event
-	if s.cfg.StripeWebhookSecret != "" {
-		event, err = webhook.ConstructEventWithOptions(body, r.Header.Get("Stripe-Signature"), s.cfg.StripeWebhookSecret, webhook.ConstructEventOptions{IgnoreAPIVersionMismatch: true})
-		if err != nil {
-			return err
-		}
-	} else if err := json.Unmarshal(body, &event); err != nil {
-		return fmt.Errorf("evento inválido")
+	event, err = webhook.ConstructEventWithOptions(body, r.Header.Get("Stripe-Signature"), s.cfg.StripeWebhookSecret, webhook.ConstructEventOptions{IgnoreAPIVersionMismatch: true})
+	if err != nil {
+		return err
 	}
 	ctx := r.Context()
 	_, _ = s.pg.Exec(ctx, `INSERT INTO billing_events (stripe_event_id, type, payload) VALUES ($1,$2,$3) ON CONFLICT (stripe_event_id) DO NOTHING`,

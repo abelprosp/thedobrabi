@@ -122,3 +122,18 @@ func TestNormalizeAlertOp(t *testing.T) {
 		t.Fatal("default")
 	}
 }
+
+func TestScopedIntelFiltersKeepsOnlyMatchingDataset(t *testing.T) {
+	filters := []DashboardIntelFilter{
+		{DatasetID: "ds-a", Dimension: "empresa", Op: "eq", Value: "A"},
+		{DatasetID: "ds-b", Dimension: "produto", Op: "eq", Value: "B"},
+		{Dimension: "pais", Op: "eq", Value: "BR"},
+	}
+	got := scopedIntelFilters(filters, "ds-a")
+	if len(got) != 2 {
+		t.Fatalf("expected matching and unscoped filters, got %#v", got)
+	}
+	if got[0].Dimension != "empresa" || got[1].Dimension != "pais" {
+		t.Fatalf("unexpected filters: %#v", got)
+	}
+}

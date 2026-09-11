@@ -65,8 +65,10 @@ func (s *Service) Deliver(ctx context.Context, alertID uuid.UUID, channels []str
 				url = s.cfg.AlertWebhook
 			}
 			err = s.httpJSON(url, map[string]any{"title": msg.Title, "body": msg.Body, "url": msg.URL})
+		case ch == "realtime" || ch == "in_app" || ch == "in-app":
+			err = s.inApp(ctx, alertID, msg)
 		default:
-			err = nil // realtime / in-app
+			err = fmt.Errorf("canal de notificação desconhecido: %s", ch)
 		}
 		status := "ok"
 		detail := ""
@@ -80,6 +82,20 @@ func (s *Service) Deliver(ctx context.Context, alertID uuid.UUID, channels []str
 		_, _ = s.pg.Exec(ctx, `INSERT INTO alert_deliveries (alert_id, channel, status, detail) VALUES ($1,$2,$3,$4)`,
 			alertID, ch, status, detail)
 	}
+}
+
+func (s *Service) inApp(ctx context.Context, alertID uuid.UUID, msg Message) error {
+	var orgID, workspaceID uuid.UUID
+	if err := s.pg.QueryRow(ctx, `SELECT org_id, workspace_id FROM alerts WHERE id=$1`, alertID).Scan(&orgID, &workspaceID); err != nil {
+		return err
+	}
+	_, err := s.pg.Exec(ctx, `
+		INSERT INTO notifications (org_id, workspace_id, user_id, kind, title, body, url)
+		SELECT $1, $2, om.user_id, 'alert', $3, $4, $5
+		FROM organization_members om
+		WHERE om.org_id=$1
+	`, orgID, workspaceID, msg.Title, msg.Body, msg.URL)
+	return err
 }
 
 func (s *Service) SendMail(to, subject, body string) error {

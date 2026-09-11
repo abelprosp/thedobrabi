@@ -100,16 +100,7 @@ func (a *Agent) DobraCompose(ctx context.Context, orgID, wsID, userID uuid.UUID,
 	out.ConversationID = convID.String()
 	out.DatasetID = dsID
 	out.DatasetName = dsName
-	fixed := make([]map[string]any, 0, len(out.Widgets))
-	for _, w := range out.Widgets {
-		if f, warnings := a.validateAndFixWidgetDetailed(w, dsID, model); f != nil {
-			fixed = append(fixed, f)
-			out.Warnings = append(out.Warnings, warnings...)
-		} else {
-			out.Warnings = append(out.Warnings, warnings...)
-		}
-	}
-	out.Widgets = fixed
+	out.Widgets, out.Warnings = a.validateDobraWidgets(out.Widgets, dsID, model, out.Warnings)
 	var filterWarnings []string
 	out.Filters, filterWarnings = validateDobraFilters(out.Filters, model)
 	out.Warnings = append(out.Warnings, filterWarnings...)
@@ -122,10 +113,12 @@ func (a *Agent) DobraCompose(ctx context.Context, orgID, wsID, userID uuid.UUID,
 		out.Plan = fb.Plan
 		out.Replace = fb.Replace
 		out.Warnings = append(out.Warnings, "O plano original não passou na validação; foi aplicado um plano seguro com os campos disponíveis.")
+		out.Widgets, out.Warnings = a.validateDobraWidgets(out.Widgets, dsID, model, out.Warnings)
 		if out.Reply == "" {
 			out.Reply = fb.Reply
 		}
 	}
+	out.Widgets = applyDobraScope(out.Widgets, out.Filters, out.TimeRange)
 	out.Validated = true
 	if out.Source == "openai" && len(out.Warnings) == 0 {
 		out.Confidence = "high"
@@ -134,6 +127,34 @@ func (a *Agent) DobraCompose(ctx context.Context, orgID, wsID, userID uuid.UUID,
 	}
 	a.storeAssistant(ctx, convID, out)
 	return out, nil
+}
+
+func (a *Agent) validateDobraWidgets(widgets []map[string]any, dsID string, model semantic.Model, warnings []string) ([]map[string]any, []string) {
+	fixed := make([]map[string]any, 0, len(widgets))
+	for _, widget := range widgets {
+		validated, widgetWarnings := a.validateAndFixWidgetDetailed(widget, dsID, model)
+		warnings = append(warnings, widgetWarnings...)
+		if validated != nil {
+			fixed = append(fixed, validated)
+		}
+	}
+	return fixed, warnings
+}
+
+func applyDobraScope(widgets []map[string]any, filters []DobraFilter, timeRange map[string]string) []map[string]any {
+	for _, widget := range widgets {
+		query, ok := widget["query"].(map[string]any)
+		if !ok {
+			continue
+		}
+		if len(filters) > 0 {
+			query["filters"] = filters
+		}
+		if len(timeRange) > 0 {
+			query["time_range"] = timeRange
+		}
+	}
+	return widgets
 }
 
 func validateDobraFilters(filters []DobraFilter, model semantic.Model) ([]DobraFilter, []string) {
@@ -611,10 +632,18 @@ func dimensionNames(model semantic.Model) []string {
 func summarizeWidgets(widgets []map[string]any) []map[string]any {
 	out := make([]map[string]any, 0, len(widgets))
 	for _, w := range widgets {
-		item := map[string]any{"type": w["type"], "title": w["title"]}
+		item := map[string]any{
+			"type":   w["type"],
+			"title":  w["title"],
+			"layout": w["layout"],
+			"config": w["config"],
+		}
 		if q, ok := w["query"].(map[string]any); ok {
+			item["dataset_id"] = q["dataset_id"]
 			item["measures"] = q["measures"]
 			item["dimensions"] = q["dimensions"]
+			item["filters"] = q["filters"]
+			item["time_range"] = q["time_range"]
 		}
 		out = append(out, item)
 		if len(out) >= 24 {

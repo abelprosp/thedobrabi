@@ -37,11 +37,19 @@ var kpiIntelTypes = map[string]bool{
 
 // AnalyzeDashboardRequest is the payload from the Inteligência dados widget.
 type AnalyzeDashboardRequest struct {
-	DashboardID   string                `json:"dashboard_id,omitempty"`
-	FocusPrompt   string                `json:"focus_prompt,omitempty"`
-	TimeRange     *queryeng.TimeRange   `json:"time_range,omitempty"`
-	GlobalFilters []queryeng.Filter     `json:"global_filters,omitempty"`
-	Widgets       []DashboardWidgetSpec `json:"widgets"`
+	DashboardID   string                 `json:"dashboard_id,omitempty"`
+	FocusPrompt   string                 `json:"focus_prompt,omitempty"`
+	TimeRange     *queryeng.TimeRange    `json:"time_range,omitempty"`
+	GlobalFilters []DashboardIntelFilter `json:"global_filters,omitempty"`
+	Widgets       []DashboardWidgetSpec  `json:"widgets"`
+}
+
+// DashboardIntelFilter retains dataset scope from multi-source dashboards.
+type DashboardIntelFilter struct {
+	DatasetID string `json:"dataset_id,omitempty"`
+	Dimension string `json:"dimension"`
+	Op        string `json:"op"`
+	Value     any    `json:"value"`
 }
 
 // DashboardWidgetSpec is a sibling visual to analyse.
@@ -145,7 +153,7 @@ func (a *Agent) AnalyzeDashboardWidgets(ctx context.Context, orgID, wsID, userID
 			q.TimeRange = req.TimeRange
 		}
 		if len(req.GlobalFilters) > 0 {
-			q.Filters = append(append([]queryeng.Filter{}, q.Filters...), req.GlobalFilters...)
+			q.Filters = append(q.Filters, scopedIntelFilters(req.GlobalFilters, dsID)...)
 		}
 		if kpiIntelTypes[spec.Type] {
 			q.Dimensions = nil
@@ -196,6 +204,21 @@ func (a *Agent) AnalyzeDashboardWidgets(ctx context.Context, orgID, wsID, userID
 		}
 	}
 	return out, nil
+}
+
+func scopedIntelFilters(filters []DashboardIntelFilter, datasetID string) []queryeng.Filter {
+	scoped := make([]queryeng.Filter, 0, len(filters))
+	for _, filter := range filters {
+		if filter.DatasetID != "" && filter.DatasetID != datasetID {
+			continue
+		}
+		scoped = append(scoped, queryeng.Filter{
+			Dimension: filter.Dimension,
+			Op:        filter.Op,
+			Value:     filter.Value,
+		})
+	}
+	return scoped
 }
 
 func (a *Agent) analyzeDashboardWithLLM(ctx context.Context, snaps []widgetSnapshot, focus string) (DashboardIntelResult, error) {

@@ -441,7 +441,19 @@ func (a *Agent) ensureConv(ctx context.Context, orgID, wsID, userID uuid.UUID, r
 	if req.ConversationID != "" {
 		id, err := uuid.Parse(req.ConversationID)
 		if err == nil {
-			return id, nil
+			var owned bool
+			err = a.pg.QueryRow(ctx, `
+				SELECT EXISTS(
+					SELECT 1 FROM ai_conversations
+					WHERE id=$1 AND org_id=$2 AND workspace_id=$3 AND user_id=$4
+				)
+			`, id, orgID, wsID, userID).Scan(&owned)
+			if err != nil {
+				return uuid.Nil, fmt.Errorf("não foi possível validar a conversa: %w", err)
+			}
+			if owned {
+				return id, nil
+			}
 		}
 	}
 	id := uuid.New()
@@ -884,13 +896,13 @@ func pickMeasure(model semantic.Model, q string) string {
 		}
 	}
 	if strings.Contains(q, "profit") || strings.Contains(q, "lucro") {
-		if _, ok := semantic.ResolveMeasure(model, "profit"); ok {
-			return "profit"
+		if measure, ok := semantic.ResolveMeasure(model, "profit"); ok {
+			return measure.Name
 		}
 	}
 	if strings.Contains(q, "margin") || strings.Contains(q, "margem") {
-		if _, ok := semantic.ResolveMeasure(model, "margin"); ok {
-			return "margin"
+		if measure, ok := semantic.ResolveMeasure(model, "margin"); ok {
+			return measure.Name
 		}
 	}
 	if asksForCount(q) {
@@ -899,12 +911,6 @@ func pickMeasure(model semantic.Model, q string) string {
 				return m.Name
 			}
 		}
-	}
-	if name := semantic.PrimaryMeasure(model); name != "" {
-		return name
-	}
-	if len(model.Measures) > 0 {
-		return model.Measures[0].Name
 	}
 	return ""
 }

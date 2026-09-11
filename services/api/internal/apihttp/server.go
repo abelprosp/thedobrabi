@@ -98,6 +98,8 @@ func New(deps *platform.Deps) http.Handler {
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Recoverer)
 	r.Use(middleware.Timeout(60 * time.Second))
+	r.Use(s.securityHeaders)
+	r.Use(s.rateLimit)
 	r.Use(cors.Handler(cors.Options{
 		AllowOriginFunc:  func(_ *http.Request, origin string) bool { return s.allowCORSOrigin(origin) },
 		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
@@ -187,13 +189,21 @@ func New(deps *platform.Deps) http.Handler {
 			r.Post("/datasets/{id}/file", s.updateDatasetFile)
 			r.Get("/datasets/{id}/export", s.exportDataset)
 			r.Get("/datasets/{id}/quality", s.datasetQuality)
+			r.Post("/datasets/{id}/quality/refresh", s.refreshDatasetQuality)
+			r.Get("/datasets/{id}/jobs", s.listDatasetJobs)
+			r.Get("/datasets/{id}/health", s.datasetHealth)
+			r.Get("/datasets/{id}/forecast", s.datasetForecast)
 
 			r.Get("/semantic-models", s.listSemantic)
 			r.Get("/semantic-models/{id}", s.getSemantic)
 			r.Put("/semantic-models/{id}", s.putSemantic)
+			r.Get("/semantic-models/{id}/certifications", s.listMetricCertifications)
+			r.Post("/semantic-models/{id}/certifications", s.createMetricCertification)
+			r.Patch("/semantic-models/{id}/certifications/{certificationID}", s.patchMetricCertification)
 
 			r.Post("/queries", s.runQuery)
 			r.Get("/queries/history", s.queryHistory)
+			r.Get("/queries/observability", s.queryObservability)
 
 			r.Get("/dashboards", s.listDashboards)
 			r.Post("/dashboards", s.createDashboard)
@@ -201,6 +211,11 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/dashboards/{id}", s.getDashboard)
 			r.Put("/dashboards/{id}", s.putDashboard)
 			r.Delete("/dashboards/{id}", s.deleteDashboard)
+			r.Get("/dashboards/{id}/comments", s.listDashboardComments)
+			r.Post("/dashboards/{id}/comments", s.createDashboardComment)
+			r.Patch("/dashboards/{id}/comments/{commentID}", s.patchDashboardComment)
+			r.Get("/dashboards/{id}/versions", s.listDashboardVersions)
+			r.Post("/dashboards/{id}/versions/{version}/restore", s.restoreDashboardVersion)
 			r.Post("/dashboards/{id}/share", s.shareDashboard)
 			r.Post("/dashboards/{id}/embed", s.createDashboardEmbed)
 			r.Get("/dashboards/{id}/embed", s.listDashboardEmbeds)
@@ -218,6 +233,12 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/alerts", s.listAlerts)
 			r.Post("/alerts", s.createAlert)
 			r.Post("/alerts/{id}/evaluate", s.evalAlert)
+			r.Get("/notifications", s.listNotifications)
+			r.Post("/notifications/read-all", s.readAllNotifications)
+			r.Post("/notifications/{id}/read", s.readNotification)
+			r.Get("/goals", s.listMetricGoals)
+			r.Post("/goals", s.createMetricGoal)
+			r.Patch("/goals/{id}", s.patchMetricGoal)
 
 			r.Get("/reports", s.listReports)
 			r.Post("/reports", s.createReport)
@@ -270,6 +291,7 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/semantic-models/{id}/relationships", s.listRelationships)
 			r.Post("/semantic-models/{id}/relationships", s.createRelationship)
 			r.Delete("/semantic-models/{id}/relationships/{rid}", s.deleteRelationship)
+			r.Get("/semantic-models/{id}/relationship-suggestions", s.relationshipSuggestions)
 			r.Post("/semantic-models/{id}/validate-measure", s.validateMeasure)
 			r.Post("/semantic-models/{id}/validate-dimension", s.validateDimension)
 
@@ -349,15 +371,21 @@ func (s *Server) authMw(next http.Handler) http.Handler {
 			httpx.Error(w, 401, "unauthorized", "token inválido")
 			return
 		}
-		if ws := r.Header.Get("X-Workspace-Id"); ws != "" {
-			id, err := uuid.Parse(ws)
-			if err == nil && id != p.WorkspaceID {
-				np, err := s.auth.Principal(r.Context(), p.UserID, id)
-				if err == nil {
-					p = np
-				}
+		targetWorkspace := p.WorkspaceID
+		if rawWorkspace := r.Header.Get("X-Workspace-Id"); rawWorkspace != "" {
+			id, err := uuid.Parse(rawWorkspace)
+			if err != nil {
+				httpx.Error(w, 400, "invalid_workspace", "X-Workspace-Id inválido")
+				return
 			}
+			targetWorkspace = id
 		}
+		live, err := s.auth.Principal(r.Context(), p.UserID, targetWorkspace)
+		if err != nil {
+			httpx.Error(w, 401, "unauthorized", "sessão sem acesso a este espaço")
+			return
+		}
+		p = live
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, ctxkey.UserID, p.UserID)
 		ctx = context.WithValue(ctx, ctxkey.OrgID, p.OrgID)

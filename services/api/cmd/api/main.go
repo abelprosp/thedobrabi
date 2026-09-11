@@ -24,6 +24,10 @@ func main() {
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelInfo}))
 	cfg := config.Load()
+	if err := cfg.Validate(); err != nil {
+		log.Error("invalid production configuration", "err", err)
+		os.Exit(1)
+	}
 	ctx := context.Background()
 
 	pg, err := db.ConnectPostgres(ctx, cfg.PostgresDSN)

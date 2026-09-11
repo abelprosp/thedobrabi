@@ -124,3 +124,23 @@ func TestContextualAskMessageKeepsFollowUpContext(t *testing.T) {
 		t.Fatalf("context: %q", got)
 	}
 }
+
+func TestApplyDobraScopePersistsFiltersAndTimeRangeInQueries(t *testing.T) {
+	widgets := []map[string]any{
+		{"type": "bar", "query": map[string]any{"dataset_id": "ds-1"}},
+		{"type": "text", "text": "Resumo"},
+	}
+	filters := []DobraFilter{{Dimension: "empresa", Op: "eq", Value: "Dobra"}}
+	timeRange := map[string]string{"start": "2026-09-01", "end": "2026-10-01"}
+	got := applyDobraScope(widgets, filters, timeRange)
+	query := got[0]["query"].(map[string]any)
+	if len(query["filters"].([]DobraFilter)) != 1 {
+		t.Fatalf("filters: %#v", query["filters"])
+	}
+	if query["time_range"].(map[string]string)["start"] != "2026-09-01" {
+		t.Fatalf("time range: %#v", query["time_range"])
+	}
+	if _, ok := got[1]["query"]; ok {
+		t.Fatal("text widget should remain query-free")
+	}
+}

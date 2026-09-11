@@ -5,7 +5,18 @@ import { api, normalizeArray } from "@/lib/api";
 import { toast } from "sonner";
 import { useState } from "react";
 import { AlertTriangle } from "lucide-react";
-import { Badge, Button, Card, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  Card,
+  EmptyState,
+  ErrorState,
+  FieldLabel,
+  Input,
+  PageHeader,
+  PageSkeleton,
+  Select,
+} from "@/components/ui";
 
 const channelLabel: Record<string, string> = {
   realtime: "tempo real",
@@ -15,23 +26,44 @@ const channelLabel: Record<string, string> = {
 };
 
 export default function AlertsPage() {
-  const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
-  const q = useQuery({ queryKey: ["alerts"], queryFn: () => api<any>("/api/v1/alerts") });
+  const datasets = useQuery({
+    queryKey: ["datasets"],
+    queryFn: () => api<any>("/api/v1/datasets"),
+  });
+  const semantic = useQuery({
+    queryKey: ["semantic"],
+    queryFn: () => api<any>("/api/v1/semantic-models"),
+  });
+  const q = useQuery({
+    queryKey: ["alerts"],
+    queryFn: () => api<any>("/api/v1/alerts"),
+  });
   const alerts = normalizeArray(q.data);
+  const datasetList = normalizeArray<{ id: string; name: string }>(
+    datasets.data,
+  );
+  const models = normalizeArray<any>(semantic.data);
+  const selectedDataset = datasetList[0];
+  const selectedModel = models.find(
+    (model) => model.dataset_id === selectedDataset?.id,
+  );
+  const measures = selectedModel?.model?.measures || [];
   const [name, setName] = useState("Queda de receita");
-  const [measure, setMeasure] = useState("revenue");
+  const [measure, setMeasure] = useState("");
   const [op, setOp] = useState("<");
   const [value, setValue] = useState("1");
   const [channels, setChannels] = useState<string[]>(["realtime", "email"]);
   const [busyId, setBusyId] = useState<string | null>(null);
 
   function toggle(ch: string) {
-    setChannels((p) => (p.includes(ch) ? p.filter((x) => x !== ch) : [...p, ch]));
+    setChannels((p) =>
+      p.includes(ch) ? p.filter((x) => x !== ch) : [...p, ch],
+    );
   }
 
   const create = useMutation({
     mutationFn: async () => {
-      const ds = datasets.data?.[0]?.id;
+      const ds = selectedDataset?.id;
       if (!ds) throw new Error("Carregue um conjunto primeiro");
       return api("/api/v1/alerts", {
         method: "POST",
@@ -51,8 +83,12 @@ export default function AlertsPage() {
   async function evalAlert(id: string) {
     setBusyId(id);
     try {
-      const r = await api<any>(`/api/v1/alerts/${id}/evaluate`, { method: "POST" });
-      toast.message(r.triggered ? "Disparado" : "Não disparou", { description: `valor=${r.value}` });
+      const r = await api<any>(`/api/v1/alerts/${id}/evaluate`, {
+        method: "POST",
+      });
+      toast.message(r.triggered ? "Disparado" : "Não disparou", {
+        description: `valor=${r.value}`,
+      });
     } catch (e: any) {
       toast.error(e.message);
     } finally {
@@ -61,14 +97,33 @@ export default function AlertsPage() {
   }
   return (
     <div className="mx-auto max-w-4xl space-y-4">
-      <PageHeader title="Alertas" description="Receba avisos quando uma métrica cruzar um limiar." />
+      <PageHeader
+        title="Alertas"
+        description="Receba avisos quando uma métrica cruzar um limiar."
+      />
       <Card className="space-y-3">
         <FieldLabel label="Nome" required>
-          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex.: Queda de receita" />
+          <Input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Ex.: Queda de receita"
+          />
         </FieldLabel>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <FieldLabel label="Métrica">
-            <Input value={measure} onChange={(e) => setMeasure(e.target.value)} />
+            <Select
+              value={measure || measures[0]?.name || ""}
+              onChange={(e) => setMeasure(e.target.value)}
+            >
+              {measures.length === 0 && (
+                <option value="">Carregue um modelo semântico</option>
+              )}
+              {measures.map((item: any) => (
+                <option key={item.name} value={item.name}>
+                  {item.name}
+                </option>
+              ))}
+            </Select>
           </FieldLabel>
           <FieldLabel label="Operador">
             <Select value={op} onChange={(e) => setOp(e.target.value)}>
@@ -79,24 +134,40 @@ export default function AlertsPage() {
             </Select>
           </FieldLabel>
           <FieldLabel label="Valor">
-            <Input value={value} onChange={(e) => setValue(e.target.value)} inputMode="decimal" />
+            <Input
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              inputMode="decimal"
+            />
           </FieldLabel>
         </div>
         <div className="flex flex-wrap gap-3 text-[12px] text-mute">
           {["realtime", "email", "slack", "webhook"].map((ch) => (
             <label key={ch} className="flex min-h-9 items-center gap-1.5">
-              <input type="checkbox" checked={channels.includes(ch)} onChange={() => toggle(ch)} />
+              <input
+                type="checkbox"
+                checked={channels.includes(ch)}
+                onChange={() => toggle(ch)}
+              />
               {channelLabel[ch]}
             </label>
           ))}
         </div>
-        <p className="text-[11px] text-mute">E-mail, Slack e webhook usam SMTP_HOST / SLACK_WEBHOOK_URL / ALERT_WEBHOOK_URL no servidor.</p>
+        <p className="text-[11px] text-mute">
+          E-mail, Slack e webhook usam SMTP_HOST / SLACK_WEBHOOK_URL /
+          ALERT_WEBHOOK_URL no servidor.
+        </p>
         <Button onClick={() => create.mutate()} busy={create.isPending}>
           Criar alerta
         </Button>
       </Card>
       {q.isLoading && <PageSkeleton cards={2} />}
-      {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
+      {q.isError && (
+        <ErrorState
+          message={(q.error as Error).message}
+          onRetry={() => q.refetch()}
+        />
+      )}
       {alerts.length === 0 && !q.isLoading && !q.isError && (
         <div className="space-y-4">
           <EmptyState
@@ -107,15 +178,21 @@ export default function AlertsPage() {
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
             <Card className="space-y-1 p-4">
               <div className="text-[13px] font-medium text-ink">1. Dados</div>
-              <div className="text-[12px] text-mute">Carregue um conjunto em /data.</div>
+              <div className="text-[12px] text-mute">
+                Carregue um conjunto em /data.
+              </div>
             </Card>
             <Card className="space-y-1 p-4">
               <div className="text-[13px] font-medium text-ink">2. Métrica</div>
-              <div className="text-[12px] text-mute">Defina uma medida no modelo semântico.</div>
+              <div className="text-[12px] text-mute">
+                Defina uma medida no modelo semântico.
+              </div>
             </Card>
             <Card className="space-y-1 p-4">
               <div className="text-[13px] font-medium text-ink">3. Limiar</div>
-              <div className="text-[12px] text-mute">Escolha um operador e um valor de disparo.</div>
+              <div className="text-[12px] text-mute">
+                Escolha um operador e um valor de disparo.
+              </div>
             </Card>
           </div>
         </div>
@@ -125,14 +202,24 @@ export default function AlertsPage() {
           <div>
             <div className="text-sm text-ink">{a.name}</div>
             <div className="mt-1 flex flex-wrap gap-1.5">
-              <Badge tone={a.enabled ? "ok" : "neutral"}>{a.enabled ? "activo" : "inactivo"}</Badge>
+              <Badge tone={a.enabled ? "ok" : "neutral"}>
+                {a.enabled ? "activo" : "inactivo"}
+              </Badge>
               {a.channels &&
-                (typeof a.channels === "string" ? a.channels.split(",") : a.channels).map((ch: string) => (
+                (typeof a.channels === "string"
+                  ? a.channels.split(",")
+                  : a.channels
+                ).map((ch: string) => (
                   <Badge key={ch}>{channelLabel[ch] || ch}</Badge>
                 ))}
             </div>
           </div>
-          <Button variant="secondary" size="sm" busy={busyId === a.id} onClick={() => evalAlert(a.id)}>
+          <Button
+            variant="secondary"
+            size="sm"
+            busy={busyId === a.id}
+            onClick={() => evalAlert(a.id)}
+          >
             Avaliar
           </Button>
         </Card>

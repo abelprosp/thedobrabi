@@ -27,20 +27,44 @@ import {
   PanelLeftOpen,
   ChevronDown,
 } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, lazy, Suspense, type ComponentType } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+  type ComponentType,
+} from "react";
 import { api, setTokens, clearTokens, getAccess } from "@/lib/api";
 import { CommandPalette } from "@/components/command-palette";
 import { Logo } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSystemTheme } from "@/components/theme-provider";
 
-const OnboardingModal = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingModal })));
-const OnboardingSpotlight = lazy(() => import("@/components/onboarding").then((m) => ({ default: m.OnboardingSpotlight })));
+const OnboardingModal = lazy(() =>
+  import("@/components/onboarding").then((m) => ({
+    default: m.OnboardingModal,
+  })),
+);
+const OnboardingSpotlight = lazy(() =>
+  import("@/components/onboarding").then((m) => ({
+    default: m.OnboardingSpotlight,
+  })),
+);
 
 const SIDEBAR_COLLAPSED_KEY = "thedobra.sidebar-collapsed";
 const NAV_GROUPS_KEY = "thedobra.nav-groups";
 
-type NavItem = { href: string; label: string; icon: ComponentType<{ size?: number; className?: string; "aria-hidden"?: boolean }> };
+type NavItem = {
+  href: string;
+  label: string;
+  icon: ComponentType<{
+    size?: number;
+    className?: string;
+    "aria-hidden"?: boolean;
+  }>;
+};
 type NavGroup = { id: string; label: string; items: NavItem[] };
 
 const pinnedNav: NavItem[] = [
@@ -92,21 +116,34 @@ function pathMatches(path: string, href: string) {
 }
 
 function groupIdForPath(path: string) {
-  return navGroups.find((g) => g.items.some((i) => pathMatches(path, i.href)))?.id;
+  return navGroups.find((g) => g.items.some((i) => pathMatches(path, i.href)))
+    ?.id;
 }
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const path = usePathname();
   const router = useRouter();
   const { theme } = useSystemTheme();
-  const [me, setMe] = useState<{ name: string; email: string; org_name?: string; role?: string; workspace_id?: string } | null>(null);
-  const [brand, setBrand] = useState<{ brand_name?: string; brand_logo_url?: string }>({});
-  const [workspaces, setWorkspaces] = useState<{ id: string; name: string }[]>([]);
+  const [me, setMe] = useState<{
+    name: string;
+    email: string;
+    org_name?: string;
+    role?: string;
+    workspace_id?: string;
+  } | null>(null);
+  const [brand, setBrand] = useState<{
+    brand_name?: string;
+    brand_logo_url?: string;
+  }>({});
+  const [workspaces, setWorkspaces] = useState<{ id: string; name: string }[]>(
+    [],
+  );
   const [wsId, setWsId] = useState("");
   const [open, setOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [openGroups, setOpenGroups] = useState<string[]>(["analise"]);
   const menuRef = useRef<HTMLDivElement>(null);
   const prevPathRef = useRef<string | null>(null);
@@ -119,8 +156,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     }
     Promise.all([
       api<any>("/api/v1/auth/me"),
-      api<{ id: string; name: string }[]>("/api/v1/workspaces").catch(() => [] as { id: string; name: string }[]),
-      api<{ brand_name?: string; brand_logo_url?: string }>("/api/v1/organizations/current").catch(() => ({})),
+      api<{ id: string; name: string }[]>("/api/v1/workspaces").catch(
+        () => [] as { id: string; name: string }[],
+      ),
+      api<{ brand_name?: string; brand_logo_url?: string }>(
+        "/api/v1/organizations/current",
+      ).catch(() => ({})),
     ])
       .then(([u, list, org]) => {
         setMe(u);
@@ -128,7 +169,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         const ws = Array.isArray(list) ? list : [];
         setWorkspaces(ws);
         const stored = localStorage.getItem("thedobra.workspace") || "";
-        const valid = ws.some((w) => w.id === stored) ? stored : u.workspace_id || ws[0]?.id || "";
+        const valid = ws.some((w) => w.id === stored)
+          ? stored
+          : u.workspace_id || ws[0]?.id || "";
         if (valid) {
           localStorage.setItem("thedobra.workspace", valid);
           setWsId(valid);
@@ -136,6 +179,23 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       })
       .catch(() => router.replace("/login"));
   }, [router]);
+
+  useEffect(() => {
+    if (!getAccess()) return;
+    let active = true;
+    const load = () =>
+      api<{ unread?: number }>("/api/v1/notifications")
+        .then((res) => {
+          if (active) setUnreadNotifications(Number(res.unread || 0));
+        })
+        .catch(() => undefined);
+    void load();
+    const timer = window.setInterval(load, 60_000);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -160,11 +220,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       let saved: string[] | null = null;
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.every((x) => typeof x === "string")) saved = parsed;
+        if (Array.isArray(parsed) && parsed.every((x) => typeof x === "string"))
+          saved = parsed;
       }
       const current = groupIdForPath(path);
       if (saved) {
-        setOpenGroups(current && !saved.includes(current) ? [...saved, current] : saved);
+        setOpenGroups(
+          current && !saved.includes(current) ? [...saved, current] : saved,
+        );
       } else if (current) {
         setOpenGroups([current]);
       }
@@ -181,7 +244,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (prevPathRef.current === path) return;
     prevPathRef.current = path;
     if (!activeGroupId) return;
-    setOpenGroups((prev) => (prev.includes(activeGroupId) ? prev : [...prev, activeGroupId]));
+    setOpenGroups((prev) =>
+      prev.includes(activeGroupId) ? prev : [...prev, activeGroupId],
+    );
   }, [path, activeGroupId]);
 
   const persistGroups = (next: string[]) => {
@@ -194,7 +259,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   };
 
   const toggleGroup = (id: string) => {
-    persistGroups(openGroups.includes(id) ? openGroups.filter((g) => g !== id) : [...openGroups, id]);
+    persistGroups(
+      openGroups.includes(id)
+        ? openGroups.filter((g) => g !== id)
+        : [...openGroups, id],
+    );
   };
 
   const toggleCollapsed = () => {
@@ -211,7 +280,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     function onDoc(e: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenu(false);
+      if (menuRef.current && !menuRef.current.contains(e.target as Node))
+        setMenu(false);
     }
     document.addEventListener("mousedown", onDoc);
     return () => document.removeEventListener("mousedown", onDoc);
@@ -240,7 +310,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const sidebarContent = (opts: { iconOnly: boolean; showCollapse: boolean }) => {
+  const sidebarContent = (opts: {
+    iconOnly: boolean;
+    showCollapse: boolean;
+  }) => {
     const { iconOnly, showCollapse } = opts;
     const settingsActive = path.startsWith("/settings");
     const billingActive = path.startsWith("/billing");
@@ -248,7 +321,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <>
         <div
           className={`flex shrink-0 ${
-            iconOnly ? "flex-col items-center gap-1 px-2 py-3" : "items-center justify-between gap-1 px-3 py-4"
+            iconOnly
+              ? "flex-col items-center gap-1 px-2 py-3"
+              : "items-center justify-between gap-1 px-3 py-4"
           }`}
         >
           <Link
@@ -273,16 +348,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               title={iconOnly ? "Expandir menu" : "Recolher menu"}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-mute hover:bg-surface-2 hover:text-ink"
             >
-              {iconOnly ? <PanelLeftOpen size={18} aria-hidden /> : <PanelLeftClose size={18} aria-hidden />}
+              {iconOnly ? (
+                <PanelLeftOpen size={18} aria-hidden />
+              ) : (
+                <PanelLeftClose size={18} aria-hidden />
+              )}
             </button>
           )}
         </div>
-        <nav className={`min-h-0 flex-1 overflow-y-auto ${iconOnly ? "space-y-0.5 px-2" : "space-y-4 px-3"}`} aria-label="Principal">
+        <nav
+          className={`min-h-0 flex-1 overflow-y-auto ${iconOnly ? "space-y-0.5 px-2" : "space-y-4 px-3"}`}
+          aria-label="Principal"
+        >
           <div className="space-y-0.5">
             {pinnedNav.map((item) => navItem(item, iconOnly))}
           </div>
           {navGroups.map((group) => {
-            const groupActive = group.items.some((i) => pathMatches(path, i.href));
+            const groupActive = group.items.some((i) =>
+              pathMatches(path, i.href),
+            );
             const expanded = iconOnly || openGroups.includes(group.id);
             return (
               <div key={group.id} className="space-y-0.5">
@@ -294,7 +378,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     onClick={() => toggleGroup(group.id)}
                     aria-expanded={expanded}
                     className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] transition ${
-                      groupActive ? "text-primary-600" : "text-mute hover:text-ink"
+                      groupActive
+                        ? "text-primary-600"
+                        : "text-mute hover:text-ink"
                     }`}
                   >
                     {group.label}
@@ -306,7 +392,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   </button>
                 )}
                 {expanded && (
-                  <div className={iconOnly ? "space-y-0.5" : "ml-1.5 space-y-0.5 border-l border-line pl-1.5"}>
+                  <div
+                    className={
+                      iconOnly
+                        ? "space-y-0.5"
+                        : "ml-1.5 space-y-0.5 border-l border-line pl-1.5"
+                    }
+                  >
                     {group.items.map((item) => navItem(item, iconOnly))}
                   </div>
                 )}
@@ -314,7 +406,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
-        <div className={`shrink-0 space-y-0.5 border-t border-line pb-4 pt-2 ${iconOnly ? "px-2" : "px-3"}`}>
+        <div
+          className={`shrink-0 space-y-0.5 border-t border-line pb-4 pt-2 ${iconOnly ? "px-2" : "px-3"}`}
+        >
           <Link
             href="/settings"
             title={iconOnly ? "Definições" : undefined}
@@ -323,7 +417,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             className={navLinkClass(settingsActive, iconOnly)}
           >
             <Settings size={16} className="shrink-0" aria-hidden />
-            <span className={iconOnly ? "sr-only" : "truncate"}>Definições</span>
+            <span className={iconOnly ? "sr-only" : "truncate"}>
+              Definições
+            </span>
           </Link>
           <Link
             href="/billing"
@@ -357,7 +453,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
       {mobile && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          <div className="absolute inset-0 bg-ink/30" onClick={() => setMobile(false)} />
+          <div
+            className="absolute inset-0 bg-ink/30"
+            onClick={() => setMobile(false)}
+          />
           <aside className="relative z-10 flex h-full min-h-0 w-[min(18rem,88vw)] flex-col overflow-hidden bg-surface pb-[env(safe-area-inset-bottom)] pt-[env(safe-area-inset-top)] shadow-xl">
             <button
               className="absolute top-3 right-3 flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2"
@@ -380,7 +479,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               <Menu size={18} />
             </button>
-            <span className="hidden truncate sm:inline">{me?.org_name || "Organização"}</span>
+            <span className="hidden truncate sm:inline">
+              {me?.org_name || "Organização"}
+            </span>
             <span className="hidden text-line sm:inline">/</span>
             {workspaces.length > 0 ? (
               <select
@@ -391,10 +492,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   const id = e.target.value;
                   if (!id || id === wsId) return;
                   try {
-                    const res = await api<{ tokens: { access_token: string; refresh_token: string; expires_in: number } }>(
-                      `/api/v1/workspaces/${id}/switch`,
-                      { method: "POST" },
-                    );
+                    const res = await api<{
+                      tokens: {
+                        access_token: string;
+                        refresh_token: string;
+                        expires_in: number;
+                      };
+                    }>(`/api/v1/workspaces/${id}/switch`, { method: "POST" });
                     setTokens(res.tokens);
                     localStorage.setItem("thedobra.workspace", id);
                     setWsId(id);
@@ -422,21 +526,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             >
               <Search size={14} />
               <span className="hidden sm:inline">Procurar</span>
-              <kbd className="ml-2 hidden text-[10px] text-slate-400 sm:inline">⌘K</kbd>
+              <kbd className="ml-2 hidden text-[10px] text-slate-400 sm:inline">
+                ⌘K
+              </kbd>
             </button>
             <div className="hidden sm:block">
               <ThemeToggle />
             </div>
-            <Link href="/ask" className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20 transition hover:-translate-y-px hover:bg-primary-600 sm:h-9 sm:w-auto sm:px-3 sm:text-[12px] sm:font-medium">
+            <Link
+              href="/ask"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20 transition hover:-translate-y-px hover:bg-primary-600 sm:h-9 sm:w-auto sm:px-3 sm:text-[12px] sm:font-medium"
+            >
               <MessageSquare size={16} className="sm:hidden" />
               <span className="hidden sm:inline">Perguntar</span>
             </Link>
             <Link
               href="/alerts"
-              className="hidden h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2 sm:flex"
+              className="relative hidden h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2 sm:flex"
               aria-label="Alertas"
             >
               <Bell size={16} />
+              {unreadNotifications > 0 && (
+                <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger px-1 text-[9px] font-semibold text-white">
+                  {unreadNotifications > 9 ? "9+" : unreadNotifications}
+                </span>
+              )}
             </Link>
             <div className="relative" ref={menuRef}>
               <button
@@ -450,10 +564,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               {menu && (
                 <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-line bg-surface py-1 shadow-lg">
                   <div className="border-b border-line px-3 py-2">
-                    <div className="truncate text-[13px] font-medium text-ink">{me?.name}</div>
-                    <div className="truncate text-[11px] text-mute">{me?.email}</div>
+                    <div className="truncate text-[13px] font-medium text-ink">
+                      {me?.name}
+                    </div>
+                    <div className="truncate text-[11px] text-mute">
+                      {me?.email}
+                    </div>
                   </div>
-                  <Link href="/settings" className="flex min-h-10 items-center gap-2 px-3 text-sm text-ink hover:bg-bg">
+                  <Link
+                    href="/settings"
+                    className="flex min-h-10 items-center gap-2 px-3 text-sm text-ink hover:bg-bg"
+                  >
                     <Settings size={14} /> Definições
                   </Link>
                   <button
@@ -470,7 +591,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main id="main-content" className="min-w-0 flex-1 px-3 py-5 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:p-7 lg:pb-7">{children}</main>
+        <main
+          id="main-content"
+          className="min-w-0 flex-1 px-3 py-5 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:p-7 lg:pb-7"
+        >
+          {children}
+        </main>
         <nav
           aria-label="Navegação rápida"
           className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-line/80 bg-surface/95 px-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:hidden"
@@ -487,7 +613,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   active ? "text-primary" : "text-mute"
                 }`}
               >
-                <span className={`flex h-8 w-10 items-center justify-center rounded-xl ${active ? "bg-primary/10" : ""}`}>
+                <span
+                  className={`flex h-8 w-10 items-center justify-center rounded-xl ${active ? "bg-primary/10" : ""}`}
+                >
                   <Icon size={17} aria-hidden />
                 </span>
                 {item.label}

@@ -19,6 +19,7 @@ import {
   CheckCircle2,
   Database,
   Loader2,
+  RotateCcw,
   Sparkles,
   Wand2,
 } from "lucide-react";
@@ -251,24 +252,49 @@ export default function AskPage() {
             Respostas com as métricas do seu conjunto — sem inventar fórmulas.
           </p>
         </div>
-        {datasetList.length > 0 && (
-          <Select
-            aria-label="Conjunto"
-            value={activeId}
-            onChange={(e) => {
-              setDatasetId(e.target.value);
-              setConversationId("");
-              setMsgs([]);
-            }}
-            className="w-full shrink-0 sm:max-w-[220px]"
-          >
-            {datasetList.map((d) => (
-              <option key={d.id} value={d.id}>
-                {d.name}
-              </option>
-            ))}
-          </Select>
-        )}
+        <div className="flex w-full gap-2 sm:w-auto">
+          {datasetList.length > 0 && (
+            <Select
+              aria-label="Conjunto"
+              value={activeId}
+              onChange={(e) => {
+                setDatasetId(e.target.value);
+                setConversationId("");
+                setMsgs([]);
+              }}
+              className="min-w-0 flex-1 sm:w-[220px]"
+            >
+              {datasetList.map((d) => (
+                <option key={d.id} value={d.id}>
+                  {d.name}
+                </option>
+              ))}
+            </Select>
+          )}
+          {msgs.length > 0 && (
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Nova conversa"
+              title="Nova conversa"
+              onClick={() => {
+                setConversationId("");
+                setMsgs([]);
+              }}
+            >
+              <RotateCcw size={15} />
+            </Button>
+          )}
+        </div>
+      </div>
+      <div className="mb-4 flex flex-wrap items-center gap-2 rounded-xl border border-primary/10 bg-primary/[0.045] px-3 py-2 text-[11px] text-mute">
+        <CheckCircle2 size={13} className="text-emerald-600" />
+        <span>
+          Respostas calculadas com métricas oficiais e evidências do conjunto
+          selecionado.
+        </span>
+        <span className="hidden text-line sm:inline">·</span>
+        <span>Faça perguntas de continuação como “e por região?”</span>
       </div>
 
       <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
@@ -363,6 +389,25 @@ export default function AskPage() {
                 {m.answer?.recommendation && (
                   <div className="rounded-xl border border-primary/15 bg-primary/5 px-3 py-2.5 text-[13px] leading-relaxed text-primary-700">
                     {m.answer.recommendation}
+                  </div>
+                )}
+                {m.answer && !m.answer.insufficient_data && (
+                  <div className="flex flex-wrap gap-1.5 border-t border-line pt-3">
+                    {[
+                      "E por região?",
+                      "Compare com o período anterior",
+                      "O que devo fazer agora?",
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onClick={() => ask(suggestion)}
+                        disabled={busy}
+                        className="rounded-full border border-line bg-surface px-2.5 py-1.5 text-[11px] text-mute transition hover:border-primary/30 hover:text-primary disabled:opacity-50"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
                   </div>
                 )}
                 {m.answer?.warnings && m.answer.warnings.length > 0 && (

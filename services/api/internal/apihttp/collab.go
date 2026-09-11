@@ -184,6 +184,27 @@ func (s *Server) patchMember(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "invalid", "função obrigatória")
 		return
 	}
+	if body.Role != "viewer" && body.Role != "analyst" && body.Role != "admin" {
+		httpx.Error(w, 400, "invalid", "função inválida")
+		return
+	}
+	if role != "owner" && body.Role == "admin" {
+		httpx.Error(w, 403, "forbidden", "apenas owner pode promover admin")
+		return
+	}
+	var currentRole string
+	if err := s.deps.PG.QueryRow(r.Context(), `SELECT role FROM organization_members WHERE org_id=$1 AND user_id=$2`, org, id).Scan(&currentRole); err != nil {
+		httpx.Error(w, 404, "not_found", "membro não encontrado")
+		return
+	}
+	if currentRole == "owner" && body.Role != "owner" {
+		var owners int
+		_ = s.deps.PG.QueryRow(r.Context(), `SELECT COUNT(*) FROM organization_members WHERE org_id=$1 AND role='owner'`, org).Scan(&owners)
+		if owners <= 1 {
+			httpx.Error(w, 400, "last_owner", "a organização precisa manter um owner")
+			return
+		}
+	}
 	_, err = s.deps.PG.Exec(r.Context(), `UPDATE organization_members SET role=$3 WHERE org_id=$1 AND user_id=$2`, org, id, body.Role)
 	if err != nil {
 		httpx.Error(w, 400, "update_failed", err.Error())
@@ -197,6 +218,11 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id")
+		return
+	}
+	var exists bool
+	if err := s.deps.PG.QueryRow(r.Context(), `SELECT EXISTS(SELECT 1 FROM dashboards WHERE id=$1 AND org_id=$2 AND workspace_id=$3)`, id, org, ws).Scan(&exists); err != nil || !exists {
+		httpx.Error(w, 404, "not_found", "dashboard não encontrado")
 		return
 	}
 	tok, err := cryptoenc.RandomToken(18)

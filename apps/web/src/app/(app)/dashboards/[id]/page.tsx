@@ -88,7 +88,7 @@ import {
 } from "@/lib/semantic";
 import { DASHBOARD_TEMPLATES, instantiateTemplate, prepareTemplateModel } from "@/lib/dashboard-templates";
 import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
-import { DobraAIChat } from "@/components/dobra-ai-chat";
+import { DobraAIChat, type DobraReply } from "@/components/dobra-ai-chat";
 import { ThemeSegmented } from "@/components/theme-toggle";
 import { AppearanceScope, parseLayoutTheme } from "@/components/theme-provider";
 import { readStoredDashboardAppearance, writeStoredDashboardAppearance, type Appearance } from "@/lib/theme";
@@ -447,9 +447,21 @@ function DashboardEditorInner() {
 
   const aiComplete = useMutation({
     mutationFn: () =>
-      api<{ id: string; name: string; widgets: any[]; source: string }>("/api/v1/ai/generate-dashboard", {
+      api<DobraReply>("/api/v1/ai/dobra", {
         method: "POST",
-        body: JSON.stringify({ prompt: aiCompletePrompt, dataset_id: aiCompleteDataset || undefined }),
+        body: JSON.stringify({
+          message: `Adicione ao dashboard atual sem substituir os widgets existentes: ${aiCompletePrompt}`,
+          dataset_id: aiCompleteDataset || preferredDatasetId || datasetList[0]?.id || undefined,
+          dashboard_id: id,
+          dashboard_name: name,
+          widgets: widgets.slice(0, 24).map((widget) => ({
+            type: widget.type,
+            title: widget.title,
+            layout: widget.layout,
+            query: widget.query,
+            config: widget.config,
+          })),
+        }),
       }),
     onMutate: () => setAiCompleteStep(0),
     onSuccess: (res) => {
@@ -463,11 +475,34 @@ function DashboardEditorInner() {
           w: Number(w.layout?.w ?? 6),
           h: Number(w.layout?.h ?? 4),
         },
-        query: w.query ? { ...w.query, dataset_id: w.query.dataset_id || datasetList[0]?.id } : undefined,
+        query: w.query ? { ...w.query, dataset_id: w.query.dataset_id || res.dataset_id || datasetList[0]?.id } : undefined,
         text: w.text,
+        config: w.config,
       }));
       if (generated.length > 0) {
         history.push([...widgets, ...generated]);
+        if (res.filters?.length) {
+          const additions = res.filters.map((filter) => ({
+            dimension: filter.dimension,
+            op: (filter.op === "in" ? "in" : "eq") as "eq" | "in",
+            value: filter.value,
+            dataset_id: res.dataset_id || aiCompleteDataset || preferredDatasetId,
+          }));
+          setGlobalFilters((current) => [
+            ...current,
+            ...additions.filter(
+              (addition) =>
+                !current.some(
+                  (existing) =>
+                    existing.dimension === addition.dimension &&
+                    (existing.dataset_id || "") === (addition.dataset_id || ""),
+                ),
+            ),
+          ]);
+        }
+        if (res.time_range?.start || res.time_range?.end) {
+          setTimeRange({ start: res.time_range.start, end: res.time_range.end });
+        }
         toast.success(`${generated.length} widgets sugeridos adicionados`);
       } else {
         toast.error("A IA não sugeriu widgets compatíveis");
@@ -986,7 +1021,23 @@ function DashboardEditorInner() {
               history.push(replace ? next : [...widgets, ...next]);
               setSelected(null);
               if (nextName) setName(nextName);
-              if (filters && filters.length) setGlobalFilters(filters);
+              if (filters && filters.length) {
+                setGlobalFilters((current) =>
+                  replace
+                    ? filters
+                    : [
+                        ...current,
+                        ...filters.filter(
+                          (addition) =>
+                            !current.some(
+                              (existing) =>
+                                existing.dimension === addition.dimension &&
+                                (existing.dataset_id || "") === (addition.dataset_id || ""),
+                            ),
+                        ),
+                      ],
+                );
+              }
               if (tr && (tr.start || tr.end)) setTimeRange({ start: tr.start, end: tr.end });
               toast.success(replace ? `${next.length} visuais montados no dashboard` : `${next.length} visuais adicionados`);
             }}

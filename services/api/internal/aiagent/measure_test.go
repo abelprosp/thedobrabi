@@ -83,3 +83,16 @@ func TestMatchMeasureInPromptIgnoresAccentsAndSeparators(t *testing.T) {
 		t.Fatalf("unexpected match: %#v", got)
 	}
 }
+
+func TestPickMeasureDoesNotGuessUnrelatedMetric(t *testing.T) {
+	model := semantic.Model{Measures: []semantic.Measure{
+		{Name: "Receita", Column: "receita"},
+		{Name: "Margem", Column: "margem"},
+	}}
+	if got := pickMeasure(model, "quantos funcionários temos?"); got != "" {
+		t.Fatalf("expected no measure, got %q", got)
+	}
+	if got := pickMeasure(model, "qual a margem?"); got != "Margem" {
+		t.Fatalf("expected Margem, got %q", got)
+	}
+}

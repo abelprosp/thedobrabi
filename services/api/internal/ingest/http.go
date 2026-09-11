@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"net"
 	"net/http"
+	"net/netip"
 	"net/url"
 	"strings"
 	"time"
@@ -16,6 +18,34 @@ import (
 
 var connectorHTTP = &http.Client{
 	Timeout: 20 * time.Second,
+	Transport: &http.Transport{
+		Proxy: nil,
+		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+			host, port, err := net.SplitHostPort(address)
+			if err != nil {
+				return nil, err
+			}
+			ips, err := net.DefaultResolver.LookupIP(ctx, "ip", host)
+			if err != nil {
+				return nil, fmt.Errorf("falha ao resolver host")
+			}
+			var lastErr error
+			for _, ip := range ips {
+				if blockedConnectorIP(ip) {
+					continue
+				}
+				conn, err := (&net.Dialer{Timeout: 10 * time.Second}).DialContext(ctx, network, net.JoinHostPort(ip.String(), port))
+				if err == nil {
+					return conn, nil
+				}
+				lastErr = err
+			}
+			if lastErr != nil {
+				return nil, lastErr
+			}
+			return nil, fmt.Errorf("host interno ou reservado não permitido")
+		},
+	},
 	CheckRedirect: func(req *http.Request, via []*http.Request) error {
 		if len(via) >= 5 {
 			return fmt.Errorf("demasiados redireccionamentos")
@@ -29,13 +59,26 @@ var connectorHTTP = &http.Client{
 
 func assertHTTPURL(raw string) error {
 	u, err := url.Parse(strings.TrimSpace(raw))
-	if err != nil || u.Scheme == "" || u.Host == "" {
+	if err != nil || u.Scheme == "" || u.Host == "" || u.User != nil {
 		return fmt.Errorf("URL inválido")
 	}
 	if u.Scheme != "http" && u.Scheme != "https" {
 		return fmt.Errorf("apenas http/https são permitidos")
 	}
+	if ip, err := netip.ParseAddr(u.Hostname()); err == nil && blockedConnectorIP(net.IP(ip.AsSlice())) {
+		return fmt.Errorf("host interno ou reservado não permitido")
+	}
 	return nil
+}
+
+func blockedConnectorIP(ip net.IP) bool {
+	addr, err := netip.ParseAddr(ip.String())
+	if err != nil {
+		return true
+	}
+	return addr.IsLoopback() || addr.IsPrivate() || addr.IsLinkLocalUnicast() ||
+		addr.IsLinkLocalMulticast() || addr.IsUnspecified() || addr.IsMulticast() ||
+		addr.String() == "169.254.169.254"
 }
 
 func (e *Engine) pingHTTP(ctx context.Context, cfg SQLConfig) error {

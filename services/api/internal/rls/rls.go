@@ -3,6 +3,7 @@ package rls
 import (
 	"context"
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/google/uuid"
@@ -49,6 +50,9 @@ func (s *Store) Create(ctx context.Context, orgID, wsID, datasetID uuid.UUID, ro
 	if role == "" {
 		role = "viewer"
 	}
+	if err := ValidateRule(role, column, expr); err != nil {
+		return uuid.Nil, err
+	}
 	id := uuid.New()
 	_, err := s.pg.Exec(ctx, `
 		INSERT INTO dataset_rls (id, org_id, workspace_id, dataset_id, role, column_name, expression)
@@ -58,6 +62,9 @@ func (s *Store) Create(ctx context.Context, orgID, wsID, datasetID uuid.UUID, ro
 }
 
 func (s *Store) Update(ctx context.Context, orgID, wsID, id uuid.UUID, role, column, expr string) error {
+	if err := ValidateRule(role, column, expr); err != nil {
+		return err
+	}
 	ct, err := s.pg.Exec(ctx, `
 		UPDATE dataset_rls SET role=$1, column_name=$2, expression=$3, updated_at=now()
 		WHERE id=$4 AND org_id=$5 AND workspace_id=$6
@@ -67,6 +74,42 @@ func (s *Store) Update(ctx context.Context, orgID, wsID, id uuid.UUID, role, col
 	}
 	if ct.RowsAffected() == 0 {
 		return fmt.Errorf("not found")
+	}
+	return nil
+}
+
+var rlsIdentifier = regexp.MustCompile(`^[A-Za-z_][A-Za-z0-9_]*$`)
+
+// ValidateRule accepts only a small predicate language. RLS rules are later
+// embedded in ClickHouse SQL, so arbitrary SQL must never be stored.
+func ValidateRule(role, column, expr string) error {
+	if role != "owner" && role != "admin" && role != "analyst" && role != "viewer" {
+		return fmt.Errorf("função de RLS inválida")
+	}
+	column = strings.TrimSpace(column)
+	expr = strings.TrimSpace(expr)
+	if !rlsIdentifier.MatchString(column) {
+		return fmt.Errorf("coluna de RLS inválida")
+	}
+	if expr == "" || len(expr) > 500 {
+		return fmt.Errorf("expressão de RLS inválida")
+	}
+	upper := strings.ToUpper(expr)
+	for _, forbidden := range []string{"SELECT", "INSERT", "UPDATE", "DELETE", "DROP", "ALTER", "UNION", "JOIN", "FROM", "--", "/*", "*/", ";"} {
+		if strings.Contains(upper, forbidden) {
+			return fmt.Errorf("expressão de RLS contém SQL não permitido")
+		}
+	}
+	if strings.Contains(upper, " OR ") || strings.Contains(upper, "||") {
+		return fmt.Errorf("expressões OR não são permitidas em regras de RLS")
+	}
+	for _, r := range expr {
+		if !(r == '_' || r == '-' || r == '+' || r == '*' || r == '/' || r == '(' || r == ')' ||
+			r == ',' || r == '.' || r == '=' || r == '!' || r == '<' || r == '>' ||
+			r == '\'' || r == '"' || r == ' ' || r == '\t' ||
+			r >= '0' && r <= '9' || r >= 'A' && r <= 'Z' || r >= 'a' && r <= 'z') {
+			return fmt.Errorf("caractere não permitido na expressão de RLS")
+		}
 	}
 	return nil
 }

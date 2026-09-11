@@ -6,21 +6,23 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/subtle"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/thedobra/thedobra/services/gateway/internal/gateway"
 )
 
 type Config struct {
-	RemoteURL string          `json:"remote_url" yaml:"remote_url"`
-	Token     string          `json:"token" yaml:"token"`
-	Instance  string          `json:"instance" yaml:"instance"`
-	Listen    string          `json:"listen" yaml:"listen"`
+	RemoteURL string           `json:"remote_url" yaml:"remote_url"`
+	Token     string           `json:"token" yaml:"token"`
+	Instance  string           `json:"instance" yaml:"instance"`
+	Listen    string           `json:"listen" yaml:"listen"`
 	Sources   []gateway.Source `json:"sources" yaml:"sources"`
 }
 
@@ -87,6 +89,15 @@ func main() {
 	mux.HandleFunc("/tunnel/query", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			gateway.WriteJSON(w, 405, map[string]string{"error": "method not allowed"})
+			return
+		}
+		provided := r.Header.Get("X-Gateway-Token")
+		if provided == "" {
+			provided = r.Header.Get("Authorization")
+			provided = strings.TrimPrefix(provided, "Bearer ")
+		}
+		if subtle.ConstantTimeCompare([]byte(provided), []byte(cfg.Token)) != 1 {
+			gateway.WriteJSON(w, 401, map[string]string{"error": "unauthorized"})
 			return
 		}
 		var req gateway.QueryRequest

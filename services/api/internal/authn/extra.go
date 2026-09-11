@@ -134,6 +134,9 @@ func (s *Service) CreateInvite(ctx context.Context, orgID, by uuid.UUID, email, 
 	if role == "" {
 		role = "analyst"
 	}
+	if role != "viewer" && role != "analyst" && role != "admin" {
+		return "", fmt.Errorf("função de convite inválida")
+	}
 	plain, err := cryptoenc.RandomToken(24)
 	if err != nil {
 		return "", err

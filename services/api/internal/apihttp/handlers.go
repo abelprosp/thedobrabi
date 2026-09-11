@@ -185,6 +185,11 @@ func (s *Server) syncSource(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "sync_failed", err.Error())
 		return
 	}
+	_, _ = s.deps.PG.Exec(r.Context(), `
+		INSERT INTO dataset_refresh_runs
+			(org_id,workspace_id,dataset_id,status,rows_affected,started_at,finished_at)
+		VALUES ($1,$2,$3,'ok',$4,now(),now())
+	`, org, ws, res.DatasetID, res.RowCount)
 	if body.StorageMode != "" {
 		_, _ = s.deps.PG.Exec(r.Context(), `UPDATE datasets SET storage_mode=$1 WHERE id=$2`, body.StorageMode, res.DatasetID)
 	}
@@ -558,7 +563,7 @@ func (s *Server) getDashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) putDashboard(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	uid, org, ws, _ := principal(r)
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
 	var body struct {
 		Name        string          `json:"name"`
@@ -575,6 +580,13 @@ func (s *Server) putDashboard(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "dashboard não encontrado")
 		return
 	}
+	var version int
+	_ = s.deps.PG.QueryRow(r.Context(), `SELECT COALESCE(MAX(version),0)+1 FROM dashboard_versions WHERE dashboard_id=$1 AND org_id=$2 AND workspace_id=$3`, id, org, ws).Scan(&version)
+	_, _ = s.deps.PG.Exec(r.Context(), `
+		INSERT INTO dashboard_versions
+			(org_id,workspace_id,dashboard_id,version,name,description,layout_json,created_by)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+	`, org, ws, id, version, body.Name, body.Description, body.Layout, uid)
 	s.audit(r, "DASHBOARD_UPDATED", "dashboard", id, nil)
 	s.lineage.RecordDashboard(r.Context(), org, ws, id, uuid.Nil, body.Name)
 	httpx.JSON(w, 200, map[string]any{"id": id})
@@ -866,8 +878,40 @@ func (s *Server) createAlert(w http.ResponseWriter, r *http.Request) {
 	if len(body.Channels) == 0 {
 		body.Channels = []byte(`["realtime"]`)
 	}
+	var condition struct {
+		DatasetID string  `json:"dataset_id"`
+		Measure   string  `json:"measure"`
+		Op        string  `json:"op"`
+		Value     float64 `json:"value"`
+		Type      string  `json:"type"`
+	}
+	if json.Unmarshal(body.Condition, &condition) != nil || condition.DatasetID == "" || condition.Measure == "" {
+		httpx.Error(w, 400, "invalid_condition", "dataset_id e measure são obrigatórios")
+		return
+	}
+	if condition.Op == "" {
+		condition.Op = ">"
+	}
+	switch condition.Op {
+	case "<", ">", "<=", ">=", "=":
+	default:
+		httpx.Error(w, 400, "invalid_condition", "operador de alerta inválido")
+		return
+	}
+	model, _, err := s.ai.LoadModel(r.Context(), org, ws, condition.DatasetID)
+	if err != nil {
+		httpx.Error(w, 400, "invalid_condition", err.Error())
+		return
+	}
+	measure, ok := semantic.ResolveMeasure(model, condition.Measure)
+	if !ok {
+		httpx.Error(w, 400, "invalid_condition", "a métrica não existe no modelo semântico")
+		return
+	}
+	condition.Measure = measure.Name
+	body.Condition = mustJSON(condition)
 	id := uuid.New()
-	_, err := s.deps.PG.Exec(r.Context(), `INSERT INTO alerts (id, org_id, workspace_id, name, condition_json, channels) VALUES ($1,$2,$3,$4,$5,$6)`,
+	_, err = s.deps.PG.Exec(r.Context(), `INSERT INTO alerts (id, org_id, workspace_id, name, condition_json, channels) VALUES ($1,$2,$3,$4,$5,$6)`,
 		id, org, ws, body.Name, body.Condition, body.Channels)
 	if err != nil {
 		httpx.Error(w, 400, "create_failed", err.Error())

@@ -64,14 +64,6 @@ func (p *Planner) loadDataset(ctx context.Context, orgID, wsID uuid.UUID, datase
 		WHERE d.id=$1 AND d.org_id=$2 AND d.workspace_id=$3
 	`, id, orgID, wsID).Scan(&m.WorkspaceID, &m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON)
 	if err != nil {
-		err = p.pg.QueryRow(ctx, `
-			SELECT d.workspace_id, d.name, d.clickhouse_table, d.storage_mode, d.source_table, d.source_query, d.schema_json, d.row_count, COALESCE(s.model_json, '{}'::jsonb)
-			FROM datasets d
-			LEFT JOIN semantic_models s ON s.dataset_id = d.id
-			WHERE d.id=$1 AND d.org_id=$2
-		`, id, orgID).Scan(&m.WorkspaceID, &m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON)
-	}
-	if err != nil {
 		return datasetInfo{}, fmt.Errorf("dataset not found")
 	}
 	_ = json.Unmarshal(m.ModelJSON, &m.Model)
