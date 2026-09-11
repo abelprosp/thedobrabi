@@ -142,6 +142,7 @@ export default function AskPage() {
   }, [activeName]);
 
   useEffect(() => {
+    if (!msgs.length && !busy) return;
     const container = chatScroll.current;
     if (!container) return;
     requestAnimationFrame(() => {

@@ -662,7 +662,7 @@ function DashboardEditorInner() {
   if (!d.data && widgets.length === 0) return <PageSkeleton />;
 
   return (
-    <div className="-m-4 flex h-[calc(100dvh-8rem)] min-h-0 flex-col bg-surface-2 sm:-m-6 lg:h-[calc(100dvh-3.5rem)]">
+    <div className="-m-4 flex h-[calc(100dvh-10rem)] min-h-0 flex-col bg-surface-2 sm:-m-6 xl:h-[calc(100dvh-3.5rem)]">
       <div className="flex shrink-0 flex-wrap items-center gap-2 border-b border-line bg-surface px-3 py-2 sm:px-4">
         <nav className="hidden min-w-0 items-center gap-1.5 text-[12px] text-mute sm:flex">
           <Link href="/dashboards" className="hover:text-ink">Dashboards</Link>
@@ -888,7 +888,7 @@ function DashboardEditorInner() {
             "h-full min-h-0",
             phoneFrame ? "overflow-auto bg-surface-2" : "overflow-auto bg-bg pb-10",
             edit && current && !mobileView && !dobraOpen && "pr-80",
-            edit && dobraOpen && !mobileView && "lg:pr-[24rem]",
+            edit && dobraOpen && !mobileView && "xl:pr-[24rem]",
           )}
         >
         <div

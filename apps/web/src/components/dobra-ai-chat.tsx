@@ -156,12 +156,14 @@ export function DobraAIChat({
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (open) {
+    if (open && msgs.length > 1) {
       inputRef.current?.focus();
       const container = chatScroll.current;
       if (container) {
         requestAnimationFrame(() => container.scrollTo({ top: container.scrollHeight, behavior: "smooth" }));
       }
+    } else if (open) {
+      inputRef.current?.focus();
     }
   }, [open, msgs.length]);
 
@@ -243,7 +245,7 @@ export function DobraAIChat({
   if (!open) return null;
 
   return (
-    <aside className="absolute inset-0 z-40 flex w-full flex-col border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-xl lg:inset-y-0 lg:right-0 lg:left-auto lg:w-[min(100%,24rem)] lg:border-l">
+    <aside className="absolute inset-0 z-40 flex w-full flex-col border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-xl xl:inset-y-0 xl:right-0 xl:left-auto xl:w-[min(100%,24rem)] xl:border-l">
       <div className="flex items-center gap-2 border-b border-line px-3 py-2.5">
         <Sparkles size={16} className="text-primary" />
         <div className="min-w-0 flex-1">
