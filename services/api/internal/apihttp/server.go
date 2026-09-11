@@ -372,7 +372,13 @@ func (s *Server) authMw(next http.Handler) http.Handler {
 			return
 		}
 		targetWorkspace := p.WorkspaceID
-		if rawWorkspace := r.Header.Get("X-Workspace-Id"); rawWorkspace != "" {
+		// /auth/me is the recovery endpoint for a stale workspace selection.
+		// It must resolve the user's current active workspace from the
+		// membership rather than reject the whole session first.
+		if r.URL.Path == "/api/v1/auth/me" {
+			targetWorkspace = uuid.Nil
+		}
+		if rawWorkspace := r.Header.Get("X-Workspace-Id"); rawWorkspace != "" && r.URL.Path != "/api/v1/auth/me" {
 			id, err := uuid.Parse(rawWorkspace)
 			if err != nil {
 				httpx.Error(w, 400, "invalid_workspace", "X-Workspace-Id inválido")
