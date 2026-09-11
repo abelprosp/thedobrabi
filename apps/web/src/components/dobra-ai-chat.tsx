@@ -152,12 +152,16 @@ export function DobraAIChat({
     },
   ]);
   const bottom = useRef<HTMLDivElement>(null);
+  const chatScroll = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     if (open) {
       inputRef.current?.focus();
-      bottom.current?.scrollIntoView({ behavior: "smooth" });
+      const container = chatScroll.current;
+      if (container) {
+        requestAnimationFrame(() => container.scrollTo({ top: container.scrollHeight, behavior: "smooth" }));
+      }
     }
   }, [open, msgs.length]);
 
@@ -239,7 +243,7 @@ export function DobraAIChat({
   if (!open) return null;
 
   return (
-    <aside className="absolute inset-y-0 right-0 z-40 flex w-[min(100%,24rem)] flex-col border-l border-line bg-surface shadow-xl">
+    <aside className="absolute inset-0 z-40 flex w-full flex-col border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-xl lg:inset-y-0 lg:right-0 lg:left-auto lg:w-[min(100%,24rem)] lg:border-l">
       <div className="flex items-center gap-2 border-b border-line px-3 py-2.5">
         <Sparkles size={16} className="text-primary" />
         <div className="min-w-0 flex-1">
@@ -273,7 +277,7 @@ export function DobraAIChat({
           </Select>
         </div>
       )}
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
+      <div ref={chatScroll} className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain px-3 py-3 [scrollbar-gutter:stable]">
         {msgs.map((m, i) => (
           <div
             key={i}
@@ -367,7 +371,7 @@ export function DobraAIChat({
         </div>
       )}
       <form
-        className="flex items-end gap-2 border-t border-line p-3"
+        className="flex items-end gap-2 border-t border-line p-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
         onSubmit={(e) => {
           e.preventDefault();
           void send();

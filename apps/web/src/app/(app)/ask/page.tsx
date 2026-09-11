@@ -118,7 +118,9 @@ export default function AskPage() {
   const [datasetId, setDatasetId] = useState("");
   const [conversationId, setConversationId] = useState("");
   const bottom = useRef<HTMLDivElement>(null);
+  const chatScroll = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [showLatest, setShowLatest] = useState(false);
 
   const datasets = useQuery({
     queryKey: ["datasets"],
@@ -140,7 +142,11 @@ export default function AskPage() {
   }, [activeName]);
 
   useEffect(() => {
-    bottom.current?.scrollIntoView({ behavior: "smooth" });
+    const container = chatScroll.current;
+    if (!container) return;
+    requestAnimationFrame(() => {
+      container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+    });
   }, [msgs, busy]);
 
   async function ask(text: string) {
@@ -246,7 +252,7 @@ export default function AskPage() {
   }
 
   return (
-    <div className="mx-auto flex h-[calc(100dvh-7rem)] max-w-5xl flex-col">
+    <div className="mx-auto flex h-[calc(100dvh-12rem)] min-h-[34rem] max-w-5xl flex-col lg:h-[calc(100dvh-9rem)]">
       <div className="mb-4 overflow-hidden rounded-3xl border border-primary/15 bg-gradient-to-br from-primary/[0.08] via-surface to-accent/[0.06] p-5 shadow-sm sm:p-6">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-3">
@@ -314,7 +320,17 @@ export default function AskPage() {
         <span>Faça perguntas de continuação como “e por região?”</span>
       </div>
 
-      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto pr-1">
+      <div className="relative min-h-0 flex-1">
+      <div
+        ref={chatScroll}
+        onScroll={(event) => {
+          const el = event.currentTarget;
+          const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
+          setShowLatest(distance > 180);
+        }}
+        aria-label="Histórico da conversa"
+        className="h-full space-y-4 overflow-y-auto overscroll-contain scroll-smooth px-0.5 pb-5 pt-2 pr-1 [scrollbar-gutter:stable]"
+      >
         {msgs.length === 0 && (
           <div className="flex min-h-full flex-col items-center justify-center px-2 py-8 text-center">
             <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary ring-8 ring-primary/[0.035]">
@@ -477,13 +493,23 @@ export default function AskPage() {
         )}
         <div ref={bottom} />
       </div>
+      {showLatest && (
+        <button
+          type="button"
+          onClick={() => chatScroll.current?.scrollTo({ top: chatScroll.current.scrollHeight, behavior: "smooth" })}
+          className="absolute bottom-3 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-primary/20 bg-surface px-3 py-2 text-[11px] font-medium text-primary shadow-lg shadow-slate-900/10 transition hover:-translate-y-px"
+        >
+          <ArrowUp size={13} className="rotate-180" /> Ver mensagens recentes
+        </button>
+      )}
+      </div>
 
       <form
         onSubmit={(e) => {
           e.preventDefault();
           ask(q);
         }}
-        className="mt-3 shrink-0 rounded-2xl border border-line bg-surface p-2 shadow-[var(--shadow-card)]"
+        className="mt-3 shrink-0 rounded-2xl border border-line bg-surface p-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-card)]"
       >
         <textarea
           ref={inputRef}
