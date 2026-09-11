@@ -155,7 +155,7 @@ export default function ConnectorDetailPage() {
   return (
     <div className="mx-auto max-w-4xl space-y-5">
       <div className="flex items-start gap-3">
-        <ConnectorIcon src={connectorIconSrc(item, s.type)} className="h-8 w-8 object-contain" boxClassName="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-line" />
+        <ConnectorIcon src={connectorIconSrc(item, s.type)} className="h-8 w-8 object-contain" boxClassName="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-surface ring-1 ring-line" />
         <div className="min-w-0 flex-1">
       <PageHeader
         title={s.name}
@@ -225,7 +225,7 @@ export default function ConnectorDetailPage() {
             <ConnectorIcon
               src={connectorIconSrc(item, s.type)}
               className="h-5 w-5 object-contain"
-              boxClassName="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-line"
+              boxClassName="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-surface ring-1 ring-line"
             />
             <Badge tone={preview ? "warn" : s.status === "synced" ? "ok" : "neutral"}>{preview ? "Preview" : statusLabel(s.status)}</Badge>
             <span className="text-[12px] text-mute">{s.type}</span>
@@ -272,7 +272,7 @@ export default function ConnectorDetailPage() {
                 key={t}
                 type="button"
                 onClick={() => sync(t)}
-                className="rounded-lg border border-line bg-white px-2 py-1 text-[12px] text-ink hover:border-primary/40 hover:bg-primary/5"
+                className="rounded-lg border border-line bg-surface px-2 py-1 text-[12px] text-ink hover:border-primary/40 hover:bg-primary/5"
               >
                 Sync {t}
               </button>

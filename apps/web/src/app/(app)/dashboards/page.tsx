@@ -51,19 +51,6 @@ function DashboardsPageInner() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const ai = useMutation({
-    mutationFn: () =>
-      api<{ id: string }>("/api/v1/dashboards/ai", {
-        method: "POST",
-        body: JSON.stringify({ prompt: "Criar um dashboard executivo de vendas" }),
-      }),
-    onSuccess: (d) => {
-      toast.success("Dashboard gerado a partir do modelo semântico");
-      router.push(`/dashboards/${d.id}`);
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
-
   const remove = useMutation({
     mutationFn: (id: string) => api(`/api/v1/dashboards/${id}`, { method: "DELETE" }),
     onSuccess: () => {
@@ -117,22 +104,19 @@ function DashboardsPageInner() {
     <div className="mx-auto max-w-5xl space-y-5">
       <PageHeader
         title="Dashboards"
-        description="Visualize o negócio em painéis que usa todos os dias."
+        description="Crie, acompanhe e partilhe as métricas que movem o seu negócio."
         actions={
           <>
             <Link href="/store">
               <Button variant="secondary">
-                <Store size={16} /> Loja de painéis
+                <Store size={16} /> Modelos
               </Button>
             </Link>
-            <Button variant="secondary" onClick={() => ai.mutate()} busy={ai.isPending} className="text-accent">
-              Construir com IA
+            <Button variant="secondary" data-onboarding="new-dashboard" onClick={() => create.mutate()} busy={create.isPending}>
+              Em branco
             </Button>
-            <Button variant="secondary" onClick={() => setAiOpen(true)}>
-              <Sparkles size={16} /> Novo dashboard com IA
-            </Button>
-            <Button data-onboarding="new-dashboard" onClick={() => create.mutate()} busy={create.isPending}>
-              Novo dashboard
+            <Button onClick={() => setAiOpen(true)}>
+              <Sparkles size={16} /> Criar com DobraAI
             </Button>
           </>
         }
@@ -144,46 +128,45 @@ function DashboardsPageInner() {
           <EmptyState
             icon={LayoutDashboard}
             title="Ainda sem dashboards"
-            description="Depois de ter dados e métricas, crie um painel executivo. Use a IA para gerar automaticamente KPIs, gráficos e tabelas."
+            description="A DobraAI transforma os seus dados num painel com KPIs, gráficos, filtros e análises."
             action={
               <div className="flex flex-wrap gap-2">
-                <Link href="/store">
-                  <Button variant="secondary">
-                    <Store size={16} /> Ativar painel pronto
-                  </Button>
-                </Link>
-                <Button data-onboarding="new-dashboard" onClick={() => create.mutate()} busy={create.isPending}>
-                  Criar primeiro dashboard
-                </Button>
-                <Button variant="secondary" onClick={() => ai.mutate()} busy={ai.isPending}>
-                  Construir com IA
-                </Button>
                 <Button onClick={() => setAiOpen(true)}>
-                  <Sparkles size={16} /> Novo dashboard com IA
+                  <Sparkles size={16} /> Criar com DobraAI
+                </Button>
+                <Button variant="secondary" data-onboarding="new-dashboard" onClick={() => create.mutate()} busy={create.isPending}>
+                  Começar em branco
                 </Button>
               </div>
             }
           />
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <EducationalCard title="1. Crie" body="Novo dashboard em branco." />
-            <EducationalCard title="2. Adicione widgets" body="KPI, linha, barras, pizza, tabela e slicers." />
-            <EducationalCard title="3. Partilhe" body="Copie a ligação pública ou convide a equipa." />
+            <EducationalCard title="1. Descreva" body="Diga à DobraAI o que precisa acompanhar." />
+            <EducationalCard title="2. Ajuste" body="Edite métricas, gráficos, filtros e layout." />
+            <EducationalCard title="3. Partilhe" body="Envie o link ou incorpore no seu sistema." />
           </div>
         </div>
       )}
       {!!dashboards.length && (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {dashboards.map((d) => (
-            <Card key={d.id} className="h-full transition hover:border-accent/30">
+            <Card key={d.id} className="group h-full transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg">
               <div className="flex items-start justify-between gap-2">
-                <Link href={`/dashboards/${d.id}`} className="min-w-0 flex-1">
-                  <div className="text-sm font-medium text-ink">{d.name}</div>
-                  <div className="mt-1 text-[12px] text-mute">{d.description || "Sem descrição"}</div>
+                <Link href={`/dashboards/${d.id}`} className="min-w-0 flex-1 py-1">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <LayoutDashboard size={17} />
+                  </div>
+                  <div className="mt-4 text-base font-semibold tracking-tight text-ink">{d.name}</div>
+                  <div className="mt-1 line-clamp-2 min-h-9 text-[12px] leading-relaxed text-mute">{d.description || "Dashboard sem descrição"}</div>
+                  <div className="mt-4 text-[11px] text-mute">
+                    Atualizado {new Date(d.updated_at).toLocaleDateString("pt-BR")}
+                  </div>
                 </Link>
                 {canDelete && (
                   <Button
-                    size="sm"
-                    variant="danger"
+                    size="icon"
+                    variant="ghost"
+                    className="text-mute opacity-70 hover:text-danger sm:opacity-0 sm:group-hover:opacity-100"
                     onClick={(e) => {
                       e.preventDefault();
                       e.stopPropagation();
@@ -193,7 +176,7 @@ function DashboardsPageInner() {
                     }}
                     busy={remove.isPending}
                   >
-                    <Trash2 size={12} /> Excluir
+                    <Trash2 size={14} />
                   </Button>
                 )}
               </div>
@@ -207,8 +190,13 @@ function DashboardsPageInner() {
           <Card className="max-h-[92dvh] w-full max-w-lg space-y-4 overflow-y-auto rounded-b-none pb-[max(1.25rem,env(safe-area-inset-bottom))] sm:rounded-2xl sm:pb-5">
             <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-lg font-medium text-ink">Novo dashboard com IA</h3>
-                <p className="text-[13px] text-mute">Descreva o que precisa e a IA monta o painel.</p>
+                <div className="mb-1 flex items-center gap-2">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <Sparkles size={15} />
+                  </span>
+                  <h3 className="text-lg font-semibold tracking-tight text-ink">Criar com DobraAI</h3>
+                </div>
+                <p className="text-[13px] text-mute">Descreva a decisão que precisa tomar. A DobraAI escolhe métricas, gráficos e filtros.</p>
               </div>
               <button onClick={() => setAiOpen(false)} className="rounded-lg p-1 text-mute hover:bg-surface-2">
                 <X size={18} />
@@ -267,7 +255,7 @@ function DashboardsPageInner() {
 
 function EducationalCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+    <div className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
       <div className="text-sm font-medium text-ink">{title}</div>
       <p className="mt-1 text-[12px] text-mute">{body}</p>
     </div>

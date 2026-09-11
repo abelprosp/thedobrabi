@@ -6,14 +6,14 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
   /* Superfícies (tema claro) */
-  --color-bg: #f8fafc;
+  --color-bg: #f6f8fc;
   --color-surface: #ffffff;
-  --color-surface-2: #f1f5f9;
-  --color-line: #e2e8f0;
+  --color-surface-2: #f0f3f9;
+  --color-line: #dfe5ef;
 
   /* Texto */
   --color-ink: #0f172a;
-  --color-mute: #5b6470;
+  --color-mute: #647084;
 
   /* Marca TheDobra — azul/indigo/ciano do logo */
   --color-primary: #2563eb;
@@ -36,24 +36,27 @@
   --color-danger: #be123c;
   --color-ok: #059669;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.03), 0 8px 24px rgba(15, 23, 42, 0.055);
 }
 
 :root {
   --brand-gradient: linear-gradient(135deg, #4f46e5, #2563eb, #0ea5e9);
   --brand-gradient-dark: linear-gradient(135deg, #1e1b4b 0%, #111a3f 45%, #0b1226 100%);
+  --app-background:
+    radial-gradient(circle at 75% -10%, rgba(37, 99, 235, 0.08), transparent 30rem),
+    var(--color-bg);
   color-scheme: light;
 }
 
 .dark {
   color-scheme: dark;
-  --color-bg: #0b1220;
+  --color-bg: #080e1a;
   --color-surface: #111827;
-  --color-surface-2: #1e293b;
-  --color-line: #334155;
+  --color-surface-2: #1a2435;
+  --color-line: #2a374b;
   --color-ink: #f1f5f9;
   --color-mute: #94a3b8;
   --color-accent-soft: #1e3a8a;
@@ -62,24 +65,30 @@
   --color-warn: #fbbf24;
   --color-danger: #fb7185;
   --color-ok: #34d399;
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 30px rgba(0, 0, 0, 0.18);
+  --app-background:
+    radial-gradient(circle at 75% -10%, rgba(37, 99, 235, 0.13), transparent 32rem),
+    var(--color-bg);
 }
 
 .light {
   color-scheme: light;
-  --color-bg: #f8fafc;
+  --color-bg: #f6f8fc;
   --color-surface: #ffffff;
-  --color-surface-2: #f1f5f9;
-  --color-line: #e2e8f0;
+  --color-surface-2: #f0f3f9;
+  --color-line: #dfe5ef;
   --color-ink: #0f172a;
-  --color-mute: #5b6470;
+  --color-mute: #647084;
   --color-accent-soft: #eff6ff;
   --color-panel: #0b1437;
   --color-panel-2: #1e1b4b;
   --color-warn: #b45309;
   --color-danger: #be123c;
   --color-ok: #059669;
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.03), 0 8px 24px rgba(15, 23, 42, 0.055);
+  --app-background:
+    radial-gradient(circle at 75% -10%, rgba(37, 99, 235, 0.08), transparent 30rem),
+    var(--color-bg);
 }
 
 .dark .react-grid-item.react-grid-placeholder {
@@ -88,12 +97,14 @@
 
 html,
 body {
-  background: var(--color-bg);
+  background: var(--app-background);
   color: var(--color-ink);
   min-height: 100%;
   min-height: 100dvh;
   font-family: var(--font-sans);
   overflow-x: clip;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -111,6 +122,41 @@ body {
 
 a {
   text-underline-offset: 2px;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:not(:disabled),
+a[href],
+select {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-mute) 30%, transparent) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--color-mute) 30%, transparent);
+  background-clip: padding-box;
 }
 
 .brand-gradient {
@@ -202,6 +248,17 @@ a {
 
   .page-actions {
     width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

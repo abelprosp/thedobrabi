@@ -4,8 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import Link from "next/link";
 import { toast } from "sonner";
-import { Database, Plug, Trash2 } from "lucide-react";
-import { Badge, Button, Card, EmptyState, ErrorState, PageHeader, PageSkeleton, Table, TableWrap, Td, Th, formatPt } from "@/components/ui";
+import { Database, Plug, Trash2, Upload } from "lucide-react";
+import { Badge, Button, EmptyState, ErrorState, PageHeader, PageSkeleton, Table, TableWrap, Td, Th, formatPt } from "@/components/ui";
 import { statusLabel } from "@/lib/labels";
 
 type Dataset = {
@@ -19,31 +19,19 @@ type Dataset = {
   source_type?: string | null;
   source_name?: string | null;
 };
-type Source = { id: string; name: string; type: string; status: string; last_sync_at?: string; preview?: boolean };
 type Lake = { id: string; stage: string; key: string; bytes: number; created_at: string };
 
 export default function DataPage() {
   const qc = useQueryClient();
   const q = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
-  const sources = useQuery({ queryKey: ["sources"], queryFn: () => api<any>("/api/v1/data-sources") });
   const lake = useQuery({ queryKey: ["lake"], queryFn: () => api<any>("/api/v1/lake") });
   const datasetList = normalizeArray<Dataset>(q.data);
-  const sourceList = normalizeArray<Source>(sources.data);
   const lakeList = normalizeArray<Lake>(lake.data);
   const demo = useMutation({
     mutationFn: () => api("/api/v1/datasets/demo", { method: "POST" }),
     onSuccess: () => {
       toast.success("Conjunto pronto");
       q.refetch();
-    },
-    onError: (e: Error) => toast.error(e.message),
-  });
-  const removeSource = useMutation({
-    mutationFn: (id: string) => api(`/api/v1/data-sources/${id}`, { method: "DELETE" }),
-    onSuccess: () => {
-      toast.success("Fonte excluída");
-      qc.invalidateQueries({ queryKey: ["sources"] });
-      qc.invalidateQueries({ queryKey: ["datasets"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -76,77 +64,25 @@ export default function DataPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-5">
       <PageHeader
-        title="Dados"
-        description="Conjuntos, qualidade, lake e modelo semântico. Abra um conjunto para acrescentar linhas ou actualizar o ficheiro."
+        title="Conjuntos de dados"
+        description="Consulte a qualidade, explore os campos e atualize os dados de cada conjunto."
         actions={
           <>
             <Link href="/connectors">
-              <Button variant="secondary">
-                <Plug size={14} /> Ver conectores
+              <Button>
+                <Plug size={14} /> Conectar dados
               </Button>
             </Link>
-            <label className="inline-flex min-h-10 cursor-pointer items-center rounded-xl border border-line bg-white px-3 text-sm hover:bg-bg">
-              Carregar CSV / XLSX / JSON
+            <label className="inline-flex min-h-10 cursor-pointer items-center gap-2 rounded-xl border border-line bg-surface px-3 text-sm font-medium text-ink shadow-sm transition hover:-translate-y-px hover:border-primary/25 hover:bg-surface-2">
+              <Upload size={14} /> Importar ficheiro
               <input type="file" accept=".csv,.xlsx,.xls,.json,.ndjson" className="hidden" onChange={onUpload} />
             </label>
-            <Button data-onboarding="demo" onClick={() => demo.mutate()} busy={demo.isPending}>
-              Carregar demo
+            <Button variant="ghost" data-onboarding="demo" onClick={() => demo.mutate()} busy={demo.isPending}>
+              Usar dados de exemplo
             </Button>
           </>
         }
       />
-
-      <Card>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <h2 className="text-[13px] font-medium text-mute">Fontes de dados</h2>
-            <p className="mt-1 max-w-lg text-[13px] text-mute">
-              Todos os conectores do hub sincronizam dados para um conjunto ClickHouse. Use Testar ligação e Sync em cada fonte.
-            </p>
-          </div>
-          <Link href="/connectors">
-            <Button>
-              <Plug size={14} /> Abrir hub de conectores
-            </Button>
-          </Link>
-        </div>
-        {sourceList.length > 0 && (
-          <div className="mt-4 space-y-2">
-            {sourceList.slice(0, 6).map((s) => (
-              <div
-                key={s.id}
-                className="flex items-center justify-between gap-2 rounded-xl border border-line px-3 py-2 text-sm hover:bg-bg"
-              >
-                <Link href={`/connectors/${s.id}`} className="min-w-0 flex-1">
-                  {s.name} · {s.type}
-                </Link>
-                <div className="flex shrink-0 items-center gap-1">
-                  <Badge tone={s.preview || s.status === "preview" ? "warn" : s.status === "synced" ? "ok" : "neutral"}>
-                    {s.preview ? "Preview" : statusLabel(s.status)}
-                  </Badge>
-                  <Button
-                    size="sm"
-                    variant="danger"
-                    onClick={() => {
-                      if (confirm(`Excluir a fonte «${s.name}» e os conjuntos sincronizados a partir dela?`)) {
-                        removeSource.mutate(s.id);
-                      }
-                    }}
-                    busy={removeSource.isPending}
-                  >
-                    <Trash2 size={12} /> Excluir
-                  </Button>
-                </div>
-              </div>
-            ))}
-            {sourceList.length > 6 && (
-              <Link href="/connectors" className="text-[12px] text-accent hover:underline">
-                Ver todas as {sourceList.length} fontes
-              </Link>
-            )}
-          </div>
-        )}
-      </Card>
 
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
@@ -155,11 +91,14 @@ export default function DataPage() {
           <EmptyState
             icon={Database}
             title="Ainda sem conjuntos"
-            description="Comece por dados. Pode carregar a demo de vendas, fazer upload de CSV/XLSX/JSON ou ligar PostgreSQL/MySQL no hub de conectores."
+            description="Ligue uma fonte, importe um ficheiro ou use os dados de exemplo para começar."
             action={
-              <Button data-onboarding="demo" onClick={() => demo.mutate()} busy={demo.isPending}>
-                Carregar demo de vendas
-              </Button>
+              <div className="flex flex-wrap justify-center gap-2">
+                <Link href="/connectors"><Button><Plug size={14} /> Conectar dados</Button></Link>
+                <Button variant="secondary" data-onboarding="demo" onClick={() => demo.mutate()} busy={demo.isPending}>
+                  Usar exemplo
+                </Button>
+              </div>
             }
           />
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -228,12 +167,10 @@ export default function DataPage() {
       )}
 
       {lakeList.length > 0 && (
-        <div className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
-          <h2 className="mb-1 text-[13px] text-mute">Cópias do conjunto actual</h2>
-          <p className="mb-3 text-[12px] text-mute">
-            Conjuntos excluídos são apagados do lake e do motor. Estas cópias são só do que está activo.
-          </p>
-          <div className="space-y-1 text-[12px] text-mute">
+        <details className="rounded-[1.125rem] border border-line bg-surface px-5 py-4 text-sm shadow-[var(--shadow-card)]">
+          <summary className="cursor-pointer font-medium text-ink">Armazenamento avançado</summary>
+          <p className="mb-3 mt-2 text-[12px] text-mute">Objetos ativos no data lake. Esta informação é útil para administração técnica.</p>
+          <div className="max-h-48 space-y-1 overflow-auto text-[11px] text-mute">
             {lakeList.map((o) => (
               <div key={o.id} className="flex justify-between font-mono">
                 <span>
@@ -243,7 +180,7 @@ export default function DataPage() {
               </div>
             ))}
           </div>
-        </div>
+        </details>
       )}
     </div>
   );
@@ -251,7 +188,7 @@ export default function DataPage() {
 
 function EducationalCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+    <div className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
       <div className="text-sm font-medium text-ink">{title}</div>
       <p className="mt-1 text-[12px] text-mute">{body}</p>
     </div>

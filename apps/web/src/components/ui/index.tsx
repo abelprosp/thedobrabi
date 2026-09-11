@@ -24,10 +24,10 @@ export function Button({
   busy?: boolean;
 }) {
   const variants = {
-    primary: "bg-primary text-white shadow-sm shadow-primary/20 hover:bg-primary-600 disabled:opacity-60",
-    secondary: "border border-line bg-surface text-ink hover:bg-surface-2 hover:border-slate-300 dark:hover:border-slate-500",
+    primary: "bg-primary text-white shadow-sm shadow-primary/20 hover:-translate-y-px hover:bg-primary-600 hover:shadow-md hover:shadow-primary/20 disabled:opacity-60 disabled:hover:translate-y-0",
+    secondary: "border border-line bg-surface text-ink shadow-sm hover:-translate-y-px hover:border-primary/25 hover:bg-surface-2 disabled:hover:translate-y-0",
     ghost: "text-mute hover:bg-surface-2 hover:text-ink",
-    danger: "border border-line bg-surface text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10",
+    danger: "border border-line bg-surface text-danger hover:border-danger/20 hover:bg-rose-50 dark:hover:bg-rose-500/10",
   };
   const sizes = {
     sm: "min-h-10 px-3 text-[12px] sm:min-h-9",
@@ -40,7 +40,7 @@ export function Button({
       type={type}
       disabled={disabled || busy}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-150 disabled:cursor-not-allowed",
         focusRing,
         variants[variant],
         sizes[size],
@@ -55,15 +55,15 @@ export function Button({
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-2xl border border-line bg-surface p-4 shadow-sm sm:p-5", className)}>{children}</div>;
+  return <div className={cn("rounded-[1.125rem] border border-line/90 bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5", className)}>{children}</div>;
 }
 
 export function CardTitle({ children }: { children: ReactNode }) {
-  return <h2 className="mb-3 text-[13px] font-medium text-mute">{children}</h2>;
+  return <h2 className="mb-3 text-sm font-semibold tracking-tight text-ink">{children}</h2>;
 }
 
 const fieldCls =
-  "w-full min-h-11 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink placeholder:text-mute outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/15 disabled:bg-bg sm:min-h-10";
+  "w-full min-h-11 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink shadow-sm placeholder:text-mute/80 outline-none transition focus:border-primary/50 focus:ring-3 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-bg disabled:text-mute sm:min-h-10";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldCls, className)} {...props} />;
@@ -116,7 +116,7 @@ export function PageHeader({
   crumbs?: { href: string; label: string }[];
 }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
+    <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:justify-between">
       <div className="min-w-0">
         {crumbs && crumbs.length > 0 && (
           <nav aria-label="Navegação estrutural" className="mb-1.5 flex flex-wrap items-center gap-1.5 text-[12px] text-mute">
@@ -132,8 +132,8 @@ export function PageHeader({
             <span className="truncate text-ink">{title}</span>
           </nav>
         )}
-        <h1 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">{title}</h1>
-        {description && <p className="mt-1 max-w-2xl text-sm text-mute">{description}</p>}
+        <h1 className="text-2xl font-semibold tracking-[-0.025em] text-ink sm:text-[1.75rem]">{title}</h1>
+        {description && <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-mute">{description}</p>}
       </div>
       {actions && <div className="page-actions flex flex-wrap items-center gap-2 sm:justify-end">{actions}</div>}
     </div>
@@ -152,12 +152,12 @@ export function EmptyState({
   icon?: LucideIcon;
 }) {
   return (
-    <Card className="flex flex-col items-center py-12 text-center">
-      <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-        <Icon size={20} />
+    <Card className="flex flex-col items-center border-dashed py-14 text-center shadow-none">
+      <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-8 ring-primary/[0.035]">
+        <Icon size={21} />
       </div>
-      <p className="text-sm font-medium text-ink">{title}</p>
-      {description && <p className="mt-1 max-w-md text-[13px] text-mute">{description}</p>}
+      <p className="text-base font-semibold tracking-tight text-ink">{title}</p>
+      {description && <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-mute">{description}</p>}
       {action && <div className="mt-4">{action}</div>}
     </Card>
   );
@@ -243,15 +243,15 @@ export function Badge({
   const tones = {
     neutral: "bg-surface-2 text-mute",
     accent: "bg-primary/10 text-primary-600",
-    warn: "bg-amber-50 text-warn",
-    danger: "bg-rose-50 text-danger",
-    ok: "bg-emerald-50 text-ok",
+    warn: "bg-amber-50 text-warn dark:bg-amber-400/10",
+    danger: "bg-rose-50 text-danger dark:bg-rose-400/10",
+    ok: "bg-emerald-50 text-ok dark:bg-emerald-400/10",
   };
-  return <span className={cn("inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium", tones[tone])}>{children}</span>;
+  return <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium leading-none", tones[tone])}>{children}</span>;
 }
 
 export function TableWrap({ children }: { children: ReactNode }) {
-  return <div className="overflow-x-auto rounded-2xl border border-line bg-surface shadow-sm">{children}</div>;
+  return <div className="overflow-x-auto rounded-[1.125rem] border border-line/90 bg-surface shadow-[var(--shadow-card)]">{children}</div>;
 }
 
 export function Table({ children, className }: { children: ReactNode; className?: string }) {
@@ -259,11 +259,11 @@ export function Table({ children, className }: { children: ReactNode; className?
 }
 
 export function Th({ children, numeric }: { children: ReactNode; numeric?: boolean }) {
-  return <th className={cn("px-4 py-3 text-[12px] font-medium uppercase tracking-wide text-mute", numeric && "text-right")}>{children}</th>;
+  return <th className={cn("whitespace-nowrap px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-mute", numeric && "text-right")}>{children}</th>;
 }
 
 export function Td({ children, numeric }: { children: ReactNode; numeric?: boolean }) {
-  return <td className={cn("px-4 py-3", numeric && "text-right tabular-nums")}>{children}</td>;
+  return <td className={cn("px-4 py-3.5", numeric && "text-right tabular-nums")}>{children}</td>;
 }
 
 export function cellValue(v: unknown) {

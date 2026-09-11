@@ -12,7 +12,7 @@ export function OnboardingChecklist() {
     return (
       <Card className="flex items-center gap-3 border-emerald-200 bg-emerald-50/60 py-4">
         <PartyPopper className="text-ok" size={22} />
-        <div className="text-sm font-medium text-ok">Parabéns! Completou o onboarding da TheDobra.</div>
+        <div className="text-sm font-medium text-ok">Tudo pronto! A configuração inicial da TheDobra foi concluída.</div>
       </Card>
     );
   }
@@ -26,7 +26,7 @@ export function OnboardingChecklist() {
 
   return (
     <Card>
-      <CardTitle>Primeiros passos</CardTitle>
+      <CardTitle>Configure a TheDobra</CardTitle>
       <div className="mb-3 flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-2">
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} />
@@ -47,7 +47,7 @@ export function OnboardingChecklist() {
                   ? "border-emerald-200 bg-emerald-50/40"
                   : active
                     ? "border-primary/30 bg-primary/5"
-                    : "border-line bg-white"
+                    : "border-line bg-surface"
               }`}
             >
               <div className="flex items-center gap-2.5">

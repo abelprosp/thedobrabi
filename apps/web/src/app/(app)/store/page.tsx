@@ -189,7 +189,7 @@ export default function StorePage() {
       </section>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-line bg-white px-3 py-2">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 shadow-sm">
           <Search size={16} className="shrink-0 text-mute" />
           <input
             value={q}
@@ -209,7 +209,7 @@ export default function StorePage() {
             type="button"
             onClick={() => setCategory(c.id)}
             className={`rounded-full px-3.5 py-1.5 text-[13px] font-medium transition ${
-              category === c.id ? "bg-primary text-white shadow-sm" : "border border-line bg-white text-mute hover:border-primary/40 hover:text-ink"
+              category === c.id ? "bg-primary text-white shadow-sm" : "border border-line bg-surface text-mute hover:border-primary/40 hover:text-ink"
             }`}
           >
             {c.label}

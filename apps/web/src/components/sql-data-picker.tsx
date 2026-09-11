@@ -268,7 +268,7 @@ export function SqlDataPicker({
                   key={t.full_name}
                   className={cn(
                     "flex cursor-pointer items-start gap-3 rounded-xl border px-3 py-2.5 transition",
-                    on ? "border-primary/40 bg-primary/5" : "border-line bg-white hover:border-primary/30",
+                    on ? "border-primary/40 bg-primary/5" : "border-line bg-surface hover:border-primary/30",
                   )}
                 >
                   <input type="checkbox" className="mt-1" checked={on} onChange={() => toggleTable(t)} />
@@ -296,7 +296,7 @@ export function SqlDataPicker({
               const cols = selected[key] || [];
               const open = openTable === key || selectedKeys.length === 1;
               return (
-                <div key={key} className="rounded-xl border border-line bg-white">
+                <div key={key} className="rounded-xl border border-line bg-surface">
                   <button
                     type="button"
                     className="flex w-full items-center gap-2 px-3 py-2.5 text-left"
@@ -411,7 +411,7 @@ export function SqlDataPicker({
               const t = tableByKey(tables, key);
               const cols = selected[key] || [];
               return (
-                <li key={key} className="rounded-xl border border-line bg-white px-3 py-2">
+                <li key={key} className="rounded-xl border border-line bg-surface px-3 py-2">
                   <div className="text-sm font-medium text-ink">{t?.label || key}</div>
                   <div className="mt-1 flex flex-wrap gap-1">
                     {(cols.length ? cols : ["todos"]).slice(0, 12).map((c) => (
@@ -480,7 +480,7 @@ function JoinCard({
   const left = tableByKey(tables, join.left_table);
   const right = tableByKey(tables, join.right_table);
   return (
-    <div className="rounded-xl border border-line bg-white p-3">
+    <div className="rounded-xl border border-line bg-surface p-3">
       <div className="mb-2 flex items-center justify-between">
         <p className="text-[13px] font-medium text-ink">{joinSentence(tables, join)}</p>
         <button type="button" onClick={onRemove} className="text-mute hover:text-danger" aria-label="Remover cruzamento">

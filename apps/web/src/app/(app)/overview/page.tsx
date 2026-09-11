@@ -2,12 +2,11 @@
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { Kpi } from "@/components/viz";
 import { toast } from "sonner";
 import { Button, Card, CardTitle, ErrorState, PageSkeleton } from "@/components/ui";
 import { OnboardingChecklist } from "@/components/onboarding";
 import Link from "next/link";
-import { Store } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, MessageSquare, Plug, Store } from "lucide-react";
 
 type Brief = {
   headline: string;
@@ -38,17 +37,17 @@ export default function OverviewPage() {
 
   return (
     <div className="mx-auto max-w-6xl space-y-6">
-      <section className="panel-gradient relative overflow-hidden rounded-3xl px-6 py-8 text-white sm:px-8">
+      <section className="panel-gradient relative overflow-hidden rounded-[1.75rem] px-6 py-7 text-white shadow-2xl shadow-slate-950/10 sm:px-8 sm:py-9">
         <div className="grid-fade pointer-events-none absolute inset-0 opacity-50" />
         <div className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-indigo-500/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-sky-500/20 blur-3xl" />
         <div className="relative z-10 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <p className="text-[12px] uppercase tracking-[0.18em] text-indigo-200/90">Analista digital de negócio</p>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-indigo-200/90">Resumo executivo</p>
+            <h1 className="mt-3 text-2xl font-semibold tracking-[-0.03em] sm:text-4xl">
               {brief?.headline || "Analisei o seu negócio. Eis o que importa."}
             </h1>
-            <p className="mt-2 text-sm text-white/80">O analista digital do seu negócio — métricas oficiais, sem fórmulas inventadas.</p>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/75">Métricas oficiais, riscos e oportunidades reunidos num só lugar — sem fórmulas inventadas.</p>
           </div>
           {(!q.data?.datasets || q.data.datasets === 0) && (
             <Button
@@ -67,22 +66,18 @@ export default function OverviewPage() {
         </div>
       </section>
       <OnboardingChecklist />
-      <Link href="/store" className="block">
-        <Card className="flex items-center justify-between gap-4 transition hover:border-primary/30">
-          <div>
-            <div className="mb-1 text-[13px] font-medium text-mute">Loja de painéis</div>
-            <p className="text-sm text-ink">Financeiro, comercial, RH, e-commerce e mais — ative um painel pronto e só ligue o conjunto.</p>
-          </div>
-          <span className="inline-flex shrink-0 items-center gap-2 rounded-xl border border-line bg-white px-4 py-2 text-sm font-medium text-ink">
-            <Store size={14} /> Abrir loja
-          </span>
-        </Card>
-      </Link>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <Kpi label="Mudanças principais" value={String(brief?.major_changes?.length ?? 0)} />
-        <Kpi label="Riscos" value={String(brief?.risks?.length ?? 0)} />
-        <Kpi label="Oportunidades" value={String(brief?.opportunities?.length ?? 0)} />
-      </div>
+      <section>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-ink">O que quer fazer agora?</h2>
+          <span className="text-[11px] text-mute">Acesso rápido</span>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <QuickAction href="/dashboards" icon={LayoutDashboard} title="Criar dashboard" description="Monte um painel com a DobraAI." />
+          <QuickAction href="/ask" icon={MessageSquare} title="Analisar dados" description="Pergunte usando métricas oficiais." />
+          <QuickAction href="/connectors" icon={Plug} title="Conectar uma fonte" description="Bases, ficheiros, APIs e ERPs." />
+          <QuickAction href="/store" icon={Store} title="Usar um modelo" description="Comece com um painel pronto." />
+        </div>
+      </section>
       <section className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Card>
           <CardTitle>O que aconteceu</CardTitle>
@@ -125,6 +120,31 @@ function GlassStat({ label, value }: { label: string; value: string }) {
       <div className="text-[11px] uppercase tracking-wide text-white/70">{label}</div>
       <div className="mt-1 text-2xl font-semibold">{value}</div>
     </div>
+  );
+}
+
+function QuickAction({
+  href,
+  icon: Icon,
+  title,
+  description,
+}: {
+  href: string;
+  icon: typeof Store;
+  title: string;
+  description: string;
+}) {
+  return (
+    <Link href={href} className="group rounded-[1.125rem] border border-line/90 bg-surface p-4 shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-primary/25 hover:shadow-lg">
+      <div className="flex items-start justify-between">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+          <Icon size={18} />
+        </span>
+        <ArrowUpRight size={16} className="text-mute transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary" />
+      </div>
+      <div className="mt-4 text-sm font-semibold text-ink">{title}</div>
+      <p className="mt-1 text-[12px] leading-relaxed text-mute">{description}</p>
+    </Link>
   );
 }
 

@@ -44,14 +44,21 @@ type NavItem = { href: string; label: string; icon: ComponentType<{ size?: numbe
 type NavGroup = { id: string; label: string; items: NavItem[] };
 
 const pinnedNav: NavItem[] = [
-  { href: "/overview", label: "Visão geral", icon: Sparkles },
-  { href: "/ask", label: "Perguntar", icon: MessageSquare },
+  { href: "/overview", label: "Início", icon: Sparkles },
+  { href: "/ask", label: "Analisar com IA", icon: MessageSquare },
+];
+
+const mobilePrimaryNav: NavItem[] = [
+  { href: "/overview", label: "Início", icon: Sparkles },
+  { href: "/dashboards", label: "Painéis", icon: LayoutDashboard },
+  { href: "/ask", label: "DobraAI", icon: MessageSquare },
+  { href: "/connectors", label: "Dados", icon: Plug },
 ];
 
 const navGroups: NavGroup[] = [
   {
     id: "analise",
-    label: "Análise",
+    label: "Criar e analisar",
     items: [
       { href: "/dashboards", label: "Dashboards", icon: LayoutDashboard },
       { href: "/store", label: "Loja", icon: Store },
@@ -61,17 +68,17 @@ const navGroups: NavGroup[] = [
   },
   {
     id: "dados",
-    label: "Dados",
+    label: "Fontes e dados",
     items: [
-      { href: "/data", label: "Conjuntos", icon: Database },
       { href: "/connectors", label: "Conectores", icon: Plug },
+      { href: "/data", label: "Conjuntos de dados", icon: Database },
       { href: "/flows", label: "Flows", icon: Workflow },
-      { href: "/lineage", label: "Linha de origem", icon: GitBranch },
+      { href: "/lineage", label: "Linhagem", icon: GitBranch },
     ],
   },
   {
     id: "monitor",
-    label: "Monitorização",
+    label: "Monitoramento",
     items: [
       { href: "/metrics", label: "Métricas", icon: BarChart3 },
       { href: "/insights", label: "Insights", icon: LineChart },
@@ -211,9 +218,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, []);
 
   const navLinkClass = (active: boolean, iconOnly: boolean) =>
-    `flex min-h-10 items-center rounded-xl py-2 text-[13px] transition ${
+    `group flex min-h-10 items-center rounded-xl py-2 text-[13px] transition-all ${
       iconOnly ? "justify-center px-2" : "gap-2.5 px-3"
-    } ${active ? "bg-primary/10 font-medium text-primary-600" : "text-mute hover:bg-surface-2 hover:text-ink"}`;
+    } ${active ? "bg-primary/10 font-semibold text-primary-600 shadow-[inset_3px_0_0_var(--color-primary)]" : "text-mute hover:translate-x-0.5 hover:bg-surface-2 hover:text-ink"}`;
 
   const navItem = (item: NavItem, iconOnly: boolean) => {
     const active = pathMatches(path, item.href);
@@ -270,7 +277,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </button>
           )}
         </div>
-        <nav className={`min-h-0 flex-1 overflow-y-auto ${iconOnly ? "space-y-0.5 px-2" : "space-y-3 px-3"}`} aria-label="Principal">
+        <nav className={`min-h-0 flex-1 overflow-y-auto ${iconOnly ? "space-y-0.5 px-2" : "space-y-4 px-3"}`} aria-label="Principal">
           <div className="space-y-0.5">
             {pinnedNav.map((item) => navItem(item, iconOnly))}
           </div>
@@ -286,7 +293,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     type="button"
                     onClick={() => toggleGroup(group.id)}
                     aria-expanded={expanded}
-                    className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${
+                    className={`flex w-full items-center justify-between rounded-lg px-2 py-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] transition ${
                       groupActive ? "text-primary-600" : "text-mute hover:text-ink"
                     }`}
                   >
@@ -334,10 +341,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-bg">
+    <div className="flex min-h-screen bg-transparent">
       <aside
-        className={`hidden min-h-0 flex-col overflow-hidden border-r border-line bg-surface print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
-          collapsed ? "w-[72px]" : "w-60"
+        className={`hidden min-h-0 flex-col overflow-hidden border-r border-line/80 bg-surface/95 print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
+          collapsed ? "w-[72px]" : "w-64"
         }`}
       >
         {sidebarContent({ iconOnly: collapsed, showCollapse: true })}
@@ -358,7 +365,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         </div>
       )}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center justify-between gap-2 border-b border-line bg-surface px-3 print:hidden sm:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between gap-2 border-b border-line/80 bg-surface/90 px-3 backdrop-blur-xl print:hidden sm:px-6">
           <div className="flex min-w-0 items-center gap-2 text-[13px] text-mute">
             <button
               className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 lg:hidden"
@@ -405,14 +412,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <button
               onClick={() => setOpen(true)}
               aria-label="Procurar"
-              className="flex h-10 items-center gap-2 rounded-lg border border-line bg-bg px-2.5 text-[12px] text-mute sm:h-9 sm:px-3"
+              className="flex h-10 items-center gap-2 rounded-xl border border-line bg-bg/80 px-2.5 text-[12px] text-mute shadow-sm transition hover:border-primary/25 hover:text-ink sm:h-9 sm:min-w-36 sm:px-3"
             >
               <Search size={14} />
               <span className="hidden sm:inline">Procurar</span>
               <kbd className="ml-2 hidden text-[10px] text-slate-400 sm:inline">⌘K</kbd>
             </button>
             <ThemeToggle />
-            <Link href="/ask" className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-white hover:bg-primary-600 sm:h-9 sm:w-auto sm:px-3 sm:text-[12px] sm:font-medium">
+            <Link href="/ask" className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20 transition hover:-translate-y-px hover:bg-primary-600 sm:h-9 sm:w-auto sm:px-3 sm:text-[12px] sm:font-medium">
               <MessageSquare size={16} className="sm:hidden" />
               <span className="hidden sm:inline">Perguntar</span>
             </Link>
@@ -455,7 +462,31 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="min-w-0 flex-1 px-3 py-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:p-6">{children}</main>
+        <main className="min-w-0 flex-1 px-3 py-5 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:p-7 lg:pb-7">{children}</main>
+        <nav
+          aria-label="Navegação rápida"
+          className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-line/80 bg-surface/95 px-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:hidden"
+        >
+          {mobilePrimaryNav.map((item) => {
+            const active = pathMatches(path, item.href);
+            const Icon = item.icon;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={active ? "page" : undefined}
+                className={`flex min-h-16 flex-col items-center justify-center gap-1 rounded-xl text-[10px] font-medium transition ${
+                  active ? "text-primary" : "text-mute"
+                }`}
+              >
+                <span className={`flex h-8 w-10 items-center justify-center rounded-xl ${active ? "bg-primary/10" : ""}`}>
+                  <Icon size={17} aria-hidden />
+                </span>
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
       </div>
       <CommandPalette open={open} onClose={() => setOpen(false)} />
       <Suspense fallback={null}>

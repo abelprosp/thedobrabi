@@ -99,19 +99,21 @@ export default function ConnectorsPage() {
     <div className="mx-auto max-w-6xl space-y-6">
       <PageHeader
         title="Conectores"
-        description="Hub de dados da TheDobra — ligue bases de dados, ficheiros, APIs e fontes cloud. Configure a actualização automática em cada conector."
+        description="Conecte bases, ficheiros e aplicações. A TheDobra mantém os conjuntos atualizados para você."
         actions={
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
             <Search size={14} className="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-mute" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Filtrar catálogo…" className="w-56 pl-8" />
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar conector…" className="w-full pl-8 sm:w-64" />
           </div>
         }
       />
 
-      <Card>
+      <section>
         <div className="mb-3 flex items-center justify-between gap-2">
-          <h2 className="text-[13px] font-medium text-mute">Instâncias ligadas</h2>
-          <span className="text-[12px] text-mute">{sourceList.length} fonte(s)</span>
+          <div>
+            <h2 className="text-sm font-semibold text-ink">Suas conexões</h2>
+            <p className="mt-0.5 text-[12px] text-mute">{sourceList.length ? `${sourceList.length} fonte${sourceList.length === 1 ? "" : "s"} conectada${sourceList.length === 1 ? "" : "s"}` : "Nenhuma fonte conectada"}</p>
+          </div>
         </div>
         {sources.isError && <ErrorState message={(sources.error as Error).message} onRetry={() => sources.refetch()} />}
         {sourceList.length === 0 && !sources.isLoading && (
@@ -126,8 +128,8 @@ export default function ConnectorsPage() {
                   <Th>Tipo</Th>
                   <Th>Estado</Th>
                   <Th>Último sync</Th>
-                  <Th>Actualização</Th>
-                  <Th>Acções</Th>
+                  <Th>Atualização</Th>
+                  <Th>Ações</Th>
                 </tr>
               </thead>
               <tbody>
@@ -143,7 +145,7 @@ export default function ConnectorsPage() {
                         <ConnectorIcon
                           src={connectorIconSrc(connectorByType(items, s.type), s.type)}
                           className="h-5 w-5 object-contain"
-                          boxClassName="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-white ring-1 ring-line"
+                          boxClassName="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-surface ring-1 ring-line"
                         />
                         {connectorLabel(items, s.type)}
                       </span>
@@ -172,7 +174,7 @@ export default function ConnectorsPage() {
                           Descobrir
                         </Button>
                         <Button size="sm" variant="ghost" onClick={() => sync(s.id)}>
-                          <RefreshCw size={12} /> Sync
+                          <RefreshCw size={12} /> Sincronizar
                         </Button>
                         <Button
                           size="sm"
@@ -192,7 +194,7 @@ export default function ConnectorsPage() {
             </Table>
           </TableWrap>
         )}
-      </Card>
+      </section>
 
       {groups.map((g) => {
         const list = filtered.filter((it) => it.group === g.id).sort((a, b) => {
@@ -216,7 +218,7 @@ export default function ConnectorsPage() {
                     key={it.id}
                     type="button"
                     onClick={() => setPicked(it)}
-                    className="rounded-2xl border border-line bg-white p-4 text-left shadow-sm transition hover:border-primary/40 hover:shadow"
+                    className="group rounded-[1.125rem] border border-line/90 bg-surface p-4 text-left shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <ConnectorIcon src={connectorIconSrc(it)} />
@@ -368,7 +370,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         aria-modal="true"
         aria-labelledby="connect-title"
         className={cn(
-          "max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-line bg-white p-5 shadow-2xl",
+          "max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-line bg-surface p-5 shadow-2xl",
           picking || isManualType(item.id) ? "max-w-2xl" : "max-w-lg",
         )}
         onClick={(e) => e.stopPropagation()}
@@ -413,7 +415,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
                   <input
                     type="file"
                     accept={f.accept}
-                    className="block w-full text-sm text-ink file:mr-3 file:rounded-lg file:border file:border-line file:bg-white file:px-3 file:py-1.5"
+                    className="block w-full text-sm text-ink file:mr-3 file:rounded-lg file:border file:border-line file:bg-surface file:px-3 file:py-1.5"
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                   />
                 </FieldLabel>

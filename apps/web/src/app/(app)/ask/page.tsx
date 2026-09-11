@@ -174,7 +174,7 @@ export default function AskPage() {
                   key={ex}
                   type="button"
                   onClick={() => ask(ex)}
-                  className="rounded-full border border-line bg-white px-3.5 py-2 text-[12px] text-ink shadow-sm transition hover:border-primary/40 hover:text-primary"
+                  className="rounded-full border border-line bg-surface px-3.5 py-2 text-[12px] text-ink shadow-sm transition hover:-translate-y-px hover:border-primary/40 hover:text-primary"
                 >
                   {ex}
                 </button>
@@ -253,7 +253,7 @@ export default function AskPage() {
           e.preventDefault();
           ask(q);
         }}
-        className="mt-3 shrink-0 rounded-2xl border border-line bg-white p-2 shadow-sm"
+        className="mt-3 shrink-0 rounded-2xl border border-line bg-surface p-2 shadow-[var(--shadow-card)]"
       >
         <textarea
           ref={inputRef}
