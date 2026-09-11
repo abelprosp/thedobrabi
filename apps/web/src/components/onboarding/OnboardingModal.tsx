@@ -57,7 +57,7 @@ const stepContent: Record<OnboardingStep, { title: string; description: string; 
 };
 
 export function OnboardingModal() {
-  const { step, completed, seen, isLoading, next, skip, markSeen } = useOnboarding();
+  const { step, completed, seen, isLoading, next, markSeen } = useOnboarding();
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState(step);
 
@@ -103,7 +103,7 @@ export function OnboardingModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
       <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={close} />
-      <div className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-line bg-white shadow-2xl sm:rounded-3xl">
+      <div className="relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-line bg-surface shadow-2xl sm:rounded-3xl">
         <div className="brand-gradient p-6 text-white">
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">
@@ -135,8 +135,8 @@ export function OnboardingModal() {
                 <ArrowLeft size={14} /> Voltar
               </Button>
             )}
-            <Button variant="secondary" onClick={skip}>
-              Pular
+            <Button variant="secondary" onClick={close}>
+              Continuar depois
             </Button>
             {content.href && content.cta && (
               <Link href={content.href} onClick={handleNext}>

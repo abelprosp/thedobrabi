@@ -5,10 +5,27 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import { Chart, Kpi } from "@/components/viz";
 import { toast } from "sonner";
-import { Button, Card, Select, cn } from "@/components/ui";
-import { ArrowUp, Loader2, Sparkles, Wand2 } from "lucide-react";
+import {
+  Button,
+  Card,
+  EmptyState,
+  PageSkeleton,
+  Select,
+  cn,
+} from "@/components/ui";
+import {
+  AlertTriangle,
+  ArrowUp,
+  CheckCircle2,
+  Database,
+  Loader2,
+  Sparkles,
+  Wand2,
+} from "lucide-react";
+import Link from "next/link";
 
 type Answer = {
+  conversation_id?: string;
   answer: string;
   key_metric?: { label: string; value: number; delta_pct?: number };
   chart?: { type: string; title: string; columns: string[]; rows: any[] };
@@ -17,9 +34,17 @@ type Answer = {
   recommendation?: string;
   evidence?: Record<string, any>;
   insufficient_data?: boolean;
+  source?: string;
+  confidence?: "low" | "medium" | "high";
+  warnings?: string[];
 };
 
-type Msg = { role: "user" | "assistant"; text: string; answer?: Answer; meta?: any };
+type Msg = {
+  role: "user" | "assistant";
+  text: string;
+  answer?: Answer;
+  meta?: any;
+};
 type Dataset = { id: string; name: string };
 
 const examples = [
@@ -31,7 +56,9 @@ const examples = [
 ];
 
 function formatMetric(label: string, value: number) {
-  const money = /valor|receita|despesa|amount|revenue|total|montante/i.test(label);
+  const money = /valor|receita|despesa|amount|revenue|total|montante/i.test(
+    label,
+  );
   return value.toLocaleString("pt-BR", {
     minimumFractionDigits: money ? 2 : 0,
     maximumFractionDigits: money ? 2 : 0,
@@ -45,7 +72,9 @@ function Evidence({ evidence }: { evidence: Record<string, any> }) {
   const period = String(evidence.period || "");
   return (
     <details className="rounded-xl border border-line bg-bg/80">
-      <summary className="cursor-pointer px-3 py-2 text-[12px] font-medium text-mute hover:text-ink">Como cheguei aqui</summary>
+      <summary className="cursor-pointer px-3 py-2 text-[12px] font-medium text-mute hover:text-ink">
+        Como cheguei aqui
+      </summary>
       <div className="space-y-2 border-t border-line px-3 py-3 text-[12px] text-mute">
         {source && (
           <div>
@@ -63,9 +92,15 @@ function Evidence({ evidence }: { evidence: Record<string, any> }) {
           </div>
         )}
         {sql && (
-          <pre className="overflow-x-auto rounded-lg bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-slate-100">{sql}</pre>
+          <pre className="overflow-x-auto rounded-lg bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-slate-100">
+            {sql}
+          </pre>
         )}
-        {!sql && <pre className="overflow-x-auto text-[11px]">{JSON.stringify(evidence, null, 2)}</pre>}
+        {!sql && (
+          <pre className="overflow-x-auto text-[11px]">
+            {JSON.stringify(evidence, null, 2)}
+          </pre>
+        )}
       </div>
     </details>
   );
@@ -76,10 +111,14 @@ export default function AskPage() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [busy, setBusy] = useState(false);
   const [datasetId, setDatasetId] = useState("");
+  const [conversationId, setConversationId] = useState("");
   const bottom = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
+  const datasets = useQuery({
+    queryKey: ["datasets"],
+    queryFn: () => api<any>("/api/v1/datasets"),
+  });
   const datasetList = normalizeArray<Dataset>(datasets.data);
   const activeId = datasetId || datasetList[0]?.id || "";
   const activeName = datasetList.find((d) => d.id === activeId)?.name;
@@ -108,12 +147,29 @@ export default function AskPage() {
     try {
       const res = await api<Answer>("/api/v1/ai/ask", {
         method: "POST",
-        body: JSON.stringify({ message: prompt, dataset_id: activeId || undefined }),
+        body: JSON.stringify({
+          conversation_id: conversationId || undefined,
+          message: prompt,
+          dataset_id: activeId || undefined,
+          history: msgs
+            .slice(-6)
+            .map((message) => ({ role: message.role, text: message.text })),
+        }),
       });
-      setMsgs((m) => [...m, { role: "assistant", text: res.answer, answer: res }]);
+      if (res.conversation_id) setConversationId(res.conversation_id);
+      setMsgs((m) => [
+        ...m,
+        { role: "assistant", text: res.answer, answer: res },
+      ]);
     } catch (e: any) {
       toast.error(e.message);
-      setMsgs((m) => [...m, { role: "assistant", text: "Não consegui responder agora. Tente de novo em instantes." }]);
+      setMsgs((m) => [
+        ...m,
+        {
+          role: "assistant",
+          text: "Não consegui responder agora. Tente de novo em instantes.",
+        },
+      ]);
     } finally {
       setBusy(false);
       inputRef.current?.focus();
@@ -122,30 +178,88 @@ export default function AskPage() {
 
   const generateSQL = useMutation({
     mutationFn: (prompt: string) =>
-      api<{ sql: string; explanation: string }>("/api/v1/ai/generate-sql", { method: "POST", body: JSON.stringify({ prompt, dataset_id: activeId || undefined }) }),
-    onSuccess: (res, prompt) => setMsgs((m) => [...m, { role: "assistant", text: "SQL para: " + prompt, meta: res }]),
+      api<{ sql: string; explanation: string }>("/api/v1/ai/generate-sql", {
+        method: "POST",
+        body: JSON.stringify({ prompt, dataset_id: activeId || undefined }),
+      }),
+    onSuccess: (res, prompt) =>
+      setMsgs((m) => [
+        ...m,
+        { role: "assistant", text: "SQL para: " + prompt, meta: res },
+      ]),
     onError: (e: Error) => toast.error(e.message),
   });
 
   const generateMeasure = useMutation({
     mutationFn: (prompt: string) =>
-      api<{ name: string; expression: string; explanation: string }>("/api/v1/ai/generate-measure", { method: "POST", body: JSON.stringify({ prompt, dataset_id: activeId || undefined }) }),
-    onSuccess: (res, prompt) => setMsgs((m) => [...m, { role: "assistant", text: "Medida para: " + prompt, meta: res }]),
+      api<{ name: string; expression: string; explanation: string }>(
+        "/api/v1/ai/generate-measure",
+        {
+          method: "POST",
+          body: JSON.stringify({ prompt, dataset_id: activeId || undefined }),
+        },
+      ),
+    onSuccess: (res, prompt) =>
+      setMsgs((m) => [
+        ...m,
+        { role: "assistant", text: "Medida para: " + prompt, meta: res },
+      ]),
     onError: (e: Error) => toast.error(e.message),
   });
+
+  if (datasets.isLoading) return <PageSkeleton cards={2} />;
+
+  if (datasetList.length === 0) {
+    return (
+      <div className="mx-auto max-w-3xl space-y-5">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-ink">
+            Analisar com IA
+          </h1>
+          <p className="mt-1.5 text-sm text-mute">
+            Conecte os seus dados para receber respostas com métricas oficiais e
+            evidências.
+          </p>
+        </div>
+        <EmptyState
+          icon={Database}
+          title="A DobraAI precisa de dados"
+          description="Conecte uma base, importe um ficheiro ou use os dados de exemplo. Depois poderá perguntar em português e conferir como cada resposta foi calculada."
+          action={
+            <div className="flex flex-wrap justify-center gap-2">
+              <Link href="/connectors">
+                <Button>Conectar dados</Button>
+              </Link>
+              <Link href="/data">
+                <Button variant="secondary">Importar ficheiro</Button>
+              </Link>
+            </div>
+          }
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto flex h-[calc(100dvh-7rem)] max-w-3xl flex-col">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight text-ink">Perguntar à TheDobra</h1>
-          <p className="mt-1 text-[13px] text-mute">Respostas com as métricas do seu conjunto — sem inventar fórmulas.</p>
+          <h1 className="text-xl font-semibold tracking-tight text-ink">
+            Perguntar à TheDobra
+          </h1>
+          <p className="mt-1 text-[13px] text-mute">
+            Respostas com as métricas do seu conjunto — sem inventar fórmulas.
+          </p>
         </div>
         {datasetList.length > 0 && (
           <Select
             aria-label="Conjunto"
             value={activeId}
-            onChange={(e) => setDatasetId(e.target.value)}
+            onChange={(e) => {
+              setDatasetId(e.target.value);
+              setConversationId("");
+              setMsgs([]);
+            }}
             className="w-full shrink-0 sm:max-w-[220px]"
           >
             {datasetList.map((d) => (
@@ -163,10 +277,14 @@ export default function AskPage() {
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               <Sparkles size={26} />
             </div>
-            <h2 className="mt-4 text-lg font-medium text-ink">O analista do seu negócio</h2>
+            <h2 className="mt-4 text-lg font-medium text-ink">
+              O analista do seu negócio
+            </h2>
             <p className="mt-2 max-w-md text-[13px] leading-relaxed text-mute">
-              Pergunte em português. A TheDobra usa o modelo semântico do conjunto
-              {activeName ? ` «${activeName}»` : ""} e devolve números com evidência.
+              Pergunte em português. A TheDobra usa o modelo semântico do
+              conjunto
+              {activeName ? ` «${activeName}»` : ""} e devolve números com
+              evidência.
             </p>
             <div className="mt-6 flex max-w-lg flex-wrap justify-center gap-2">
               {examplesForData.map((ex) => (
@@ -186,28 +304,47 @@ export default function AskPage() {
         {msgs.map((m, i) =>
           m.role === "user" ? (
             <div key={i} className="flex justify-end">
-              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-relaxed text-white">{m.text}</div>
+              <div className="max-w-[85%] rounded-2xl rounded-br-md bg-primary px-4 py-2.5 text-sm leading-relaxed text-white">
+                {m.text}
+              </div>
             </div>
           ) : (
             <div key={i} className="flex gap-2.5">
               <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                 <Sparkles size={14} />
               </div>
-              <Card className={cn("min-w-0 flex-1 space-y-3", m.answer?.insufficient_data && "border-amber-200 bg-amber-50/40")}>
+              <Card
+                className={cn(
+                  "min-w-0 flex-1 space-y-3",
+                  m.answer?.insufficient_data &&
+                    "border-amber-200 bg-amber-50/40",
+                )}
+              >
                 <p className="text-sm leading-relaxed text-ink">{m.text}</p>
                 {m.answer?.key_metric && (
                   <Kpi
                     label={m.answer.key_metric.label}
-                    value={formatMetric(m.answer.key_metric.label, m.answer.key_metric.value)}
+                    value={formatMetric(
+                      m.answer.key_metric.label,
+                      m.answer.key_metric.value,
+                    )}
                     delta={m.answer.key_metric.delta_pct}
                   />
                 )}
                 {m.answer?.chart && (
-                  <Chart type={(m.answer.chart.type as any) || "bar"} title={m.answer.chart.title} columns={m.answer.chart.columns} rows={m.answer.chart.rows} height={280} />
+                  <Chart
+                    type={(m.answer.chart.type as any) || "bar"}
+                    title={m.answer.chart.title}
+                    columns={m.answer.chart.columns}
+                    rows={m.answer.chart.rows}
+                    height={280}
+                  />
                 )}
                 {m.answer?.drivers && m.answer.drivers.length > 0 && (
                   <div>
-                    <div className="text-[11px] font-medium uppercase tracking-wide text-mute">O que puxa o número</div>
+                    <div className="text-[11px] font-medium uppercase tracking-wide text-mute">
+                      O que puxa o número
+                    </div>
                     <ul className="mt-2 space-y-1.5 text-sm text-ink">
                       {m.answer.drivers.map((d) => (
                         <li key={d} className="flex gap-2">
@@ -218,22 +355,57 @@ export default function AskPage() {
                     </ul>
                   </div>
                 )}
-                {m.answer?.explanation && <p className="text-[13px] leading-relaxed text-mute">{m.answer.explanation}</p>}
+                {m.answer?.explanation && (
+                  <p className="text-[13px] leading-relaxed text-mute">
+                    {m.answer.explanation}
+                  </p>
+                )}
                 {m.answer?.recommendation && (
                   <div className="rounded-xl border border-primary/15 bg-primary/5 px-3 py-2.5 text-[13px] leading-relaxed text-primary-700">
                     {m.answer.recommendation}
                   </div>
                 )}
-                {m.answer?.evidence && Object.keys(m.answer.evidence).length > 0 && <Evidence evidence={m.answer.evidence} />}
+                {m.answer?.warnings && m.answer.warnings.length > 0 && (
+                  <div className="space-y-1 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-[12px] text-amber-800">
+                    {m.answer.warnings.map((warning) => (
+                      <p key={warning} className="flex items-start gap-1.5">
+                        <AlertTriangle size={13} className="mt-0.5 shrink-0" />
+                        {warning}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {m.answer?.evidence &&
+                  Object.keys(m.answer.evidence).length > 0 && (
+                    <Evidence evidence={m.answer.evidence} />
+                  )}
+                {m.answer && !m.answer.insufficient_data && (
+                  <p className="flex items-center gap-1 text-[10px] text-mute">
+                    <CheckCircle2 size={11} className="text-emerald-600" />
+                    Calculado no conjunto selecionado · confiança{" "}
+                    {m.answer.confidence === "low"
+                      ? "baixa"
+                      : m.answer.confidence === "medium"
+                        ? "média"
+                        : "alta"}
+                  </p>
+                )}
                 {m.meta && (
                   <div className="space-y-2 rounded-xl border border-line bg-bg p-3 text-[13px]">
-                    {m.meta.sql && <pre className="overflow-x-auto font-mono text-[11px] text-ink">{m.meta.sql}</pre>}
+                    {m.meta.sql && (
+                      <pre className="overflow-x-auto font-mono text-[11px] text-ink">
+                        {m.meta.sql}
+                      </pre>
+                    )}
                     {m.meta.expression && (
                       <p>
-                        <span className="font-medium">{m.meta.name}</span> = {m.meta.expression}
+                        <span className="font-medium">{m.meta.name}</span> ={" "}
+                        {m.meta.expression}
                       </p>
                     )}
-                    {m.meta.explanation && <p className="text-mute">{m.meta.explanation}</p>}
+                    {m.meta.explanation && (
+                      <p className="text-mute">{m.meta.explanation}</p>
+                    )}
                   </div>
                 )}
               </Card>
@@ -241,8 +413,12 @@ export default function AskPage() {
           ),
         )}
         {busy && (
-          <div className="flex items-center gap-2 text-sm text-mute" aria-live="polite">
-            <Loader2 size={14} className="animate-spin text-primary" /> A consultar o conjunto…
+          <div
+            className="flex items-center gap-2 text-sm text-mute"
+            aria-live="polite"
+          >
+            <Loader2 size={14} className="animate-spin text-primary" /> A
+            consultar o conjunto…
           </div>
         )}
         <div ref={bottom} />
@@ -265,7 +441,11 @@ export default function AskPage() {
               ask(q);
             }
           }}
-          placeholder={activeName ? `Pergunte sobre «${activeName}»…` : "Pergunte qualquer coisa sobre o seu negócio…"}
+          placeholder={
+            activeName
+              ? `Pergunte sobre «${activeName}»…`
+              : "Pergunte qualquer coisa sobre o seu negócio…"
+          }
           aria-label="Pergunta"
           disabled={busy}
           rows={2}
@@ -292,7 +472,13 @@ export default function AskPage() {
               <Wand2 size={14} /> Medida
             </Button>
           </div>
-          <Button type="submit" size="icon" busy={busy} disabled={!q.trim()} aria-label="Enviar">
+          <Button
+            type="submit"
+            size="icon"
+            busy={busy}
+            disabled={!q.trim()}
+            aria-label="Enviar"
+          >
             <ArrowUp size={16} />
           </Button>
         </div>

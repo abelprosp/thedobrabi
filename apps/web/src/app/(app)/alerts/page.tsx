@@ -97,7 +97,7 @@ export default function AlertsPage() {
       </Card>
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {alerts.length === 0 && (
+      {alerts.length === 0 && !q.isLoading && !q.isError && (
         <div className="space-y-4">
           <EmptyState
             icon={AlertTriangle}

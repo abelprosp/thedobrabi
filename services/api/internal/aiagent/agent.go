@@ -31,9 +31,15 @@ func New(pg *pgxpool.Pool, q *queryeng.Engine, intel *intelligence.Engine, cfg c
 }
 
 type AskRequest struct {
-	ConversationID string `json:"conversation_id"`
-	Message        string `json:"message"`
-	DatasetID      string `json:"dataset_id"`
+	ConversationID string    `json:"conversation_id"`
+	Message        string    `json:"message"`
+	DatasetID      string    `json:"dataset_id"`
+	History        []AskTurn `json:"history,omitempty"`
+}
+
+type AskTurn struct {
+	Role string `json:"role"`
+	Text string `json:"text"`
 }
 
 type Answer struct {
@@ -46,6 +52,9 @@ type Answer struct {
 	Recommendation string         `json:"recommendation,omitempty"`
 	Evidence       map[string]any `json:"evidence"`
 	Insufficient   bool           `json:"insufficient_data"`
+	Source         string         `json:"source"`
+	Confidence     string         `json:"confidence"`
+	Warnings       []string       `json:"warnings,omitempty"`
 }
 
 type Metric struct {
@@ -88,17 +97,28 @@ func (a *Agent) Ask(ctx context.Context, orgID, wsID, userID uuid.UUID, role str
 
 	var ans Answer
 	if a.cfg.OpenAIKey != "" {
-		ans, err = a.askLLM(ctx, orgID, wsID, userID, role, dsID, dsName, model, req.Message)
+		ans, err = a.askLLM(ctx, orgID, wsID, userID, role, dsID, dsName, model, req.Message, req.History)
 		if err != nil {
-			ans, err = a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, req.Message)
+			ans, err = a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, contextualAskMessage(req.Message, req.History))
+			ans.Warnings = append(ans.Warnings, "O planeamento avançado não estava disponível; a análise foi executada diretamente sobre o modelo semântico.")
 		}
 	} else {
-		ans, err = a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, req.Message)
+		ans, err = a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, contextualAskMessage(req.Message, req.History))
 	}
 	if err != nil {
 		return Answer{}, err
 	}
 	ans.ConversationID = convID.String()
+	if ans.Source == "" {
+		ans.Source = "query_engine"
+	}
+	if ans.Confidence == "" {
+		if ans.Insufficient {
+			ans.Confidence = "low"
+		} else {
+			ans.Confidence = "high"
+		}
+	}
 	a.storeAssistant(ctx, convID, ans)
 	return ans, nil
 }
@@ -295,13 +315,20 @@ func (a *Agent) askDeterministic(ctx context.Context, orgID, wsID, userID uuid.U
 	return ans, nil
 }
 
-func (a *Agent) askLLM(ctx context.Context, orgID, wsID, userID uuid.UUID, role string, dsID, dsName string, model semantic.Model, msg string) (Answer, error) {
+func (a *Agent) askLLM(ctx context.Context, orgID, wsID, userID uuid.UUID, role string, dsID, dsName string, model semantic.Model, msg string, history []AskTurn) (Answer, error) {
 	schema, _ := json.Marshal(model)
-	sys := `És um especialista sénior em análise de dados. Respondes com rigor analítico sobre o conjunto semântico da TheDobra.
-DEVE usar apenas métricas oficiais da camada semântica. Nunca inventes uma fórmula. Se os dados forem insuficientes, di-lo. Se as métricas conflitarem, pede a definição oficial.
-Distingue tendência temporal de ranking por categoria. Quantifica variação e recomenda a próxima acção.
-Responde em português do Brasil, em JSON: {"answer":"", "explanation":"", "recommendation":"", "drivers":[], "measure":"", "dimension":"", "chart_type":"bar|line|none"}`
-	user := fmt.Sprintf("Conjunto: %s\nModelo semântico: %s\nPergunta: %s", dsName, schema, msg)
+	sys := `És o planeador de consultas da TheDobra. NÃO tens acesso aos valores e, por isso, não podes responder à pergunta nem citar números.
+Escolhe somente uma medida e, quando necessário, uma dimensão que existam exatamente no modelo semântico.
+Distingue série temporal de ranking por categoria. Se não houver correspondência segura, deixa o campo vazio.
+Responde apenas em JSON: {"measure":"","dimension":"","chart_type":"bar|line|none"}`
+	historyText := ""
+	for _, turn := range history {
+		if len(historyText) >= 2400 {
+			break
+		}
+		historyText += fmt.Sprintf("%s: %s\n", turn.Role, turn.Text)
+	}
+	user := fmt.Sprintf("Conjunto: %s\nModelo semântico: %s\nHistórico recente:\n%s\nPergunta atual: %s", dsName, schema, historyText, msg)
 	raw, err := a.callOpenAI(ctx, sys, user)
 	if err != nil {
 		return Answer{}, err
@@ -317,34 +344,59 @@ Responde em português do Brasil, em JSON: {"answer":"", "explanation":"", "reco
 		return Answer{}, fmt.Errorf("invalid llm response")
 	}
 	var plan struct {
-		Answer         string   `json:"answer"`
-		Explanation    string   `json:"explanation"`
-		Recommendation string   `json:"recommendation"`
-		Drivers        []string `json:"drivers"`
-		Measure        string   `json:"measure"`
-		Dimension      string   `json:"dimension"`
-		ChartType      string   `json:"chart_type"`
+		Measure   string `json:"measure"`
+		Dimension string `json:"dimension"`
+		ChartType string `json:"chart_type"`
 	}
 	if json.Unmarshal([]byte(parsed.Choices[0].Message.Content), &plan) != nil {
-		return a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, msg)
+		return a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, contextualAskMessage(msg, history))
 	}
-	base, err := a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, msg)
+	plannedMessage := contextualAskMessage(msg, history)
+	warnings := []string{}
+	if plan.Measure != "" {
+		if measure, ok := semantic.ResolveMeasure(model, plan.Measure); ok {
+			plannedMessage += "\nMétrica oficial selecionada: " + measure.Name
+		} else {
+			warnings = append(warnings, fmt.Sprintf("A métrica sugerida pela IA (%q) foi ignorada porque não existe no modelo.", plan.Measure))
+		}
+	}
+	if plan.Dimension != "" {
+		if dimension, ok := semantic.ResolveDimension(model, plan.Dimension); ok {
+			plannedMessage += "\nAnalisar por: " + dimension.Column
+		} else {
+			warnings = append(warnings, fmt.Sprintf("A dimensão sugerida pela IA (%q) foi ignorada porque não existe no modelo.", plan.Dimension))
+		}
+	}
+	if plan.ChartType == "line" {
+		plannedMessage += "\nMostrar tendência ao longo do tempo."
+	} else if plan.ChartType == "bar" {
+		plannedMessage += "\nComparar por categoria."
+	}
+	base, err := a.askDeterministic(ctx, orgID, wsID, userID, role, dsID, dsName, model, plannedMessage)
 	if err != nil {
 		return Answer{}, err
 	}
-	if plan.Answer != "" {
-		base.Answer = plan.Answer
-	}
-	if plan.Explanation != "" {
-		base.Explanation = plan.Explanation
-	}
-	if plan.Recommendation != "" {
-		base.Recommendation = plan.Recommendation
-	}
-	if len(plan.Drivers) > 0 {
-		base.Drivers = plan.Drivers
-	}
+	base.Source = "openai_planned_query"
+	base.Warnings = append(base.Warnings, warnings...)
 	return base, nil
+}
+
+func contextualAskMessage(message string, history []AskTurn) string {
+	current := strings.TrimSpace(message)
+	normalized := strings.ToLower(current)
+	needsContext := len(strings.Fields(current)) <= 7 ||
+		strings.Contains(normalized, "isso") || strings.Contains(normalized, "essa ") ||
+		strings.Contains(normalized, "agora") || strings.HasPrefix(normalized, "e ") ||
+		strings.Contains(normalized, "por quê") || strings.Contains(normalized, "por que")
+	if !needsContext {
+		return current
+	}
+	for i := len(history) - 1; i >= 0; i-- {
+		if history[i].Role == "user" && strings.TrimSpace(history[i].Text) != "" {
+			return history[i].Text + "\nContinuação: " + current
+		}
+	}
+	return current
 }
 
 func (a *Agent) loadModel(ctx context.Context, orgID, wsID uuid.UUID, dsID string) (semantic.Model, string, error) {
@@ -647,8 +699,23 @@ func asStringSlice(v any) []string {
 }
 
 func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semantic.Model) map[string]any {
+	fixed, _ := a.validateAndFixWidgetDetailed(w, dsID, model)
+	return fixed
+}
+
+func (a *Agent) validateAndFixWidgetDetailed(w map[string]any, dsID string, model semantic.Model) (map[string]any, []string) {
+	warnings := []string{}
 	typ, _ := w["type"].(string)
-	if typ == "" {
+	allowedTypes := map[string]bool{
+		"kpi": true, "kpi_goal": true, "line": true, "bar": true, "area": true,
+		"pie": true, "table": true, "ranking": true, "slicer": true,
+		"data_intelligence": true, "text": true, "gauge": true, "sparkline": true,
+		"heatmap": true, "treemap": true, "funnel": true, "big_table": true,
+	}
+	if !allowedTypes[typ] {
+		if typ != "" {
+			warnings = append(warnings, fmt.Sprintf("O tipo de visual %q não é suportado e foi convertido em barras.", typ))
+		}
 		typ = "bar"
 	}
 	title, _ := w["title"].(string)
@@ -661,13 +728,19 @@ func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semant
 	}
 	query["dataset_id"] = dsID
 
+	requestedMeasures := asStringSlice(query["measures"])
 	measures := []string{}
-	for _, name := range asStringSlice(query["measures"]) {
-		if _, ok := semantic.ResolveMeasure(model, name); ok {
-			measures = append(measures, name)
+	for _, name := range requestedMeasures {
+		if measure, ok := semantic.ResolveMeasure(model, name); ok {
+			measures = append(measures, measure.Name)
 		} else if found := a.findClosestMeasure(model, name); found != "" {
 			measures = append(measures, found)
+		} else {
+			warnings = append(warnings, fmt.Sprintf("A medida %q não existe no modelo.", name))
 		}
+	}
+	if len(requestedMeasures) > 0 && len(measures) == 0 && widgetNeedsQuery(typ) && typ != "slicer" {
+		return nil, warnings
 	}
 	if widgetNeedsQuery(typ) && typ != "slicer" && len(measures) == 0 && len(model.Measures) > 0 {
 		if p := semantic.PrimaryMeasure(model); p != "" {
@@ -678,12 +751,37 @@ func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semant
 	}
 	query["measures"] = measures
 
+	requestedDimensions := asStringSlice(query["dimensions"])
 	dimensions := []string{}
-	for _, name := range asStringSlice(query["dimensions"]) {
-		if _, ok := semantic.ResolveDimension(model, name); ok {
-			dimensions = append(dimensions, name)
+	for _, name := range requestedDimensions {
+		if dimension, ok := semantic.ResolveDimension(model, name); ok {
+			dimensions = append(dimensions, dimension.Column)
 		} else if found := a.findClosestDimension(model, name); found != "" {
 			dimensions = append(dimensions, found)
+		} else {
+			warnings = append(warnings, fmt.Sprintf("A dimensão %q não existe no modelo.", name))
+		}
+	}
+	needsDimension := map[string]bool{"line": true, "area": true, "bar": true, "pie": true, "ranking": true, "slicer": true, "heatmap": true, "treemap": true, "funnel": true}
+	if len(requestedDimensions) > 0 && len(dimensions) == 0 && needsDimension[typ] {
+		return nil, warnings
+	}
+	if len(dimensions) == 0 && needsDimension[typ] {
+		if typ == "line" || typ == "area" {
+			if model.TimeColumn != "" {
+				dimensions = []string{model.TimeColumn}
+			}
+		} else {
+			for _, dimension := range model.Dimensions {
+				if dimension.Column != "" && !strings.EqualFold(dimension.Column, model.TimeColumn) {
+					dimensions = []string{dimension.Column}
+					break
+				}
+			}
+		}
+		if len(dimensions) == 0 {
+			warnings = append(warnings, fmt.Sprintf("O visual %q foi ignorado porque exige uma dimensão.", title))
+			return nil, warnings
 		}
 	}
 	query["dimensions"] = dimensions
@@ -735,54 +833,48 @@ func (a *Agent) validateAndFixWidget(w map[string]any, dsID string, model semant
 	if out["id"] == nil || out["id"] == "" {
 		out["id"] = uuid.New().String()
 	}
-	return out
+	return out, warnings
 }
 
 func (a *Agent) findClosestMeasure(model semantic.Model, name string) string {
 	want := alias(name)
-	if want == "linhas" || want == "orders" || want == "count" {
-		if p := semantic.PrimaryMeasure(model); p != "" {
-			return p
-		}
+	if len(want) < 3 {
+		return ""
 	}
 	for _, m := range model.Measures {
-		if strings.Contains(alias(m.Name), want) || strings.Contains(want, alias(m.Name)) {
+		candidate := alias(m.Name)
+		if candidate == want || (len(candidate) >= 4 && len(want) >= 4 && (strings.Contains(candidate, want) || strings.Contains(want, candidate))) {
 			return m.Name
 		}
-	}
-	if p := semantic.PrimaryMeasure(model); p != "" {
-		return p
-	}
-	if len(model.Measures) > 0 {
-		return model.Measures[0].Name
 	}
 	return ""
 }
 
 func (a *Agent) findClosestDimension(model semantic.Model, name string) string {
 	want := alias(name)
+	if len(want) < 3 {
+		return ""
+	}
 	for _, d := range model.Dimensions {
-		if strings.Contains(alias(d.Name), want) || strings.Contains(want, alias(d.Column)) || strings.Contains(alias(d.Column), want) {
+		nameAlias, columnAlias := alias(d.Name), alias(d.Column)
+		if nameAlias == want || columnAlias == want ||
+			(len(want) >= 4 && ((len(nameAlias) >= 4 && (strings.Contains(nameAlias, want) || strings.Contains(want, nameAlias))) ||
+				(len(columnAlias) >= 4 && (strings.Contains(columnAlias, want) || strings.Contains(want, columnAlias))))) {
 			return d.Column
 		}
-	}
-	if model.TimeColumn != "" {
-		return model.TimeColumn
-	}
-	if len(model.Dimensions) > 0 {
-		return model.Dimensions[0].Column
 	}
 	return ""
 }
 
 func pickMeasure(model semantic.Model, q string) string {
+	normalizedQuery := normalizeSemanticName(q)
 	for _, m := range model.Measures {
 		if isRowCountMeasure(m) && !asksForCount(q) {
 			continue
 		}
-		n := strings.ToLower(m.Name)
-		c := strings.ToLower(m.Column)
-		if strings.Contains(q, n) || strings.Contains(q, strings.ReplaceAll(n, " ", "_")) || (c != "*" && strings.Contains(q, c)) {
+		n := normalizeSemanticName(m.Name)
+		c := normalizeSemanticName(m.Column)
+		if (n != "" && strings.Contains(normalizedQuery, n)) || (c != "" && c != "*" && strings.Contains(normalizedQuery, c)) {
 			return m.Name
 		}
 	}
@@ -827,6 +919,14 @@ func asksForCount(q string) bool {
 }
 
 func pickDimension(model semantic.Model, q string) string {
+	normalizedQuery := normalizeSemanticName(q)
+	for _, dimension := range model.Dimensions {
+		name := normalizeSemanticName(dimension.Name)
+		column := normalizeSemanticName(dimension.Column)
+		if (name != "" && strings.Contains(normalizedQuery, name)) || (column != "" && strings.Contains(normalizedQuery, column)) {
+			return dimension.Column
+		}
+	}
 	cands := []string{"customer", "product", "region", "seller", "channel", "segment", "cliente", "produto", "região", "regiao", "vendedor", "canal", "segmento", "categoria", "linha", "natureza", "empresa", "mes", "mês"}
 	for _, c := range cands {
 		if strings.Contains(q, c) {

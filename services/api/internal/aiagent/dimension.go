@@ -19,11 +19,15 @@ type GenerateDimensionRequest struct {
 
 // GeneratedDimension is a row-level SQL expression suggested from a prompt.
 type GeneratedDimension struct {
-	Name        string `json:"name"`
-	Expression  string `json:"expression"`
-	Explanation string `json:"explanation"`
-	Source      string `json:"source"`
-	DatasetID   string `json:"dataset_id,omitempty"`
+	Name             string   `json:"name"`
+	Expression       string   `json:"expression"`
+	Explanation      string   `json:"explanation"`
+	Source           string   `json:"source"`
+	DatasetID        string   `json:"dataset_id,omitempty"`
+	Validated        bool     `json:"validated"`
+	Confidence       string   `json:"confidence"`
+	ReferencedFields []string `json:"referenced_fields,omitempty"`
+	Warnings         []string `json:"warnings,omitempty"`
 }
 
 // GenerateDimension builds a calculated dimension from a natural-language prompt.
@@ -47,9 +51,24 @@ func (a *Agent) GenerateDimension(ctx context.Context, orgID, wsID, userID uuid.
 	if a.cfg.OpenAIKey != "" {
 		if llm, err := a.generateDimensionWithLLM(ctx, req.Prompt, dsName, model); err == nil {
 			out = llm
+		} else {
+			out.Warnings = append(out.Warnings, "A sugestão avançada não pôde ser validada; foi usada uma expressão segura baseada no modelo.")
 		}
 	}
+	references, err := validateExpressionAgainstModel(out.Expression, model, false)
+	if err != nil {
+		return GeneratedDimension{}, fmt.Errorf("não foi possível criar uma dimensão segura: %w", err)
+	}
 	out.DatasetID = dsID
+	out.Validated = true
+	out.ReferencedFields = references
+	if out.Confidence == "" {
+		if out.Source == "openai" {
+			out.Confidence = "high"
+		} else {
+			out.Confidence = "medium"
+		}
+	}
 	_ = userID
 	return out, nil
 }
@@ -94,6 +113,9 @@ Regras:
 	if parsedExpr.IsAggregate() {
 		return GeneratedDimension{}, fmt.Errorf("a dimensão não pode usar agregações")
 	}
+	if _, err := validateExpressionAgainstModel(expr, model, false); err != nil {
+		return GeneratedDimension{}, err
+	}
 	name := strings.TrimSpace(strings.ReplaceAll(parsed.Name, "\n", " "))
 	if name == "" {
 		name = "Nova dimensão"
@@ -110,6 +132,7 @@ Regras:
 		Expression:  expr,
 		Explanation: expl,
 		Source:      "openai",
+		Confidence:  "high",
 	}, nil
 }
 
@@ -163,13 +186,14 @@ func generateDimensionFallback(prompt string, model semantic.Model, dsName strin
 }
 
 func pickDimensionColumn(model semantic.Model, q string) string {
+	normalizedQuery := normalizeSemanticName(q)
 	for _, d := range model.Dimensions {
-		ln := strings.ToLower(d.Name)
-		lc := strings.ToLower(d.Column)
-		if ln != "" && strings.Contains(q, ln) && d.Column != "" {
+		ln := normalizeSemanticName(d.Name)
+		lc := normalizeSemanticName(d.Column)
+		if ln != "" && strings.Contains(normalizedQuery, ln) && d.Column != "" {
 			return d.Column
 		}
-		if lc != "" && strings.Contains(q, lc) {
+		if lc != "" && strings.Contains(normalizedQuery, lc) {
 			return d.Column
 		}
 	}
@@ -178,5 +202,5 @@ func pickDimensionColumn(model semantic.Model, q string) string {
 			return d.Column
 		}
 	}
-	return "categoria"
+	return ""
 }

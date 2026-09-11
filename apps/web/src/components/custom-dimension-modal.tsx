@@ -60,10 +60,13 @@ export function CustomDimensionModal({
 
   const validate = useMutation({
     mutationFn: () =>
-      api<ValidationResult>(`/api/v1/semantic-models/${semanticModelId}/validate-dimension`, {
-        method: "POST",
-        body: JSON.stringify({ expression }),
-      }),
+      api<ValidationResult>(
+        `/api/v1/semantic-models/${semanticModelId}/validate-dimension`,
+        {
+          method: "POST",
+          body: JSON.stringify({ expression }),
+        },
+      ),
     onSuccess: (res) => setValidation(res),
     onError: (e: Error) => setValidation({ valid: false, error: e.message }),
   });
@@ -98,23 +101,46 @@ export function CustomDimensionModal({
 
   const generate = useMutation({
     mutationFn: (prompt: string) =>
-      api<{ name: string; expression: string; explanation: string; source?: string }>("/api/v1/ai/generate-dimension", {
+      api<{
+        name: string;
+        expression: string;
+        explanation: string;
+        source?: string;
+        validated?: boolean;
+        confidence?: string;
+        referenced_fields?: string[];
+        warnings?: string[];
+      }>("/api/v1/ai/generate-dimension", {
         method: "POST",
-        body: JSON.stringify({ prompt, dataset_id: resolvedDatasetId || undefined }),
+        body: JSON.stringify({
+          prompt,
+          dataset_id: resolvedDatasetId || undefined,
+        }),
       }),
     onSuccess: (res) => {
       const expr = (res.expression || "").trim();
       if (res.name?.trim()) setName(res.name.trim());
       setExpression(expr);
       setValidation(null);
-      setAiNote(res.explanation || "Dimensão preenchida. Valide antes de guardar.");
-      toast.success("Dimensão gerada — reveja e valide.");
+      const fields = res.referenced_fields?.length
+        ? ` Campos usados: ${res.referenced_fields.join(", ")}.`
+        : "";
+      const warnings = res.warnings?.length ? ` ${res.warnings.join(" ")}` : "";
+      setAiNote(
+        `${res.explanation || "Dimensão preenchida."}${fields}${warnings}`,
+      );
+      toast.success(
+        res.validated
+          ? "Dimensão gerada com campos validados."
+          : "Dimensão gerada — reveja e valide.",
+      );
     },
     onError: (e: Error) => toast.error(e.message),
   });
 
   const canValidate = expression.trim().length > 0;
-  const canSave = validation?.valid === true && name.trim().length > 0 && !save.isPending;
+  const canSave =
+    validation?.valid === true && name.trim().length > 0 && !save.isPending;
 
   const handleSqlChange = (v: string) => {
     setExpression(v);
@@ -122,17 +148,30 @@ export function CustomDimensionModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4"
+      onClick={onClose}
+    >
       <div
         className="flex max-h-[92dvh] w-full max-w-3xl flex-col overflow-hidden rounded-t-2xl border border-line bg-surface shadow-xl sm:rounded-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
           <div>
-            <h3 className="text-[15px] font-semibold text-ink">Nova dimensão</h3>
-            <p className="text-[12px] text-mute">Escreva SQL ao nível da linha ou peça à IA para agrupar categorias.</p>
+            <h3 className="text-[15px] font-semibold text-ink">
+              Nova dimensão
+            </h3>
+            <p className="text-[12px] text-mute">
+              Escreva SQL ao nível da linha ou peça à IA para agrupar
+              categorias.
+            </p>
           </div>
-          <button type="button" onClick={onClose} className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 hover:text-ink" aria-label="Fechar">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-mute hover:bg-surface-2 hover:text-ink"
+            aria-label="Fechar"
+          >
             <X size={16} />
           </button>
         </div>
@@ -175,8 +214,15 @@ export function CustomDimensionModal({
             {aiNote && <p className="text-[12px] text-ink">{aiNote}</p>}
           </div>
 
-          <FieldLabel label="Nome da dimensão" hint="Ex: Mês, Grupo de empresas, Faixa">
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Ex: Grupo de empresas" />
+          <FieldLabel
+            label="Nome da dimensão"
+            hint="Ex: Mês, Grupo de empresas, Faixa"
+          >
+            <Input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Ex: Grupo de empresas"
+            />
           </FieldLabel>
 
           <FieldLabel
@@ -186,20 +232,28 @@ export function CustomDimensionModal({
             <Textarea
               value={expression}
               onChange={(e) => handleSqlChange(e.target.value)}
-              placeholder={"Exemplos:\nTOMONTH(data_venda)\nCASE WHEN empresa IN ('VIVO','TIM') THEN 'Telecom' ELSE 'Outros' END"}
+              placeholder={
+                "Exemplos:\nTOMONTH(data_venda)\nCASE WHEN empresa IN ('VIVO','TIM') THEN 'Telecom' ELSE 'Outros' END"
+              }
               className="min-h-[120px] font-mono text-[12px]"
             />
           </FieldLabel>
           {columns.length > 0 && (
             <div className="rounded-xl border border-line bg-surface-2/60 p-3">
-              <p className="mb-1.5 text-[11px] font-medium text-mute">Colunas (clique para inserir):</p>
+              <p className="mb-1.5 text-[11px] font-medium text-mute">
+                Colunas (clique para inserir):
+              </p>
               <div className="flex flex-wrap gap-1">
                 {columns.map((c) => (
                   <code
                     key={c.name}
                     className="cursor-pointer rounded bg-surface px-1.5 py-0.5 text-[10px] text-ink hover:bg-primary/10 hover:text-primary"
                     onClick={() =>
-                      handleSqlChange(expression + (expression && !expression.endsWith(" ") ? " " : "") + c.name)
+                      handleSqlChange(
+                        expression +
+                          (expression && !expression.endsWith(" ") ? " " : "") +
+                          c.name,
+                      )
                     }
                   >
                     {c.name}
@@ -219,7 +273,10 @@ export function CustomDimensionModal({
               )}
             >
               {validation.valid ? (
-                <CheckCircle2 size={14} className="mt-0.5 shrink-0 text-emerald-600" />
+                <CheckCircle2
+                  size={14}
+                  className="mt-0.5 shrink-0 text-emerald-600"
+                />
               ) : (
                 <XCircle size={14} className="mt-0.5 shrink-0 text-red-600" />
               )}
@@ -227,7 +284,9 @@ export function CustomDimensionModal({
                 {validation.valid ? (
                   <>
                     <span className="font-medium">Expressão válida.</span>
-                    <div className="mt-0.5 font-mono text-[11px] opacity-75">SQL: {validation.sql}</div>
+                    <div className="mt-0.5 font-mono text-[11px] opacity-75">
+                      SQL: {validation.sql}
+                    </div>
                   </>
                 ) : (
                   <>
@@ -244,11 +303,21 @@ export function CustomDimensionModal({
           <Button variant="secondary" onClick={onClose}>
             Cancelar
           </Button>
-          <Button variant="secondary" onClick={() => validate.mutate()} disabled={!canValidate || validate.isPending}>
-            {validate.isPending && <Loader2 size={14} className="animate-spin" />}
+          <Button
+            variant="secondary"
+            onClick={() => validate.mutate()}
+            disabled={!canValidate || validate.isPending}
+          >
+            {validate.isPending && (
+              <Loader2 size={14} className="animate-spin" />
+            )}
             Validar
           </Button>
-          <Button onClick={() => save.mutate()} disabled={!canSave} busy={save.isPending}>
+          <Button
+            onClick={() => save.mutate()}
+            disabled={!canSave}
+            busy={save.isPending}
+          >
             Adicionar dimensão
           </Button>
         </div>

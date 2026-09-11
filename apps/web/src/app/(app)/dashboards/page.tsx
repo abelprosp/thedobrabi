@@ -123,7 +123,7 @@ function DashboardsPageInner() {
       />
       {q.isLoading && <PageSkeleton cards={4} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {dashboards.length === 0 && (
+      {dashboards.length === 0 && !q.isLoading && !q.isError && (
         <div className="space-y-4">
           <EmptyState
             icon={LayoutDashboard}

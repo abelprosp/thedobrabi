@@ -19,11 +19,15 @@ type GenerateMeasureRequest struct {
 
 // GeneratedMeasure is a DAX-like measure suggested from a natural-language prompt.
 type GeneratedMeasure struct {
-	Name        string `json:"name"`
-	Expression  string `json:"expression"`
-	Explanation string `json:"explanation"`
-	Source      string `json:"source"`
-	DatasetID   string `json:"dataset_id,omitempty"`
+	Name             string   `json:"name"`
+	Expression       string   `json:"expression"`
+	Explanation      string   `json:"explanation"`
+	Source           string   `json:"source"`
+	DatasetID        string   `json:"dataset_id,omitempty"`
+	Validated        bool     `json:"validated"`
+	Confidence       string   `json:"confidence"`
+	ReferencedFields []string `json:"referenced_fields,omitempty"`
+	Warnings         []string `json:"warnings,omitempty"`
 }
 
 // GenerateMeasure builds a custom measure from a natural-language prompt.
@@ -51,9 +55,24 @@ func (a *Agent) GenerateMeasure(ctx context.Context, orgID, wsID, userID uuid.UU
 	if a.cfg.OpenAIKey != "" {
 		if llm, err := a.generateMeasureWithLLM(ctx, req.Prompt, dsName, model); err == nil {
 			out = llm
+		} else {
+			out.Warnings = append(out.Warnings, "A sugestão avançada não pôde ser validada; foi usada uma fórmula segura baseada no modelo.")
 		}
 	}
+	references, err := validateExpressionAgainstModel(out.Expression, model, true)
+	if err != nil {
+		return GeneratedMeasure{}, fmt.Errorf("não foi possível criar uma medida segura: %w", err)
+	}
 	out.DatasetID = dsID
+	out.Validated = true
+	out.ReferencedFields = references
+	if out.Confidence == "" {
+		if out.Source == "openai" {
+			out.Confidence = "high"
+		} else {
+			out.Confidence = "medium"
+		}
+	}
 	_ = userID
 	return out, nil
 }
@@ -94,6 +113,9 @@ Regras:
 	if _, err := semanticxpr.Parse(expr); err != nil {
 		return GeneratedMeasure{}, fmt.Errorf("expressão gerada inválida: %w", err)
 	}
+	if _, err := validateExpressionAgainstModel(expr, model, true); err != nil {
+		return GeneratedMeasure{}, err
+	}
 	name := strings.TrimSpace(strings.ReplaceAll(parsed.Name, "\n", " "))
 	if name == "" {
 		name = "Nova métrica"
@@ -110,6 +132,7 @@ Regras:
 		Expression:  expr,
 		Explanation: expl,
 		Source:      "openai",
+		Confidence:  "high",
 	}, nil
 }
 
@@ -223,7 +246,7 @@ func pickMeasureColumn(model semantic.Model, q string) string {
 			return m.Column
 		}
 	}
-	return "revenue"
+	return ""
 }
 
 func titleFromPrompt(prompt, fallback string) string {
@@ -239,17 +262,18 @@ func titleFromPrompt(prompt, fallback string) string {
 }
 
 func matchMeasureInPrompt(model semantic.Model, q string) *semantic.Measure {
+	normalizedQuery := normalizeSemanticName(q)
 	for i := range model.Measures {
 		m := &model.Measures[i]
-		ln := strings.ToLower(m.Name)
-		lc := strings.ToLower(m.Column)
+		ln := normalizeSemanticName(m.Name)
+		lc := normalizeSemanticName(m.Column)
 		if ln != "" && strings.Contains(q, ln) {
 			return m
 		}
-		if lc != "" && lc != "*" && strings.Contains(q, lc) {
+		if ln != "" && strings.Contains(normalizedQuery, ln) {
 			return m
 		}
-		if ln != "" && strings.Contains(q, strings.ReplaceAll(ln, " ", "_")) {
+		if lc != "" && lc != "*" && strings.Contains(normalizedQuery, lc) {
 			return m
 		}
 	}

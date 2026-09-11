@@ -92,3 +92,16 @@ func TestHydrateEmptyModel(t *testing.T) {
 		t.Fatal("expected categoria dimension after hydrate")
 	}
 }
+
+func TestResolveIgnoresAccentsAndSeparators(t *testing.T) {
+	model := Model{
+		Measures:   []Measure{{Name: "Receita Líquida", Column: "receita_liquida"}},
+		Dimensions: []Dimension{{Name: "Região Comercial", Column: "regiao-comercial"}},
+	}
+	if _, ok := ResolveMeasure(model, "receita liquida"); !ok {
+		t.Fatal("expected accent-insensitive measure match")
+	}
+	if _, ok := ResolveDimension(model, "região comercial"); !ok {
+		t.Fatal("expected separator-insensitive dimension match")
+	}
+}

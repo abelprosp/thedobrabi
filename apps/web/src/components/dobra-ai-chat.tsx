@@ -3,11 +3,28 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api";
 import { Button, Select, cn } from "@/components/ui";
-import { ArrowUp, Loader2, Sparkles, X } from "lucide-react";
-import type { DashboardFilter, Widget, WidgetType } from "@/components/WidgetView";
+import {
+  AlertTriangle,
+  ArrowUp,
+  CheckCircle2,
+  Loader2,
+  Sparkles,
+  X,
+} from "lucide-react";
+import type {
+  DashboardFilter,
+  Widget,
+  WidgetType,
+} from "@/components/WidgetView";
 import { DEFAULT_QUERY_LIMIT } from "@/lib/widget-config";
 
-type PlanItem = { title: string; chart: string; why: string; measure?: string; dimension?: string };
+type PlanItem = {
+  title: string;
+  chart: string;
+  why: string;
+  measure?: string;
+  dimension?: string;
+};
 
 export type DobraReply = {
   conversation_id: string;
@@ -22,13 +39,39 @@ export type DobraReply = {
   source?: string;
   dataset_id?: string;
   dataset_name?: string;
+  validated?: boolean;
+  confidence?: "low" | "medium" | "high";
+  warnings?: string[];
 };
 
-type Msg = { role: "user" | "assistant"; text: string; plan?: PlanItem[]; applied?: number };
+type Msg = {
+  role: "user" | "assistant";
+  text: string;
+  plan?: PlanItem[];
+  applied?: number;
+  warnings?: string[];
+  validated?: boolean;
+  confidence?: string;
+};
 
 const ALLOWED: WidgetType[] = [
-  "kpi", "kpi_goal", "line", "bar", "area", "pie", "table", "ranking", "slicer",
-  "data_intelligence", "text", "gauge", "sparkline", "heatmap", "treemap", "funnel", "big_table",
+  "kpi",
+  "kpi_goal",
+  "line",
+  "bar",
+  "area",
+  "pie",
+  "table",
+  "ranking",
+  "slicer",
+  "data_intelligence",
+  "text",
+  "gauge",
+  "sparkline",
+  "heatmap",
+  "treemap",
+  "funnel",
+  "big_table",
 ];
 
 const SUGGESTIONS = [
@@ -38,11 +81,23 @@ const SUGGESTIONS = [
   "Inclui um slicer e a análise automática",
 ];
 
-function mapWidgets(raw: any[], fallbackDataset?: string, yOffset = 0): Widget[] {
+function mapWidgets(
+  raw: any[],
+  fallbackDataset?: string,
+  yOffset = 0,
+): Widget[] {
   return (raw || []).map((w): Widget => {
     const type: WidgetType = ALLOWED.includes(w.type) ? w.type : "bar";
-    const q = w.query ? { ...w.query, dataset_id: w.query.dataset_id || fallbackDataset } : undefined;
-    if (q && q.limit == null) q.limit = type === "ranking" ? 10 : type === "table" || type === "big_table" ? 200 : DEFAULT_QUERY_LIMIT;
+    const q = w.query
+      ? { ...w.query, dataset_id: w.query.dataset_id || fallbackDataset }
+      : undefined;
+    if (q && q.limit == null)
+      q.limit =
+        type === "ranking"
+          ? 10
+          : type === "table" || type === "big_table"
+            ? 200
+            : DEFAULT_QUERY_LIMIT;
     return {
       id: typeof w.id === "string" && w.id ? w.id : crypto.randomUUID(),
       type,
@@ -113,7 +168,9 @@ export function DobraAIChat({
     setBusy(true);
     setMsgs((m) => [...m, { role: "user", text: message }]);
     try {
-      const history = msgs.slice(-8).map((m) => ({ role: m.role, text: m.text }));
+      const history = msgs
+        .slice(-8)
+        .map((m) => ({ role: m.role, text: m.text }));
       const res = await api<DobraReply>("/api/v1/ai/dobra", {
         method: "POST",
         body: JSON.stringify({
@@ -126,12 +183,18 @@ export function DobraAIChat({
           widgets: widgets.slice(0, 24).map((w) => ({
             type: w.type,
             title: w.title,
-            query: w.query ? { measures: w.query.measures, dimensions: w.query.dimensions } : undefined,
+            query: w.query
+              ? { measures: w.query.measures, dimensions: w.query.dimensions }
+              : undefined,
           })),
         }),
       });
       if (res.conversation_id) setConvId(res.conversation_id);
-      const mapped = mapWidgets(res.widgets || [], res.dataset_id || datasetId, res.replace ? 0 : maxY(widgets));
+      const mapped = mapWidgets(
+        res.widgets || [],
+        res.dataset_id || datasetId,
+        res.replace ? 0 : maxY(widgets),
+      );
       if (res.apply && mapped.length > 0) {
         onApply({
           widgets: mapped,
@@ -155,10 +218,19 @@ export function DobraAIChat({
           text: res.reply || "Pronto.",
           plan: res.plan,
           applied: res.apply ? mapped.length : 0,
+          warnings: res.warnings,
+          validated: res.validated,
+          confidence: res.confidence,
         },
       ]);
     } catch (e: any) {
-      setMsgs((m) => [...m, { role: "assistant", text: e.message || "Não consegui montar o dashboard." }]);
+      setMsgs((m) => [
+        ...m,
+        {
+          role: "assistant",
+          text: e.message || "Não consegui montar o dashboard.",
+        },
+      ]);
     } finally {
       setBusy(false);
     }
@@ -172,15 +244,26 @@ export function DobraAIChat({
         <Sparkles size={16} className="text-primary" />
         <div className="min-w-0 flex-1">
           <div className="text-[13px] font-semibold text-ink">DobraAI</div>
-          <div className="truncate text-[11px] text-mute">Planeia e monta o dashboard</div>
+          <div className="truncate text-[11px] text-mute">
+            Planeia e monta o dashboard
+          </div>
         </div>
-        <button type="button" className="rounded-lg p-1 text-mute hover:bg-bg hover:text-ink" onClick={onClose} aria-label="Fechar DobraAI">
+        <button
+          type="button"
+          className="rounded-lg p-1 text-mute hover:bg-bg hover:text-ink"
+          onClick={onClose}
+          aria-label="Fechar DobraAI"
+        >
           <X size={16} />
         </button>
       </div>
       {datasets.length > 0 && (
         <div className="border-b border-line px-3 py-2">
-          <Select value={datasetId} onChange={(e) => onDatasetId(e.target.value)} className="h-8 text-[12px]">
+          <Select
+            value={datasetId}
+            onChange={(e) => onDatasetId(e.target.value)}
+            className="h-8 text-[12px]"
+          >
             <option value="">Conjunto automático</option>
             {datasets.map((d) => (
               <option key={d.id} value={d.id}>
@@ -192,22 +275,71 @@ export function DobraAIChat({
       )}
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto px-3 py-3">
         {msgs.map((m, i) => (
-          <div key={i} className={cn("max-w-[95%] rounded-2xl px-3 py-2 text-[13px] leading-relaxed", m.role === "user" ? "ml-auto bg-primary text-white" : "bg-bg text-ink")}>
+          <div
+            key={i}
+            className={cn(
+              "max-w-[95%] rounded-2xl px-3 py-2 text-[13px] leading-relaxed",
+              m.role === "user"
+                ? "ml-auto bg-primary text-white"
+                : "bg-bg text-ink",
+            )}
+          >
             <p className="whitespace-pre-wrap">{m.text}</p>
             {m.plan && m.plan.length > 0 && (
               <ul className="mt-2 space-y-1.5 border-t border-white/20 pt-2 text-[12px]">
                 {m.plan.map((p, j) => (
-                  <li key={j} className={cn(m.role === "user" ? "text-white/90" : "text-mute")}>
-                    <span className={cn("font-medium", m.role === "assistant" && "text-ink")}>{p.title}</span>
+                  <li
+                    key={j}
+                    className={cn(
+                      m.role === "user" ? "text-white/90" : "text-mute",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "font-medium",
+                        m.role === "assistant" && "text-ink",
+                      )}
+                    >
+                      {p.title}
+                    </span>
                     <span> · {p.chart}</span>
-                    {p.why ? <div className="text-[11px] opacity-80">{p.why}</div> : null}
+                    {p.why ? (
+                      <div className="text-[11px] opacity-80">{p.why}</div>
+                    ) : null}
                   </li>
                 ))}
               </ul>
             )}
             {!!m.applied && (
-              <p className={cn("mt-2 text-[11px] font-medium", m.role === "assistant" ? "text-primary" : "text-white/90")}>
-                {m.applied} visual{m.applied === 1 ? "" : "is"} aplicado{m.applied === 1 ? "" : "s"} no canvas
+              <p
+                className={cn(
+                  "mt-2 text-[11px] font-medium",
+                  m.role === "assistant" ? "text-primary" : "text-white/90",
+                )}
+              >
+                {m.applied} visual{m.applied === 1 ? "" : "is"} aplicado
+                {m.applied === 1 ? "" : "s"} no canvas
+              </p>
+            )}
+            {m.warnings && m.warnings.length > 0 && (
+              <div className="mt-2 space-y-1 border-t border-amber-500/20 pt-2 text-[11px] text-amber-700">
+                {m.warnings.map((warning, j) => (
+                  <p key={j} className="flex items-start gap-1.5">
+                    <AlertTriangle size={12} className="mt-0.5 shrink-0" />
+                    <span>{warning}</span>
+                  </p>
+                ))}
+              </div>
+            )}
+            {m.role === "assistant" && m.validated && (
+              <p className="mt-2 flex items-center gap-1 text-[10px] text-mute">
+                <CheckCircle2 size={11} className="text-emerald-600" />
+                Campos validados no modelo · confiança{" "}
+                {m.confidence === "high"
+                  ? "alta"
+                  : m.confidence === "low"
+                    ? "baixa"
+                    : "média"}
               </p>
             )}
           </div>
@@ -255,8 +387,17 @@ export function DobraAIChat({
           placeholder="Ex.: monta um painel de vendas com filtros"
           className="min-h-16 flex-1 resize-none rounded-xl border border-line bg-bg px-3 py-2 text-[13px] text-ink outline-none focus:border-primary"
         />
-        <Button type="submit" size="icon" disabled={busy || !q.trim()} title="Enviar">
-          {busy ? <Loader2 size={16} className="animate-spin" /> : <ArrowUp size={16} />}
+        <Button
+          type="submit"
+          size="icon"
+          disabled={busy || !q.trim()}
+          title="Enviar"
+        >
+          {busy ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <ArrowUp size={16} />
+          )}
         </Button>
       </form>
     </aside>
@@ -264,5 +405,8 @@ export function DobraAIChat({
 }
 
 function maxY(widgets: Widget[]) {
-  return widgets.reduce((m, w) => Math.max(m, (w.layout?.y ?? 0) + (w.layout?.h ?? 0)), 0);
+  return widgets.reduce(
+    (m, w) => Math.max(m, (w.layout?.y ?? 0) + (w.layout?.h ?? 0)),
+    0,
+  );
 }

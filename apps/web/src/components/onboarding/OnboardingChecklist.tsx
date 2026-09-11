@@ -6,7 +6,7 @@ import { Button, Card, CardTitle } from "@/components/ui";
 import { CheckCircle2, Circle, PartyPopper } from "lucide-react";
 
 export function OnboardingChecklist() {
-  const { step, completed, taskCompleted, next, complete } = useOnboarding();
+  const { step, completed, taskCompleted, complete } = useOnboarding();
 
   if (completed || step === "done") {
     return (
@@ -56,9 +56,6 @@ export function OnboardingChecklist() {
               </div>
               <Link
                 href={t.href}
-                onClick={() => {
-                  if (active) next(step);
-                }}
               >
                 <Button size="sm" variant={active ? "primary" : "secondary"}>
                   {done ? "Feito" : active ? "Começar" : "Ver"}

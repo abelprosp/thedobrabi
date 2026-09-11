@@ -53,6 +53,9 @@ type DobraReply struct {
 	Source         string            `json:"source"`
 	DatasetID      string            `json:"dataset_id"`
 	DatasetName    string            `json:"dataset_name"`
+	Validated      bool              `json:"validated"`
+	Confidence     string            `json:"confidence"`
+	Warnings       []string          `json:"warnings,omitempty"`
 }
 
 func (a *Agent) DobraCompose(ctx context.Context, orgID, wsID, userID uuid.UUID, req DobraRequest) (DobraReply, error) {
@@ -99,22 +102,71 @@ func (a *Agent) DobraCompose(ctx context.Context, orgID, wsID, userID uuid.UUID,
 	out.DatasetName = dsName
 	fixed := make([]map[string]any, 0, len(out.Widgets))
 	for _, w := range out.Widgets {
-		if f := a.validateAndFixWidget(w, dsID, model); f != nil {
+		if f, warnings := a.validateAndFixWidgetDetailed(w, dsID, model); f != nil {
 			fixed = append(fixed, f)
+			out.Warnings = append(out.Warnings, warnings...)
+		} else {
+			out.Warnings = append(out.Warnings, warnings...)
 		}
 	}
 	out.Widgets = fixed
+	var filterWarnings []string
+	out.Filters, filterWarnings = validateDobraFilters(out.Filters, model)
+	out.Warnings = append(out.Warnings, filterWarnings...)
+	var timeWarnings []string
+	out.TimeRange, timeWarnings = validateDobraTimeRange(out.TimeRange, model)
+	out.Warnings = append(out.Warnings, timeWarnings...)
 	if out.Apply && len(out.Widgets) == 0 && !proposeOnly(msg) {
 		fb := a.dobraFallback(req, dsID, dsName, model)
 		out.Widgets = fb.Widgets
 		out.Plan = fb.Plan
 		out.Replace = fb.Replace
+		out.Warnings = append(out.Warnings, "O plano original não passou na validação; foi aplicado um plano seguro com os campos disponíveis.")
 		if out.Reply == "" {
 			out.Reply = fb.Reply
 		}
 	}
+	out.Validated = true
+	if out.Source == "openai" && len(out.Warnings) == 0 {
+		out.Confidence = "high"
+	} else {
+		out.Confidence = "medium"
+	}
 	a.storeAssistant(ctx, convID, out)
 	return out, nil
+}
+
+func validateDobraFilters(filters []DobraFilter, model semantic.Model) ([]DobraFilter, []string) {
+	valid := make([]DobraFilter, 0, len(filters))
+	warnings := []string{}
+	for _, filter := range filters {
+		dimension, ok := semantic.ResolveDimension(model, filter.Dimension)
+		if !ok {
+			warnings = append(warnings, fmt.Sprintf("O filtro %q foi ignorado porque a dimensão não existe no modelo.", filter.Dimension))
+			continue
+		}
+		filter.Dimension = dimension.Column
+		if filter.Op != "in" {
+			filter.Op = "eq"
+		}
+		valid = append(valid, filter)
+	}
+	return valid, warnings
+}
+
+func validateDobraTimeRange(value map[string]string, model semantic.Model) (map[string]string, []string) {
+	if len(value) == 0 {
+		return nil, nil
+	}
+	if strings.TrimSpace(model.TimeColumn) == "" {
+		return nil, []string{"O período foi ignorado porque o conjunto não possui uma dimensão de tempo."}
+	}
+	start, startErr := time.Parse("2006-01-02", value["start"])
+	end, endErr := time.Parse("2006-01-02", value["end"])
+	if startErr != nil || endErr != nil || !end.After(start) {
+		return nil, []string{"O período sugerido foi ignorado porque as datas eram inválidas."}
+	}
+	return map[string]string{"start": start.Format("2006-01-02"), "end": end.Format("2006-01-02")}, nil
 }
 
 func proposeOnly(msg string) bool {
@@ -201,11 +253,7 @@ func (a *Agent) dobraWithLLM(ctx context.Context, req DobraRequest, dsID, dsName
 		"required": []string{"reply", "apply", "plan"},
 	}
 
-	modelJSON, _ := json.Marshal(map[string]any{
-		"measures":    measureNames(model),
-		"dimensions":  dimensionNames(model),
-		"time_column": model.TimeColumn,
-	})
+	modelJSON, _ := json.Marshal(summarizeModelForMeasure(model))
 	current, _ := json.Marshal(summarizeWidgets(req.Widgets))
 	hist := ""
 	for _, t := range req.History {
@@ -218,9 +266,13 @@ func (a *Agent) dobraWithLLM(ctx context.Context, req DobraRequest, dsID, dsName
 Ajuda a montar o dashboard: propõe o plano (KPIs, gráficos, filtros, análises) e DEVOLVE os widgets prontos a aplicar no canvas.
 Regras:
 - Usa APENAS medidas e dimensões do modelo semântico. Nunca inventes colunas.
+- Copia os nomes exatamente como aparecem no modelo. Se o pedido depender de um campo ausente, explica a limitação e não cries esse visual.
 - Por omissão apply=true e monta o dashboard. Só apply=false se o utilizador pedir explicitamente um plano sem aplicar.
 - replace=true quando o canvas está vazio, quando pedem para refazer/substituir, ou quando o plano é um dashboard completo. replace=false para "adiciona X".
 - Escolhe o gráfico certo: kpi para totais, line para tempo, ranking/bar para categorias, pie só com poucas fatias, slicer para filtros, data_intelligence para análise automática, table para detalhe.
+- Para pedidos de alteração, preserva os visuais atuais que não foram mencionados e devolve apenas os novos visuais com replace=false.
+- Não cries KPI sem medida; não cries line/area sem dimensão temporal; não cries ranking, pie, slicer ou barras sem dimensão categórica.
+- Usa no máximo 8 visuais num dashboard completo, sem repetir a mesma combinação de medida e dimensão.
 - Grelha 12 colunas. Sem sobreposições. KPIs na primeira fila.
 - Inclui dataset_id em cada query.
 - Responde em português do Brasil. No reply, explica o plano em 3–6 frases e diz o que foi montado.`
@@ -251,6 +303,9 @@ func (a *Agent) dobraFallback(req DobraRequest, dsID, dsName string, model seman
 	}
 
 	meas := semantic.PrimaryMeasure(model)
+	if requested := pickMeasure(model, q); requested != "" {
+		meas = requested
+	}
 	if meas == "" && len(model.Measures) > 0 {
 		meas = model.Measures[0].Name
 	}
@@ -269,6 +324,18 @@ func (a *Agent) dobraFallback(req DobraRequest, dsID, dsName string, model seman
 	}
 	timeDim := pickModelTime(model)
 	cats := pickModelCategories(model, timeDim, 3)
+	if requested := pickDimension(model, q); requested != "" && !strings.EqualFold(requested, timeDim) {
+		reordered := []string{requested}
+		for _, category := range cats {
+			if !strings.EqualFold(category, requested) {
+				reordered = append(reordered, category)
+			}
+		}
+		cats = reordered
+		if len(cats) > 3 {
+			cats = cats[:3]
+		}
+	}
 
 	want := detectWantedCharts(q)
 	widgets := []map[string]any{}

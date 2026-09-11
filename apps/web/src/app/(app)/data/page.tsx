@@ -86,7 +86,7 @@ export default function DataPage() {
 
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {datasetList.length === 0 && (
+      {datasetList.length === 0 && !q.isLoading && !q.isError && (
         <div className="space-y-4">
           <EmptyState
             icon={Database}

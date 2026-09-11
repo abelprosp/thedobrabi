@@ -86,3 +86,41 @@ func TestValidateSlicerAndIntelligence(t *testing.T) {
 		t.Fatal("intelligence should not require query")
 	}
 }
+
+func TestValidateWidgetRejectsInventedSemanticFields(t *testing.T) {
+	a := &Agent{}
+	fixed, warnings := a.validateAndFixWidgetDetailed(map[string]any{
+		"type":  "bar",
+		"title": "Campo inventado",
+		"query": map[string]any{
+			"measures":   []any{"Receita imaginária"},
+			"dimensions": []any{"Planeta"},
+		},
+	}, "ds-1", sampleModel())
+	if fixed != nil {
+		t.Fatalf("invented fields should reject widget: %#v", fixed)
+	}
+	if len(warnings) == 0 {
+		t.Fatal("expected a validation warning")
+	}
+}
+
+func TestValidateDobraFiltersCanonicalizesDimension(t *testing.T) {
+	filters, warnings := validateDobraFilters([]DobraFilter{
+		{Dimension: "Mês", Op: "eq", Value: "2026-09"},
+		{Dimension: "Inexistente", Op: "eq", Value: "x"},
+	}, sampleModel())
+	if len(filters) != 1 || filters[0].Dimension != "mes" {
+		t.Fatalf("filters: %#v", filters)
+	}
+	if len(warnings) != 1 {
+		t.Fatalf("warnings: %#v", warnings)
+	}
+}
+
+func TestContextualAskMessageKeepsFollowUpContext(t *testing.T) {
+	got := contextualAskMessage("E por empresa?", []AskTurn{{Role: "user", Text: "Mostre a receita deste mês"}})
+	if !strings.Contains(got, "Mostre a receita") || !strings.Contains(got, "E por empresa?") {
+		t.Fatalf("context: %q", got)
+	}
+}

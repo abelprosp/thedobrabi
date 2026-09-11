@@ -15,7 +15,7 @@ export default function MetricsPage() {
       <PageHeader title="Métricas" description="A camada semântica é a fonte da verdade. A TheDobra nunca inventa uma fórmula." />
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {models.length === 0 && (
+      {models.length === 0 && !q.isLoading && !q.isError && (
         <div className="space-y-4">
           <EmptyState
             icon={BarChart3}

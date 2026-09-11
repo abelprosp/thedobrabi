@@ -60,3 +60,26 @@ func TestSanitizeMeasureExpression(t *testing.T) {
 		t.Fatalf("got %q", got)
 	}
 }
+
+func TestValidateExpressionAgainstModelRejectsInventedColumn(t *testing.T) {
+	if _, err := validateExpressionAgainstModel("SUM(receita_inventada)", testModel(), true); err == nil {
+		t.Fatal("expected invented column to be rejected")
+	}
+}
+
+func TestValidateExpressionAgainstModelAcceptsColumnsAndMeasures(t *testing.T) {
+	refs, err := validateExpressionAgainstModel("DIVIDE(SUM(valor_mensal), [Clientes])", testModel(), true)
+	if err != nil {
+		t.Fatalf("validate: %v", err)
+	}
+	if len(refs) != 2 || refs[0] != "Clientes" || refs[1] != "valor_mensal" {
+		t.Fatalf("unexpected references: %#v", refs)
+	}
+}
+
+func TestMatchMeasureInPromptIgnoresAccentsAndSeparators(t *testing.T) {
+	model := semantic.Model{Measures: []semantic.Measure{{Name: "Receita Líquida", Column: "receita_liquida"}}}
+	if got := matchMeasureInPrompt(model, "mostre a receita liquida"); got == nil || got.Name != "Receita Líquida" {
+		t.Fatalf("unexpected match: %#v", got)
+	}
+}

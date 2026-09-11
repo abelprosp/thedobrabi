@@ -342,6 +342,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex min-h-screen bg-transparent">
+      <a
+        href="#main-content"
+        className="fixed left-3 top-3 z-[100] -translate-y-20 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-white shadow-lg transition focus:translate-y-0"
+      >
+        Ir para o conteúdo
+      </a>
       <aside
         className={`hidden min-h-0 flex-col overflow-hidden border-r border-line/80 bg-surface/95 print:hidden transition-[width] duration-200 ease-in-out lg:flex ${
           collapsed ? "w-[72px]" : "w-64"
@@ -418,14 +424,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="hidden sm:inline">Procurar</span>
               <kbd className="ml-2 hidden text-[10px] text-slate-400 sm:inline">⌘K</kbd>
             </button>
-            <ThemeToggle />
+            <div className="hidden sm:block">
+              <ThemeToggle />
+            </div>
             <Link href="/ask" className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20 transition hover:-translate-y-px hover:bg-primary-600 sm:h-9 sm:w-auto sm:px-3 sm:text-[12px] sm:font-medium">
               <MessageSquare size={16} className="sm:hidden" />
               <span className="hidden sm:inline">Perguntar</span>
             </Link>
             <Link
               href="/alerts"
-              className="flex h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2"
+              className="hidden h-9 w-9 items-center justify-center rounded-lg text-mute hover:bg-surface-2 sm:flex"
               aria-label="Alertas"
             >
               <Bell size={16} />
@@ -462,7 +470,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
         </header>
-        <main className="min-w-0 flex-1 px-3 py-5 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:p-7 lg:pb-7">{children}</main>
+        <main id="main-content" className="min-w-0 flex-1 px-3 py-5 pb-[calc(5.5rem+env(safe-area-inset-bottom))] sm:p-7 lg:pb-7">{children}</main>
         <nav
           aria-label="Navegação rápida"
           className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-line/80 bg-surface/95 px-2 pb-[env(safe-area-inset-bottom)] shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur-xl lg:hidden"
