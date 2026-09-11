@@ -63,6 +63,10 @@ function skipRefresh(path: string) {
   return /\/auth\/(refresh|login|logout|oauth|mfa)/.test(path);
 }
 
+function skipWorkspaceHeader(path: string) {
+  return /\/auth\/me(?:$|\?)|\/workspaces(?:$|\?)|\/organizations\/current(?:$|\?)/.test(path);
+}
+
 let refreshInFlight: Promise<boolean> | null = null;
 
 async function refreshAccess(): Promise<boolean> {
@@ -100,13 +104,13 @@ function redirectToLogin() {
 }
 
 export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const run = async () => {
+  const run = async (withWorkspace = true) => {
     const headers = new Headers(init.headers);
     const token = getAccess();
     if (token) headers.set("Authorization", `Bearer ${token}`);
     if (typeof window !== "undefined") {
       const ws = localStorage.getItem("thedobra.workspace");
-      if (ws) headers.set("X-Workspace-Id", ws);
+      if (withWorkspace && ws && !skipWorkspaceHeader(path)) headers.set("X-Workspace-Id", ws);
     }
     if (!headers.has("Content-Type") && init.body && !(init.body instanceof FormData)) {
       headers.set("Content-Type", "application/json");
@@ -117,6 +121,25 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
   };
 
   let { res, json } = await run();
+  const storedWorkspace = typeof window !== "undefined" ? localStorage.getItem("thedobra.workspace") : null;
+  if (res.status === 401 && storedWorkspace && !skipWorkspaceHeader(path) && !skipRefresh(path)) {
+    // A workspace left over from a previous session must not invalidate a
+    // valid token. Ask for the token's canonical workspace before refreshing.
+    try {
+      const token = getAccess();
+      const sessionRes = await fetch("/api/v1/auth/me", {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      const sessionJSON = await sessionRes.json().catch(() => ({}));
+      const session = unwrap(sessionJSON) as { workspace_id?: string } | undefined;
+      if (sessionRes.ok && session?.workspace_id && session.workspace_id !== storedWorkspace) {
+        localStorage.setItem("thedobra.workspace", session.workspace_id);
+        ({ res, json } = await run());
+      }
+    } catch {
+      // The normal refresh/error path below remains authoritative.
+    }
+  }
   if (res.status === 401 && !skipRefresh(path)) {
     const ok = await refreshAccess();
     if (ok) {
