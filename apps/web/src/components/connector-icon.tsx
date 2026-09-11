@@ -1,7 +1,7 @@
 export function ConnectorIcon({
   src,
   className = "h-8 w-8 object-contain",
-  boxClassName = "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white ring-1 ring-line",
+  boxClassName = "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-surface ring-1 ring-line",
 }: {
   src?: string;
   className?: string;

@@ -7,7 +7,7 @@ import { Logo } from "@/components/brand";
 
 export function AuthSplit({ children }: { children: ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-white">
+    <div className="flex min-h-screen bg-bg">
       <div className="flex w-full flex-col lg:w-1/2">{children}</div>
       <MarketingPanel />
     </div>
@@ -36,7 +36,7 @@ export function AuthFormShell({
             <Link
               href="/login"
               className={`rounded-full px-5 py-1.5 text-[13px] font-medium transition ${
-                mode === "login" ? "bg-white text-ink shadow-sm" : "text-mute hover:text-ink"
+                mode === "login" ? "bg-surface text-ink shadow-sm" : "text-mute hover:text-ink"
               }`}
             >
               Entrar
@@ -44,7 +44,7 @@ export function AuthFormShell({
             <Link
               href="/signup"
               className={`rounded-full px-5 py-1.5 text-[13px] font-medium transition ${
-                mode === "signup" ? "bg-white text-ink shadow-sm" : "text-mute hover:text-ink"
+                mode === "signup" ? "bg-surface text-ink shadow-sm" : "text-mute hover:text-ink"
               }`}
             >
               Criar conta
@@ -122,7 +122,7 @@ export function Field({
           minLength={minLength}
           autoComplete={autoComplete}
           aria-invalid={error ? true : undefined}
-          className={`min-h-11 w-full rounded-xl border bg-white py-2.5 text-sm text-ink outline-none placeholder:text-slate-400 focus:ring-2 focus:ring-accent/15 ${
+          className={`min-h-11 w-full rounded-xl border bg-surface py-2.5 text-sm text-ink outline-none placeholder:text-mute focus:ring-2 focus:ring-accent/15 ${
             error ? "border-danger focus:border-danger" : "border-line focus:border-accent/50"
           } ${Icon ? "pl-10" : "px-3.5"} ${isPassword ? "pr-11" : "pr-3.5"}`}
         />

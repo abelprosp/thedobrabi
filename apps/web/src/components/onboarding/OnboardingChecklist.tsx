@@ -51,7 +51,7 @@ export function OnboardingChecklist() {
               }`}
             >
               <div className="flex items-center gap-2.5">
-                {done ? <CheckCircle2 size={16} className="text-ok" /> : <Circle size={16} className={active ? "text-primary" : "text-slate-300"} />}
+                {done ? <CheckCircle2 size={16} className="text-ok" /> : <Circle size={16} className={active ? "text-primary" : "text-mute/40"} />}
                 <span className={`text-sm ${done ? "text-ok line-through" : active ? "font-medium text-ink" : "text-mute"}`}>{t.label}</span>
               </div>
               <Link

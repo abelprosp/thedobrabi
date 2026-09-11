@@ -583,7 +583,7 @@ function ChartCard({
 
 function IssueHint({ issue }: { issue: { message: string } }) {
   return (
-    <div className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex items-start gap-1.5 rounded-xl border border-amber-200 bg-amber-50/95 px-2.5 py-2 text-[11px] leading-snug text-amber-950 shadow-sm">
+    <div className="pointer-events-none absolute inset-x-2 bottom-2 z-10 flex items-start gap-1.5 rounded-xl border border-amber-200 bg-amber-50/95 px-2.5 py-2 text-[11px] leading-snug text-amber-950 shadow-sm dark:border-amber-500/25 dark:bg-amber-950/80 dark:text-amber-100">
       <AlertCircle size={14} className="mt-0.5 shrink-0 text-amber-700" />
       <span>{issue.message}</span>
     </div>

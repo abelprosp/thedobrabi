@@ -40,7 +40,7 @@ export function Button({
       type={type}
       disabled={disabled || busy}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-150 disabled:cursor-not-allowed",
+        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition-all duration-150 active:scale-[0.98] disabled:cursor-not-allowed",
         focusRing,
         variants[variant],
         sizes[size],
@@ -55,7 +55,7 @@ export function Button({
 }
 
 export function Card({ className, children, ...props }: HTMLAttributes<HTMLDivElement> & { children: ReactNode }) {
-  return <div className={cn("rounded-[1.125rem] border border-line/90 bg-surface p-4 shadow-[var(--shadow-card)] sm:p-5", className)} {...props}>{children}</div>;
+  return <div className={cn("rounded-[1.125rem] border border-line/90 bg-surface p-4 shadow-[var(--shadow-card)] transition-colors duration-200 sm:p-5", className)} {...props}>{children}</div>;
 }
 
 export function CardTitle({ children }: { children: ReactNode }) {
@@ -63,7 +63,7 @@ export function CardTitle({ children }: { children: ReactNode }) {
 }
 
 const fieldCls =
-  "w-full min-h-11 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink shadow-sm placeholder:text-mute/80 outline-none transition focus:border-primary/50 focus:ring-3 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-bg disabled:text-mute sm:min-h-10";
+  "w-full min-h-11 rounded-xl border border-line bg-surface px-3.5 py-2 text-sm text-ink shadow-sm placeholder:text-mute/80 outline-none transition-[border-color,box-shadow,background-color] focus:border-primary/50 focus:ring-4 focus:ring-primary/10 disabled:cursor-not-allowed disabled:bg-bg disabled:text-mute sm:min-h-10";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
   return <input className={cn(fieldCls, className)} {...props} />;
@@ -96,8 +96,9 @@ export function FieldLabel({
 }) {
   return (
     <label className="block text-[13px] font-medium text-ink">
-      {label}
+      <span className="flex items-center gap-1">{label}
       {required && <span className="ml-0.5 text-accent">*</span>}
+      </span>
       <span className="mt-1.5 block">{children}</span>
       {error ? <span className="mt-1 block text-[12px] font-normal text-danger">{error}</span> : hint ? <span className="mt-1 block text-[12px] font-normal text-mute">{hint}</span> : null}
     </label>
@@ -132,7 +133,7 @@ export function PageHeader({
             <span className="truncate text-ink">{title}</span>
           </nav>
         )}
-        <h1 className="text-2xl font-semibold tracking-[-0.025em] text-ink sm:text-[1.75rem]">{title}</h1>
+        <h1 className="text-2xl font-semibold tracking-[-0.03em] text-ink sm:text-[1.75rem]">{title}</h1>
         {description && <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-mute">{description}</p>}
       </div>
       {actions && <div className="page-actions flex flex-wrap items-center gap-2 sm:justify-end">{actions}</div>}
@@ -152,7 +153,7 @@ export function EmptyState({
   icon?: LucideIcon;
 }) {
   return (
-    <Card className="flex flex-col items-center border-dashed py-14 text-center shadow-none">
+    <Card className="flex flex-col items-center border-dashed bg-transparent py-14 text-center shadow-none">
       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-8 ring-primary/[0.035]">
         <Icon size={21} />
       </div>
@@ -241,11 +242,11 @@ export function Badge({
   tone?: "neutral" | "accent" | "warn" | "danger" | "ok";
 }) {
   const tones = {
-    neutral: "bg-surface-2 text-mute",
-    accent: "bg-primary/10 text-primary-600",
-    warn: "bg-amber-50 text-warn dark:bg-amber-400/10",
-    danger: "bg-rose-50 text-danger dark:bg-rose-400/10",
-    ok: "bg-emerald-50 text-ok dark:bg-emerald-400/10",
+    neutral: "border border-line bg-surface-2 text-mute",
+    accent: "border border-primary/10 bg-primary/10 text-primary-600",
+    warn: "border border-amber-200/70 bg-amber-50 text-warn dark:border-amber-400/20 dark:bg-amber-400/10",
+    danger: "border border-rose-200/70 bg-rose-50 text-danger dark:border-rose-400/20 dark:bg-rose-400/10",
+    ok: "border border-emerald-200/70 bg-emerald-50 text-ok dark:border-emerald-400/20 dark:bg-emerald-400/10",
   };
   return <span className={cn("inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium leading-none", tones[tone])}>{children}</span>;
 }
@@ -263,7 +264,7 @@ export function Th({ children, numeric }: { children: ReactNode; numeric?: boole
 }
 
 export function Td({ children, numeric }: { children: ReactNode; numeric?: boolean }) {
-  return <td className={cn("px-4 py-3.5", numeric && "text-right tabular-nums")}>{children}</td>;
+  return <td className={cn("px-4 py-3.5 text-ink", numeric && "text-right tabular-nums")}>{children}</td>;
 }
 
 export function cellValue(v: unknown) {

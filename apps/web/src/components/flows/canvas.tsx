@@ -288,7 +288,7 @@ export function FlowCanvasEditor({ flow, initialSteps }: { flow: Flow; initialSt
           ))}
           {nodes.length === 0 && (
             <div className="absolute inset-0 flex items-center justify-center p-6">
-              <div className="max-w-md rounded-2xl border border-line bg-white p-6 text-center shadow-sm">
+              <div className="max-w-md rounded-2xl border border-line bg-surface p-6 text-center shadow-sm">
                 <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                   <Workflow size={20} />
                 </div>
@@ -603,7 +603,7 @@ function RunList({ flowId, outputDatasetId }: { flowId: string; outputDatasetId?
       )}
       {runList.length === 0 && <p className="text-[12px] text-mute">Ainda sem execuções. Clique em Executar e materializar.</p>}
       {runList.map((r: any) => (
-        <div key={r.id} className="rounded-xl border border-line bg-white px-3 py-2 text-sm">
+        <div key={r.id} className="rounded-xl border border-line bg-surface px-3 py-2 text-sm">
           <button type="button" className="flex w-full items-center justify-between" onClick={() => setRunId(runId === r.id ? null : r.id)}>
             <span>
               {r.id.slice(0, 8)} · {r.status} · {r.rows_processed ?? "—"} linhas

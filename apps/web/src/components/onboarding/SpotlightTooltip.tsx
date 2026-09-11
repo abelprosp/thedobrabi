@@ -61,7 +61,7 @@ export function SpotlightTooltip({
       <div className="absolute inset-0 bg-ink/20" onClick={onClose} />
       <div
         ref={tooltipRef}
-        className="absolute w-80 rounded-2xl border border-line bg-white p-4 shadow-xl"
+        className="absolute w-80 rounded-2xl border border-line bg-surface p-4 shadow-xl"
         style={{ left: Math.max(12, Math.min(window.innerWidth - 320, pos.left - 160)), top: Math.max(12, pos.top) }}
       >
         <div className="flex items-start justify-between">

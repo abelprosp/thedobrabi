@@ -123,7 +123,7 @@ export function NewFlowWizard({ open, onClose }: { open: boolean; onClose: () =>
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4">
-      <div className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl border border-line bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:rounded-2xl">
+      <div className="max-h-[92dvh] w-full max-w-2xl overflow-y-auto rounded-t-2xl border border-line bg-surface p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:rounded-2xl">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h3 className="text-lg font-semibold text-ink">Novo flow</h3>
@@ -148,7 +148,7 @@ export function NewFlowWizard({ open, onClose }: { open: boolean; onClose: () =>
                 }}
                 className={cn(
                   "rounded-2xl border p-3 text-left transition",
-                  selected ? "border-primary bg-primary/5 ring-1 ring-primary/30" : "border-line bg-white hover:border-primary/40",
+                  selected ? "border-primary bg-primary/5 ring-1 ring-primary/30" : "border-line bg-surface hover:border-primary/40",
                 )}
               >
                 <div className="flex items-center gap-2">
