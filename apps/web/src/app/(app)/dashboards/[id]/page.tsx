@@ -232,7 +232,7 @@ function DashboardEditorInner() {
   const [dashTheme, setDashTheme] = useState<Appearance>("light");
 
   const me = useQuery({ queryKey: ["me"], queryFn: () => api<{ role?: string }>("/api/v1/auth/me") });
-  const canDelete = !me.data || me.data.role !== "viewer";
+  const canDelete = !me.data || me.data.role === "owner" || me.data.role === "admin";
   const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
   const datasetList = normalizeArray<DatasetListItem>(datasets.data);
   const sourceOptions = useMemo(() => {

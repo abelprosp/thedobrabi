@@ -97,7 +97,10 @@ func (s *Server) listSources(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createSource(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	var body struct {
 		Name   string          `json:"name"`
 		Type   string          `json:"type"`
@@ -152,7 +155,10 @@ func (s *Server) createSource(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) discoverSource(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -167,7 +173,10 @@ func (s *Server) discoverSource(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) syncSource(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -243,7 +252,10 @@ func (s *Server) listDatasets(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) uploadDataset(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "dataset"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -281,7 +293,10 @@ func (s *Server) uploadDataset(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) demoDataset(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "dataset"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -301,8 +316,7 @@ func (s *Server) demoDataset(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) deleteDataset(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para excluir conjuntos")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
@@ -425,7 +439,10 @@ func (s *Server) getSemantic(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) putSemantic(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
 	var model semantic.Model
 	if err := httpx.Decode(r, &model); err != nil {
@@ -594,8 +611,7 @@ func (s *Server) putDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) deleteDashboard(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para excluir dashboards")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))

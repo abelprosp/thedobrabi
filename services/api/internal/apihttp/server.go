@@ -554,7 +554,7 @@ func (s *Server) orgCurrent(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) patchOrgCurrent(w http.ResponseWriter, r *http.Request) {
 	_, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "apenas administradores podem alterar a marca")
 		return
 	}
@@ -633,7 +633,7 @@ func (s *Server) workspaces(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) createWorkspace(w http.ResponseWriter, r *http.Request) {
 	uid, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "permissão insuficiente")
 		return
 	}

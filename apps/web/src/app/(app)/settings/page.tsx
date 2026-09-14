@@ -37,6 +37,7 @@ export default function SettingsPage() {
   const workspacesList = normalizeArray(workspaces.data);
   const ssoList = normalizeArray(sso.data);
   const gatewaysList = normalizeArray(gateways.data);
+  const isAdmin = me.data?.role === "owner" || me.data?.role === "admin";
   const [meta, setMeta] = useState("");
   const [samlName, setSamlName] = useState("Okta / Entra ID");
   const [inviteEmail, setInviteEmail] = useState("");
@@ -149,10 +150,12 @@ export default function SettingsPage() {
                 placeholder="E-mail do colega"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
+                disabled={!isAdmin}
               />
               <button
                 onClick={() => invite.mutate()}
-                className="rounded-xl bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700"
+                disabled={!isAdmin}
+                className="rounded-xl bg-indigo-600 px-4 py-2 text-sm text-white hover:bg-indigo-700 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Convidar
               </button>
@@ -169,13 +172,14 @@ export default function SettingsPage() {
             aria-label="E-mail do novo membro"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
+            disabled={!isAdmin}
           />
-          <select className={selectCls} value={inviteRole} onChange={(e) => setInviteRole(e.target.value)} aria-label="Função do convidado">
+          <select className={selectCls} value={inviteRole} onChange={(e) => setInviteRole(e.target.value)} aria-label="Função do convidado" disabled={!isAdmin}>
             <option value="admin">{ROLE_LABELS.admin}</option>
             <option value="analyst">{ROLE_LABELS.analyst}</option>
             <option value="viewer">{ROLE_LABELS.viewer}</option>
           </select>
-          <button onClick={() => invite.mutate()} className="rounded-lg bg-accent px-3 py-2 text-sm text-white hover:bg-accent-2">
+          <button onClick={() => invite.mutate()} disabled={!isAdmin} className="rounded-lg bg-accent px-3 py-2 text-sm text-white hover:bg-accent-2 disabled:cursor-not-allowed disabled:opacity-50">
             Convidar
           </button>
         </div>
@@ -187,6 +191,7 @@ export default function SettingsPage() {
             <select
               className="rounded border border-line bg-surface px-2 py-1 text-[12px]"
               value={m.role}
+              disabled={!isAdmin || m.role === "owner"}
               onChange={async (e) => {
                 try {
                   await api(`/api/v1/members/${m.id}`, { method: "PATCH", body: JSON.stringify({ role: e.target.value }) });

@@ -13,12 +13,7 @@ import (
 )
 
 func canWrite(role string) bool {
-	switch role {
-	case "owner", "admin", "analyst":
-		return true
-	default:
-		return false
-	}
+	return canAnalyze(role)
 }
 
 func requireWrite(w http.ResponseWriter, role string) bool {

@@ -33,7 +33,10 @@ func (s *Server) getSource(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) patchSource(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")
@@ -64,8 +67,7 @@ func (s *Server) patchSource(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) deleteSource(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para excluir fontes")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
@@ -83,7 +85,10 @@ func (s *Server) deleteSource(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) testSource(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")
@@ -114,8 +119,7 @@ func (s *Server) getManualTable(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) putManualSchema(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para alterar a planilha")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
@@ -141,8 +145,7 @@ func (s *Server) putManualSchema(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) postManualRow(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para preencher a planilha")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
@@ -168,8 +171,7 @@ func (s *Server) postManualRow(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) patchManualRow(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para editar linhas")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
@@ -199,8 +201,7 @@ func (s *Server) patchManualRow(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) deleteManualRow(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para excluir linhas")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))

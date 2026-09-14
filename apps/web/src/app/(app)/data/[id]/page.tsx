@@ -452,7 +452,6 @@ function SecurityTab({ datasetId }: { datasetId: string }) {
             <option value="viewer">viewer</option>
             <option value="analyst">analyst</option>
             <option value="admin">admin</option>
-            <option value="owner">owner</option>
           </Select>
           <Input value={column} onChange={(e) => setColumn(e.target.value)} placeholder="Coluna" />
           <Input value={expr} onChange={(e) => setExpr(e.target.value)} placeholder="Expressão" />

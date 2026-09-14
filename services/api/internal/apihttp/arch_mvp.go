@@ -341,7 +341,10 @@ func (s *Server) listDatasetRLS(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createDatasetRLS(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -365,7 +368,10 @@ func (s *Server) createDatasetRLS(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateDatasetRLS(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	rid, err := uuid.Parse(chi.URLParam(r, "rid"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -388,7 +394,10 @@ func (s *Server) updateDatasetRLS(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteDatasetRLS(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	rid, err := uuid.Parse(chi.URLParam(r, "rid"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -442,7 +451,10 @@ func (s *Server) listHierarchies(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createHierarchy(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -476,7 +488,10 @@ func (s *Server) createHierarchy(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteHierarchy(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	hid, err := uuid.Parse(chi.URLParam(r, "hid"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -531,7 +546,10 @@ func (s *Server) listRelationships(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createRelationship(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -574,7 +592,10 @@ func (s *Server) createRelationship(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteRelationship(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	rid, err := uuid.Parse(chi.URLParam(r, "rid"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")

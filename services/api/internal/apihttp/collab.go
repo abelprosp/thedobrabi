@@ -139,7 +139,7 @@ func (s *Server) listMembers(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) inviteMember(w http.ResponseWriter, r *http.Request) {
 	uid, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "apenas admin")
 		return
 	}
@@ -167,7 +167,7 @@ func (s *Server) inviteMember(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) patchMember(w http.ResponseWriter, r *http.Request) {
 	_, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "apenas admin")
 		return
 	}
@@ -188,7 +188,7 @@ func (s *Server) patchMember(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "invalid", "função inválida")
 		return
 	}
-	if role != "owner" && body.Role == "admin" {
+	if !isAdmin(role) && body.Role == "admin" {
 		httpx.Error(w, 403, "forbidden", "apenas owner pode promover admin")
 		return
 	}

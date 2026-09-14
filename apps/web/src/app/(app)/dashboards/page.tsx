@@ -63,7 +63,7 @@ function DashboardsPageInner() {
     queryKey: ["me"],
     queryFn: () => api<{ role?: string }>("/api/v1/auth/me"),
   });
-  const canDelete = !me.data || me.data.role !== "viewer";
+  const canDelete = !me.data || me.data.role === "owner" || me.data.role === "admin";
   const q = useQuery({
     queryKey: ["dashboards"],
     queryFn: () => api<any>("/api/v1/dashboards"),

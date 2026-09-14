@@ -31,7 +31,7 @@ func (s *Server) onboardingComplete(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) onboardingReset(w http.ResponseWriter, r *http.Request) {
 	_, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "apenas admin")
 		return
 	}

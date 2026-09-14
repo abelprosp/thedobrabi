@@ -1,10 +1,12 @@
 /** Rótulos em português para valores técnicos devolvidos pela API. */
 
 export const ROLE_LABELS: Record<string, string> = {
-  owner: "Proprietário",
+  // "owner" remains an internal role for backwards compatibility. Product UI
+  // exposes the three supported profiles: admin, analyst and viewer.
+  owner: "Administrador",
   admin: "Administrador",
   analyst: "Analista",
-  viewer: "Leitor",
+  viewer: "Visualizador",
 };
 
 export const PLAN_LABELS: Record<string, string> = {

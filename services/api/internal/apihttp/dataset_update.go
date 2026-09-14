@@ -13,8 +13,7 @@ import (
 
 func (s *Server) updateDatasetFile(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para alterar conjuntos")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
@@ -47,8 +46,7 @@ func (s *Server) updateDatasetFile(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) updateDatasetRows(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, role := principal(r)
-	if role == "viewer" {
-		httpx.Error(w, 403, "forbidden", "sem permissão para alterar conjuntos")
+	if !requireAdmin(w, role) {
 		return
 	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))

@@ -108,7 +108,7 @@ func (s *Server) listSSO(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) createSSO(w http.ResponseWriter, r *http.Request) {
 	_, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "apenas admin")
 		return
 	}
@@ -135,7 +135,7 @@ func (s *Server) createSSO(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) createSCIMToken(w http.ResponseWriter, r *http.Request) {
 	_, org, _, role := principal(r)
-	if role != "owner" && role != "admin" {
+	if !isAdmin(role) {
 		httpx.Error(w, 403, "forbidden", "apenas admin")
 		return
 	}
