@@ -3,6 +3,7 @@ package config
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -48,6 +49,7 @@ type Config struct {
 	StripePriceEnterprise string
 
 	SMTPHost        string
+	SMTPPort        int
 	SMTPUser        string
 	SMTPPass        string
 	SMTPFrom        string
@@ -100,6 +102,7 @@ func Load() Config {
 		StripePriceBusiness:   os.Getenv("STRIPE_PRICE_BUSINESS"),
 		StripePriceEnterprise: os.Getenv("STRIPE_PRICE_ENTERPRISE"),
 		SMTPHost:              os.Getenv("SMTP_HOST"),
+		SMTPPort:              smtpPort(),
 		SMTPUser:              os.Getenv("SMTP_USER"),
 		SMTPPass:              os.Getenv("SMTP_PASS"),
 		SMTPFrom:              getenv("SMTP_FROM", "TheDobra <noreply@thedobra.dev>"),
@@ -108,6 +111,14 @@ func Load() Config {
 		AlertEmail:            os.Getenv("ALERT_EMAIL"),
 		WhatsAppWebhook:       os.Getenv("WHATSAPP_WEBHOOK_URL"),
 	}
+}
+
+func smtpPort() int {
+	port, err := strconv.Atoi(getenv("SMTP_PORT", "587"))
+	if err != nil || port < 1 || port > 65535 {
+		return 587
+	}
+	return port
 }
 
 // Validate prevents the API from starting with credentials that are safe only

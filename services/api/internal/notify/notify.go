@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
+	"net/mail"
 	"net/smtp"
 	"strings"
 	"time"
@@ -150,12 +151,13 @@ func (s *Service) emailFrom(from, to string, msg Message) error {
 		from = "thedobra@" + s.cfg.SMTPHost
 	}
 	auth := smtp.PlainAuth("", s.cfg.SMTPUser, s.cfg.SMTPPass, s.cfg.SMTPHost)
-	addr := s.cfg.SMTPHost
-	if !strings.Contains(addr, ":") {
-		addr += ":587"
+	addr := fmt.Sprintf("%s:%d", s.cfg.SMTPHost, s.cfg.SMTPPort)
+	envelopeFrom := from
+	if parsed, err := mail.ParseAddress(from); err == nil {
+		envelopeFrom = parsed.Address
 	}
 	raw := buildMail(from, to, msg)
-	return smtp.SendMail(addr, auth, from, []string{to}, raw)
+	return smtp.SendMail(addr, auth, envelopeFrom, []string{to}, raw)
 }
 
 func buildMail(from, to string, msg Message) []byte {

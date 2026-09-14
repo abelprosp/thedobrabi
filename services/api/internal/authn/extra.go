@@ -102,6 +102,39 @@ func (s *Service) RequestPasswordReset(ctx context.Context, email string) (plain
 	return plain, true, err
 }
 
+func (s *Service) CreateEmailVerification(ctx context.Context, userID uuid.UUID) (string, error) {
+	plain, err := cryptoenc.RandomToken(32)
+	if err != nil {
+		return "", err
+	}
+	_, _ = s.pg.Exec(ctx, `DELETE FROM email_verification_tokens WHERE user_id=$1 OR expires_at < now()`, userID)
+	_, err = s.pg.Exec(ctx, `
+		INSERT INTO email_verification_tokens (user_id, token_hash, expires_at)
+		VALUES ($1,$2,$3)
+	`, userID, cryptoenc.HashToken(plain), time.Now().Add(24*time.Hour))
+	return plain, err
+}
+
+func (s *Service) VerifyEmail(ctx context.Context, token string) error {
+	var userID uuid.UUID
+	var expiresAt time.Time
+	var usedAt *time.Time
+	hash := cryptoenc.HashToken(token)
+	err := s.pg.QueryRow(ctx, `
+		SELECT user_id, expires_at, used_at
+		FROM email_verification_tokens
+		WHERE token_hash=$1
+	`, hash).Scan(&userID, &expiresAt, &usedAt)
+	if err != nil || usedAt != nil || time.Now().After(expiresAt) {
+		return fmt.Errorf("ligação de confirmação inválida ou expirada")
+	}
+	if _, err := s.pg.Exec(ctx, `UPDATE users SET email_verified_at=now(), updated_at=now() WHERE id=$1`, userID); err != nil {
+		return err
+	}
+	_, err = s.pg.Exec(ctx, `UPDATE email_verification_tokens SET used_at=now() WHERE token_hash=$1`, hash)
+	return err
+}
+
 func (s *Service) ResetPassword(ctx context.Context, token, password string) error {
 	if len(password) < 8 {
 		return fmt.Errorf("a senha deve ter pelo menos 8 caracteres")

@@ -3,6 +3,7 @@ package apihttp
 import (
 	"encoding/json"
 	"net/http"
+	"net/url"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -110,6 +111,10 @@ func (s *Server) acceptInvite(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		httpx.Error(w, 400, "invite", err.Error())
 		return
+	}
+	if verificationToken, verifyErr := s.auth.CreateEmailVerification(r.Context(), p.UserID); verifyErr == nil {
+		link := s.deps.Cfg.WebOrigin + "/verify-email?token=" + url.QueryEscape(verificationToken)
+		_ = s.notify.SendMail(p.Email, "Confirme o seu e-mail — TheDobra", "Confirme a sua conta TheDobra através deste link:\n\n"+link+"\n\nEsta ligação expira em 24 horas.")
 	}
 	httpx.JSON(w, 200, map[string]any{"tokens": tok, "user": p})
 }

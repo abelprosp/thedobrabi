@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -112,6 +113,7 @@ func New(deps *platform.Deps) http.Handler {
 
 	r.Route("/api/v1", func(r chi.Router) {
 		r.Post("/auth/register", s.register)
+		r.Get("/auth/verify-email", s.verifyEmail)
 		r.Post("/auth/login", s.login)
 		r.Post("/auth/mfa/verify", s.mfaVerify)
 		r.Post("/auth/forgot", s.forgotPassword)
@@ -463,8 +465,25 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "register_failed", err.Error())
 		return
 	}
+	if verificationToken, verifyErr := s.auth.CreateEmailVerification(r.Context(), p.UserID); verifyErr == nil {
+		link := s.deps.Cfg.WebOrigin + "/verify-email?token=" + url.QueryEscape(verificationToken)
+		_ = s.notify.SendMail(p.Email, "Confirme o seu e-mail — TheDobra", "Confirme a sua conta TheDobra através deste link:\n\n"+link+"\n\nEsta ligação expira em 24 horas.")
+	}
 	s.audit(r.WithContext(context.WithValue(context.WithValue(context.WithValue(r.Context(), ctxkey.UserID, p.UserID), ctxkey.OrgID, p.OrgID), ctxkey.WorkspaceID, p.WorkspaceID)), "LOGIN", "user", p.UserID, nil)
 	httpx.JSON(w, 201, map[string]any{"tokens": tok, "user": p})
+}
+
+func (s *Server) verifyEmail(w http.ResponseWriter, r *http.Request) {
+	token := strings.TrimSpace(r.URL.Query().Get("token"))
+	if token == "" {
+		httpx.Error(w, 400, "invalid_token", "token de confirmação em falta")
+		return
+	}
+	if err := s.auth.VerifyEmail(r.Context(), token); err != nil {
+		httpx.Error(w, 400, "verify_failed", err.Error())
+		return
+	}
+	httpx.JSON(w, 200, map[string]any{"ok": true, "message": "e-mail confirmado"})
 }
 
 func (s *Server) login(w http.ResponseWriter, r *http.Request) {
