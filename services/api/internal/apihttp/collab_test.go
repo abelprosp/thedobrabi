@@ -2,8 +2,6 @@ package apihttp
 
 import (
 	"testing"
-
-	"github.com/thedobra/thedobra/services/api/internal/queryeng"
 )
 
 func TestAllowedDatasetIDs(t *testing.T) {
@@ -30,17 +28,22 @@ func TestAllowedDatasetIDs(t *testing.T) {
 }
 
 func TestWidgetQueryAllowed(t *testing.T) {
-	allowed := map[string]struct{}{"ds-1": {}, "ds-2": {}}
-	if !widgetQueryAllowed(queryeng.Request{DatasetID: "ds-1"}, allowed) {
-		t.Fatal("expected ds-1 to be allowed")
+	req, _, err := buildPublicWidgetQuery([]byte(`{
+		"widgets":[{"id":"w1","type":"bar","query":{"dataset_id":"ds-1","measures":["m"],"joins":[{"dataset_id":"ds-2","from_column":"a","to_column":"b"}]}}]
+	}`), publicQueryInput{WidgetID: "w1"})
+	if err != nil {
+		t.Fatal(err)
 	}
-	if widgetQueryAllowed(queryeng.Request{DatasetID: "ds-9"}, allowed) {
-		t.Fatal("expected unknown dataset to be rejected")
+	if req.DatasetID != "ds-1" || len(req.Joins) != 1 || req.Joins[0].DatasetID != "ds-2" {
+		t.Fatalf("unexpected req %#v", req)
 	}
-	if widgetQueryAllowed(queryeng.Request{DatasetID: "ds-1", Joins: []queryeng.DatasetJoin{{DatasetID: "ds-9"}}}, allowed) {
-		t.Fatal("expected unknown join dataset to be rejected")
+	if _, ok := req.AllowedDatasets["ds-2"]; !ok {
+		t.Fatal("join dataset should be in allowlist")
 	}
-	if !widgetQueryAllowed(queryeng.Request{DatasetID: "ds-1", Joins: []queryeng.DatasetJoin{{DatasetID: "ds-2"}}}, allowed) {
-		t.Fatal("expected join on shared dataset to be allowed")
+	_, _, err = buildPublicWidgetQuery([]byte(`{
+		"widgets":[{"id":"w1","type":"bar","query":{"dataset_id":"ds-1","measures":["m"]}}]
+	}`), publicQueryInput{WidgetID: "missing"})
+	if err == nil {
+		t.Fatal("expected missing widget rejected")
 	}
 }

@@ -11,7 +11,6 @@ import (
 	"encoding/pem"
 	"encoding/xml"
 	"fmt"
-	"io"
 	"math/big"
 	"net/url"
 	"strings"
@@ -20,69 +19,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type samlResponse struct {
-	XMLName   xml.Name      `xml:"Response"`
-	Assertion samlAssertion `xml:"Assertion"`
-}
-
-type samlAssertion struct {
-	Subject struct {
-		NameID string `xml:"NameID"`
-	} `xml:"Subject"`
-	AttributeStatement struct {
-		Attributes []struct {
-			Name   string   `xml:"Name,attr"`
-			Values []string `xml:"AttributeValue"`
-		} `xml:"Attribute"`
-	} `xml:"AttributeStatement"`
-}
-
+// ParseSAMLResponse refuses all assertions until real cryptographic validation
+// (IdP certificate, issuer, audience, NotOnOrAfter, and replay protection) exists.
+// Checking for the literal word "Signature" is not authentication and must not be used.
 func ParseSAMLResponse(raw string) (email, name, subject string, err error) {
-	raw = strings.TrimSpace(raw)
-	decoded, err := base64.StdEncoding.DecodeString(raw)
-	if err != nil {
-		decoded, err = base64.URLEncoding.DecodeString(raw)
-		if err != nil {
-			return "", "", "", fmt.Errorf("SAMLResponse inválido")
-		}
-	}
-	if !bytes.Contains(decoded, []byte("<")) {
-		decoded = inflateRaw(decoded)
-	}
-	if !bytes.Contains(decoded, []byte("Signature")) && !bytes.Contains(decoded, []byte("ds:Signature")) {
-		return "", "", "", fmt.Errorf("asserção SAML sem assinatura XML")
-	}
-	var resp samlResponse
-	if err := xml.Unmarshal(decoded, &resp); err != nil {
-		return "", "", "", fmt.Errorf("XML SAML inválido: %w", err)
-	}
-	subject = strings.TrimSpace(resp.Assertion.Subject.NameID)
-	for _, a := range resp.Assertion.AttributeStatement.Attributes {
-		n := strings.ToLower(a.Name)
-		val := ""
-		if len(a.Values) > 0 {
-			val = a.Values[0]
-		}
-		if strings.Contains(n, "email") || n == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" {
-			email = val
-		}
-		if strings.Contains(n, "displayname") || strings.Contains(n, "name") && email == "" {
-			name = val
-		}
-	}
-	if email == "" && strings.Contains(subject, "@") {
-		email = subject
-	}
-	if email == "" {
-		return "", "", "", fmt.Errorf("asserção SAML sem e-mail")
-	}
-	if name == "" {
-		name = email
-	}
-	if subject == "" {
-		subject = email
-	}
-	return email, name, subject, nil
+	_ = raw
+	return "", "", "", fmt.Errorf("validação criptográfica SAML não implementada: respostas não são aceitas até verificação real de assinatura/certificado IdP, issuer, audience, tempo e replay")
 }
 
 func SPMetadata(entityID, acs string) string {
@@ -138,16 +80,6 @@ func deflateB64(b []byte) (string, error) {
 		return "", err
 	}
 	return base64.StdEncoding.EncodeToString(buf.Bytes()), nil
-}
-
-func inflateRaw(b []byte) []byte {
-	r := flate.NewReader(bytes.NewReader(b))
-	defer r.Close()
-	out, err := io.ReadAll(r)
-	if err != nil {
-		return b
-	}
-	return out
 }
 
 func GenerateDevCert() (certPEM, keyPEM []byte, err error) {

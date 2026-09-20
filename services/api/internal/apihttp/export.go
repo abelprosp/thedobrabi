@@ -15,7 +15,7 @@ import (
 )
 
 func (s *Server) exportDataset(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
 	id := chi.URLParam(r, "id")
 	format := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("format")))
 	if format == "" {
@@ -31,11 +31,13 @@ func (s *Server) exportDataset(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "conjunto não encontrado")
 		return
 	}
-	headers, rows, err := s.query.ReadRows(r.Context(), org, ws, id, 100000)
+	const exportLimit = 100000
+	headers, rows, err := s.query.ReadRows(r.Context(), org, ws, id, exportLimit, uid, role)
 	if err != nil {
 		httpx.Error(w, 400, "export_failed", err.Error())
 		return
 	}
+	truncated := len(rows) >= exportLimit
 	safe := slugFile(name)
 	if format == "xlsx" {
 		raw, err := writeXLSX(headers, rows)
@@ -45,6 +47,12 @@ func (s *Server) exportDataset(w http.ResponseWriter, r *http.Request) {
 		}
 		w.Header().Set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 		w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s.xlsx"`, safe))
+		w.Header().Set("X-Export-Row-Count", strconv.Itoa(len(rows)))
+		w.Header().Set("X-Export-Truncated", strconv.FormatBool(truncated))
+		if truncated {
+			w.Header().Set("X-Export-Limit", strconv.Itoa(exportLimit))
+			w.Header().Set("Warning", fmt.Sprintf("199 thedobra \"export truncated at %d rows\"", exportLimit))
+		}
 		w.Write(raw)
 		return
 	}
@@ -65,6 +73,12 @@ func (s *Server) exportDataset(w http.ResponseWriter, r *http.Request) {
 	cw.Flush()
 	w.Header().Set("Content-Type", "text/csv; charset=utf-8")
 	w.Header().Set("Content-Disposition", fmt.Sprintf(`attachment; filename="%s.csv"`, safe))
+	w.Header().Set("X-Export-Row-Count", strconv.Itoa(len(rows)))
+	w.Header().Set("X-Export-Truncated", strconv.FormatBool(truncated))
+	if truncated {
+		w.Header().Set("X-Export-Limit", strconv.Itoa(exportLimit))
+		w.Header().Set("Warning", fmt.Sprintf("199 thedobra \"export truncated at %d rows\"", exportLimit))
+	}
 	w.Write(buf.Bytes())
 }
 

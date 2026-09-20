@@ -448,15 +448,95 @@ func (e *Engine) ReplaceDataset(ctx context.Context, orgID, wsID, datasetID uuid
 		}
 		aligned[r] = rec
 	}
-	if err := e.ch.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, table)); err != nil {
+	return e.replaceDatasetAtomic(ctx, orgID, wsID, datasetID, table, cols, aligned)
+}
+
+// replaceDatasetAtomic loads rows into a staging ClickHouse table, validates the
+// insert, then EXCHANGE TABLES with the live table so a mid-load failure never
+// truncates the previous version. Concurrent replaces of the same dataset are
+// blocked via a status CAS (with stale "replacing" reclaim).
+func (e *Engine) replaceDatasetAtomic(ctx context.Context, orgID, wsID, datasetID uuid.UUID, table string, cols []schemax.Column, rows [][]string) (int64, error) {
+	if !safeCHTable(table) {
+		return 0, fmt.Errorf("tabela inválida")
+	}
+	if err := e.beginDatasetReplace(ctx, orgID, wsID, datasetID); err != nil {
 		return 0, err
 	}
-	n, err := e.insertRows(ctx, table, orgID, cols, aligned)
+	release := true
+	defer func() {
+		if release {
+			_, _ = e.pg.Exec(context.Background(), `UPDATE datasets SET status='ready', updated_at=now() WHERE id=$1 AND status='replacing'`, datasetID)
+		}
+	}()
+
+	staging := table + "_stg"
+	if !safeCHTable(staging) {
+		staging = "stg_" + strings.ReplaceAll(uuid.New().String(), "-", "")
+	}
+	_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, staging))
+	if err := e.createTable(ctx, staging, cols); err != nil {
+		return 0, err
+	}
+
+	n, err := e.insertRows(ctx, staging, orgID, cols, rows)
 	if err != nil {
+		_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, staging))
 		return 0, err
 	}
-	_, _ = e.pg.Exec(ctx, `UPDATE datasets SET row_count=$2, status='ready', updated_at=now() WHERE id=$1`, datasetID, n)
+	if n != int64(len(rows)) {
+		_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, staging))
+		return 0, fmt.Errorf("validação falhou: inseridas %d de %d linhas", n, len(rows))
+	}
+
+	// Ensure live table exists so EXCHANGE/RENAME can proceed on first replace edge cases.
+	if err := e.createTable(ctx, table, cols); err != nil {
+		_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, staging))
+		return 0, err
+	}
+
+	db := e.cfg.ClickHouseDB
+	swap := fmt.Sprintf("EXCHANGE TABLES %s.`%s` AND %s.`%s`", db, table, db, staging)
+	if err := e.ch.Exec(ctx, swap); err != nil {
+		old := table + "_prev"
+		if !safeCHTable(old) {
+			old = "prev_" + strings.ReplaceAll(uuid.New().String(), "-", "")
+		}
+		_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", db, old))
+		rename := fmt.Sprintf("RENAME TABLE %s.`%s` TO %s.`%s`, %s.`%s` TO %s.`%s`", db, table, db, old, db, staging, db, table)
+		if err2 := e.ch.Exec(ctx, rename); err2 != nil {
+			_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", db, staging))
+			return 0, fmt.Errorf("troca atômica falhou: %v (fallback: %v)", err, err2)
+		}
+		staging = old // drop previous version below
+	}
+
+	// Previous version is discarded only after a successful swap.
+	_ = e.ch.Exec(ctx, fmt.Sprintf("DROP TABLE IF EXISTS %s.`%s`", db, staging))
+
+	if _, err := e.pg.Exec(ctx, `UPDATE datasets SET row_count=$2, status='ready', updated_at=now() WHERE id=$1`, datasetID, n); err != nil {
+		release = false
+		return n, fmt.Errorf("dados substituídos, mas metadados falharam: %w", err)
+	}
+	release = false
 	return n, nil
+}
+
+func (e *Engine) beginDatasetReplace(ctx context.Context, orgID, wsID, datasetID uuid.UUID) error {
+	tag, err := e.pg.Exec(ctx, `
+		UPDATE datasets SET status='replacing', updated_at=now()
+		WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+		  AND (
+		    COALESCE(status,'') IN ('', 'ready')
+		    OR (status='replacing' AND updated_at < now() - interval '30 minutes')
+		  )
+	`, datasetID, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		return fmt.Errorf("outra substituição deste conjunto está em andamento")
+	}
+	return nil
 }
 
 func (e *Engine) writeLake(ctx context.Context, orgID, wsID, datasetID uuid.UUID, headers []string, rows [][]string) error {
@@ -495,39 +575,83 @@ func (e *Engine) csvBytes(headers []string, rows [][]string) []byte {
 	return buf.Bytes()
 }
 
-func (e *Engine) ReadSQLIncremental(ctx context.Context, orgID, wsID, sourceID uuid.UUID, table, cursorCol, cursor string, limit int) ([]string, [][]string, string, error) {
+func (e *Engine) ReadSQLIncremental(ctx context.Context, orgID, wsID, sourceID uuid.UUID, table, cursorCol, pkCol, cursor, cursorPK string, limit int) ([]string, [][]string, string, string, error) {
 	typ, cfg, err := e.loadSource(ctx, orgID, wsID, sourceID)
 	if err != nil {
-		return nil, nil, "", err
+		return nil, nil, "", "", err
 	}
 	if table != "" {
 		cfg.Table = table
 	}
 	if !tableIdentOK(cfg.Table) || !tableIdentOK(cursorCol) {
-		return nil, nil, "", fmt.Errorf("identificador inválido")
+		return nil, nil, "", "", fmt.Errorf("identificador inválido")
+	}
+	if pkCol != "" && !tableIdentOK(pkCol) {
+		return nil, nil, "", "", fmt.Errorf("identificador inválido")
 	}
 	if limit <= 0 {
 		limit = 10000
 	}
-	q := fmt.Sprintf("SELECT * FROM %s WHERE %s > $1 ORDER BY %s LIMIT %d", cfg.Table, cursorCol, cursorCol, limit)
-	if typ != "postgres" && typ != "supabase" {
-		q = fmt.Sprintf("SELECT * FROM %s WHERE %s > ? ORDER BY %s LIMIT %d", cfg.Table, cursorCol, cursorCol, limit)
+
+	useComposite := pkCol != "" && !strings.EqualFold(pkCol, cursorCol) && cursorPK != ""
+	// When pkCol is known but cursorPK is empty (legacy watermark or first init),
+	// advance by cursorCol only so (ts, pk) typing stays valid; the next batch
+	// persists a composite end-cursor.
+	orderComposite := pkCol != "" && !strings.EqualFold(pkCol, cursorCol)
+	var q string
+	var args []any
+	if useComposite {
+		if typ == "postgres" || typ == "supabase" {
+			q = fmt.Sprintf(
+				"SELECT * FROM %s WHERE (%s, %s) > ($1, $2) ORDER BY %s, %s LIMIT %d",
+				cfg.Table, cursorCol, pkCol, cursorCol, pkCol, limit,
+			)
+		} else {
+			q = fmt.Sprintf(
+				"SELECT * FROM %s WHERE (%s, %s) > (?, ?) ORDER BY %s, %s LIMIT %d",
+				cfg.Table, cursorCol, pkCol, cursorCol, pkCol, limit,
+			)
+		}
+		args = []any{cursor, cursorPK}
+	} else if orderComposite {
+		if typ == "postgres" || typ == "supabase" {
+			q = fmt.Sprintf("SELECT * FROM %s WHERE %s > $1 ORDER BY %s, %s LIMIT %d", cfg.Table, cursorCol, cursorCol, pkCol, limit)
+		} else {
+			q = fmt.Sprintf("SELECT * FROM %s WHERE %s > ? ORDER BY %s, %s LIMIT %d", cfg.Table, cursorCol, cursorCol, pkCol, limit)
+		}
+		args = []any{cursor}
+	} else {
+		if typ == "postgres" || typ == "supabase" {
+			q = fmt.Sprintf("SELECT * FROM %s WHERE %s > $1 ORDER BY %s LIMIT %d", cfg.Table, cursorCol, cursorCol, limit)
+		} else {
+			q = fmt.Sprintf("SELECT * FROM %s WHERE %s > ? ORDER BY %s LIMIT %d", cfg.Table, cursorCol, cursorCol, limit)
+		}
+		args = []any{cursor}
 	}
 	cfg.Query = ""
-	headers, rows, err := e.readSQLBound(ctx, typ, cfg, q, cursor)
+	headers, rows, err := e.readSQLBoundArgs(ctx, typ, cfg, q, args...)
 	if err != nil {
-		return nil, nil, "", err
+		return nil, nil, "", "", err
 	}
-	next := cursor
+	next, nextPK := cursor, cursorPK
 	if len(rows) > 0 {
-		ci := 0
-		for i, h := range headers {
-			if strings.EqualFold(h, cursorCol) || strings.EqualFold(h, strings.TrimPrefix(cursorCol, cfg.Table+".")) {
-				ci = i
-				break
-			}
-		}
+		ci := colIndex(headers, cursorCol, cfg.Table)
 		next = rows[len(rows)-1][ci]
+		if orderComposite {
+			pi := colIndex(headers, pkCol, cfg.Table)
+			nextPK = rows[len(rows)-1][pi]
+		} else {
+			nextPK = ""
+		}
 	}
-	return headers, rows, next, nil
+	return headers, rows, next, nextPK, nil
+}
+
+func colIndex(headers []string, col, table string) int {
+	for i, h := range headers {
+		if strings.EqualFold(h, col) || strings.EqualFold(h, strings.TrimPrefix(col, table+".")) {
+			return i
+		}
+	}
+	return 0
 }

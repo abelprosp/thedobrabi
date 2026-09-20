@@ -6,7 +6,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 	"strings"
+	"sync"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -41,6 +43,7 @@ type Agent struct {
 	instanceID string
 	sources    map[string]Source
 	dbCache    map[string]*sql.DB
+	mu         sync.Mutex
 }
 
 func NewAgent(remoteURL, token, instanceID string, sources []Source) *Agent {
@@ -81,6 +84,8 @@ func (a *Agent) Query(ctx context.Context, req QueryRequest) (QueryResponse, err
 	return collectRows(rows, req.Limit)
 }
 
+var limitClauseRE = regexp.MustCompile(`(?i)\blimit\b`)
+
 func safeSelect(query string, limit int) (string, error) {
 	q := strings.TrimSpace(query)
 	if q == "" || len(q) > 100000 {
@@ -95,13 +100,33 @@ func safeSelect(query string, limit int) (string, error) {
 			return "", fmt.Errorf("SQL não permitido")
 		}
 	}
-	if limit <= 0 || strings.Contains(lower, " limit ") {
+	if limitClauseRE.MatchString(lower) {
+		// Caller already constrained the result set; collectRows still caps rows.
+		return q, nil
+	}
+	if limit <= 0 {
 		limit = 10000
 	}
 	return q + fmt.Sprintf(" LIMIT %d", limit), nil
 }
 
+func driverNameFor(srcType string) (string, error) {
+	switch srcType {
+	case "postgresql", "postgres":
+		return "pgx", nil
+	case "mysql":
+		return "mysql", nil
+	case "mssql", "sqlserver":
+		return "", fmt.Errorf("mssql not implemented in this MVP")
+	default:
+		return "", fmt.Errorf("unsupported source type %q", srcType)
+	}
+}
+
 func (a *Agent) getDB(ctx context.Context, src Source) (*sql.DB, error) {
+	a.mu.Lock()
+	defer a.mu.Unlock()
+
 	if db, ok := a.dbCache[src.Name]; ok {
 		if err := db.PingContext(ctx); err != nil {
 			db.Close()
@@ -109,6 +134,10 @@ func (a *Agent) getDB(ctx context.Context, src Source) (*sql.DB, error) {
 		} else {
 			return db, nil
 		}
+	}
+	driverName, err := driverNameFor(src.Type)
+	if err != nil {
+		return nil, err
 	}
 	var dsn string
 	switch src.Type {
@@ -122,12 +151,8 @@ func (a *Agent) getDB(ctx context.Context, src Source) (*sql.DB, error) {
 			src.Port = 3306
 		}
 		dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s", src.User, src.Password, src.Host, src.Port, src.Database)
-	case "mssql", "sqlserver":
-		return nil, fmt.Errorf("mssql not implemented in this MVP")
-	default:
-		return nil, fmt.Errorf("unsupported source type %q", src.Type)
 	}
-	db, err := sql.Open(src.Type, dsn)
+	db, err := sql.Open(driverName, dsn)
 	if err != nil {
 		return nil, err
 	}

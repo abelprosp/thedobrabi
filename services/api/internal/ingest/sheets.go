@@ -476,18 +476,24 @@ func downloadPublicSheet(ctx context.Context, rawURL string) ([]byte, error) {
 	return raw, nil
 }
 
-var sheetsHTTP = &http.Client{
-	Timeout: 25 * time.Second,
-	CheckRedirect: func(req *http.Request, via []*http.Request) error {
-		if len(via) >= 8 {
-			return fmt.Errorf("demasiados redireccionamentos")
-		}
-		if strings.Contains(strings.ToLower(req.URL.Host), "accounts.google") {
-			return fmt.Errorf("a planilha não está partilhada")
-		}
-		return assertHTTPURL(req.URL.String())
-	},
+func sheetsRedirectCheck(req *http.Request, via []*http.Request) error {
+	if len(via) >= 8 {
+		return fmt.Errorf("demasiados redireccionamentos")
+	}
+	if strings.Contains(strings.ToLower(req.URL.Host), "accounts.google") {
+		return fmt.Errorf("a planilha não está partilhada")
+	}
+	return assertHTTPURL(req.URL.String())
 }
+
+func newSheetsHTTP() *http.Client {
+	return &http.Client{
+		Timeout:       25 * time.Second,
+		CheckRedirect: sheetsRedirectCheck,
+	}
+}
+
+var sheetsHTTP = newSheetsHTTP()
 
 func parseGoogleSheetBody(raw []byte, limit int) ([]string, [][]string, error) {
 	raw = bytes.TrimPrefix(bytes.TrimSpace(raw), []byte{0xEF, 0xBB, 0xBF})

@@ -81,6 +81,23 @@ func TestAssertHTTPURL(t *testing.T) {
 	if err := assertHTTPURL("file:///etc/passwd"); err == nil {
 		t.Fatal("file deveria falhar")
 	}
+
+	// Production SSRF: loopback blocked when private hosts are not allowed.
+	connectorMu.Lock()
+	prevAllow := allowPrivateConnectorHosts
+	allowPrivateConnectorHosts = false
+	connectorMu.Unlock()
+	t.Cleanup(func() {
+		connectorMu.Lock()
+		allowPrivateConnectorHosts = prevAllow
+		connectorMu.Unlock()
+	})
+	if err := assertHTTPURL("http://127.0.0.1:9/"); err == nil {
+		t.Fatal("loopback deveria falhar em produção")
+	}
+	if err := assertHTTPURL("http://10.0.0.1/"); err == nil {
+		t.Fatal("IP privado deveria falhar em produção")
+	}
 }
 
 func contains(ss []string, v string) bool {

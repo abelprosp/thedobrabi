@@ -952,6 +952,10 @@ func tableIdentOK(s string) bool {
 }
 
 func (e *Engine) readSQLBound(ctx context.Context, typ string, cfg SQLConfig, q string, arg string) ([]string, [][]string, error) {
+	return e.readSQLBoundArgs(ctx, typ, cfg, q, arg)
+}
+
+func (e *Engine) readSQLBoundArgs(ctx context.Context, typ string, cfg SQLConfig, q string, args ...any) ([]string, [][]string, error) {
 	switch typ {
 	case "postgres", "supabase":
 		if typ == "supabase" {
@@ -962,7 +966,7 @@ func (e *Engine) readSQLBound(ctx context.Context, typ string, cfg SQLConfig, q 
 			return nil, nil, err
 		}
 		defer conn.Close(ctx)
-		rows, err := conn.Query(ctx, q, arg)
+		rows, err := conn.Query(ctx, q, args...)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -994,7 +998,7 @@ func (e *Engine) readSQLBound(ctx context.Context, typ string, cfg SQLConfig, q 
 			return nil, nil, err
 		}
 		defer db.Close()
-		rows, err := db.QueryContext(ctx, q, arg)
+		rows, err := db.QueryContext(ctx, q, args...)
 		if err != nil {
 			return nil, nil, err
 		}

@@ -12,10 +12,12 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 	"time"
 
 	"github.com/thedobra/thedobra/services/gateway/internal/gateway"
+	"gopkg.in/yaml.v3"
 )
 
 type Config struct {
@@ -35,9 +37,24 @@ func loadConfig(path string) (Config, error) {
 	if err != nil {
 		return cfg, err
 	}
-	if err := json.Unmarshal(b, &cfg); err != nil {
-		// Fallback to YAML if json fails; for MVP require JSON or env.
-		return cfg, fmt.Errorf("parse config: %w", err)
+	ext := strings.ToLower(filepath.Ext(path))
+	switch ext {
+	case ".yaml", ".yml":
+		if err := yaml.Unmarshal(b, &cfg); err != nil {
+			return cfg, fmt.Errorf("parse config yaml: %w", err)
+		}
+	case ".json":
+		if err := json.Unmarshal(b, &cfg); err != nil {
+			return cfg, fmt.Errorf("parse config json: %w", err)
+		}
+	default:
+		// Prefer JSON, then YAML (default filename is gateway.yaml).
+		if err := json.Unmarshal(b, &cfg); err != nil {
+			cfg = Config{}
+			if yerr := yaml.Unmarshal(b, &cfg); yerr != nil {
+				return cfg, fmt.Errorf("parse config: json: %v; yaml: %w", err, yerr)
+			}
+		}
 	}
 	if cfg.RemoteURL == "" {
 		cfg.RemoteURL = os.Getenv("DOBRA_REMOTE")

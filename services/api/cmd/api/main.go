@@ -49,7 +49,7 @@ func main() {
 	}
 	defer ch.Close()
 
-	rdb, err := db.ConnectRedis(ctx, cfg.RedisAddr)
+	rdb, err := db.ConnectRedis(ctx, cfg.RedisAddr, cfg.RedisPassword)
 	if err != nil {
 		log.Error("redis", "err", err)
 		os.Exit(1)

@@ -50,20 +50,20 @@ func NewEngine(store *Store, ingest Ingester, lineage LineageRecorder) *Engine {
 	return &Engine{store: store, ingest: ingest, lineage: lineage}
 }
 
-func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID, reader DatasetReader) (ResultSummary, error) {
-	run, err := e.store.GetRun(ctx, runID)
+func (e *Engine) Execute(ctx context.Context, orgID, wsID, runID, userID uuid.UUID, reader DatasetReader) (ResultSummary, error) {
+	run, err := e.store.GetRun(ctx, orgID, wsID, runID)
 	if err != nil {
 		return ResultSummary{}, err
 	}
-	flow, err := e.store.Get(ctx, run.OrgID, run.WorkspaceID, run.FlowID)
+	flow, err := e.store.Get(ctx, orgID, wsID, run.FlowID)
 	if err != nil {
 		return ResultSummary{}, err
 	}
-	steps, err := e.store.ListSteps(ctx, flow.ID)
+	steps, err := e.store.ListSteps(ctx, orgID, wsID, flow.ID)
 	if err != nil {
 		return ResultSummary{}, err
 	}
-	_ = e.store.UpdateRun(ctx, runID, "running", "", nil)
+	_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "running", "", nil)
 	log := func(stepID uuid.UUID, level, msg string) {
 		_ = e.store.AddLog(ctx, runID, stepID, level, msg, nil)
 	}
@@ -84,7 +84,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 		h, rws, err := reader(dsID, 100000)
 		if err != nil {
 			log(st.ID, "error", err.Error())
-			_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), nil)
+			_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "failed", err.Error(), nil)
 			return ResultSummary{}, err
 		}
 		extras[dsID] = rws
@@ -99,7 +99,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 		var err error
 		headers, rows, err = reader(flow.SourceDatasetID.String(), 100000)
 		if err != nil {
-			_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), nil)
+			_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "failed", err.Error(), nil)
 			return ResultSummary{}, err
 		}
 		extras[flow.SourceDatasetID.String()] = rows
@@ -114,7 +114,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 			out, err := applyTransform(st, headers, rows, extras, reader)
 			if err != nil {
 				log(st.ID, "error", err.Error())
-				_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), int64Ptr(len(rows)))
+				_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "failed", err.Error(), int64Ptr(len(rows)))
 				return ResultSummary{}, err
 			}
 			rows = out
@@ -126,7 +126,7 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 			bad, err := applyValidate(st, headers, rows)
 			if err != nil {
 				log(st.ID, "error", err.Error())
-				_ = e.store.UpdateRun(ctx, runID, "failed", err.Error(), int64Ptr(len(rows)))
+				_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "failed", err.Error(), int64Ptr(len(rows)))
 				return ResultSummary{}, err
 			}
 			log(st.ID, "info", fmt.Sprintf("Validation: %d bad rows out of %d", bad, len(rows)))
@@ -141,19 +141,20 @@ func (e *Engine) Execute(ctx context.Context, runID uuid.UUID, userID uuid.UUID,
 	var total int64 = int64(len(rows))
 	var outputDSID *uuid.UUID
 	if len(rows) > 0 && e.ingest != nil {
-		res, err := e.ingest.IngestRowsFromMaps(ctx, run.OrgID, run.WorkspaceID, userID, flow.Name+" · output", headers, rows)
+		res, err := e.ingest.IngestRowsFromMaps(ctx, orgID, wsID, userID, flow.Name+" · output", headers, rows)
 		if err != nil {
 			log(uuid.Nil, "error", "Materialization failed: "+err.Error())
-		} else {
-			id := res.DatasetID
-			outputDSID = &id
-			_ = e.store.SetOutputDataset(ctx, run.FlowID, *outputDSID)
-			e.lineage.RecordFlowToDataset(ctx, run.OrgID, run.WorkspaceID, run.FlowID, *outputDSID, flow.Name)
-			log(uuid.Nil, "info", fmt.Sprintf("Materialized output dataset %s with %d rows", outputDSID.String(), total))
+			_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "failed", err.Error(), &total)
+			return ResultSummary{}, fmt.Errorf("materialization failed: %w", err)
 		}
+		id := res.DatasetID
+		outputDSID = &id
+		_ = e.store.SetOutputDataset(ctx, orgID, wsID, run.FlowID, *outputDSID)
+		e.lineage.RecordFlowToDataset(ctx, orgID, wsID, run.FlowID, *outputDSID, flow.Name)
+		log(uuid.Nil, "info", fmt.Sprintf("Materialized output dataset %s with %d rows", outputDSID.String(), total))
 	}
 
-	_ = e.store.UpdateRun(ctx, runID, "completed", "", &total)
+	_ = e.store.UpdateRun(ctx, orgID, wsID, runID, "completed", "", &total)
 	return ResultSummary{Rows: total, Columns: headers, Sample: sampleRows(rows, 5), OutputDatasetID: outputDSID}, nil
 }
 
@@ -164,12 +165,14 @@ type ResultSummary struct {
 	OutputDatasetID *uuid.UUID       `json:"output_dataset_id,omitempty"`
 }
 
-func (s *Store) GetRun(ctx context.Context, runID uuid.UUID) (RunCtx, error) {
+func (s *Store) GetRun(ctx context.Context, orgID, wsID, runID uuid.UUID) (RunCtx, error) {
 	var r RunCtx
 	err := s.pg.QueryRow(ctx, `
 		SELECT fr.id, fr.flow_id, f.org_id, f.workspace_id
-		FROM flow_runs fr JOIN flows f ON f.id=fr.flow_id WHERE fr.id=$1
-	`, runID).Scan(&r.RunID, &r.FlowID, &r.OrgID, &r.WorkspaceID)
+		FROM flow_runs fr
+		JOIN flows f ON f.id = fr.flow_id
+		WHERE fr.id=$1 AND f.org_id=$2 AND f.workspace_id=$3
+	`, runID, orgID, wsID).Scan(&r.RunID, &r.FlowID, &r.OrgID, &r.WorkspaceID)
 	return r, err
 }
 

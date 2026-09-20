@@ -1,9 +1,12 @@
 package apihttp
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/url"
+	"strings"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -105,11 +108,26 @@ func (s *Server) acceptInvite(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		Name     string `json:"name"`
 		Password string `json:"password"`
+		MFACode  string `json:"mfa_code"`
 	}
 	_ = httpx.Decode(r, &body)
-	p, tok, err := s.auth.AcceptInvite(r.Context(), token, body.Name, body.Password)
+
+	// Optional session: existing invitees (incl. SSO) may prove identity via Bearer token.
+	// An admin opening invite_url is not the invitee, so this does not auto-login as them.
+	sessionUserID := uuid.Nil
+	if h := r.Header.Get("Authorization"); strings.HasPrefix(h, "Bearer ") {
+		if sess, err := s.auth.ParseAccess(strings.TrimPrefix(h, "Bearer ")); err == nil {
+			sessionUserID = sess.UserID
+		}
+	}
+
+	p, tok, err := s.auth.AcceptInvite(r.Context(), token, body.Name, body.Password, body.MFACode, sessionUserID)
 	if err != nil {
 		httpx.Error(w, 400, "invite", err.Error())
+		return
+	}
+	if tok.TokenType == "mfa_required" {
+		httpx.JSON(w, 200, map[string]any{"mfa_required": true})
 		return
 	}
 	if verificationToken, verifyErr := s.auth.CreateEmailVerification(r.Context(), p.UserID); verifyErr == nil {
@@ -219,7 +237,10 @@ func (s *Server) patchMember(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id")
@@ -230,32 +251,127 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "dashboard não encontrado")
 		return
 	}
+	var body struct {
+		ExpiresDays *int `json:"expires_days"`
+	}
+	_ = httpx.Decode(r, &body)
 	tok, err := cryptoenc.RandomToken(18)
 	if err != nil {
 		httpx.Error(w, 500, "token", err.Error())
 		return
 	}
+	var expires *time.Time
+	days := 90
+	if body.ExpiresDays != nil {
+		days = *body.ExpiresDays
+	}
+	if days > 0 {
+		t := time.Now().UTC().Add(time.Duration(days) * 24 * time.Hour)
+		expires = &t
+	}
 	_, err = s.deps.PG.Exec(r.Context(), `
-		INSERT INTO dashboard_shares (org_id, workspace_id, dashboard_id, token, created_by) VALUES ($1,$2,$3,$4,$5)
-	`, org, ws, id, tok, uid)
+		INSERT INTO dashboard_shares (org_id, workspace_id, dashboard_id, token, created_by, expires_at)
+		VALUES ($1,$2,$3,$4,$5,$6)
+	`, org, ws, id, tok, uid, expires)
 	if err != nil {
 		httpx.Error(w, 400, "share", err.Error())
 		return
 	}
-	httpx.JSON(w, 201, map[string]any{"url": s.orgWebOrigin(r.Context(), org) + "/share/" + tok, "token": tok})
+	out := map[string]any{"url": s.orgWebOrigin(r.Context(), org) + "/share/" + tok, "token": tok}
+	if expires != nil {
+		out["expires_at"] = expires.UTC()
+	}
+	httpx.JSON(w, 201, out)
 }
+
+func (s *Server) listDashboardShares(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, _ := principal(r)
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	rows, err := s.deps.PG.Query(r.Context(), `
+		SELECT token, created_at, expires_at, revoked_at
+		FROM dashboard_shares
+		WHERE dashboard_id=$1 AND org_id=$2 AND workspace_id=$3
+		ORDER BY created_at DESC
+	`, id, org, ws)
+	if err != nil {
+		httpx.Error(w, 500, "query_failed", err.Error())
+		return
+	}
+	defer rows.Close()
+	out := []map[string]any{}
+	for rows.Next() {
+		var tok string
+		var created time.Time
+		var expires, revoked *time.Time
+		if err := rows.Scan(&tok, &created, &expires, &revoked); err != nil {
+			continue
+		}
+		item := map[string]any{
+			"token":      tok,
+			"url":        s.orgWebOrigin(r.Context(), org) + "/share/" + tok,
+			"created_at": created,
+			"revoked_at": revoked,
+			"active":     revoked == nil && (expires == nil || expires.After(time.Now())),
+		}
+		if expires != nil {
+			item["expires_at"] = expires.UTC()
+		}
+		out = append(out, item)
+	}
+	httpx.JSON(w, 200, out)
+}
+
+func (s *Server) revokeDashboardShare(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
+	id, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "id inválido")
+		return
+	}
+	tok := chi.URLParam(r, "token")
+	ct, err := s.deps.PG.Exec(r.Context(), `
+		UPDATE dashboard_shares SET revoked_at=now()
+		WHERE dashboard_id=$1 AND org_id=$2 AND workspace_id=$3 AND token=$4 AND revoked_at IS NULL
+	`, id, org, ws, tok)
+	if err != nil || ct.RowsAffected() == 0 {
+		httpx.Error(w, 404, "not_found", "partilha não encontrada")
+		return
+	}
+	httpx.JSON(w, 200, map[string]any{"ok": true})
+}
+
+func (s *Server) lookupShare(ctx context.Context, tok string) (org, ws, dash uuid.UUID, layout []byte, name, desc string, err error) {
+	var expires, revoked *time.Time
+	err = s.deps.PG.QueryRow(ctx, `
+		SELECT s.org_id, s.workspace_id, d.id, d.name, d.description, d.layout_json, s.expires_at, s.revoked_at
+		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
+		WHERE s.token=$1
+	`, tok).Scan(&org, &ws, &dash, &name, &desc, &layout, &expires, &revoked)
+	if err != nil {
+		return
+	}
+	if revoked != nil || (expires != nil && !expires.After(time.Now())) {
+		err = errShareGone
+	}
+	return
+}
+
+type shareGone string
+
+func (e shareGone) Error() string { return string(e) }
+
+const errShareGone shareGone = "partilha expirada ou revogada"
 
 func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	var id uuid.UUID
-	var name, desc string
-	var layout []byte
-	var org uuid.UUID
-	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT d.id, d.name, d.description, d.layout_json, s.org_id
-		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
-		WHERE s.token=$1
-	`, tok).Scan(&id, &name, &desc, &layout, &org)
+	org, _, id, layout, name, desc, err := s.lookupShare(r.Context(), tok)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
@@ -273,39 +389,20 @@ func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	var org, ws uuid.UUID
-	var layout []byte
-	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT s.org_id, s.workspace_id, d.layout_json
-		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
-		WHERE s.token=$1
-	`, tok).Scan(&org, &ws, &layout)
+	org, ws, _, layout, _, _, err := s.lookupShare(r.Context(), tok)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
 	}
-	var req queryeng.Request
-	if err := httpx.Decode(r, &req); err != nil {
+	var in publicQueryInput
+	if err := httpx.Decode(r, &in); err != nil {
 		httpx.Error(w, 400, "invalid", "consulta inválida")
 		return
 	}
-	allowed := allowedDatasetIDs(layout)
-	if req.DatasetID == "" {
-		httpx.Error(w, 400, "invalid", "conjunto em falta")
+	req, _, err := buildPublicWidgetQuery(layout, in)
+	if err != nil {
+		httpx.Error(w, 403, "forbidden", err.Error())
 		return
-	}
-	if _, ok := allowed[req.DatasetID]; !ok {
-		httpx.Error(w, 403, "forbidden", "conjunto não faz parte desta partilha")
-		return
-	}
-	for _, j := range req.Joins {
-		if j.DatasetID == "" {
-			continue
-		}
-		if _, ok := allowed[j.DatasetID]; !ok {
-			httpx.Error(w, 403, "forbidden", "conjunto não faz parte desta partilha")
-			return
-		}
 	}
 	res, err := s.query.Execute(r.Context(), org, ws, uuid.Nil, "viewer", req)
 	if err != nil {
@@ -317,13 +414,7 @@ func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) publicDashboardAnalyze(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	var org, ws uuid.UUID
-	var layout []byte
-	err := s.deps.PG.QueryRow(r.Context(), `
-		SELECT s.org_id, s.workspace_id, d.layout_json
-		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
-		WHERE s.token=$1
-	`, tok).Scan(&org, &ws, &layout)
+	org, ws, _, layout, _, _, err := s.lookupShare(r.Context(), tok)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
@@ -341,12 +432,35 @@ func (s *Server) analyzePublicDashboard(w http.ResponseWriter, r *http.Request, 
 		httpx.Error(w, 400, "invalid", "pedido inválido")
 		return
 	}
-	allowed := allowedDatasetIDs(layout)
+	global := make([]queryeng.Filter, 0, len(req.GlobalFilters))
+	for _, f := range req.GlobalFilters {
+		global = append(global, queryeng.Filter{Dimension: f.Dimension, Op: f.Op, Value: f.Value})
+	}
 	kept := make([]aiagent.DashboardWidgetSpec, 0, len(req.Widgets))
 	for _, spec := range req.Widgets {
-		if widgetQueryAllowed(spec.Query, allowed) {
-			kept = append(kept, spec)
+		lw, ok := findLayoutWidget(layout, spec.ID)
+		if !ok {
+			continue
 		}
+		built, _, err := buildPublicWidgetQuery(layout, publicQueryInput{
+			WidgetID:      spec.ID,
+			GlobalFilters: global,
+			TimeRange:     req.TimeRange,
+		})
+		if err != nil {
+			continue
+		}
+		title := spec.Title
+		if title == "" {
+			title = lw.Type
+		}
+		kept = append(kept, aiagent.DashboardWidgetSpec{
+			ID:     lw.ID,
+			Type:   lw.Type,
+			Title:  title,
+			Query:  built,
+			Config: lw.Config,
+		})
 	}
 	req.Widgets = kept
 	if len(req.Widgets) == 0 {
@@ -361,24 +475,6 @@ func (s *Server) analyzePublicDashboard(w http.ResponseWriter, r *http.Request, 
 	out.AlertSuggestions = nil
 	s.audit(r, "AI_DASHBOARD_ANALYZED", "ai", uuid.Nil, map[string]any{"widgets": out.AnalyzedWidgets, "source": out.Source, "public": true})
 	httpx.JSON(w, 200, out)
-}
-
-func widgetQueryAllowed(q queryeng.Request, allowed map[string]struct{}) bool {
-	if q.DatasetID == "" {
-		return false
-	}
-	if _, ok := allowed[q.DatasetID]; !ok {
-		return false
-	}
-	for _, j := range q.Joins {
-		if j.DatasetID == "" {
-			continue
-		}
-		if _, ok := allowed[j.DatasetID]; !ok {
-			return false
-		}
-	}
-	return true
 }
 
 func allowedDatasetIDs(layout []byte) map[string]struct{} {

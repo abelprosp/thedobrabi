@@ -373,8 +373,8 @@ func (s *Server) getDataset(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) previewDataset(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
-	res, err := s.query.Preview(r.Context(), org, ws, chi.URLParam(r, "id"), 50)
+	uid, org, ws, role := principal(r)
+	res, err := s.query.Preview(r.Context(), org, ws, chi.URLParam(r, "id"), 50, uid, role)
 	if err != nil {
 		httpx.Error(w, 400, "preview_failed", err.Error())
 		return
@@ -537,7 +537,14 @@ func (s *Server) listDashboards(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createDashboard(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
+	if err := s.ent.Check(r.Context(), org, "dashboard"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
 	var body struct {
 		Name        string          `json:"name"`
 		Description string          `json:"description"`
@@ -580,7 +587,10 @@ func (s *Server) getDashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) putDashboard(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
 	var body struct {
 		Name        string          `json:"name"`

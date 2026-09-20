@@ -139,24 +139,38 @@ func (s *Service) ResetPassword(ctx context.Context, token, password string) err
 	if len(password) < 8 {
 		return fmt.Errorf("a senha deve ter pelo menos 8 caracteres")
 	}
-	var userID uuid.UUID
-	var exp time.Time
-	var used *time.Time
-	err := s.pg.QueryRow(ctx, `SELECT user_id, expires_at, used_at FROM password_resets WHERE token_hash=$1`, cryptoenc.HashToken(token)).
-		Scan(&userID, &exp, &used)
-	if err != nil || used != nil || time.Now().After(exp) {
-		return fmt.Errorf("ligação de recuperação inválida ou expirada")
-	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
 		return err
 	}
-	_, err = s.pg.Exec(ctx, `UPDATE users SET password_hash=$2, updated_at=now() WHERE id=$1`, userID, string(hash))
+	tokenHash := cryptoenc.HashToken(token)
+
+	tx, err := s.pg.Begin(ctx)
 	if err != nil {
 		return err
 	}
-	_, _ = s.pg.Exec(ctx, `UPDATE password_resets SET used_at=now() WHERE token_hash=$1`, cryptoenc.HashToken(token))
-	return nil
+	defer tx.Rollback(ctx)
+
+	var userID uuid.UUID
+	err = tx.QueryRow(ctx, `
+		UPDATE password_resets
+		SET used_at=now()
+		WHERE token_hash=$1 AND used_at IS NULL AND expires_at > now()
+		RETURNING user_id
+	`, tokenHash).Scan(&userID)
+	if err != nil {
+		return fmt.Errorf("ligação de recuperação inválida ou expirada")
+	}
+	if _, err := tx.Exec(ctx, `UPDATE users SET password_hash=$2, updated_at=now() WHERE id=$1`, userID, string(hash)); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(ctx, `
+		UPDATE refresh_tokens SET revoked_at=now()
+		WHERE user_id=$1 AND revoked_at IS NULL
+	`, userID); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
 }
 
 func (s *Service) CreateInvite(ctx context.Context, orgID, by uuid.UUID, email, role string) (string, error) {
@@ -181,22 +195,37 @@ func (s *Service) CreateInvite(ctx context.Context, orgID, by uuid.UUID, email, 
 	return plain, err
 }
 
-func (s *Service) AcceptInvite(ctx context.Context, token, name, password string) (Principal, TokenPair, error) {
+// AcceptInvite consumes an organization invite.
+// New users: create account, join inviting org, issue tokens scoped to that org.
+// Existing users: require proof of identity (password + MFA if enabled, or an
+// already-authenticated session as that user) before joining; tokens are only
+// issued after successful auth and are scoped to the invite's organization.
+func (s *Service) AcceptInvite(ctx context.Context, token, name, password, mfaCode string, sessionUserID uuid.UUID) (Principal, TokenPair, error) {
+	tokenHash := cryptoenc.HashToken(token)
 	var orgID uuid.UUID
 	var email, role string
 	var exp time.Time
 	var accepted *time.Time
 	err := s.pg.QueryRow(ctx, `SELECT org_id, email, role, expires_at, accepted_at FROM organization_invites WHERE token_hash=$1`,
-		cryptoenc.HashToken(token)).Scan(&orgID, &email, &role, &exp, &accepted)
+		tokenHash).Scan(&orgID, &email, &role, &exp, &accepted)
 	if err != nil || accepted != nil || time.Now().After(exp) {
 		return Principal{}, TokenPair{}, fmt.Errorf("convite inválido ou expirado")
 	}
 	if name == "" {
 		name = strings.Split(email, "@")[0]
 	}
+
 	var userID uuid.UUID
-	err = s.pg.QueryRow(ctx, `SELECT id FROM users WHERE email=$1`, email).Scan(&userID)
-	if err == pgx.ErrNoRows {
+	var passwordHash, authProvider, mfaSecretEnc string
+	var mfaEnabled, active bool
+	err = s.pg.QueryRow(ctx, `
+		SELECT id, password_hash, COALESCE(auth_provider,'password'), COALESCE(mfa_enabled, FALSE),
+		       COALESCE(mfa_secret_enc,''), COALESCE(active, TRUE)
+		FROM users WHERE email=$1
+	`, email).Scan(&userID, &passwordHash, &authProvider, &mfaEnabled, &mfaSecretEnc, &active)
+
+	switch {
+	case err == pgx.ErrNoRows:
 		if len(password) < 8 {
 			return Principal{}, TokenPair{}, fmt.Errorf("a senha deve ter pelo menos 8 caracteres")
 		}
@@ -204,22 +233,108 @@ func (s *Service) AcceptInvite(ctx context.Context, token, name, password string
 		if err != nil {
 			return Principal{}, TokenPair{}, err
 		}
-		err = s.pg.QueryRow(ctx, `INSERT INTO users (email, password_hash, name) VALUES ($1,$2,$3) RETURNING id`, email, string(hash), name).Scan(&userID)
+		tx, err := s.pg.Begin(ctx)
 		if err != nil {
 			return Principal{}, TokenPair{}, err
 		}
-	} else if err != nil {
+		defer tx.Rollback(ctx)
+
+		err = tx.QueryRow(ctx, `INSERT INTO users (email, password_hash, name) VALUES ($1,$2,$3) RETURNING id`,
+			email, string(hash), name).Scan(&userID)
+		if err != nil {
+			return Principal{}, TokenPair{}, err
+		}
+		if err := consumeInviteTx(ctx, tx, tokenHash, orgID, userID, role); err != nil {
+			return Principal{}, TokenPair{}, err
+		}
+		if err := tx.Commit(ctx); err != nil {
+			return Principal{}, TokenPair{}, err
+		}
+
+	case err != nil:
 		return Principal{}, TokenPair{}, err
+
+	default:
+		// Existing account: never issue tokens from the invite alone.
+		if !active {
+			return Principal{}, TokenPair{}, fmt.Errorf("conta desactivada")
+		}
+		needMFA, proofErr := proveExistingInvitee(sessionUserID, userID, authProvider, password, passwordHash, mfaCode, mfaSecretEnc, mfaEnabled, s.encKey)
+		if proofErr != nil {
+			return Principal{}, TokenPair{}, proofErr
+		}
+		if needMFA {
+			return Principal{UserID: userID, Email: email, MFAEnabled: true}, TokenPair{TokenType: "mfa_required", ExpiresIn: 300}, nil
+		}
+
+		tx, err := s.pg.Begin(ctx)
+		if err != nil {
+			return Principal{}, TokenPair{}, err
+		}
+		defer tx.Rollback(ctx)
+
+		if err := consumeInviteTx(ctx, tx, tokenHash, orgID, userID, role); err != nil {
+			return Principal{}, TokenPair{}, err
+		}
+		if err := tx.Commit(ctx); err != nil {
+			return Principal{}, TokenPair{}, err
+		}
 	}
-	_, err = s.pg.Exec(ctx, `INSERT INTO organization_members (org_id, user_id, role) VALUES ($1,$2,$3) ON CONFLICT (org_id, user_id) DO UPDATE SET role=EXCLUDED.role`, orgID, userID, role)
-	if err != nil {
-		return Principal{}, TokenPair{}, err
-	}
-	_, _ = s.pg.Exec(ctx, `UPDATE organization_invites SET accepted_at=now() WHERE token_hash=$1`, cryptoenc.HashToken(token))
-	p, err := s.principalForUser(ctx, userID, uuid.Nil)
+
+	p, err := s.principalForOrg(ctx, userID, orgID)
 	if err != nil {
 		return Principal{}, TokenPair{}, err
 	}
 	pair, err := s.issue(ctx, p)
 	return p, pair, err
+}
+
+// proveExistingInvitee verifies identity before joining an existing user to an org via invite.
+// Returns needMFA=true when password is valid but MFA code is still required (invite not consumed).
+func proveExistingInvitee(
+	sessionUserID, inviteeID uuid.UUID,
+	authProvider, password, passwordHash, mfaCode, mfaSecretEnc string,
+	mfaEnabled bool,
+	encKey []byte,
+) (needMFA bool, err error) {
+	if sessionUserID != uuid.Nil && sessionUserID == inviteeID {
+		return false, nil
+	}
+	if authProvider != "" && authProvider != "password" {
+		return false, fmt.Errorf("esta conta entra via SSO (%s); inicie sessão e aceite o convite autenticado", authProvider)
+	}
+	if password == "" || bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password)) != nil {
+		return false, fmt.Errorf("credenciais inválidas")
+	}
+	if !mfaEnabled {
+		return false, nil
+	}
+	if strings.TrimSpace(mfaCode) == "" {
+		return true, nil
+	}
+	secret, decErr := cryptoenc.Decrypt(encKey, mfaSecretEnc)
+	if decErr != nil || !VerifyTOTP(secret, mfaCode) {
+		return false, fmt.Errorf("código MFA inválido")
+	}
+	return false, nil
+}
+
+func consumeInviteTx(ctx context.Context, tx pgx.Tx, tokenHash string, orgID, userID uuid.UUID, role string) error {
+	tag, err := tx.Exec(ctx, `
+		UPDATE organization_invites
+		SET accepted_at=now()
+		WHERE token_hash=$1 AND accepted_at IS NULL AND expires_at > now()
+	`, tokenHash)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		return fmt.Errorf("convite inválido ou expirado")
+	}
+	_, err = tx.Exec(ctx, `
+		INSERT INTO organization_members (org_id, user_id, role)
+		VALUES ($1,$2,$3)
+		ON CONFLICT (org_id, user_id) DO UPDATE SET role=EXCLUDED.role
+	`, orgID, userID, role)
+	return err
 }

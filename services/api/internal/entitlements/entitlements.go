@@ -92,6 +92,8 @@ func NormalizePlan(plan string) string {
 		return PlanPro
 	case PlanCompleto, "business", "enterprise":
 		return PlanCompleto
+	case PlanEssencial, "starter":
+		return PlanEssencial
 	default:
 		return PlanEssencial
 	}
@@ -239,12 +241,13 @@ func (s *Service) Check(ctx context.Context, orgID uuid.UUID, kind string) error
 			return fmt.Errorf("limite de conjuntos do plano %s atingido (%d)", lim.Name, lim.Datasets)
 		}
 	case "dashboard":
-		if lim.Dashboards < mar0(lim.Dashboards) && lim.Dashboards >= 0 {
-			var n int
-			_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM dashboards WHERE org_id=$1`, orgID).Scan(&n)
-			if n >= lim.Dashboards {
-				return fmt.Errorf("o plano %s inclui %d dashboards. Peça um upgrade ou um teste de 7 dias", lim.Name, lim.Dashboards)
-			}
+		if lim.Dashboards < 0 {
+			return nil
+		}
+		var n int
+		_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM dashboards WHERE org_id=$1`, orgID).Scan(&n)
+		if n >= lim.Dashboards {
+			return fmt.Errorf("o plano %s inclui %d dashboards. Peça um upgrade ou um teste de 7 dias", lim.Name, lim.Dashboards)
 		}
 	case "connector":
 		if lim.Connectors >= 0 {
@@ -286,8 +289,6 @@ func (s *Service) Check(ctx context.Context, orgID uuid.UUID, kind string) error
 	}
 	return nil
 }
-
-func mar0(n int) int { return n } // keep Check dashboard readable; dashboards >= 0 is the real gate
 
 func (s *Service) CheckConnector(ctx context.Context, orgID uuid.UUID, typ string) error {
 	lim := s.Limits(ctx, orgID)

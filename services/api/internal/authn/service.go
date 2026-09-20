@@ -163,21 +163,20 @@ func (s *Service) Login(ctx context.Context, email, password string) (Principal,
 func (s *Service) Refresh(ctx context.Context, refresh string) (Principal, TokenPair, error) {
 	hash := cryptoenc.HashToken(refresh)
 	var userID uuid.UUID
-	var expires time.Time
-	var revoked *time.Time
-	err := s.pg.QueryRow(ctx, `SELECT user_id, expires_at, revoked_at FROM refresh_tokens WHERE token_hash=$1`, hash).
-		Scan(&userID, &expires, &revoked)
+	// Atomically consume the refresh token so concurrent renewals cannot both succeed.
+	err := s.pg.QueryRow(ctx, `
+		UPDATE refresh_tokens
+		SET revoked_at=now()
+		WHERE token_hash=$1 AND revoked_at IS NULL AND expires_at > now()
+		RETURNING user_id
+	`, hash).Scan(&userID)
 	if err != nil {
-		return Principal{}, TokenPair{}, fmt.Errorf("refresh token inválido")
-	}
-	if revoked != nil || time.Now().After(expires) {
-		return Principal{}, TokenPair{}, fmt.Errorf("refresh token expirado")
+		return Principal{}, TokenPair{}, fmt.Errorf("refresh token inválido ou expirado")
 	}
 	p, err := s.principalForUser(ctx, userID, uuid.Nil)
 	if err != nil {
 		return Principal{}, TokenPair{}, err
 	}
-	_, _ = s.pg.Exec(ctx, `UPDATE refresh_tokens SET revoked_at=now() WHERE token_hash=$1`, hash)
 	pair, err := s.issue(ctx, p)
 	return p, pair, err
 }
@@ -225,6 +224,19 @@ func (s *Service) Principal(ctx context.Context, userID, workspaceID uuid.UUID) 
 }
 
 func (s *Service) principalForUser(ctx context.Context, userID, workspaceID uuid.UUID) (Principal, error) {
+	return s.resolvePrincipal(ctx, userID, uuid.Nil, workspaceID)
+}
+
+// principalForOrg resolves the principal for a specific organization membership.
+// Prefer this over principalForUser(uuid.Nil) when the target org is known (e.g. invite accept).
+func (s *Service) principalForOrg(ctx context.Context, userID, orgID uuid.UUID) (Principal, error) {
+	if orgID == uuid.Nil {
+		return Principal{}, fmt.Errorf("organização obrigatória")
+	}
+	return s.resolvePrincipal(ctx, userID, orgID, uuid.Nil)
+}
+
+func (s *Service) resolvePrincipal(ctx context.Context, userID, orgID, workspaceID uuid.UUID) (Principal, error) {
 	var p Principal
 	q := `
 		SELECT u.id, u.email, u.name, o.id, o.name, o.plan, om.role, w.id, COALESCE(u.mfa_enabled, FALSE),
@@ -236,8 +248,14 @@ func (s *Service) principalForUser(ctx context.Context, userID, workspaceID uuid
 		WHERE u.id = $1 AND COALESCE(u.active, TRUE)
 	`
 	args := []any{userID}
+	argN := 2
+	if orgID != uuid.Nil {
+		q += fmt.Sprintf(` AND o.id = $%d`, argN)
+		args = append(args, orgID)
+		argN++
+	}
 	if workspaceID != uuid.Nil {
-		q += ` AND w.id = $2`
+		q += fmt.Sprintf(` AND w.id = $%d`, argN)
 		args = append(args, workspaceID)
 	}
 	q += ` ORDER BY om.created_at ASC, w.created_at ASC LIMIT 1`
@@ -294,7 +312,12 @@ func (s *Service) UpsertSSO(ctx context.Context, email, name, provider, subject 
 	err := s.pg.QueryRow(ctx, `SELECT user_id FROM oauth_identities WHERE provider=$1 AND subject=$2`, provider, subject).Scan(&userID)
 	if err == pgx.ErrNoRows {
 		err = s.pg.QueryRow(ctx, `SELECT id FROM users WHERE email=$1`, email).Scan(&userID)
-		if err == pgx.ErrNoRows {
+		if err == nil {
+			// Never auto-link unverified SAML (or any SAML) identity to an existing account by email.
+			if provider == "saml" {
+				return Principal{}, TokenPair{}, fmt.Errorf("não é permitido vincular identidade SAML a conta existente por e-mail sem validação criptográfica")
+			}
+		} else if err == pgx.ErrNoRows {
 			hash, _ := bcrypt.GenerateFromPassword([]byte(uuid.NewString()), 10)
 			err = s.pg.QueryRow(ctx, `INSERT INTO users (email, password_hash, name, auth_provider, external_id) VALUES ($1,$2,$3,$4,$5) RETURNING id`,
 				email, string(hash), name, provider, subject).Scan(&userID)

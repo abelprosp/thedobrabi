@@ -114,7 +114,7 @@ func (s *Server) refreshDatasetQuality(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "profile_failed", "esquema do conjunto inválido")
 		return
 	}
-	headers, rows, err := s.query.ReadRows(r.Context(), org, ws, id.String(), 50000)
+	headers, rows, err := s.query.ReadRows(r.Context(), org, ws, id.String(), 50000, uuid.Nil, "")
 	if err != nil {
 		httpx.Error(w, 400, "profile_failed", err.Error())
 		return

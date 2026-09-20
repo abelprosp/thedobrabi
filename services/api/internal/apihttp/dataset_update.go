@@ -88,7 +88,7 @@ func (s *Server) updateDatasetRows(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) listDatasetRows(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
 	id := chi.URLParam(r, "id")
 	if _, err := uuid.Parse(id); err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")
@@ -106,7 +106,7 @@ func (s *Server) listDatasetRows(w http.ResponseWriter, r *http.Request) {
 	if limit > ingest.MaxJSONReplaceRows {
 		limit = ingest.MaxJSONReplaceRows
 	}
-	cols, rows, err := s.query.ReadRows(r.Context(), org, ws, id, limit)
+	cols, rows, err := s.query.ReadRows(r.Context(), org, ws, id, limit, uid, role)
 	if err != nil {
 		httpx.Error(w, 400, "rows_failed", err.Error())
 		return

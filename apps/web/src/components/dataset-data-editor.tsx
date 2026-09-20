@@ -64,10 +64,13 @@ function filled(cols: Col[], row: Record<string, string>) {
 export function DatasetDataEditor({ dataset }: { dataset: Dataset }) {
   const qc = useQueryClient();
   const id = dataset.id;
+  const me = useQuery({ queryKey: ["me"], queryFn: () => api<{ role?: string }>("/api/v1/auth/me") });
+  const role = me.data?.role || "";
+  const isAdmin = role === "owner" || role === "admin";
   const cols = useMemo(() => dataCols(dataset.schema || []), [dataset.schema]);
   const live = dataset.storage_mode === "direct_query";
   const manual = dataset.source_type === "manual";
-  const canEdit = !live && !manual && cols.length > 0;
+  const canEdit = isAdmin && !live && !manual && cols.length > 0;
   const smallEnough = (dataset.row_count || 0) <= EDIT_LIMIT;
   const appendRef = useRef<HTMLInputElement>(null);
   const replaceRef = useRef<HTMLInputElement>(null);
@@ -184,6 +187,16 @@ export function DatasetDataEditor({ dataset }: { dataset: Dataset }) {
             Abrir planilha
           </Link>
         )}
+      </Card>
+    );
+  }
+  if (!isAdmin) {
+    return (
+      <Card>
+        <CardTitle>Dados</CardTitle>
+        <p className="text-[13px] text-mute">
+          Apenas administradores podem alterar linhas deste conjunto. Peça a um administrador se precisar atualizar os dados.
+        </p>
       </Card>
     );
   }

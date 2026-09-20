@@ -8,12 +8,14 @@ import (
 	"net/http"
 
 	"github.com/google/uuid"
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/stripe/stripe-go/v82"
 	portalsession "github.com/stripe/stripe-go/v82/billingportal/session"
 	checkoutsession "github.com/stripe/stripe-go/v82/checkout/session"
 	"github.com/stripe/stripe-go/v82/webhook"
 	"github.com/thedobra/thedobra/services/api/internal/config"
+	"github.com/thedobra/thedobra/services/api/internal/entitlements"
 )
 
 type Service struct {
@@ -31,14 +33,18 @@ func New(cfg config.Config, pg *pgxpool.Pool) *Service {
 func (s *Service) Enabled() bool { return s.cfg.StripeSecret != "" }
 
 func (s *Service) PublicConfig() map[string]any {
+	catalog := entitlements.Catalog()
+	plans := make([]map[string]any, 0, len(catalog))
+	for _, p := range catalog {
+		plans = append(plans, map[string]any{
+			"id": p.ID, "name": p.Name, "price_brl": p.PriceBRL,
+			"users": p.Users, "datasets": p.Datasets, "queries": p.Queries,
+			"ai": p.AI, "dashboards": p.Dashboards, "connectors": p.Connectors,
+		})
+	}
 	return map[string]any{
 		"enabled": s.Enabled(),
-		"plans": []map[string]any{
-			{"id": "starter", "name": "Starter", "users": 5, "datasets": 10, "queries": 10000, "ai": 500},
-			{"id": "growth", "name": "Growth", "users": 20, "datasets": 50, "queries": 100000, "ai": 5000},
-			{"id": "business", "name": "Business", "users": 100, "datasets": 200, "queries": 1000000, "ai": 25000},
-			{"id": "enterprise", "name": "Enterprise", "users": -1, "datasets": -1, "queries": -1, "ai": -1},
-		},
+		"plans":   plans,
 	}
 }
 
@@ -46,6 +52,7 @@ func (s *Service) Checkout(_ context.Context, orgID uuid.UUID, email, plan strin
 	if !s.Enabled() {
 		return "", fmt.Errorf("Stripe não está configurado (STRIPE_SECRET_KEY)")
 	}
+	plan = entitlements.NormalizePlan(plan)
 	price := s.priceFor(plan)
 	if price == "" {
 		return "", fmt.Errorf("este plano ainda não tem price ID no Stripe")
@@ -100,23 +107,51 @@ func (s *Service) HandleWebhook(r *http.Request) error {
 	if err != nil {
 		return err
 	}
-	ctx := r.Context()
-	_, _ = s.pg.Exec(ctx, `INSERT INTO billing_events (stripe_event_id, type, payload) VALUES ($1,$2,$3) ON CONFLICT (stripe_event_id) DO NOTHING`,
-		event.ID, string(event.Type), event.Data.Raw)
 
+	ctx := r.Context()
+	tx, err := s.pg.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+
+	// Claim the event: only the first successful insert applies side effects.
+	tag, err := tx.Exec(ctx, `
+		INSERT INTO billing_events (stripe_event_id, type, payload)
+		VALUES ($1,$2,$3)
+		ON CONFLICT (stripe_event_id) DO NOTHING
+	`, event.ID, string(event.Type), event.Data.Raw)
+	if err != nil {
+		return err
+	}
+	if tag.RowsAffected() == 0 {
+		// Already processed — acknowledge without reapplying effects.
+		return tx.Commit(ctx)
+	}
+
+	if err := s.applyWebhookEvent(ctx, tx, event); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
+}
+
+func (s *Service) applyWebhookEvent(ctx context.Context, tx pgx.Tx, event stripe.Event) error {
 	switch event.Type {
 	case "checkout.session.completed":
 		var sess stripe.CheckoutSession
-		if json.Unmarshal(event.Data.Raw, &sess) != nil {
-			return nil
+		if err := json.Unmarshal(event.Data.Raw, &sess); err != nil {
+			return fmt.Errorf("checkout.session.completed payload: %w", err)
 		}
 		orgID, _ := uuid.Parse(sess.ClientReferenceID)
 		if orgID == uuid.Nil && sess.Metadata != nil {
 			orgID, _ = uuid.Parse(sess.Metadata["org_id"])
 		}
-		plan := "growth"
+		if orgID == uuid.Nil {
+			return fmt.Errorf("checkout.session.completed sem org_id")
+		}
+		plan := entitlements.PlanPro
 		if sess.Metadata != nil && sess.Metadata["plan"] != "" {
-			plan = sess.Metadata["plan"]
+			plan = entitlements.NormalizePlan(sess.Metadata["plan"])
 		}
 		cust, sub := "", ""
 		if sess.Customer != nil {
@@ -125,22 +160,40 @@ func (s *Service) HandleWebhook(r *http.Request) error {
 		if sess.Subscription != nil {
 			sub = sess.Subscription.ID
 		}
-		_, _ = s.pg.Exec(ctx, `
+		if _, err := tx.Exec(ctx, `
 			INSERT INTO stripe_customers (org_id, stripe_customer_id, stripe_sub_id, status, price_id)
 			VALUES ($1,$2,$3,'active',$4)
-			ON CONFLICT (org_id) DO UPDATE SET stripe_customer_id=EXCLUDED.stripe_customer_id, stripe_sub_id=EXCLUDED.stripe_sub_id, status='active', updated_at=now()
-		`, orgID, cust, sub, s.priceFor(plan))
-		_, _ = s.pg.Exec(ctx, `UPDATE organizations SET plan=$2, updated_at=now() WHERE id=$1`, orgID, plan)
+			ON CONFLICT (org_id) DO UPDATE SET
+				stripe_customer_id=EXCLUDED.stripe_customer_id,
+				stripe_sub_id=EXCLUDED.stripe_sub_id,
+				status='active',
+				price_id=EXCLUDED.price_id,
+				updated_at=now()
+		`, orgID, cust, sub, s.priceFor(plan)); err != nil {
+			return err
+		}
+		if _, err := tx.Exec(ctx, `UPDATE organizations SET plan=$2, updated_at=now() WHERE id=$1`, orgID, plan); err != nil {
+			return err
+		}
 	case "customer.subscription.deleted":
 		var sub stripe.Subscription
-		if json.Unmarshal(event.Data.Raw, &sub) != nil {
-			return nil
+		if err := json.Unmarshal(event.Data.Raw, &sub); err != nil {
+			return fmt.Errorf("customer.subscription.deleted payload: %w", err)
 		}
-		_, _ = s.pg.Exec(ctx, `UPDATE stripe_customers SET status='canceled', updated_at=now() WHERE stripe_sub_id=$1`, sub.ID)
-		_, _ = s.pg.Exec(ctx, `UPDATE organizations SET plan='starter' WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)`, sub.ID)
+		if _, err := tx.Exec(ctx, `UPDATE stripe_customers SET status='canceled', updated_at=now() WHERE stripe_sub_id=$1`, sub.ID); err != nil {
+			return err
+		}
+		if _, err := tx.Exec(ctx, `
+			UPDATE organizations SET plan=$2, updated_at=now()
+			WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)
+		`, sub.ID, entitlements.PlanEssencial); err != nil {
+			return err
+		}
 	case "customer.subscription.updated", "invoice.paid":
 		var raw map[string]any
-		_ = json.Unmarshal(event.Data.Raw, &raw)
+		if err := json.Unmarshal(event.Data.Raw, &raw); err != nil {
+			return fmt.Errorf("%s payload: %w", event.Type, err)
+		}
 		subID, _ := raw["id"].(string)
 		if event.Type == "invoice.paid" {
 			if sub, ok := raw["subscription"].(string); ok {
@@ -152,11 +205,19 @@ func (s *Service) HandleWebhook(r *http.Request) error {
 			status = "active"
 		}
 		if subID != "" {
-			_, _ = s.pg.Exec(ctx, `UPDATE stripe_customers SET status=$2, updated_at=now() WHERE stripe_sub_id=$1`, subID, status)
+			if _, err := tx.Exec(ctx, `UPDATE stripe_customers SET status=$2, updated_at=now() WHERE stripe_sub_id=$1`, subID, status); err != nil {
+				return err
+			}
 		}
 		if meta, ok := raw["metadata"].(map[string]any); ok {
 			if p, ok := meta["plan"].(string); ok && p != "" {
-				_, _ = s.pg.Exec(ctx, `UPDATE organizations SET plan=$2, updated_at=now() WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)`, subID, p)
+				plan := entitlements.NormalizePlan(p)
+				if _, err := tx.Exec(ctx, `
+					UPDATE organizations SET plan=$2, updated_at=now()
+					WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)
+				`, subID, plan); err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -168,18 +229,19 @@ func (s *Service) Status(ctx context.Context, orgID uuid.UUID) map[string]any {
 	_ = s.pg.QueryRow(ctx, `SELECT plan FROM organizations WHERE id=$1`, orgID).Scan(&plan)
 	var cust, status string
 	_ = s.pg.QueryRow(ctx, `SELECT COALESCE(stripe_customer_id,''), COALESCE(status,'') FROM stripe_customers WHERE org_id=$1`, orgID).Scan(&cust, &status)
-	return map[string]any{"plan": plan, "stripe_customer": cust != "", "subscription_status": status, "enabled": s.Enabled()}
+	return map[string]any{"plan": entitlements.NormalizePlan(plan), "stripe_customer": cust != "", "subscription_status": status, "enabled": s.Enabled()}
 }
 
 func (s *Service) priceFor(plan string) string {
-	switch plan {
-	case "starter":
+	switch entitlements.NormalizePlan(plan) {
+	case entitlements.PlanEssencial:
 		return s.cfg.StripePriceStarter
-	case "growth":
+	case entitlements.PlanPro:
 		return s.cfg.StripePriceGrowth
-	case "business":
-		return s.cfg.StripePriceBusiness
-	case "enterprise":
+	case entitlements.PlanCompleto:
+		if s.cfg.StripePriceBusiness != "" {
+			return s.cfg.StripePriceBusiness
+		}
 		return s.cfg.StripePriceEnterprise
 	default:
 		return s.cfg.StripePriceGrowth

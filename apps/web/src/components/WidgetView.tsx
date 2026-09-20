@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/cn";
 import { DEFAULT_QUERY_LIMIT, MAX_QUERY_LIMIT, titleAlignClass, widgetCrossBy } from "@/lib/widget-config";
 import { diagnoseQueryValue, firstNumericEntry } from "@/lib/widget-errors";
+import { renderMarkdown } from "@/lib/safeMarkdown";
 import { AlertCircle, ChevronLeft, ChevronRight, Download, Image as ImageIcon } from "lucide-react";
 import { DataIntelligenceCard } from "@/components/data-intelligence-card";
 import { RankingCard } from "@/components/ranking-card";
@@ -192,6 +193,27 @@ export function WidgetView({
     [globalFilters, w.query?.dataset_id],
   );
   const body = useMemo(() => {
+    if (isPublicQuery) {
+      let filters = [...scopedFilters];
+      if (w.type === "slicer") {
+        const own = w.query?.dimensions?.[0];
+        if (own) filters = filters.filter((f) => f.dimension !== own);
+      }
+      let limit = w.query?.limit;
+      if (w.type === "ranking") {
+        const n = Number(cfg.rankLimit || 10);
+        limit = Math.max(3, Math.min(50, Number.isFinite(n) ? n : 10));
+      } else if (!limit || limit <= 0) {
+        limit = w.type === "big_table" ? MAX_QUERY_LIMIT : DEFAULT_QUERY_LIMIT;
+      }
+      return {
+        widget_id: w.id,
+        filters: filters.length ? filters : undefined,
+        drill_path: w.drillPath?.length ? w.drillPath : undefined,
+        time_range: timeRange?.start || timeRange?.end ? { start: timeRange.start, end: timeRange.end } : undefined,
+        limit,
+      };
+    }
     const b: QuerySpec = { ...w.query };
     if (timeRange?.start || timeRange?.end) {
       b.time_range = { start: timeRange.start, end: timeRange.end };
@@ -248,7 +270,7 @@ export function WidgetView({
     else delete b.filters;
     if (!b.limit || b.limit <= 0) b.limit = w.type === "big_table" ? MAX_QUERY_LIMIT : DEFAULT_QUERY_LIMIT;
     return b;
-  }, [w, scopedFilters, timeRange]);
+  }, [w, scopedFilters, timeRange, isPublicQuery, cfg.overlayLine, cfg.rankLimit, cfg.rankOrder]);
 
   const q = useQuery({
     queryKey: ["widget", w.id, queriesURL, body],
@@ -971,14 +993,4 @@ async function downloadDatasetXlsx(datasetId: string, title: string) {
   a.download = `${(title || "conjunto").replace(/[^\w\-]+/g, "_")}.xlsx`;
   a.click();
   URL.revokeObjectURL(url);
-}
-
-function renderMarkdown(md: string) {
-  return md
-    .replace(/^### (.*$)/gim, "<h3>$1</h3>")
-    .replace(/^## (.*$)/gim, "<h2>$1</h2>")
-    .replace(/^# (.*$)/gim, "<h1>$1</h1>")
-    .replace(/\*\*(.*)\*\*/gim, "<b>$1</b>")
-    .replace(/\*(.*)\*\*/gim, "<i>$1</i>")
-    .replace(/\n/gim, "<br>");
 }

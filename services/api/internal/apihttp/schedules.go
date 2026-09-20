@@ -282,17 +282,17 @@ func (s *Server) runScheduledConnector(ctx context.Context, orgID, wsID, userID,
 }
 
 func (s *Server) runScheduledFlow(ctx context.Context, orgID, wsID, userID, flowID uuid.UUID) (scheduler.JobResult, error) {
-	if _, err := s.flow.Get(ctx, orgID, wsID, flowID); err != nil {
-		return scheduler.JobResult{}, fmt.Errorf("flow não encontrado")
-	}
-	runID, err := s.flow.CreateRun(ctx, flow.Run{FlowID: flowID, Status: "pending"})
+	runID, err := s.flow.CreateRun(ctx, orgID, wsID, flow.Run{FlowID: flowID, Status: "pending"})
 	if err != nil {
+		if err.Error() == "not found" {
+			return scheduler.JobResult{}, fmt.Errorf("flow não encontrado")
+		}
 		return scheduler.JobResult{}, err
 	}
 	reader := func(datasetID string, limit int) ([]string, []map[string]any, error) {
-		return s.query.ReadRows(ctx, orgID, wsID, datasetID, limit)
+		return s.query.ReadRows(ctx, orgID, wsID, datasetID, limit, uuid.Nil, "")
 	}
-	sum, err := s.flowEng.Execute(ctx, runID, userID, reader)
+	sum, err := s.flowEng.Execute(ctx, orgID, wsID, runID, userID, reader)
 	n := sum.Rows
 	return scheduler.JobResult{Mode: "full", Rows: &n}, err
 }

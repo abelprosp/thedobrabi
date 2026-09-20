@@ -226,21 +226,39 @@ func (s *Store) Update(ctx context.Context, orgID, wsID, id uuid.UUID, f Flow) e
 	return nil
 }
 
-func (s *Store) SetOutputDataset(ctx context.Context, flowID, datasetID uuid.UUID) error {
-	_, err := s.pg.Exec(ctx, `UPDATE flows SET output_dataset_id=$1, updated_at=now() WHERE id=$2`, datasetID, flowID)
-	return err
+func (s *Store) SetOutputDataset(ctx context.Context, orgID, wsID, flowID, datasetID uuid.UUID) error {
+	ct, err := s.pg.Exec(ctx, `
+		UPDATE flows SET output_dataset_id=$1, updated_at=now()
+		WHERE id=$2 AND org_id=$3 AND workspace_id=$4
+	`, datasetID, flowID, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	if ct.RowsAffected() == 0 {
+		return fmt.Errorf("not found")
+	}
+	return nil
 }
 
 func (s *Store) Delete(ctx context.Context, orgID, wsID, id uuid.UUID) error {
-	_, err := s.pg.Exec(ctx, `DELETE FROM flows WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, orgID, wsID)
-	return err
+	ct, err := s.pg.Exec(ctx, `DELETE FROM flows WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	if ct.RowsAffected() == 0 {
+		return fmt.Errorf("not found")
+	}
+	return nil
 }
 
-func (s *Store) ListSteps(ctx context.Context, flowID uuid.UUID) ([]Step, error) {
+func (s *Store) ListSteps(ctx context.Context, orgID, wsID, flowID uuid.UUID) ([]Step, error) {
 	rows, err := s.pg.Query(ctx, `
-		SELECT id, flow_id, step_order, kind, subkind, name, config, created_at, updated_at
-		FROM flow_steps WHERE flow_id=$1 ORDER BY step_order
-	`, flowID)
+		SELECT fs.id, fs.flow_id, fs.step_order, fs.kind, fs.subkind, fs.name, fs.config, fs.created_at, fs.updated_at
+		FROM flow_steps fs
+		JOIN flows f ON f.id = fs.flow_id
+		WHERE fs.flow_id=$1 AND f.org_id=$2 AND f.workspace_id=$3
+		ORDER BY fs.step_order
+	`, flowID, orgID, wsID)
 	if err != nil {
 		return nil, err
 	}
@@ -258,26 +276,36 @@ func (s *Store) ListSteps(ctx context.Context, flowID uuid.UUID) ([]Step, error)
 	return out, rows.Err()
 }
 
-func (s *Store) CreateStep(ctx context.Context, st Step) (uuid.UUID, error) {
+func (s *Store) CreateStep(ctx context.Context, orgID, wsID uuid.UUID, st Step) (uuid.UUID, error) {
 	if st.ID == uuid.Nil {
 		st.ID = uuid.New()
 	}
 	raw, _ := json.Marshal(st.Config)
-	_, err := s.pg.Exec(ctx, `
+	err := s.pg.QueryRow(ctx, `
 		INSERT INTO flow_steps (id, flow_id, step_order, kind, subkind, name, config)
-		VALUES ($1,$2,$3,$4,$5,$6,$7)
-	`, st.ID, st.FlowID, st.StepOrder, st.Kind, st.Subkind, st.Name, raw)
-	return st.ID, err
+		SELECT $1, f.id, $3, $4, $5, $6, $7
+		FROM flows f
+		WHERE f.id=$2 AND f.org_id=$8 AND f.workspace_id=$9
+		RETURNING id
+	`, st.ID, st.FlowID, st.StepOrder, st.Kind, st.Subkind, st.Name, raw, orgID, wsID).Scan(&st.ID)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return uuid.Nil, fmt.Errorf("not found")
+		}
+		return uuid.Nil, err
+	}
+	return st.ID, nil
 }
 
-func (s *Store) UpdateStep(ctx context.Context, stepID uuid.UUID, st Step) error {
+func (s *Store) UpdateStep(ctx context.Context, orgID, wsID, flowID, stepID uuid.UUID, st Step) error {
 	raw, _ := json.Marshal(st.Config)
 	ct, err := s.pg.Exec(ctx, `
-		UPDATE flow_steps SET
-			step_order=CASE WHEN $1 = 0 THEN step_order ELSE $1 END,
+		UPDATE flow_steps fs SET
+			step_order=CASE WHEN $1 = 0 THEN fs.step_order ELSE $1 END,
 			kind=$2, subkind=$3, name=$4, config=$5, updated_at=now()
-		WHERE id=$6
-	`, st.StepOrder, st.Kind, st.Subkind, st.Name, raw, stepID)
+		FROM flows f
+		WHERE fs.id=$6 AND fs.flow_id=$7 AND fs.flow_id=f.id AND f.org_id=$8 AND f.workspace_id=$9
+	`, st.StepOrder, st.Kind, st.Subkind, st.Name, raw, stepID, flowID, orgID, wsID)
 	if err != nil {
 		return err
 	}
@@ -287,35 +315,67 @@ func (s *Store) UpdateStep(ctx context.Context, stepID uuid.UUID, st Step) error
 	return nil
 }
 
-func (s *Store) DeleteStep(ctx context.Context, stepID uuid.UUID) error {
-	_, err := s.pg.Exec(ctx, `DELETE FROM flow_steps WHERE id=$1`, stepID)
-	return err
+func (s *Store) DeleteStep(ctx context.Context, orgID, wsID, flowID, stepID uuid.UUID) error {
+	ct, err := s.pg.Exec(ctx, `
+		DELETE FROM flow_steps fs
+		USING flows f
+		WHERE fs.id=$1 AND fs.flow_id=$2 AND fs.flow_id=f.id AND f.org_id=$3 AND f.workspace_id=$4
+	`, stepID, flowID, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	if ct.RowsAffected() == 0 {
+		return fmt.Errorf("not found")
+	}
+	return nil
 }
 
-func (s *Store) CreateRun(ctx context.Context, run Run) (uuid.UUID, error) {
+func (s *Store) CreateRun(ctx context.Context, orgID, wsID uuid.UUID, run Run) (uuid.UUID, error) {
 	if run.ID == uuid.Nil {
 		run.ID = uuid.New()
 	}
+	if run.Status == "" {
+		run.Status = "pending"
+	}
 	err := s.pg.QueryRow(ctx, `
 		INSERT INTO flow_runs (id, flow_id, status, started_at)
-		VALUES ($1,$2,$3,now()) RETURNING id, created_at
-	`, run.ID, run.FlowID, run.Status).Scan(&run.ID, &run.CreatedAt)
-	return run.ID, err
+		SELECT $1, f.id, $3, now()
+		FROM flows f
+		WHERE f.id=$2 AND f.org_id=$4 AND f.workspace_id=$5
+		RETURNING id, created_at
+	`, run.ID, run.FlowID, run.Status, orgID, wsID).Scan(&run.ID, &run.CreatedAt)
+	if err != nil {
+		if err == pgx.ErrNoRows {
+			return uuid.Nil, fmt.Errorf("not found")
+		}
+		return uuid.Nil, err
+	}
+	return run.ID, nil
 }
 
-func (s *Store) UpdateRun(ctx context.Context, runID uuid.UUID, status, errStr string, rows *int64) error {
-	_, err := s.pg.Exec(ctx, `
-		UPDATE flow_runs SET status=$1, error=$2, rows_processed=$3, finished_at=now()
-		WHERE id=$4
-	`, status, errStr, rows, runID)
-	return err
+func (s *Store) UpdateRun(ctx context.Context, orgID, wsID, runID uuid.UUID, status, errStr string, rows *int64) error {
+	ct, err := s.pg.Exec(ctx, `
+		UPDATE flow_runs fr SET status=$1, error=$2, rows_processed=$3, finished_at=now()
+		FROM flows f
+		WHERE fr.id=$4 AND fr.flow_id=f.id AND f.org_id=$5 AND f.workspace_id=$6
+	`, status, errStr, rows, runID, orgID, wsID)
+	if err != nil {
+		return err
+	}
+	if ct.RowsAffected() == 0 {
+		return fmt.Errorf("not found")
+	}
+	return nil
 }
 
-func (s *Store) ListRuns(ctx context.Context, flowID uuid.UUID) ([]Run, error) {
+func (s *Store) ListRuns(ctx context.Context, orgID, wsID, flowID uuid.UUID) ([]Run, error) {
 	rows, err := s.pg.Query(ctx, `
-		SELECT id, flow_id, status, started_at, finished_at, rows_processed, error, created_at
-		FROM flow_runs WHERE flow_id=$1 ORDER BY created_at DESC LIMIT 50
-	`, flowID)
+		SELECT fr.id, fr.flow_id, fr.status, fr.started_at, fr.finished_at, fr.rows_processed, fr.error, fr.created_at
+		FROM flow_runs fr
+		JOIN flows f ON f.id = fr.flow_id
+		WHERE fr.flow_id=$1 AND f.org_id=$2 AND f.workspace_id=$3
+		ORDER BY fr.created_at DESC LIMIT 50
+	`, flowID, orgID, wsID)
 	if err != nil {
 		return nil, err
 	}
@@ -344,11 +404,15 @@ func (s *Store) AddLog(ctx context.Context, runID, stepID uuid.UUID, level, mess
 	return err
 }
 
-func (s *Store) GetRunLogs(ctx context.Context, runID uuid.UUID) ([]RunLog, error) {
+func (s *Store) GetRunLogs(ctx context.Context, orgID, wsID, runID uuid.UUID) ([]RunLog, error) {
 	rows, err := s.pg.Query(ctx, `
-		SELECT id, run_id, step_id, level, message, details, created_at
-		FROM flow_run_logs WHERE run_id=$1 ORDER BY created_at
-	`, runID)
+		SELECT l.id, l.run_id, l.step_id, l.level, l.message, l.details, l.created_at
+		FROM flow_run_logs l
+		JOIN flow_runs fr ON fr.id = l.run_id
+		JOIN flows f ON f.id = fr.flow_id
+		WHERE l.run_id=$1 AND f.org_id=$2 AND f.workspace_id=$3
+		ORDER BY l.created_at
+	`, runID, orgID, wsID)
 	if err != nil {
 		return nil, err
 	}

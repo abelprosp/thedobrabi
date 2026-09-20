@@ -11,50 +11,91 @@ import (
 	"net/netip"
 	"net/url"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/google/uuid"
 )
 
-var connectorHTTP = &http.Client{
-	Timeout: 20 * time.Second,
-	Transport: &http.Transport{
-		Proxy: nil,
-		DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
-			host, port, err := net.SplitHostPort(address)
-			if err != nil {
-				return nil, err
-			}
-			ips, err := net.DefaultResolver.LookupIP(ctx, "ip", host)
-			if err != nil {
-				return nil, fmt.Errorf("falha ao resolver host")
-			}
-			var lastErr error
-			for _, ip := range ips {
-				if blockedConnectorIP(ip) {
-					continue
+var (
+	connectorMu            sync.RWMutex
+	connectorHTTP          = newSecureConnectorHTTP()
+	allowPrivateConnectorHosts bool
+)
+
+func newSecureConnectorHTTP() *http.Client {
+	return &http.Client{
+		Timeout: 20 * time.Second,
+		Transport: &http.Transport{
+			Proxy: nil,
+			DialContext: func(ctx context.Context, network, address string) (net.Conn, error) {
+				host, port, err := net.SplitHostPort(address)
+				if err != nil {
+					return nil, err
 				}
-				conn, err := (&net.Dialer{Timeout: 10 * time.Second}).DialContext(ctx, network, net.JoinHostPort(ip.String(), port))
-				if err == nil {
-					return conn, nil
+				ips, err := net.DefaultResolver.LookupIP(ctx, "ip", host)
+				if err != nil {
+					return nil, fmt.Errorf("falha ao resolver host")
 				}
-				lastErr = err
-			}
-			if lastErr != nil {
-				return nil, lastErr
-			}
-			return nil, fmt.Errorf("host interno ou reservado não permitido")
+				var lastErr error
+				for _, ip := range ips {
+					if blockedConnectorIP(ip) {
+						continue
+					}
+					conn, err := (&net.Dialer{Timeout: 10 * time.Second}).DialContext(ctx, network, net.JoinHostPort(ip.String(), port))
+					if err == nil {
+						return conn, nil
+					}
+					lastErr = err
+				}
+				if lastErr != nil {
+					return nil, lastErr
+				}
+				return nil, fmt.Errorf("host interno ou reservado não permitido")
+			},
 		},
-	},
-	CheckRedirect: func(req *http.Request, via []*http.Request) error {
-		if len(via) >= 5 {
-			return fmt.Errorf("demasiados redireccionamentos")
-		}
-		if err := assertHTTPURL(req.URL.String()); err != nil {
-			return err
-		}
-		return nil
-	},
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			if len(via) >= 5 {
+				return fmt.Errorf("demasiados redireccionamentos")
+			}
+			if err := assertHTTPURL(req.URL.String()); err != nil {
+				return err
+			}
+			return nil
+		},
+	}
+}
+
+// SetConnectorHTTP replaces the package HTTP client used by connectors.
+// Pass nil to restore the production client with SSRF protection.
+// A non-nil client enables loopback/private hosts so httptest can be used in tests.
+func SetConnectorHTTP(c *http.Client) {
+	connectorMu.Lock()
+	defer connectorMu.Unlock()
+	if c == nil {
+		connectorHTTP = newSecureConnectorHTTP()
+		allowPrivateConnectorHosts = false
+		sheetsHTTP = newSheetsHTTP()
+		return
+	}
+	connectorHTTP = c
+	allowPrivateConnectorHosts = true
+	sheetsHTTP = &http.Client{
+		Timeout:       25 * time.Second,
+		CheckRedirect: sheetsRedirectCheck,
+	}
+}
+
+func currentConnectorHTTP() *http.Client {
+	connectorMu.RLock()
+	defer connectorMu.RUnlock()
+	return connectorHTTP
+}
+
+func privateHostsAllowed() bool {
+	connectorMu.RLock()
+	defer connectorMu.RUnlock()
+	return allowPrivateConnectorHosts
 }
 
 func assertHTTPURL(raw string) error {
@@ -66,7 +107,9 @@ func assertHTTPURL(raw string) error {
 		return fmt.Errorf("apenas http/https são permitidos")
 	}
 	if ip, err := netip.ParseAddr(u.Hostname()); err == nil && blockedConnectorIP(net.IP(ip.AsSlice())) {
-		return fmt.Errorf("host interno ou reservado não permitido")
+		if !privateHostsAllowed() {
+			return fmt.Errorf("host interno ou reservado não permitido")
+		}
 	}
 	return nil
 }
@@ -177,7 +220,7 @@ func (e *Engine) doHTTP(ctx context.Context, cfg SQLConfig, method string) ([]by
 		}
 		req.Header.Set(k, v)
 	}
-	resp, err := connectorHTTP.Do(req)
+	resp, err := currentConnectorHTTP().Do(req)
 	if err != nil {
 		return nil, "", fmt.Errorf("pedido HTTP falhou: %w", err)
 	}

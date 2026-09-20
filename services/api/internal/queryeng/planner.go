@@ -2,6 +2,7 @@ package queryeng
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -27,18 +28,20 @@ func NewPlanner(pg *pgxpool.Pool, rdb *redis.Client) *Planner {
 }
 
 type datasetInfo struct {
-	ID          uuid.UUID
-	OrgID       uuid.UUID
-	WorkspaceID uuid.UUID
-	Name        string
-	Table       string
-	StorageMode string
-	SourceTable *string
-	SourceQuery *string
-	SchemaJSON  []byte
-	ModelJSON   []byte
-	Model       semantic.Model
-	RowCount    int64
+	ID             uuid.UUID
+	OrgID          uuid.UUID
+	WorkspaceID    uuid.UUID
+	Name           string
+	Table          string
+	StorageMode    string
+	SourceTable    *string
+	SourceQuery    *string
+	SchemaJSON     []byte
+	ModelJSON      []byte
+	Model          semantic.Model
+	RowCount       int64
+	UpdatedAt      time.Time
+	ModelUpdatedAt time.Time
 }
 
 type plan struct {
@@ -58,11 +61,12 @@ func (p *Planner) loadDataset(ctx context.Context, orgID, wsID uuid.UUID, datase
 	m.ID = id
 	m.OrgID = orgID
 	err = p.pg.QueryRow(ctx, `
-		SELECT d.workspace_id, d.name, d.clickhouse_table, d.storage_mode, d.source_table, d.source_query, d.schema_json, d.row_count, COALESCE(s.model_json, '{}'::jsonb)
+		SELECT d.workspace_id, d.name, d.clickhouse_table, d.storage_mode, d.source_table, d.source_query, d.schema_json, d.row_count,
+			COALESCE(s.model_json, '{}'::jsonb), d.updated_at, COALESCE(s.updated_at, d.updated_at)
 		FROM datasets d
 		LEFT JOIN semantic_models s ON s.dataset_id = d.id
 		WHERE d.id=$1 AND d.org_id=$2 AND d.workspace_id=$3
-	`, id, orgID, wsID).Scan(&m.WorkspaceID, &m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON)
+	`, id, orgID, wsID).Scan(&m.WorkspaceID, &m.Name, &m.Table, &m.StorageMode, &m.SourceTable, &m.SourceQuery, &m.SchemaJSON, &m.RowCount, &m.ModelJSON, &m.UpdatedAt, &m.ModelUpdatedAt)
 	if err != nil {
 		return datasetInfo{}, fmt.Errorf("dataset not found")
 	}
@@ -168,10 +172,19 @@ func measureResolver(model *semantic.Model) semanticxpr.MeasureResolver {
 
 // rlsPredicates loads RLS rules for the dataset and returns SQL predicates.
 func (p *Planner) rlsPredicates(ctx context.Context, meta datasetInfo, userID uuid.UUID, role string) ([]string, error) {
+	rules, err := p.loadRLSRules(ctx, meta)
+	if err != nil {
+		return nil, err
+	}
+	return rls.Predicates(rules, meta.OrgID, userID, role), nil
+}
+
+func (p *Planner) loadRLSRules(ctx context.Context, meta datasetInfo) ([]rls.Rule, error) {
 	rows, err := p.pg.Query(ctx, `
 		SELECT role, column_name, expression
 		FROM dataset_rls
 		WHERE org_id=$1 AND workspace_id=$2 AND dataset_id=$3
+		ORDER BY role, column_name, expression
 	`, meta.OrgID, meta.WorkspaceID, meta.ID)
 	if err != nil {
 		return nil, err
@@ -185,5 +198,46 @@ func (p *Planner) rlsPredicates(ctx context.Context, meta datasetInfo, userID uu
 		}
 		rules = append(rules, r)
 	}
-	return rls.Predicates(rules, meta.OrgID, userID, role), nil
+	return rules, rows.Err()
+}
+
+// permissionFingerprint hashes RLS rules (and join dataset rules) so cache keys
+// change when access policies change, without returning hits before RLS is considered.
+func (p *Planner) permissionFingerprint(ctx context.Context, meta datasetInfo, joins []DatasetJoin, userID uuid.UUID, role string) (string, error) {
+	type ruleKey struct {
+		Dataset string `json:"dataset"`
+		Role    string `json:"role"`
+		Column  string `json:"column"`
+		Expr    string `json:"expr"`
+	}
+	var keys []ruleKey
+	appendRules := func(ds datasetInfo) error {
+		rules, err := p.loadRLSRules(ctx, ds)
+		if err != nil {
+			return err
+		}
+		for _, r := range rules {
+			keys = append(keys, ruleKey{Dataset: ds.ID.String(), Role: r.Role, Column: r.ColumnName, Expr: r.Expression})
+		}
+		return nil
+	}
+	if err := appendRules(meta); err != nil {
+		return "", err
+	}
+	for _, j := range joins {
+		jm, err := p.loadDataset(ctx, meta.OrgID, meta.WorkspaceID, j.DatasetID)
+		if err != nil {
+			continue
+		}
+		if err := appendRules(jm); err != nil {
+			return "", err
+		}
+	}
+	b, _ := json.Marshal(struct {
+		Role  string    `json:"role"`
+		User  string    `json:"user"`
+		Rules []ruleKey `json:"rules"`
+	}{Role: role, User: userID.String(), Rules: keys})
+	sum := sha256.Sum256(b)
+	return fmt.Sprintf("%x", sum[:]), nil
 }

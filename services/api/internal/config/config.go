@@ -17,6 +17,7 @@ type Config struct {
 	EncryptionKey  []byte
 	PostgresDSN    string
 	RedisAddr      string
+	RedisPassword  string
 	ClickHouseAddr string
 	ClickHouseDB   string
 	ClickHouseUser string
@@ -73,6 +74,7 @@ func Load() Config {
 		EncryptionKey:         []byte(enc[:32]),
 		PostgresDSN:           getenv("POSTGRES_DSN", "postgres://thedobra:thedobra@localhost:5432/thedobra?sslmode=disable"),
 		RedisAddr:             getenv("REDIS_ADDR", "localhost:6379"),
+		RedisPassword:         os.Getenv("REDIS_PASSWORD"),
 		ClickHouseAddr:        getenv("CLICKHOUSE_ADDR", "localhost:9009"),
 		ClickHouseDB:          getenv("CLICKHOUSE_DATABASE", "thedobra"),
 		ClickHouseUser:        getenv("CLICKHOUSE_USER", "thedobra"),

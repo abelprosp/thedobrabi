@@ -52,7 +52,7 @@ func (e *Engine) downloadBytes(ctx context.Context, cfg SQLConfig) ([]byte, erro
 	if t := cfg.AuthToken(); t != "" {
 		req.Header.Set("Authorization", "Bearer "+t)
 	}
-	resp, err := connectorHTTP.Do(req)
+	resp, err := currentConnectorHTTP().Do(req)
 	if err != nil {
 		return nil, err
 	}

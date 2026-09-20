@@ -9,9 +9,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.24.x"
+          go-version: "1.25.x"
       - run: go test ./...
         working-directory: services/api
+      - run: go test ./...
+        working-directory: services/gateway
   web:
     runs-on: ubuntu-latest
     steps:
@@ -19,5 +21,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npm install && npx tsc --noEmit
+      - run: npm ci && npx tsc --noEmit
         working-directory: apps/web

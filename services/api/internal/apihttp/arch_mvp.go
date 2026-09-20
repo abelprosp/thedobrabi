@@ -50,7 +50,7 @@ func (s *Server) getFlow(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "flow não encontrado")
 		return
 	}
-	steps, _ := s.flow.ListSteps(r.Context(), id)
+	steps, _ := s.flow.ListSteps(r.Context(), org, ws, id)
 	if steps == nil {
 		steps = []flow.Step{}
 	}
@@ -67,7 +67,10 @@ type createFlowBody struct {
 }
 
 func (s *Server) createFlow(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	var body createFlowBody
 	if err := httpx.Decode(r, &body); err != nil {
 		httpx.Error(w, 400, "invalid", "corpo inválido")
@@ -110,7 +113,10 @@ func (s *Server) createFlow(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateFlow(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -130,14 +136,17 @@ func (s *Server) updateFlow(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteFlow(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
 		return
 	}
 	if err := s.flow.Delete(r.Context(), org, ws, id); err != nil {
-		httpx.Error(w, 500, "delete_failed", err.Error())
+		httpx.Error(w, 404, "not_found", err.Error())
 		return
 	}
 	s.sched.DeleteForTarget(r.Context(), "flow", id)
@@ -146,12 +155,13 @@ func (s *Server) deleteFlow(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) listFlowSteps(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, _ := principal(r)
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
 		return
 	}
-	steps, err := s.flow.ListSteps(r.Context(), id)
+	steps, err := s.flow.ListSteps(r.Context(), org, ws, id)
 	if err != nil {
 		httpx.Error(w, 500, "query_failed", err.Error())
 		return
@@ -163,6 +173,10 @@ func (s *Server) listFlowSteps(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createFlowStep(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	fid, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -174,8 +188,12 @@ func (s *Server) createFlowStep(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	st.FlowID = fid
-	id, err := s.flow.CreateStep(r.Context(), st)
+	id, err := s.flow.CreateStep(r.Context(), org, ws, st)
 	if err != nil {
+		if err.Error() == "not found" {
+			httpx.Error(w, 404, "not_found", "flow não encontrado")
+			return
+		}
 		httpx.Error(w, 400, "create_failed", err.Error())
 		return
 	}
@@ -183,6 +201,15 @@ func (s *Server) createFlowStep(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateFlowStep(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
+	fid, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "bad id")
+		return
+	}
 	stepID, err := uuid.Parse(chi.URLParam(r, "stepId"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad step id")
@@ -193,7 +220,7 @@ func (s *Server) updateFlowStep(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "invalid", "corpo inválido")
 		return
 	}
-	if err := s.flow.UpdateStep(r.Context(), stepID, st); err != nil {
+	if err := s.flow.UpdateStep(r.Context(), org, ws, fid, stepID, st); err != nil {
 		httpx.Error(w, 404, "not_found", err.Error())
 		return
 	}
@@ -201,31 +228,43 @@ func (s *Server) updateFlowStep(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteFlowStep(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
+	fid, err := uuid.Parse(chi.URLParam(r, "id"))
+	if err != nil {
+		httpx.Error(w, 400, "invalid", "bad id")
+		return
+	}
 	stepID, err := uuid.Parse(chi.URLParam(r, "stepId"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad step id")
 		return
 	}
-	if err := s.flow.DeleteStep(r.Context(), stepID); err != nil {
-		httpx.Error(w, 500, "delete_failed", err.Error())
+	if err := s.flow.DeleteStep(r.Context(), org, ws, fid, stepID); err != nil {
+		httpx.Error(w, 404, "not_found", err.Error())
 		return
 	}
 	httpx.JSON(w, 200, map[string]any{"ok": true})
 }
 
 func (s *Server) runFlow(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	fid, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
 		return
 	}
-	if _, err := s.flow.Get(r.Context(), org, ws, fid); err != nil {
-		httpx.Error(w, 404, "not_found", "flow não encontrado")
-		return
-	}
-	runID, err := s.flow.CreateRun(r.Context(), flow.Run{FlowID: fid, Status: "pending"})
+	runID, err := s.flow.CreateRun(r.Context(), org, ws, flow.Run{FlowID: fid, Status: "pending"})
 	if err != nil {
+		if err.Error() == "not found" {
+			httpx.Error(w, 404, "not_found", "flow não encontrado")
+			return
+		}
 		httpx.Error(w, 500, "run_failed", err.Error())
 		return
 	}
@@ -233,21 +272,22 @@ func (s *Server) runFlow(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 		defer cancel()
 		reader := func(datasetID string, limit int) ([]string, []map[string]any, error) {
-			return s.query.ReadRows(ctx, org, ws, datasetID, limit)
+			return s.query.ReadRows(ctx, org, ws, datasetID, limit, uuid.Nil, "")
 		}
-		_, _ = s.flowEng.Execute(ctx, runID, uid, reader)
+		_, _ = s.flowEng.Execute(ctx, org, ws, runID, uid, reader)
 	}()
 	s.audit(r, "FLOW_RUN_CREATED", "flow_run", runID, map[string]any{"flow_id": fid})
 	httpx.JSON(w, 201, map[string]any{"run_id": runID, "status": "running"})
 }
 
 func (s *Server) listFlowRuns(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, _ := principal(r)
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
 		return
 	}
-	list, err := s.flow.ListRuns(r.Context(), id)
+	list, err := s.flow.ListRuns(r.Context(), org, ws, id)
 	if err != nil {
 		httpx.Error(w, 500, "query_failed", err.Error())
 		return
@@ -259,12 +299,13 @@ func (s *Server) listFlowRuns(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getFlowRun(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, _ := principal(r)
 	runID, err := uuid.Parse(chi.URLParam(r, "runId"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad run id")
 		return
 	}
-	rc, err := s.flow.GetRun(r.Context(), runID)
+	rc, err := s.flow.GetRun(r.Context(), org, ws, runID)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "run não encontrado")
 		return
@@ -273,12 +314,13 @@ func (s *Server) getFlowRun(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getFlowRunLogs(w http.ResponseWriter, r *http.Request) {
+	_, org, ws, _ := principal(r)
 	runID, err := uuid.Parse(chi.URLParam(r, "runId"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad run id")
 		return
 	}
-	logs, err := s.flow.GetRunLogs(r.Context(), runID)
+	logs, err := s.flow.GetRunLogs(r.Context(), org, ws, runID)
 	if err != nil {
 		httpx.Error(w, 500, "query_failed", err.Error())
 		return

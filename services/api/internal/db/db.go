@@ -66,8 +66,8 @@ func ConnectClickHouse(ctx context.Context, cfg config.Config) (driver.Conn, err
 	return conn, nil
 }
 
-func ConnectRedis(ctx context.Context, addr string) (*redis.Client, error) {
-	rdb := redis.NewClient(&redis.Options{Addr: addr})
+func ConnectRedis(ctx context.Context, addr, password string) (*redis.Client, error) {
+	rdb := redis.NewClient(&redis.Options{Addr: addr, Password: password})
 	ctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
 	if err := rdb.Ping(ctx).Err(); err != nil {

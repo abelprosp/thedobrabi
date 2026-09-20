@@ -219,6 +219,8 @@ func New(deps *platform.Deps) http.Handler {
 			r.Get("/dashboards/{id}/versions", s.listDashboardVersions)
 			r.Post("/dashboards/{id}/versions/{version}/restore", s.restoreDashboardVersion)
 			r.Post("/dashboards/{id}/share", s.shareDashboard)
+			r.Get("/dashboards/{id}/share", s.listDashboardShares)
+			r.Delete("/dashboards/{id}/share/{token}", s.revokeDashboardShare)
 			r.Post("/dashboards/{id}/embed", s.createDashboardEmbed)
 			r.Get("/dashboards/{id}/embed", s.listDashboardEmbeds)
 			r.Delete("/dashboards/{id}/embed/{token}", s.revokeDashboardEmbed)

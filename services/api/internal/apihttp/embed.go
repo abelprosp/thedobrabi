@@ -13,11 +13,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/thedobra/thedobra/services/api/internal/cryptoenc"
 	"github.com/thedobra/thedobra/services/api/internal/httpx"
-	"github.com/thedobra/thedobra/services/api/internal/queryeng"
 )
 
 func (s *Server) createDashboardEmbed(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")
@@ -91,7 +93,10 @@ func (s *Server) listDashboardEmbeds(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) revokeDashboardEmbed(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")
@@ -220,28 +225,15 @@ func (s *Server) publicEmbedQuery(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "embed não encontrado")
 		return
 	}
-	var req queryeng.Request
-	if err := httpx.Decode(r, &req); err != nil {
+	var in publicQueryInput
+	if err := httpx.Decode(r, &in); err != nil {
 		httpx.Error(w, 400, "invalid", "consulta inválida")
 		return
 	}
-	allowed := allowedDatasetIDs(layout)
-	if req.DatasetID == "" {
-		httpx.Error(w, 400, "invalid", "conjunto em falta")
+	req, _, err := buildPublicWidgetQuery(layout, in)
+	if err != nil {
+		httpx.Error(w, 403, "forbidden", err.Error())
 		return
-	}
-	if _, ok := allowed[req.DatasetID]; !ok {
-		httpx.Error(w, 403, "forbidden", "conjunto não faz parte deste embed")
-		return
-	}
-	for _, j := range req.Joins {
-		if j.DatasetID == "" {
-			continue
-		}
-		if _, ok := allowed[j.DatasetID]; !ok {
-			httpx.Error(w, 403, "forbidden", "conjunto não faz parte deste embed")
-			return
-		}
 	}
 	res, err := s.query.Execute(r.Context(), org, ws, uuid.Nil, "viewer", req)
 	if err != nil {

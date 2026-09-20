@@ -144,7 +144,7 @@ func httpJSON(ctx context.Context, method, rawURL string, headers map[string]str
 	if basicUser != "" || basicPass != "" {
 		req.SetBasicAuth(basicUser, basicPass)
 	}
-	resp, err := connectorHTTP.Do(req)
+	resp, err := currentConnectorHTTP().Do(req)
 	if err != nil {
 		return nil, 0, fmt.Errorf("pedido HTTP falhou: %w", err)
 	}
@@ -321,7 +321,7 @@ func contaAzulToken(ctx context.Context, cfg SQLConfig) (string, error) {
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp, err := connectorHTTP.Do(req)
+	resp, err := currentConnectorHTTP().Do(req)
 	if err != nil {
 		return "", err
 	}
@@ -475,7 +475,7 @@ func googleRefresh(ctx context.Context, cfg SQLConfig) (string, error) {
 		return "", err
 	}
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp, err := connectorHTTP.Do(req)
+	resp, err := currentConnectorHTTP().Do(req)
 	if err != nil {
 		return "", err
 	}

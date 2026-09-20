@@ -42,6 +42,12 @@ type Request struct {
 	GlobalFilters []Filter      `json:"global_filters,omitempty"`
 	DrillPath     []string      `json:"drill_path,omitempty"`
 	Joins         []DatasetJoin `json:"joins,omitempty"`
+
+	// AllowedDatasets, when non-nil, rejects any primary/join dataset outside the set
+	// (checked after auto-join resolution). Used by public share/embed queries.
+	AllowedDatasets map[string]struct{} `json:"-"`
+	// DisableAutoJoins skips relationship auto-injection when Joins is empty.
+	DisableAutoJoins bool `json:"-"`
 }
 
 type DatasetJoin struct {
@@ -92,18 +98,26 @@ func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, rol
 	if req.Limit <= 0 || req.Limit > e.cfg.QueryRowLimit {
 		req.Limit = 900
 	}
-	if len(req.Joins) == 0 {
+	if req.Joins == nil && !req.DisableAutoJoins {
 		req.Joins = e.relationshipsForDataset(ctx, orgID, wsID, req.DatasetID)
+	}
+	if err := validateAllowedDatasets(req); err != nil {
+		return Result{}, err
 	}
 	meta, err := e.planner.loadDataset(ctx, orgID, wsID, req.DatasetID)
 	if err != nil {
 		return Result{}, err
 	}
 	plan := e.planner.choosePlan(meta, req)
-	fp := fingerprint(orgID, wsID, userID, req)
+	permFP, err := e.planner.permissionFingerprint(ctx, meta, req.Joins, userID, role)
+	if err != nil {
+		return Result{}, fmt.Errorf("não foi possível carregar regras de RLS: %w", err)
+	}
+	fp := fingerprint(orgID, wsID, userID, role, req, meta, permFP)
 	if cached, ok := e.getCache(ctx, fp, plan.CacheTTL); ok {
 		cached.CacheHit = true
 		cached.Fingerprint = fp
+		e.record(ctx, orgID, wsID, userID, fp, req, cached.SQL, cached, true, plan.SourceType)
 		return cached, nil
 	}
 
@@ -142,20 +156,12 @@ func (e *Engine) Execute(ctx context.Context, orgID, wsID, userID uuid.UUID, rol
 func (e *Engine) executeDuckDB(ctx context.Context, meta datasetInfo, plan plan, req Request, orgID, userID uuid.UUID, role string) (Result, error) {
 	sql, ev := requestToSimpleSQL(meta, req)
 	loader := func(ctx context.Context, limit int) ([]string, []map[string]any, error) {
-		return e.ReadRows(ctx, orgID, meta.WorkspaceID, meta.ID.String(), limit)
+		return e.ReadRows(ctx, orgID, meta.WorkspaceID, meta.ID.String(), limit, userID, role)
 	}
 	exec := NewDuckDBExecutor(loader)
 	res, err := exec.Execute(ctx, sql, req.Limit)
 	if err != nil {
 		return Result{}, err
-	}
-	// Apply role-based RLS predicates to filter rows in memory.
-	if role != "" {
-		preds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
-		if err == nil && len(preds) > 0 {
-			predsSQL := strings.Join(preds, " AND ")
-			res.Rows = filterRows(res.Rows, parsePredicates(predsSQL))
-		}
 	}
 	if len(req.OrderBy) == 0 && timeDimensionOrderField(req, meta.Model) != "" {
 		reverseRowMaps(res.Rows)
@@ -295,7 +301,10 @@ func (e *Engine) relationshipsForDataset(ctx context.Context, orgID, wsID uuid.U
 	return out
 }
 
-func (e *Engine) ReadRows(ctx context.Context, orgID, wsID uuid.UUID, datasetID string, limit int) ([]string, []map[string]any, error) {
+// ReadRows loads raw dataset rows. When userID is set or role is non-empty,
+// RLS predicates are applied and a load failure aborts the read. Pass
+// uuid.Nil and "" only for internal authorized ops (flows, schedules, quality).
+func (e *Engine) ReadRows(ctx context.Context, orgID, wsID uuid.UUID, datasetID string, limit int, userID uuid.UUID, role string) ([]string, []map[string]any, error) {
 	if limit <= 0 || limit > 200000 {
 		limit = 100000
 	}
@@ -308,8 +317,18 @@ func (e *Engine) ReadRows(ctx context.Context, orgID, wsID uuid.UUID, datasetID 
 	if target == "" {
 		target = meta.Table
 	}
-	sql := fmt.Sprintf("SELECT * EXCEPT(_tenant) FROM %s.`%s` WHERE _tenant = '%s' LIMIT %d",
-		e.cfg.ClickHouseDB, target, orgID.String(), limit)
+	sql := fmt.Sprintf("SELECT * EXCEPT(_tenant) FROM %s.`%s` WHERE _tenant = '%s'",
+		e.cfg.ClickHouseDB, target, orgID.String())
+	if userID != uuid.Nil || role != "" {
+		preds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
+		if err != nil {
+			return nil, nil, fmt.Errorf("não foi possível carregar regras de RLS: %w", err)
+		}
+		if len(preds) > 0 {
+			sql += " AND " + strings.Join(preds, " AND ")
+		}
+	}
+	sql += fmt.Sprintf(" LIMIT %d", limit)
 	qctx, cancel := context.WithTimeout(ctx, e.cfg.QueryTimeout)
 	defer cancel()
 	rows, err := e.ch.Query(qctx, sql)
@@ -324,7 +343,7 @@ func (e *Engine) ReadRows(ctx context.Context, orgID, wsID uuid.UUID, datasetID 
 	return cols, data, nil
 }
 
-func (e *Engine) Preview(ctx context.Context, orgID, wsID uuid.UUID, datasetID string, limit int) (Result, error) {
+func (e *Engine) Preview(ctx context.Context, orgID, wsID uuid.UUID, datasetID string, limit int, userID uuid.UUID, role string) (Result, error) {
 	if limit <= 0 || limit > 200 {
 		limit = 50
 	}
@@ -337,10 +356,20 @@ func (e *Engine) Preview(ctx context.Context, orgID, wsID uuid.UUID, datasetID s
 	if target == "" {
 		target = meta.Table
 	}
-	sql := fmt.Sprintf("SELECT * EXCEPT(_tenant) FROM %s.`%s` WHERE _tenant = '%s' LIMIT %d",
-		e.cfg.ClickHouseDB, target, orgID.String(), limit)
+	sql := fmt.Sprintf("SELECT * EXCEPT(_tenant) FROM %s.`%s` WHERE _tenant = '%s'",
+		e.cfg.ClickHouseDB, target, orgID.String())
+	if userID != uuid.Nil || role != "" {
+		preds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
+		if err != nil {
+			return Result{}, fmt.Errorf("não foi possível carregar regras de RLS: %w", err)
+		}
+		if len(preds) > 0 {
+			sql += " AND " + strings.Join(preds, " AND ")
+		}
+	}
+	sql += fmt.Sprintf(" LIMIT %d", limit)
 	req := Request{DatasetID: datasetID, Limit: limit}
-	return e.runRaw(ctx, orgID, wsID, uuid.Nil, sql, req, "preview")
+	return e.runRaw(ctx, orgID, wsID, userID, sql, req, "preview")
 }
 
 func (e *Engine) runRaw(ctx context.Context, orgID, wsID, userID uuid.UUID, sql string, req Request, planner string) (Result, error) {
@@ -518,17 +547,16 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 		}
 	}
 
-	if userID != uuid.Nil {
-		rlsPreds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
-		if err == nil {
-			for i, p := range rlsPreds {
-				if strings.Contains(p, "`") {
-					rlsPreds[i] = qualifyIdentExpr(p, "a")
-				}
-			}
-			where = append(where, rlsPreds...)
+	rlsPreds, err := e.planner.rlsPredicates(ctx, meta, userID, role)
+	if err != nil {
+		return "", ev, fmt.Errorf("não foi possível carregar regras de RLS: %w", err)
+	}
+	for i, p := range rlsPreds {
+		if strings.Contains(p, "`") {
+			rlsPreds[i] = qualifyIdentExpr(p, "a")
 		}
 	}
+	where = append(where, rlsPreds...)
 
 	var b strings.Builder
 	fmt.Fprintf(&b, "SELECT %s FROM %s.`%s` AS a", strings.Join(selects, ", "), e.cfg.ClickHouseDB, target)
@@ -544,8 +572,20 @@ func (e *Engine) buildSQL(ctx context.Context, meta datasetInfo, plan plan, req 
 			kind = "LEFT JOIN"
 		}
 		al := joinAlias(i)
-		fmt.Fprintf(&b, " %s %s.`%s` AS %s ON a.`%s` = %s.`%s` AND %s._tenant = '%s'",
-			kind, e.cfg.ClickHouseDB, joinTable, al, spec.FromColumn, al, spec.ToColumn, al, orgID.String())
+		joinRLS, err := e.planner.rlsPredicates(ctx, jm, userID, role)
+		if err != nil {
+			return "", ev, fmt.Errorf("não foi possível carregar regras de RLS do join: %w", err)
+		}
+		var joinExtra strings.Builder
+		for _, p := range joinRLS {
+			if strings.Contains(p, "`") {
+				p = qualifyIdentExpr(p, al)
+			}
+			joinExtra.WriteString(" AND ")
+			joinExtra.WriteString(p)
+		}
+		fmt.Fprintf(&b, " %s %s.`%s` AS %s ON a.`%s` = %s.`%s` AND %s._tenant = '%s'%s",
+			kind, e.cfg.ClickHouseDB, joinTable, al, spec.FromColumn, al, spec.ToColumn, al, orgID.String(), joinExtra.String())
 	}
 	b.WriteString(" WHERE ")
 	b.WriteString(strings.Join(where, " AND "))
@@ -923,6 +963,30 @@ func alias(s string) string {
 	return s
 }
 
+func validateAllowedDatasets(req Request) error {
+	if req.AllowedDatasets == nil {
+		return nil
+	}
+	if req.DatasetID == "" {
+		return fmt.Errorf("conjunto em falta")
+	}
+	if _, ok := req.AllowedDatasets[req.DatasetID]; !ok {
+		return fmt.Errorf("conjunto não autorizado nesta partilha")
+	}
+	for _, j := range req.Joins {
+		if j.DatasetID == "" {
+			continue
+		}
+		if _, ok := req.AllowedDatasets[j.DatasetID]; !ok {
+			return fmt.Errorf("conjunto não autorizado nesta partilha")
+		}
+	}
+	return nil
+}
+
+// ValidateAllowedDatasets exposes allowlist checks for unit tests.
+func ValidateAllowedDatasets(req Request) error { return validateAllowedDatasets(req) }
+
 func defaultMeasures(m semantic.Model) []string {
 	if name := semantic.PrimaryMeasure(m); name != "" {
 		return []string{name}
@@ -933,10 +997,35 @@ func defaultMeasures(m semantic.Model) []string {
 	return []string{m.Measures[0].Name}
 }
 
-func fingerprint(orgID, wsID, userID uuid.UUID, req Request) string {
-	b, _ := json.Marshal(req)
-	sum := sha256.Sum256(append(append(append(orgID[:], wsID[:]...), userID[:]...), b...))
+func fingerprint(orgID, wsID, userID uuid.UUID, role string, req Request, meta datasetInfo, permFP string) string {
+	payload, _ := json.Marshal(struct {
+		Req            Request `json:"req"`
+		Role           string  `json:"role"`
+		Table          string  `json:"table"`
+		ModelHash      string  `json:"model_hash"`
+		SchemaHash     string  `json:"schema_hash"`
+		RowCount       int64   `json:"row_count"`
+		UpdatedAt      string  `json:"updated_at"`
+		ModelUpdatedAt string  `json:"model_updated_at"`
+		Perm           string  `json:"perm"`
+	}{
+		Req:            req,
+		Role:           role,
+		Table:          meta.Table,
+		ModelHash:      hashBytes(meta.ModelJSON),
+		SchemaHash:     hashBytes(meta.SchemaJSON),
+		RowCount:       meta.RowCount,
+		UpdatedAt:      meta.UpdatedAt.UTC().Format(time.RFC3339Nano),
+		ModelUpdatedAt: meta.ModelUpdatedAt.UTC().Format(time.RFC3339Nano),
+		Perm:           permFP,
+	})
+	sum := sha256.Sum256(append(append(append(orgID[:], wsID[:]...), userID[:]...), payload...))
 	return fmt.Sprintf("%x", sum[:])
+}
+
+func hashBytes(b []byte) string {
+	sum := sha256.Sum256(b)
+	return fmt.Sprintf("%x", sum[:8])
 }
 
 func (e *Engine) getCache(ctx context.Context, fp string, ttl time.Duration) (Result, bool) {

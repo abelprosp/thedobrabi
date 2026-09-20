@@ -241,16 +241,14 @@ func (e *Engine) applyDatasetPatchOn(ctx context.Context, orgID, wsID, datasetID
 		if err != nil {
 			return DatasetPatch{}, err
 		}
-		_, _ = e.pg.Exec(ctx, `UPDATE datasets SET row_count=row_count+$2, status='ready', updated_at=now() WHERE id=$1`, datasetID, n)
-	} else {
-		if err := e.ch.Exec(ctx, fmt.Sprintf("TRUNCATE TABLE IF EXISTS %s.`%s`", e.cfg.ClickHouseDB, ds.Table)); err != nil {
-			return DatasetPatch{}, err
+		if _, err := e.pg.Exec(ctx, `UPDATE datasets SET row_count=row_count+$2, status='ready', updated_at=now() WHERE id=$1`, datasetID, n); err != nil {
+			return DatasetPatch{}, fmt.Errorf("linhas inseridas, mas metadados falharam: %w", err)
 		}
-		n, err = e.insertRows(ctx, ds.Table, orgID, ds.Cols, aligned)
+	} else {
+		n, err = e.replaceDatasetAtomic(ctx, orgID, wsID, datasetID, ds.Table, ds.Cols, aligned)
 		if err != nil {
 			return DatasetPatch{}, err
 		}
-		_, _ = e.pg.Exec(ctx, `UPDATE datasets SET row_count=$2, status='ready', updated_at=now() WHERE id=$1`, datasetID, n)
 	}
 
 	var total int64

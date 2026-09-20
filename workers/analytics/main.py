@@ -98,18 +98,34 @@ def main() -> None:
         print("redis package missing — running one-shot self test")
         print(json.dumps(forecast([10, 12, 13, 15, 18, 19, 22], 4), indent=2))
         return
-    client = redis.Redis(host=host or "localhost", port=int(port or 6379), decode_responses=True)
+    client = redis.Redis(
+        host=host or "localhost",
+        port=int(port or 6379),
+        password=os.environ.get("REDIS_PASSWORD") or None,
+        decode_responses=True,
+    )
     print("thedobra analytics worker listening on", addr)
     while True:
         item = client.blpop("thedobra:ml:jobs", timeout=5)
         if not item:
             continue
         _, raw = item
-        job = json.loads(raw)
-        result = handle(job)
-        key = job.get("result_key") or f"thedobra:ml:result:{job.get('id', int(time.time()))}"
-        client.setex(key, 3600, json.dumps(result))
-        print("done", job.get("kind"), key)
+        try:
+            job = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            print("invalid job payload:", exc)
+            client.lpush("thedobra:ml:jobs:dead", raw)
+            continue
+        try:
+            result = handle(job)
+            key = job.get("result_key") or f"thedobra:ml:result:{job.get('id', int(time.time()))}"
+            client.setex(key, 3600, json.dumps(result))
+            print("done", job.get("kind"), key)
+        except Exception as exc:  # noqa: BLE001 — isolate bad jobs from the worker loop
+            print("job failed:", exc)
+            client.lpush("thedobra:ml:jobs:dead", raw)
+            fail_key = job.get("result_key") or f"thedobra:ml:result:{job.get('id', int(time.time()))}"
+            client.setex(fail_key, 3600, json.dumps({"error": str(exc)}))
 
 
 if __name__ == "__main__":

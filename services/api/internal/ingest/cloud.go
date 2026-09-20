@@ -212,7 +212,7 @@ func (e *Engine) pingDatabricks(ctx context.Context, cfg SQLConfig) error {
 	u := "https://" + host + "/api/2.0/sql/warehouses"
 	req, _ := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
 	req.Header.Set("Authorization", "Bearer "+cfg.AuthToken())
-	resp, err := connectorHTTP.Do(req)
+	resp, err := currentConnectorHTTP().Do(req)
 	if err != nil {
 		return err
 	}

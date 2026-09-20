@@ -79,21 +79,9 @@ func (s *Server) samlLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) samlACS(w http.ResponseWriter, r *http.Request) {
-	if err := r.ParseForm(); err != nil {
-		httpx.Error(w, 400, "saml", "form inválido")
-		return
-	}
-	email, name, sub, err := sso.ParseSAMLResponse(r.FormValue("SAMLResponse"))
-	if err != nil {
-		httpx.Error(w, 400, "saml", err.Error())
-		return
-	}
-	_, pair, err := s.auth.UpsertSSO(r.Context(), email, name, "saml", sub)
-	if err != nil {
-		httpx.Error(w, 400, "saml", err.Error())
-		return
-	}
-	sso.RedirectWithTokens(w, r, s.deps.Cfg.WebOrigin, pair)
+	// Disabled until real SAML crypto validation exists (IdP cert, issuer, audience, time, replay).
+	httpx.Error(w, http.StatusNotImplemented, "saml",
+		"ACS SAML desabilitado: validação criptográfica (certificado IdP, issuer, audience, tempo e replay) ainda não implementada")
 }
 
 func (s *Server) listSSO(w http.ResponseWriter, r *http.Request) {
@@ -157,7 +145,10 @@ func (s *Server) billingStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) billingCheckout(w http.ResponseWriter, r *http.Request) {
-	uid, org, _, _ := principal(r)
+	uid, org, _, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	var body struct {
 		Plan string `json:"plan"`
 	}
@@ -175,7 +166,10 @@ func (s *Server) billingCheckout(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) billingPortal(w http.ResponseWriter, r *http.Request) {
-	_, org, _, _ := principal(r)
+	_, org, _, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	url, err := s.billing.Portal(r.Context(), org)
 	if err != nil {
 		httpx.Error(w, 400, "stripe", err.Error())

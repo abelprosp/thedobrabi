@@ -767,9 +767,12 @@ function DashboardEditorInner() {
                   onClick={async () => {
                     setMoreOpen(false);
                     try {
-                      const shared = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, { method: "POST" });
+                      const shared = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, {
+                        method: "POST",
+                        body: JSON.stringify({ expires_days: 90 }),
+                      });
                       await navigator.clipboard?.writeText(shared.url);
-                      toast.success("Ligação de partilha copiada");
+                      toast.success("Ligação de partilha copiada · válida 90 dias");
                     } catch (e: any) { toast.error(e.message); }
                   }}
                 >
