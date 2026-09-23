@@ -23,6 +23,11 @@ WEB_PORT="${WEB_PORT:-13010}"
 API_BIN="${API_BIN:-/usr/local/bin/thedobra-api}"
 REDIS_PASSWORD="${REDIS_PASSWORD:-thedobra-redis-local}"
 
+if [[ "$WEB_PORT" != "13010" ]]; then
+  echo "WEB_PORT=$WEB_PORT não é suportada neste deploy; a configuração nginx/systemd usa 13010." >&2
+  exit 1
+fi
+
 # Export so child processes (systemctl EnvironmentFile or nohup) see required secrets.
 export APP_HTTP_ADDR="$API_ADDR"
 export REDIS_PASSWORD
@@ -81,6 +86,11 @@ sleep 2
 
 if systemctl list-unit-files | grep -q '^thedobra-api.service'; then
   echo "==> systemctl restart thedobra-api"
+  api_workdir="$(systemctl show -p WorkingDirectory --value thedobra-api 2>/dev/null || true)"
+  if [[ -n "$api_workdir" && "$api_workdir" != "$ROOT" ]]; then
+    echo "thedobra-api.service aponta para $api_workdir, mas este deploy está em $ROOT; recusando restart." >&2
+    exit 1
+  fi
   systemctl reset-failed thedobra-api || true
   # Garante env limpo antes do restart (NOAUTH se REDIS_PASSWORD faltar ao processo)
   if [[ -x "$ROOT/deploy/sync-env-systemd.sh" ]]; then
@@ -102,6 +112,11 @@ fi
 
 if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
   echo "==> systemctl restart thedobra-web"
+  web_workdir="$(systemctl show -p WorkingDirectory --value thedobra-web 2>/dev/null || true)"
+  if [[ -n "$web_workdir" && "$web_workdir" != "$ROOT/apps/web" ]]; then
+    echo "thedobra-web.service aponta para $web_workdir, mas este deploy está em $ROOT/apps/web; recusando restart." >&2
+    exit 1
+  fi
   systemctl reset-failed thedobra-web || true
   build_next_atomic
   systemctl restart thedobra-web
