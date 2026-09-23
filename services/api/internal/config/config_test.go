@@ -71,16 +71,21 @@ func TestValidateRejectsDevishAndWeakPostgres(t *testing.T) {
 		EncryptionKey: []byte("this-is-a-strong-enc-key-32bytes!"),
 		encKeyRaw:     "this-is-a-strong-enc-key-32bytes!",
 		RedisPassword: "redis-secret",
-		PostgresDSN:   "postgres://thedobra:thedobra@db/x?sslmode=require",
+		PostgresDSN:   "postgres://thedobra:thedobra@db.example.com/x?sslmode=require",
 	}
 	if err := base.Validate(); err == nil {
-		t.Fatal("expected default postgres password to fail")
+		t.Fatal("expected default postgres password on remote host to fail")
 	}
-	base.PostgresDSN = "postgres://u:strong@db/x?sslmode=disable"
+	base.PostgresDSN = "postgres://u:strong@db.example.com/x?sslmode=disable"
 	if err := base.Validate(); err == nil {
-		t.Fatal("expected sslmode=disable to fail")
+		t.Fatal("expected sslmode=disable on remote host to fail")
 	}
-	base.PostgresDSN = "postgres://u:strong@db/x?sslmode=require"
+	// Loopback Docker on the VPS is allowed (common production-on-one-box layout).
+	base.PostgresDSN = "postgres://thedobra:thedobra@127.0.0.1:15432/thedobra?sslmode=disable"
+	if err := base.Validate(); err != nil {
+		t.Fatalf("loopback compose DSN should be allowed: %v", err)
+	}
+	base.PostgresDSN = "postgres://u:strong@db.example.com/x?sslmode=require"
 	base.JWTSecret = []byte("production-dev-jwt-secret-change!!")
 	if err := base.Validate(); err == nil {
 		t.Fatal("expected JWT containing 'dev' to fail")

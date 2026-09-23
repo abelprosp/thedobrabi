@@ -1,0 +1,18 @@
+[Unit]
+Description=TheDobra API
+After=network.target docker.service
+Wants=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/root/thedobrabi
+EnvironmentFile=-/root/thedobrabi/.env
+# Force loopback bind even if .env still has :2003
+Environment=APP_HTTP_ADDR=127.0.0.1:2003
+ExecStart=/usr/local/bin/thedobra-api
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target

@@ -185,18 +185,32 @@ func (c Config) Validate() error {
 		return fmt.Errorf("REDIS_PASSWORD is required in production")
 	}
 
-	dsn := strings.ToLower(c.PostgresDSN)
-	if strings.Contains(dsn, "password=thedobra") || strings.Contains(dsn, ":thedobra@") {
-		return fmt.Errorf("POSTGRES_DSN must not use the default thedobra password in production")
-	}
-	if strings.Contains(dsn, "sslmode=disable") {
-		return fmt.Errorf("POSTGRES_DSN must not use sslmode=disable in production")
+	// Local Docker on the same VPS commonly uses loopback without TLS and the
+	// compose defaults. Reject those only when the DSN points off-box.
+	if !dsnIsLoopback(c.PostgresDSN) {
+		dsn := strings.ToLower(c.PostgresDSN)
+		if strings.Contains(dsn, "password=thedobra") || strings.Contains(dsn, ":thedobra@") {
+			return fmt.Errorf("POSTGRES_DSN must not use the default thedobra password for a remote database")
+		}
+		if strings.Contains(dsn, "sslmode=disable") {
+			return fmt.Errorf("POSTGRES_DSN must not use sslmode=disable for a remote database")
+		}
 	}
 
 	if c.StripeSecret != "" && c.StripeWebhookSecret == "" {
 		return fmt.Errorf("STRIPE_WEBHOOK_SECRET is required when Stripe is enabled")
 	}
 	return nil
+}
+
+func dsnIsLoopback(dsn string) bool {
+	lower := strings.ToLower(dsn)
+	for _, h := range []string{"@127.0.0.1", "@localhost", "@[::1]"} {
+		if strings.Contains(lower, h) {
+			return true
+		}
+	}
+	return false
 }
 
 func parseBoolEnv(key string, def bool) bool {

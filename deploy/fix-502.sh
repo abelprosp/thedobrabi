@@ -115,9 +115,32 @@ if [[ ! -x "$API_BIN" ]]; then
 elif [[ "$ROOT/services/api/cmd/api/main.go" -nt "$API_BIN" ]]; then
   NEED_BUILD=1
 fi
+# Also rebuild if source tree is newer than binary (security fixes, Validate, etc.)
+if [[ -x "$API_BIN" ]] && find "$ROOT/services/api" -name '*.go' -newer "$API_BIN" | grep -q .; then
+  NEED_BUILD=1
+fi
 if [[ "$NEED_BUILD" -eq 1 ]]; then
   echo "A compilar API → $API_BIN"
   (cd "$ROOT/services/api" && go build -o "$API_BIN" ./cmd/api)
+fi
+
+echo "==> 7b) Teste de arranque (mostra erro de Validate/Redis/DSN)"
+set +e
+timeout 4 bash -c "set -a; source '$ROOT/.env'; set +a; export APP_HTTP_ADDR='$API_ADDR'; exec '$API_BIN'" \
+  >/tmp/thedobra-api-boot.out 2>&1
+boot_rc=$?
+set -e
+if [[ -s /tmp/thedobra-api-boot.out ]]; then
+  echo "--- saída do arranque ---"
+  cat /tmp/thedobra-api-boot.out
+  echo "-------------------------"
+fi
+if [[ "$boot_rc" -eq 124 ]]; then
+  echo "API manteve-se a correr ~4s (provável OK). A matar o teste..."
+  pkill -f "$API_BIN" || true
+  sleep 1
+elif [[ "$boot_rc" -ne 0 ]]; then
+  echo "API saiu com código $boot_rc — corrija o .env com base na saída acima." >&2
 fi
 
 echo "==> 8) Reinício completo"

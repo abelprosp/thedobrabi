@@ -1,0 +1,17 @@
+[Unit]
+Description=TheDobra Web (Next.js)
+After=network.target thedobra-api.service
+
+[Service]
+Type=simple
+WorkingDirectory=/root/thedobrabi/apps/web
+Environment=NODE_ENV=production
+Environment=PORT=13010
+Environment=API_PROXY_URL=http://127.0.0.1:2003
+EnvironmentFile=-/root/thedobrabi/.env
+ExecStart=/usr/bin/npm run start
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
