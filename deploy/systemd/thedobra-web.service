@@ -6,10 +6,13 @@ After=network.target thedobra-api.service
 Type=simple
 WorkingDirectory=/root/thedobrabi/apps/web
 Environment=NODE_ENV=production
+Environment=HOSTNAME=127.0.0.1
 Environment=PORT=13010
 Environment=API_PROXY_URL=http://127.0.0.1:2003
 EnvironmentFile=-/root/thedobrabi/.env
-ExecStart=/usr/bin/npm run start
+# O build usa output: "standalone"; iniciar o server gerado evita depender
+# do diretório de trabalho para que o Next encontre exatamente esta release.
+ExecStart=/usr/bin/node .next/standalone/server.js
 Restart=on-failure
 RestartSec=3
 

@@ -56,7 +56,10 @@ build_next_atomic() {
     cd "$web_root"
     # O build ocorre fora de .next; portanto o serviço atual continua servindo
     # o bundle anterior até a troca final.
-    NEXT_DIST_DIR="$release" npm run build
+    if ! NEXT_DIST_DIR="$release" npm run build; then
+      rm -rf "$release"
+      return 1
+    fi
 
     # Assets têm nomes com hash. Manter os assets anteriores evita que HTML
     # cacheado de uma versão anterior gere ChunkLoadError após o deploy.
@@ -68,10 +71,17 @@ build_next_atomic() {
     # Cada mv no mesmo filesystem é atômico para os leitores do diretório.
     if ! compgen -G "$release/static/css/*.css" >/dev/null; then
       echo "build Next inválido: nenhum CSS em $release/static/css" >&2
+      rm -rf "$release"
       return 1
     fi
     if ! compgen -G "$release/static/chunks/*.js" >/dev/null; then
       echo "build Next inválido: nenhum chunk JS em $release/static/chunks" >&2
+      rm -rf "$release"
+      return 1
+    fi
+    if [[ ! -s "$release/BUILD_ID" || ! -s "$release/standalone/server.js" ]]; then
+      echo "build Next inválido: BUILD_ID ou standalone/server.js ausente" >&2
+      rm -rf "$release"
       return 1
     fi
     rm -rf "$previous"
@@ -142,10 +152,11 @@ if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
 else
   echo "==> a arrancar Next na porta $WEB_PORT"
   build_next_atomic
-  pkill -f "next start" || true
+  pkill -f "$ROOT/apps/web/.next/standalone/server.js" || true
   cd "$ROOT/apps/web"
-  nohup env NODE_ENV=production PORT="$WEB_PORT" API_PROXY_URL="http://127.0.0.1:${API_PORT}" \
-    npm run start >>/var/log/thedobra-web.log 2>&1 &
+  nohup env NODE_ENV=production HOSTNAME=127.0.0.1 PORT="$WEB_PORT" \
+    API_PROXY_URL="http://127.0.0.1:${API_PORT}" \
+    node .next/standalone/server.js >>/var/log/thedobra-web.log 2>&1 &
 fi
 
 echo "==> A esperar listen"
