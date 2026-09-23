@@ -22,17 +22,17 @@ services:
 
   redis:
     image: redis:7-alpine
-    # Default: no password (local loopback only). To require auth, set REDIS_PASSWORD
-    # in .env and override command, e.g.:
-    #   command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD}"]
-    # Then set the same REDIS_PASSWORD for the API.
-    command: ["redis-server", "--appendonly", "yes"]
+    # AUTH is always on. Default local password matches .env.example; override REDIS_PASSWORD
+    # in .env for anything beyond loopback/dev (API REDIS_PASSWORD must match).
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-thedobra-redis-local}
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-thedobra-redis-local}"]
     ports:
       - "127.0.0.1:${REDIS_PORT:-16379}:6379"
     volumes:
       - redisdata:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep -q PONG"]
       interval: 3s
       timeout: 5s
       retries: 20

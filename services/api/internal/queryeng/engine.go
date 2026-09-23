@@ -302,8 +302,10 @@ func (e *Engine) relationshipsForDataset(ctx context.Context, orgID, wsID uuid.U
 }
 
 // ReadRows loads raw dataset rows. When userID is set or role is non-empty,
-// RLS predicates are applied and a load failure aborts the read. Pass
-// uuid.Nil and "" only for internal authorized ops (flows, schedules, quality).
+// RLS predicates are applied and a load failure aborts the read. Callers that
+// act on behalf of a user (flows, schedules) must pass that user's id/role.
+// Pass uuid.Nil and "" only for trusted internal ops that intentionally bypass RLS
+// (e.g. quality scans) after separate authorization.
 func (e *Engine) ReadRows(ctx context.Context, orgID, wsID uuid.UUID, datasetID string, limit int, userID uuid.UUID, role string) ([]string, []map[string]any, error) {
 	if limit <= 0 || limit > 200000 {
 		limit = 100000

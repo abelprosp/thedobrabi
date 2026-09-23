@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { setTokens } from "@/lib/api";
+import { setTokens, type Tokens } from "@/lib/api";
 import { Suspense } from "react";
 
 export default function CallbackPage() {
@@ -16,15 +16,50 @@ export default function CallbackPage() {
 function Inner() {
   const router = useRouter();
   const params = useSearchParams();
+  const [error, setError] = useState(false);
+
   useEffect(() => {
-    const access = params.get("access_token");
-    const refresh = params.get("refresh_token");
-    if (access && refresh) {
-      setTokens({ access_token: access, refresh_token: refresh, expires_in: 900 });
-      router.replace("/overview");
-    } else {
+    const code = params.get("code");
+    if (!code) {
       router.replace("/login");
+      return;
     }
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/v1/auth/oauth/exchange", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ code }),
+        });
+        const json = await res.json().catch(() => ({}));
+        const tokens = (json?.data?.tokens ?? json?.tokens) as Tokens | undefined;
+        if (!res.ok || !tokens?.access_token || !tokens?.refresh_token) {
+          throw new Error("exchange failed");
+        }
+        if (cancelled) return;
+        setTokens(tokens); // clears localStorage leftovers; session is HttpOnly cookie
+        // Strip code from the address bar / history so it cannot be reused via share/back.
+        window.history.replaceState({}, "", "/auth/callback");
+        router.replace("/overview");
+      } catch {
+        if (!cancelled) {
+          setError(true);
+          router.replace("/login");
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [params, router]);
-  return <div className="flex min-h-screen items-center justify-center text-mute">A concluir SSO…</div>;
+
+  return (
+    <div className="flex min-h-screen items-center justify-center text-mute">
+      {error ? "Falha no SSO…" : "A concluir SSO…"}
+    </div>
+  );
 }

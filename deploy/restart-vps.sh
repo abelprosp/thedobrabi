@@ -13,8 +13,9 @@ if [[ -f "$ROOT/.env" ]]; then
   set +a
 fi
 
-API_ADDR="${APP_HTTP_ADDR:-:2003}"
-API_PORT="${API_ADDR#:}"
+# Bind loopback by default so the API is not exposed on all interfaces (Nginx proxies).
+API_ADDR="${APP_HTTP_ADDR:-127.0.0.1:2003}"
+API_PORT="${API_ADDR##*:}"
 WEB_PORT="${WEB_PORT:-13010}"
 API_BIN="${API_BIN:-/usr/local/bin/thedobra-api}"
 

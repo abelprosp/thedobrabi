@@ -6,6 +6,32 @@ const nextConfig: NextConfig = {
   transpilePackages: ["lucide-react"],
   // Evita o Next tratar o lockfile vazio da raiz do monorepo como workspace root.
   outputFileTracingRoot: path.join(__dirname),
+  async headers() {
+    const csp = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+      "style-src 'self' 'unsafe-inline'",
+      "img-src 'self' data: blob: https:",
+      "font-src 'self' data:",
+      "connect-src 'self' https: wss:",
+      "frame-src 'self' https:",
+      "frame-ancestors 'self'",
+      "upgrade-insecure-requests",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+    ].join("; ");
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          { key: "Content-Security-Policy", value: csp },
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+    ];
+  },
   async rewrites() {
     return [
       {

@@ -978,6 +978,7 @@ async function downloadDatasetXlsx(datasetId: string, title: string) {
   const token = getAccess();
   const ws = typeof window !== "undefined" ? localStorage.getItem("thedobra.workspace") : "";
   const res = await fetch(`/api/v1/datasets/${datasetId}/export?format=xlsx`, {
+    credentials: "include",
     headers: {
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(ws ? { "X-Workspace-Id": ws } : {}),

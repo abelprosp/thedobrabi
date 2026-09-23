@@ -36,6 +36,13 @@ func mongoURI(cfg SQLConfig) string {
 }
 
 func (e *Engine) mongoClient(ctx context.Context, cfg SQLConfig) (*mongo.Client, error) {
+	check := cfg
+	if strings.TrimSpace(check.Host) == "" && strings.TrimSpace(check.URL) == "" {
+		check.Host = "localhost"
+	}
+	if err := assertConfigHosts(check); err != nil {
+		return nil, err
+	}
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURI(cfg)).SetServerSelectionTimeout(8*time.Second))
 	if err != nil {
 		return nil, err

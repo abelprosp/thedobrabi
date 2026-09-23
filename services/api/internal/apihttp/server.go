@@ -58,7 +58,7 @@ type Server struct {
 }
 
 func New(deps *platform.Deps) http.Handler {
-	auth := authn.New(deps.PG, deps.Cfg.JWTSecret, deps.Cfg.EncryptionKey)
+	auth := authn.New(deps.PG, deps.Cfg.JWTSecret, deps.Cfg.EncryptionKey, deps.Cfg.RequireEmailVerified)
 	ing := ingest.New(deps.PG, deps.CH, deps.Minio, deps.Cfg, deps.Bus)
 	q := queryeng.New(deps.PG, deps.CH, deps.Redis, deps.Cfg)
 	intel := intelligence.New(deps.PG, q)
@@ -130,6 +130,7 @@ func New(deps *platform.Deps) http.Handler {
 		r.Get("/auth/oauth/providers", s.oauthProviders)
 		r.Get("/auth/oauth/{provider}/start", s.oauthStart)
 		r.Get("/auth/oauth/{provider}/callback", s.oauthCallback)
+		r.Post("/auth/oauth/exchange", s.oauthExchange)
 		r.Get("/auth/saml/{org}/metadata", s.samlMetadata)
 		r.Get("/auth/saml/{org}/login", s.samlLogin)
 		r.Post("/auth/saml/{org}/acs", s.samlACS)
@@ -365,12 +366,12 @@ func (s *Server) ready(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) authMw(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		h := r.Header.Get("Authorization")
-		if !strings.HasPrefix(h, "Bearer ") {
+		raw := accessTokenFromRequest(r)
+		if raw == "" {
 			httpx.Error(w, 401, "unauthorized", "token em falta")
 			return
 		}
-		p, err := s.auth.ParseAccess(strings.TrimPrefix(h, "Bearer "))
+		p, err := s.auth.ParseAccess(r.Context(), raw)
 		if err != nil {
 			httpx.Error(w, 401, "unauthorized", "token inválido")
 			return
@@ -472,6 +473,7 @@ func (s *Server) register(w http.ResponseWriter, r *http.Request) {
 		_ = s.notify.SendMail(p.Email, "Confirme o seu e-mail — TheDobra", "Confirme a sua conta TheDobra através deste link:\n\n"+link+"\n\nEsta ligação expira em 24 horas.")
 	}
 	s.audit(r.WithContext(context.WithValue(context.WithValue(context.WithValue(r.Context(), ctxkey.UserID, p.UserID), ctxkey.OrgID, p.OrgID), ctxkey.WorkspaceID, p.WorkspaceID)), "LOGIN", "user", p.UserID, nil)
+	setAuthCookies(w, r, tok)
 	httpx.JSON(w, 201, map[string]any{"tokens": tok, "user": p})
 }
 
@@ -511,6 +513,7 @@ func (s *Server) login(w http.ResponseWriter, r *http.Request) {
 	ctx = context.WithValue(ctx, ctxkey.OrgID, p.OrgID)
 	ctx = context.WithValue(ctx, ctxkey.WorkspaceID, p.WorkspaceID)
 	s.audit(r.WithContext(ctx), "LOGIN", "user", p.UserID, nil)
+	setAuthCookies(w, r, tok)
 	httpx.JSON(w, 200, map[string]any{"tokens": tok, "user": p})
 }
 
@@ -518,24 +521,41 @@ func (s *Server) refresh(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		RefreshToken string `json:"refresh_token"`
 	}
-	if err := httpx.Decode(r, &body); err != nil {
-		httpx.Error(w, 400, "invalid_json", "invalid body")
+	_ = httpx.Decode(r, &body)
+	rt := refreshTokenFromRequest(r, body.RefreshToken)
+	if rt == "" {
+		httpx.Error(w, 401, "invalid_refresh", "refresh token em falta")
 		return
 	}
-	p, tok, err := s.auth.Refresh(r.Context(), body.RefreshToken)
+	p, tok, err := s.auth.Refresh(r.Context(), rt)
 	if err != nil {
 		httpx.Error(w, 401, "invalid_refresh", err.Error())
 		return
 	}
+	setAuthCookies(w, r, tok)
 	httpx.JSON(w, 200, map[string]any{"tokens": tok, "user": p})
 }
 
 func (s *Server) logout(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		RefreshToken string `json:"refresh_token"`
+		All          bool   `json:"all"`
 	}
 	_ = httpx.Decode(r, &body)
-	s.auth.Logout(r.Context(), body.RefreshToken)
+	rt := refreshTokenFromRequest(r, body.RefreshToken)
+	if body.All {
+		if err := s.auth.LogoutAllByRefresh(r.Context(), rt); err != nil {
+			// Fall back: access JWT may identify the user when refresh is already gone.
+			if raw := accessTokenFromRequest(r); raw != "" {
+				if p, err2 := s.auth.ParseAccess(r.Context(), raw); err2 == nil {
+					_ = s.auth.LogoutAll(r.Context(), p.UserID)
+				}
+			}
+		}
+	} else {
+		s.auth.Logout(r.Context(), rt)
+	}
+	clearAuthCookies(w, r)
 	httpx.JSON(w, 200, map[string]any{"ok": true})
 }
 
@@ -693,5 +713,6 @@ func (s *Server) switchWorkspace(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 500, "token_failed", err.Error())
 		return
 	}
+	setAuthCookies(w, r, pair)
 	httpx.JSON(w, 200, map[string]any{"tokens": pair, "user": p})
 }

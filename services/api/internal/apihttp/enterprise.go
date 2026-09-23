@@ -38,7 +38,24 @@ func (s *Server) oauthCallback(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, s.deps.Cfg.WebOrigin+"/login?erro="+err.Error(), http.StatusFound)
 		return
 	}
-	sso.RedirectWithTokens(w, r, s.deps.Cfg.WebOrigin, pair)
+	s.sso.RedirectWithCode(w, r, pair)
+}
+
+func (s *Server) oauthExchange(w http.ResponseWriter, r *http.Request) {
+	var body struct {
+		Code string `json:"code"`
+	}
+	if err := httpx.Decode(r, &body); err != nil || body.Code == "" {
+		httpx.Error(w, 400, "invalid", "código obrigatório")
+		return
+	}
+	pair, err := s.sso.ExchangeCode(r.Context(), body.Code)
+	if err != nil {
+		httpx.Error(w, 400, "oauth", err.Error())
+		return
+	}
+	setAuthCookies(w, r, pair)
+	httpx.JSON(w, 200, map[string]any{"tokens": pair})
 }
 
 func (s *Server) samlMetadata(w http.ResponseWriter, r *http.Request) {
@@ -207,7 +224,10 @@ func (s *Server) listCDC(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) enableCDC(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	var body struct {
 		DataSourceID string `json:"data_source_id"`
 		DatasetID    string `json:"dataset_id"`

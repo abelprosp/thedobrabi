@@ -643,7 +643,10 @@ func (s *Server) deleteDashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) aiDashboard(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	var body struct {
 		Prompt    string `json:"prompt"`
 		DatasetID string `json:"dataset_id"`
@@ -657,10 +660,29 @@ func (s *Server) aiDashboard(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		ds = id.String()
+	} else {
+		dsID, err := uuid.Parse(ds)
+		if err != nil {
+			httpx.Error(w, 400, "invalid", "dataset_id inválido")
+			return
+		}
+		var ok bool
+		if err := s.deps.PG.QueryRow(r.Context(), `SELECT EXISTS(SELECT 1 FROM datasets WHERE id=$1 AND org_id=$2 AND workspace_id=$3)`, dsID, org, ws).Scan(&ok); err != nil || !ok {
+			httpx.Error(w, 404, "not_found", "conjunto de dados não encontrado")
+			return
+		}
 	}
 	var modelJSON []byte
 	var dsName string
-	_ = s.deps.PG.QueryRow(r.Context(), `SELECT d.name, s.model_json FROM datasets d JOIN semantic_models s ON s.dataset_id=d.id WHERE d.id=$1`, ds).Scan(&dsName, &modelJSON)
+	if err := s.deps.PG.QueryRow(r.Context(), `
+		SELECT d.name, s.model_json
+		FROM datasets d
+		JOIN semantic_models s ON s.dataset_id=d.id AND s.org_id=d.org_id AND s.workspace_id=d.workspace_id
+		WHERE d.id=$1 AND d.org_id=$2 AND d.workspace_id=$3
+	`, ds, org, ws).Scan(&dsName, &modelJSON); err != nil {
+		httpx.Error(w, 404, "not_found", "modelo semântico não encontrado para este conjunto")
+		return
+	}
 	var model semantic.Model
 	_ = json.Unmarshal(modelJSON, &model)
 	widgets := autoWidgets(ds, model)
@@ -687,7 +709,10 @@ func (s *Server) aiDashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) generateDashboard(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -724,7 +749,10 @@ func (s *Server) generateDashboard(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) dobraCompose(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -798,6 +826,9 @@ func (s *Server) aiConfig(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) ask(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -850,6 +881,9 @@ func (s *Server) insights(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) refreshInsights(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	var id uuid.UUID
 	if err := s.deps.PG.QueryRow(r.Context(), `SELECT id FROM datasets WHERE org_id=$1 AND workspace_id=$2 AND status='ready' ORDER BY updated_at DESC LIMIT 1`, org, ws).Scan(&id); err != nil {
 		httpx.Error(w, 400, "no_dataset", "nenhum conjunto disponível")
@@ -891,7 +925,10 @@ func (s *Server) listAlerts(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createAlert(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	var body struct {
 		Name      string          `json:"name"`
 		Condition json.RawMessage `json:"condition"`
@@ -998,7 +1035,10 @@ func (s *Server) getReport(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createReport(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	var body struct {
 		Name    string          `json:"name"`
 		Cadence string          `json:"cadence"`
@@ -1025,7 +1065,10 @@ func (s *Server) createReport(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateReport(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
 	var body struct {
 		Name       string          `json:"name"`
@@ -1071,7 +1114,10 @@ func (s *Server) updateReport(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteReport(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, _ := uuid.Parse(chi.URLParam(r, "id"))
 	_, err := s.deps.PG.Exec(r.Context(), `DELETE FROM reports WHERE id=$1 AND org_id=$2 AND workspace_id=$3`, id, org, ws)
 	if err != nil {
@@ -1084,6 +1130,9 @@ func (s *Server) deleteReport(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) generateReport(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")

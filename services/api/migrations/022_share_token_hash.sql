@@ -1,0 +1,4 @@
+-- dashboard_shares.token stores SHA-256 hex (cryptoenc.HashToken) for newly created shares.
+-- Raw share secrets are returned only once at creation time.
+-- lookupShare dual-reads: WHERE token = HashToken(plain) OR token = plain (legacy rows).
+-- Existing plaintext share URLs remain valid until rotated/revoked; no data migration required.

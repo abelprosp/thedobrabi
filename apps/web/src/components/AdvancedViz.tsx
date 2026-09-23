@@ -482,8 +482,21 @@ export function DecompositionTree({
 }
 
 export function IframeWidget({ url, title }: { url?: string; title?: string }) {
+  const safeUrl = (() => {
+    const raw = (url || "").trim();
+    if (!raw) return undefined;
+    // Same-origin relative paths are fine; absolute URLs must be https only.
+    if (raw.startsWith("/") && !raw.startsWith("//")) return raw;
+    try {
+      const u = new URL(raw);
+      if (u.protocol === "https:") return u.href;
+    } catch {
+      /* invalid */
+    }
+    return undefined;
+  })();
   const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const isExternal = !!(url && origin && !url.startsWith(origin) && !url.startsWith("/"));
+  const isExternal = !!(safeUrl && origin && !safeUrl.startsWith(origin) && !safeUrl.startsWith("/"));
   return (
     <div className="flex h-full flex-col rounded-2xl border border-line bg-surface shadow-sm">
       <div className="flex items-center justify-between border-b border-line px-3 py-2">
@@ -491,12 +504,12 @@ export function IframeWidget({ url, title }: { url?: string; title?: string }) {
         {isExternal && <span className="text-[10px] text-warn">conteúdo externo</span>}
       </div>
       <div className="min-h-0 flex-1 p-2">
-        {url ? (
-          <iframe src={url} title={title || "embed"} className="h-full w-full rounded-xl" sandbox="allow-scripts allow-same-origin" />
+        {safeUrl ? (
+          <iframe src={safeUrl} title={title || "embed"} className="h-full w-full rounded-xl" sandbox="allow-scripts allow-same-origin" />
         ) : (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-mute">
             <Globe size={28} />
-            <p className="text-xs">Insira uma URL no painel lateral.</p>
+            <p className="text-xs">{url ? "Apenas URLs https são permitidas." : "Insira uma URL no painel lateral."}</p>
           </div>
         )}
       </div>

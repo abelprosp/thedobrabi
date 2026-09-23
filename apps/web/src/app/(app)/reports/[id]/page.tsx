@@ -196,6 +196,7 @@ export default function ReportEditorPage() {
       const token = getAccess();
       const ws = localStorage.getItem("thedobra.workspace") || "";
       const res = await fetch(`/api/v1/reports/${id}/pdf`, {
+        credentials: "include",
         headers: {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           ...(ws ? { "X-Workspace-Id": ws } : {}),

@@ -3,6 +3,7 @@ package apihttp
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -272,7 +273,7 @@ func (s *Server) runFlow(w http.ResponseWriter, r *http.Request) {
 		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 		defer cancel()
 		reader := func(datasetID string, limit int) ([]string, []map[string]any, error) {
-			return s.query.ReadRows(ctx, org, ws, datasetID, limit, uuid.Nil, "")
+			return s.query.ReadRows(ctx, org, ws, datasetID, limit, uid, role)
 		}
 		_, _ = s.flowEng.Execute(ctx, org, ws, runID, uid, reader)
 	}()
@@ -334,7 +335,10 @@ func (s *Server) getFlowRunLogs(w http.ResponseWriter, r *http.Request) {
 // ================= Datasets: storage mode & RLS =================
 
 func (s *Server) patchDatasetStorageMode(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -718,7 +722,10 @@ func (s *Server) validateDimension(w http.ResponseWriter, r *http.Request) {
 // ================= AI generation endpoints =================
 
 func (s *Server) generateSQL(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -753,7 +760,10 @@ func (s *Server) generateSQL(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) generateMeasure(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -773,7 +783,10 @@ func (s *Server) generateMeasure(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) generateDimension(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -794,6 +807,9 @@ func (s *Server) generateDimension(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) analyzeDashboardWidgets(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -813,7 +829,10 @@ func (s *Server) analyzeDashboardWidgets(w http.ResponseWriter, r *http.Request)
 }
 
 func (s *Server) generateVisual(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	if err := s.ent.Check(r.Context(), org, "ai"); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
@@ -908,6 +927,24 @@ func pickDimensionForPrompt(model semantic.Model, q string) string {
 
 // ================= Apps =================
 
+// publicAppDashboardSQL loads dashboard metadata only within the published app's tenant.
+const publicAppDashboardSQL = `
+			SELECT name, description FROM dashboards
+			WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+		`
+
+// publicAppReportSQL loads report metadata only within the published app's tenant.
+const publicAppReportSQL = `
+			SELECT name, cadence, last_generated_at FROM reports
+			WHERE id=$1 AND org_id=$2 AND workspace_id=$3
+		`
+
+// dashboardBelongsToAppTenant is the IDOR guard used by publicApp/openApp paths:
+// a dashboard layout must never be returned unless org+ws match the app tenant.
+func dashboardBelongsToAppTenant(appOrg, appWs, dashOrg, dashWs uuid.UUID) bool {
+	return appOrg == dashOrg && appWs == dashWs
+}
+
 func (s *Server) listApps(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	list, err := s.apps.List(r.Context(), org, ws)
@@ -933,11 +970,11 @@ func (s *Server) getApp(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "app não encontrado")
 		return
 	}
-	ds, _ := s.apps.Dashboards(r.Context(), id)
+	ds, _ := s.apps.Dashboards(r.Context(), org, ws, id)
 	if ds == nil {
 		ds = []apps.DashboardRef{}
 	}
-	reps, _ := s.apps.Reports(r.Context(), id)
+	reps, _ := s.apps.Reports(r.Context(), org, ws, id)
 	if reps == nil {
 		reps = []apps.ReportRef{}
 	}
@@ -945,7 +982,10 @@ func (s *Server) getApp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) createApp(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, _ := principal(r)
+	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	var body apps.App
 	if err := httpx.Decode(r, &body); err != nil || body.Name == "" {
 		httpx.Error(w, 400, "invalid", "nome obrigatório")
@@ -965,7 +1005,10 @@ func (s *Server) createApp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) updateApp(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -985,7 +1028,10 @@ func (s *Server) updateApp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) deleteApp(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -1000,7 +1046,10 @@ func (s *Server) deleteApp(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) setAppContent(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -1036,11 +1085,19 @@ func (s *Server) setAppContent(w http.ResponseWriter, r *http.Request) {
 			reps = append(reps, apps.ReportRef{ID: rid, Order: i, Section: rp.Section})
 		}
 	}
-	if err := s.apps.SetDashboards(r.Context(), id, ds); err != nil {
+	if err := s.apps.SetDashboards(r.Context(), org, ws, id, ds); err != nil {
+		if errors.Is(err, apps.ErrNotInWorkspace) {
+			httpx.Error(w, 403, "forbidden", "dashboard não pertence a este workspace")
+			return
+		}
 		httpx.Error(w, 400, "update_failed", err.Error())
 		return
 	}
-	if err := s.apps.SetReports(r.Context(), id, reps); err != nil {
+	if err := s.apps.SetReports(r.Context(), org, ws, id, reps); err != nil {
+		if errors.Is(err, apps.ErrNotInWorkspace) {
+			httpx.Error(w, 403, "forbidden", "relatório não pertence a este workspace")
+			return
+		}
 		httpx.Error(w, 400, "update_failed", err.Error())
 		return
 	}
@@ -1048,7 +1105,10 @@ func (s *Server) setAppContent(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) publishApp(w http.ResponseWriter, r *http.Request) {
-	_, org, ws, _ := principal(r)
+	_, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "bad id")
@@ -1086,22 +1146,25 @@ func (s *Server) publicApp(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "app não encontrado")
 		return
 	}
-	ds, _ := s.apps.Dashboards(r.Context(), app.ID)
+	ds, _ := s.apps.Dashboards(r.Context(), app.OrgID, app.WorkspaceID, app.ID)
 	if ds == nil {
 		ds = []apps.DashboardRef{}
 	}
-	reps, _ := s.apps.Reports(r.Context(), app.ID)
+	reps, _ := s.apps.Reports(r.Context(), app.OrgID, app.WorkspaceID, app.ID)
 	if reps == nil {
 		reps = []apps.ReportRef{}
 	}
 	var dashboards []map[string]any
 	for _, ref := range ds {
 		var name, desc string
-		err := s.deps.PG.QueryRow(r.Context(), `SELECT name, description FROM dashboards WHERE id=$1`, ref.ID).Scan(&name, &desc)
+		err := s.deps.PG.QueryRow(r.Context(), publicAppDashboardSQL, ref.ID, app.OrgID, app.WorkspaceID).Scan(&name, &desc)
 		if err != nil {
 			continue
 		}
 		shareToken := s.ensureDashboardShare(r.Context(), app.OrgID, app.WorkspaceID, ref.ID)
+		if shareToken == "" {
+			continue
+		}
 		dashboards = append(dashboards, map[string]any{
 			"id": ref.ID, "name": name, "description": desc, "section": ref.Section,
 			"public_url": s.deps.Cfg.WebOrigin + "/share/" + shareToken,
@@ -1111,26 +1174,45 @@ func (s *Server) publicApp(w http.ResponseWriter, r *http.Request) {
 	for _, ref := range reps {
 		var name, cadence string
 		var last *time.Time
-		_ = s.deps.PG.QueryRow(r.Context(), `SELECT name, cadence, last_generated_at FROM reports WHERE id=$1`, ref.ID).Scan(&name, &cadence, &last)
+		err := s.deps.PG.QueryRow(r.Context(), publicAppReportSQL, ref.ID, app.OrgID, app.WorkspaceID).Scan(&name, &cadence, &last)
+		if err != nil {
+			continue
+		}
 		reports = append(reports, map[string]any{"id": ref.ID, "name": name, "section": ref.Section, "cadence": cadence, "last_generated_at": last})
 	}
 	httpx.JSON(w, 200, map[string]any{"app": app, "dashboards": dashboards, "reports": reports})
 }
 
+// ensureDashboardShare returns a share token only when the dashboard belongs to org+ws.
+// Never creates a share for a foreign dashboard (IDOR guard).
 func (s *Server) ensureDashboardShare(ctx context.Context, orgID, wsID, dashboardID uuid.UUID) string {
-	var tok string
-	err := s.deps.PG.QueryRow(ctx, `
-		SELECT token FROM dashboard_shares WHERE org_id=$1 AND workspace_id=$2 AND dashboard_id=$3 LIMIT 1
-	`, orgID, wsID, dashboardID).Scan(&tok)
-	if err == nil && tok != "" {
-		return tok
+	var exists bool
+	if err := s.deps.PG.QueryRow(ctx, `
+		SELECT EXISTS(SELECT 1 FROM dashboards WHERE id=$1 AND org_id=$2 AND workspace_id=$3)
+	`, dashboardID, orgID, wsID).Scan(&exists); err != nil || !exists {
+		return ""
 	}
-	tok, _ = cryptoenc.RandomToken(18)
-	_, _ = s.deps.PG.Exec(ctx, `
+	// Reuse only legacy plaintext tokens (hashed rows cannot recover the secret).
+	var stored string
+	err := s.deps.PG.QueryRow(ctx, `
+		SELECT token FROM dashboard_shares
+		WHERE org_id=$1 AND workspace_id=$2 AND dashboard_id=$3 AND revoked_at IS NULL
+		ORDER BY created_at DESC LIMIT 1
+	`, orgID, wsID, dashboardID).Scan(&stored)
+	if err == nil && stored != "" && len(stored) != 64 {
+		return stored
+	}
+	tok, _ := cryptoenc.RandomToken(18)
+	ct, err := s.deps.PG.Exec(ctx, `
 		INSERT INTO dashboard_shares (org_id, workspace_id, dashboard_id, token)
-		VALUES ($1,$2,$3,$4)
+		SELECT $1, $2, d.id, $3
+		FROM dashboards d
+		WHERE d.id=$4 AND d.org_id=$1 AND d.workspace_id=$2
 		ON CONFLICT (token) DO UPDATE SET token=EXCLUDED.token
-	`, orgID, wsID, dashboardID, tok)
+	`, orgID, wsID, cryptoenc.HashToken(tok), dashboardID)
+	if err != nil || ct.RowsAffected() == 0 {
+		return ""
+	}
 	return tok
 }
 
@@ -1146,7 +1228,7 @@ func (s *Server) openApp(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 404, "not_found", "app não encontrado")
 		return
 	}
-	ds, err := s.apps.Dashboards(r.Context(), id)
+	ds, err := s.apps.Dashboards(r.Context(), org, ws, id)
 	if err != nil {
 		httpx.Error(w, 500, "query_failed", err.Error())
 		return
@@ -1225,7 +1307,10 @@ func (s *Server) listGatewayInstances(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) generateGatewayToken(w http.ResponseWriter, r *http.Request) {
-	_, org, _, _ := principal(r)
+	_, org, _, role := principal(r)
+	if !requireAdmin(w, role) {
+		return
+	}
 	var body struct {
 		Name string `json:"name"`
 	}

@@ -229,6 +229,10 @@ func (e *Engine) poll(ctx context.Context, c checkpointClaim) error {
 		return e.pollViaIngest(ctx, c, cfg.Table)
 	}
 
+	if err := ingest.AssertConnectorConfig(cfg); err != nil {
+		return err
+	}
+
 	port := cfg.Port
 	if port == 0 {
 		port = 5432

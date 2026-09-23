@@ -150,7 +150,11 @@ func (s *Service) applyWebhookEvent(ctx context.Context, tx pgx.Tx, event stripe
 			return fmt.Errorf("checkout.session.completed sem org_id")
 		}
 		plan := entitlements.PlanPro
-		if sess.Metadata != nil && sess.Metadata["plan"] != "" {
+		if priceID := checkoutSessionPriceID(sess); priceID != "" {
+			if mapped, ok := s.planFromPrice(priceID); ok {
+				plan = mapped
+			}
+		} else if sess.Metadata != nil && sess.Metadata["plan"] != "" {
 			plan = entitlements.NormalizePlan(sess.Metadata["plan"])
 		}
 		cust, sub := "", ""
@@ -204,20 +208,30 @@ func (s *Service) applyWebhookEvent(ctx context.Context, tx pgx.Tx, event stripe
 		if status == "" {
 			status = "active"
 		}
+		priceID := extractStripePriceID(raw)
+		plan := ""
+		if mapped, ok := s.planFromPrice(priceID); ok {
+			plan = mapped
+		} else if meta, ok := raw["metadata"].(map[string]any); ok {
+			if p, ok := meta["plan"].(string); ok && p != "" {
+				plan = entitlements.NormalizePlan(p)
+			}
+		}
 		if subID != "" {
-			if _, err := tx.Exec(ctx, `UPDATE stripe_customers SET status=$2, updated_at=now() WHERE stripe_sub_id=$1`, subID, status); err != nil {
+			if priceID != "" {
+				if _, err := tx.Exec(ctx, `UPDATE stripe_customers SET status=$2, price_id=$3, updated_at=now() WHERE stripe_sub_id=$1`, subID, status, priceID); err != nil {
+					return err
+				}
+			} else if _, err := tx.Exec(ctx, `UPDATE stripe_customers SET status=$2, updated_at=now() WHERE stripe_sub_id=$1`, subID, status); err != nil {
 				return err
 			}
 		}
-		if meta, ok := raw["metadata"].(map[string]any); ok {
-			if p, ok := meta["plan"].(string); ok && p != "" {
-				plan := entitlements.NormalizePlan(p)
-				if _, err := tx.Exec(ctx, `
-					UPDATE organizations SET plan=$2, updated_at=now()
-					WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)
-				`, subID, plan); err != nil {
-					return err
-				}
+		if plan != "" && subID != "" {
+			if _, err := tx.Exec(ctx, `
+				UPDATE organizations SET plan=$2, updated_at=now()
+				WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)
+			`, subID, plan); err != nil {
+				return err
 			}
 		}
 	}
@@ -246,4 +260,88 @@ func (s *Service) priceFor(plan string) string {
 	default:
 		return s.cfg.StripePriceGrowth
 	}
+}
+
+// planFromPrice maps a Stripe price ID back to an internal plan. Returns false
+// when the price is unknown so callers can fall back to metadata.
+func (s *Service) planFromPrice(priceID string) (string, bool) {
+	if priceID == "" {
+		return "", false
+	}
+	switch priceID {
+	case s.cfg.StripePriceStarter:
+		if s.cfg.StripePriceStarter != "" {
+			return entitlements.PlanEssencial, true
+		}
+	case s.cfg.StripePriceGrowth:
+		if s.cfg.StripePriceGrowth != "" {
+			return entitlements.PlanPro, true
+		}
+	case s.cfg.StripePriceBusiness:
+		if s.cfg.StripePriceBusiness != "" {
+			return entitlements.PlanCompleto, true
+		}
+	case s.cfg.StripePriceEnterprise:
+		if s.cfg.StripePriceEnterprise != "" {
+			return entitlements.PlanCompleto, true
+		}
+	}
+	return "", false
+}
+
+func checkoutSessionPriceID(sess stripe.CheckoutSession) string {
+	if sess.LineItems != nil {
+		for _, li := range sess.LineItems.Data {
+			if li != nil && li.Price != nil && li.Price.ID != "" {
+				return li.Price.ID
+			}
+		}
+	}
+	return ""
+}
+
+// extractStripePriceID pulls the first price id from subscription or invoice payloads.
+func extractStripePriceID(raw map[string]any) string {
+	if items, ok := raw["items"].(map[string]any); ok {
+		if data, ok := items["data"].([]any); ok {
+			for _, row := range data {
+				m, _ := row.(map[string]any)
+				if m == nil {
+					continue
+				}
+				if id := priceIDFromObject(m["price"]); id != "" {
+					return id
+				}
+				if id := priceIDFromObject(m["plan"]); id != "" {
+					return id
+				}
+			}
+		}
+	}
+	if lines, ok := raw["lines"].(map[string]any); ok {
+		if data, ok := lines["data"].([]any); ok {
+			for _, row := range data {
+				m, _ := row.(map[string]any)
+				if m == nil {
+					continue
+				}
+				if id := priceIDFromObject(m["price"]); id != "" {
+					return id
+				}
+			}
+		}
+	}
+	return ""
+}
+
+func priceIDFromObject(v any) string {
+	switch t := v.(type) {
+	case string:
+		return t
+	case map[string]any:
+		if id, ok := t["id"].(string); ok {
+			return id
+		}
+	}
+	return ""
 }

@@ -240,7 +240,7 @@ func (s *Server) publicEmbedQuery(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "query_failed", err.Error())
 		return
 	}
-	httpx.JSON(w, 200, res)
+	httpx.JSON(w, 200, publicQueryResponse(res))
 }
 
 func (s *Server) publicEmbedAnalyze(w http.ResponseWriter, r *http.Request) {

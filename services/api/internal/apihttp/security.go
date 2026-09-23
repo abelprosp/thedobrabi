@@ -25,9 +25,10 @@ func (s *Server) securityHeaders(next http.Handler) http.Handler {
 	})
 }
 
-// rateLimit is deliberately Redis-backed so limits are shared by all API
-// replicas. It fails open when Redis is unavailable: a cache outage should not
-// make a healthy API reject every request.
+// rateLimit is Redis-backed so limits are shared by all API replicas.
+// Auth routes fail closed (503) if Redis is unavailable to avoid brute-force
+// during an outage; other routes still fail open so a cache outage does not
+// take down the whole API.
 func (s *Server) rateLimit(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/healthz" || r.URL.Path == "/readyz" {
@@ -37,9 +38,13 @@ func (s *Server) rateLimit(next http.Handler) http.Handler {
 		key := requestIP(r)
 		bucket := "general"
 		limit := int64(300)
-		if strings.HasPrefix(r.URL.Path, "/api/v1/auth/") {
+		authRoute := strings.HasPrefix(r.URL.Path, "/api/v1/auth/")
+		if authRoute {
 			bucket = "auth"
 			limit = 30
+		} else if strings.HasPrefix(r.URL.Path, "/api/v1/public/") {
+			bucket = "public"
+			limit = 60
 		} else if strings.Contains(r.URL.Path, "/ai/") || strings.HasPrefix(r.URL.Path, "/api/v1/queries") {
 			bucket = "analytics"
 			limit = 120
@@ -48,17 +53,23 @@ func (s *Server) rateLimit(next http.Handler) http.Handler {
 		redisKey := "thedobra:ratelimit:" + key + ":" + bucket + ":" + formatInt(window)
 		ctx := r.Context()
 		count, err := s.deps.Redis.Incr(ctx, redisKey).Result()
-		if err == nil {
-			if count == 1 {
-				_ = s.deps.Redis.Expire(ctx, redisKey, 70*time.Second).Err()
-			}
-			w.Header().Set("X-RateLimit-Limit", formatInt(limit))
-			w.Header().Set("X-RateLimit-Remaining", formatInt(maxInt64(0, limit-count)))
-			if count > limit {
-				w.Header().Set("Retry-After", "60")
-				httpx.Error(w, http.StatusTooManyRequests, "rate_limited", "muitas solicitações; tente novamente em instantes")
+		if err != nil {
+			if authRoute {
+				httpx.Error(w, http.StatusServiceUnavailable, "unavailable", "serviço temporariamente indisponível")
 				return
 			}
+			next.ServeHTTP(w, r)
+			return
+		}
+		if count == 1 {
+			_ = s.deps.Redis.Expire(ctx, redisKey, 70*time.Second).Err()
+		}
+		w.Header().Set("X-RateLimit-Limit", formatInt(limit))
+		w.Header().Set("X-RateLimit-Remaining", formatInt(maxInt64(0, limit-count)))
+		if count > limit {
+			w.Header().Set("Retry-After", "60")
+			httpx.Error(w, http.StatusTooManyRequests, "rate_limited", "muitas solicitações; tente novamente em instantes")
+			return
 		}
 		next.ServeHTTP(w, r)
 	})
@@ -66,13 +77,23 @@ func (s *Server) rateLimit(next http.Handler) http.Handler {
 
 func requestIP(r *http.Request) string {
 	host, _, err := net.SplitHostPort(r.RemoteAddr)
-	if err == nil {
-		return host
+	if err != nil {
+		host = r.RemoteAddr
 	}
-	if r.RemoteAddr != "" {
-		return r.RemoteAddr
+	if host == "" {
+		return "unknown"
 	}
-	return "unknown"
+	// Behind Nginx/local proxy, RemoteAddr is loopback — use first X-Forwarded-For hop
+	// so rate limits are per client, not shared across everyone as 127.0.0.1.
+	if ip := net.ParseIP(host); ip != nil && ip.IsLoopback() {
+		if xff := r.Header.Get("X-Forwarded-For"); xff != "" {
+			first := strings.TrimSpace(strings.Split(xff, ",")[0])
+			if first != "" {
+				return first
+			}
+		}
+	}
+	return host
 }
 
 func formatInt(value int64) string {

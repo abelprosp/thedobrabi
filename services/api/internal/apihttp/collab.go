@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/url"
-	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -30,6 +29,7 @@ func (s *Server) mfaVerify(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 401, "mfa", err.Error())
 		return
 	}
+	setAuthCookies(w, r, tok)
 	httpx.JSON(w, 200, map[string]any{"tokens": tok, "user": p})
 }
 
@@ -112,11 +112,11 @@ func (s *Server) acceptInvite(w http.ResponseWriter, r *http.Request) {
 	}
 	_ = httpx.Decode(r, &body)
 
-	// Optional session: existing invitees (incl. SSO) may prove identity via Bearer token.
+	// Optional session: existing invitees (incl. SSO) may prove identity via Bearer or cookie.
 	// An admin opening invite_url is not the invitee, so this does not auto-login as them.
 	sessionUserID := uuid.Nil
-	if h := r.Header.Get("Authorization"); strings.HasPrefix(h, "Bearer ") {
-		if sess, err := s.auth.ParseAccess(strings.TrimPrefix(h, "Bearer ")); err == nil {
+	if raw := accessTokenFromRequest(r); raw != "" {
+		if sess, err := s.auth.ParseAccess(r.Context(), raw); err == nil {
 			sessionUserID = sess.UserID
 		}
 	}
@@ -134,6 +134,7 @@ func (s *Server) acceptInvite(w http.ResponseWriter, r *http.Request) {
 		link := s.deps.Cfg.WebOrigin + "/verify-email?token=" + url.QueryEscape(verificationToken)
 		_ = s.notify.SendMail(p.Email, "Confirme o seu e-mail — TheDobra", "Confirme a sua conta TheDobra através deste link:\n\n"+link+"\n\nEsta ligação expira em 24 horas.")
 	}
+	setAuthCookies(w, r, tok)
 	httpx.JSON(w, 200, map[string]any{"tokens": tok, "user": p})
 }
 
@@ -272,7 +273,7 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 	_, err = s.deps.PG.Exec(r.Context(), `
 		INSERT INTO dashboard_shares (org_id, workspace_id, dashboard_id, token, created_by, expires_at)
 		VALUES ($1,$2,$3,$4,$5,$6)
-	`, org, ws, id, tok, uid, expires)
+	`, org, ws, id, cryptoenc.HashToken(tok), uid, expires)
 	if err != nil {
 		httpx.Error(w, 400, "share", err.Error())
 		return
@@ -310,9 +311,14 @@ func (s *Server) listDashboardShares(w http.ResponseWriter, r *http.Request) {
 		if err := rows.Scan(&tok, &created, &expires, &revoked); err != nil {
 			continue
 		}
+		// Hashed tokens are not usable in URLs; only return a hint for list UI.
+		hint := tok
+		if len(hint) > 12 {
+			hint = hint[:8] + "…"
+		}
 		item := map[string]any{
 			"token":      tok,
-			"url":        s.orgWebOrigin(r.Context(), org) + "/share/" + tok,
+			"token_hint": hint,
 			"created_at": created,
 			"revoked_at": revoked,
 			"active":     revoked == nil && (expires == nil || expires.After(time.Now())),
@@ -336,10 +342,12 @@ func (s *Server) revokeDashboardShare(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	tok := chi.URLParam(r, "token")
+	hashed := cryptoenc.HashToken(tok)
 	ct, err := s.deps.PG.Exec(r.Context(), `
 		UPDATE dashboard_shares SET revoked_at=now()
-		WHERE dashboard_id=$1 AND org_id=$2 AND workspace_id=$3 AND token=$4 AND revoked_at IS NULL
-	`, id, org, ws, tok)
+		WHERE dashboard_id=$1 AND org_id=$2 AND workspace_id=$3
+		  AND (token=$4 OR token=$5) AND revoked_at IS NULL
+	`, id, org, ws, hashed, tok)
 	if err != nil || ct.RowsAffected() == 0 {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
@@ -347,13 +355,19 @@ func (s *Server) revokeDashboardShare(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{"ok": true})
 }
 
+// shareLookupSQL joins shares to dashboards only when org+ws match (IDOR guard).
+// $1 = HashToken(plain), $2 = plain (legacy dual-read during transition).
+const shareLookupSQL = `
+		SELECT s.org_id, s.workspace_id, d.id, d.name, d.description, d.layout_json, s.expires_at, s.revoked_at
+		FROM dashboard_shares s
+		JOIN dashboards d ON d.id=s.dashboard_id AND d.org_id=s.org_id AND d.workspace_id=s.workspace_id
+		WHERE s.token=$1 OR s.token=$2
+	`
+
 func (s *Server) lookupShare(ctx context.Context, tok string) (org, ws, dash uuid.UUID, layout []byte, name, desc string, err error) {
 	var expires, revoked *time.Time
-	err = s.deps.PG.QueryRow(ctx, `
-		SELECT s.org_id, s.workspace_id, d.id, d.name, d.description, d.layout_json, s.expires_at, s.revoked_at
-		FROM dashboard_shares s JOIN dashboards d ON d.id=s.dashboard_id
-		WHERE s.token=$1
-	`, tok).Scan(&org, &ws, &dash, &name, &desc, &layout, &expires, &revoked)
+	hashed := cryptoenc.HashToken(tok)
+	err = s.deps.PG.QueryRow(ctx, shareLookupSQL, hashed, tok).Scan(&org, &ws, &dash, &name, &desc, &layout, &expires, &revoked)
 	if err != nil {
 		return
 	}
@@ -409,7 +423,7 @@ func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "query_failed", err.Error())
 		return
 	}
-	httpx.JSON(w, 200, res)
+	httpx.JSON(w, 200, publicQueryResponse(res))
 }
 
 func (s *Server) publicDashboardAnalyze(w http.ResponseWriter, r *http.Request) {
@@ -474,7 +488,7 @@ func (s *Server) analyzePublicDashboard(w http.ResponseWriter, r *http.Request, 
 	}
 	out.AlertSuggestions = nil
 	s.audit(r, "AI_DASHBOARD_ANALYZED", "ai", uuid.Nil, map[string]any{"widgets": out.AnalyzedWidgets, "source": out.Source, "public": true})
-	httpx.JSON(w, 200, out)
+	httpx.JSON(w, 200, stripPublicAnalyzeSQL(out))
 }
 
 func allowedDatasetIDs(layout []byte) map[string]struct{} {
@@ -538,4 +552,33 @@ func (s *Server) lakeObjects(w http.ResponseWriter, r *http.Request) {
 		out = append(out, map[string]any{"id": id, "dataset_id": ds, "stage": stage, "key": key, "bytes": bytes, "created_at": at})
 	}
 	httpx.JSON(w, 200, out)
+}
+
+// publicQueryResponse omits generated SQL so anonymous share/embed clients
+// cannot inspect warehouse queries.
+func publicQueryResponse(res queryeng.Result) map[string]any {
+	return map[string]any{
+		"columns":     res.Columns,
+		"rows":        res.Rows,
+		"cache_hit":   res.CacheHit,
+		"duration_ms": res.DurationMs,
+		"row_count":   res.RowCount,
+		"bytes_read":  res.BytesRead,
+		"fingerprint": res.Fingerprint,
+		"planner":     res.Planner,
+		"evidence":    res.Evidence,
+	}
+}
+
+// stripPublicAnalyzeSQL removes any accidental SQL keys from insight evidence
+// before returning public analyze payloads.
+func stripPublicAnalyzeSQL(out aiagent.DashboardIntelResult) aiagent.DashboardIntelResult {
+	for i := range out.Insights {
+		if out.Insights[i].Evidence == nil {
+			continue
+		}
+		delete(out.Insights[i].Evidence, "sql")
+		delete(out.Insights[i].Evidence, "SQL")
+	}
+	return out
 }

@@ -8,6 +8,12 @@ import (
 	"time"
 )
 
+const (
+	defaultJWTSecret     = "thedobra-dev-jwt-secret-change-me-32b"
+	defaultEncryptionKey = "thedobra-dev-enc-key-32bytes-ok!"
+	encPadSuffix         = "thedobra-dev-enc-key-32bytes-ok!"
+)
+
 type Config struct {
 	Env            string
 	HTTPAddr       string
@@ -58,20 +64,35 @@ type Config struct {
 	AlertWebhook    string
 	AlertEmail      string
 	WhatsAppWebhook string
+
+	// RequireEmailVerified rejects password login when email_verified_at is null.
+	// Defaults to true when APP_ENV is production/prod; override with REQUIRE_EMAIL_VERIFIED.
+	RequireEmailVerified bool
+
+	// encKeyPadded is true when ENCRYPTION_KEY was shorter than 32 bytes and padded.
+	encKeyPadded bool
+	// encKeyRaw is the original ENCRYPTION_KEY env value (before padding).
+	encKeyRaw string
 }
 
 func Load() Config {
-	enc := getenv("ENCRYPTION_KEY", "thedobra-dev-enc-key-32bytes-ok!")
+	encRaw := getenv("ENCRYPTION_KEY", defaultEncryptionKey)
+	encPadded := false
+	enc := encRaw
 	if len(enc) < 32 {
-		enc = (enc + "thedobra-dev-enc-key-32bytes-ok!")[:32]
+		encPadded = true
+		enc = (enc + encPadSuffix)[:32]
 	}
-	return Config{
+
+	cfg := Config{
 		Env:                   getenv("APP_ENV", "development"),
 		HTTPAddr:              getenv("APP_HTTP_ADDR", ":8080"),
 		PublicURL:             getenv("APP_PUBLIC_URL", "http://localhost:8080"),
 		WebOrigin:             getenv("WEB_ORIGIN", "http://localhost:3010"),
-		JWTSecret:             []byte(getenv("JWT_SECRET", "thedobra-dev-jwt-secret-change-me-32b")),
+		JWTSecret:             []byte(getenv("JWT_SECRET", defaultJWTSecret)),
 		EncryptionKey:         []byte(enc[:32]),
+		encKeyPadded:          encPadded,
+		encKeyRaw:             encRaw,
 		PostgresDSN:           getenv("POSTGRES_DSN", "postgres://thedobra:thedobra@localhost:5432/thedobra?sslmode=disable"),
 		RedisAddr:             getenv("REDIS_ADDR", "localhost:6379"),
 		RedisPassword:         os.Getenv("REDIS_PASSWORD"),
@@ -113,6 +134,8 @@ func Load() Config {
 		AlertEmail:            os.Getenv("ALERT_EMAIL"),
 		WhatsAppWebhook:       os.Getenv("WHATSAPP_WEBHOOK_URL"),
 	}
+	cfg.RequireEmailVerified = parseBoolEnv("REQUIRE_EMAIL_VERIFIED", cfg.IsProduction())
+	return cfg
 }
 
 func smtpPort() int {
@@ -123,22 +146,72 @@ func smtpPort() int {
 	return port
 }
 
+// IsProduction reports whether APP_ENV is production or prod.
+func (c Config) IsProduction() bool {
+	env := strings.ToLower(strings.TrimSpace(c.Env))
+	return env == "production" || env == "prod"
+}
+
 // Validate prevents the API from starting with credentials that are safe only
 // for local development.
 func (c Config) Validate() error {
-	if c.Env != "production" {
+	if !c.IsProduction() {
 		return nil
 	}
-	if string(c.JWTSecret) == "thedobra-dev-jwt-secret-change-me-32b" || len(c.JWTSecret) < 32 {
+
+	jwt := string(c.JWTSecret)
+	if jwt == defaultJWTSecret || len(c.JWTSecret) < 32 {
 		return fmt.Errorf("JWT_SECRET must be a strong production secret")
 	}
-	if string(c.EncryptionKey) == "thedobra-dev-enc-key-32bytes-ok!" {
+	if strings.Contains(strings.ToLower(jwt), "dev") {
+		return fmt.Errorf("JWT_SECRET must not contain 'dev' in production")
+	}
+
+	enc := string(c.EncryptionKey)
+	if enc == defaultEncryptionKey {
 		return fmt.Errorf("ENCRYPTION_KEY must be a strong production secret")
 	}
+	if c.encKeyPadded || len(c.encKeyRaw) < 32 {
+		return fmt.Errorf("ENCRYPTION_KEY must be at least 32 bytes (short keys are not padded in production)")
+	}
+	if strings.HasSuffix(enc, encPadSuffix) || strings.Contains(enc, encPadSuffix) {
+		return fmt.Errorf("ENCRYPTION_KEY looks padded from a short/dev key")
+	}
+	if strings.Contains(strings.ToLower(c.encKeyRaw), "dev") || strings.Contains(strings.ToLower(enc), "dev") {
+		return fmt.Errorf("ENCRYPTION_KEY must not contain 'dev' in production")
+	}
+
+	if strings.TrimSpace(c.RedisPassword) == "" {
+		return fmt.Errorf("REDIS_PASSWORD is required in production")
+	}
+
+	dsn := strings.ToLower(c.PostgresDSN)
+	if strings.Contains(dsn, "password=thedobra") || strings.Contains(dsn, ":thedobra@") {
+		return fmt.Errorf("POSTGRES_DSN must not use the default thedobra password in production")
+	}
+	if strings.Contains(dsn, "sslmode=disable") {
+		return fmt.Errorf("POSTGRES_DSN must not use sslmode=disable in production")
+	}
+
 	if c.StripeSecret != "" && c.StripeWebhookSecret == "" {
 		return fmt.Errorf("STRIPE_WEBHOOK_SECRET is required when Stripe is enabled")
 	}
 	return nil
+}
+
+func parseBoolEnv(key string, def bool) bool {
+	v := strings.TrimSpace(os.Getenv(key))
+	if v == "" {
+		return def
+	}
+	switch strings.ToLower(v) {
+	case "1", "true", "yes", "on":
+		return true
+	case "0", "false", "no", "off":
+		return false
+	default:
+		return def
+	}
 }
 
 func getenv(k, def string) string {

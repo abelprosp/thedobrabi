@@ -23,22 +23,25 @@ export function apiStatus(err: unknown): number {
 const ACCESS = "thedobra.access";
 const REFRESH = "thedobra.refresh";
 
+/** Legacy localStorage only — prefer HttpOnly cookies; returns null once migrated. */
 export function getAccess(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem(ACCESS);
 }
 
-function getRefresh(): string | null {
+/** Legacy localStorage only — refresh prefers cookie via credentials: include. */
+export function getRefresh(): string | null {
   if (typeof window === "undefined") return null;
   return localStorage.getItem(REFRESH);
 }
 
-export function setTokens(t: Tokens) {
-  localStorage.setItem(ACCESS, t.access_token);
-  localStorage.setItem(REFRESH, t.refresh_token);
+/** Cookie session: clear any leftover localStorage tokens (do not persist JWTs). */
+export function setTokens(_t?: Tokens) {
+  clearTokens();
 }
 
 export function clearTokens() {
+  if (typeof window === "undefined") return;
   localStorage.removeItem(ACCESS);
   localStorage.removeItem(REFRESH);
 }
@@ -73,17 +76,17 @@ async function refreshAccess(): Promise<boolean> {
   if (refreshInFlight) return refreshInFlight;
   refreshInFlight = (async () => {
     const rt = getRefresh();
-    if (!rt) return false;
     try {
       const res = await fetch("/api/v1/auth/refresh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh_token: rt }),
+        credentials: "include",
+        body: JSON.stringify(rt ? { refresh_token: rt } : {}),
       });
       const json = await res.json().catch(() => ({}));
       if (!res.ok) return false;
       const tokens = unwrap(json)?.tokens as Tokens | undefined;
-      if (!tokens?.access_token || !tokens.refresh_token) return false;
+      if (!tokens?.access_token) return false;
       setTokens(tokens);
       return true;
     } catch {
@@ -115,7 +118,7 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     if (!headers.has("Content-Type") && init.body && !(init.body instanceof FormData)) {
       headers.set("Content-Type", "application/json");
     }
-    const res = await fetch(path, { ...init, headers });
+    const res = await fetch(path, { ...init, headers, credentials: "include" });
     const json = await res.json().catch(() => ({}));
     return { res, json };
   };
@@ -128,6 +131,7 @@ export async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     try {
       const token = getAccess();
       const sessionRes = await fetch("/api/v1/auth/me", {
+        credentials: "include",
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       const sessionJSON = await sessionRes.json().catch(() => ({}));

@@ -16,6 +16,9 @@ import (
 )
 
 func (e *Engine) discoverSQL(ctx context.Context, typ string, cfg SQLConfig) ([]string, error) {
+	if err := assertConfigHosts(cfg); err != nil {
+		return nil, err
+	}
 	if typ == "odbc" {
 		typ = detectODBCType(cfg)
 		if typ == "postgres" && strings.TrimSpace(cfg.URL) != "" {
@@ -105,6 +108,9 @@ func scanStringRows(rows *sql.Rows) ([]string, error) {
 }
 
 func openSQL(typ string, cfg SQLConfig) (*sql.DB, string, error) {
+	if err := assertConfigHosts(cfg); err != nil {
+		return nil, "", err
+	}
 	if typ == "odbc" {
 		typ = detectODBCType(cfg)
 	}

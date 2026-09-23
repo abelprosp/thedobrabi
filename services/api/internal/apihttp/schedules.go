@@ -289,8 +289,16 @@ func (s *Server) runScheduledFlow(ctx context.Context, orgID, wsID, userID, flow
 		}
 		return scheduler.JobResult{}, err
 	}
+	// Prefer the schedule owner's membership role so RLS applies; fall back to
+	// viewer (most restrictive) when created_by is missing or no longer a member.
+	role := "viewer"
+	if userID != uuid.Nil {
+		if p, perr := s.auth.Principal(ctx, userID, wsID); perr == nil && p.OrgID == orgID && p.Role != "" {
+			role = p.Role
+		}
+	}
 	reader := func(datasetID string, limit int) ([]string, []map[string]any, error) {
-		return s.query.ReadRows(ctx, orgID, wsID, datasetID, limit, uuid.Nil, "")
+		return s.query.ReadRows(ctx, orgID, wsID, datasetID, limit, userID, role)
 	}
 	sum, err := s.flowEng.Execute(ctx, orgID, wsID, runID, userID, reader)
 	n := sum.Rows

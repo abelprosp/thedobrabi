@@ -8,7 +8,6 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"net/netip"
 	"net/url"
 	"strings"
 	"sync"
@@ -18,9 +17,9 @@ import (
 )
 
 var (
-	connectorMu            sync.RWMutex
-	connectorHTTP          = newSecureConnectorHTTP()
-	allowPrivateConnectorHosts bool
+	connectorMu                sync.RWMutex
+	connectorHTTP              = newSecureConnectorHTTP()
+	allowPrivateConnectorHosts bool // set by SetConnectorHTTP for tests; also see CONNECTOR_ALLOW_PRIVATE
 )
 
 func newSecureConnectorHTTP() *http.Client {
@@ -39,7 +38,7 @@ func newSecureConnectorHTTP() *http.Client {
 				}
 				var lastErr error
 				for _, ip := range ips {
-					if blockedConnectorIP(ip) {
+					if BlockedConnectorIP(ip) {
 						continue
 					}
 					conn, err := (&net.Dialer{Timeout: 10 * time.Second}).DialContext(ctx, network, net.JoinHostPort(ip.String(), port))
@@ -92,12 +91,6 @@ func currentConnectorHTTP() *http.Client {
 	return connectorHTTP
 }
 
-func privateHostsAllowed() bool {
-	connectorMu.RLock()
-	defer connectorMu.RUnlock()
-	return allowPrivateConnectorHosts
-}
-
 func assertHTTPURL(raw string) error {
 	u, err := url.Parse(strings.TrimSpace(raw))
 	if err != nil || u.Scheme == "" || u.Host == "" || u.User != nil {
@@ -106,22 +99,10 @@ func assertHTTPURL(raw string) error {
 	if u.Scheme != "http" && u.Scheme != "https" {
 		return fmt.Errorf("apenas http/https são permitidos")
 	}
-	if ip, err := netip.ParseAddr(u.Hostname()); err == nil && blockedConnectorIP(net.IP(ip.AsSlice())) {
-		if !privateHostsAllowed() {
-			return fmt.Errorf("host interno ou reservado não permitido")
-		}
+	if err := AssertPublicHost(u.Hostname()); err != nil {
+		return err
 	}
 	return nil
-}
-
-func blockedConnectorIP(ip net.IP) bool {
-	addr, err := netip.ParseAddr(ip.String())
-	if err != nil {
-		return true
-	}
-	return addr.IsLoopback() || addr.IsPrivate() || addr.IsLinkLocalUnicast() ||
-		addr.IsLinkLocalMulticast() || addr.IsUnspecified() || addr.IsMulticast() ||
-		addr.String() == "169.254.169.254"
 }
 
 func (e *Engine) pingHTTP(ctx context.Context, cfg SQLConfig) error {

@@ -14,14 +14,24 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const MinPasswordLen = 10
+
 type Service struct {
-	pg     *pgxpool.Pool
-	secret []byte
-	encKey []byte
+	pg                   *pgxpool.Pool
+	secret               []byte
+	encKey               []byte
+	requireEmailVerified bool
 }
 
-func New(pg *pgxpool.Pool, secret, encKey []byte) *Service {
-	return &Service{pg: pg, secret: secret, encKey: encKey}
+func New(pg *pgxpool.Pool, secret, encKey []byte, requireEmailVerified bool) *Service {
+	return &Service{pg: pg, secret: secret, encKey: encKey, requireEmailVerified: requireEmailVerified}
+}
+
+func validatePassword(password string) error {
+	if len(password) < MinPasswordLen {
+		return fmt.Errorf("a senha deve ter pelo menos %d caracteres", MinPasswordLen)
+	}
+	return nil
 }
 
 type Principal struct {
@@ -50,8 +60,8 @@ func (s *Service) Register(ctx context.Context, name, email, password, orgName s
 	if email == "" || password == "" || name == "" {
 		return Principal{}, TokenPair{}, fmt.Errorf("nome, e-mail e senha são obrigatórios")
 	}
-	if len(password) < 8 {
-		return Principal{}, TokenPair{}, fmt.Errorf("a senha deve ter pelo menos 8 caracteres")
+	if err := validatePassword(password); err != nil {
+		return Principal{}, TokenPair{}, err
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
@@ -145,9 +155,13 @@ func (s *Service) Login(ctx context.Context, email, password string) (Principal,
 		return Principal{}, TokenPair{}, fmt.Errorf("credenciais inválidas")
 	}
 	var active, mfa bool
-	_ = s.pg.QueryRow(ctx, `SELECT COALESCE(active, TRUE), mfa_enabled FROM users WHERE id=$1`, p.UserID).Scan(&active, &mfa)
+	var emailVerified *time.Time
+	_ = s.pg.QueryRow(ctx, `SELECT COALESCE(active, TRUE), mfa_enabled, email_verified_at FROM users WHERE id=$1`, p.UserID).Scan(&active, &mfa, &emailVerified)
 	if !active {
 		return Principal{}, TokenPair{}, fmt.Errorf("conta desactivada")
+	}
+	if s.requireEmailVerified && emailVerified == nil {
+		return Principal{}, TokenPair{}, fmt.Errorf("verifique o e-mail antes de entrar")
 	}
 	if mfa {
 		ch, err := s.BeginMFA(ctx, p.UserID)
@@ -188,7 +202,48 @@ func (s *Service) Logout(ctx context.Context, refresh string) {
 	_, _ = s.pg.Exec(ctx, `UPDATE refresh_tokens SET revoked_at=now() WHERE token_hash=$1`, cryptoenc.HashToken(refresh))
 }
 
-func (s *Service) ParseAccess(token string) (Principal, error) {
+// LogoutAll revokes every refresh token and bumps token_version so outstanding
+// access JWTs fail ParseAccess until the user authenticates again.
+func (s *Service) LogoutAll(ctx context.Context, userID uuid.UUID) error {
+	if userID == uuid.Nil {
+		return fmt.Errorf("utilizador inválido")
+	}
+	tx, err := s.pg.Begin(ctx)
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback(ctx)
+	if _, err := tx.Exec(ctx, `
+		UPDATE refresh_tokens SET revoked_at=now()
+		WHERE user_id=$1 AND revoked_at IS NULL
+	`, userID); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(ctx, `
+		UPDATE users SET token_version = token_version + 1, updated_at=now() WHERE id=$1
+	`, userID); err != nil {
+		return err
+	}
+	return tx.Commit(ctx)
+}
+
+// LogoutAllByRefresh resolves the user from a refresh token and performs LogoutAll.
+func (s *Service) LogoutAllByRefresh(ctx context.Context, refresh string) error {
+	if refresh == "" {
+		return fmt.Errorf("refresh token em falta")
+	}
+	var userID uuid.UUID
+	err := s.pg.QueryRow(ctx, `
+		SELECT user_id FROM refresh_tokens
+		WHERE token_hash=$1 AND revoked_at IS NULL AND expires_at > now()
+	`, cryptoenc.HashToken(refresh)).Scan(&userID)
+	if err != nil {
+		return fmt.Errorf("refresh token inválido ou expirado")
+	}
+	return s.LogoutAll(ctx, userID)
+}
+
+func (s *Service) ParseAccess(ctx context.Context, token string) (Principal, error) {
 	parsed, err := jwt.Parse(token, func(t *jwt.Token) (any, error) {
 		if t.Method.Alg() != jwt.SigningMethodHS256.Alg() {
 			return nil, fmt.Errorf("unexpected alg")
@@ -214,6 +269,14 @@ func (s *Service) ParseAccess(token string) (Principal, error) {
 	p.OrgID, _ = uuid.Parse(str(claims["org_id"]))
 	p.WorkspaceID, _ = uuid.Parse(str(claims["workspace_id"]))
 	if p.UserID == uuid.Nil {
+		return Principal{}, fmt.Errorf("unauthorized")
+	}
+	claimVer := intClaim(claims["tv"])
+	var dbVer int
+	if err := s.pg.QueryRow(ctx, `SELECT COALESCE(token_version, 0) FROM users WHERE id=$1 AND COALESCE(active, TRUE)`, p.UserID).Scan(&dbVer); err != nil {
+		return Principal{}, fmt.Errorf("unauthorized")
+	}
+	if claimVer != dbVer {
 		return Principal{}, fmt.Errorf("unauthorized")
 	}
 	return p, nil
@@ -270,6 +333,8 @@ func (s *Service) Issue(ctx context.Context, p Principal) (TokenPair, error) {
 func (s *Service) issue(ctx context.Context, p Principal) (TokenPair, error) {
 	now := time.Now()
 	accessTTL := 8 * time.Hour
+	var tokenVersion int
+	_ = s.pg.QueryRow(ctx, `SELECT COALESCE(token_version, 0) FROM users WHERE id=$1`, p.UserID).Scan(&tokenVersion)
 	claims := jwt.MapClaims{
 		"sub":                  p.UserID.String(),
 		"org_id":               p.OrgID.String(),
@@ -280,6 +345,7 @@ func (s *Service) issue(ctx context.Context, p Principal) (TokenPair, error) {
 		"plan":                 p.Plan,
 		"onboarding_step":      p.OnboardingStep,
 		"onboarding_completed": p.OnboardingCompleted,
+		"tv":                   tokenVersion,
 		"iat":                  now.Unix(),
 		"exp":                  now.Add(accessTTL).Unix(),
 	}
@@ -311,13 +377,31 @@ func (s *Service) UpsertSSO(ctx context.Context, email, name, provider, subject 
 	var userID uuid.UUID
 	err := s.pg.QueryRow(ctx, `SELECT user_id FROM oauth_identities WHERE provider=$1 AND subject=$2`, provider, subject).Scan(&userID)
 	if err == pgx.ErrNoRows {
-		err = s.pg.QueryRow(ctx, `SELECT id FROM users WHERE email=$1`, email).Scan(&userID)
-		if err == nil {
-			// Never auto-link unverified SAML (or any SAML) identity to an existing account by email.
+		var authProvider, externalID string
+		err = s.pg.QueryRow(ctx, `
+			SELECT id, COALESCE(auth_provider,'password'), COALESCE(external_id,'')
+			FROM users WHERE email=$1
+		`, email).Scan(&userID, &authProvider, &externalID)
+		switch {
+		case err == nil:
+			// Never auto-link SAML by email alone.
 			if provider == "saml" {
 				return Principal{}, TokenPair{}, fmt.Errorf("não é permitido vincular identidade SAML a conta existente por e-mail sem validação criptográfica")
 			}
-		} else if err == pgx.ErrNoRows {
+			// Password accounts must link explicitly (login + settings), not via OAuth email match.
+			if authProvider == "" || authProvider == "password" {
+				return Principal{}, TokenPair{}, fmt.Errorf("esta conta usa palavra-passe; inicie sessão com a palavra-passe e vincule o provedor nas definições")
+			}
+			// Only auto-link when the account already belongs to this OAuth provider / subject.
+			if authProvider != provider && externalID != subject {
+				return Principal{}, TokenPair{}, fmt.Errorf("esta conta já está associada a outro método de autenticação; inicie sessão e vincule o provedor nas definições")
+			}
+			_, _ = s.pg.Exec(ctx, `INSERT INTO oauth_identities (user_id, provider, subject, email) VALUES ($1,$2,$3,$4) ON CONFLICT (provider, subject) DO NOTHING`,
+				userID, provider, subject, email)
+			if externalID == "" {
+				_, _ = s.pg.Exec(ctx, `UPDATE users SET external_id=$2, updated_at=now() WHERE id=$1`, userID, subject)
+			}
+		case err == pgx.ErrNoRows:
 			hash, _ := bcrypt.GenerateFromPassword([]byte(uuid.NewString()), 10)
 			err = s.pg.QueryRow(ctx, `INSERT INTO users (email, password_hash, name, auth_provider, external_id) VALUES ($1,$2,$3,$4,$5) RETURNING id`,
 				email, string(hash), name, provider, subject).Scan(&userID)
@@ -333,12 +417,11 @@ func (s *Service) UpsertSSO(ctx context.Context, email, name, provider, subject 
 			}
 			_, _ = s.pg.Exec(ctx, `INSERT INTO organization_members (org_id, user_id, role) VALUES ($1,$2,'owner')`, orgID, userID)
 			_, _ = s.pg.Exec(ctx, `INSERT INTO workspaces (org_id, name, slug) VALUES ($1,'Padrão','default')`, orgID)
-		} else if err != nil {
+			_, _ = s.pg.Exec(ctx, `INSERT INTO oauth_identities (user_id, provider, subject, email) VALUES ($1,$2,$3,$4) ON CONFLICT (provider, subject) DO NOTHING`,
+				userID, provider, subject, email)
+		default:
 			return Principal{}, TokenPair{}, err
 		}
-		_, _ = s.pg.Exec(ctx, `INSERT INTO oauth_identities (user_id, provider, subject, email) VALUES ($1,$2,$3,$4) ON CONFLICT (provider, subject) DO NOTHING`,
-			userID, provider, subject, email)
-		_, _ = s.pg.Exec(ctx, `UPDATE users SET auth_provider=$2, external_id=$3 WHERE id=$1`, userID, provider, subject)
 	} else if err != nil {
 		return Principal{}, TokenPair{}, err
 	}
@@ -390,4 +473,22 @@ func boolClaim(v any) bool {
 		return b
 	}
 	return str(v) == "true"
+}
+
+func intClaim(v any) int {
+	if v == nil {
+		return 0
+	}
+	switch n := v.(type) {
+	case float64:
+		return int(n)
+	case int:
+		return n
+	case int64:
+		return int(n)
+	default:
+		var i int
+		_, _ = fmt.Sscan(str(v), &i)
+		return i
+	}
 }

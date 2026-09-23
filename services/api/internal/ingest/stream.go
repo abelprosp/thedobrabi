@@ -15,6 +15,9 @@ func (e *Engine) pingKafka(cfg SQLConfig) error {
 	if cfg.Broker == "" || cfg.Topic == "" {
 		return fmt.Errorf("broker e tópico Kafka obrigatórios")
 	}
+	if err := assertConfigHosts(cfg); err != nil {
+		return err
+	}
 	conn, err := kafka.Dial("tcp", cfg.Broker)
 	if err != nil {
 		return err
@@ -27,6 +30,9 @@ func (e *Engine) pingKafka(cfg SQLConfig) error {
 func (e *Engine) readKafka(ctx context.Context, cfg SQLConfig) ([]string, [][]string, error) {
 	if cfg.Broker == "" || cfg.Topic == "" {
 		return nil, nil, fmt.Errorf("broker e tópico Kafka obrigatórios")
+	}
+	if err := assertConfigHosts(cfg); err != nil {
+		return nil, nil, err
 	}
 	limit := cfg.RowLimit()
 	if limit > 5000 {
@@ -114,6 +120,13 @@ func mqttBroker(cfg SQLConfig) string {
 }
 
 func (e *Engine) pingMQTT(cfg SQLConfig) error {
+	check := cfg
+	if strings.TrimSpace(check.Broker) == "" {
+		check.Broker = "localhost:1883"
+	}
+	if err := assertConfigHosts(check); err != nil {
+		return err
+	}
 	opts := mqtt.NewClientOptions().AddBroker(mqttBroker(cfg)).SetConnectTimeout(5 * time.Second)
 	if cfg.User != "" {
 		opts.SetUsername(cfg.User)
@@ -132,6 +145,13 @@ func (e *Engine) pingMQTT(cfg SQLConfig) error {
 }
 
 func (e *Engine) readMQTT(ctx context.Context, cfg SQLConfig) ([]string, [][]string, error) {
+	check := cfg
+	if strings.TrimSpace(check.Broker) == "" {
+		check.Broker = "localhost:1883"
+	}
+	if err := assertConfigHosts(check); err != nil {
+		return nil, nil, err
+	}
 	topic := cfg.Topic
 	if topic == "" {
 		topic = "#"

@@ -116,6 +116,9 @@ func (e *Engine) discoverSupabase(ctx context.Context, cfg SQLConfig) ([]string,
 
 func (e *Engine) discoverSupabaseSQL(ctx context.Context, cfg SQLConfig) ([]string, error) {
 	cfg = supabasePreparedSQL(cfg)
+	if err := assertConfigHosts(cfg); err != nil {
+		return nil, err
+	}
 	conn, err := pgx.Connect(ctx, postgresDSN(cfg))
 	if err != nil {
 		return nil, err
@@ -337,6 +340,9 @@ func (e *Engine) fetchSupabaseRESTTable(ctx context.Context, cfg SQLConfig, tabl
 func (e *Engine) pingSupabase(ctx context.Context, cfg SQLConfig) error {
 	if supabaseUsePostgres(cfg) {
 		cfg = supabasePreparedSQL(cfg)
+		if err := assertConfigHosts(cfg); err != nil {
+			return err
+		}
 		conn, err := pgx.Connect(ctx, postgresDSN(cfg))
 		if err != nil {
 			return err

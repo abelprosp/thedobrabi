@@ -114,25 +114,29 @@ func discoverOIDC(issuer string) (oidcDiscovery, error) {
 }
 
 func (s *Service) StartURL(ctx context.Context, provider string) (string, error) {
+	if s.rdb == nil {
+		return "", fmt.Errorf("OAuth indisponível: Redis não configurado")
+	}
 	cfg, err := s.oauthConfig(provider)
 	if err != nil {
 		return "", err
 	}
 	state := randomState()
-	if s.rdb != nil {
-		_ = s.rdb.Set(ctx, "oauth:"+state, provider, 10*time.Minute).Err()
+	if err := s.rdb.Set(ctx, "oauth:"+state, provider, 10*time.Minute).Err(); err != nil {
+		return "", fmt.Errorf("OAuth indisponível: não foi possível guardar o estado")
 	}
 	return cfg.AuthCodeURL(state, oauth2.AccessTypeOnline), nil
 }
 
 func (s *Service) Finish(ctx context.Context, provider, code, state string) (authn.Principal, authn.TokenPair, error) {
-	if s.rdb != nil {
-		got, err := s.rdb.Get(ctx, "oauth:"+state).Result()
-		if err != nil || got != provider {
-			return authn.Principal{}, authn.TokenPair{}, fmt.Errorf("estado OAuth inválido")
-		}
-		_ = s.rdb.Del(ctx, "oauth:"+state).Err()
+	if s.rdb == nil {
+		return authn.Principal{}, authn.TokenPair{}, fmt.Errorf("OAuth indisponível: Redis não configurado")
 	}
+	got, err := s.rdb.Get(ctx, "oauth:"+state).Result()
+	if err != nil || got != provider {
+		return authn.Principal{}, authn.TokenPair{}, fmt.Errorf("estado OAuth inválido")
+	}
+	_ = s.rdb.Del(ctx, "oauth:"+state).Err()
 	cfg, err := s.oauthConfig(provider)
 	if err != nil {
 		return authn.Principal{}, authn.TokenPair{}, err
@@ -288,13 +292,52 @@ func (s *Service) SaveConnection(ctx context.Context, orgID uuid.UUID, kind, nam
 	return id, err
 }
 
-func RedirectWithTokens(w http.ResponseWriter, r *http.Request, webOrigin string, pair authn.TokenPair) {
-	u, _ := url.Parse(strings.TrimRight(webOrigin, "/") + "/auth/callback")
+const oauthExchangeTTL = 2 * time.Minute
+
+// RedirectWithCode stores the token pair in Redis under a short opaque code and
+// redirects the browser with ?code= only. Fails closed if Redis is unavailable
+// (never puts tokens in the URL).
+func (s *Service) RedirectWithCode(w http.ResponseWriter, r *http.Request, pair authn.TokenPair) {
+	if s.rdb == nil {
+		http.Redirect(w, r, strings.TrimRight(s.cfg.WebOrigin, "/")+"/login?erro="+url.QueryEscape("sessão SSO indisponível"), http.StatusFound)
+		return
+	}
+	code := randomState()
+	payload, err := json.Marshal(pair)
+	if err != nil {
+		http.Redirect(w, r, strings.TrimRight(s.cfg.WebOrigin, "/")+"/login?erro="+url.QueryEscape("sessão SSO falhou"), http.StatusFound)
+		return
+	}
+	if err := s.rdb.Set(r.Context(), "oauth:exchange:"+code, payload, oauthExchangeTTL).Err(); err != nil {
+		http.Redirect(w, r, strings.TrimRight(s.cfg.WebOrigin, "/")+"/login?erro="+url.QueryEscape("sessão SSO indisponível"), http.StatusFound)
+		return
+	}
+	u, _ := url.Parse(strings.TrimRight(s.cfg.WebOrigin, "/") + "/auth/callback")
 	q := u.Query()
-	q.Set("access_token", pair.AccessToken)
-	q.Set("refresh_token", pair.RefreshToken)
+	q.Set("code", code)
 	u.RawQuery = q.Encode()
 	http.Redirect(w, r, u.String(), http.StatusFound)
+}
+
+// ExchangeCode returns the token pair once and deletes the Redis key.
+func (s *Service) ExchangeCode(ctx context.Context, code string) (authn.TokenPair, error) {
+	code = strings.TrimSpace(code)
+	if code == "" {
+		return authn.TokenPair{}, fmt.Errorf("código em falta")
+	}
+	if s.rdb == nil {
+		return authn.TokenPair{}, fmt.Errorf("sessão SSO indisponível")
+	}
+	key := "oauth:exchange:" + code
+	raw, err := s.rdb.GetDel(ctx, key).Bytes()
+	if err != nil {
+		return authn.TokenPair{}, fmt.Errorf("código inválido ou expirado")
+	}
+	var pair authn.TokenPair
+	if err := json.Unmarshal(raw, &pair); err != nil || pair.AccessToken == "" || pair.RefreshToken == "" {
+		return authn.TokenPair{}, fmt.Errorf("código inválido ou expirado")
+	}
+	return pair, nil
 }
 
 func ReadBody(r io.Reader) []byte {

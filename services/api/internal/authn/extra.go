@@ -136,8 +136,8 @@ func (s *Service) VerifyEmail(ctx context.Context, token string) error {
 }
 
 func (s *Service) ResetPassword(ctx context.Context, token, password string) error {
-	if len(password) < 8 {
-		return fmt.Errorf("a senha deve ter pelo menos 8 caracteres")
+	if err := validatePassword(password); err != nil {
+		return err
 	}
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
@@ -167,6 +167,11 @@ func (s *Service) ResetPassword(ctx context.Context, token, password string) err
 	if _, err := tx.Exec(ctx, `
 		UPDATE refresh_tokens SET revoked_at=now()
 		WHERE user_id=$1 AND revoked_at IS NULL
+	`, userID); err != nil {
+		return err
+	}
+	if _, err := tx.Exec(ctx, `
+		UPDATE users SET token_version = token_version + 1, updated_at=now() WHERE id=$1
 	`, userID); err != nil {
 		return err
 	}
@@ -226,8 +231,8 @@ func (s *Service) AcceptInvite(ctx context.Context, token, name, password, mfaCo
 
 	switch {
 	case err == pgx.ErrNoRows:
-		if len(password) < 8 {
-			return Principal{}, TokenPair{}, fmt.Errorf("a senha deve ter pelo menos 8 caracteres")
+		if err := validatePassword(password); err != nil {
+			return Principal{}, TokenPair{}, err
 		}
 		hash, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {

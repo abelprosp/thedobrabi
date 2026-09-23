@@ -25,6 +25,9 @@ type alertCondition struct {
 
 func (s *Server) evalAlert(w http.ResponseWriter, r *http.Request) {
 	uid, org, ws, role := principal(r)
+	if !requireAnalyst(w, role) {
+		return
+	}
 	id, err := uuid.Parse(chi.URLParam(r, "id"))
 	if err != nil {
 		httpx.Error(w, 400, "invalid", "id inválido")

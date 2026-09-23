@@ -754,6 +754,9 @@ func (e *Engine) readSQL(ctx context.Context, typ string, cfg SQLConfig) ([]stri
 
 	switch typ {
 	case "postgres", "redshift":
+		if err := assertConfigHosts(cfg); err != nil {
+			return nil, nil, err
+		}
 		conn, err := pgx.Connect(ctx, postgresDSN(cfg))
 		if err != nil {
 			return nil, nil, err
@@ -956,6 +959,9 @@ func (e *Engine) readSQLBound(ctx context.Context, typ string, cfg SQLConfig, q 
 }
 
 func (e *Engine) readSQLBoundArgs(ctx context.Context, typ string, cfg SQLConfig, q string, args ...any) ([]string, [][]string, error) {
+	if err := assertConfigHosts(cfg); err != nil {
+		return nil, nil, err
+	}
 	switch typ {
 	case "postgres", "supabase":
 		if typ == "supabase" {
@@ -1150,6 +1156,9 @@ func (e *Engine) TestConnection(ctx context.Context, orgID, wsID, id uuid.UUID) 
 func (e *Engine) pingSource(ctx context.Context, typ string, cfg SQLConfig) error {
 	switch typ {
 	case "postgres", "redshift":
+		if err := assertConfigHosts(cfg); err != nil {
+			return err
+		}
 		conn, err := pgx.Connect(ctx, postgresDSN(cfg))
 		if err != nil {
 			return err

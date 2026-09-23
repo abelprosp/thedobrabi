@@ -36,7 +36,7 @@ import {
   Suspense,
   type ComponentType,
 } from "react";
-import { api, setTokens, clearTokens, getAccess } from "@/lib/api";
+import { api, setTokens, clearTokens, getRefresh } from "@/lib/api";
 import { CommandPalette } from "@/components/command-palette";
 import { Logo } from "@/components/brand";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -150,10 +150,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const activeGroupId = useMemo(() => groupIdForPath(path), [path]);
 
   useEffect(() => {
-    if (!getAccess()) {
-      router.replace("/login");
-      return;
-    }
     Promise.all([
       api<any>("/api/v1/auth/me"),
       api<{ id: string; name: string }[]>("/api/v1/workspaces").catch(
@@ -181,7 +177,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   useEffect(() => {
-    if (!getAccess()) return;
     let active = true;
     const load = () =>
       api<{ unread?: number }>("/api/v1/notifications")
@@ -579,7 +574,19 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   </Link>
                   <button
                     className="flex min-h-10 w-full items-center gap-2 px-3 text-sm text-danger hover:bg-rose-50 dark:hover:bg-rose-500/10"
-                    onClick={() => {
+                    onClick={async () => {
+                      const refresh = getRefresh();
+                      try {
+                        await api("/api/v1/auth/logout", {
+                          method: "POST",
+                          body: JSON.stringify({
+                            ...(refresh ? { refresh_token: refresh } : {}),
+                            all: true,
+                          }),
+                        });
+                      } catch {
+                        /* clear local session anyway */
+                      }
                       clearTokens();
                       router.replace("/login");
                     }}

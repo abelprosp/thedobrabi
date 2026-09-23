@@ -78,6 +78,9 @@ func (e *Engine) inspectSQL(ctx context.Context, typ string, cfg SQLConfig) ([]I
 }
 
 func (e *Engine) inspectPostgres(ctx context.Context, cfg SQLConfig, onlySchema string) ([]InspectTable, []InspectFK, error) {
+	if err := assertConfigHosts(cfg); err != nil {
+		return nil, nil, err
+	}
 	conn, err := pgx.Connect(ctx, postgresDSN(cfg))
 	if err != nil {
 		return nil, nil, err
