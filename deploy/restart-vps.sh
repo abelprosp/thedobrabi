@@ -53,7 +53,9 @@ web_process_is_owned() {
   [[ -r "/proc/$pid/cmdline" ]] || return 1
   cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null || true)"
   cmdline="$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null || true)"
-  [[ "$cwd" == "$ROOT/apps/web" ]] &&
+  # O server.js standalone faz process.chdir(.next/standalone); aceitar o
+  # próprio apps/web e qualquer subdiretório dele (ex.: .next/standalone).
+  [[ "$cwd" == "$ROOT/apps/web" || "$cwd" == "$ROOT/apps/web/"* ]] &&
     [[ "$cmdline" == *"$WEB_SERVER"* ]]
 }
 
@@ -140,22 +142,53 @@ build_next_atomic() {
       cp -a "$current/static/." "$release/static/"
     fi
 
-    # Cada mv no mesmo filesystem é atômico para os leitores do diretório.
-    if ! compgen -G "$release/static/css/*.css" >/dev/null; then
-      echo "build Next inválido: nenhum CSS em $release/static/css" >&2
-      rm -rf "$release"
-      return 1
-    fi
-    if ! compgen -G "$release/static/chunks/*.js" >/dev/null; then
-      echo "build Next inválido: nenhum chunk JS em $release/static/chunks" >&2
-      rm -rf "$release"
-      return 1
-    fi
     if [[ ! -s "$release/BUILD_ID" || ! -s "$release/standalone/server.js" ]]; then
       echo "build Next inválido: BUILD_ID ou standalone/server.js ausente" >&2
       rm -rf "$release"
       return 1
     fi
+
+    # output: "standalone" NÃO inclui `static/` nem `public/` (docs do Next:
+    # devem ser copiados manualmente). O server.js gerado faz chdir para
+    # standalone/ e serve /_next/static a partir de standalone/<distDir>/static,
+    # onde <distDir> é o nome usado no build (NEXT_DIST_DIR=$release), e os
+    # ficheiros de public/ a partir de standalone/public. Sem esta cópia o
+    # Next devolve 404 (ou 400 se o índice em memória ficou obsoleto).
+    local standalone_dist="$release/standalone/$release"
+    if [[ ! -d "$standalone_dist/server" ]]; then
+      if [[ -d "$release/standalone/.next/server" ]]; then
+        standalone_dist="$release/standalone/.next"
+      else
+        echo "build Next inválido: não encontrei <distDir>/server dentro de $release/standalone" >&2
+        rm -rf "$release"
+        return 1
+      fi
+    fi
+    mkdir -p "$standalone_dist/static"
+    cp -a "$release/static/." "$standalone_dist/static/"
+    if [[ -d public ]]; then
+      mkdir -p "$release/standalone/public"
+      cp -a public/. "$release/standalone/public/"
+    fi
+
+    # Validar o que o Next standalone vai realmente servir.
+    if ! compgen -G "$standalone_dist/static/css/*.css" >/dev/null; then
+      echo "build Next inválido: nenhum CSS em $standalone_dist/static/css" >&2
+      rm -rf "$release"
+      return 1
+    fi
+    if ! compgen -G "$standalone_dist/static/chunks/*.js" >/dev/null; then
+      echo "build Next inválido: nenhum chunk JS em $standalone_dist/static/chunks" >&2
+      rm -rf "$release"
+      return 1
+    fi
+    if [[ -d public && ! -d "$release/standalone/public" ]]; then
+      echo "build Next inválido: standalone/public ausente" >&2
+      rm -rf "$release"
+      return 1
+    fi
+
+    # Cada mv no mesmo filesystem é atômico para os leitores do diretório.
     rm -rf "$previous"
     if [[ -e "$current" || -L "$current" ]]; then
       mv "$current" "$previous"
@@ -285,6 +318,19 @@ if [[ "$web_ok" -ne 1 ]]; then
     tail -40 /var/log/thedobra-web.log || true
   fi
   exit 1
+fi
+
+# Confirma que o Next standalone serve de facto os assets desta release
+# (a falha típica é static/ não copiado para standalone → 404/400).
+css_file="$(find "$ROOT/apps/web/.next/static/css" -maxdepth 1 -name '*.css' -printf '%f\n' 2>/dev/null | head -1 || true)"
+if [[ -n "$css_file" ]]; then
+  css_status="$(curl -sS -o /dev/null --max-time 5 -w '%{http_code} %{content_type}' \
+    "http://127.0.0.1:${WEB_PORT}/_next/static/css/${css_file}" || true)"
+  echo "==> /_next/static/css/${css_file}: ${css_status}"
+  if [[ "$css_status" != 200\ text/css* ]]; then
+    echo "Next não serve /_next/static (esperado '200 text/css'); veja .next/standalone/<distDir>/static" >&2
+    exit 1
+  fi
 fi
 
 echo "Pronto. Site: https://app.thedobra.cc"
