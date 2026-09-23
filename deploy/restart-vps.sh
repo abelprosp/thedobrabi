@@ -22,7 +22,11 @@ API_PORT="${API_ADDR##*:}"
 WEB_PORT="${WEB_PORT:-13010}"
 API_BIN="${API_BIN:-/usr/local/bin/thedobra-api}"
 REDIS_PASSWORD="${REDIS_PASSWORD:-thedobra-redis-local}"
-WEB_SERVER="$ROOT/apps/web/.next/standalone/server.js"
+WEB_ROOT="$ROOT/apps/web"
+# Caminho físico (sem symlinks) para comparar com /proc/<pid>/cwd, que o kernel
+# devolve já resolvido.
+WEB_ROOT_REAL="$(readlink -f "$WEB_ROOT" 2>/dev/null || echo "$WEB_ROOT")"
+WEB_SERVER="$WEB_ROOT/.next/standalone/server.js"
 
 if [[ "$WEB_PORT" != "13010" ]]; then
   echo "WEB_PORT=$WEB_PORT não é suportada neste deploy; a configuração nginx/systemd usa 13010." >&2
@@ -46,17 +50,41 @@ if [[ "$APP_ENV" == "production" ]]; then
   export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://app.thedobra.cc}"
 fi
 
+path_is_under_web_root() {
+  local path="$1" root
+  [[ -n "$path" ]] || return 1
+  for root in "$WEB_ROOT" "$WEB_ROOT_REAL"; do
+    [[ "$path" == "$root" || "$path" == "$root/"* ]] && return 0
+  done
+  return 1
+}
+
 web_process_is_owned() {
   local pid="$1"
-  local cwd cmdline
+  local cwd cwd_real cmdline
   [[ "$pid" =~ ^[0-9]+$ && "$pid" != "1" && "$pid" != "$$" ]] || return 1
   [[ -r "/proc/$pid/cmdline" ]] || return 1
+  # O server.js standalone faz process.chdir(__dirname). Após a troca atômica
+  # (.next -> .next.previous, .next-release-* -> .next) o kernel passa a
+  # reportar o cwd do processo antigo como .../apps/web/.next.previous/standalone
+  # ou .../apps/web/.next-release-*/standalone e, depois do rm -rf, com o
+  # sufixo " (deleted)". Aceitar qualquer cwd dentro de apps/web (prefix match),
+  # tanto no caminho lógico como no físico.
   cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null || true)"
+  cwd="${cwd% (deleted)}"
+  cwd_real="$(readlink -f "/proc/$pid/cwd" 2>/dev/null || true)"
+  cwd_real="${cwd_real% (deleted)}"
+  if path_is_under_web_root "$cwd" || path_is_under_web_root "$cwd_real"; then
+    return 0
+  fi
+  # O Next reescreve o título do processo para "next-server (vX.Y.Z)", pelo que
+  # o cmdline pode já não conter o caminho do server.js. Aceitar também quando
+  # o cmdline referencia este checkout ou é o próprio next-server.
   cmdline="$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null || true)"
-  # O server.js standalone faz process.chdir(.next/standalone); aceitar o
-  # próprio apps/web e qualquer subdiretório dele (ex.: .next/standalone).
-  [[ "$cwd" == "$ROOT/apps/web" || "$cwd" == "$ROOT/apps/web/"* ]] &&
-    [[ "$cmdline" == *"$WEB_SERVER"* ]]
+  [[ "$cmdline" == *"$WEB_ROOT/"* || "$cmdline" == *"$WEB_ROOT_REAL/"* ]] && return 0
+  [[ "$cmdline" == *"next-server"* ]] && return 0
+  # Processos de outros diretórios/aplicações continuam a ser recusados.
+  return 1
 }
 
 web_listener_pids() {
@@ -97,26 +125,46 @@ stop_owned_processes_and_wait() {
 
 stop_owned_web_listeners() {
   local signal="${1:-TERM}"
-  local pid
+  local pid cwd cmdline
   while read -r pid; do
     [[ -n "$pid" ]] || continue
     if web_process_is_owned "$pid"; then
-      echo "==> a parar processo web confirmado pid=$pid cwd=$ROOT/apps/web"
+      cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null || true)"
+      echo "==> a parar processo web confirmado pid=$pid ($signal) cwd=${cwd:-?}"
       kill "-$signal" "$pid" 2>/dev/null || true
     else
-      echo "processo pid=$pid escuta :$WEB_PORT, mas não pertence a $ROOT/apps/web; recusando pará-lo." >&2
+      cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null || true)"
+      cmdline="$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null || true)"
+      echo "processo pid=$pid escuta :$WEB_PORT, mas não pertence a $WEB_ROOT (cwd=${cwd:-?} cmd=${cmdline:-?}); recusando pará-lo." >&2
       return 1
     fi
   done < <(web_listener_pids)
 }
 
+# Para todos os listeners da porta web pertencentes a este checkout e só
+# devolve 0 quando a porta está de facto livre. Qualquer outro resultado é
+# erro: o chamador deve abortar em vez de arrancar um novo Next por cima.
 stop_owned_web_listeners_and_wait() {
-  stop_owned_web_listeners TERM
+  stop_owned_web_listeners TERM || return 1
   for _ in $(seq 1 10); do
     [[ -z "$(web_listener_pids)" ]] && return 0
     sleep 1
   done
-  stop_owned_web_listeners KILL
+  stop_owned_web_listeners KILL || return 1
+  for _ in $(seq 1 5); do
+    [[ -z "$(web_listener_pids)" ]] && return 0
+    sleep 1
+  done
+  echo "porta :$WEB_PORT continua ocupada após TERM/KILL (pids: $(web_listener_pids | tr '\n' ' '))." >&2
+  return 1
+}
+
+ensure_web_port_free() {
+  if ! stop_owned_web_listeners_and_wait; then
+    echo "ERRO: não foi possível libertar a porta :$WEB_PORT do Next antigo; a abortar sem arrancar o novo build." >&2
+    echo "      O processo antigo pode continuar a servir o bundle anterior (404 nos assets novos). Verifique: ss -lptn 'sport = :$WEB_PORT'" >&2
+    exit 1
+  fi
 }
 
 build_next_atomic() {
@@ -252,23 +300,33 @@ if [[ -d /run/systemd/system ]]; then
 fi
 
 if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
-  echo "==> systemctl restart thedobra-web"
+  echo "==> thedobra-web (build -> stop -> start)"
   web_workdir="$(systemctl show -p WorkingDirectory --value thedobra-web 2>/dev/null || true)"
   if [[ -n "$web_workdir" && "$web_workdir" != "$ROOT/apps/web" ]]; then
     echo "thedobra-web.service aponta para $web_workdir, mas este deploy está em $ROOT/apps/web; recusando restart." >&2
     exit 1
   fi
   systemctl reset-failed thedobra-web || true
-  # systemd não controla um Next antigo iniciado manualmente fora do cgroup.
-  # Pare a unidade primeiro e remova apenas o standalone deste checkout.
+  # Ordem: build (o serviço atual continua a servir o bundle anterior) ->
+  # troca atômica -> parar a unit e qualquer Next antigo fora do cgroup ->
+  # arrancar o novo. Se a paragem falhar, ensure_web_port_free aborta o script:
+  # nunca arrancar o novo build com o antigo ainda na porta.
+  if ! build_next_atomic; then
+    echo "ERRO: build Next falhou; o serviço atual não foi tocado." >&2
+    exit 1
+  fi
+  echo "==> systemctl stop thedobra-web"
   systemctl stop thedobra-web || true
-  stop_owned_web_listeners_and_wait
-  build_next_atomic
+  ensure_web_port_free
+  echo "==> systemctl start thedobra-web"
   systemctl start thedobra-web
 else
   echo "==> a arrancar Next na porta $WEB_PORT"
-  build_next_atomic
-  stop_owned_web_listeners_and_wait
+  if ! build_next_atomic; then
+    echo "ERRO: build Next falhou; o processo atual não foi tocado." >&2
+    exit 1
+  fi
+  ensure_web_port_free
   cd "$ROOT/apps/web"
   nohup env NODE_ENV=production HOSTNAME=127.0.0.1 PORT="$WEB_PORT" \
     API_PROXY_URL="http://127.0.0.1:${API_PORT}" \
