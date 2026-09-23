@@ -391,4 +391,15 @@ if [[ -n "$css_file" ]]; then
   fi
 fi
 
+# O HTML de produção não pode anunciar URLs http://localhost (ex.: og:image
+# via metadataBase quando o build correu sem NEXT_PUBLIC_APP_URL).
+if [[ "$APP_ENV" == "production" ]]; then
+  html_localhost="$(curl -sS --max-time 5 -H 'Host: app.thedobra.cc' "http://127.0.0.1:${WEB_PORT}/login" \
+    | grep -o 'http://localhost[^"]*' | head -3 || true)"
+  if [[ -n "$html_localhost" ]]; then
+    echo "AVISO: HTML de produção contém URLs http://localhost (build sem NEXT_PUBLIC_APP_URL?):" >&2
+    echo "$html_localhost" >&2
+  fi
+fi
+
 echo "Pronto. Site: https://app.thedobra.cc"

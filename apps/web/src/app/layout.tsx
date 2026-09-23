@@ -6,6 +6,15 @@ import { THEME_BOOT_SCRIPT } from "@/lib/theme";
 
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
+// Base para og:image/twitter:image. Em produção nunca cair em http://localhost
+// (aconteceu quando o build corre sem NEXT_PUBLIC_APP_URL): a página HTTPS
+// passaria a anunciar URLs http:// absolutas nas meta tags.
+function resolveMetadataBase(): URL {
+  const fromEnv = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_PUBLIC_URL;
+  if (fromEnv) return new URL(fromEnv);
+  return new URL(process.env.NODE_ENV === "production" ? "https://app.thedobra.cc" : "http://localhost:3010");
+}
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -20,7 +29,7 @@ export const metadata: Metadata = {
   },
   description: "Ligue os dados. Entenda o negócio. Aja com inteligência.",
   applicationName: "TheDobra",
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3010"),
+  metadataBase: resolveMetadataBase(),
   icons: {
     icon: [{ url: "/logo-mark.svg", type: "image/svg+xml" }],
     shortcut: "/logo-mark.svg",
