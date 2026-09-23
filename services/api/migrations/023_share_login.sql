@@ -1,0 +1,2 @@
+ALTER TABLE dashboard_shares
+    ADD COLUMN IF NOT EXISTS require_login BOOLEAN NOT NULL DEFAULT FALSE;

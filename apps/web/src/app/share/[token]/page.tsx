@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
@@ -100,7 +101,21 @@ export default function SharePage() {
 
   const queryPath = `/api/v1/public/dashboards/${token}/queries`;
 
-  if (q.isError) return <ErrorState message="Partilha inválida ou expirada." />;
+  if (q.isError) {
+    const err = q.error as { status?: number; message?: string };
+    if (err?.status === 401) {
+      return (
+        <div className="mx-auto mt-16 max-w-md rounded-2xl border border-line bg-surface p-8 text-center shadow-sm">
+          <h1 className="text-base font-semibold text-ink">Login necessário</h1>
+          <p className="mt-2 text-sm text-mute">Esta partilha exige uma conta com acesso à organização.</p>
+          <Link className="mt-5 inline-flex rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white" href="/login">
+            Entrar
+          </Link>
+        </div>
+      );
+    }
+    return <ErrorState message="Partilha inválida ou expirada." />;
+  }
   if (q.isLoading || !q.data) return <div className="p-8"><PageSkeleton /></div>;
 
   return (

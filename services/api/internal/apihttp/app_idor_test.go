@@ -8,6 +8,9 @@ import (
 )
 
 func TestLookupShareSQLRequiresTenantMatch(t *testing.T) {
+	if !strings.Contains(shareLookupSQL, "s.require_login") {
+		t.Fatal("lookupShare must load the per-share login requirement")
+	}
 	if !strings.Contains(shareLookupSQL, "d.org_id=s.org_id") {
 		t.Fatal("lookupShare JOIN must require d.org_id=s.org_id")
 	}

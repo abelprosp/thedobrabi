@@ -11,6 +11,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/thedobra/thedobra/services/api/internal/aiagent"
 	"github.com/thedobra/thedobra/services/api/internal/cryptoenc"
+	"github.com/thedobra/thedobra/services/api/internal/ctxkey"
 	"github.com/thedobra/thedobra/services/api/internal/httpx"
 	"github.com/thedobra/thedobra/services/api/internal/queryeng"
 )
@@ -253,7 +254,8 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	var body struct {
-		ExpiresDays *int `json:"expires_days"`
+		ExpiresDays  *int `json:"expires_days"`
+		RequireLogin bool `json:"require_login"`
 	}
 	_ = httpx.Decode(r, &body)
 	tok, err := cryptoenc.RandomToken(18)
@@ -271,9 +273,9 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 		expires = &t
 	}
 	_, err = s.deps.PG.Exec(r.Context(), `
-		INSERT INTO dashboard_shares (org_id, workspace_id, dashboard_id, token, created_by, expires_at)
-		VALUES ($1,$2,$3,$4,$5,$6)
-	`, org, ws, id, cryptoenc.HashToken(tok), uid, expires)
+		INSERT INTO dashboard_shares (org_id, workspace_id, dashboard_id, token, created_by, expires_at, require_login)
+		VALUES ($1,$2,$3,$4,$5,$6,$7)
+	`, org, ws, id, cryptoenc.HashToken(tok), uid, expires, body.RequireLogin)
 	if err != nil {
 		httpx.Error(w, 400, "share", err.Error())
 		return
@@ -293,7 +295,7 @@ func (s *Server) listDashboardShares(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	rows, err := s.deps.PG.Query(r.Context(), `
-		SELECT token, created_at, expires_at, revoked_at
+		SELECT token, created_at, expires_at, revoked_at, require_login
 		FROM dashboard_shares
 		WHERE dashboard_id=$1 AND org_id=$2 AND workspace_id=$3
 		ORDER BY created_at DESC
@@ -308,7 +310,8 @@ func (s *Server) listDashboardShares(w http.ResponseWriter, r *http.Request) {
 		var tok string
 		var created time.Time
 		var expires, revoked *time.Time
-		if err := rows.Scan(&tok, &created, &expires, &revoked); err != nil {
+		var requireLogin bool
+		if err := rows.Scan(&tok, &created, &expires, &revoked, &requireLogin); err != nil {
 			continue
 		}
 		// Hashed tokens are not usable in URLs; only return a hint for list UI.
@@ -317,11 +320,12 @@ func (s *Server) listDashboardShares(w http.ResponseWriter, r *http.Request) {
 			hint = hint[:8] + "…"
 		}
 		item := map[string]any{
-			"token":      tok,
-			"token_hint": hint,
-			"created_at": created,
-			"revoked_at": revoked,
-			"active":     revoked == nil && (expires == nil || expires.After(time.Now())),
+			"token":         tok,
+			"token_hint":    hint,
+			"created_at":    created,
+			"revoked_at":    revoked,
+			"active":        revoked == nil && (expires == nil || expires.After(time.Now())),
+			"require_login": requireLogin,
 		}
 		if expires != nil {
 			item["expires_at"] = expires.UTC()
@@ -358,16 +362,21 @@ func (s *Server) revokeDashboardShare(w http.ResponseWriter, r *http.Request) {
 // shareLookupSQL joins shares to dashboards only when org+ws match (IDOR guard).
 // $1 = HashToken(plain), $2 = plain (legacy dual-read during transition).
 const shareLookupSQL = `
-		SELECT s.org_id, s.workspace_id, d.id, d.name, d.description, d.layout_json, s.expires_at, s.revoked_at
+		SELECT s.org_id, s.workspace_id, d.id, d.name, d.description, d.layout_json, s.expires_at, s.revoked_at, s.require_login
 		FROM dashboard_shares s
 		JOIN dashboards d ON d.id=s.dashboard_id AND d.org_id=s.org_id AND d.workspace_id=s.workspace_id
 		WHERE s.token=$1 OR s.token=$2
 	`
 
 func (s *Server) lookupShare(ctx context.Context, tok string) (org, ws, dash uuid.UUID, layout []byte, name, desc string, err error) {
+	org, ws, dash, layout, name, desc, _, err = s.lookupShareAccess(ctx, tok)
+	return
+}
+
+func (s *Server) lookupShareAccess(ctx context.Context, tok string) (org, ws, dash uuid.UUID, layout []byte, name, desc string, requireLogin bool, err error) {
 	var expires, revoked *time.Time
 	hashed := cryptoenc.HashToken(tok)
-	err = s.deps.PG.QueryRow(ctx, shareLookupSQL, hashed, tok).Scan(&org, &ws, &dash, &name, &desc, &layout, &expires, &revoked)
+	err = s.deps.PG.QueryRow(ctx, shareLookupSQL, hashed, tok).Scan(&org, &ws, &dash, &name, &desc, &layout, &expires, &revoked, &requireLogin)
 	if err != nil {
 		return
 	}
@@ -375,6 +384,30 @@ func (s *Server) lookupShare(ctx context.Context, tok string) (org, ws, dash uui
 		err = errShareGone
 	}
 	return
+}
+
+func (s *Server) authenticateShare(w http.ResponseWriter, r *http.Request, workspace uuid.UUID) (*http.Request, bool) {
+	raw := accessTokenFromRequest(r)
+	if raw == "" {
+		httpx.Error(w, 401, "unauthorized", "esta partilha exige login")
+		return nil, false
+	}
+	p, err := s.auth.ParseAccess(r.Context(), raw)
+	if err != nil {
+		httpx.Error(w, 401, "unauthorized", "sessão expirada")
+		return nil, false
+	}
+	p, err = s.auth.Principal(r.Context(), p.UserID, workspace)
+	if err != nil {
+		httpx.Error(w, 401, "unauthorized", "sessão sem acesso a esta partilha")
+		return nil, false
+	}
+	ctx := context.WithValue(r.Context(), ctxkey.UserID, p.UserID)
+	ctx = context.WithValue(ctx, ctxkey.OrgID, p.OrgID)
+	ctx = context.WithValue(ctx, ctxkey.WorkspaceID, p.WorkspaceID)
+	ctx = context.WithValue(ctx, ctxkey.Role, p.Role)
+	ctx = context.WithValue(ctx, ctxkey.Email, p.Email)
+	return r.WithContext(ctx), true
 }
 
 type shareGone string
@@ -385,10 +418,17 @@ const errShareGone shareGone = "partilha expirada ou revogada"
 
 func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	org, _, id, layout, name, desc, err := s.lookupShare(r.Context(), tok)
+	org, ws, id, layout, name, desc, requireLogin, err := s.lookupShareAccess(r.Context(), tok)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
+	}
+	if requireLogin {
+		var ok bool
+		r, ok = s.authenticateShare(w, r, ws)
+		if !ok {
+			return
+		}
 	}
 	var parsed any
 	if json.Unmarshal(layout, &parsed) != nil || parsed == nil {
@@ -403,10 +443,17 @@ func (s *Server) publicDashboard(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	org, ws, _, layout, _, _, err := s.lookupShare(r.Context(), tok)
+	org, ws, _, layout, _, _, requireLogin, err := s.lookupShareAccess(r.Context(), tok)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
+	}
+	if requireLogin {
+		var ok bool
+		r, ok = s.authenticateShare(w, r, ws)
+		if !ok {
+			return
+		}
 	}
 	var in publicQueryInput
 	if err := httpx.Decode(r, &in); err != nil {
@@ -428,10 +475,17 @@ func (s *Server) publicDashboardQuery(w http.ResponseWriter, r *http.Request) {
 
 func (s *Server) publicDashboardAnalyze(w http.ResponseWriter, r *http.Request) {
 	tok := chi.URLParam(r, "token")
-	org, ws, _, layout, _, _, err := s.lookupShare(r.Context(), tok)
+	org, ws, _, layout, _, _, requireLogin, err := s.lookupShareAccess(r.Context(), tok)
 	if err != nil {
 		httpx.Error(w, 404, "not_found", "partilha não encontrada")
 		return
+	}
+	if requireLogin {
+		var ok bool
+		r, ok = s.authenticateShare(w, r, ws)
+		if !ok {
+			return
+		}
 	}
 	s.analyzePublicDashboard(w, r, org, ws, layout)
 }

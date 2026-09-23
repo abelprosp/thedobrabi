@@ -772,13 +772,16 @@ function DashboardEditorInner() {
                   onClick={async () => {
                     setMoreOpen(false);
                     try {
+                      const requireLogin = window.confirm(
+                        "Exigir login para abrir esta partilha?\n\nOK: apenas utilizadores autenticados desta organização.\nCancelar: qualquer pessoa com o link.",
+                      );
                       const shared = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, {
                         method: "POST",
-                        body: JSON.stringify({ expires_days: 90 }),
+                        body: JSON.stringify({ expires_days: 90, require_login: requireLogin }),
                       });
                       const link = publicAppUrl(shared.url, `/share/${shared.url?.split("/").pop() || ""}`);
                       await navigator.clipboard?.writeText(link);
-                      toast.success("Ligação de partilha copiada · válida 90 dias");
+                      toast.success(`${requireLogin ? "Partilha protegida por login" : "Partilha pública"} · ligação copiada`);
                     } catch (e: any) { toast.error(e.message); }
                   }}
                 >
