@@ -22,6 +22,7 @@ API_PORT="${API_ADDR##*:}"
 WEB_PORT="${WEB_PORT:-13010}"
 API_BIN="${API_BIN:-/usr/local/bin/thedobra-api}"
 REDIS_PASSWORD="${REDIS_PASSWORD:-thedobra-redis-local}"
+WEB_SERVER="$ROOT/apps/web/.next/standalone/server.js"
 
 if [[ "$WEB_PORT" != "13010" ]]; then
   echo "WEB_PORT=$WEB_PORT não é suportada neste deploy; a configuração nginx/systemd usa 13010." >&2
@@ -44,6 +45,38 @@ if [[ "$APP_ENV" == "production" ]]; then
   esac
   export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://app.thedobra.cc}"
 fi
+
+stop_owned_processes() {
+  local command_fragment="$1"
+  local signal="${2:-TERM}"
+  local pid args
+
+  while read -r pid args; do
+    [[ -n "$pid" && "$pid" != "$$" ]] || continue
+    [[ "$args" == *"$command_fragment"* ]] || continue
+    echo "==> a parar processo TheDobra pid=$pid ($command_fragment)"
+    kill "-$signal" "$pid" 2>/dev/null || true
+  done < <(ps -eo pid=,args=)
+}
+
+stop_owned_processes_and_wait() {
+  local command_fragment="$1"
+  local pid args
+  stop_owned_processes "$command_fragment" TERM
+  for _ in $(seq 1 10); do
+    local found=0
+    while read -r pid args; do
+      [[ -n "$pid" && "$pid" != "$$" ]] || continue
+      [[ "$args" == *"$command_fragment"* ]] || continue
+      found=1
+      break
+    done < <(ps -eo pid=,args=)
+    [[ "$found" -eq 0 ]] && return 0
+    sleep 1
+  done
+  # Ainda limitado ao comando/projeto TheDobra; nunca mata por porta ou nome genérico.
+  stop_owned_processes "$command_fragment" KILL
+}
 
 build_next_atomic() {
   local web_root="$ROOT/apps/web"
@@ -133,7 +166,7 @@ else
     echo "falta $API_BIN — corre: cd $ROOT/services/api && go build -o $API_BIN ./cmd/api" >&2
     exit 1
   fi
-  pkill -f "$API_BIN" || true
+  stop_owned_processes_and_wait "$API_BIN"
   # Carrega o .env completo — sem REDIS_PASSWORD a API falha a arrancar (502 no nginx).
   nohup bash -c "set -a; [[ -f '$ROOT/.env' ]] && source '$ROOT/.env'; set +a; export APP_HTTP_ADDR='$API_ADDR' REDIS_PASSWORD='${REDIS_PASSWORD}'; exec '$API_BIN'" \
     >>/var/log/thedobra-api.log 2>&1 &
@@ -147,12 +180,16 @@ if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
     exit 1
   fi
   systemctl reset-failed thedobra-web || true
+  # systemd não controla um Next antigo iniciado manualmente fora do cgroup.
+  # Pare a unidade primeiro e remova apenas o standalone deste checkout.
+  systemctl stop thedobra-web || true
+  stop_owned_processes_and_wait "$WEB_SERVER"
   build_next_atomic
-  systemctl restart thedobra-web
+  systemctl start thedobra-web
 else
   echo "==> a arrancar Next na porta $WEB_PORT"
   build_next_atomic
-  pkill -f "$ROOT/apps/web/.next/standalone/server.js" || true
+  stop_owned_processes_and_wait "$WEB_SERVER"
   cd "$ROOT/apps/web"
   nohup env NODE_ENV=production HOSTNAME=127.0.0.1 PORT="$WEB_PORT" \
     API_PROXY_URL="http://127.0.0.1:${API_PORT}" \
@@ -169,6 +206,15 @@ for i in $(seq 1 20); do
   sleep 1
 done
 
+web_ok=0
+for i in $(seq 1 20); do
+  if curl -fsS --max-time 2 "http://127.0.0.1:${WEB_PORT}/" >/dev/null 2>&1; then
+    web_ok=1
+    break
+  fi
+  sleep 1
+done
+
 echo "==> ss"
 ss -lptn | grep -E ":${API_PORT}|:${WEB_PORT}" || true
 
@@ -180,6 +226,17 @@ else
     journalctl -u thedobra-api -n 40 --no-pager || true
   else
     tail -40 /var/log/thedobra-api.log || true
+  fi
+  exit 1
+fi
+
+if [[ "$web_ok" -ne 1 ]]; then
+  echo "Web ainda não responde em :${WEB_PORT}" >&2
+  if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
+    systemctl status thedobra-web --no-pager -l || true
+    journalctl -u thedobra-web -n 40 --no-pager || true
+  else
+    tail -40 /var/log/thedobra-web.log || true
   fi
   exit 1
 fi
