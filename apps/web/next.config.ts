@@ -3,6 +3,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  // Permite ao deploy gerar o novo build fora de `.next` e trocá-lo
+  // atomicamente, sem deixar o processo atual sem um bundle válido.
+  distDir: process.env.NEXT_DIST_DIR ?? ".next",
   transpilePackages: ["lucide-react"],
   // Evita o Next tratar o lockfile vazio da raiz do monorepo como workspace root.
   outputFileTracingRoot: path.join(__dirname),
@@ -28,6 +31,16 @@ const nextConfig: NextConfig = {
           { key: "Content-Security-Policy", value: csp },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          { key: "Cache-Control", value: "no-store, max-age=0" },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
         ],
       },
     ];

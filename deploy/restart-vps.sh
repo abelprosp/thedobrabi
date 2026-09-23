@@ -29,6 +29,39 @@ export REDIS_PASSWORD
 export REDIS_ADDR="${REDIS_ADDR:-127.0.0.1:16379}"
 export APP_ENV="${APP_ENV:-production}"
 
+build_next_atomic() {
+  local web_root="$ROOT/apps/web"
+  local current="$web_root/.next"
+  local release=".next-release-$(date +%s)-$$"
+  local previous="$web_root/.next.previous"
+
+  echo "==> build Next.js atômico ($release)"
+  (
+    cd "$web_root"
+    # O build ocorre fora de .next; portanto o serviço atual continua servindo
+    # o bundle anterior até a troca final.
+    NEXT_DIST_DIR="$release" npm run build
+
+    # Assets têm nomes com hash. Manter os assets anteriores evita que HTML
+    # cacheado de uma versão anterior gere ChunkLoadError após o deploy.
+    if [[ -d "$current/static" ]]; then
+      mkdir -p "$release/static"
+      cp -a "$current/static/." "$release/static/"
+    fi
+
+    # Cada mv no mesmo filesystem é atômico para os leitores do diretório.
+    rm -rf "$previous"
+    if [[ -e "$current" || -L "$current" ]]; then
+      mv "$current" "$previous"
+    fi
+    if ! mv "$release" "$current"; then
+      [[ -e "$previous" ]] && mv "$previous" "$current"
+      return 1
+    fi
+    rm -rf "$previous"
+  )
+}
+
 echo "==> Docker Compose"
 docker compose -f "$ROOT/docker-compose.yml" up -d
 docker compose -f "$ROOT/docker-compose.yml" ps
@@ -70,13 +103,11 @@ fi
 if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
   echo "==> systemctl restart thedobra-web"
   systemctl reset-failed thedobra-web || true
-  echo "==> build Next.js (garante que o bundle publicado corresponde ao código)"
-  (cd "$ROOT/apps/web" && npm run build)
+  build_next_atomic
   systemctl restart thedobra-web
 else
   echo "==> a arrancar Next na porta $WEB_PORT"
-  echo "==> build Next.js (garante que o bundle publicado corresponde ao código)"
-  (cd "$ROOT/apps/web" && npm run build)
+  build_next_atomic
   pkill -f "next start" || true
   cd "$ROOT/apps/web"
   nohup env NODE_ENV=production PORT="$WEB_PORT" API_PROXY_URL="http://127.0.0.1:${API_PORT}" \
