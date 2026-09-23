@@ -15,9 +15,19 @@ fi
 
 # Bind loopback by default so the API is not exposed on all interfaces (Nginx proxies).
 API_ADDR="${APP_HTTP_ADDR:-127.0.0.1:2003}"
+if [[ "$API_ADDR" == :* ]]; then
+  API_ADDR="127.0.0.1${API_ADDR}"
+fi
 API_PORT="${API_ADDR##*:}"
 WEB_PORT="${WEB_PORT:-13010}"
 API_BIN="${API_BIN:-/usr/local/bin/thedobra-api}"
+REDIS_PASSWORD="${REDIS_PASSWORD:-thedobra-redis-local}"
+
+# Export so child processes (systemctl EnvironmentFile or nohup) see required secrets.
+export APP_HTTP_ADDR="$API_ADDR"
+export REDIS_PASSWORD
+export REDIS_ADDR="${REDIS_ADDR:-127.0.0.1:16379}"
+export APP_ENV="${APP_ENV:-production}"
 
 echo "==> Docker Compose"
 docker compose -f "$ROOT/docker-compose.yml" up -d
@@ -47,7 +57,9 @@ else
     exit 1
   fi
   pkill -f "$API_BIN" || true
-  nohup env APP_HTTP_ADDR="$API_ADDR" "$API_BIN" >>/var/log/thedobra-api.log 2>&1 &
+  # Carrega o .env completo — sem REDIS_PASSWORD a API falha a arrancar (502 no nginx).
+  nohup bash -c "set -a; [[ -f '$ROOT/.env' ]] && source '$ROOT/.env'; set +a; export APP_HTTP_ADDR='$API_ADDR' REDIS_PASSWORD='${REDIS_PASSWORD}'; exec '$API_BIN'" \
+    >>/var/log/thedobra-api.log 2>&1 &
 fi
 
 if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
