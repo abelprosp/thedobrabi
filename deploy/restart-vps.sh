@@ -46,6 +46,22 @@ if [[ "$APP_ENV" == "production" ]]; then
   export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://app.thedobra.cc}"
 fi
 
+web_process_is_owned() {
+  local pid="$1"
+  local cwd cmdline
+  [[ "$pid" =~ ^[0-9]+$ && "$pid" != "1" && "$pid" != "$$" ]] || return 1
+  [[ -r "/proc/$pid/cmdline" ]] || return 1
+  cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null || true)"
+  cmdline="$(tr '\0' ' ' <"/proc/$pid/cmdline" 2>/dev/null || true)"
+  [[ "$cwd" == "$ROOT/apps/web" ]] &&
+    [[ "$cmdline" == *"$WEB_SERVER"* ]]
+}
+
+web_listener_pids() {
+  ss -ltnpH "sport = :$WEB_PORT" 2>/dev/null |
+    grep -oE 'pid=[0-9]+' | cut -d= -f2 | sort -u
+}
+
 stop_owned_processes() {
   local command_fragment="$1"
   local signal="${2:-TERM}"
@@ -74,8 +90,31 @@ stop_owned_processes_and_wait() {
     [[ "$found" -eq 0 ]] && return 0
     sleep 1
   done
-  # Ainda limitado ao comando/projeto TheDobra; nunca mata por porta ou nome genérico.
   stop_owned_processes "$command_fragment" KILL
+}
+
+stop_owned_web_listeners() {
+  local signal="${1:-TERM}"
+  local pid
+  while read -r pid; do
+    [[ -n "$pid" ]] || continue
+    if web_process_is_owned "$pid"; then
+      echo "==> a parar processo web confirmado pid=$pid cwd=$ROOT/apps/web"
+      kill "-$signal" "$pid" 2>/dev/null || true
+    else
+      echo "processo pid=$pid escuta :$WEB_PORT, mas não pertence a $ROOT/apps/web; recusando pará-lo." >&2
+      return 1
+    fi
+  done < <(web_listener_pids)
+}
+
+stop_owned_web_listeners_and_wait() {
+  stop_owned_web_listeners TERM
+  for _ in $(seq 1 10); do
+    [[ -z "$(web_listener_pids)" ]] && return 0
+    sleep 1
+  done
+  stop_owned_web_listeners KILL
 }
 
 build_next_atomic() {
@@ -172,6 +211,13 @@ else
     >>/var/log/thedobra-api.log 2>&1 &
 fi
 
+if [[ -d /run/systemd/system ]]; then
+  # A unit é parte deste deploy; não confiar numa cópia antiga já instalada.
+  install -m 644 "$ROOT/deploy/systemd/thedobra-web.service" /etc/systemd/system/thedobra-web.service
+  bash "$ROOT/deploy/sync-env-systemd.sh" "$ROOT/.env" /etc/thedobra/web.env
+  systemctl daemon-reload
+fi
+
 if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
   echo "==> systemctl restart thedobra-web"
   web_workdir="$(systemctl show -p WorkingDirectory --value thedobra-web 2>/dev/null || true)"
@@ -183,13 +229,13 @@ if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
   # systemd não controla um Next antigo iniciado manualmente fora do cgroup.
   # Pare a unidade primeiro e remova apenas o standalone deste checkout.
   systemctl stop thedobra-web || true
-  stop_owned_processes_and_wait "$WEB_SERVER"
+  stop_owned_web_listeners_and_wait
   build_next_atomic
   systemctl start thedobra-web
 else
   echo "==> a arrancar Next na porta $WEB_PORT"
   build_next_atomic
-  stop_owned_processes_and_wait "$WEB_SERVER"
+  stop_owned_web_listeners_and_wait
   cd "$ROOT/apps/web"
   nohup env NODE_ENV=production HOSTNAME=127.0.0.1 PORT="$WEB_PORT" \
     API_PROXY_URL="http://127.0.0.1:${API_PORT}" \

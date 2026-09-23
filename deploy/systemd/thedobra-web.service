@@ -5,11 +5,11 @@ After=network.target thedobra-api.service
 [Service]
 Type=simple
 WorkingDirectory=/root/thedobrabi/apps/web
-EnvironmentFile=-/root/thedobrabi/.env
+EnvironmentFile=-/etc/thedobra/web.env
 # A porta do web é parte do contrato com o Nginx; não aceitar PORT do .env.
 # O build usa output: "standalone"; iniciar o server gerado evita depender
 # do diretório de trabalho para que o Next encontre exatamente esta release.
-ExecStart=/usr/bin/env NODE_ENV=production HOSTNAME=127.0.0.1 PORT=13010 API_PROXY_URL=http://127.0.0.1:2003 /usr/bin/node .next/standalone/server.js
+ExecStart=/usr/bin/env NODE_ENV=production HOSTNAME=127.0.0.1 PORT=13010 API_PROXY_URL=http://127.0.0.1:2003 /usr/bin/node /root/thedobrabi/apps/web/.next/standalone/server.js
 KillMode=control-group
 Restart=on-failure
 RestartSec=3

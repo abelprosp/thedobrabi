@@ -136,6 +136,7 @@ fi
 
 echo "==> 7b) Sincronizar env systemd (corrige NOAUTH / REDIS_PASSWORD)"
 bash "$ROOT/deploy/sync-env-systemd.sh" "$ROOT/.env" /etc/thedobra/api.env
+cp /etc/thedobra/api.env /etc/thedobra/web.env
 install -m 644 "$ROOT/deploy/systemd/thedobra-api.service" /etc/systemd/system/thedobra-api.service
 install -m 644 "$ROOT/deploy/systemd/thedobra-web.service" /etc/systemd/system/thedobra-web.service
 systemctl daemon-reload
