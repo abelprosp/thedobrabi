@@ -33,6 +33,17 @@ export APP_HTTP_ADDR="$API_ADDR"
 export REDIS_PASSWORD
 export REDIS_ADDR="${REDIS_ADDR:-127.0.0.1:16379}"
 export APP_ENV="${APP_ENV:-production}"
+if [[ "$APP_ENV" == "production" ]]; then
+  case "${APP_PUBLIC_URL:-}" in
+    https://app.thedobra.cc) ;;
+    *) echo "APP_PUBLIC_URL deve ser https://app.thedobra.cc em produção." >&2; exit 1 ;;
+  esac
+  case "${WEB_ORIGIN:-}" in
+    https://app.thedobra.cc) ;;
+    *) echo "WEB_ORIGIN deve ser https://app.thedobra.cc em produção." >&2; exit 1 ;;
+  esac
+  export NEXT_PUBLIC_APP_URL="${NEXT_PUBLIC_APP_URL:-https://app.thedobra.cc}"
+fi
 
 build_next_atomic() {
   local web_root="$ROOT/apps/web"
@@ -55,6 +66,14 @@ build_next_atomic() {
     fi
 
     # Cada mv no mesmo filesystem é atômico para os leitores do diretório.
+    if ! compgen -G "$release/static/css/*.css" >/dev/null; then
+      echo "build Next inválido: nenhum CSS em $release/static/css" >&2
+      return 1
+    fi
+    if ! compgen -G "$release/static/chunks/*.js" >/dev/null; then
+      echo "build Next inválido: nenhum chunk JS em $release/static/chunks" >&2
+      return 1
+    fi
     rm -rf "$previous"
     if [[ -e "$current" || -L "$current" ]]; then
       mv "$current" "$previous"
