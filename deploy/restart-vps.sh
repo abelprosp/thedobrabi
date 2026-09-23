@@ -70,9 +70,13 @@ fi
 if systemctl list-unit-files | grep -q '^thedobra-web.service'; then
   echo "==> systemctl restart thedobra-web"
   systemctl reset-failed thedobra-web || true
+  echo "==> build Next.js (garante que o bundle publicado corresponde ao código)"
+  (cd "$ROOT/apps/web" && npm run build)
   systemctl restart thedobra-web
 else
   echo "==> a arrancar Next na porta $WEB_PORT"
+  echo "==> build Next.js (garante que o bundle publicado corresponde ao código)"
+  (cd "$ROOT/apps/web" && npm run build)
   pkill -f "next start" || true
   cd "$ROOT/apps/web"
   nohup env NODE_ENV=production PORT="$WEB_PORT" API_PROXY_URL="http://127.0.0.1:${API_PORT}" \
