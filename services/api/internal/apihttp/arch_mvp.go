@@ -1136,7 +1136,7 @@ func (s *Server) publishApp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.audit(r, "APP_PUBLISHED", "app", id, nil)
-	httpx.JSON(w, 200, map[string]any{"id": id, "public_token": token, "public_url": s.deps.Cfg.WebOrigin + "/apps/public/" + token})
+	httpx.JSON(w, 200, map[string]any{"id": id, "public_token": token, "public_url": s.orgWebOriginReq(r.Context(), app.OrgID, r) + "/apps/public/" + token})
 }
 
 func (s *Server) publicApp(w http.ResponseWriter, r *http.Request) {
@@ -1167,7 +1167,7 @@ func (s *Server) publicApp(w http.ResponseWriter, r *http.Request) {
 		}
 		dashboards = append(dashboards, map[string]any{
 			"id": ref.ID, "name": name, "description": desc, "section": ref.Section,
-			"public_url": s.deps.Cfg.WebOrigin + "/share/" + shareToken,
+			"public_url": s.orgWebOriginReq(r.Context(), app.OrgID, r) + "/share/" + shareToken,
 		})
 	}
 	var reports []map[string]any

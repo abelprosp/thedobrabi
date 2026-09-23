@@ -3,6 +3,7 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, apiStatus, normalizeArray } from "@/lib/api";
+import { publicAppUrl } from "@/lib/publicUrl";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { WidgetView, type Widget, type DashboardFilter, type WidgetType } from "@/components/WidgetView";
 import { WidgetInspector } from "@/components/widget-inspector";
@@ -289,9 +290,13 @@ function DashboardEditorInner() {
         method: "POST",
         body: JSON.stringify({ expires_days: 90 }),
       });
-      setEmbedSnippet(emb);
+      setEmbedSnippet({
+        ...emb,
+        url: publicAppUrl(emb.url),
+        iframe: emb.iframe?.replace(/src="https?:\/\/[^"]+"/i, `src="${publicAppUrl(emb.url)}"`) || emb.iframe,
+      });
       await refreshEmbeds();
-      await navigator.clipboard?.writeText(emb.url);
+      await navigator.clipboard?.writeText(publicAppUrl(emb.url));
       toast.success("Token de embed criado · válido 90 dias");
     } catch (e: any) {
       toast.error(e.message);
@@ -771,7 +776,8 @@ function DashboardEditorInner() {
                         method: "POST",
                         body: JSON.stringify({ expires_days: 90 }),
                       });
-                      await navigator.clipboard?.writeText(shared.url);
+                      const link = publicAppUrl(shared.url, `/share/${shared.url?.split("/").pop() || ""}`);
+                      await navigator.clipboard?.writeText(link);
                       toast.success("Ligação de partilha copiada · válida 90 dias");
                     } catch (e: any) { toast.error(e.message); }
                   }}
@@ -1140,8 +1146,8 @@ function DashboardEditorInner() {
               <>
                 <FieldLabel label="URL">
                   <div className="flex gap-2">
-                    <Input readOnly value={embedSnippet.url} />
-                    <Button variant="secondary" onClick={() => { navigator.clipboard?.writeText(embedSnippet.url); toast.success("URL copiada"); }}><Copy size={14} /></Button>
+                    <Input readOnly value={publicAppUrl(embedSnippet.url)} />
+                    <Button variant="secondary" onClick={() => { navigator.clipboard?.writeText(publicAppUrl(embedSnippet.url)); toast.success("URL copiada"); }}><Copy size={14} /></Button>
                   </div>
                 </FieldLabel>
                 <FieldLabel label="Iframe">

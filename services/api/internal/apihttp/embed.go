@@ -53,7 +53,7 @@ func (s *Server) createDashboardEmbed(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "embed", err.Error())
 		return
 	}
-	httpx.JSON(w, 201, s.embedPayload(r.Context(), org, id, jti, expires))
+	httpx.JSON(w, 201, s.embedPayload(r.Context(), org, id, jti, expires, r))
 }
 
 func (s *Server) listDashboardEmbeds(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +82,7 @@ func (s *Server) listDashboardEmbeds(w http.ResponseWriter, r *http.Request) {
 		if err := rows.Scan(&jti, &created, &expires, &revoked); err != nil {
 			continue
 		}
-		item := s.embedPayload(r.Context(), org, id, jti, expires)
+		item := s.embedPayload(r.Context(), org, id, jti, expires, r)
 		item["jti"] = jti
 		item["created_at"] = created
 		item["revoked_at"] = revoked
@@ -114,9 +114,9 @@ func (s *Server) revokeDashboardEmbed(w http.ResponseWriter, r *http.Request) {
 	httpx.JSON(w, 200, map[string]any{"ok": true})
 }
 
-func (s *Server) embedPayload(ctx context.Context, org, dash uuid.UUID, jti string, expires *time.Time) map[string]any {
+func (s *Server) embedPayload(ctx context.Context, org, dash uuid.UUID, jti string, expires *time.Time, r *http.Request) map[string]any {
 	tok := s.signEmbedJWT(org, dash, jti, expires)
-	origin := s.orgWebOrigin(ctx, org)
+	origin := s.orgWebOriginReq(ctx, org, r)
 	url := origin + "/embed/" + tok
 	out := map[string]any{
 		"token":  tok,
@@ -260,12 +260,82 @@ func (s *Server) orgBrand(ctx context.Context, org uuid.UUID) (string, string) {
 }
 
 func (s *Server) orgWebOrigin(ctx context.Context, org uuid.UUID) string {
+	return s.orgWebOriginReq(ctx, org, nil)
+}
+
+// orgWebOriginReq builds the public site origin for share/invite/embed links.
+// Prefer org custom domain, then a non-localhost WEB_ORIGIN, then the inbound request host
+// (so a misconfigured WEB_ORIGIN=http://localhost:... does not leak into production links).
+func (s *Server) orgWebOriginReq(ctx context.Context, org uuid.UUID, r *http.Request) string {
 	var domain string
 	_ = s.deps.PG.QueryRow(ctx, `SELECT COALESCE(custom_domain,'') FROM organizations WHERE id=$1`, org).Scan(&domain)
 	if host := normalizeDomain(domain); host != "" {
 		return "https://" + host
 	}
-	return s.deps.Cfg.WebOrigin
+	if cfg := strings.TrimRight(strings.TrimSpace(s.deps.Cfg.WebOrigin), "/"); cfg != "" && !isLocalOrigin(cfg) {
+		return cfg
+	}
+	if r != nil {
+		if origin := requestPublicOrigin(r); origin != "" {
+			return origin
+		}
+	}
+	if cfg := strings.TrimRight(strings.TrimSpace(s.deps.Cfg.WebOrigin), "/"); cfg != "" {
+		return cfg
+	}
+	return "https://app.thedobra.cc"
+}
+
+func isLocalOrigin(raw string) bool {
+	u, err := url.Parse(strings.TrimSpace(raw))
+	if err != nil || u.Hostname() == "" {
+		lower := strings.ToLower(raw)
+		return strings.Contains(lower, "localhost") || strings.Contains(lower, "127.0.0.1")
+	}
+	host := strings.ToLower(u.Hostname())
+	return host == "localhost" || host == "127.0.0.1" || host == "::1" || strings.HasSuffix(host, ".localhost")
+}
+
+func requestPublicOrigin(r *http.Request) string {
+	if r == nil {
+		return ""
+	}
+	if o := strings.TrimSpace(r.Header.Get("Origin")); o != "" && !isLocalOrigin(o) {
+		return strings.TrimRight(o, "/")
+	}
+	if ref := strings.TrimSpace(r.Header.Get("Referer")); ref != "" {
+		if u, err := url.Parse(ref); err == nil && u.Scheme != "" && u.Host != "" {
+			cand := u.Scheme + "://" + u.Host
+			if !isLocalOrigin(cand) {
+				return cand
+			}
+		}
+	}
+	proto := strings.TrimSpace(r.Header.Get("X-Forwarded-Proto"))
+	if proto == "" {
+		if r.TLS != nil {
+			proto = "https"
+		} else {
+			proto = "http"
+		}
+	} else {
+		proto = strings.Split(proto, ",")[0]
+		proto = strings.TrimSpace(proto)
+	}
+	host := strings.TrimSpace(r.Header.Get("X-Forwarded-Host"))
+	if host == "" {
+		host = strings.TrimSpace(r.Host)
+	} else {
+		host = strings.TrimSpace(strings.Split(host, ",")[0])
+	}
+	if host == "" {
+		return ""
+	}
+	cand := proto + "://" + host
+	if isLocalOrigin(cand) {
+		return ""
+	}
+	return strings.TrimRight(cand, "/")
 }
 
 func normalizeDomain(raw string) string {

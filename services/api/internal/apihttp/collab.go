@@ -278,7 +278,7 @@ func (s *Server) shareDashboard(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "share", err.Error())
 		return
 	}
-	out := map[string]any{"url": s.orgWebOrigin(r.Context(), org) + "/share/" + tok, "token": tok}
+	out := map[string]any{"url": s.orgWebOriginReq(r.Context(), org, r) + "/share/" + tok, "token": tok}
 	if expires != nil {
 		out["expires_at"] = expires.UTC()
 	}
