@@ -49,6 +49,11 @@ sleep 2
 if systemctl list-unit-files | grep -q '^thedobra-api.service'; then
   echo "==> systemctl restart thedobra-api"
   systemctl reset-failed thedobra-api || true
+  # Garante env limpo antes do restart (NOAUTH se REDIS_PASSWORD faltar ao processo)
+  if [[ -x "$ROOT/deploy/sync-env-systemd.sh" ]]; then
+    bash "$ROOT/deploy/sync-env-systemd.sh" "$ROOT/.env" /etc/thedobra/api.env || true
+    systemctl daemon-reload || true
+  fi
   systemctl restart thedobra-api
 else
   echo "==> a arrancar API ($API_BIN) em $API_ADDR"

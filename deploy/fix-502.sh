@@ -108,40 +108,38 @@ else
 fi
 echo
 
-echo "==> 7) Rebuild API se o binário faltar ou for antigo"
+echo "==> 7) Rebuild API"
 NEED_BUILD=0
 if [[ ! -x "$API_BIN" ]]; then
   NEED_BUILD=1
-elif [[ "$ROOT/services/api/cmd/api/main.go" -nt "$API_BIN" ]]; then
-  NEED_BUILD=1
-fi
-# Also rebuild if source tree is newer than binary (security fixes, Validate, etc.)
-if [[ -x "$API_BIN" ]] && find "$ROOT/services/api" -name '*.go' -newer "$API_BIN" | grep -q .; then
+elif find "$ROOT/services/api" -name '*.go' -newer "$API_BIN" 2>/dev/null | grep -q .; then
   NEED_BUILD=1
 fi
 if [[ "$NEED_BUILD" -eq 1 ]]; then
-  echo "A compilar API → $API_BIN"
-  (cd "$ROOT/services/api" && go build -o "$API_BIN" ./cmd/api)
+  if command -v go >/dev/null 2>&1; then
+    echo "A compilar API com go local → $API_BIN"
+    (cd "$ROOT/services/api" && go build -o "$API_BIN" ./cmd/api)
+  elif command -v docker >/dev/null 2>&1; then
+    echo "go não está no PATH — a compilar com Docker (golang:1.25)..."
+    docker run --rm -v "$ROOT/services/api:/src" -w /src golang:1.25 \
+      go build -o /src/thedobra-api.bin ./cmd/api
+    install -m 755 "$ROOT/services/api/thedobra-api.bin" "$API_BIN"
+    rm -f "$ROOT/services/api/thedobra-api.bin"
+  else
+    echo "Sem go nem docker — a manter o binário actual em $API_BIN" >&2
+    if [[ ! -x "$API_BIN" ]]; then
+      echo "falta $API_BIN" >&2
+      exit 1
+    fi
+  fi
 fi
 
-echo "==> 7b) Teste de arranque (mostra erro de Validate/Redis/DSN)"
-set +e
-timeout 4 bash -c "set -a; source '$ROOT/.env'; set +a; export APP_HTTP_ADDR='$API_ADDR'; exec '$API_BIN'" \
-  >/tmp/thedobra-api-boot.out 2>&1
-boot_rc=$?
-set -e
-if [[ -s /tmp/thedobra-api-boot.out ]]; then
-  echo "--- saída do arranque ---"
-  cat /tmp/thedobra-api-boot.out
-  echo "-------------------------"
-fi
-if [[ "$boot_rc" -eq 124 ]]; then
-  echo "API manteve-se a correr ~4s (provável OK). A matar o teste..."
-  pkill -f "$API_BIN" || true
-  sleep 1
-elif [[ "$boot_rc" -ne 0 ]]; then
-  echo "API saiu com código $boot_rc — corrija o .env com base na saída acima." >&2
-fi
+echo "==> 7b) Sincronizar env systemd (corrige NOAUTH / REDIS_PASSWORD)"
+bash "$ROOT/deploy/sync-env-systemd.sh" "$ROOT/.env" /etc/thedobra/api.env
+install -m 644 "$ROOT/deploy/systemd/thedobra-api.service" /etc/systemd/system/thedobra-api.service
+install -m 644 "$ROOT/deploy/systemd/thedobra-web.service" /etc/systemd/system/thedobra-web.service
+systemctl daemon-reload
+systemctl reset-failed thedobra-api || true
 
 echo "==> 8) Reinício completo"
 bash "$ROOT/deploy/restart-vps.sh"
