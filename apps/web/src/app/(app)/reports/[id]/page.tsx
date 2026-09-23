@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, getAccess, normalizeArray } from "@/lib/api";
+import { copyWithToast } from "@/lib/clipboard";
 import { WidgetView, type Widget } from "@/components/WidgetView";
 import { modelIdForDataset, relationshipsToJoins, widgetFieldDefaults, modelForDataset } from "@/lib/semantic";
 import { DEFAULT_QUERY_LIMIT, widgetCrossBy } from "@/lib/widget-config";
@@ -352,7 +353,7 @@ export default function ReportEditorPage() {
                       <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setMoreOpen(false); downloadServerPdf(); }}><FileDown size={14} /> PDF servidor</button>
                       <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setMoreOpen(false); window.print(); }}><Printer size={14} /> Imprimir</button>
                       <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setMoreOpen(false); setScheduleOpen(true); }}><Calendar size={14} /> Agendar</button>
-                      <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setMoreOpen(false); navigator.clipboard?.writeText(window.location.href); toast.success("Link copiado"); }}><Share2 size={14} /> Partilhar</button>
+                      <button className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg" onClick={() => { setMoreOpen(false); copyWithToast(window.location.href, "Link copiado"); }}><Share2 size={14} /> Partilhar</button>
                     </div>
                   )}
                 </div>
@@ -361,7 +362,7 @@ export default function ReportEditorPage() {
                   <Button variant="secondary" onClick={downloadServerPdf}><FileDown size={14} /> PDF servidor</Button>
                   <Button variant="secondary" onClick={() => window.print()}><Printer size={14} /> Imprimir</Button>
                   <Button variant="secondary" onClick={() => setScheduleOpen(true)}><Calendar size={14} /> Agendar</Button>
-                  <Button variant="secondary" onClick={() => { navigator.clipboard?.writeText(window.location.href); toast.success("Link copiado"); }}><Share2 size={14} /> Partilhar</Button>
+                  <Button variant="secondary" onClick={() => copyWithToast(window.location.href, "Link copiado")}><Share2 size={14} /> Partilhar</Button>
                 </div>
               </div>
             }

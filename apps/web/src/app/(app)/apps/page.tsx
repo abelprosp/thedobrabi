@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
 import { toast } from "sonner";
+import { copyWithToast } from "@/lib/clipboard";
 import { Badge, Button, Card, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Textarea } from "@/components/ui";
 import { Box, Globe, ExternalLink, Trash2, Edit3, Rocket, Copy } from "lucide-react";
 import Link from "next/link";
@@ -102,7 +103,7 @@ export default function AppsPage() {
             {app.public_token && (
               <div className="flex items-center gap-2 rounded-xl border border-line bg-surface-2 px-3 py-2">
                 <input readOnly value={`${origin}/apps/public/${app.public_token}`} className="min-w-0 flex-1 bg-transparent text-[11px] text-mute outline-none" />
-                <Button variant="ghost" size="icon" onClick={() => { navigator.clipboard.writeText(`${origin}/apps/public/${app.public_token}`); toast.success("Link copiado"); }}><Copy size={14} /></Button>
+                <Button variant="ghost" size="icon" title="Copiar link" onClick={() => copyWithToast(`${origin}/apps/public/${app.public_token}`, "Link copiado")}><Copy size={14} /></Button>
                 <Link href={`/apps/public/${app.public_token}`} target="_blank"><Button variant="ghost" size="icon"><Globe size={14} /></Button></Link>
               </div>
             )}

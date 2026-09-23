@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
+import { copyToClipboard } from "@/lib/clipboard";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import { PageHeader, PageSkeleton } from "@/components/ui";
@@ -74,7 +75,7 @@ export default function SettingsPage() {
       }),
     onSuccess: (d) => {
       toast.success("Convite enviado");
-      navigator.clipboard?.writeText(d.invite_url).catch(() => {});
+      copyToClipboard(d.invite_url).catch(() => {});
       setInviteEmail("");
       members.refetch();
     },

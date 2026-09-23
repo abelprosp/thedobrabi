@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
+import { copyWithToast } from "@/lib/clipboard";
 import { toast } from "sonner";
 import {
   Badge,
@@ -217,10 +218,7 @@ export default function AppEditorPage() {
               variant="ghost"
               size="icon"
               title="Copiar link"
-              onClick={() => {
-                navigator.clipboard.writeText(publicUrl);
-                toast.success("Link copiado");
-              }}
+              onClick={() => copyWithToast(publicUrl, "Link copiado")}
             >
               <Copy size={14} />
             </Button>

@@ -4,6 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, apiStatus, normalizeArray } from "@/lib/api";
 import { publicAppUrl } from "@/lib/publicUrl";
+import { copyToClipboard, copyWithToast } from "@/lib/clipboard";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { WidgetView, type Widget, type DashboardFilter, type WidgetType } from "@/components/WidgetView";
 import { WidgetInspector } from "@/components/widget-inspector";
@@ -12,6 +13,7 @@ import GridLayout, { WidthProvider, type Layout } from "react-grid-layout";
 import "react-grid-layout/css/styles.css";
 import "react-resizable/css/styles.css";
 import {
+  Badge,
   Button,
   Card,
   EmptyState,
@@ -77,6 +79,8 @@ import {
   Sparkle,
   Brain,
   Trophy,
+  Globe,
+  Lock,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -190,6 +194,30 @@ type EmbedSnippet = {
   active?: boolean;
 };
 
+type ShareItem = {
+  token: string;
+  token_hint?: string;
+  created_at?: string;
+  expires_at?: string;
+  revoked_at?: string | null;
+  active?: boolean;
+  require_login?: boolean;
+};
+
+type ShareCreated = {
+  url: string;
+  token: string;
+  expires_at?: string;
+  require_login: boolean;
+};
+
+const SHARE_EXPIRY_OPTIONS: { value: number; label: string }[] = [
+  { value: 7, label: "7 dias" },
+  { value: 30, label: "30 dias" },
+  { value: 90, label: "90 dias" },
+  { value: 365, label: "1 ano" },
+  { value: 0, label: "Sem expiração" },
+];
 
 export default function DashboardEditorPage() {
   return (
@@ -223,6 +251,12 @@ function DashboardEditorInner() {
   const [embedSnippet, setEmbedSnippet] = useState<EmbedSnippet | null>(null);
   const [embedList, setEmbedList] = useState<EmbedSnippet[]>([]);
   const [embedBusy, setEmbedBusy] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareList, setShareList] = useState<ShareItem[]>([]);
+  const [shareBusy, setShareBusy] = useState(false);
+  const [shareRequireLogin, setShareRequireLogin] = useState(false);
+  const [shareExpiresDays, setShareExpiresDays] = useState(90);
+  const [shareCreated, setShareCreated] = useState<ShareCreated | null>(null);
   const isNarrow = useMediaQuery("(max-width: 767px)");
   const mobileView = mobilePreview || isNarrow;
   const phoneFrame = mobilePreview && !isNarrow;
@@ -296,8 +330,9 @@ function DashboardEditorInner() {
         iframe: emb.iframe?.replace(/src="https?:\/\/[^"]+"/i, `src="${publicAppUrl(emb.url)}"`) || emb.iframe,
       });
       await refreshEmbeds();
-      await navigator.clipboard?.writeText(publicAppUrl(emb.url));
       toast.success("Token de embed criado · válido 90 dias");
+      // Best effort: the user can always copy from the read-only field below.
+      copyToClipboard(publicAppUrl(emb.url)).catch(() => {});
     } catch (e: any) {
       toast.error(e.message);
     } finally {
@@ -320,6 +355,59 @@ function DashboardEditorInner() {
       setEmbedBusy(false);
     }
   }, [id, refreshEmbeds]);
+
+  const refreshShares = useCallback(async () => {
+    const list = normalizeArray<ShareItem>(await api(`/api/v1/dashboards/${id}/share`));
+    setShareList(list);
+    return list;
+  }, [id]);
+
+  const openShare = useCallback(async () => {
+    setMoreOpen(false);
+    setShareCreated(null);
+    setShareOpen(true);
+    try {
+      await refreshShares();
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  }, [refreshShares]);
+
+  const createShare = useCallback(async () => {
+    setShareBusy(true);
+    try {
+      const shared = await api<{ url: string; token: string; expires_at?: string }>(`/api/v1/dashboards/${id}/share`, {
+        method: "POST",
+        body: JSON.stringify({ expires_days: shareExpiresDays, require_login: shareRequireLogin }),
+      });
+      const token = shared.token || shared.url?.split("/").pop() || "";
+      const link = publicAppUrl(shared.url, `/share/${token}`);
+      setShareCreated({ url: link, token, expires_at: shared.expires_at, require_login: shareRequireLogin });
+      toast.success(shareRequireLogin ? "Partilha protegida por login criada" : "Partilha pública criada");
+      refreshShares().catch(() => {});
+      // Best effort only: the document may not be focused; the "Copiar" button is the reliable path.
+      copyToClipboard(link).catch(() => {});
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setShareBusy(false);
+    }
+  }, [id, shareExpiresDays, shareRequireLogin, refreshShares]);
+
+  const revokeShare = useCallback(async (token: string) => {
+    if (!token) return;
+    setShareBusy(true);
+    try {
+      await api(`/api/v1/dashboards/${id}/share/${encodeURIComponent(token)}`, { method: "DELETE" });
+      await refreshShares();
+      if (shareCreated?.token === token) setShareCreated(null);
+      toast.success("Partilha revogada");
+    } catch (e: any) {
+      toast.error(e.message);
+    } finally {
+      setShareBusy(false);
+    }
+  }, [id, refreshShares, shareCreated]);
 
   useEffect(() => {
     if (d.data && !hydrated) {
@@ -769,21 +857,7 @@ function DashboardEditorInner() {
                 </button>
                 <button
                   className="flex min-h-10 w-full items-center gap-2 px-3 text-left text-[13px] text-ink hover:bg-bg"
-                  onClick={async () => {
-                    setMoreOpen(false);
-                    try {
-                      const requireLogin = window.confirm(
-                        "Exigir login para abrir esta partilha?\n\nOK: apenas utilizadores autenticados desta organização.\nCancelar: qualquer pessoa com o link.",
-                      );
-                      const shared = await api<{ url: string }>(`/api/v1/dashboards/${id}/share`, {
-                        method: "POST",
-                        body: JSON.stringify({ expires_days: 90, require_login: requireLogin }),
-                      });
-                      const link = publicAppUrl(shared.url, `/share/${shared.url?.split("/").pop() || ""}`);
-                      await navigator.clipboard?.writeText(link);
-                      toast.success(`${requireLogin ? "Partilha protegida por login" : "Partilha pública"} · ligação copiada`);
-                    } catch (e: any) { toast.error(e.message); }
-                  }}
+                  onClick={openShare}
                 >
                   <Share2 size={14} /> Partilhar
                 </button>
@@ -1150,7 +1224,7 @@ function DashboardEditorInner() {
                 <FieldLabel label="URL">
                   <div className="flex gap-2">
                     <Input readOnly value={publicAppUrl(embedSnippet.url)} />
-                    <Button variant="secondary" onClick={() => { navigator.clipboard?.writeText(publicAppUrl(embedSnippet.url)); toast.success("URL copiada"); }}><Copy size={14} /></Button>
+                    <Button variant="secondary" title="Copiar URL" onClick={() => copyWithToast(publicAppUrl(embedSnippet.url), "URL copiada")}><Copy size={14} /></Button>
                   </div>
                 </FieldLabel>
                 <FieldLabel label="Iframe">
@@ -1173,6 +1247,111 @@ function DashboardEditorInner() {
                 <Code2 size={14} /> Novo token
               </Button>
               <Button variant="secondary" onClick={() => setEmbedOpen(false)}>Fechar</Button>
+            </div>
+          </Card>
+          </div>
+        </div>
+      )}
+
+      {shareOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/40 p-0 sm:items-center sm:p-4" onClick={() => setShareOpen(false)}>
+          <div className="w-full max-w-lg" onClick={(e) => e.stopPropagation()}>
+          <Card className="space-y-3" role="dialog" aria-modal="true" aria-labelledby="share-dialog-title">
+            <div className="flex items-center justify-between">
+              <h2 id="share-dialog-title" className="text-[15px] font-semibold text-ink">Partilhar dashboard</h2>
+              <button type="button" onClick={() => setShareOpen(false)} className="text-mute hover:text-ink" aria-label="Fechar"><X size={16} /></button>
+            </div>
+            <p className="text-[13px] text-mute">Crie uma ligação de leitura para «{name || d.data?.name || "este dashboard"}». Pode revogá-la a qualquer momento.</p>
+
+            <div className="space-y-2">
+              <span className="block text-[13px] font-medium text-ink">Quem pode abrir</span>
+              <div role="radiogroup" aria-label="Quem pode abrir" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {([
+                  { value: false, icon: Globe, title: "Público", hint: "Qualquer pessoa com o link" },
+                  { value: true, icon: Lock, title: "Somente com login", hint: "Apenas utilizadores autenticados desta organização" },
+                ] as const).map((opt) => {
+                  const Icon = opt.icon;
+                  const active = shareRequireLogin === opt.value;
+                  return (
+                    <button
+                      key={String(opt.value)}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      disabled={shareBusy}
+                      onClick={() => setShareRequireLogin(opt.value)}
+                      className={cn(
+                        "flex items-start gap-2.5 rounded-xl border px-3 py-2.5 text-left transition",
+                        active ? "border-primary bg-primary/5 text-ink" : "border-line bg-surface text-mute hover:border-primary/25 hover:bg-surface-2",
+                        shareBusy && "cursor-not-allowed opacity-60",
+                      )}
+                    >
+                      <Icon size={15} className={cn("mt-0.5 shrink-0", active ? "text-primary" : "text-mute")} />
+                      <span className="min-w-0">
+                        <span className="block text-[13px] font-medium text-ink">{opt.title}</span>
+                        <span className="block text-[11px] leading-snug text-mute">{opt.hint}</span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <FieldLabel label="Expira em">
+              <Select value={String(shareExpiresDays)} disabled={shareBusy} onChange={(e) => setShareExpiresDays(Number(e.target.value))} className="h-10 sm:w-48">
+                {SHARE_EXPIRY_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </Select>
+            </FieldLabel>
+
+            {shareCreated && (
+              <div className="space-y-2 rounded-xl border border-primary/20 bg-primary/5 p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-[13px] font-medium text-ink">Ligação criada</span>
+                  <span className="flex items-center gap-1.5">
+                    <Badge tone={shareCreated.require_login ? "accent" : "ok"}>{shareCreated.require_login ? "Login" : "Público"}</Badge>
+                    {shareCreated.expires_at && <Badge>até {new Date(shareCreated.expires_at).toLocaleDateString()}</Badge>}
+                  </span>
+                </div>
+                <div className="flex gap-2">
+                  <Input readOnly value={shareCreated.url} onFocus={(e) => e.currentTarget.select()} className="font-mono text-[12px]" aria-label="Ligação de partilha" />
+                  <Button variant="primary" className="shrink-0" onClick={() => copyWithToast(shareCreated.url, "Ligação copiada")}>
+                    <Copy size={14} /> Copiar
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {shareList.length > 0 && (
+              <div className="space-y-1.5">
+                <span className="block text-[13px] font-medium text-ink">Partilhas existentes</span>
+                <div className="max-h-40 space-y-1 overflow-auto rounded-xl border border-line p-2">
+                  {shareList.map((s) => (
+                    <div key={s.token} className="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-[12px]">
+                      <span className="flex min-w-0 items-center gap-2">
+                        <span className="truncate font-mono text-mute">{s.token_hint || `${(s.token || "").slice(0, 8)}…`}</span>
+                        <Badge tone={s.require_login ? "accent" : "ok"}>{s.require_login ? "Login" : "Público"}</Badge>
+                      </span>
+                      <span className="flex shrink-0 items-center gap-2 text-mute">
+                        <span>{s.active ? (s.expires_at ? `até ${new Date(s.expires_at).toLocaleDateString()}` : "activa") : "revogada"}</span>
+                        {s.active && (
+                          <Button variant="ghost" size="sm" disabled={shareBusy} title="Revogar" onClick={() => revokeShare(s.token)}>
+                            <Ban size={13} /> Revogar
+                          </Button>
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button variant="secondary" onClick={() => setShareOpen(false)}>Fechar</Button>
+              <Button onClick={createShare} busy={shareBusy}>
+                <Share2 size={14} /> {shareCreated ? "Criar outra ligação" : "Criar ligação"}
+              </Button>
             </div>
           </Card>
           </div>
