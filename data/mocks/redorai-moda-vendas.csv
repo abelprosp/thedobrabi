@@ -1,0 +1,561 @@
+data,mes,ano,loja,vendedor,cliente,categoria,colecao,produto,tamanho,cor,canal,quantidade,valor,custo,desconto,empresa
+2025-11-07,Novembro,2025,Loja Outlet,Ana Costa,Forge Engenharia,Camiseta,Cápsula Urbana,Camiseta básica,P,Branco,E-commerce,1,83.34,51.11,5.66,Dobra Moda
+2025-11-07,Novembro,2025,Loja Outlet,Diego Alves,Costa Farma,Vestido,Cápsula Urbana,Vestido midi,PP,Bege,E-commerce,1,249.00,120.88,0.00,Dobra Moda
+2026-08-20,Agosto,2026,Loja Outlet,Bruno Lima,Costa Farma,Calçado,Verão 2026,Tênis casual,G,Azul,E-commerce,1,324.16,184.38,24.84,Dobra Moda
+2025-12-26,Dezembro,2025,Loja Shopping,Bruno Lima,Aurora Moda,Calçado,Verão 2026,Tênis corrida,P,Branco,Loja,2,858.00,488.43,0.00,Dobra Moda
+2025-09-21,Setembro,2025,Loja Shopping,Eva Martins,Delta Log,Acessório,Básicos,Bolsa transversal,GG,Vermelho,E-commerce,3,777.00,359.27,0.00,Dobra Moda
+2026-01-05,Janeiro,2026,Loja Centro,Ana Costa,Orbit Educação,Calçado,Verão 2026,Tênis casual,PP,Preto,Loja,1,291.53,176.58,57.47,Dobra Moda
+2026-04-23,Abril,2026,Loja Outlet,Diego Alves,Terra Nova,Calçado,Verão 2026,Tênis corrida,PP,Bege,WhatsApp,1,429.00,264.18,0.00,Dobra Moda
+2026-05-07,Maio,2026,Loja Outlet,Bruno Lima,Pampa Alimentos,Vestido,Verão 2026,Vestido midi,GG,Verde,E-commerce,1,249.00,150.35,0.00,Dobra Moda
+2026-08-22,Agosto,2026,Loja Shopping,Ana Costa,Pulse Varejo,Jaqueta,Inverno 2026,Jaqueta jeans,P,Bege,Marketplace,1,254.27,143.26,74.73,Dobra Moda
+2026-01-09,Janeiro,2026,Loja Shopping,Carla Souza,Orbit Educação,Calça,Inverno 2026,Calça alfaiataria,PP,Bege,Loja,1,279.00,116.97,0.00,Dobra Moda
+2026-08-14,Agosto,2026,Loja Centro,Bruno Lima,Atlas Ltda,Jaqueta,Inverno 2026,Jaqueta jeans,P,Azul,Loja,1,254.71,120.17,74.29,Dobra Moda
+2026-04-15,Abril,2026,Loja Outlet,Eva Martins,Boa Vista,Acessório,Básicos,Meia kit,PP,Azul,Loja,1,39.00,19.67,0.00,Dobra Moda
+2025-11-25,Novembro,2025,Loja Outlet,Carla Souza,Forge Engenharia,Camiseta,Básicos,Camiseta básica,P,Vermelho,Loja,2,178.00,83.77,0.00,Dobra Moda
+2026-01-10,Janeiro,2026,Loja Centro,Eva Martins,Aurora Moda,Shorts,Cápsula Urbana,Shorts linho,P,Azul,Loja,2,274.93,147.89,43.07,Dobra Moda
+2026-05-13,Maio,2026,Loja Centro,Diego Alves,Forge Engenharia,Calçado,Cápsula Urbana,Tênis casual,M,Verde,Loja,1,267.89,138.27,81.11,Dobra Moda
+2026-07-07,Julho,2026,Loja Centro,Bruno Lima,Boa Vista,Calça,Básicos,Calça jeans,PP,Preto,Loja,1,229.00,126.87,0.00,Dobra Moda
+2026-03-30,Março,2026,Loja Outlet,Eva Martins,Serra Café,Calça,Inverno 2026,Calça alfaiataria,G,Branco,Loja,1,279.00,127.17,0.00,Dobra Moda
+2025-11-18,Novembro,2025,Loja Outlet,Bruno Lima,Nimbus SA,Blusa,Cápsula Urbana,Blusa tricô,G,Preto,Loja,1,179.00,99.07,0.00,Dobra Moda
+2026-01-11,Janeiro,2026,Loja Centro,Bruno Lima,Lumen Tech,Shorts,Verão 2026,Shorts linho,P,Vermelho,E-commerce,1,159.00,81.45,0.00,Dobra Moda
+2025-09-21,Setembro,2025,Loja Outlet,Bruno Lima,Forge Engenharia,Camiseta,Verão 2026,Camiseta básica,P,Branco,Loja,1,89.00,52.00,0.00,Dobra Moda
+2025-11-28,Novembro,2025,Loja Centro,Carla Souza,Sul Minas,Acessório,Inverno 2026,Bolsa transversal,G,Verde,Loja,1,259.00,130.21,0.00,Dobra Moda
+2026-05-14,Maio,2026,Loja Shopping,Carla Souza,Sul Minas,Jaqueta,Verão 2026,Blazer,G,Azul,Marketplace,1,318.12,129.26,80.88,Dobra Moda
+2025-11-08,Novembro,2025,Loja Outlet,Diego Alves,Céu Soft,Acessório,Cápsula Urbana,Meia kit,P,Azul,E-commerce,2,61.70,26.08,16.30,Dobra Moda
+2026-03-18,Março,2026,Loja Shopping,Ana Costa,Terra Nova,Blusa,Cápsula Urbana,Blusa tricô,P,Branco,Loja,1,179.00,85.17,0.00,Dobra Moda
+2025-12-02,Dezembro,2025,Loja Centro,Bruno Lima,Forge Engenharia,Camisa,Inverno 2026,Camisa linho,P,Preto,Loja,1,189.00,91.60,0.00,Dobra Moda
+2025-10-03,Outubro,2025,Loja Centro,Carla Souza,Rio Branco,Camiseta,Verão 2026,Camiseta básica,PP,Bege,WhatsApp,1,89.00,45.18,0.00,Dobra Moda
+2026-04-17,Abril,2026,Loja Outlet,Carla Souza,Boa Vista,Calça,Verão 2026,Calça jeans,P,Verde,E-commerce,2,458.00,241.03,0.00,Dobra Moda
+2025-10-27,Outubro,2025,Loja Centro,Bruno Lima,Atlas Ltda,Acessório,Verão 2026,Cinto couro,PP,Azul,Marketplace,1,92.22,44.39,26.78,Dobra Moda
+2025-11-22,Novembro,2025,Loja Centro,Ana Costa,Aurora Moda,Calçado,Verão 2026,Tênis corrida,M,Branco,Loja,1,429.00,182.43,0.00,Dobra Moda
+2026-05-30,Maio,2026,Loja Shopping,Eva Martins,Pulse Varejo,Calça,Verão 2026,Calça alfaiataria,PP,Bege,Loja,1,245.23,133.74,33.77,Dobra Moda
+2026-08-24,Agosto,2026,Loja Centro,Bruno Lima,Pulse Varejo,Jaqueta,Inverno 2026,Blazer,GG,Verde,WhatsApp,1,399.00,193.39,0.00,Dobra Moda
+2026-08-11,Agosto,2026,Loja Outlet,Ana Costa,Casa Norte,Acessório,Básicos,Bolsa transversal,PP,Vermelho,Marketplace,2,407.71,194.81,110.29,Dobra Moda
+2026-03-26,Março,2026,Loja Centro,Ana Costa,Forge Engenharia,Calça,Inverno 2026,Calça jeans,P,Vermelho,E-commerce,1,197.67,89.57,31.33,Dobra Moda
+2025-11-20,Novembro,2025,Loja Outlet,Eva Martins,Casa Norte,Calça,Inverno 2026,Calça alfaiataria,M,Branco,Loja,2,558.00,232.44,0.00,Dobra Moda
+2026-07-05,Julho,2026,Loja Outlet,Ana Costa,Serra Café,Acessório,Cápsula Urbana,Cinto couro,G,Bege,Loja,2,238.00,109.02,0.00,Dobra Moda
+2025-09-23,Setembro,2025,Loja Centro,Ana Costa,Sul Minas,Jaqueta,Verão 2026,Blazer,M,Branco,WhatsApp,2,798.00,461.34,0.00,Dobra Moda
+2026-07-16,Julho,2026,Loja Shopping,Eva Martins,Helix Saúde,Calça,Básicos,Calça jeans,GG,Bege,E-commerce,1,229.00,109.54,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Bruno Lima,Atlas Ltda,Blusa,Inverno 2026,Blusa tricô,G,Bege,Loja,1,179.00,83.05,0.00,Dobra Moda
+2026-03-24,Março,2026,Loja Centro,Bruno Lima,Aurora Moda,Calçado,Cápsula Urbana,Tênis corrida,P,Azul,E-commerce,1,332.91,172.43,96.09,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Diego Alves,Atlas Ltda,Shorts,Cápsula Urbana,Shorts linho,M,Branco,E-commerce,2,281.36,147.59,36.64,Dobra Moda
+2026-07-09,Julho,2026,Loja Outlet,Diego Alves,Maré Energia,Camiseta,Básicos,Camiseta básica,PP,Bege,E-commerce,1,89.00,36.87,0.00,Dobra Moda
+2026-03-22,Março,2026,Loja Outlet,Diego Alves,Costa Farma,Calçado,Básicos,Tênis casual,GG,Verde,Loja,1,276.98,135.65,72.02,Dobra Moda
+2026-01-20,Janeiro,2026,Loja Shopping,Ana Costa,Maré Energia,Camisa,Cápsula Urbana,Camisa linho,P,Azul,WhatsApp,3,469.67,235.30,97.33,Dobra Moda
+2026-05-24,Maio,2026,Loja Outlet,Ana Costa,Serra Café,Blusa,Básicos,Blusa tricô,GG,Verde,Loja,1,179.00,93.00,0.00,Dobra Moda
+2026-01-27,Janeiro,2026,Loja Outlet,Diego Alves,Atlas Ltda,Jaqueta,Básicos,Jaqueta jeans,P,Preto,WhatsApp,1,329.00,177.36,0.00,Dobra Moda
+2025-09-17,Setembro,2025,Loja Shopping,Carla Souza,Sul Minas,Calça,Verão 2026,Calça jeans,PP,Verde,Loja,1,229.00,89.17,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Eva Martins,Sul Minas,Acessório,Inverno 2026,Meia kit,PP,Azul,E-commerce,1,39.00,22.03,0.00,Dobra Moda
+2026-08-08,Agosto,2026,Loja Outlet,Ana Costa,Sul Minas,Acessório,Básicos,Meia kit,G,Branco,Loja,1,32.41,16.00,6.59,Dobra Moda
+2026-04-17,Abril,2026,Loja Shopping,Diego Alves,Serra Café,Acessório,Verão 2026,Bolsa transversal,GG,Verde,Loja,1,246.02,96.20,12.98,Dobra Moda
+2025-12-14,Dezembro,2025,Loja Centro,Eva Martins,Costa Farma,Camiseta,Inverno 2026,Camiseta básica,G,Verde,E-commerce,2,178.00,84.19,0.00,Dobra Moda
+2026-01-29,Janeiro,2026,Loja Centro,Ana Costa,Casa Norte,Jaqueta,Cápsula Urbana,Blazer,P,Bege,WhatsApp,1,318.31,190.78,80.69,Dobra Moda
+2025-09-18,Setembro,2025,Loja Outlet,Ana Costa,Nimbus SA,Camiseta,Inverno 2026,Camiseta básica,M,Azul,Loja,1,89.00,42.96,0.00,Dobra Moda
+2026-01-08,Janeiro,2026,Loja Shopping,Carla Souza,Maré Energia,Calça,Cápsula Urbana,Calça jeans,M,Branco,Loja,1,229.00,108.64,0.00,Dobra Moda
+2025-09-20,Setembro,2025,Loja Shopping,Eva Martins,Terra Nova,Jaqueta,Cápsula Urbana,Blazer,G,Branco,Loja,1,399.00,162.81,0.00,Dobra Moda
+2026-04-06,Abril,2026,Loja Outlet,Ana Costa,Aurora Moda,Acessório,Inverno 2026,Bolsa transversal,P,Vermelho,E-commerce,1,259.00,109.66,0.00,Dobra Moda
+2026-01-29,Janeiro,2026,Loja Shopping,Eva Martins,Delta Log,Calçado,Básicos,Tênis casual,M,Verde,Loja,2,620.20,369.75,77.80,Dobra Moda
+2026-04-12,Abril,2026,Loja Outlet,Bruno Lima,Aurora Moda,Jaqueta,Verão 2026,Jaqueta jeans,G,Preto,Marketplace,1,329.00,189.59,0.00,Dobra Moda
+2026-01-26,Janeiro,2026,Loja Outlet,Ana Costa,Atlas Ltda,Jaqueta,Inverno 2026,Jaqueta jeans,G,Branco,E-commerce,2,603.22,349.23,54.78,Dobra Moda
+2025-10-17,Outubro,2025,Loja Outlet,Bruno Lima,Céu Soft,Acessório,Cápsula Urbana,Meia kit,P,Bege,WhatsApp,1,39.00,19.24,0.00,Dobra Moda
+2026-06-02,Junho,2026,Loja Outlet,Carla Souza,Sul Minas,Blusa,Básicos,Blusa tricô,P,Branco,E-commerce,1,157.65,72.05,21.35,Dobra Moda
+2026-02-04,Fevereiro,2026,Loja Shopping,Ana Costa,Serra Café,Calça,Verão 2026,Calça jeans,GG,Azul,E-commerce,1,229.00,126.20,0.00,Dobra Moda
+2026-07-12,Julho,2026,Loja Outlet,Ana Costa,Pampa Alimentos,Camisa,Básicos,Camisa linho,GG,Preto,Loja,1,144.92,73.47,44.08,Dobra Moda
+2026-04-21,Abril,2026,Loja Centro,Carla Souza,Céu Soft,Vestido,Básicos,Vestido midi,PP,Bege,Loja,1,218.32,94.22,30.68,Dobra Moda
+2026-06-25,Junho,2026,Loja Shopping,Carla Souza,Terra Nova,Vestido,Inverno 2026,Vestido midi,PP,Azul,Loja,2,498.00,244.15,0.00,Dobra Moda
+2026-05-20,Maio,2026,Loja Centro,Bruno Lima,Verde Agro,Calçado,Inverno 2026,Tênis corrida,G,Preto,E-commerce,1,362.09,174.20,66.91,Dobra Moda
+2026-05-18,Maio,2026,Loja Shopping,Bruno Lima,Rio Branco,Calçado,Cápsula Urbana,Tênis corrida,P,Preto,Loja,2,858.00,440.70,0.00,Dobra Moda
+2026-06-12,Junho,2026,Loja Centro,Diego Alves,Delta Log,Jaqueta,Cápsula Urbana,Blazer,M,Vermelho,Loja,1,399.00,181.64,0.00,Dobra Moda
+2026-02-15,Fevereiro,2026,Loja Centro,Ana Costa,Casa Norte,Acessório,Verão 2026,Cinto couro,M,Bege,E-commerce,1,119.00,67.62,0.00,Dobra Moda
+2025-12-06,Dezembro,2025,Loja Shopping,Diego Alves,Serra Café,Vestido,Inverno 2026,Vestido midi,GG,Bege,E-commerce,1,249.00,99.86,0.00,Dobra Moda
+2025-10-04,Outubro,2025,Loja Outlet,Eva Martins,Costa Farma,Vestido,Cápsula Urbana,Vestido midi,G,Azul,Marketplace,1,249.00,102.78,0.00,Dobra Moda
+2026-02-22,Fevereiro,2026,Loja Outlet,Ana Costa,Helix Saúde,Camiseta,Verão 2026,Camiseta básica,GG,Verde,E-commerce,1,89.00,50.70,0.00,Dobra Moda
+2026-05-04,Maio,2026,Loja Outlet,Carla Souza,Pulse Varejo,Calça,Verão 2026,Calça alfaiataria,PP,Verde,E-commerce,1,279.00,121.69,0.00,Dobra Moda
+2026-08-06,Agosto,2026,Loja Outlet,Eva Martins,Casa Norte,Calçado,Básicos,Tênis corrida,GG,Vermelho,E-commerce,1,351.73,166.57,77.27,Dobra Moda
+2026-04-23,Abril,2026,Loja Shopping,Carla Souza,Boa Vista,Shorts,Básicos,Shorts linho,GG,Branco,Marketplace,1,122.09,57.26,36.91,Dobra Moda
+2025-10-27,Outubro,2025,Loja Shopping,Eva Martins,Terra Nova,Acessório,Verão 2026,Meia kit,P,Azul,E-commerce,1,36.49,20.39,2.51,Dobra Moda
+2025-12-06,Dezembro,2025,Loja Shopping,Ana Costa,Aurora Moda,Blusa,Básicos,Blusa tricô,M,Azul,WhatsApp,1,179.00,106.63,0.00,Dobra Moda
+2026-01-15,Janeiro,2026,Loja Centro,Eva Martins,Serra Café,Acessório,Verão 2026,Bolsa transversal,PP,Branco,E-commerce,3,777.00,437.09,0.00,Dobra Moda
+2026-07-24,Julho,2026,Loja Outlet,Ana Costa,Forge Engenharia,Camiseta,Inverno 2026,Camiseta básica,GG,Bege,WhatsApp,1,89.00,49.88,0.00,Dobra Moda
+2025-10-11,Outubro,2025,Loja Centro,Eva Martins,Boa Vista,Vestido,Inverno 2026,Vestido midi,PP,Bege,Loja,3,747.00,285.90,0.00,Dobra Moda
+2025-09-25,Setembro,2025,Loja Shopping,Eva Martins,Lumen Tech,Jaqueta,Inverno 2026,Jaqueta jeans,M,Preto,E-commerce,1,329.00,158.60,0.00,Dobra Moda
+2026-08-03,Agosto,2026,Loja Outlet,Diego Alves,Atlas Ltda,Jaqueta,Básicos,Jaqueta jeans,P,Branco,E-commerce,2,658.00,253.30,0.00,Dobra Moda
+2025-09-11,Setembro,2025,Loja Centro,Bruno Lima,Sul Minas,Acessório,Inverno 2026,Cinto couro,GG,Bege,Loja,2,214.62,111.66,23.38,Dobra Moda
+2026-07-28,Julho,2026,Loja Centro,Eva Martins,Aurora Moda,Acessório,Verão 2026,Meia kit,GG,Vermelho,Loja,1,31.41,12.25,7.59,Dobra Moda
+2026-01-24,Janeiro,2026,Loja Shopping,Ana Costa,Aurora Moda,Jaqueta,Cápsula Urbana,Jaqueta jeans,P,Bege,E-commerce,1,298.59,146.50,30.41,Dobra Moda
+2025-11-11,Novembro,2025,Loja Outlet,Diego Alves,Boa Vista,Calçado,Inverno 2026,Tênis casual,P,Azul,Loja,1,349.00,175.31,0.00,Dobra Moda
+2026-07-14,Julho,2026,Loja Shopping,Ana Costa,Pampa Alimentos,Camiseta,Básicos,Camiseta básica,G,Vermelho,Loja,2,178.00,90.90,0.00,Dobra Moda
+2026-07-31,Julho,2026,Loja Shopping,Eva Martins,Pulse Varejo,Jaqueta,Básicos,Jaqueta jeans,M,Preto,Loja,2,658.00,287.85,0.00,Dobra Moda
+2026-01-27,Janeiro,2026,Loja Centro,Eva Martins,Verde Agro,Calça,Cápsula Urbana,Calça alfaiataria,G,Branco,Loja,1,279.00,108.87,0.00,Dobra Moda
+2025-11-21,Novembro,2025,Loja Shopping,Ana Costa,Aurora Moda,Calçado,Inverno 2026,Tênis corrida,M,Branco,E-commerce,1,429.00,229.96,0.00,Dobra Moda
+2026-03-13,Março,2026,Loja Centro,Ana Costa,Terra Nova,Acessório,Cápsula Urbana,Bolsa transversal,M,Vermelho,WhatsApp,1,209.54,100.36,49.46,Dobra Moda
+2026-02-19,Fevereiro,2026,Loja Shopping,Ana Costa,Pampa Alimentos,Calçado,Verão 2026,Tênis corrida,PP,Branco,E-commerce,2,858.00,387.74,0.00,Dobra Moda
+2026-06-07,Junho,2026,Loja Centro,Diego Alves,Maré Energia,Camiseta,Inverno 2026,Camiseta básica,G,Branco,Marketplace,1,89.00,34.00,0.00,Dobra Moda
+2026-05-19,Maio,2026,Loja Shopping,Ana Costa,Casa Norte,Acessório,Inverno 2026,Meia kit,GG,Azul,WhatsApp,1,39.00,21.15,0.00,Dobra Moda
+2025-09-12,Setembro,2025,Loja Shopping,Carla Souza,Terra Nova,Shorts,Verão 2026,Shorts linho,GG,Branco,Loja,1,159.00,76.39,0.00,Dobra Moda
+2026-06-02,Junho,2026,Loja Shopping,Carla Souza,Pampa Alimentos,Acessório,Verão 2026,Bolsa transversal,P,Azul,E-commerce,2,518.00,260.14,0.00,Dobra Moda
+2026-04-21,Abril,2026,Loja Outlet,Diego Alves,Sul Minas,Calça,Verão 2026,Calça jeans,PP,Bege,WhatsApp,2,410.75,175.46,47.25,Dobra Moda
+2026-01-17,Janeiro,2026,Loja Centro,Eva Martins,Casa Norte,Acessório,Verão 2026,Bolsa transversal,GG,Bege,Loja,2,518.00,222.09,0.00,Dobra Moda
+2026-04-29,Abril,2026,Loja Outlet,Bruno Lima,Lumen Tech,Calçado,Cápsula Urbana,Tênis casual,M,Bege,Loja,1,349.00,175.50,0.00,Dobra Moda
+2026-01-07,Janeiro,2026,Loja Shopping,Bruno Lima,Casa Norte,Camisa,Cápsula Urbana,Camisa linho,PP,Branco,E-commerce,1,179.08,107.30,9.92,Dobra Moda
+2026-03-22,Março,2026,Loja Shopping,Ana Costa,Pulse Varejo,Calça,Inverno 2026,Calça jeans,PP,Verde,Loja,1,229.00,140.33,0.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Ana Costa,Rio Branco,Jaqueta,Básicos,Jaqueta jeans,PP,Verde,Loja,1,294.88,131.84,34.12,Dobra Moda
+2026-01-17,Janeiro,2026,Loja Outlet,Diego Alves,Terra Nova,Jaqueta,Básicos,Jaqueta jeans,PP,Vermelho,Marketplace,3,828.91,329.96,158.09,Dobra Moda
+2025-11-13,Novembro,2025,Loja Outlet,Eva Martins,Rio Branco,Acessório,Inverno 2026,Bolsa transversal,G,Azul,WhatsApp,1,259.00,100.17,0.00,Dobra Moda
+2026-06-22,Junho,2026,Loja Shopping,Bruno Lima,Pulse Varejo,Jaqueta,Básicos,Blazer,PP,Azul,WhatsApp,1,372.82,186.05,26.18,Dobra Moda
+2026-08-22,Agosto,2026,Loja Outlet,Ana Costa,Nimbus SA,Blusa,Inverno 2026,Blusa tricô,M,Bege,E-commerce,1,166.48,84.58,12.52,Dobra Moda
+2025-10-21,Outubro,2025,Loja Shopping,Bruno Lima,Nimbus SA,Acessório,Inverno 2026,Cinto couro,PP,Preto,E-commerce,1,112.76,57.63,6.24,Dobra Moda
+2025-12-31,Dezembro,2025,Loja Outlet,Carla Souza,Lumen Tech,Jaqueta,Cápsula Urbana,Blazer,GG,Verde,Loja,2,798.00,329.20,0.00,Dobra Moda
+2026-02-21,Fevereiro,2026,Loja Centro,Carla Souza,Boa Vista,Calçado,Verão 2026,Tênis casual,PP,Bege,Loja,1,327.37,163.29,21.63,Dobra Moda
+2026-04-25,Abril,2026,Loja Centro,Bruno Lima,Forge Engenharia,Camisa,Verão 2026,Camisa linho,P,Verde,WhatsApp,1,189.00,101.50,0.00,Dobra Moda
+2026-06-17,Junho,2026,Loja Shopping,Diego Alves,Orbit Educação,Camiseta,Inverno 2026,Camiseta básica,PP,Preto,WhatsApp,2,178.00,70.87,0.00,Dobra Moda
+2026-01-08,Janeiro,2026,Loja Shopping,Ana Costa,Rio Branco,Jaqueta,Verão 2026,Jaqueta jeans,GG,Branco,E-commerce,2,658.00,294.15,0.00,Dobra Moda
+2025-10-06,Outubro,2025,Loja Shopping,Ana Costa,Orbit Educação,Calçado,Inverno 2026,Tênis casual,M,Azul,WhatsApp,2,698.00,316.57,0.00,Dobra Moda
+2025-11-07,Novembro,2025,Loja Centro,Bruno Lima,Boa Vista,Calça,Básicos,Calça jeans,PP,Branco,Marketplace,1,199.35,82.65,29.65,Dobra Moda
+2026-08-07,Agosto,2026,Loja Shopping,Bruno Lima,Serra Café,Acessório,Verão 2026,Cinto couro,P,Vermelho,Loja,1,95.39,46.46,23.61,Dobra Moda
+2026-07-26,Julho,2026,Loja Centro,Diego Alves,Terra Nova,Blusa,Básicos,Blusa tricô,GG,Preto,Marketplace,1,137.01,67.53,41.99,Dobra Moda
+2026-08-13,Agosto,2026,Loja Outlet,Eva Martins,Pampa Alimentos,Calça,Verão 2026,Calça jeans,G,Preto,Loja,1,229.00,125.05,0.00,Dobra Moda
+2025-10-25,Outubro,2025,Loja Centro,Bruno Lima,Maré Energia,Shorts,Cápsula Urbana,Shorts linho,M,Vermelho,E-commerce,1,121.47,63.11,37.53,Dobra Moda
+2026-06-02,Junho,2026,Loja Outlet,Diego Alves,Orbit Educação,Jaqueta,Inverno 2026,Blazer,G,Bege,Marketplace,1,399.00,227.38,0.00,Dobra Moda
+2025-09-05,Setembro,2025,Loja Centro,Diego Alves,Sul Minas,Calçado,Verão 2026,Tênis corrida,GG,Preto,E-commerce,1,385.34,193.70,43.66,Dobra Moda
+2026-05-10,Maio,2026,Loja Shopping,Ana Costa,Nimbus SA,Vestido,Cápsula Urbana,Vestido midi,GG,Vermelho,E-commerce,1,249.00,99.74,0.00,Dobra Moda
+2026-05-29,Maio,2026,Loja Outlet,Bruno Lima,Lumen Tech,Acessório,Básicos,Meia kit,P,Azul,E-commerce,2,78.00,33.41,0.00,Dobra Moda
+2026-05-20,Maio,2026,Loja Centro,Ana Costa,Verde Agro,Jaqueta,Cápsula Urbana,Blazer,M,Azul,Loja,1,399.00,155.36,0.00,Dobra Moda
+2025-11-15,Novembro,2025,Loja Outlet,Diego Alves,Orbit Educação,Acessório,Verão 2026,Cinto couro,M,Azul,Loja,2,178.60,76.41,59.40,Dobra Moda
+2025-12-16,Dezembro,2025,Loja Centro,Carla Souza,Serra Café,Acessório,Cápsula Urbana,Bolsa transversal,P,Verde,Loja,1,245.11,123.67,13.89,Dobra Moda
+2025-09-03,Setembro,2025,Loja Centro,Ana Costa,Costa Farma,Camiseta,Verão 2026,Camiseta básica,G,Preto,Loja,1,89.00,50.44,0.00,Dobra Moda
+2025-10-18,Outubro,2025,Loja Centro,Bruno Lima,Rio Branco,Jaqueta,Inverno 2026,Blazer,G,Vermelho,WhatsApp,1,399.00,166.20,0.00,Dobra Moda
+2026-08-11,Agosto,2026,Loja Outlet,Eva Martins,Nimbus SA,Calçado,Cápsula Urbana,Tênis corrida,PP,Verde,WhatsApp,3,1287.00,631.09,0.00,Dobra Moda
+2026-02-20,Fevereiro,2026,Loja Outlet,Diego Alves,Rio Branco,Vestido,Básicos,Vestido midi,G,Branco,Loja,1,249.00,99.53,0.00,Dobra Moda
+2025-09-12,Setembro,2025,Loja Outlet,Bruno Lima,Verde Agro,Shorts,Cápsula Urbana,Shorts linho,PP,Preto,E-commerce,2,318.00,160.15,0.00,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Outlet,Eva Martins,Sul Minas,Calçado,Básicos,Tênis casual,M,Azul,E-commerce,1,269.96,123.21,79.04,Dobra Moda
+2026-06-21,Junho,2026,Loja Shopping,Ana Costa,Forge Engenharia,Acessório,Básicos,Bolsa transversal,P,Azul,WhatsApp,1,259.00,110.18,0.00,Dobra Moda
+2026-01-21,Janeiro,2026,Loja Outlet,Eva Martins,Terra Nova,Jaqueta,Básicos,Blazer,M,Verde,WhatsApp,1,399.00,187.54,0.00,Dobra Moda
+2026-01-18,Janeiro,2026,Loja Centro,Ana Costa,Sul Minas,Acessório,Inverno 2026,Meia kit,M,Vermelho,E-commerce,1,39.00,21.52,0.00,Dobra Moda
+2025-11-11,Novembro,2025,Loja Centro,Bruno Lima,Verde Agro,Acessório,Cápsula Urbana,Cinto couro,GG,Azul,Marketplace,2,238.00,129.78,0.00,Dobra Moda
+2025-11-16,Novembro,2025,Loja Centro,Diego Alves,Costa Farma,Jaqueta,Básicos,Blazer,P,Bege,Loja,1,399.00,199.58,0.00,Dobra Moda
+2026-03-03,Março,2026,Loja Centro,Carla Souza,Céu Soft,Blusa,Verão 2026,Blusa tricô,PP,Azul,Loja,3,537.00,224.65,0.00,Dobra Moda
+2026-07-15,Julho,2026,Loja Outlet,Carla Souza,Helix Saúde,Camisa,Verão 2026,Camisa linho,G,Preto,E-commerce,3,567.00,234.44,0.00,Dobra Moda
+2026-07-21,Julho,2026,Loja Centro,Ana Costa,Nimbus SA,Jaqueta,Cápsula Urbana,Jaqueta jeans,GG,Branco,Loja,1,268.76,159.68,60.24,Dobra Moda
+2026-01-14,Janeiro,2026,Loja Centro,Diego Alves,Forge Engenharia,Jaqueta,Verão 2026,Blazer,PP,Vermelho,WhatsApp,1,368.85,161.61,30.15,Dobra Moda
+2025-11-29,Novembro,2025,Loja Shopping,Ana Costa,Pampa Alimentos,Calça,Verão 2026,Calça alfaiataria,P,Preto,E-commerce,3,672.11,404.65,164.89,Dobra Moda
+2026-01-14,Janeiro,2026,Loja Shopping,Bruno Lima,Costa Farma,Calçado,Básicos,Tênis corrida,G,Vermelho,Loja,2,688.90,333.74,169.10,Dobra Moda
+2026-02-04,Fevereiro,2026,Loja Outlet,Carla Souza,Serra Café,Blusa,Verão 2026,Blusa tricô,PP,Verde,Loja,1,154.30,95.21,24.70,Dobra Moda
+2025-12-31,Dezembro,2025,Loja Centro,Carla Souza,Rio Branco,Camiseta,Inverno 2026,Camiseta básica,M,Branco,Loja,1,89.00,50.88,0.00,Dobra Moda
+2026-04-04,Abril,2026,Loja Shopping,Ana Costa,Orbit Educação,Camisa,Cápsula Urbana,Camisa linho,P,Bege,Loja,1,189.00,79.49,0.00,Dobra Moda
+2025-09-02,Setembro,2025,Loja Shopping,Diego Alves,Orbit Educação,Calçado,Inverno 2026,Tênis corrida,M,Preto,Marketplace,1,429.00,246.34,0.00,Dobra Moda
+2026-07-16,Julho,2026,Loja Outlet,Carla Souza,Terra Nova,Calçado,Básicos,Tênis casual,G,Bege,WhatsApp,2,698.00,356.67,0.00,Dobra Moda
+2026-08-06,Agosto,2026,Loja Centro,Diego Alves,Helix Saúde,Calça,Básicos,Calça jeans,GG,Verde,E-commerce,1,229.00,106.89,0.00,Dobra Moda
+2026-02-02,Fevereiro,2026,Loja Centro,Carla Souza,Maré Energia,Calça,Cápsula Urbana,Calça jeans,GG,Branco,Marketplace,1,205.10,88.25,23.90,Dobra Moda
+2025-11-17,Novembro,2025,Loja Outlet,Carla Souza,Pulse Varejo,Camisa,Básicos,Camisa linho,M,Verde,WhatsApp,1,189.00,110.08,0.00,Dobra Moda
+2025-09-09,Setembro,2025,Loja Centro,Ana Costa,Terra Nova,Jaqueta,Cápsula Urbana,Blazer,P,Verde,E-commerce,1,356.46,205.47,42.54,Dobra Moda
+2026-05-30,Maio,2026,Loja Centro,Carla Souza,Boa Vista,Calça,Básicos,Calça jeans,GG,Verde,WhatsApp,1,186.92,81.51,42.08,Dobra Moda
+2025-10-04,Outubro,2025,Loja Centro,Diego Alves,Serra Café,Calçado,Básicos,Tênis corrida,PP,Azul,WhatsApp,1,429.00,206.24,0.00,Dobra Moda
+2025-10-22,Outubro,2025,Loja Outlet,Carla Souza,Forge Engenharia,Camiseta,Inverno 2026,Camiseta básica,P,Preto,Loja,1,68.92,31.33,20.08,Dobra Moda
+2026-03-25,Março,2026,Loja Centro,Bruno Lima,Rio Branco,Camiseta,Inverno 2026,Camiseta básica,PP,Vermelho,E-commerce,1,89.00,45.10,0.00,Dobra Moda
+2026-05-17,Maio,2026,Loja Centro,Ana Costa,Terra Nova,Jaqueta,Cápsula Urbana,Blazer,GG,Verde,E-commerce,1,366.03,226.90,32.97,Dobra Moda
+2025-09-26,Setembro,2025,Loja Shopping,Ana Costa,Verde Agro,Camisa,Verão 2026,Camisa linho,G,Vermelho,Loja,1,144.08,62.01,44.92,Dobra Moda
+2026-04-27,Abril,2026,Loja Centro,Diego Alves,Orbit Educação,Acessório,Básicos,Bolsa transversal,GG,Preto,E-commerce,1,259.00,146.95,0.00,Dobra Moda
+2026-01-11,Janeiro,2026,Loja Outlet,Carla Souza,Pampa Alimentos,Camisa,Verão 2026,Camisa linho,PP,Preto,Loja,1,142.57,70.15,46.43,Dobra Moda
+2026-04-13,Abril,2026,Loja Centro,Diego Alves,Pulse Varejo,Jaqueta,Cápsula Urbana,Jaqueta jeans,GG,Vermelho,Loja,1,329.00,180.78,0.00,Dobra Moda
+2025-11-10,Novembro,2025,Loja Shopping,Ana Costa,Maré Energia,Acessório,Verão 2026,Bolsa transversal,G,Preto,E-commerce,1,259.00,142.87,0.00,Dobra Moda
+2026-05-21,Maio,2026,Loja Centro,Bruno Lima,Terra Nova,Camisa,Cápsula Urbana,Camisa linho,M,Bege,E-commerce,2,378.00,219.37,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Diego Alves,Sul Minas,Calçado,Verão 2026,Tênis corrida,PP,Branco,WhatsApp,1,429.00,186.36,0.00,Dobra Moda
+2026-06-08,Junho,2026,Loja Shopping,Diego Alves,Casa Norte,Camiseta,Verão 2026,Camiseta básica,PP,Branco,E-commerce,1,89.00,41.64,0.00,Dobra Moda
+2026-08-09,Agosto,2026,Loja Shopping,Bruno Lima,Pulse Varejo,Acessório,Verão 2026,Meia kit,G,Verde,Loja,1,39.00,16.08,0.00,Dobra Moda
+2026-03-16,Março,2026,Loja Shopping,Carla Souza,Serra Café,Shorts,Cápsula Urbana,Shorts linho,PP,Bege,WhatsApp,1,159.00,73.87,0.00,Dobra Moda
+2026-08-16,Agosto,2026,Loja Centro,Eva Martins,Pampa Alimentos,Blusa,Inverno 2026,Blusa tricô,PP,Azul,Loja,1,179.00,97.67,0.00,Dobra Moda
+2025-10-30,Outubro,2025,Loja Shopping,Ana Costa,Lumen Tech,Acessório,Inverno 2026,Meia kit,M,Preto,Marketplace,1,35.92,14.28,3.08,Dobra Moda
+2026-07-30,Julho,2026,Loja Centro,Ana Costa,Terra Nova,Calçado,Inverno 2026,Tênis corrida,GG,Branco,Loja,2,858.00,358.27,0.00,Dobra Moda
+2026-01-28,Janeiro,2026,Loja Shopping,Eva Martins,Forge Engenharia,Calçado,Verão 2026,Tênis corrida,M,Branco,Loja,1,381.69,154.86,47.31,Dobra Moda
+2025-10-22,Outubro,2025,Loja Outlet,Eva Martins,Serra Café,Jaqueta,Básicos,Jaqueta jeans,G,Vermelho,WhatsApp,2,658.00,363.69,0.00,Dobra Moda
+2025-12-28,Dezembro,2025,Loja Shopping,Eva Martins,Forge Engenharia,Blusa,Verão 2026,Blusa tricô,PP,Azul,Loja,2,358.00,164.39,0.00,Dobra Moda
+2025-10-31,Outubro,2025,Loja Centro,Diego Alves,Casa Norte,Acessório,Cápsula Urbana,Bolsa transversal,PP,Azul,Loja,1,259.00,114.56,0.00,Dobra Moda
+2026-06-10,Junho,2026,Loja Centro,Eva Martins,Forge Engenharia,Jaqueta,Cápsula Urbana,Jaqueta jeans,G,Azul,WhatsApp,1,329.00,193.26,0.00,Dobra Moda
+2025-11-08,Novembro,2025,Loja Centro,Carla Souza,Pampa Alimentos,Calça,Básicos,Calça alfaiataria,P,Bege,WhatsApp,1,279.00,139.35,0.00,Dobra Moda
+2026-07-25,Julho,2026,Loja Centro,Diego Alves,Atlas Ltda,Camiseta,Inverno 2026,Camiseta básica,M,Azul,Loja,2,178.00,87.37,0.00,Dobra Moda
+2026-03-09,Março,2026,Loja Centro,Carla Souza,Forge Engenharia,Acessório,Cápsula Urbana,Bolsa transversal,PP,Preto,Loja,1,259.00,127.55,0.00,Dobra Moda
+2025-10-02,Outubro,2025,Loja Outlet,Diego Alves,Sul Minas,Acessório,Inverno 2026,Meia kit,G,Vermelho,E-commerce,1,34.05,15.09,4.95,Dobra Moda
+2025-12-20,Dezembro,2025,Loja Centro,Diego Alves,Delta Log,Camisa,Verão 2026,Camisa linho,M,Verde,WhatsApp,1,170.92,65.60,18.08,Dobra Moda
+2026-08-28,Agosto,2026,Loja Centro,Carla Souza,Costa Farma,Calçado,Cápsula Urbana,Tênis casual,GG,Bege,Marketplace,1,349.00,146.19,0.00,Dobra Moda
+2026-04-19,Abril,2026,Loja Shopping,Diego Alves,Maré Energia,Calça,Básicos,Calça jeans,P,Preto,Loja,1,229.00,141.82,0.00,Dobra Moda
+2026-03-13,Março,2026,Loja Outlet,Bruno Lima,Aurora Moda,Blusa,Inverno 2026,Blusa tricô,GG,Bege,Loja,1,179.00,70.92,0.00,Dobra Moda
+2026-08-21,Agosto,2026,Loja Outlet,Diego Alves,Terra Nova,Calça,Verão 2026,Calça jeans,G,Vermelho,E-commerce,1,176.65,85.41,52.35,Dobra Moda
+2026-01-13,Janeiro,2026,Loja Outlet,Bruno Lima,Pulse Varejo,Calçado,Verão 2026,Tênis corrida,M,Azul,WhatsApp,2,858.00,407.05,0.00,Dobra Moda
+2026-01-11,Janeiro,2026,Loja Centro,Diego Alves,Lumen Tech,Camiseta,Cápsula Urbana,Camiseta básica,PP,Azul,E-commerce,1,75.21,43.64,13.79,Dobra Moda
+2026-04-19,Abril,2026,Loja Outlet,Carla Souza,Maré Energia,Jaqueta,Cápsula Urbana,Blazer,PP,Vermelho,Loja,3,1197.00,545.14,0.00,Dobra Moda
+2026-07-02,Julho,2026,Loja Shopping,Ana Costa,Boa Vista,Calçado,Verão 2026,Tênis casual,P,Verde,Loja,1,349.00,153.95,0.00,Dobra Moda
+2025-12-02,Dezembro,2025,Loja Shopping,Bruno Lima,Pulse Varejo,Calçado,Verão 2026,Tênis casual,P,Branco,Marketplace,1,349.00,202.75,0.00,Dobra Moda
+2025-11-15,Novembro,2025,Loja Shopping,Diego Alves,Maré Energia,Calçado,Verão 2026,Tênis casual,G,Preto,Loja,1,349.00,202.64,0.00,Dobra Moda
+2025-09-30,Setembro,2025,Loja Centro,Carla Souza,Costa Farma,Acessório,Cápsula Urbana,Bolsa transversal,GG,Verde,Loja,1,259.00,132.19,0.00,Dobra Moda
+2026-03-11,Março,2026,Loja Centro,Bruno Lima,Boa Vista,Calça,Inverno 2026,Calça jeans,P,Preto,WhatsApp,3,687.00,418.58,0.00,Dobra Moda
+2026-03-31,Março,2026,Loja Centro,Diego Alves,Costa Farma,Shorts,Cápsula Urbana,Shorts linho,PP,Preto,Loja,2,238.70,141.72,79.30,Dobra Moda
+2025-09-13,Setembro,2025,Loja Centro,Bruno Lima,Forge Engenharia,Acessório,Cápsula Urbana,Meia kit,P,Bege,WhatsApp,1,39.00,23.12,0.00,Dobra Moda
+2025-09-21,Setembro,2025,Loja Centro,Bruno Lima,Pulse Varejo,Jaqueta,Cápsula Urbana,Jaqueta jeans,G,Branco,Loja,1,329.00,148.01,0.00,Dobra Moda
+2026-01-22,Janeiro,2026,Loja Shopping,Bruno Lima,Boa Vista,Jaqueta,Básicos,Blazer,G,Bege,Marketplace,1,399.00,234.26,0.00,Dobra Moda
+2026-06-12,Junho,2026,Loja Shopping,Carla Souza,Costa Farma,Camiseta,Verão 2026,Camiseta básica,P,Azul,E-commerce,1,89.00,34.51,0.00,Dobra Moda
+2026-07-11,Julho,2026,Loja Centro,Eva Martins,Verde Agro,Acessório,Inverno 2026,Meia kit,G,Vermelho,Loja,3,117.00,64.08,0.00,Dobra Moda
+2026-05-11,Maio,2026,Loja Shopping,Bruno Lima,Pampa Alimentos,Calça,Verão 2026,Calça jeans,M,Verde,WhatsApp,1,176.57,72.09,52.43,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Carla Souza,Pulse Varejo,Calça,Cápsula Urbana,Calça jeans,P,Verde,E-commerce,2,458.00,223.79,0.00,Dobra Moda
+2026-03-02,Março,2026,Loja Centro,Diego Alves,Atlas Ltda,Calça,Cápsula Urbana,Calça alfaiataria,M,Preto,Loja,1,223.26,116.26,55.74,Dobra Moda
+2026-05-12,Maio,2026,Loja Centro,Eva Martins,Atlas Ltda,Jaqueta,Verão 2026,Jaqueta jeans,GG,Branco,E-commerce,2,658.00,253.47,0.00,Dobra Moda
+2025-11-24,Novembro,2025,Loja Shopping,Bruno Lima,Terra Nova,Calça,Verão 2026,Calça jeans,M,Azul,E-commerce,2,458.00,259.41,0.00,Dobra Moda
+2025-09-18,Setembro,2025,Loja Centro,Bruno Lima,Lumen Tech,Shorts,Inverno 2026,Shorts linho,PP,Branco,Loja,1,159.00,73.72,0.00,Dobra Moda
+2025-10-05,Outubro,2025,Loja Shopping,Carla Souza,Nimbus SA,Camiseta,Verão 2026,Camiseta básica,GG,Vermelho,Loja,1,89.00,47.75,0.00,Dobra Moda
+2026-02-20,Fevereiro,2026,Loja Centro,Diego Alves,Boa Vista,Vestido,Básicos,Vestido midi,P,Verde,Loja,1,249.00,148.25,0.00,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Outlet,Diego Alves,Orbit Educação,Calça,Verão 2026,Calça alfaiataria,GG,Preto,Loja,2,502.61,301.87,55.39,Dobra Moda
+2026-06-03,Junho,2026,Loja Shopping,Ana Costa,Pulse Varejo,Blusa,Verão 2026,Blusa tricô,G,Azul,E-commerce,1,135.47,60.24,43.53,Dobra Moda
+2026-03-21,Março,2026,Loja Centro,Ana Costa,Orbit Educação,Jaqueta,Inverno 2026,Jaqueta jeans,G,Bege,Loja,2,658.00,347.13,0.00,Dobra Moda
+2026-05-05,Maio,2026,Loja Centro,Diego Alves,Pulse Varejo,Calçado,Básicos,Tênis casual,PP,Verde,Loja,1,349.00,146.03,0.00,Dobra Moda
+2026-04-18,Abril,2026,Loja Centro,Diego Alves,Céu Soft,Jaqueta,Verão 2026,Jaqueta jeans,P,Preto,E-commerce,1,329.00,171.29,0.00,Dobra Moda
+2025-12-28,Dezembro,2025,Loja Shopping,Diego Alves,Aurora Moda,Acessório,Inverno 2026,Cinto couro,GG,Vermelho,Marketplace,1,119.00,69.64,0.00,Dobra Moda
+2026-01-07,Janeiro,2026,Loja Outlet,Diego Alves,Helix Saúde,Jaqueta,Cápsula Urbana,Blazer,P,Preto,Loja,1,399.00,218.77,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Bruno Lima,Costa Farma,Calça,Verão 2026,Calça jeans,P,Branco,E-commerce,1,229.00,136.62,0.00,Dobra Moda
+2025-10-03,Outubro,2025,Loja Shopping,Ana Costa,Costa Farma,Jaqueta,Inverno 2026,Jaqueta jeans,P,Preto,E-commerce,1,329.00,153.02,0.00,Dobra Moda
+2025-10-24,Outubro,2025,Loja Shopping,Diego Alves,Boa Vista,Vestido,Cápsula Urbana,Vestido midi,P,Azul,Loja,1,249.00,125.54,0.00,Dobra Moda
+2025-11-04,Novembro,2025,Loja Outlet,Eva Martins,Verde Agro,Jaqueta,Básicos,Jaqueta jeans,M,Vermelho,Marketplace,1,303.91,186.29,25.09,Dobra Moda
+2025-10-27,Outubro,2025,Loja Outlet,Diego Alves,Rio Branco,Shorts,Verão 2026,Shorts linho,G,Bege,E-commerce,1,159.00,60.70,0.00,Dobra Moda
+2026-06-22,Junho,2026,Loja Outlet,Eva Martins,Sul Minas,Calça,Cápsula Urbana,Calça alfaiataria,M,Preto,Loja,3,837.00,470.24,0.00,Dobra Moda
+2026-07-14,Julho,2026,Loja Shopping,Diego Alves,Costa Farma,Camiseta,Verão 2026,Camiseta básica,GG,Azul,E-commerce,1,89.00,45.42,0.00,Dobra Moda
+2026-03-03,Março,2026,Loja Shopping,Diego Alves,Rio Branco,Acessório,Inverno 2026,Cinto couro,G,Branco,Loja,1,95.47,40.21,23.53,Dobra Moda
+2026-05-19,Maio,2026,Loja Shopping,Bruno Lima,Aurora Moda,Vestido,Básicos,Vestido midi,PP,Verde,Loja,1,207.44,87.21,41.56,Dobra Moda
+2026-06-12,Junho,2026,Loja Centro,Eva Martins,Pulse Varejo,Calça,Básicos,Calça jeans,G,Branco,E-commerce,1,229.00,87.49,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Bruno Lima,Atlas Ltda,Calçado,Verão 2026,Tênis casual,P,Branco,Loja,1,349.00,181.95,0.00,Dobra Moda
+2026-01-19,Janeiro,2026,Loja Centro,Eva Martins,Maré Energia,Camisa,Cápsula Urbana,Camisa linho,P,Vermelho,Loja,1,189.00,98.76,0.00,Dobra Moda
+2025-11-08,Novembro,2025,Loja Centro,Eva Martins,Pampa Alimentos,Jaqueta,Cápsula Urbana,Blazer,P,Branco,Loja,1,312.73,144.56,86.27,Dobra Moda
+2026-01-24,Janeiro,2026,Loja Centro,Ana Costa,Boa Vista,Blusa,Inverno 2026,Blusa tricô,P,Azul,WhatsApp,1,179.00,94.42,0.00,Dobra Moda
+2026-06-03,Junho,2026,Loja Outlet,Bruno Lima,Serra Café,Shorts,Verão 2026,Shorts linho,PP,Bege,Marketplace,1,124.45,50.09,34.55,Dobra Moda
+2026-05-29,Maio,2026,Loja Shopping,Diego Alves,Helix Saúde,Calça,Cápsula Urbana,Calça jeans,PP,Bege,Marketplace,1,229.00,104.63,0.00,Dobra Moda
+2025-11-06,Novembro,2025,Loja Shopping,Ana Costa,Atlas Ltda,Jaqueta,Básicos,Blazer,P,Bege,Loja,1,399.00,219.92,0.00,Dobra Moda
+2026-01-17,Janeiro,2026,Loja Centro,Ana Costa,Lumen Tech,Jaqueta,Inverno 2026,Blazer,G,Preto,Loja,1,399.00,214.73,0.00,Dobra Moda
+2026-07-14,Julho,2026,Loja Centro,Ana Costa,Serra Café,Vestido,Básicos,Vestido midi,M,Azul,Loja,1,214.87,88.73,34.13,Dobra Moda
+2025-12-10,Dezembro,2025,Loja Outlet,Carla Souza,Rio Branco,Calçado,Cápsula Urbana,Tênis casual,PP,Bege,WhatsApp,1,349.00,207.57,0.00,Dobra Moda
+2025-12-16,Dezembro,2025,Loja Shopping,Diego Alves,Forge Engenharia,Acessório,Cápsula Urbana,Bolsa transversal,M,Azul,Loja,1,213.74,83.53,45.26,Dobra Moda
+2026-06-09,Junho,2026,Loja Outlet,Bruno Lima,Pulse Varejo,Calçado,Básicos,Tênis casual,P,Preto,WhatsApp,1,272.48,144.07,76.52,Dobra Moda
+2026-01-25,Janeiro,2026,Loja Shopping,Bruno Lima,Verde Agro,Calçado,Básicos,Tênis corrida,M,Bege,WhatsApp,1,341.36,136.09,87.64,Dobra Moda
+2025-12-10,Dezembro,2025,Loja Centro,Bruno Lima,Pampa Alimentos,Calçado,Básicos,Tênis corrida,GG,Azul,E-commerce,2,858.00,418.42,0.00,Dobra Moda
+2026-03-13,Março,2026,Loja Shopping,Diego Alves,Pulse Varejo,Acessório,Inverno 2026,Meia kit,GG,Bege,E-commerce,2,78.00,40.27,0.00,Dobra Moda
+2026-01-15,Janeiro,2026,Loja Shopping,Bruno Lima,Casa Norte,Camisa,Básicos,Camisa linho,M,Bege,E-commerce,1,189.00,71.97,0.00,Dobra Moda
+2026-01-16,Janeiro,2026,Loja Outlet,Eva Martins,Atlas Ltda,Calça,Verão 2026,Calça jeans,GG,Branco,Loja,1,229.00,99.91,0.00,Dobra Moda
+2025-10-10,Outubro,2025,Loja Shopping,Ana Costa,Delta Log,Vestido,Inverno 2026,Vestido midi,G,Verde,Marketplace,1,212.21,113.62,36.79,Dobra Moda
+2026-05-26,Maio,2026,Loja Shopping,Ana Costa,Sul Minas,Vestido,Cápsula Urbana,Vestido midi,M,Bege,Loja,1,249.00,118.30,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Diego Alves,Sul Minas,Acessório,Verão 2026,Meia kit,M,Vermelho,Loja,1,39.00,18.45,0.00,Dobra Moda
+2026-08-22,Agosto,2026,Loja Outlet,Ana Costa,Nimbus SA,Camisa,Inverno 2026,Camisa linho,G,Bege,Marketplace,1,189.00,105.68,0.00,Dobra Moda
+2025-11-25,Novembro,2025,Loja Outlet,Diego Alves,Sul Minas,Shorts,Cápsula Urbana,Shorts linho,PP,Azul,Marketplace,2,269.22,123.92,48.78,Dobra Moda
+2026-03-06,Março,2026,Loja Centro,Bruno Lima,Verde Agro,Jaqueta,Cápsula Urbana,Blazer,M,Bege,E-commerce,2,798.00,367.87,0.00,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Centro,Ana Costa,Serra Café,Calça,Cápsula Urbana,Calça alfaiataria,PP,Verde,Marketplace,1,279.00,135.48,0.00,Dobra Moda
+2025-12-03,Dezembro,2025,Loja Outlet,Carla Souza,Forge Engenharia,Acessório,Verão 2026,Cinto couro,GG,Bege,E-commerce,1,119.00,69.71,0.00,Dobra Moda
+2026-05-18,Maio,2026,Loja Outlet,Ana Costa,Serra Café,Jaqueta,Cápsula Urbana,Blazer,P,Verde,Loja,1,399.00,183.17,0.00,Dobra Moda
+2026-02-03,Fevereiro,2026,Loja Outlet,Diego Alves,Serra Café,Blusa,Verão 2026,Blusa tricô,M,Vermelho,Loja,2,358.00,195.63,0.00,Dobra Moda
+2025-09-12,Setembro,2025,Loja Outlet,Diego Alves,Nimbus SA,Acessório,Básicos,Meia kit,GG,Bege,WhatsApp,1,35.97,20.82,3.03,Dobra Moda
+2025-10-10,Outubro,2025,Loja Shopping,Diego Alves,Lumen Tech,Calçado,Inverno 2026,Tênis corrida,PP,Preto,Loja,2,858.00,417.22,0.00,Dobra Moda
+2025-11-23,Novembro,2025,Loja Shopping,Bruno Lima,Boa Vista,Shorts,Inverno 2026,Shorts linho,GG,Verde,Loja,3,477.00,281.96,0.00,Dobra Moda
+2026-06-18,Junho,2026,Loja Outlet,Carla Souza,Lumen Tech,Acessório,Inverno 2026,Meia kit,G,Preto,Loja,1,36.11,15.06,2.89,Dobra Moda
+2025-09-04,Setembro,2025,Loja Centro,Diego Alves,Boa Vista,Calçado,Básicos,Tênis corrida,P,Preto,Loja,1,429.00,225.90,0.00,Dobra Moda
+2026-08-23,Agosto,2026,Loja Centro,Bruno Lima,Aurora Moda,Shorts,Básicos,Shorts linho,GG,Vermelho,Loja,1,159.00,69.37,0.00,Dobra Moda
+2026-01-23,Janeiro,2026,Loja Centro,Diego Alves,Terra Nova,Jaqueta,Inverno 2026,Jaqueta jeans,PP,Verde,Loja,2,658.00,316.14,0.00,Dobra Moda
+2026-06-03,Junho,2026,Loja Outlet,Bruno Lima,Costa Farma,Calçado,Inverno 2026,Tênis casual,GG,Verde,E-commerce,1,349.00,216.06,0.00,Dobra Moda
+2026-01-21,Janeiro,2026,Loja Outlet,Ana Costa,Céu Soft,Blusa,Verão 2026,Blusa tricô,G,Bege,E-commerce,2,358.00,195.96,0.00,Dobra Moda
+2025-09-03,Setembro,2025,Loja Centro,Ana Costa,Aurora Moda,Jaqueta,Verão 2026,Blazer,PP,Bege,E-commerce,1,399.00,177.58,0.00,Dobra Moda
+2026-01-08,Janeiro,2026,Loja Outlet,Eva Martins,Forge Engenharia,Acessório,Básicos,Bolsa transversal,PP,Branco,Marketplace,1,259.00,107.24,0.00,Dobra Moda
+2025-09-24,Setembro,2025,Loja Shopping,Carla Souza,Nimbus SA,Camisa,Cápsula Urbana,Camisa linho,PP,Branco,Loja,1,189.00,116.15,0.00,Dobra Moda
+2026-07-20,Julho,2026,Loja Centro,Diego Alves,Pulse Varejo,Calçado,Cápsula Urbana,Tênis corrida,P,Verde,Loja,1,429.00,252.20,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Eva Martins,Aurora Moda,Calçado,Verão 2026,Tênis corrida,PP,Bege,Loja,1,429.00,193.49,0.00,Dobra Moda
+2026-05-18,Maio,2026,Loja Outlet,Diego Alves,Costa Farma,Blusa,Verão 2026,Blusa tricô,PP,Bege,E-commerce,1,179.00,92.29,0.00,Dobra Moda
+2026-04-05,Abril,2026,Loja Shopping,Ana Costa,Pulse Varejo,Shorts,Cápsula Urbana,Shorts linho,G,Bege,Loja,1,159.00,94.17,0.00,Dobra Moda
+2026-06-13,Junho,2026,Loja Centro,Diego Alves,Nimbus SA,Camiseta,Inverno 2026,Camiseta básica,G,Branco,E-commerce,1,89.00,38.95,0.00,Dobra Moda
+2026-01-14,Janeiro,2026,Loja Outlet,Bruno Lima,Costa Farma,Vestido,Básicos,Vestido midi,GG,Vermelho,WhatsApp,1,249.00,130.17,0.00,Dobra Moda
+2026-05-07,Maio,2026,Loja Outlet,Bruno Lima,Delta Log,Camiseta,Inverno 2026,Camiseta básica,M,Branco,Loja,1,71.26,40.94,17.74,Dobra Moda
+2025-09-10,Setembro,2025,Loja Shopping,Carla Souza,Verde Agro,Shorts,Verão 2026,Shorts linho,P,Verde,Marketplace,1,159.00,96.93,0.00,Dobra Moda
+2026-06-19,Junho,2026,Loja Centro,Eva Martins,Serra Café,Calçado,Cápsula Urbana,Tênis casual,PP,Branco,Marketplace,1,349.00,191.61,0.00,Dobra Moda
+2026-01-29,Janeiro,2026,Loja Centro,Carla Souza,Pampa Alimentos,Calça,Inverno 2026,Calça alfaiataria,G,Azul,E-commerce,1,222.37,121.31,56.63,Dobra Moda
+2025-10-11,Outubro,2025,Loja Shopping,Ana Costa,Verde Agro,Acessório,Cápsula Urbana,Cinto couro,M,Verde,E-commerce,1,119.00,55.71,0.00,Dobra Moda
+2025-10-31,Outubro,2025,Loja Centro,Eva Martins,Pampa Alimentos,Jaqueta,Básicos,Jaqueta jeans,G,Bege,Loja,2,658.00,407.66,0.00,Dobra Moda
+2025-12-11,Dezembro,2025,Loja Outlet,Eva Martins,Maré Energia,Calça,Básicos,Calça jeans,GG,Preto,Loja,1,199.08,97.80,29.92,Dobra Moda
+2026-06-25,Junho,2026,Loja Outlet,Bruno Lima,Orbit Educação,Vestido,Verão 2026,Vestido midi,M,Branco,E-commerce,1,249.00,149.08,0.00,Dobra Moda
+2026-03-18,Março,2026,Loja Centro,Diego Alves,Maré Energia,Calça,Cápsula Urbana,Calça jeans,PP,Bege,Marketplace,1,229.00,121.09,0.00,Dobra Moda
+2026-06-19,Junho,2026,Loja Outlet,Eva Martins,Orbit Educação,Shorts,Inverno 2026,Shorts linho,P,Azul,E-commerce,1,140.09,73.75,18.91,Dobra Moda
+2026-05-03,Maio,2026,Loja Shopping,Diego Alves,Terra Nova,Acessório,Inverno 2026,Meia kit,M,Bege,Loja,3,117.00,57.49,0.00,Dobra Moda
+2025-11-02,Novembro,2025,Loja Shopping,Eva Martins,Verde Agro,Calça,Verão 2026,Calça alfaiataria,M,Branco,E-commerce,1,235.85,138.70,43.15,Dobra Moda
+2025-12-07,Dezembro,2025,Loja Centro,Ana Costa,Delta Log,Acessório,Básicos,Bolsa transversal,PP,Vermelho,Marketplace,1,239.52,91.58,19.48,Dobra Moda
+2026-08-24,Agosto,2026,Loja Centro,Carla Souza,Verde Agro,Calçado,Verão 2026,Tênis casual,M,Vermelho,Marketplace,3,865.46,484.03,181.54,Dobra Moda
+2025-10-07,Outubro,2025,Loja Shopping,Bruno Lima,Sul Minas,Calça,Cápsula Urbana,Calça alfaiataria,P,Preto,E-commerce,1,236.22,122.36,42.78,Dobra Moda
+2026-06-04,Junho,2026,Loja Centro,Bruno Lima,Delta Log,Jaqueta,Verão 2026,Blazer,M,Verde,Marketplace,1,399.00,188.37,0.00,Dobra Moda
+2026-07-30,Julho,2026,Loja Outlet,Diego Alves,Maré Energia,Calça,Cápsula Urbana,Calça jeans,GG,Preto,E-commerce,1,202.12,88.07,26.88,Dobra Moda
+2026-01-12,Janeiro,2026,Loja Outlet,Eva Martins,Nimbus SA,Calçado,Básicos,Tênis corrida,G,Verde,Loja,2,858.00,514.53,0.00,Dobra Moda
+2025-09-03,Setembro,2025,Loja Centro,Diego Alves,Terra Nova,Camisa,Cápsula Urbana,Camisa linho,G,Preto,Marketplace,1,189.00,100.30,0.00,Dobra Moda
+2026-04-09,Abril,2026,Loja Outlet,Carla Souza,Atlas Ltda,Shorts,Básicos,Shorts linho,P,Azul,E-commerce,1,159.00,89.33,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Eva Martins,Aurora Moda,Acessório,Cápsula Urbana,Cinto couro,PP,Preto,Loja,1,111.32,47.49,7.68,Dobra Moda
+2026-05-09,Maio,2026,Loja Centro,Bruno Lima,Maré Energia,Calçado,Verão 2026,Tênis casual,GG,Vermelho,Loja,1,296.91,181.99,52.09,Dobra Moda
+2025-09-24,Setembro,2025,Loja Outlet,Eva Martins,Forge Engenharia,Calça,Inverno 2026,Calça jeans,GG,Bege,Loja,1,229.00,127.92,0.00,Dobra Moda
+2026-04-24,Abril,2026,Loja Shopping,Carla Souza,Céu Soft,Camiseta,Básicos,Camiseta básica,GG,Verde,Loja,1,89.00,51.13,0.00,Dobra Moda
+2026-01-17,Janeiro,2026,Loja Shopping,Bruno Lima,Verde Agro,Calçado,Básicos,Tênis casual,PP,Preto,E-commerce,1,349.00,212.93,0.00,Dobra Moda
+2026-04-29,Abril,2026,Loja Shopping,Ana Costa,Sul Minas,Jaqueta,Básicos,Blazer,PP,Bege,E-commerce,1,399.00,209.87,0.00,Dobra Moda
+2026-08-03,Agosto,2026,Loja Shopping,Diego Alves,Lumen Tech,Calça,Básicos,Calça jeans,PP,Verde,WhatsApp,2,458.00,182.66,0.00,Dobra Moda
+2026-06-13,Junho,2026,Loja Outlet,Ana Costa,Aurora Moda,Acessório,Cápsula Urbana,Bolsa transversal,M,Azul,E-commerce,1,228.11,127.30,30.89,Dobra Moda
+2026-07-15,Julho,2026,Loja Centro,Diego Alves,Rio Branco,Jaqueta,Verão 2026,Blazer,PP,Azul,Loja,1,325.87,195.93,73.13,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Shopping,Ana Costa,Sul Minas,Acessório,Básicos,Meia kit,PP,Branco,E-commerce,2,78.00,35.61,0.00,Dobra Moda
+2026-06-07,Junho,2026,Loja Centro,Eva Martins,Serra Café,Calça,Cápsula Urbana,Calça jeans,P,Vermelho,E-commerce,1,229.00,88.35,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Carla Souza,Atlas Ltda,Calçado,Cápsula Urbana,Tênis corrida,GG,Verde,Loja,1,429.00,220.13,0.00,Dobra Moda
+2026-03-20,Março,2026,Loja Shopping,Carla Souza,Maré Energia,Jaqueta,Inverno 2026,Jaqueta jeans,P,Vermelho,Loja,1,329.00,132.17,0.00,Dobra Moda
+2026-04-02,Abril,2026,Loja Shopping,Carla Souza,Costa Farma,Calça,Verão 2026,Calça jeans,GG,Verde,Marketplace,1,229.00,120.27,0.00,Dobra Moda
+2026-04-10,Abril,2026,Loja Shopping,Ana Costa,Terra Nova,Calçado,Inverno 2026,Tênis casual,PP,Vermelho,E-commerce,1,349.00,183.30,0.00,Dobra Moda
+2026-07-04,Julho,2026,Loja Outlet,Carla Souza,Verde Agro,Acessório,Verão 2026,Cinto couro,PP,Branco,E-commerce,1,119.00,65.87,0.00,Dobra Moda
+2025-11-14,Novembro,2025,Loja Shopping,Eva Martins,Nimbus SA,Acessório,Básicos,Bolsa transversal,P,Bege,Loja,1,228.68,102.03,30.32,Dobra Moda
+2026-08-03,Agosto,2026,Loja Shopping,Bruno Lima,Orbit Educação,Camisa,Verão 2026,Camisa linho,M,Branco,E-commerce,1,189.00,73.29,0.00,Dobra Moda
+2026-04-29,Abril,2026,Loja Outlet,Carla Souza,Delta Log,Blusa,Cápsula Urbana,Blusa tricô,PP,Verde,E-commerce,1,179.00,79.73,0.00,Dobra Moda
+2026-08-14,Agosto,2026,Loja Shopping,Ana Costa,Delta Log,Acessório,Cápsula Urbana,Bolsa transversal,PP,Verde,E-commerce,1,259.00,110.65,0.00,Dobra Moda
+2026-01-03,Janeiro,2026,Loja Shopping,Diego Alves,Orbit Educação,Shorts,Cápsula Urbana,Shorts linho,P,Branco,Loja,1,159.00,78.96,0.00,Dobra Moda
+2026-06-23,Junho,2026,Loja Centro,Diego Alves,Forge Engenharia,Jaqueta,Básicos,Blazer,PP,Branco,Loja,3,1197.00,735.31,0.00,Dobra Moda
+2026-06-12,Junho,2026,Loja Centro,Carla Souza,Nimbus SA,Calçado,Cápsula Urbana,Tênis casual,P,Preto,Loja,1,349.00,175.92,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Ana Costa,Maré Energia,Jaqueta,Básicos,Blazer,PP,Verde,E-commerce,2,798.00,328.00,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Ana Costa,Verde Agro,Camiseta,Verão 2026,Camiseta básica,P,Azul,Loja,2,178.00,92.95,0.00,Dobra Moda
+2026-07-09,Julho,2026,Loja Shopping,Carla Souza,Boa Vista,Vestido,Cápsula Urbana,Vestido midi,GG,Azul,Loja,1,249.00,140.48,0.00,Dobra Moda
+2025-10-28,Outubro,2025,Loja Outlet,Eva Martins,Maré Energia,Shorts,Verão 2026,Shorts linho,P,Bege,Loja,1,138.57,54.30,20.43,Dobra Moda
+2026-05-11,Maio,2026,Loja Centro,Ana Costa,Aurora Moda,Vestido,Básicos,Vestido midi,GG,Verde,Loja,1,222.94,118.43,26.06,Dobra Moda
+2026-01-25,Janeiro,2026,Loja Centro,Eva Martins,Terra Nova,Jaqueta,Cápsula Urbana,Jaqueta jeans,M,Vermelho,Loja,1,275.87,146.58,53.13,Dobra Moda
+2025-12-18,Dezembro,2025,Loja Shopping,Diego Alves,Pulse Varejo,Vestido,Inverno 2026,Vestido midi,GG,Vermelho,Loja,2,498.00,280.32,0.00,Dobra Moda
+2025-11-03,Novembro,2025,Loja Centro,Diego Alves,Helix Saúde,Calçado,Cápsula Urbana,Tênis casual,P,Azul,E-commerce,1,282.73,133.22,66.27,Dobra Moda
+2025-09-16,Setembro,2025,Loja Shopping,Diego Alves,Atlas Ltda,Calçado,Inverno 2026,Tênis casual,P,Azul,WhatsApp,1,349.00,186.26,0.00,Dobra Moda
+2025-10-03,Outubro,2025,Loja Centro,Ana Costa,Céu Soft,Jaqueta,Inverno 2026,Jaqueta jeans,PP,Bege,E-commerce,1,287.91,123.16,41.09,Dobra Moda
+2025-10-19,Outubro,2025,Loja Centro,Carla Souza,Orbit Educação,Jaqueta,Inverno 2026,Jaqueta jeans,M,Azul,Loja,1,329.00,159.77,0.00,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Outlet,Diego Alves,Costa Farma,Shorts,Básicos,Shorts linho,P,Preto,E-commerce,1,159.00,70.55,0.00,Dobra Moda
+2026-02-11,Fevereiro,2026,Loja Shopping,Diego Alves,Helix Saúde,Acessório,Verão 2026,Cinto couro,GG,Vermelho,E-commerce,3,357.00,185.66,0.00,Dobra Moda
+2026-03-23,Março,2026,Loja Shopping,Eva Martins,Lumen Tech,Jaqueta,Cápsula Urbana,Blazer,M,Bege,WhatsApp,3,1197.00,698.36,0.00,Dobra Moda
+2026-06-11,Junho,2026,Loja Shopping,Eva Martins,Céu Soft,Calça,Cápsula Urbana,Calça alfaiataria,GG,Preto,Loja,1,279.00,146.68,0.00,Dobra Moda
+2026-04-28,Abril,2026,Loja Outlet,Diego Alves,Rio Branco,Camiseta,Verão 2026,Camiseta básica,GG,Azul,Loja,2,178.00,110.10,0.00,Dobra Moda
+2025-09-04,Setembro,2025,Loja Outlet,Carla Souza,Maré Energia,Acessório,Cápsula Urbana,Bolsa transversal,P,Branco,Loja,1,259.00,108.61,0.00,Dobra Moda
+2025-11-13,Novembro,2025,Loja Outlet,Bruno Lima,Lumen Tech,Acessório,Cápsula Urbana,Cinto couro,M,Azul,Loja,2,238.00,102.59,0.00,Dobra Moda
+2026-06-15,Junho,2026,Loja Shopping,Diego Alves,Terra Nova,Calça,Inverno 2026,Calça jeans,M,Branco,Loja,1,229.00,131.84,0.00,Dobra Moda
+2025-12-31,Dezembro,2025,Loja Outlet,Bruno Lima,Nimbus SA,Shorts,Inverno 2026,Shorts linho,P,Vermelho,Loja,3,384.37,226.09,92.63,Dobra Moda
+2026-06-22,Junho,2026,Loja Outlet,Bruno Lima,Verde Agro,Camisa,Inverno 2026,Camisa linho,GG,Azul,Loja,1,189.00,74.78,0.00,Dobra Moda
+2025-12-18,Dezembro,2025,Loja Outlet,Ana Costa,Rio Branco,Vestido,Básicos,Vestido midi,M,Preto,Loja,1,207.12,86.13,41.88,Dobra Moda
+2026-01-16,Janeiro,2026,Loja Shopping,Carla Souza,Maré Energia,Acessório,Verão 2026,Cinto couro,P,Verde,Marketplace,1,119.00,46.86,0.00,Dobra Moda
+2025-11-03,Novembro,2025,Loja Centro,Bruno Lima,Orbit Educação,Camiseta,Inverno 2026,Camiseta básica,G,Vermelho,E-commerce,1,89.00,50.66,0.00,Dobra Moda
+2025-11-17,Novembro,2025,Loja Centro,Diego Alves,Casa Norte,Calça,Verão 2026,Calça jeans,G,Bege,Marketplace,1,229.00,99.02,0.00,Dobra Moda
+2026-05-03,Maio,2026,Loja Shopping,Ana Costa,Verde Agro,Camiseta,Cápsula Urbana,Camiseta básica,PP,Azul,E-commerce,3,267.00,114.75,0.00,Dobra Moda
+2025-11-26,Novembro,2025,Loja Centro,Diego Alves,Delta Log,Shorts,Verão 2026,Shorts linho,P,Bege,Loja,1,131.01,52.45,27.99,Dobra Moda
+2026-08-12,Agosto,2026,Loja Outlet,Bruno Lima,Maré Energia,Blusa,Cápsula Urbana,Blusa tricô,G,Branco,Loja,2,358.00,201.22,0.00,Dobra Moda
+2025-09-02,Setembro,2025,Loja Centro,Bruno Lima,Serra Café,Acessório,Inverno 2026,Meia kit,GG,Vermelho,Marketplace,3,117.00,44.85,0.00,Dobra Moda
+2026-07-22,Julho,2026,Loja Shopping,Diego Alves,Forge Engenharia,Acessório,Básicos,Meia kit,GG,Bege,Loja,2,78.00,46.17,0.00,Dobra Moda
+2026-07-02,Julho,2026,Loja Outlet,Eva Martins,Rio Branco,Calçado,Básicos,Tênis casual,GG,Preto,Loja,1,295.06,127.53,53.94,Dobra Moda
+2026-08-28,Agosto,2026,Loja Shopping,Carla Souza,Atlas Ltda,Calçado,Básicos,Tênis corrida,GG,Vermelho,WhatsApp,1,429.00,226.88,0.00,Dobra Moda
+2025-12-16,Dezembro,2025,Loja Centro,Bruno Lima,Orbit Educação,Calça,Inverno 2026,Calça jeans,GG,Azul,WhatsApp,2,458.00,222.02,0.00,Dobra Moda
+2025-10-22,Outubro,2025,Loja Outlet,Ana Costa,Helix Saúde,Calça,Básicos,Calça jeans,GG,Azul,E-commerce,1,229.00,119.21,0.00,Dobra Moda
+2026-02-21,Fevereiro,2026,Loja Shopping,Bruno Lima,Orbit Educação,Calça,Inverno 2026,Calça alfaiataria,GG,Verde,E-commerce,1,260.96,142.07,18.04,Dobra Moda
+2026-02-03,Fevereiro,2026,Loja Centro,Carla Souza,Serra Café,Calçado,Cápsula Urbana,Tênis casual,GG,Vermelho,E-commerce,1,349.00,210.45,0.00,Dobra Moda
+2026-05-21,Maio,2026,Loja Outlet,Eva Martins,Rio Branco,Acessório,Verão 2026,Bolsa transversal,M,Vermelho,E-commerce,1,196.05,84.15,62.95,Dobra Moda
+2026-01-27,Janeiro,2026,Loja Centro,Carla Souza,Boa Vista,Camisa,Básicos,Camisa linho,G,Azul,Loja,1,153.18,94.51,35.82,Dobra Moda
+2026-06-22,Junho,2026,Loja Centro,Carla Souza,Casa Norte,Shorts,Cápsula Urbana,Shorts linho,G,Verde,Loja,1,159.00,70.76,0.00,Dobra Moda
+2026-03-18,Março,2026,Loja Outlet,Diego Alves,Orbit Educação,Calça,Inverno 2026,Calça alfaiataria,G,Preto,Loja,2,558.00,342.09,0.00,Dobra Moda
+2026-06-06,Junho,2026,Loja Centro,Ana Costa,Maré Energia,Camiseta,Básicos,Camiseta básica,M,Azul,E-commerce,1,83.06,39.55,5.94,Dobra Moda
+2026-08-17,Agosto,2026,Loja Shopping,Carla Souza,Aurora Moda,Calçado,Básicos,Tênis corrida,G,Azul,Loja,1,364.71,219.71,64.29,Dobra Moda
+2025-11-28,Novembro,2025,Loja Shopping,Carla Souza,Casa Norte,Vestido,Cápsula Urbana,Vestido midi,GG,Branco,Loja,1,236.21,111.67,12.79,Dobra Moda
+2025-09-30,Setembro,2025,Loja Centro,Bruno Lima,Pulse Varejo,Jaqueta,Básicos,Jaqueta jeans,M,Azul,Loja,1,329.00,145.18,0.00,Dobra Moda
+2026-05-21,Maio,2026,Loja Centro,Bruno Lima,Casa Norte,Shorts,Cápsula Urbana,Shorts linho,GG,Bege,Loja,1,159.00,60.61,0.00,Dobra Moda
+2025-12-29,Dezembro,2025,Loja Centro,Diego Alves,Atlas Ltda,Acessório,Inverno 2026,Meia kit,G,Branco,Loja,1,39.00,15.21,0.00,Dobra Moda
+2026-07-16,Julho,2026,Loja Shopping,Ana Costa,Pulse Varejo,Vestido,Verão 2026,Vestido midi,M,Vermelho,Loja,2,381.84,192.08,116.16,Dobra Moda
+2026-07-11,Julho,2026,Loja Outlet,Ana Costa,Lumen Tech,Acessório,Básicos,Cinto couro,GG,Preto,E-commerce,1,98.56,58.10,20.44,Dobra Moda
+2026-04-10,Abril,2026,Loja Outlet,Diego Alves,Orbit Educação,Blusa,Básicos,Blusa tricô,M,Branco,E-commerce,1,179.00,93.64,0.00,Dobra Moda
+2025-10-27,Outubro,2025,Loja Shopping,Carla Souza,Nimbus SA,Calça,Cápsula Urbana,Calça alfaiataria,P,Azul,E-commerce,1,279.00,141.28,0.00,Dobra Moda
+2026-03-13,Março,2026,Loja Outlet,Carla Souza,Rio Branco,Acessório,Inverno 2026,Bolsa transversal,GG,Azul,E-commerce,1,219.66,135.33,39.34,Dobra Moda
+2026-02-20,Fevereiro,2026,Loja Outlet,Diego Alves,Atlas Ltda,Shorts,Inverno 2026,Shorts linho,GG,Azul,Loja,2,318.00,124.29,0.00,Dobra Moda
+2026-07-31,Julho,2026,Loja Outlet,Eva Martins,Orbit Educação,Acessório,Básicos,Meia kit,GG,Azul,E-commerce,2,70.46,28.30,7.54,Dobra Moda
+2025-09-09,Setembro,2025,Loja Outlet,Diego Alves,Céu Soft,Calçado,Cápsula Urbana,Tênis casual,M,Verde,Loja,1,328.70,132.51,20.30,Dobra Moda
+2026-03-05,Março,2026,Loja Centro,Eva Martins,Maré Energia,Shorts,Básicos,Shorts linho,GG,Vermelho,Loja,1,159.00,85.46,0.00,Dobra Moda
+2025-09-02,Setembro,2025,Loja Shopping,Eva Martins,Serra Café,Calçado,Básicos,Tênis corrida,PP,Verde,Loja,1,429.00,249.41,0.00,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Outlet,Carla Souza,Sul Minas,Blusa,Cápsula Urbana,Blusa tricô,GG,Azul,Loja,2,276.27,107.05,81.73,Dobra Moda
+2026-04-04,Abril,2026,Loja Shopping,Bruno Lima,Atlas Ltda,Acessório,Cápsula Urbana,Meia kit,G,Branco,WhatsApp,1,39.00,16.78,0.00,Dobra Moda
+2025-12-19,Dezembro,2025,Loja Centro,Eva Martins,Forge Engenharia,Blusa,Cápsula Urbana,Blusa tricô,GG,Verde,Loja,3,537.00,215.20,0.00,Dobra Moda
+2025-11-15,Novembro,2025,Loja Shopping,Eva Martins,Sul Minas,Jaqueta,Verão 2026,Blazer,G,Branco,Loja,2,798.00,411.09,0.00,Dobra Moda
+2026-04-24,Abril,2026,Loja Outlet,Eva Martins,Boa Vista,Acessório,Verão 2026,Cinto couro,P,Branco,Loja,1,119.00,48.62,0.00,Dobra Moda
+2026-08-14,Agosto,2026,Loja Shopping,Carla Souza,Costa Farma,Acessório,Cápsula Urbana,Meia kit,PP,Vermelho,WhatsApp,1,30.71,17.29,8.29,Dobra Moda
+2026-01-22,Janeiro,2026,Loja Shopping,Ana Costa,Céu Soft,Acessório,Cápsula Urbana,Bolsa transversal,G,Azul,Loja,1,259.00,118.50,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Eva Martins,Nimbus SA,Calçado,Cápsula Urbana,Tênis corrida,P,Bege,E-commerce,1,429.00,252.07,0.00,Dobra Moda
+2026-02-28,Fevereiro,2026,Loja Outlet,Carla Souza,Pampa Alimentos,Shorts,Cápsula Urbana,Shorts linho,P,Bege,WhatsApp,1,159.00,62.64,0.00,Dobra Moda
+2025-12-17,Dezembro,2025,Loja Outlet,Ana Costa,Orbit Educação,Calçado,Verão 2026,Tênis corrida,G,Bege,Loja,1,429.00,205.34,0.00,Dobra Moda
+2025-12-31,Dezembro,2025,Loja Outlet,Eva Martins,Atlas Ltda,Shorts,Básicos,Shorts linho,PP,Verde,WhatsApp,1,147.41,78.36,11.59,Dobra Moda
+2026-06-07,Junho,2026,Loja Outlet,Diego Alves,Helix Saúde,Camisa,Inverno 2026,Camisa linho,PP,Vermelho,WhatsApp,1,189.00,107.61,0.00,Dobra Moda
+2025-09-04,Setembro,2025,Loja Centro,Ana Costa,Nimbus SA,Jaqueta,Cápsula Urbana,Blazer,GG,Branco,Loja,1,399.00,244.10,0.00,Dobra Moda
+2025-11-15,Novembro,2025,Loja Centro,Bruno Lima,Costa Farma,Shorts,Cápsula Urbana,Shorts linho,M,Verde,Marketplace,1,159.00,83.57,0.00,Dobra Moda
+2025-09-24,Setembro,2025,Loja Outlet,Diego Alves,Casa Norte,Calça,Inverno 2026,Calça alfaiataria,P,Azul,Loja,2,475.32,233.13,82.68,Dobra Moda
+2026-04-17,Abril,2026,Loja Centro,Bruno Lima,Helix Saúde,Camiseta,Básicos,Camiseta básica,M,Azul,E-commerce,2,178.00,99.24,0.00,Dobra Moda
+2026-08-15,Agosto,2026,Loja Shopping,Bruno Lima,Forge Engenharia,Acessório,Cápsula Urbana,Meia kit,GG,Verde,E-commerce,2,78.00,46.58,0.00,Dobra Moda
+2025-12-23,Dezembro,2025,Loja Shopping,Carla Souza,Casa Norte,Calçado,Inverno 2026,Tênis corrida,PP,Preto,Loja,1,429.00,190.14,0.00,Dobra Moda
+2026-02-05,Fevereiro,2026,Loja Centro,Bruno Lima,Aurora Moda,Calçado,Verão 2026,Tênis casual,P,Bege,E-commerce,3,1047.00,574.15,0.00,Dobra Moda
+2026-04-16,Abril,2026,Loja Outlet,Eva Martins,Forge Engenharia,Camisa,Verão 2026,Camisa linho,GG,Vermelho,Loja,1,189.00,108.98,0.00,Dobra Moda
+2026-04-19,Abril,2026,Loja Shopping,Carla Souza,Pampa Alimentos,Shorts,Cápsula Urbana,Shorts linho,GG,Azul,Loja,1,122.99,53.59,36.01,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Diego Alves,Delta Log,Shorts,Verão 2026,Shorts linho,PP,Bege,Loja,2,253.68,110.52,64.32,Dobra Moda
+2025-11-08,Novembro,2025,Loja Centro,Carla Souza,Boa Vista,Shorts,Cápsula Urbana,Shorts linho,M,Bege,E-commerce,1,135.19,72.85,23.81,Dobra Moda
+2025-11-22,Novembro,2025,Loja Centro,Ana Costa,Casa Norte,Shorts,Cápsula Urbana,Shorts linho,GG,Vermelho,Loja,2,318.00,171.41,0.00,Dobra Moda
+2025-09-20,Setembro,2025,Loja Outlet,Carla Souza,Pulse Varejo,Calça,Inverno 2026,Calça jeans,P,Branco,Loja,1,191.94,115.40,37.06,Dobra Moda
+2026-03-12,Março,2026,Loja Outlet,Carla Souza,Sul Minas,Acessório,Inverno 2026,Meia kit,GG,Bege,WhatsApp,3,117.00,59.90,0.00,Dobra Moda
+2025-09-13,Setembro,2025,Loja Outlet,Carla Souza,Serra Café,Calçado,Inverno 2026,Tênis casual,PP,Azul,E-commerce,2,552.16,322.00,145.84,Dobra Moda
+2026-06-21,Junho,2026,Loja Shopping,Carla Souza,Terra Nova,Jaqueta,Verão 2026,Jaqueta jeans,G,Preto,Loja,1,329.00,197.79,0.00,Dobra Moda
+2026-02-20,Fevereiro,2026,Loja Outlet,Ana Costa,Serra Café,Camiseta,Verão 2026,Camiseta básica,M,Preto,Loja,3,267.00,106.39,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Eva Martins,Costa Farma,Acessório,Inverno 2026,Meia kit,G,Bege,Loja,1,39.00,21.36,0.00,Dobra Moda
+2025-11-05,Novembro,2025,Loja Shopping,Bruno Lima,Lumen Tech,Shorts,Verão 2026,Shorts linho,P,Bege,Marketplace,2,318.00,161.75,0.00,Dobra Moda
+2026-07-22,Julho,2026,Loja Outlet,Eva Martins,Serra Café,Jaqueta,Inverno 2026,Jaqueta jeans,PP,Verde,WhatsApp,3,987.00,511.30,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Diego Alves,Forge Engenharia,Jaqueta,Verão 2026,Blazer,P,Azul,E-commerce,1,319.50,197.32,79.50,Dobra Moda
+2026-01-02,Janeiro,2026,Loja Centro,Bruno Lima,Verde Agro,Vestido,Básicos,Vestido midi,GG,Verde,E-commerce,1,249.00,96.54,0.00,Dobra Moda
+2025-10-08,Outubro,2025,Loja Shopping,Diego Alves,Pampa Alimentos,Calça,Verão 2026,Calça alfaiataria,PP,Bege,WhatsApp,2,558.00,286.20,0.00,Dobra Moda
+2026-07-12,Julho,2026,Loja Shopping,Ana Costa,Costa Farma,Camisa,Básicos,Camisa linho,PP,Verde,Loja,1,189.00,84.34,0.00,Dobra Moda
+2026-01-04,Janeiro,2026,Loja Shopping,Diego Alves,Delta Log,Acessório,Inverno 2026,Bolsa transversal,G,Preto,Loja,2,460.60,218.74,57.40,Dobra Moda
+2026-03-16,Março,2026,Loja Shopping,Diego Alves,Terra Nova,Calça,Básicos,Calça alfaiataria,M,Verde,E-commerce,1,252.88,130.54,26.12,Dobra Moda
+2026-07-25,Julho,2026,Loja Shopping,Ana Costa,Delta Log,Calça,Verão 2026,Calça jeans,PP,Branco,Marketplace,1,229.00,133.78,0.00,Dobra Moda
+2026-06-08,Junho,2026,Loja Outlet,Bruno Lima,Costa Farma,Jaqueta,Básicos,Jaqueta jeans,M,Verde,Loja,1,259.81,120.13,69.19,Dobra Moda
+2025-11-12,Novembro,2025,Loja Shopping,Diego Alves,Verde Agro,Calça,Inverno 2026,Calça jeans,PP,Azul,Marketplace,1,229.00,118.49,0.00,Dobra Moda
+2026-01-20,Janeiro,2026,Loja Shopping,Carla Souza,Boa Vista,Jaqueta,Inverno 2026,Blazer,P,Azul,Loja,2,798.00,374.83,0.00,Dobra Moda
+2026-01-12,Janeiro,2026,Loja Outlet,Carla Souza,Lumen Tech,Acessório,Verão 2026,Cinto couro,P,Vermelho,Loja,2,238.00,119.97,0.00,Dobra Moda
+2025-09-08,Setembro,2025,Loja Centro,Eva Martins,Lumen Tech,Shorts,Verão 2026,Shorts linho,GG,Azul,E-commerce,1,135.29,65.55,23.71,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Carla Souza,Lumen Tech,Camisa,Verão 2026,Camisa linho,M,Preto,Marketplace,2,378.00,231.19,0.00,Dobra Moda
+2026-01-07,Janeiro,2026,Loja Centro,Ana Costa,Rio Branco,Calça,Verão 2026,Calça alfaiataria,GG,Bege,Loja,1,279.00,117.46,0.00,Dobra Moda
+2026-07-12,Julho,2026,Loja Centro,Carla Souza,Céu Soft,Blusa,Verão 2026,Blusa tricô,G,Vermelho,E-commerce,1,179.00,86.20,0.00,Dobra Moda
+2025-09-02,Setembro,2025,Loja Centro,Ana Costa,Pampa Alimentos,Calça,Básicos,Calça jeans,P,Vermelho,E-commerce,2,458.00,246.21,0.00,Dobra Moda
+2025-09-07,Setembro,2025,Loja Shopping,Carla Souza,Aurora Moda,Jaqueta,Verão 2026,Blazer,M,Branco,Loja,1,374.72,228.64,24.28,Dobra Moda
+2025-10-19,Outubro,2025,Loja Centro,Carla Souza,Forge Engenharia,Camisa,Básicos,Camisa linho,M,Vermelho,E-commerce,1,164.29,81.37,24.71,Dobra Moda
+2025-11-12,Novembro,2025,Loja Centro,Bruno Lima,Casa Norte,Camiseta,Inverno 2026,Camiseta básica,P,Branco,WhatsApp,1,89.00,42.89,0.00,Dobra Moda
+2026-01-21,Janeiro,2026,Loja Centro,Bruno Lima,Nimbus SA,Camiseta,Básicos,Camiseta básica,G,Branco,E-commerce,1,69.08,35.98,19.92,Dobra Moda
+2025-10-19,Outubro,2025,Loja Centro,Bruno Lima,Costa Farma,Blusa,Básicos,Blusa tricô,P,Branco,E-commerce,2,358.00,209.10,0.00,Dobra Moda
+2025-12-08,Dezembro,2025,Loja Centro,Bruno Lima,Pulse Varejo,Calça,Inverno 2026,Calça alfaiataria,GG,Azul,Loja,1,279.00,140.64,0.00,Dobra Moda
+2026-03-30,Março,2026,Loja Shopping,Carla Souza,Terra Nova,Blusa,Cápsula Urbana,Blusa tricô,G,Preto,Loja,1,159.16,79.60,19.84,Dobra Moda
+2026-06-26,Junho,2026,Loja Outlet,Carla Souza,Verde Agro,Calçado,Cápsula Urbana,Tênis corrida,G,Vermelho,E-commerce,1,392.63,154.34,36.37,Dobra Moda
+2026-07-18,Julho,2026,Loja Shopping,Bruno Lima,Terra Nova,Acessório,Cápsula Urbana,Meia kit,P,Azul,Loja,2,65.16,34.72,12.84,Dobra Moda
+2025-10-18,Outubro,2025,Loja Shopping,Carla Souza,Aurora Moda,Jaqueta,Verão 2026,Jaqueta jeans,M,Bege,WhatsApp,1,329.00,202.55,0.00,Dobra Moda
+2026-03-19,Março,2026,Loja Shopping,Diego Alves,Delta Log,Calça,Verão 2026,Calça jeans,M,Bege,WhatsApp,1,188.26,74.27,40.74,Dobra Moda
+2026-03-09,Março,2026,Loja Centro,Carla Souza,Céu Soft,Calça,Básicos,Calça alfaiataria,G,Bege,E-commerce,1,279.00,152.76,0.00,Dobra Moda
+2026-08-08,Agosto,2026,Loja Outlet,Diego Alves,Orbit Educação,Calça,Básicos,Calça alfaiataria,P,Branco,Loja,1,279.00,152.81,0.00,Dobra Moda
+2026-03-18,Março,2026,Loja Centro,Diego Alves,Maré Energia,Calçado,Inverno 2026,Tênis casual,GG,Branco,Loja,3,973.03,480.63,73.97,Dobra Moda
+2025-12-18,Dezembro,2025,Loja Shopping,Bruno Lima,Boa Vista,Blusa,Verão 2026,Blusa tricô,G,Preto,Loja,1,179.00,89.51,0.00,Dobra Moda
+2026-06-03,Junho,2026,Loja Outlet,Eva Martins,Sul Minas,Calça,Verão 2026,Calça jeans,G,Preto,Loja,1,229.00,122.13,0.00,Dobra Moda
+2025-12-24,Dezembro,2025,Loja Outlet,Bruno Lima,Céu Soft,Blusa,Verão 2026,Blusa tricô,PP,Branco,Loja,3,467.87,265.56,69.13,Dobra Moda
+2025-12-16,Dezembro,2025,Loja Centro,Ana Costa,Costa Farma,Calçado,Cápsula Urbana,Tênis casual,G,Verde,Marketplace,1,283.31,160.35,65.69,Dobra Moda
+2025-09-10,Setembro,2025,Loja Centro,Ana Costa,Orbit Educação,Calçado,Verão 2026,Tênis corrida,M,Bege,WhatsApp,2,858.00,382.69,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Carla Souza,Orbit Educação,Acessório,Inverno 2026,Bolsa transversal,G,Vermelho,Loja,1,259.00,123.09,0.00,Dobra Moda
+2026-03-27,Março,2026,Loja Outlet,Eva Martins,Delta Log,Calça,Verão 2026,Calça alfaiataria,P,Bege,WhatsApp,2,517.95,214.06,40.05,Dobra Moda
+2026-01-13,Janeiro,2026,Loja Shopping,Diego Alves,Delta Log,Calçado,Cápsula Urbana,Tênis corrida,PP,Verde,Loja,2,700.51,296.71,157.49,Dobra Moda
+2026-08-11,Agosto,2026,Loja Shopping,Bruno Lima,Terra Nova,Camiseta,Verão 2026,Camiseta básica,PP,Preto,Marketplace,1,89.00,38.61,0.00,Dobra Moda
+2025-10-26,Outubro,2025,Loja Shopping,Bruno Lima,Boa Vista,Calça,Básicos,Calça jeans,GG,Preto,WhatsApp,1,229.00,88.53,0.00,Dobra Moda
+2025-10-12,Outubro,2025,Loja Outlet,Diego Alves,Rio Branco,Calça,Inverno 2026,Calça alfaiataria,M,Verde,WhatsApp,1,249.88,123.51,29.12,Dobra Moda
+2026-01-23,Janeiro,2026,Loja Centro,Ana Costa,Forge Engenharia,Camiseta,Cápsula Urbana,Camiseta básica,G,Verde,Loja,2,178.00,97.17,0.00,Dobra Moda
+2025-10-08,Outubro,2025,Loja Outlet,Eva Martins,Forge Engenharia,Vestido,Verão 2026,Vestido midi,PP,Azul,E-commerce,2,433.21,266.03,64.79,Dobra Moda
+2025-11-22,Novembro,2025,Loja Shopping,Ana Costa,Serra Café,Camiseta,Verão 2026,Camiseta básica,PP,Verde,E-commerce,1,89.00,52.65,0.00,Dobra Moda
+2026-01-05,Janeiro,2026,Loja Shopping,Eva Martins,Aurora Moda,Vestido,Básicos,Vestido midi,GG,Azul,WhatsApp,1,249.00,140.62,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Ana Costa,Rio Branco,Calça,Verão 2026,Calça alfaiataria,P,Verde,Loja,1,261.62,129.43,17.38,Dobra Moda
+2025-10-11,Outubro,2025,Loja Shopping,Ana Costa,Lumen Tech,Jaqueta,Inverno 2026,Jaqueta jeans,PP,Verde,E-commerce,2,532.73,213.49,125.27,Dobra Moda
+2025-09-09,Setembro,2025,Loja Centro,Eva Martins,Sul Minas,Calça,Verão 2026,Calça jeans,M,Preto,Loja,1,229.00,134.69,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Ana Costa,Terra Nova,Calçado,Inverno 2026,Tênis casual,G,Bege,WhatsApp,2,644.01,319.62,53.99,Dobra Moda
+2026-03-08,Março,2026,Loja Centro,Bruno Lima,Sul Minas,Calçado,Verão 2026,Tênis casual,PP,Vermelho,E-commerce,1,349.00,148.33,0.00,Dobra Moda
+2026-07-12,Julho,2026,Loja Shopping,Bruno Lima,Verde Agro,Camisa,Inverno 2026,Camisa linho,PP,Azul,Loja,1,189.00,107.31,0.00,Dobra Moda
+2025-09-25,Setembro,2025,Loja Shopping,Eva Martins,Maré Energia,Camisa,Inverno 2026,Camisa linho,G,Preto,Loja,2,333.74,153.37,44.26,Dobra Moda
+2026-01-08,Janeiro,2026,Loja Shopping,Carla Souza,Forge Engenharia,Acessório,Verão 2026,Meia kit,P,Vermelho,Loja,1,34.53,19.40,4.47,Dobra Moda
+2026-05-08,Maio,2026,Loja Outlet,Eva Martins,Terra Nova,Acessório,Básicos,Cinto couro,GG,Verde,Marketplace,2,238.00,117.09,0.00,Dobra Moda
+2026-03-03,Março,2026,Loja Centro,Ana Costa,Atlas Ltda,Jaqueta,Básicos,Blazer,PP,Verde,Marketplace,1,333.55,202.77,65.45,Dobra Moda
+2026-08-25,Agosto,2026,Loja Shopping,Bruno Lima,Pampa Alimentos,Acessório,Básicos,Cinto couro,GG,Azul,WhatsApp,1,119.00,72.04,0.00,Dobra Moda
+2025-12-04,Dezembro,2025,Loja Outlet,Carla Souza,Serra Café,Calçado,Básicos,Tênis casual,PP,Azul,Loja,1,320.66,152.96,28.34,Dobra Moda
+2025-09-05,Setembro,2025,Loja Shopping,Ana Costa,Verde Agro,Calçado,Verão 2026,Tênis casual,G,Verde,E-commerce,1,311.02,192.76,37.98,Dobra Moda
+2026-04-04,Abril,2026,Loja Centro,Ana Costa,Atlas Ltda,Acessório,Cápsula Urbana,Meia kit,G,Verde,E-commerce,1,31.59,15.38,7.41,Dobra Moda
+2026-08-11,Agosto,2026,Loja Centro,Eva Martins,Orbit Educação,Vestido,Verão 2026,Vestido midi,G,Bege,Loja,3,747.00,301.84,0.00,Dobra Moda
+2026-05-15,Maio,2026,Loja Centro,Bruno Lima,Verde Agro,Acessório,Inverno 2026,Cinto couro,GG,Branco,Loja,1,119.00,67.86,0.00,Dobra Moda
+2026-06-12,Junho,2026,Loja Centro,Eva Martins,Lumen Tech,Calça,Básicos,Calça jeans,GG,Verde,E-commerce,1,229.00,112.91,0.00,Dobra Moda
+2025-09-17,Setembro,2025,Loja Outlet,Ana Costa,Verde Agro,Camiseta,Básicos,Camiseta básica,PP,Vermelho,Loja,1,71.18,31.62,17.82,Dobra Moda
+2026-01-05,Janeiro,2026,Loja Shopping,Bruno Lima,Aurora Moda,Jaqueta,Cápsula Urbana,Jaqueta jeans,P,Branco,WhatsApp,1,329.00,199.69,0.00,Dobra Moda
+2026-05-30,Maio,2026,Loja Shopping,Carla Souza,Helix Saúde,Shorts,Básicos,Shorts linho,G,Verde,Marketplace,1,159.00,90.63,0.00,Dobra Moda
+2026-07-04,Julho,2026,Loja Centro,Ana Costa,Delta Log,Acessório,Verão 2026,Bolsa transversal,GG,Azul,Marketplace,1,239.44,122.04,19.56,Dobra Moda
+2026-02-16,Fevereiro,2026,Loja Centro,Eva Martins,Helix Saúde,Calça,Básicos,Calça alfaiataria,M,Bege,E-commerce,1,279.00,164.38,0.00,Dobra Moda
+2026-04-21,Abril,2026,Loja Centro,Ana Costa,Casa Norte,Vestido,Inverno 2026,Vestido midi,PP,Bege,Loja,2,498.00,255.05,0.00,Dobra Moda
+2026-02-24,Fevereiro,2026,Loja Centro,Bruno Lima,Céu Soft,Calçado,Verão 2026,Tênis casual,P,Preto,Loja,3,1047.00,576.36,0.00,Dobra Moda
+2026-08-05,Agosto,2026,Loja Centro,Diego Alves,Terra Nova,Shorts,Verão 2026,Shorts linho,M,Azul,E-commerce,2,318.00,139.96,0.00,Dobra Moda
+2026-02-24,Fevereiro,2026,Loja Centro,Eva Martins,Costa Farma,Calçado,Inverno 2026,Tênis casual,GG,Vermelho,Loja,2,698.00,316.51,0.00,Dobra Moda
+2026-04-03,Abril,2026,Loja Shopping,Carla Souza,Orbit Educação,Shorts,Cápsula Urbana,Shorts linho,PP,Bege,Loja,3,477.00,186.85,0.00,Dobra Moda
+2025-09-25,Setembro,2025,Loja Shopping,Carla Souza,Céu Soft,Jaqueta,Verão 2026,Blazer,PP,Bege,Loja,1,399.00,173.98,0.00,Dobra Moda
+2026-04-16,Abril,2026,Loja Outlet,Eva Martins,Nimbus SA,Jaqueta,Inverno 2026,Blazer,M,Branco,E-commerce,1,326.07,129.32,72.93,Dobra Moda
+2026-05-21,Maio,2026,Loja Centro,Eva Martins,Serra Café,Vestido,Básicos,Vestido midi,M,Azul,Loja,1,249.00,131.43,0.00,Dobra Moda
+2026-05-14,Maio,2026,Loja Centro,Eva Martins,Delta Log,Acessório,Inverno 2026,Meia kit,P,Vermelho,Loja,2,78.00,46.05,0.00,Dobra Moda
+2026-01-07,Janeiro,2026,Loja Shopping,Ana Costa,Céu Soft,Calça,Inverno 2026,Calça jeans,M,Preto,E-commerce,1,229.00,129.16,0.00,Dobra Moda
+2026-02-23,Fevereiro,2026,Loja Outlet,Carla Souza,Aurora Moda,Calça,Cápsula Urbana,Calça alfaiataria,M,Verde,Marketplace,3,837.00,339.76,0.00,Dobra Moda
+2026-03-16,Março,2026,Loja Centro,Carla Souza,Pulse Varejo,Calça,Básicos,Calça jeans,G,Preto,Loja,2,458.00,215.68,0.00,Dobra Moda
+2025-12-19,Dezembro,2025,Loja Outlet,Carla Souza,Pampa Alimentos,Calça,Inverno 2026,Calça alfaiataria,P,Preto,Loja,1,279.00,128.65,0.00,Dobra Moda
+2026-06-03,Junho,2026,Loja Centro,Bruno Lima,Terra Nova,Acessório,Cápsula Urbana,Bolsa transversal,G,Branco,Marketplace,1,259.00,101.28,0.00,Dobra Moda
+2026-08-20,Agosto,2026,Loja Shopping,Bruno Lima,Terra Nova,Shorts,Inverno 2026,Shorts linho,P,Preto,Loja,1,159.00,64.21,0.00,Dobra Moda
+2026-03-28,Março,2026,Loja Shopping,Bruno Lima,Boa Vista,Calçado,Inverno 2026,Tênis casual,G,Bege,E-commerce,1,349.00,208.44,0.00,Dobra Moda
+2026-05-02,Maio,2026,Loja Shopping,Ana Costa,Lumen Tech,Acessório,Verão 2026,Meia kit,P,Verde,Loja,3,105.97,43.48,11.03,Dobra Moda
+2025-09-24,Setembro,2025,Loja Centro,Bruno Lima,Nimbus SA,Vestido,Cápsula Urbana,Vestido midi,PP,Vermelho,E-commerce,1,249.00,116.03,0.00,Dobra Moda
+2025-10-25,Outubro,2025,Loja Outlet,Diego Alves,Forge Engenharia,Shorts,Verão 2026,Shorts linho,PP,Preto,E-commerce,1,139.17,60.42,19.83,Dobra Moda
+2025-12-04,Dezembro,2025,Loja Centro,Bruno Lima,Aurora Moda,Acessório,Cápsula Urbana,Cinto couro,M,Vermelho,E-commerce,1,119.00,48.06,0.00,Dobra Moda
+2026-05-22,Maio,2026,Loja Outlet,Diego Alves,Boa Vista,Acessório,Inverno 2026,Cinto couro,P,Preto,Loja,1,119.00,54.05,0.00,Dobra Moda
+2026-02-24,Fevereiro,2026,Loja Shopping,Diego Alves,Céu Soft,Acessório,Verão 2026,Cinto couro,M,Azul,Loja,2,190.74,76.27,47.26,Dobra Moda
+2026-04-14,Abril,2026,Loja Outlet,Carla Souza,Pampa Alimentos,Acessório,Inverno 2026,Cinto couro,GG,Vermelho,Marketplace,1,112.74,62.87,6.26,Dobra Moda
+2025-10-12,Outubro,2025,Loja Outlet,Diego Alves,Aurora Moda,Blusa,Verão 2026,Blusa tricô,M,Branco,E-commerce,1,179.00,109.66,0.00,Dobra Moda
+2026-07-29,Julho,2026,Loja Centro,Carla Souza,Rio Branco,Acessório,Verão 2026,Bolsa transversal,G,Vermelho,Loja,1,205.45,85.97,53.55,Dobra Moda
+2026-07-17,Julho,2026,Loja Outlet,Eva Martins,Céu Soft,Camiseta,Verão 2026,Camiseta básica,G,Vermelho,WhatsApp,1,72.53,34.36,16.47,Dobra Moda
+2026-07-21,Julho,2026,Loja Centro,Eva Martins,Pampa Alimentos,Jaqueta,Inverno 2026,Blazer,PP,Branco,Loja,1,366.99,199.70,32.01,Dobra Moda
+2026-07-23,Julho,2026,Loja Centro,Diego Alves,Forge Engenharia,Calçado,Verão 2026,Tênis corrida,M,Branco,E-commerce,2,858.00,401.74,0.00,Dobra Moda
+2025-12-08,Dezembro,2025,Loja Shopping,Bruno Lima,Boa Vista,Camiseta,Inverno 2026,Camiseta básica,P,Vermelho,E-commerce,1,89.00,39.05,0.00,Dobra Moda
+2025-12-16,Dezembro,2025,Loja Outlet,Diego Alves,Serra Café,Calça,Inverno 2026,Calça jeans,P,Bege,E-commerce,1,229.00,123.22,0.00,Dobra Moda
+2026-06-02,Junho,2026,Loja Outlet,Diego Alves,Maré Energia,Acessório,Básicos,Cinto couro,GG,Preto,WhatsApp,1,119.00,61.03,0.00,Dobra Moda
+2026-02-22,Fevereiro,2026,Loja Outlet,Ana Costa,Serra Café,Calça,Básicos,Calça alfaiataria,P,Vermelho,Loja,2,519.58,294.58,38.42,Dobra Moda
+2026-01-28,Janeiro,2026,Loja Shopping,Ana Costa,Orbit Educação,Calça,Cápsula Urbana,Calça jeans,P,Azul,Loja,1,229.00,135.21,0.00,Dobra Moda
+2026-02-24,Fevereiro,2026,Loja Shopping,Diego Alves,Aurora Moda,Calça,Cápsula Urbana,Calça alfaiataria,GG,Bege,Marketplace,3,837.00,416.29,0.00,Dobra Moda
+2026-01-12,Janeiro,2026,Loja Outlet,Carla Souza,Pampa Alimentos,Calçado,Verão 2026,Tênis corrida,PP,Azul,Loja,1,371.01,155.65,57.99,Dobra Moda
+2025-11-10,Novembro,2025,Loja Outlet,Diego Alves,Aurora Moda,Jaqueta,Cápsula Urbana,Jaqueta jeans,GG,Azul,WhatsApp,1,329.00,135.25,0.00,Dobra Moda
+2025-11-13,Novembro,2025,Loja Shopping,Diego Alves,Rio Branco,Acessório,Inverno 2026,Meia kit,GG,Branco,E-commerce,1,39.00,21.99,0.00,Dobra Moda
+2026-08-26,Agosto,2026,Loja Outlet,Carla Souza,Orbit Educação,Camiseta,Verão 2026,Camiseta básica,P,Verde,Loja,1,89.00,38.42,0.00,Dobra Moda
+2026-04-12,Abril,2026,Loja Centro,Bruno Lima,Delta Log,Acessório,Cápsula Urbana,Meia kit,G,Verde,Marketplace,2,78.00,29.72,0.00,Dobra Moda
+2026-08-20,Agosto,2026,Loja Shopping,Diego Alves,Boa Vista,Acessório,Cápsula Urbana,Meia kit,P,Azul,Loja,1,39.00,14.88,0.00,Dobra Moda
+2026-05-25,Maio,2026,Loja Outlet,Eva Martins,Orbit Educação,Vestido,Verão 2026,Vestido midi,M,Bege,E-commerce,1,235.34,102.43,13.66,Dobra Moda
+2025-11-13,Novembro,2025,Loja Centro,Ana Costa,Boa Vista,Acessório,Básicos,Bolsa transversal,M,Preto,E-commerce,1,259.00,143.87,0.00,Dobra Moda
+2026-03-22,Março,2026,Loja Centro,Diego Alves,Verde Agro,Calçado,Inverno 2026,Tênis casual,GG,Bege,Loja,1,349.00,133.60,0.00,Dobra Moda
+2025-10-28,Outubro,2025,Loja Centro,Ana Costa,Casa Norte,Camisa,Básicos,Camisa linho,GG,Azul,Loja,3,567.00,327.79,0.00,Dobra Moda
+2026-01-08,Janeiro,2026,Loja Centro,Diego Alves,Céu Soft,Acessório,Cápsula Urbana,Bolsa transversal,PP,Verde,Loja,3,777.00,333.41,0.00,Dobra Moda
+2026-08-20,Agosto,2026,Loja Centro,Bruno Lima,Serra Café,Calçado,Verão 2026,Tênis corrida,M,Vermelho,E-commerce,1,429.00,239.22,0.00,Dobra Moda
+2026-07-08,Julho,2026,Loja Centro,Eva Martins,Pampa Alimentos,Vestido,Cápsula Urbana,Vestido midi,M,Verde,E-commerce,2,498.00,260.88,0.00,Dobra Moda
+2025-09-27,Setembro,2025,Loja Centro,Eva Martins,Lumen Tech,Camisa,Básicos,Camisa linho,PP,Vermelho,Marketplace,2,312.10,175.80,65.90,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Carla Souza,Casa Norte,Camisa,Verão 2026,Camisa linho,GG,Preto,Loja,1,189.00,89.58,0.00,Dobra Moda
+2026-05-27,Maio,2026,Loja Centro,Carla Souza,Costa Farma,Acessório,Verão 2026,Cinto couro,PP,Azul,Loja,1,119.00,66.02,0.00,Dobra Moda
+2026-01-02,Janeiro,2026,Loja Centro,Bruno Lima,Aurora Moda,Camisa,Inverno 2026,Camisa linho,GG,Vermelho,E-commerce,1,189.00,94.91,0.00,Dobra Moda
+2026-01-19,Janeiro,2026,Loja Shopping,Eva Martins,Nimbus SA,Calçado,Inverno 2026,Tênis corrida,PP,Verde,E-commerce,1,429.00,210.18,0.00,Dobra Moda
+2025-10-23,Outubro,2025,Loja Shopping,Eva Martins,Costa Farma,Jaqueta,Verão 2026,Blazer,PP,Verde,Loja,1,356.56,144.91,42.44,Dobra Moda
+2026-04-25,Abril,2026,Loja Outlet,Bruno Lima,Rio Branco,Acessório,Verão 2026,Bolsa transversal,G,Preto,Loja,2,399.12,202.16,118.88,Dobra Moda
+2026-05-23,Maio,2026,Loja Centro,Ana Costa,Boa Vista,Jaqueta,Cápsula Urbana,Blazer,G,Bege,Loja,1,399.00,245.25,0.00,Dobra Moda
+2026-05-25,Maio,2026,Loja Outlet,Carla Souza,Atlas Ltda,Calça,Básicos,Calça alfaiataria,GG,Branco,Loja,1,261.39,153.89,17.61,Dobra Moda
+2026-01-09,Janeiro,2026,Loja Outlet,Bruno Lima,Sul Minas,Jaqueta,Básicos,Jaqueta jeans,P,Azul,Marketplace,1,289.67,132.82,39.33,Dobra Moda
+2026-01-05,Janeiro,2026,Loja Shopping,Bruno Lima,Serra Café,Shorts,Cápsula Urbana,Shorts linho,P,Preto,Loja,1,159.00,79.85,0.00,Dobra Moda
+2026-08-25,Agosto,2026,Loja Shopping,Diego Alves,Maré Energia,Calçado,Cápsula Urbana,Tênis casual,GG,Branco,Loja,1,283.99,144.68,65.01,Dobra Moda
+2025-12-13,Dezembro,2025,Loja Shopping,Bruno Lima,Rio Branco,Camiseta,Cápsula Urbana,Camiseta básica,G,Verde,E-commerce,1,89.00,38.19,0.00,Dobra Moda
+2026-07-29,Julho,2026,Loja Centro,Bruno Lima,Aurora Moda,Calça,Inverno 2026,Calça alfaiataria,GG,Azul,Marketplace,1,244.35,136.17,34.65,Dobra Moda
+2026-04-07,Abril,2026,Loja Centro,Eva Martins,Boa Vista,Camisa,Cápsula Urbana,Camisa linho,P,Vermelho,WhatsApp,3,476.92,274.88,90.08,Dobra Moda
+2026-07-25,Julho,2026,Loja Shopping,Diego Alves,Rio Branco,Calçado,Cápsula Urbana,Tênis casual,PP,Preto,WhatsApp,2,542.34,316.03,155.66,Dobra Moda
+2026-05-15,Maio,2026,Loja Shopping,Bruno Lima,Atlas Ltda,Vestido,Verão 2026,Vestido midi,PP,Bege,Marketplace,1,200.07,107.36,48.93,Dobra Moda
+2025-11-14,Novembro,2025,Loja Shopping,Carla Souza,Rio Branco,Camisa,Inverno 2026,Camisa linho,PP,Azul,E-commerce,1,147.13,60.88,41.87,Dobra Moda
+2026-05-06,Maio,2026,Loja Centro,Eva Martins,Maré Energia,Acessório,Verão 2026,Meia kit,GG,Verde,E-commerce,2,78.00,48.09,0.00,Dobra Moda
+2025-10-26,Outubro,2025,Loja Shopping,Diego Alves,Céu Soft,Jaqueta,Cápsula Urbana,Blazer,M,Preto,E-commerce,1,399.00,185.12,0.00,Dobra Moda
+2026-08-15,Agosto,2026,Loja Centro,Eva Martins,Pampa Alimentos,Jaqueta,Inverno 2026,Blazer,P,Azul,Marketplace,1,356.10,158.05,42.90,Dobra Moda
+2026-08-12,Agosto,2026,Loja Outlet,Bruno Lima,Pulse Varejo,Jaqueta,Inverno 2026,Blazer,PP,Verde,Loja,1,399.00,226.34,0.00,Dobra Moda
+2026-01-11,Janeiro,2026,Loja Shopping,Carla Souza,Rio Branco,Calça,Inverno 2026,Calça alfaiataria,G,Preto,WhatsApp,3,837.00,410.19,0.00,Dobra Moda
+2026-02-19,Fevereiro,2026,Loja Shopping,Ana Costa,Helix Saúde,Calçado,Verão 2026,Tênis casual,PP,Bege,E-commerce,2,698.00,279.08,0.00,Dobra Moda
+2025-11-17,Novembro,2025,Loja Shopping,Eva Martins,Boa Vista,Jaqueta,Inverno 2026,Blazer,M,Bege,Marketplace,1,399.00,164.50,0.00,Dobra Moda
+2026-07-04,Julho,2026,Loja Shopping,Carla Souza,Casa Norte,Calçado,Inverno 2026,Tênis casual,M,Bege,WhatsApp,2,698.00,299.30,0.00,Dobra Moda
+2026-07-05,Julho,2026,Loja Centro,Carla Souza,Serra Café,Calça,Inverno 2026,Calça jeans,GG,Bege,Marketplace,1,229.00,112.96,0.00,Dobra Moda
+2026-03-18,Março,2026,Loja Centro,Bruno Lima,Forge Engenharia,Acessório,Cápsula Urbana,Meia kit,P,Vermelho,Loja,1,39.00,22.42,0.00,Dobra Moda
+2026-03-06,Março,2026,Loja Outlet,Bruno Lima,Rio Branco,Calça,Inverno 2026,Calça jeans,M,Preto,Loja,2,399.12,183.57,58.88,Dobra Moda
+2025-09-18,Setembro,2025,Loja Outlet,Diego Alves,Nimbus SA,Acessório,Verão 2026,Cinto couro,M,Vermelho,E-commerce,2,238.00,98.51,0.00,Dobra Moda
+2025-09-09,Setembro,2025,Loja Centro,Diego Alves,Helix Saúde,Jaqueta,Cápsula Urbana,Jaqueta jeans,P,Vermelho,Loja,1,262.17,117.23,66.83,Dobra Moda
+2026-07-28,Julho,2026,Loja Shopping,Bruno Lima,Serra Café,Acessório,Inverno 2026,Cinto couro,PP,Preto,Marketplace,2,238.00,108.73,0.00,Dobra Moda
+2025-09-30,Setembro,2025,Loja Centro,Eva Martins,Céu Soft,Acessório,Verão 2026,Cinto couro,PP,Azul,WhatsApp,1,93.52,48.75,25.48,Dobra Moda
+2026-05-31,Maio,2026,Loja Shopping,Carla Souza,Forge Engenharia,Camiseta,Básicos,Camiseta básica,GG,Verde,E-commerce,1,89.00,54.08,0.00,Dobra Moda
+2026-07-17,Julho,2026,Loja Shopping,Bruno Lima,Céu Soft,Blusa,Cápsula Urbana,Blusa tricô,G,Preto,Loja,1,179.00,70.14,0.00,Dobra Moda
+2026-04-02,Abril,2026,Loja Centro,Bruno Lima,Orbit Educação,Jaqueta,Cápsula Urbana,Blazer,GG,Preto,Loja,1,399.00,153.99,0.00,Dobra Moda
+2026-06-20,Junho,2026,Loja Shopping,Ana Costa,Pampa Alimentos,Vestido,Inverno 2026,Vestido midi,PP,Preto,Loja,2,498.00,306.54,0.00,Dobra Moda
+2026-02-26,Fevereiro,2026,Loja Outlet,Diego Alves,Rio Branco,Blusa,Inverno 2026,Blusa tricô,GG,Bege,E-commerce,1,142.13,62.35,36.87,Dobra Moda
+2026-01-27,Janeiro,2026,Loja Shopping,Bruno Lima,Maré Energia,Calça,Inverno 2026,Calça jeans,G,Bege,E-commerce,1,229.00,93.88,0.00,Dobra Moda
+2026-03-02,Março,2026,Loja Shopping,Diego Alves,Rio Branco,Blusa,Verão 2026,Blusa tricô,GG,Bege,Loja,1,179.00,85.44,0.00,Dobra Moda
+2025-11-04,Novembro,2025,Loja Centro,Diego Alves,Sul Minas,Blusa,Básicos,Blusa tricô,PP,Preto,E-commerce,1,179.00,77.33,0.00,Dobra Moda
+2026-03-23,Março,2026,Loja Centro,Bruno Lima,Maré Energia,Acessório,Cápsula Urbana,Bolsa transversal,G,Bege,E-commerce,2,396.34,166.96,121.66,Dobra Moda
+2026-08-20,Agosto,2026,Loja Outlet,Diego Alves,Forge Engenharia,Calçado,Cápsula Urbana,Tênis corrida,M,Branco,Loja,1,429.00,183.07,0.00,Dobra Moda
+2026-07-26,Julho,2026,Loja Centro,Diego Alves,Delta Log,Shorts,Inverno 2026,Shorts linho,M,Verde,E-commerce,1,159.00,97.34,0.00,Dobra Moda
+2025-11-09,Novembro,2025,Loja Shopping,Carla Souza,Terra Nova,Jaqueta,Cápsula Urbana,Jaqueta jeans,G,Azul,Loja,1,329.00,161.72,0.00,Dobra Moda
+2025-12-06,Dezembro,2025,Loja Centro,Ana Costa,Delta Log,Calçado,Verão 2026,Tênis corrida,G,Preto,WhatsApp,1,429.00,165.56,0.00,Dobra Moda
+2026-03-18,Março,2026,Loja Centro,Eva Martins,Pampa Alimentos,Jaqueta,Cápsula Urbana,Jaqueta jeans,M,Preto,E-commerce,1,329.00,170.16,0.00,Dobra Moda
+2026-04-14,Abril,2026,Loja Shopping,Ana Costa,Nimbus SA,Camisa,Básicos,Camisa linho,PP,Preto,E-commerce,1,189.00,85.81,0.00,Dobra Moda
+2025-12-04,Dezembro,2025,Loja Shopping,Eva Martins,Rio Branco,Vestido,Básicos,Vestido midi,G,Preto,E-commerce,1,249.00,105.43,0.00,Dobra Moda

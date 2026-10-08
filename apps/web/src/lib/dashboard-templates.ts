@@ -22,7 +22,10 @@ export type StoreCategory =
   | "compras"
   | "atendimento"
   | "imobiliario"
-  | "advocacia";
+  | "advocacia"
+  | "moda"
+  | "eletronicos"
+  | "oficinas";
 
 export type StoreIcon =
   | "wallet"
@@ -41,7 +44,10 @@ export type StoreIcon =
   | "building"
   | "home"
   | "key"
-  | "scale";
+  | "scale"
+  | "shirt"
+  | "smartphone"
+  | "wrench";
 
 export type TemplateWidget = Omit<Widget, "id">;
 
@@ -73,6 +79,9 @@ export const STORE_CATEGORIES: { id: StoreCategory | "todos"; label: string }[] 
   { id: "atendimento", label: "Atendimento" },
   { id: "imobiliario", label: "Imobiliário" },
   { id: "advocacia", label: "Advocacia" },
+  { id: "moda", label: "Moda" },
+  { id: "eletronicos", label: "Eletrônicos" },
+  { id: "oficinas", label: "Oficinas" },
 ];
 
 export const CATEGORY_LABEL: Record<StoreCategory, string> = Object.fromEntries(
@@ -188,6 +197,88 @@ const ADVOCACIA_FINANCEIRO_MEASURES: SemanticMeasure[] = [
   { name: "Clientes faturados", expression: "DISTINCTCOUNT(cliente)", aggregation: "expression" },
   { name: "Horas trabalhadas", expression: "SUM(horas_trabalhadas)", aggregation: "expression" },
   { name: "Ticket médio", expression: "DIVIDE(SUM(honorarios_previstos), COUNT(*))", aggregation: "expression" },
+];
+
+const MODA_VENDAS_MEASURES: SemanticMeasure[] = [
+  { name: "Receita", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Peças", expression: "SUM(quantidade)", aggregation: "expression" },
+  { name: "Ticket médio", expression: "DIVIDE(SUM(valor), COUNT(*))", aggregation: "expression" },
+  { name: "Clientes", expression: "DISTINCTCOUNT(cliente)", aggregation: "expression" },
+  { name: "Margem", expression: "(SUM(valor) - SUM(custo)) / NULLIF(SUM(valor), 0) * 100", aggregation: "expression" },
+  { name: "Desconto", expression: "SUM(desconto)", aggregation: "expression" },
+];
+
+const MODA_ESTOQUE_MEASURES: SemanticMeasure[] = [
+  { name: "Peças em estoque", expression: "SUM(estoque)", aggregation: "expression" },
+  { name: "SKUs", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Valor de estoque", expression: "SUM(valor_estoque)", aggregation: "expression" },
+  { name: "Rupturas", expression: "SUM(CASE WHEN status = 'Ruptura' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Abaixo do mínimo", expression: "SUM(CASE WHEN status = 'Baixo' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Dias em estoque", expression: "AVG(dias_estoque)", aggregation: "expression" },
+];
+
+const MODA_COLECOES_MEASURES: SemanticMeasure[] = [
+  { name: "Receita", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Custo", expression: "SUM(custo)", aggregation: "expression" },
+  { name: "Margem", expression: "(SUM(valor) - SUM(custo)) / NULLIF(SUM(valor), 0) * 100", aggregation: "expression" },
+  { name: "Peças", expression: "SUM(quantidade)", aggregation: "expression" },
+  { name: "Devoluções", expression: "SUM(devolucoes)", aggregation: "expression" },
+  { name: "Taxa de devolução", expression: "DIVIDE(SUM(valor_devolvido), NULLIF(SUM(valor), 0)) * 100", aggregation: "expression" },
+];
+
+const ELETRONICOS_VENDAS_MEASURES: SemanticMeasure[] = [
+  { name: "Receita", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Unidades", expression: "SUM(quantidade)", aggregation: "expression" },
+  { name: "Ticket médio", expression: "DIVIDE(SUM(valor), COUNT(*))", aggregation: "expression" },
+  { name: "Clientes", expression: "DISTINCTCOUNT(cliente)", aggregation: "expression" },
+  { name: "Margem", expression: "(SUM(valor) - SUM(custo)) / NULLIF(SUM(valor), 0) * 100", aggregation: "expression" },
+  { name: "Custo", expression: "SUM(custo)", aggregation: "expression" },
+];
+
+const ELETRONICOS_ESTOQUE_MEASURES: SemanticMeasure[] = [
+  { name: "Estoque", expression: "SUM(estoque)", aggregation: "expression" },
+  { name: "Valor de estoque", expression: "SUM(valor_estoque)", aggregation: "expression" },
+  { name: "SKUs", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Giro médio", expression: "AVG(giro)", aggregation: "expression" },
+  { name: "Rupturas", expression: "SUM(CASE WHEN status = 'Ruptura' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Dias em estoque", expression: "AVG(dias_estoque)", aggregation: "expression" },
+];
+
+const ELETRONICOS_POSVENDA_MEASURES: SemanticMeasure[] = [
+  { name: "Atendimentos", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Custo de reparo", expression: "SUM(custo_reparo)", aggregation: "expression" },
+  { name: "Valor envolvido", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Garantias", expression: "SUM(CASE WHEN tipo = 'Garantia' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Devoluções", expression: "SUM(CASE WHEN tipo = 'Devolução' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Taxa de conclusão", expression: "DIVIDE(SUM(CASE WHEN status = 'Concluído' THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
+];
+
+const OFICINAS_ORDENS_MEASURES: SemanticMeasure[] = [
+  { name: "Faturamento", expression: "SUM(valor)", aggregation: "expression" },
+  { name: "Ordens", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Ticket médio", expression: "DIVIDE(SUM(valor), COUNT(*))", aggregation: "expression" },
+  { name: "Horas", expression: "SUM(horas)", aggregation: "expression" },
+  { name: "Mão de obra", expression: "SUM(valor_mao_obra)", aggregation: "expression" },
+  { name: "Peças", expression: "SUM(valor_pecas)", aggregation: "expression" },
+  { name: "Taxa de entrega", expression: "DIVIDE(SUM(CASE WHEN status = 'Entregue' THEN 1 ELSE 0 END), COUNT(*)) * 100", aggregation: "expression" },
+];
+
+const OFICINAS_PECAS_MEASURES: SemanticMeasure[] = [
+  { name: "Faturamento", expression: "SUM(valor_mao_obra) + SUM(valor_pecas)", aggregation: "expression" },
+  { name: "Mão de obra", expression: "SUM(valor_mao_obra)", aggregation: "expression" },
+  { name: "Peças", expression: "SUM(valor_pecas)", aggregation: "expression" },
+  { name: "Custo de peças", expression: "SUM(custo_pecas)", aggregation: "expression" },
+  { name: "Margem de peças", expression: "(SUM(valor_pecas) - SUM(custo_pecas)) / NULLIF(SUM(valor_pecas), 0) * 100", aggregation: "expression" },
+  { name: "Quantidade", expression: "SUM(quantidade)", aggregation: "expression" },
+];
+
+const OFICINAS_AGENDA_MEASURES: SemanticMeasure[] = [
+  { name: "Ordens", expression: "COUNT(*)", aggregation: "expression" },
+  { name: "Horas realizadas", expression: "SUM(horas_realizadas)", aggregation: "expression" },
+  { name: "Horas previstas", expression: "SUM(horas_previstas)", aggregation: "expression" },
+  { name: "Ocupação", expression: "DIVIDE(SUM(horas_realizadas), NULLIF(SUM(horas_previstas), 0)) * 100", aggregation: "expression" },
+  { name: "Atrasos", expression: "SUM(CASE WHEN status = 'Atrasada' THEN 1 ELSE 0 END)", aggregation: "expression" },
+  { name: "Faturamento", expression: "SUM(valor)", aggregation: "expression" },
 ];
 
 export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
@@ -711,6 +802,238 @@ export const DASHBOARD_TEMPLATES: DashboardTemplate[] = [
       w("line", "Previsto x recebido", { x: 0, y: 9, w: 8, h: 5 }, { measures: ["Honorários previstos", "Honorários recebidos"], dimensions: ["mes"], limit: 24 }, { config: brl }),
       w("bar", "Horas por advogado", { x: 8, y: 9, w: 4, h: 5 }, { measures: ["Horas trabalhadas"], dimensions: ["advogado"], limit: 12 }),
       w("table", "Carteira financeira", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Honorários previstos", "Honorários recebidos", "Horas trabalhadas", "Ticket médio"], dimensions: ["cliente", "processo", "advogado"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "moda-vendas",
+    name: "Vendas da loja de roupas",
+    category: "moda",
+    description: "Receita, peças, ticket e margem por coleção, categoria, tamanho e canal.",
+    pain: "A loja vende todo dia, mas o mix de coleção e tamanho só aparece no fechamento do mês.",
+    icon: "shirt",
+    popular: true,
+    needs: ["valor", "produto ou categoria", "coleção ou tamanho"],
+    measures: MODA_VENDAS_MEASURES,
+    widgets: [
+      w("kpi", "Receita", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Receita"] }, { config: brl }),
+      w("kpi", "Peças", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Peças"] }),
+      w("kpi", "Ticket médio", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Ticket médio"] }, { config: brlTicket }),
+      w("kpi", "Margem", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Margem"] }, { config: pct1 }),
+      w("slicer", "Loja", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["loja"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Categoria", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["categoria"], measures: [] }),
+      w("slicer", "Coleção", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["colecao"], measures: [] }),
+      w("slicer", "Canal", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["canal"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("area", "Receita no tempo", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["Receita"], dimensions: ["date"], limit: 24 }, { config: brl }),
+      w("pie", "Mix de categoria", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["Receita"], dimensions: ["categoria"], limit: 8 }, { config: brl }),
+      w("bar", "Por produto", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Receita"], dimensions: ["produto"], limit: 12 }, { config: brl }),
+      w("bar", "Por vendedor", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Receita"], dimensions: ["vendedor"], limit: 12 }, { config: brl }),
+      w("bar", "Por tamanho", { x: 0, y: 14, w: 6, h: 5 }, { measures: ["Peças"], dimensions: ["tamanho"], limit: 8 }),
+      w("pie", "Por canal", { x: 6, y: 14, w: 6, h: 5 }, { measures: ["Receita"], dimensions: ["canal"], limit: 8 }, { config: brl }),
+      w("table", "Detalhe das vendas", { x: 0, y: 19, w: 12, h: 5 }, { measures: ["Receita", "Peças", "Desconto"], dimensions: ["produto", "colecao", "tamanho", "cor"], limit: 50 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "moda-estoque",
+    name: "Estoque e ruptura de moda",
+    category: "moda",
+    description: "Peças em estoque, valor parado, ruptura e grade por tamanho e coleção.",
+    pain: "O tamanho que vende some da arara e o que não gira ocupa o estoque da coleção nova.",
+    icon: "package",
+    popular: true,
+    needs: ["estoque ou valor", "produto ou tamanho", "status"],
+    measures: MODA_ESTOQUE_MEASURES,
+    widgets: [
+      w("kpi", "Peças em estoque", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Peças em estoque"] }),
+      w("kpi", "Valor de estoque", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Valor de estoque"] }, { config: brl }),
+      w("kpi", "Rupturas", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Rupturas"] }),
+      w("kpi", "Dias em estoque", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Dias em estoque"] }, { config: { decimals: 0 } }),
+      w("slicer", "Loja", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["loja"], measures: [] }),
+      w("slicer", "Coleção", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["colecao"], measures: [] }),
+      w("slicer", "Categoria", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["categoria"], measures: [] }),
+      w("slicer", "Status", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("bar", "Por produto", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Peças em estoque"], dimensions: ["produto"], limit: 15 }),
+      w("pie", "Por status", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["SKUs"], dimensions: ["status"], limit: 8 }),
+      w("bar", "Grade por tamanho", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Peças em estoque"], dimensions: ["tamanho"], limit: 8 }),
+      w("treemap", "Valor por coleção", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Valor de estoque"], dimensions: ["colecao"], limit: 12 }, { config: brl }),
+      w("table", "Itens críticos", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Peças em estoque", "Valor de estoque", "Dias em estoque"], dimensions: ["produto", "tamanho", "cor", "status"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "moda-colecoes",
+    name: "Coleções e margem",
+    category: "moda",
+    description: "Receita, custo, margem e devolução por coleção, categoria e canal.",
+    pain: "A coleção entra com margem boa e sai com desconto — ninguém vê a queda a tempo.",
+    icon: "trending",
+    needs: ["valor ou custo", "coleção ou categoria"],
+    measures: MODA_COLECOES_MEASURES,
+    widgets: [
+      w("kpi", "Receita", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Receita"] }, { config: brl }),
+      w("kpi", "Margem", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Margem"] }, { config: pct1 }),
+      w("kpi", "Peças", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Peças"] }),
+      w("kpi", "Taxa de devolução", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Taxa de devolução"] }, { config: pct1 }),
+      w("slicer", "Coleção", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["colecao"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Categoria", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["categoria"], measures: [] }),
+      w("slicer", "Canal", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["canal"], measures: [] }),
+      w("line", "Receita por mês", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["Receita"], dimensions: ["mes"], limit: 12 }, { config: brl }),
+      w("pie", "Mix de coleção", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["Receita"], dimensions: ["colecao"], limit: 8 }, { config: brl }),
+      w("bar", "Margem por coleção", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Margem"], dimensions: ["colecao"], limit: 8 }, { config: pct1 }),
+      w("bar", "Devoluções por categoria", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Devoluções"], dimensions: ["categoria"], limit: 10 }),
+      w("table", "Coleções", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Receita", "Custo", "Margem", "Taxa de devolução"], dimensions: ["colecao", "categoria", "canal"], limit: 40 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "eletronicos-vendas",
+    name: "Vendas de eletrônicos",
+    category: "eletronicos",
+    description: "Receita de celulares, tablets, wearables e acessórios por marca, loja e canal.",
+    pain: "O celular puxa o faturamento, mas a margem está no acessório — e isso não aparece no caixa.",
+    icon: "smartphone",
+    popular: true,
+    needs: ["valor", "produto ou marca", "categoria ou canal"],
+    measures: ELETRONICOS_VENDAS_MEASURES,
+    widgets: [
+      w("kpi", "Receita", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Receita"] }, { config: brl }),
+      w("kpi", "Unidades", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Unidades"] }),
+      w("kpi", "Ticket médio", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Ticket médio"] }, { config: brlTicket }),
+      w("kpi", "Margem", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Margem"] }, { config: pct1 }),
+      w("slicer", "Loja", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["loja"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Categoria", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["categoria"], measures: [] }),
+      w("slicer", "Marca", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["marca"], measures: [] }),
+      w("slicer", "Canal", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["canal"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("area", "Receita no tempo", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["Receita"], dimensions: ["date"], limit: 24 }, { config: brl }),
+      w("pie", "Mix de categoria", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["Receita"], dimensions: ["categoria"], limit: 8 }, { config: brl }),
+      w("bar", "Por marca", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Receita"], dimensions: ["marca"], limit: 10 }, { config: brl }),
+      w("bar", "Por produto", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Unidades"], dimensions: ["produto"], limit: 12 }),
+      w("treemap", "Peso da receita", { x: 0, y: 14, w: 7, h: 5 }, { measures: ["Receita"], dimensions: ["categoria", "marca"], limit: 20 }, { config: brl }),
+      w("bar", "Por vendedor", { x: 7, y: 14, w: 5, h: 5 }, { measures: ["Receita"], dimensions: ["vendedor"], limit: 10 }, { config: brl }),
+      w("table", "Detalhe", { x: 0, y: 19, w: 12, h: 5 }, { measures: ["Receita", "Unidades", "Margem"], dimensions: ["produto", "marca", "categoria", "canal"], limit: 50 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "eletronicos-estoque",
+    name: "Giro e estoque de eletrônicos",
+    category: "eletronicos",
+    description: "Estoque, valor parado, giro e ruptura de aparelhos e acessórios.",
+    pain: "O lançamento encalha no estoque enquanto a capa e o carregador entram em ruptura.",
+    icon: "package",
+    popular: true,
+    needs: ["estoque ou valor", "produto ou marca", "status"],
+    measures: ELETRONICOS_ESTOQUE_MEASURES,
+    widgets: [
+      w("kpi", "Estoque", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Estoque"] }),
+      w("kpi", "Valor de estoque", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Valor de estoque"] }, { config: brl }),
+      w("kpi", "Giro médio", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Giro médio"] }, { config: { decimals: 1 } }),
+      w("kpi", "Rupturas", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Rupturas"] }),
+      w("slicer", "Loja", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["loja"], measures: [] }),
+      w("slicer", "Categoria", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["categoria"], measures: [] }),
+      w("slicer", "Marca", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["marca"], measures: [] }),
+      w("slicer", "Status", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("bar", "Valor por marca", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Valor de estoque"], dimensions: ["marca"], limit: 10 }, { config: brl }),
+      w("pie", "Por status", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["SKUs"], dimensions: ["status"], limit: 8 }),
+      w("bar", "Dias em estoque", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Dias em estoque"], dimensions: ["produto"], limit: 12 }),
+      w("bar", "Giro por categoria", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Giro médio"], dimensions: ["categoria"], limit: 8 }),
+      w("table", "Posição de estoque", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Estoque", "Valor de estoque", "Giro médio", "Dias em estoque"], dimensions: ["produto", "marca", "status"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "eletronicos-posvenda",
+    name: "Garantia e pós-venda",
+    category: "eletronicos",
+    description: "Garantias, trocas, devoluções e custo de reparo por marca e categoria.",
+    pain: "O pós-venda come a margem do celular e só se vê quando o reparo já foi pago.",
+    icon: "headset",
+    needs: ["atendimento ou custo", "tipo ou status", "marca"],
+    measures: ELETRONICOS_POSVENDA_MEASURES,
+    widgets: [
+      w("kpi", "Atendimentos", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Atendimentos"] }),
+      w("kpi", "Garantias", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Garantias"] }),
+      w("kpi", "Custo de reparo", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Custo de reparo"] }, { config: brl }),
+      w("kpi", "Taxa de conclusão", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Taxa de conclusão"] }, { config: pct1 }),
+      w("slicer", "Tipo", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["tipo"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Status", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["status"], measures: [] }),
+      w("slicer", "Marca", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["marca"], measures: [] }),
+      w("line", "Entrada no tempo", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Atendimentos"], dimensions: ["date"], limit: 60 }),
+      w("pie", "Por tipo", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["Atendimentos"], dimensions: ["tipo"], limit: 8 }),
+      w("bar", "Custo por marca", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Custo de reparo"], dimensions: ["marca"], limit: 10 }, { config: brl }),
+      w("bar", "Por categoria", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Atendimentos"], dimensions: ["categoria"], limit: 8 }),
+      w("table", "Chamados", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Custo de reparo", "Valor envolvido"], dimensions: ["produto", "marca", "tipo", "status"], limit: 50 }, { config: { ...brlFull, zebra: true } }),
+    ],
+  },
+  {
+    id: "oficinas-ordens",
+    name: "Ordens de serviço",
+    category: "oficinas",
+    description: "Faturamento, ticket, horas e status das OS de carros, motos e utilitários.",
+    pain: "A oficina está cheia, mas ninguém sabe qual serviço e qual mecânico puxam o caixa.",
+    icon: "wrench",
+    popular: true,
+    needs: ["valor", "serviço ou status", "mecânico ou tipo de veículo"],
+    measures: OFICINAS_ORDENS_MEASURES,
+    widgets: [
+      w("kpi", "Faturamento", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Faturamento"] }, { config: brl }),
+      w("kpi", "Ordens", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Ordens"] }),
+      w("kpi", "Ticket médio", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Ticket médio"] }, { config: brlTicket }),
+      w("kpi", "Taxa de entrega", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Taxa de entrega"] }, { config: pct1 }),
+      w("slicer", "Oficina", { x: 0, y: 2, w: 3, h: 2 }, { dimensions: ["oficina"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Tipo de veículo", { x: 3, y: 2, w: 3, h: 2 }, { dimensions: ["tipo_veiculo"], measures: [] }),
+      w("slicer", "Serviço", { x: 6, y: 2, w: 3, h: 2 }, { dimensions: ["servico"], measures: [] }),
+      w("slicer", "Status", { x: 9, y: 2, w: 3, h: 2 }, { dimensions: ["status"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("area", "Faturamento no tempo", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["Faturamento"], dimensions: ["date"], limit: 24 }, { config: brl }),
+      w("pie", "Por tipo de veículo", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["Faturamento"], dimensions: ["tipo_veiculo"], limit: 6 }, { config: brl }),
+      w("bar", "Por mecânico", { x: 0, y: 9, w: 6, h: 5 }, { measures: ["Faturamento"], dimensions: ["mecanico"], limit: 10 }, { config: brl }),
+      w("bar", "Por serviço", { x: 6, y: 9, w: 6, h: 5 }, { measures: ["Ordens"], dimensions: ["servico"], limit: 10 }),
+      w("bar", "Mão de obra x peças", { x: 0, y: 14, w: 6, h: 5 }, { measures: ["Mão de obra", "Peças"], dimensions: ["oficina"], limit: 6 }, { config: brl }),
+      w("pie", "Por status", { x: 6, y: 14, w: 6, h: 5 }, { measures: ["Ordens"], dimensions: ["status"], limit: 8 }),
+      w("table", "Ordens", { x: 0, y: 19, w: 12, h: 5 }, { measures: ["Faturamento", "Horas", "Mão de obra", "Peças"], dimensions: ["cliente", "tipo_veiculo", "servico", "mecanico", "status"], limit: 50 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "oficinas-pecas",
+    name: "Peças e mão de obra",
+    category: "oficinas",
+    description: "Mix de mão de obra e peças, custo e margem por serviço e tipo de veículo.",
+    pain: "A peça entra cara e a mão de obra não cobre — a margem da OS só aparece no fim do mês.",
+    icon: "shopping",
+    needs: ["peças ou mão de obra", "serviço ou peça"],
+    measures: OFICINAS_PECAS_MEASURES,
+    widgets: [
+      w("kpi", "Faturamento", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Faturamento"] }, { config: brl }),
+      w("kpi", "Mão de obra", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Mão de obra"] }, { config: brl }),
+      w("kpi", "Peças", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Peças"] }, { config: brl }),
+      w("kpi", "Margem de peças", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Margem de peças"] }, { config: pct1 }),
+      w("slicer", "Oficina", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["oficina"], measures: [] }),
+      w("slicer", "Tipo de veículo", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["tipo_veiculo"], measures: [] }),
+      w("slicer", "Serviço", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["servico"], measures: [] }),
+      w("line", "Peças e mão de obra", { x: 0, y: 4, w: 8, h: 5 }, { measures: ["Mão de obra", "Peças"], dimensions: ["mes"], limit: 12 }, { config: brl }),
+      w("pie", "Mix da OS", { x: 8, y: 4, w: 4, h: 5 }, { measures: ["Faturamento"], dimensions: ["servico"], limit: 8 }, { config: brl }),
+      w("bar", "Por peça", { x: 0, y: 9, w: 7, h: 5 }, { measures: ["Peças"], dimensions: ["peca"], limit: 12 }, { config: brl }),
+      w("bar", "Margem por serviço", { x: 7, y: 9, w: 5, h: 5 }, { measures: ["Margem de peças"], dimensions: ["servico"], limit: 10 }, { config: pct1 }),
+      w("table", "Consumo de peças", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Quantidade", "Peças", "Custo de peças", "Margem de peças"], dimensions: ["peca", "servico", "tipo_veiculo"], limit: 50 }, { config: { ...brlFull, showTotals: true, zebra: true } }),
+    ],
+  },
+  {
+    id: "oficinas-agenda",
+    name: "Agenda e produtividade",
+    category: "oficinas",
+    description: "Horas previstas e realizadas, ocupação e atraso por mecânico e oficina.",
+    pain: "O box atrasa e o cliente só descobre na hora de retirar o carro ou a moto.",
+    icon: "target",
+    needs: ["horas", "mecânico ou status", "tipo de veículo"],
+    measures: OFICINAS_AGENDA_MEASURES,
+    widgets: [
+      w("kpi", "Ocupação", { x: 0, y: 0, w: 3, h: 2 }, { measures: ["Ocupação"] }, { config: pct1 }),
+      w("kpi", "Horas realizadas", { x: 3, y: 0, w: 3, h: 2 }, { measures: ["Horas realizadas"] }, { config: { decimals: 0 } }),
+      w("kpi", "Atrasos", { x: 6, y: 0, w: 3, h: 2 }, { measures: ["Atrasos"] }),
+      w("kpi", "Faturamento", { x: 9, y: 0, w: 3, h: 2 }, { measures: ["Faturamento"] }, { config: brl }),
+      w("slicer", "Oficina", { x: 0, y: 2, w: 4, h: 2 }, { dimensions: ["oficina"], measures: [] }, { config: { slicerStyle: "buttons" } }),
+      w("slicer", "Mecânico", { x: 4, y: 2, w: 4, h: 2 }, { dimensions: ["mecanico"], measures: [] }),
+      w("slicer", "Status", { x: 8, y: 2, w: 4, h: 2 }, { dimensions: ["status"], measures: [] }),
+      w("bar", "Horas por mecânico", { x: 0, y: 4, w: 7, h: 5 }, { measures: ["Horas realizadas", "Horas previstas"], dimensions: ["mecanico"], limit: 10 }),
+      w("pie", "Por status", { x: 7, y: 4, w: 5, h: 5 }, { measures: ["Ordens"], dimensions: ["status"], limit: 8 }),
+      w("line", "Ritmo da oficina", { x: 0, y: 9, w: 8, h: 5 }, { measures: ["Horas realizadas"], dimensions: ["date"], limit: 60 }),
+      w("bar", "Por tipo de veículo", { x: 8, y: 9, w: 4, h: 5 }, { measures: ["Ordens"], dimensions: ["tipo_veiculo"], limit: 6 }),
+      w("table", "Produtividade", { x: 0, y: 14, w: 12, h: 5 }, { measures: ["Horas previstas", "Horas realizadas", "Ocupação", "Faturamento"], dimensions: ["mecanico", "oficina", "tipo_veiculo"], limit: 40 }, { config: { ...brlFull, zebra: true } }),
     ],
   },
 ];

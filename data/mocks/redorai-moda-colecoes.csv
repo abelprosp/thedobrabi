@@ -1,0 +1,865 @@
+data,mes,ano,loja,colecao,categoria,canal,quantidade,valor,custo,devolucoes,valor_devolvido,empresa
+2025-09-01,Setembro,2025,Loja Shopping,Verão 2026,Acessório,Loja,39,8675.03,5238.34,2,444.87,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Verão 2026,Acessório,E-commerce,51,17089.16,9770.49,6,2010.49,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Verão 2026,Blusa,Loja,20,5283.59,2191.06,1,264.18,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Blusa,E-commerce,60,5128.29,2177.94,1,85.47,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Calça,Loja,61,14349.61,5776.49,3,705.72,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Calça,E-commerce,25,7266.48,4742.94,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Calçado,Loja,46,6404.29,2591.62,2,278.45,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Verão 2026,Calçado,E-commerce,53,16947.89,9251.78,6,1918.63,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Verão 2026,Camisa,Loja,53,12528.86,8346.81,4,945.57,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Camisa,E-commerce,12,3346.50,1452.95,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Camiseta,Loja,53,18440.10,8580.92,3,1043.78,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Verão 2026,Camiseta,E-commerce,22,3953.67,1684.40,2,359.42,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Verão 2026,Jaqueta,Loja,21,1991.20,1111.15,2,189.64,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Verão 2026,Jaqueta,E-commerce,48,9104.16,3661.61,4,758.68,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Verão 2026,Shorts,Loja,55,10589.01,6093.98,6,1155.16,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Verão 2026,Shorts,E-commerce,59,10160.73,6023.84,2,344.43,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Verão 2026,Vestido,Loja,30,7963.58,4662.52,2,530.91,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Verão 2026,Vestido,E-commerce,40,5011.79,2757.61,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Inverno 2026,Acessório,Loja,40,4893.91,2469.39,1,122.35,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Acessório,E-commerce,39,7761.52,4685.62,3,597.04,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Blusa,Loja,38,7374.69,3972.44,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Inverno 2026,Blusa,E-commerce,25,7607.01,3508.86,3,912.84,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Inverno 2026,Calça,Loja,25,4261.31,2390.41,1,170.45,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Calça,E-commerce,22,5670.85,2397.21,1,257.77,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Inverno 2026,Calçado,Loja,50,13913.13,7901.49,1,278.26,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Calçado,E-commerce,51,11030.33,6072.04,3,648.84,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Inverno 2026,Camisa,Loja,13,3532.34,2110.97,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Camisa,E-commerce,31,10178.47,6717.71,2,656.68,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Inverno 2026,Camiseta,Loja,55,17312.22,10084.99,6,1888.61,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Camiseta,E-commerce,38,5748.08,2659.78,3,453.80,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Jaqueta,Loja,56,5556.07,2779.67,5,496.08,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Inverno 2026,Jaqueta,E-commerce,62,15549.42,8138.07,5,1253.99,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Inverno 2026,Shorts,Loja,65,5279.96,3307.92,5,406.15,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Inverno 2026,Shorts,E-commerce,29,6400.68,2889.47,3,662.14,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Inverno 2026,Vestido,Loja,56,17596.98,7461.84,6,1885.39,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Inverno 2026,Vestido,E-commerce,37,9569.82,4290.29,1,258.64,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Acessório,Loja,40,11694.81,7270.97,1,292.37,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Acessório,E-commerce,45,9619.51,4952.69,1,213.77,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Básicos,Blusa,Loja,40,6015.41,3509.23,1,150.39,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Básicos,Blusa,E-commerce,57,18505.78,12432.77,3,973.99,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Calça,Loja,20,3266.07,1311.01,2,326.61,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Calça,E-commerce,61,12337.62,5771.08,7,1415.79,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Calçado,Loja,32,11400.99,6111.75,4,1425.12,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Básicos,Calçado,E-commerce,24,4707.09,1903.63,1,196.13,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Camisa,Loja,63,5701.10,3702.00,4,361.97,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Camisa,E-commerce,65,20198.06,10357.81,6,1864.44,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Camiseta,Loja,16,4092.55,2495.75,1,255.78,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Camiseta,E-commerce,60,9779.67,5481.97,1,162.99,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Jaqueta,Loja,17,3878.23,2617.07,1,228.13,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Básicos,Jaqueta,E-commerce,46,12459.88,7785.50,2,541.73,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Shorts,Loja,18,1854.42,1199.34,1,103.02,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Básicos,Shorts,E-commerce,52,16525.15,9613.05,5,1588.96,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Vestido,Loja,23,1943.74,1048.06,1,84.51,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Básicos,Vestido,E-commerce,42,4372.40,1943.27,1,104.10,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Acessório,Loja,21,5242.91,2680.94,2,499.33,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Cápsula Urbana,Acessório,E-commerce,25,4752.85,2494.43,2,380.23,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Blusa,Loja,59,18423.82,7793.50,6,1873.61,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Blusa,E-commerce,51,17473.75,9960.07,1,342.62,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Calça,Loja,31,3045.89,1706.69,3,294.76,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Calça,E-commerce,13,2147.81,1328.66,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Calçado,Loja,14,4716.05,2705.01,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Calçado,E-commerce,55,12340.63,7161.84,5,1121.88,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Camisa,Loja,24,4896.68,2439.24,2,408.06,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Camisa,E-commerce,63,13499.38,6766.71,3,642.83,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Cápsula Urbana,Camiseta,Loja,24,7249.33,3326.49,2,604.11,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Camiseta,E-commerce,69,13825.29,7352.43,5,1001.83,Dobra Moda
+2025-09-01,Setembro,2025,Loja Centro,Cápsula Urbana,Jaqueta,Loja,61,18543.85,8324.74,2,608.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Jaqueta,E-commerce,59,9064.90,5180.57,7,1075.50,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Shorts,Loja,33,11411.36,5334.55,4,1383.19,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Shorts,E-commerce,21,5162.67,2739.59,2,491.68,Dobra Moda
+2025-09-01,Setembro,2025,Loja Shopping,Cápsula Urbana,Vestido,Loja,10,1135.82,560.24,0,0.00,Dobra Moda
+2025-09-01,Setembro,2025,Loja Outlet,Cápsula Urbana,Vestido,E-commerce,61,17957.57,10273.12,3,883.16,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Acessório,Loja,12,3964.02,1876.87,1,330.34,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Acessório,E-commerce,18,6189.59,3287.44,1,343.87,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Verão 2026,Blusa,Loja,23,3259.87,1550.73,3,425.20,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Blusa,E-commerce,38,4018.87,2208.41,4,423.04,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Calça,Loja,36,9111.62,4445.93,1,253.10,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Verão 2026,Calça,E-commerce,41,14376.79,7157.70,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Verão 2026,Calçado,Loja,54,16189.07,10268.22,4,1199.19,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Calçado,E-commerce,26,5617.86,3706.84,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Camisa,Loja,32,3925.21,2556.96,2,245.33,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Camisa,E-commerce,46,5153.55,2340.52,1,112.03,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Camiseta,Loja,53,13944.91,9335.45,2,526.22,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Camiseta,E-commerce,26,5451.39,2564.63,3,629.01,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Verão 2026,Jaqueta,Loja,47,4981.08,3009.92,3,317.94,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Jaqueta,E-commerce,38,11644.32,7332.94,1,306.43,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Shorts,Loja,15,2657.30,1300.52,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Verão 2026,Shorts,E-commerce,40,5596.29,3709.63,2,279.81,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Vestido,Loja,10,2086.76,946.28,1,208.68,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Verão 2026,Vestido,E-commerce,9,1874.64,1073.07,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Inverno 2026,Acessório,Loja,54,10917.21,4474.69,3,606.51,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Inverno 2026,Acessório,E-commerce,57,8822.95,3611.80,4,619.15,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Blusa,Loja,45,15493.89,7553.71,4,1377.23,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Inverno 2026,Blusa,E-commerce,64,7863.23,4794.94,4,491.45,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Calça,Loja,49,14482.09,9536.99,3,886.66,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Inverno 2026,Calça,E-commerce,49,8730.64,3976.14,3,534.53,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Calçado,Loja,30,8050.19,4022.62,2,536.68,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Inverno 2026,Calçado,E-commerce,10,952.40,415.12,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Inverno 2026,Camisa,Loja,24,2471.77,1136.56,2,205.98,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Inverno 2026,Camisa,E-commerce,54,13553.88,5703.95,2,502.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Inverno 2026,Camiseta,Loja,37,11836.04,5281.14,3,959.68,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Camiseta,E-commerce,22,4242.88,2495.93,1,192.86,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Inverno 2026,Jaqueta,Loja,52,14733.55,7601.53,5,1416.69,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Inverno 2026,Jaqueta,E-commerce,66,10184.89,6820.96,2,308.63,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Shorts,Loja,8,747.88,394.70,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Shorts,E-commerce,55,11098.11,5572.72,6,1210.70,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Inverno 2026,Vestido,Loja,59,13177.07,8865.62,3,670.02,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Inverno 2026,Vestido,E-commerce,33,10924.20,5809.98,3,993.11,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Básicos,Acessório,Loja,51,15492.64,6810.83,4,1215.11,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Básicos,Acessório,E-commerce,32,10971.26,4707.02,3,1028.56,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Básicos,Blusa,Loja,15,2011.66,1256.55,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Básicos,Blusa,E-commerce,48,8138.80,3618.01,3,508.67,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Básicos,Calça,Loja,44,13240.07,7322.23,5,1504.55,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Calça,E-commerce,60,18396.80,11815.18,4,1226.45,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Calçado,Loja,35,5362.48,3089.61,2,306.43,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Calçado,E-commerce,51,6620.95,3920.95,2,259.65,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Básicos,Camisa,Loja,65,7132.74,3047.93,7,768.14,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Camisa,E-commerce,49,14397.60,8565.98,1,293.83,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Básicos,Camiseta,Loja,65,8561.15,5740.97,6,790.26,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Básicos,Camiseta,E-commerce,11,2577.14,1498.50,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Jaqueta,Loja,44,8972.53,5978.77,3,611.76,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Básicos,Jaqueta,E-commerce,56,12875.14,8386.69,6,1379.48,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Shorts,Loja,24,6419.61,2865.89,3,802.45,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Básicos,Shorts,E-commerce,49,7228.30,3383.00,2,295.03,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Vestido,Loja,63,6947.20,3640.45,5,551.37,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Básicos,Vestido,E-commerce,8,635.64,339.99,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Acessório,Loja,37,7943.76,4806.36,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Acessório,E-commerce,49,10523.75,4528.94,4,859.08,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Cápsula Urbana,Blusa,Loja,31,8899.17,4489.54,2,574.14,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Cápsula Urbana,Blusa,E-commerce,37,11639.20,6730.04,1,314.57,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Calça,Loja,38,3448.30,1906.11,4,362.98,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Cápsula Urbana,Calça,E-commerce,42,11069.21,4746.85,2,527.11,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Calçado,Loja,21,2993.74,1890.82,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Calçado,E-commerce,48,14526.36,6854.65,3,907.90,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Cápsula Urbana,Camisa,Loja,14,3517.05,1801.99,0,0.00,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Camisa,E-commerce,54,13510.40,5481.46,6,1501.16,Dobra Moda
+2025-10-01,Outubro,2025,Loja Shopping,Cápsula Urbana,Camiseta,Loja,57,13618.72,9128.24,6,1433.55,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,48,6887.07,3006.84,5,717.40,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Cápsula Urbana,Jaqueta,Loja,51,12572.90,7432.46,1,246.53,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Cápsula Urbana,Jaqueta,E-commerce,53,9753.46,5468.60,2,368.06,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Cápsula Urbana,Shorts,Loja,16,3023.10,2017.18,1,188.94,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Cápsula Urbana,Shorts,E-commerce,15,2584.86,1212.43,1,172.32,Dobra Moda
+2025-10-01,Outubro,2025,Loja Centro,Cápsula Urbana,Vestido,Loja,63,17875.86,11059.23,3,851.23,Dobra Moda
+2025-10-01,Outubro,2025,Loja Outlet,Cápsula Urbana,Vestido,E-commerce,32,2559.00,1148.44,2,159.94,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Acessório,Loja,88,7572.28,4529.70,6,516.29,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Verão 2026,Acessório,E-commerce,53,6295.32,4004.15,4,475.12,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Blusa,Loja,75,13681.81,6356.86,6,1094.54,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Blusa,E-commerce,26,8185.17,4738.05,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Calça,Loja,48,15734.13,7731.06,1,327.79,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Verão 2026,Calça,E-commerce,39,5861.53,3286.53,4,601.18,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Verão 2026,Calçado,Loja,39,3365.92,1499.92,1,86.31,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Verão 2026,Calçado,E-commerce,86,25284.79,11179.71,7,2058.06,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Verão 2026,Camisa,Loja,18,3093.26,1681.82,1,171.85,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Verão 2026,Camisa,E-commerce,51,12315.02,8138.81,3,724.41,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Verão 2026,Camiseta,Loja,48,10438.64,5616.24,5,1087.36,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Verão 2026,Camiseta,E-commerce,13,1146.30,590.37,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Verão 2026,Jaqueta,Loja,85,13963.26,6091.88,10,1642.74,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Verão 2026,Jaqueta,E-commerce,42,7212.18,4829.92,2,343.44,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Shorts,Loja,74,18971.11,10725.64,3,769.10,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Shorts,E-commerce,43,6524.90,3991.25,3,455.23,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Verão 2026,Vestido,Loja,49,15790.40,8242.01,1,322.25,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Verão 2026,Vestido,E-commerce,34,5649.31,3749.38,3,498.47,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Inverno 2026,Acessório,Loja,65,19729.43,10405.56,6,1821.18,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Inverno 2026,Acessório,E-commerce,60,15514.43,8257.98,2,517.15,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Inverno 2026,Blusa,Loja,21,3218.02,2000.16,2,306.48,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Blusa,E-commerce,52,8978.63,5489.36,4,690.66,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Calça,Loja,69,12048.80,7449.23,3,523.86,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Calça,E-commerce,63,20180.08,11386.84,6,1921.91,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Calçado,Loja,52,7281.97,3151.48,1,140.04,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Inverno 2026,Calçado,E-commerce,31,9909.50,6308.74,1,319.66,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Inverno 2026,Camisa,Loja,36,10728.92,6044.99,4,1192.10,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Inverno 2026,Camisa,E-commerce,52,8475.47,4522.93,6,977.94,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Camiseta,Loja,14,3010.52,2041.44,1,215.04,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Camiseta,E-commerce,62,11205.76,6595.84,3,542.21,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Jaqueta,Loja,36,8020.72,4983.03,1,222.80,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Inverno 2026,Jaqueta,E-commerce,50,6901.74,3740.29,2,276.07,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Inverno 2026,Shorts,Loja,9,1224.94,493.55,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Shorts,E-commerce,31,9925.40,6031.27,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Inverno 2026,Vestido,Loja,31,7589.65,4305.52,4,979.31,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Inverno 2026,Vestido,E-commerce,52,10065.66,4642.03,1,193.57,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Básicos,Acessório,Loja,56,11919.97,6853.30,6,1277.14,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Básicos,Acessório,E-commerce,63,12749.20,6436.86,1,202.37,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Blusa,Loja,20,4755.30,3001.15,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Básicos,Blusa,E-commerce,38,9294.11,6006.00,4,978.33,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Calça,Loja,12,3596.11,1494.00,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Calça,E-commerce,69,7839.78,4351.79,4,454.48,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Calçado,Loja,48,4230.12,2331.21,6,528.76,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Calçado,E-commerce,25,3126.84,1419.36,3,375.22,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Básicos,Camisa,Loja,11,1311.31,750.99,1,119.21,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Camisa,E-commerce,25,2133.47,1093.01,2,170.68,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Básicos,Camiseta,Loja,59,20443.09,10340.05,8,2771.94,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Básicos,Camiseta,E-commerce,51,13774.81,5518.82,4,1080.38,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Jaqueta,Loja,16,2797.24,1540.03,1,174.83,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Básicos,Jaqueta,E-commerce,45,4697.40,2544.29,2,208.77,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Básicos,Shorts,Loja,59,5208.21,2641.14,7,617.92,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Básicos,Shorts,E-commerce,40,12467.03,6160.87,3,935.03,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Básicos,Vestido,Loja,23,2569.60,1444.18,2,223.44,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Básicos,Vestido,E-commerce,56,8451.24,4237.37,7,1056.40,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Cápsula Urbana,Acessório,Loja,40,3232.63,1517.14,2,161.63,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Cápsula Urbana,Acessório,E-commerce,68,12349.54,7708.59,5,908.05,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Cápsula Urbana,Blusa,Loja,42,10842.27,5692.80,2,516.30,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Blusa,E-commerce,19,2721.95,1538.52,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Calça,Loja,23,2302.76,1230.94,2,200.24,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Cápsula Urbana,Calça,E-commerce,46,12903.00,6339.09,3,841.50,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Cápsula Urbana,Calçado,Loja,65,22512.70,13894.66,6,2078.09,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Cápsula Urbana,Calçado,E-commerce,58,13804.39,8524.02,2,476.01,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Camisa,Loja,38,11825.94,7047.16,1,311.21,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Camisa,E-commerce,57,13590.79,8470.01,2,476.87,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Cápsula Urbana,Camiseta,Loja,37,9852.94,5023.47,2,532.59,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,8,1069.68,482.61,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Cápsula Urbana,Jaqueta,Loja,37,3124.56,1318.57,0,0.00,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Jaqueta,E-commerce,38,6616.24,2793.38,5,870.56,Dobra Moda
+2025-11-01,Novembro,2025,Loja Outlet,Cápsula Urbana,Shorts,Loja,50,14215.25,8297.49,1,284.30,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Cápsula Urbana,Shorts,E-commerce,63,11365.17,5712.60,3,541.20,Dobra Moda
+2025-11-01,Novembro,2025,Loja Centro,Cápsula Urbana,Vestido,Loja,25,5475.48,2400.98,3,657.06,Dobra Moda
+2025-11-01,Novembro,2025,Loja Shopping,Cápsula Urbana,Vestido,E-commerce,11,3613.95,1856.20,0,0.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Verão 2026,Acessório,Loja,37,10613.88,6563.38,2,573.72,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Acessório,E-commerce,67,16046.08,7554.52,2,478.99,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Verão 2026,Blusa,Loja,30,8450.65,3511.35,2,563.38,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Blusa,E-commerce,35,8103.96,5371.94,1,231.54,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Calça,Loja,58,10652.40,7101.50,2,367.32,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Verão 2026,Calça,E-commerce,68,9502.53,5224.25,6,838.46,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Verão 2026,Calçado,Loja,14,1451.90,686.30,1,103.71,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Verão 2026,Calçado,E-commerce,23,2686.80,1439.91,1,116.82,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Camisa,Loja,55,12075.09,5167.20,5,1097.74,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Verão 2026,Camisa,E-commerce,18,1645.99,707.65,1,91.44,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Camiseta,Loja,92,32484.85,19081.82,2,706.19,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Camiseta,E-commerce,40,9583.18,3957.29,4,958.32,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Verão 2026,Jaqueta,Loja,56,15767.62,6864.78,2,563.13,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Verão 2026,Jaqueta,E-commerce,91,18695.01,7497.64,4,821.76,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Verão 2026,Shorts,Loja,82,23850.54,13450.21,6,1745.16,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Verão 2026,Shorts,E-commerce,86,15099.15,10118.04,8,1404.57,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Verão 2026,Vestido,Loja,87,26688.62,11253.28,10,3067.66,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Verão 2026,Vestido,E-commerce,64,6553.74,3725.36,8,819.22,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Acessório,Loja,28,9578.97,4643.47,3,1026.32,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Inverno 2026,Acessório,E-commerce,64,10433.70,6541.89,7,1141.19,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Inverno 2026,Blusa,Loja,33,6181.55,3071.19,0,0.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Blusa,E-commerce,22,2171.30,1051.14,1,98.70,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Calça,Loja,53,7696.30,5069.72,3,435.64,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Calça,E-commerce,37,12091.79,5709.83,1,326.81,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Calçado,Loja,20,6544.38,4193.51,1,327.22,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Calçado,E-commerce,40,5012.25,3372.52,2,250.61,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Inverno 2026,Camisa,Loja,14,4662.35,2847.54,1,333.03,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Inverno 2026,Camisa,E-commerce,63,20317.52,11811.08,7,2257.50,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Inverno 2026,Camiseta,Loja,64,5899.00,3691.02,3,276.52,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Camiseta,E-commerce,48,12433.86,5409.99,3,777.12,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Inverno 2026,Jaqueta,Loja,67,17087.82,10284.79,5,1275.21,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Inverno 2026,Jaqueta,E-commerce,45,8852.63,4419.36,2,393.45,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Inverno 2026,Shorts,Loja,15,4889.91,2511.19,1,325.99,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Inverno 2026,Shorts,E-commerce,59,6748.14,3193.73,2,228.75,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Inverno 2026,Vestido,Loja,21,6272.93,2914.78,1,298.71,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Inverno 2026,Vestido,E-commerce,52,8030.30,5078.78,7,1081.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Acessório,Loja,50,6033.73,2821.88,6,724.05,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Acessório,E-commerce,54,7063.28,3185.81,3,392.40,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Blusa,Loja,24,8370.25,4117.43,2,697.52,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Blusa,E-commerce,62,15945.89,8707.68,2,514.38,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Calça,Loja,57,7985.54,3931.99,4,560.39,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Calça,E-commerce,24,7298.80,3253.83,2,608.23,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Calçado,Loja,23,6948.20,4261.09,2,604.19,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Calçado,E-commerce,33,6459.36,3838.09,3,587.21,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Camisa,Loja,68,10133.64,5742.09,7,1043.17,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Camisa,E-commerce,34,11406.66,6931.73,2,670.98,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Camiseta,Loja,32,2623.30,1577.96,1,81.98,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Básicos,Camiseta,E-commerce,8,717.28,482.00,0,0.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Básicos,Jaqueta,Loja,60,11594.93,7445.17,5,966.24,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Básicos,Jaqueta,E-commerce,17,3746.97,1760.47,1,220.41,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Básicos,Shorts,Loja,27,7130.24,2956.91,3,792.25,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Shorts,E-commerce,47,5363.10,3075.13,4,456.43,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Básicos,Vestido,Loja,51,4905.56,2556.79,6,577.12,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Básicos,Vestido,E-commerce,66,9380.06,4267.99,8,1136.98,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Cápsula Urbana,Acessório,Loja,43,10495.55,5012.77,5,1220.41,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Cápsula Urbana,Acessório,E-commerce,56,13707.67,6186.31,7,1713.46,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Blusa,Loja,18,3793.24,2254.31,1,210.74,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Blusa,E-commerce,23,6975.40,3788.09,2,606.56,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Cápsula Urbana,Calça,Loja,9,1928.47,921.08,0,0.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Calça,E-commerce,20,2596.03,1205.60,1,129.80,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Cápsula Urbana,Calçado,Loja,17,4964.70,3283.42,0,0.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Calçado,E-commerce,41,5438.10,3422.20,1,132.64,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Camisa,Loja,22,2015.09,1322.79,1,91.60,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Cápsula Urbana,Camisa,E-commerce,23,2670.56,1139.89,0,0.00,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Camiseta,Loja,13,4487.16,2202.27,1,345.17,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,57,19815.61,9406.40,7,2433.50,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Cápsula Urbana,Jaqueta,Loja,24,2923.20,1699.36,2,243.60,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Centro,Cápsula Urbana,Jaqueta,E-commerce,66,12507.59,5252.41,6,1137.05,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Cápsula Urbana,Shorts,Loja,31,5691.77,2416.32,1,183.61,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Outlet,Cápsula Urbana,Shorts,E-commerce,57,5073.10,2720.03,4,356.01,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Cápsula Urbana,Vestido,Loja,13,1938.30,1305.70,1,149.10,Dobra Moda
+2025-12-01,Dezembro,2025,Loja Shopping,Cápsula Urbana,Vestido,E-commerce,64,11337.75,6893.56,6,1062.91,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Verão 2026,Acessório,Loja,61,9171.59,5625.72,1,150.35,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Acessório,E-commerce,83,9124.28,5417.65,10,1099.31,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Blusa,Loja,40,13831.19,8995.23,2,691.56,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Blusa,E-commerce,25,5592.39,3254.14,3,671.09,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Calça,Loja,31,9765.33,5083.47,3,945.03,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Calça,E-commerce,81,8093.18,4754.68,6,599.49,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Calçado,Loja,85,23819.50,11111.44,3,840.69,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Calçado,E-commerce,49,16807.63,8194.48,2,686.03,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Verão 2026,Camisa,Loja,37,8770.03,4454.44,4,948.11,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Camisa,E-commerce,65,16014.48,8471.05,1,246.38,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Verão 2026,Camiseta,Loja,68,18608.69,9644.67,8,2189.26,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Camiseta,E-commerce,14,4117.33,1690.67,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Jaqueta,Loja,74,14529.53,6202.56,1,196.34,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Verão 2026,Jaqueta,E-commerce,61,13142.54,7146.44,4,861.81,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Shorts,Loja,55,7546.10,3612.27,7,960.41,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Shorts,E-commerce,65,12182.98,5702.37,5,937.15,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Verão 2026,Vestido,Loja,91,19287.46,10607.79,5,1059.75,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Verão 2026,Vestido,E-commerce,79,14082.16,7290.75,7,1247.79,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Inverno 2026,Acessório,Loja,46,12176.00,6172.09,6,1588.17,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Inverno 2026,Acessório,E-commerce,41,5085.96,2715.99,3,372.14,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Inverno 2026,Blusa,Loja,37,4545.79,2439.80,4,491.44,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Blusa,E-commerce,47,11029.36,6490.82,6,1408.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Calça,Loja,35,8983.41,4745.65,2,513.34,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Inverno 2026,Calça,E-commerce,9,2015.37,1216.48,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Inverno 2026,Calçado,Loja,67,9471.56,5827.10,6,848.20,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Inverno 2026,Calçado,E-commerce,55,13370.54,9049.46,3,729.30,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Camisa,Loja,23,8130.98,4635.62,1,353.52,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Camisa,E-commerce,63,9583.54,5123.61,5,760.60,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Inverno 2026,Camiseta,Loja,31,6936.05,3585.94,2,447.49,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Camiseta,E-commerce,28,6078.52,2603.27,1,217.09,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Jaqueta,Loja,34,6040.35,3443.81,2,355.31,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Inverno 2026,Jaqueta,E-commerce,20,3286.63,2166.93,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Inverno 2026,Shorts,Loja,64,16850.29,7728.60,8,2106.29,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Shorts,E-commerce,52,6076.28,3330.96,7,817.96,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Vestido,Loja,28,8435.64,3941.67,2,602.55,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Inverno 2026,Vestido,E-commerce,37,5438.60,3206.39,1,146.99,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Acessório,Loja,50,10708.49,6058.14,1,214.17,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Acessório,E-commerce,14,2220.00,1186.67,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Blusa,Loja,16,4252.88,1866.07,1,265.80,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Básicos,Blusa,E-commerce,28,2399.06,998.45,1,85.68,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Básicos,Calça,Loja,69,15286.67,9300.79,1,221.55,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Calça,E-commerce,44,10283.14,4714.40,5,1168.54,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Calçado,Loja,47,6841.76,3713.71,1,145.57,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Calçado,E-commerce,14,1950.06,890.43,1,139.29,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Básicos,Camisa,Loja,23,3237.30,1903.37,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Camisa,E-commerce,12,1701.31,755.50,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Camiseta,Loja,69,14984.93,10079.23,3,651.52,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Camiseta,E-commerce,69,16432.80,9535.45,3,714.47,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Jaqueta,Loja,33,6200.16,3368.89,2,375.77,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Básicos,Jaqueta,E-commerce,30,6769.36,4221.13,1,225.65,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Shorts,Loja,17,5059.45,2918.87,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Shorts,E-commerce,15,1342.45,621.35,2,178.99,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Vestido,Loja,31,8926.13,4699.17,3,863.82,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Básicos,Vestido,E-commerce,19,1921.78,967.25,1,101.15,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Cápsula Urbana,Acessório,Loja,59,6356.85,3462.21,5,538.72,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Acessório,E-commerce,62,5106.58,2141.94,4,329.46,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Blusa,Loja,51,15508.68,9893.67,2,608.18,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Cápsula Urbana,Blusa,E-commerce,38,8910.41,5488.55,2,468.97,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Cápsula Urbana,Calça,Loja,10,2354.82,1469.18,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Cápsula Urbana,Calça,E-commerce,16,3021.52,1481.84,1,188.85,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Cápsula Urbana,Calçado,Loja,26,3188.57,1404.66,3,367.91,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,51,6166.83,3393.44,6,725.51,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Cápsula Urbana,Camisa,Loja,52,7677.95,4063.30,3,442.96,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Camisa,E-commerce,30,4278.25,1799.55,3,427.82,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Cápsula Urbana,Camiseta,Loja,64,5623.69,2489.61,6,527.22,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,44,4981.73,2360.34,1,113.22,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Cápsula Urbana,Jaqueta,Loja,49,9499.27,4819.04,1,193.86,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Cápsula Urbana,Jaqueta,E-commerce,65,19527.02,12585.95,5,1502.08,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Shorts,Loja,15,1614.66,908.16,1,107.64,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Cápsula Urbana,Shorts,E-commerce,53,16801.35,8500.51,5,1585.03,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Cápsula Urbana,Vestido,Loja,16,2629.77,1409.91,1,164.36,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Cápsula Urbana,Vestido,E-commerce,56,8979.04,6027.36,2,320.68,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Verão 2026,Acessório,Loja,34,4577.73,1920.51,1,134.64,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Verão 2026,Acessório,E-commerce,63,10501.23,6990.22,3,500.06,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Verão 2026,Blusa,Loja,69,9938.70,4851.69,2,288.08,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Blusa,E-commerce,66,10958.03,5765.26,5,830.15,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Calça,Loja,10,2883.00,1792.85,1,288.30,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Verão 2026,Calça,E-commerce,48,7783.26,4894.96,3,486.45,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Calçado,Loja,16,2153.90,1019.98,1,134.62,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Calçado,E-commerce,33,7000.56,4655.25,1,212.14,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Verão 2026,Camisa,Loja,66,13975.07,6641.82,1,211.74,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Camisa,E-commerce,33,4670.10,2989.79,4,566.07,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Camiseta,Loja,32,8169.47,4670.99,4,1021.18,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Verão 2026,Camiseta,E-commerce,11,3782.48,1774.52,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Verão 2026,Jaqueta,Loja,43,15113.53,8647.41,1,351.48,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Verão 2026,Jaqueta,E-commerce,44,7190.88,2885.02,2,326.86,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Verão 2026,Shorts,Loja,24,7015.22,3691.81,1,292.30,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Verão 2026,Shorts,E-commerce,69,16241.39,8077.68,9,2118.44,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Verão 2026,Vestido,Loja,31,8419.91,3453.32,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Verão 2026,Vestido,E-commerce,61,15857.93,7654.47,6,1559.80,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Inverno 2026,Acessório,Loja,27,5138.70,2614.47,1,190.32,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Acessório,E-commerce,25,4016.42,2192.54,1,160.66,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Inverno 2026,Blusa,Loja,62,11493.46,6642.78,5,926.89,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Inverno 2026,Blusa,E-commerce,44,9766.38,5319.69,3,665.89,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Calça,Loja,23,7039.90,2865.94,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Inverno 2026,Calça,E-commerce,57,4565.93,1918.18,4,320.42,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Inverno 2026,Calçado,Loja,48,8016.42,5243.44,4,668.04,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Inverno 2026,Calçado,E-commerce,58,19808.11,10386.63,1,341.52,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Inverno 2026,Camisa,Loja,35,8407.68,5149.61,4,960.88,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Camisa,E-commerce,25,2140.97,1409.05,1,85.64,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Camiseta,Loja,13,4576.76,2287.78,1,352.06,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Camiseta,E-commerce,35,5001.97,2327.53,3,428.74,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Jaqueta,Loja,49,13928.03,9412.28,6,1705.47,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Inverno 2026,Jaqueta,E-commerce,66,9457.54,6393.10,5,716.48,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Inverno 2026,Shorts,Loja,9,1244.91,579.58,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Inverno 2026,Shorts,E-commerce,62,18088.74,8811.26,6,1750.52,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Inverno 2026,Vestido,Loja,44,8232.76,4224.90,2,374.22,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Inverno 2026,Vestido,E-commerce,31,3421.74,2077.39,2,220.76,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Básicos,Acessório,Loja,22,7885.69,3632.21,1,358.44,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Acessório,E-commerce,55,15078.04,6684.63,4,1096.58,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Blusa,Loja,52,17683.93,8044.44,5,1700.38,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Blusa,E-commerce,59,18683.48,9440.99,3,950.01,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Básicos,Calça,Loja,23,5835.27,3748.65,2,507.41,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Básicos,Calça,E-commerce,42,11151.95,5275.06,1,265.52,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Calçado,Loja,24,3249.91,1413.14,2,270.83,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Calçado,E-commerce,32,10955.53,5702.55,2,684.72,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Camisa,Loja,47,10021.86,4651.34,2,426.46,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Básicos,Camisa,E-commerce,15,4897.73,2125.62,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Básicos,Camiseta,Loja,32,9824.71,5462.95,1,307.02,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Camiseta,E-commerce,54,10231.58,5240.41,6,1136.84,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Jaqueta,Loja,51,10447.29,4476.19,2,409.70,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Básicos,Jaqueta,E-commerce,48,8656.03,3474.30,5,901.67,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Básicos,Shorts,Loja,52,7768.85,3395.37,5,747.01,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Básicos,Shorts,E-commerce,52,18509.07,9463.86,5,1779.72,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Básicos,Vestido,Loja,30,3433.39,2174.88,2,228.89,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Básicos,Vestido,E-commerce,9,3047.58,1551.34,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Acessório,Loja,49,14662.75,9134.25,1,299.24,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Acessório,E-commerce,11,3397.36,1762.41,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Blusa,Loja,36,8527.66,5292.08,4,947.52,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Cápsula Urbana,Blusa,E-commerce,46,10281.45,4513.64,1,223.51,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Cápsula Urbana,Calça,Loja,8,2143.97,1191.39,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Calça,E-commerce,40,6565.22,4411.98,4,656.52,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Calçado,Loja,11,2972.11,1979.52,1,270.19,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,60,12800.28,5824.89,7,1493.37,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Cápsula Urbana,Camisa,Loja,11,2925.47,1603.70,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Cápsula Urbana,Camisa,E-commerce,66,9757.99,6613.18,8,1182.79,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Cápsula Urbana,Camiseta,Loja,68,19218.41,8065.16,2,565.25,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Cápsula Urbana,Camiseta,E-commerce,55,12540.88,5494.66,2,456.03,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Cápsula Urbana,Jaqueta,Loja,21,2140.59,1292.11,1,101.93,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Jaqueta,E-commerce,15,2805.27,1623.30,1,187.02,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Cápsula Urbana,Shorts,Loja,21,1830.46,829.35,1,87.16,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Cápsula Urbana,Shorts,E-commerce,50,10080.89,4706.22,4,806.47,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Cápsula Urbana,Vestido,Loja,64,16017.05,6703.34,7,1751.87,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Cápsula Urbana,Vestido,E-commerce,24,7538.04,3326.20,2,628.17,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Verão 2026,Acessório,Loja,12,2875.32,1333.78,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Verão 2026,Acessório,E-commerce,16,5309.05,2345.39,2,663.63,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Verão 2026,Blusa,Loja,57,19102.64,8576.04,7,2345.94,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Verão 2026,Blusa,E-commerce,36,5474.53,3486.18,3,456.21,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Verão 2026,Calça,Loja,66,11019.29,7206.17,4,667.84,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Verão 2026,Calça,E-commerce,24,6507.51,3110.31,3,813.44,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Verão 2026,Calçado,Loja,47,13839.39,8363.15,3,883.37,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Verão 2026,Calçado,E-commerce,62,20295.45,8540.89,7,2291.42,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Verão 2026,Camisa,Loja,21,4173.33,1697.74,2,397.46,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Verão 2026,Camisa,E-commerce,27,5924.09,2510.92,1,219.41,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Verão 2026,Camiseta,Loja,29,7790.06,4821.16,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Verão 2026,Camiseta,E-commerce,64,17619.63,7871.25,4,1101.23,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Verão 2026,Jaqueta,Loja,65,6087.16,4006.83,5,468.24,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Verão 2026,Jaqueta,E-commerce,17,4750.14,2254.44,1,279.42,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Verão 2026,Shorts,Loja,37,4131.44,1859.16,3,334.98,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Verão 2026,Shorts,E-commerce,32,2730.21,1203.51,1,85.32,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Verão 2026,Vestido,Loja,12,3633.14,1631.49,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Verão 2026,Vestido,E-commerce,46,10973.05,5893.82,5,1192.72,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Acessório,Loja,36,12119.87,6786.52,3,1009.99,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Inverno 2026,Acessório,E-commerce,68,21665.68,10582.32,4,1274.45,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Inverno 2026,Blusa,Loja,67,20658.16,9737.42,4,1233.32,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Blusa,E-commerce,13,1262.22,743.59,1,97.09,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Calça,Loja,8,2229.17,1157.37,1,278.65,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Calça,E-commerce,67,14010.21,7295.18,2,418.22,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Inverno 2026,Calçado,Loja,66,10623.19,6778.08,2,321.91,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Inverno 2026,Calçado,E-commerce,57,13200.88,6616.52,7,1621.16,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Inverno 2026,Camisa,Loja,54,11976.87,5280.88,7,1552.56,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Inverno 2026,Camisa,E-commerce,23,5937.12,2606.45,1,258.14,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Inverno 2026,Camiseta,Loja,57,5132.71,2731.00,6,540.29,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Camiseta,E-commerce,20,2545.32,1332.69,2,254.53,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Jaqueta,Loja,55,8836.35,4397.87,2,321.32,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Jaqueta,E-commerce,16,1551.98,815.99,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Inverno 2026,Shorts,Loja,16,3376.94,2135.20,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Inverno 2026,Shorts,E-commerce,52,11268.71,6710.43,5,1083.53,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Vestido,Loja,47,8021.75,3561.36,5,853.38,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Inverno 2026,Vestido,E-commerce,29,3035.61,1817.19,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Básicos,Acessório,Loja,62,5461.79,2360.32,3,264.28,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Acessório,E-commerce,55,15318.13,6679.78,6,1671.07,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Blusa,Loja,50,4130.75,2136.16,6,495.69,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Blusa,E-commerce,15,2543.24,1126.63,1,169.55,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Básicos,Calça,Loja,8,2665.12,1565.78,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Calça,E-commerce,25,8970.25,4419.19,1,358.81,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Calçado,Loja,68,20037.77,8809.26,9,2652.06,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Calçado,E-commerce,61,6736.34,3478.32,4,441.73,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Básicos,Camisa,Loja,34,11283.19,5859.99,2,663.72,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Camisa,E-commerce,37,9952.01,4006.58,1,268.97,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Básicos,Camiseta,Loja,23,3616.61,1702.56,3,471.73,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Básicos,Camiseta,E-commerce,14,2644.05,1487.23,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Jaqueta,Loja,41,6581.82,3986.12,3,481.60,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Básicos,Jaqueta,E-commerce,28,7372.53,3960.11,1,263.30,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Shorts,Loja,66,20609.69,9224.65,1,312.27,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Básicos,Shorts,E-commerce,26,2923.53,1174.38,3,337.33,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Básicos,Vestido,Loja,45,13747.55,7867.40,6,1833.01,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Básicos,Vestido,E-commerce,14,3933.91,1788.51,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Acessório,Loja,51,9366.98,5577.82,5,918.33,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Cápsula Urbana,Acessório,E-commerce,48,17005.09,11256.10,2,708.55,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Blusa,Loja,19,3935.74,2064.75,1,207.14,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Blusa,E-commerce,65,18654.21,12447.97,7,2008.91,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Cápsula Urbana,Calça,Loja,38,7322.23,4852.86,4,770.76,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Calça,E-commerce,20,3626.42,2234.04,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Calçado,Loja,56,17281.43,8457.80,5,1542.99,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,36,9966.92,5527.71,1,276.86,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Camisa,Loja,21,7460.71,3561.60,1,355.27,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Cápsula Urbana,Camisa,E-commerce,9,3008.54,1505.62,1,334.28,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Camiseta,Loja,8,2338.75,1243.86,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,12,3945.19,2509.74,1,328.77,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Jaqueta,Loja,19,6795.44,3137.13,2,715.31,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Jaqueta,E-commerce,67,19755.29,11557.04,4,1179.42,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Shorts,Loja,10,2859.43,1426.10,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Cápsula Urbana,Shorts,E-commerce,35,8661.91,5847.79,1,247.48,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Cápsula Urbana,Vestido,Loja,19,3899.35,2206.55,1,205.23,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Cápsula Urbana,Vestido,E-commerce,51,14900.44,7911.63,6,1752.99,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Verão 2026,Acessório,Loja,62,10562.56,6792.10,2,340.73,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Acessório,E-commerce,8,1913.33,1243.31,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Verão 2026,Blusa,Loja,43,14411.42,5921.85,4,1340.60,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Blusa,E-commerce,48,16797.95,7573.01,5,1749.79,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Calça,Loja,31,6993.42,4318.57,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Calça,E-commerce,20,4156.81,2455.06,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Calçado,Loja,39,9412.75,5125.62,3,724.06,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Calçado,E-commerce,8,2853.90,1537.78,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Camisa,Loja,53,15322.51,9263.17,4,1156.42,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Camisa,E-commerce,37,12112.46,7712.97,1,327.36,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Camiseta,Loja,47,15982.57,9507.41,6,2040.33,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Camiseta,E-commerce,21,5652.55,3445.16,2,538.34,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Jaqueta,Loja,29,9044.32,4917.77,3,935.62,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Verão 2026,Jaqueta,E-commerce,61,13596.94,7390.05,1,222.90,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Shorts,Loja,56,19674.61,10444.77,5,1756.66,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Verão 2026,Shorts,E-commerce,52,17208.32,6924.54,1,330.93,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Vestido,Loja,38,6040.61,3401.28,3,476.89,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Verão 2026,Vestido,E-commerce,48,7800.48,3724.53,3,487.53,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Inverno 2026,Acessório,Loja,48,15520.47,7554.09,1,323.34,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Inverno 2026,Acessório,E-commerce,36,8726.76,5514.75,3,727.23,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Inverno 2026,Blusa,Loja,31,9166.79,4548.02,3,887.11,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Inverno 2026,Blusa,E-commerce,55,17177.98,11649.83,1,312.33,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Inverno 2026,Calça,Loja,9,2735.04,1292.45,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Inverno 2026,Calça,E-commerce,65,8957.83,5116.20,3,413.44,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Inverno 2026,Calçado,Loja,47,15100.32,9172.18,3,963.85,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Inverno 2026,Calçado,E-commerce,51,12230.66,6362.07,4,959.27,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Inverno 2026,Camisa,Loja,35,10203.48,6715.33,2,583.06,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Inverno 2026,Camisa,E-commerce,49,14849.96,6239.54,3,909.18,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Inverno 2026,Camiseta,Loja,69,9679.37,4702.66,1,140.28,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Inverno 2026,Camiseta,E-commerce,21,7536.86,4391.00,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Inverno 2026,Jaqueta,Loja,60,12591.56,6404.32,7,1469.02,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Inverno 2026,Jaqueta,E-commerce,47,6265.98,3660.12,4,533.28,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Inverno 2026,Shorts,Loja,38,8710.47,4430.26,1,229.22,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Inverno 2026,Shorts,E-commerce,20,5579.19,2733.99,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Inverno 2026,Vestido,Loja,33,8058.31,3990.63,4,976.76,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Inverno 2026,Vestido,E-commerce,50,4557.21,2061.87,1,91.14,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Acessório,Loja,65,17616.88,8983.28,2,542.06,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Acessório,E-commerce,22,6030.51,3612.65,2,548.23,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Básicos,Blusa,Loja,46,5648.84,3199.42,1,122.80,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Blusa,E-commerce,68,10066.21,5385.22,1,148.03,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Calça,Loja,57,9784.43,4005.22,2,343.31,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Básicos,Calça,E-commerce,27,4748.06,2499.45,3,527.56,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Calçado,Loja,10,1945.12,1034.17,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Calçado,E-commerce,68,10444.58,6907.39,4,614.39,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Básicos,Camisa,Loja,57,17303.71,7460.05,2,607.15,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Básicos,Camisa,E-commerce,42,14260.48,8088.23,5,1697.68,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Camiseta,Loja,37,10537.96,6533.48,4,1139.24,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Básicos,Camiseta,E-commerce,9,2569.67,1102.24,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Básicos,Jaqueta,Loja,64,14785.71,6894.86,6,1386.16,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Básicos,Jaqueta,E-commerce,30,4865.61,2517.42,3,486.56,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Shorts,Loja,49,16769.94,8449.93,2,684.49,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Shorts,E-commerce,43,4013.90,2695.20,1,93.35,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Básicos,Vestido,Loja,34,7460.35,4002.03,2,438.84,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Básicos,Vestido,E-commerce,27,8153.93,3791.45,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Cápsula Urbana,Acessório,Loja,61,8104.69,4882.99,1,132.86,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Acessório,E-commerce,59,5247.33,2862.28,6,533.63,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Blusa,Loja,32,5918.25,3462.14,3,554.84,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Cápsula Urbana,Blusa,E-commerce,66,13079.15,8634.29,1,198.17,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Cápsula Urbana,Calça,Loja,19,1832.39,960.82,2,192.88,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Cápsula Urbana,Calça,E-commerce,9,974.48,600.78,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Cápsula Urbana,Calçado,Loja,66,13786.47,9057.05,1,208.89,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,50,6375.64,2649.90,4,510.05,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Camisa,Loja,23,5769.78,3046.37,2,501.72,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Camisa,E-commerce,64,11932.95,7205.98,5,932.26,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Cápsula Urbana,Camiseta,Loja,50,14556.47,9156.19,4,1164.52,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Cápsula Urbana,Camiseta,E-commerce,61,6062.89,3437.39,5,496.96,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Jaqueta,Loja,56,14013.52,6046.74,6,1501.45,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Jaqueta,E-commerce,9,926.07,415.37,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Cápsula Urbana,Shorts,Loja,63,7206.22,3175.70,3,343.15,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Cápsula Urbana,Shorts,E-commerce,35,5516.13,2907.71,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Cápsula Urbana,Vestido,Loja,46,7823.97,4740.50,3,510.26,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Cápsula Urbana,Vestido,E-commerce,56,18439.49,12195.68,1,329.28,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Verão 2026,Acessório,Loja,17,4653.32,2536.96,1,273.72,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Verão 2026,Acessório,E-commerce,9,911.17,618.79,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Verão 2026,Blusa,Loja,42,13957.94,6594.18,4,1329.33,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Verão 2026,Blusa,E-commerce,39,6632.20,4028.28,2,340.11,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Verão 2026,Calça,Loja,8,1908.57,1200.82,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Verão 2026,Calça,E-commerce,34,10618.83,5036.25,1,312.32,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Verão 2026,Calçado,Loja,23,7094.49,3518.44,1,308.46,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Verão 2026,Calçado,E-commerce,36,7555.79,3552.51,2,419.77,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Verão 2026,Camisa,Loja,24,4873.60,3055.41,2,406.13,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Verão 2026,Camisa,E-commerce,33,7044.61,3721.53,4,853.89,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Verão 2026,Camiseta,Loja,13,4332.53,2356.49,1,333.27,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Verão 2026,Camiseta,E-commerce,41,5025.48,2745.35,4,490.29,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Verão 2026,Jaqueta,Loja,39,13918.40,9049.78,3,1070.65,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Verão 2026,Jaqueta,E-commerce,51,14861.65,7014.76,3,874.21,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Verão 2026,Shorts,Loja,29,9345.48,3933.22,2,644.52,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Verão 2026,Shorts,E-commerce,10,1878.01,1128.36,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Verão 2026,Vestido,Loja,57,5692.59,3614.87,5,499.35,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Verão 2026,Vestido,E-commerce,26,5502.07,3541.05,3,634.85,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Acessório,Loja,16,3360.09,1836.74,2,420.01,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Acessório,E-commerce,77,27648.79,12093.31,7,2513.53,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Blusa,Loja,96,25718.65,12232.20,11,2946.93,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Inverno 2026,Blusa,E-commerce,18,4476.68,3015.44,1,248.70,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Inverno 2026,Calça,Loja,59,13320.20,5338.39,6,1354.60,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Calça,E-commerce,11,2459.12,1482.11,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Calçado,Loja,43,3873.19,2056.10,1,90.07,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Inverno 2026,Calçado,E-commerce,52,8275.81,3970.69,2,318.30,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Camisa,Loja,61,17366.37,9850.01,4,1138.78,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Camisa,E-commerce,67,10821.94,4581.00,1,161.52,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Inverno 2026,Camiseta,Loja,19,6446.90,3608.86,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Camiseta,E-commerce,51,15712.23,8468.60,5,1540.42,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Inverno 2026,Jaqueta,Loja,74,6091.80,2518.70,4,329.29,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Inverno 2026,Jaqueta,E-commerce,60,7496.14,4599.10,5,624.68,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Inverno 2026,Shorts,Loja,70,8984.55,3799.87,9,1155.16,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Inverno 2026,Shorts,E-commerce,65,21312.24,10699.87,6,1967.28,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Inverno 2026,Vestido,Loja,52,13582.75,7998.10,5,1306.03,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Inverno 2026,Vestido,E-commerce,66,21314.82,11046.05,6,1937.71,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Acessório,Loja,69,19957.19,9404.50,7,2024.64,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Acessório,E-commerce,17,4510.66,2663.67,1,265.33,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Básicos,Blusa,Loja,49,6153.40,2945.99,3,376.74,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Blusa,E-commerce,29,8148.49,4265.13,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Calça,Loja,60,6306.56,4108.47,2,210.22,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Calça,E-commerce,66,23450.26,14418.58,8,2842.46,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Calçado,Loja,57,10837.24,6074.92,6,1140.76,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Básicos,Calçado,E-commerce,35,8012.69,4873.25,4,915.74,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Camisa,Loja,59,9970.10,5373.82,1,168.98,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Camisa,E-commerce,26,6856.23,4278.17,2,527.40,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Camiseta,Loja,52,11650.88,4917.55,2,448.11,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Camiseta,E-commerce,10,953.86,636.87,1,95.39,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Jaqueta,Loja,32,5074.91,2094.10,2,317.18,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Básicos,Jaqueta,E-commerce,24,2076.80,1189.63,2,173.07,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Básicos,Shorts,Loja,19,3497.17,1637.29,0,0.00,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Básicos,Shorts,E-commerce,53,5814.51,3793.28,1,109.71,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Vestido,Loja,64,14373.12,8971.57,7,1572.06,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Básicos,Vestido,E-commerce,23,6195.22,4034.20,2,538.71,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Acessório,Loja,69,11684.70,5401.42,2,338.69,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Acessório,E-commerce,30,7233.06,3131.77,2,482.20,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Cápsula Urbana,Blusa,Loja,58,11980.64,7121.83,5,1032.81,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Blusa,E-commerce,66,15078.12,9736.30,1,228.46,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Cápsula Urbana,Calça,Loja,17,5443.70,2580.94,1,320.22,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Cápsula Urbana,Calça,E-commerce,49,5719.57,2824.24,2,233.45,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Cápsula Urbana,Calçado,Loja,59,18299.48,9969.04,7,2171.12,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,65,15145.33,6490.58,6,1398.03,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Cápsula Urbana,Camisa,Loja,60,18301.60,9731.59,6,1830.16,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Camisa,E-commerce,53,8357.65,4056.91,1,157.69,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Cápsula Urbana,Camiseta,Loja,44,15042.22,10053.54,3,1025.61,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,64,17324.56,11716.02,8,2165.57,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Jaqueta,Loja,24,2425.56,1094.62,1,101.06,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Cápsula Urbana,Jaqueta,E-commerce,58,10190.75,4487.35,6,1054.22,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Cápsula Urbana,Shorts,Loja,34,10943.26,6947.87,3,965.58,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Cápsula Urbana,Shorts,E-commerce,40,10113.73,5715.38,3,758.53,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Cápsula Urbana,Vestido,Loja,66,11346.10,5424.10,5,859.55,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Cápsula Urbana,Vestido,E-commerce,55,19281.89,8984.74,1,350.58,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Verão 2026,Acessório,Loja,65,7622.56,5045.93,9,1055.43,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Verão 2026,Acessório,E-commerce,33,10864.80,4355.84,1,329.24,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Verão 2026,Blusa,Loja,34,9329.66,4601.42,4,1097.61,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Verão 2026,Blusa,E-commerce,44,6581.44,4283.38,3,448.73,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Verão 2026,Calça,Loja,14,4411.73,2804.17,1,315.12,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Verão 2026,Calça,E-commerce,37,5443.24,3272.78,3,441.34,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Verão 2026,Calçado,Loja,15,4924.07,3322.43,1,328.27,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Verão 2026,Calçado,E-commerce,16,1858.88,1223.23,1,116.18,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Verão 2026,Camisa,Loja,67,20569.04,8390.16,4,1228.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Verão 2026,Camisa,E-commerce,23,2012.54,983.13,1,87.50,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Verão 2026,Camiseta,Loja,10,2775.41,1459.49,1,277.54,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Verão 2026,Camiseta,E-commerce,23,3194.78,1671.50,2,277.81,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Verão 2026,Jaqueta,Loja,52,17382.12,7280.91,3,1002.81,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Verão 2026,Jaqueta,E-commerce,18,2930.56,1887.92,1,162.81,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Verão 2026,Shorts,Loja,61,18528.38,7956.81,5,1518.72,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Verão 2026,Shorts,E-commerce,41,3404.17,1880.70,1,83.03,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Verão 2026,Vestido,Loja,41,12432.14,8127.24,2,606.45,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Verão 2026,Vestido,E-commerce,51,8311.21,4773.32,4,651.86,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Inverno 2026,Acessório,Loja,46,6628.27,3454.93,4,576.37,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Acessório,E-commerce,18,6126.41,2734.03,2,680.71,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Blusa,Loja,56,9752.03,4108.41,2,348.29,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Inverno 2026,Blusa,E-commerce,56,12926.07,6736.83,1,230.82,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Calça,Loja,83,20864.56,10624.90,10,2513.80,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Calça,E-commerce,56,9304.71,5120.57,7,1163.09,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Inverno 2026,Calçado,Loja,84,30007.46,15775.59,2,714.46,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Calçado,E-commerce,15,1519.01,701.27,1,101.27,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Inverno 2026,Camisa,Loja,58,18713.14,9896.93,6,1935.84,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Inverno 2026,Camisa,E-commerce,29,3589.48,1452.65,3,371.33,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Camiseta,Loja,56,19847.84,8643.68,4,1417.70,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Camiseta,E-commerce,52,9794.98,5090.38,4,753.46,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Inverno 2026,Jaqueta,Loja,78,10242.09,4509.87,5,656.54,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Inverno 2026,Jaqueta,E-commerce,96,27070.79,11961.83,7,1973.91,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Shorts,Loja,50,7132.28,3389.39,6,855.87,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Inverno 2026,Shorts,E-commerce,11,1431.55,787.85,1,130.14,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Inverno 2026,Vestido,Loja,66,11648.70,7497.38,7,1235.47,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Inverno 2026,Vestido,E-commerce,72,15406.21,7638.31,5,1069.88,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Básicos,Acessório,Loja,67,7722.91,4828.22,8,922.14,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Básicos,Acessório,E-commerce,47,13844.14,5754.48,2,589.11,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Básicos,Blusa,Loja,40,11092.28,5896.09,1,277.31,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Básicos,Blusa,E-commerce,56,7895.78,4564.45,6,845.98,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Básicos,Calça,Loja,42,12946.25,8115.09,5,1541.22,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Básicos,Calça,E-commerce,27,3371.33,1588.84,3,374.59,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Calçado,Loja,28,4869.43,3186.10,2,347.82,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Básicos,Calçado,E-commerce,56,15186.37,10246.38,6,1627.11,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Camisa,Loja,48,7746.30,3324.09,3,484.14,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Camisa,E-commerce,41,14233.96,7127.11,3,1041.51,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Camiseta,Loja,56,8916.46,5737.25,4,636.89,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Básicos,Camiseta,E-commerce,32,9602.64,6190.35,2,600.17,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Básicos,Jaqueta,Loja,26,9106.83,4955.68,3,1050.79,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Jaqueta,E-commerce,54,10809.55,6582.05,2,400.35,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Shorts,Loja,19,6029.22,4040.52,0,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Básicos,Shorts,E-commerce,45,8009.19,4247.02,4,711.93,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Básicos,Vestido,Loja,8,2540.59,1650.18,0,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Básicos,Vestido,E-commerce,24,4005.43,2544.59,2,333.79,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Acessório,Loja,67,13233.21,5411.01,4,790.04,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Acessório,E-commerce,42,7130.41,2970.27,1,169.77,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Blusa,Loja,10,3205.07,1501.84,0,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Cápsula Urbana,Blusa,E-commerce,15,4225.45,2287.13,0,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Cápsula Urbana,Calça,Loja,16,2270.41,1134.39,1,141.90,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Calça,E-commerce,27,8867.34,5471.30,0,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Cápsula Urbana,Calçado,Loja,49,16905.37,8494.49,2,690.01,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,25,7652.02,3759.45,1,306.08,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Cápsula Urbana,Camisa,Loja,47,9654.19,4309.60,5,1027.04,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Camisa,E-commerce,69,23405.26,11759.46,4,1356.83,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Cápsula Urbana,Camiseta,Loja,30,8244.34,4639.77,3,824.43,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Cápsula Urbana,Camiseta,E-commerce,67,11705.98,5807.48,5,873.58,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Jaqueta,Loja,9,1577.44,1026.97,0,0.00,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Cápsula Urbana,Jaqueta,E-commerce,31,7354.56,4242.34,2,474.49,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Cápsula Urbana,Shorts,Loja,39,12673.76,8465.81,2,649.94,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Cápsula Urbana,Shorts,E-commerce,42,10685.58,7092.84,4,1017.67,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Cápsula Urbana,Vestido,Loja,53,14058.14,7067.77,6,1591.49,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Cápsula Urbana,Vestido,E-commerce,66,21798.21,13441.19,6,1981.66,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Verão 2026,Acessório,Loja,18,5262.58,2686.13,1,292.37,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Verão 2026,Acessório,E-commerce,45,12529.99,5336.63,5,1392.22,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Verão 2026,Blusa,Loja,38,10589.07,5183.43,1,278.66,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Blusa,E-commerce,10,3057.20,1338.88,0,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Calça,Loja,62,12968.38,5280.75,6,1255.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Calça,E-commerce,16,5540.02,2508.49,1,346.25,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Calçado,Loja,61,7772.44,5148.57,6,764.50,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Verão 2026,Calçado,E-commerce,69,22475.58,10788.38,7,2280.13,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Verão 2026,Camisa,Loja,44,15823.54,8263.40,2,719.25,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Camisa,E-commerce,43,4487.54,2796.73,1,104.36,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Verão 2026,Camiseta,Loja,63,11380.13,7198.24,2,361.27,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Verão 2026,Camiseta,E-commerce,43,10441.32,4355.25,0,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Verão 2026,Jaqueta,Loja,45,6752.68,2958.77,5,750.30,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Jaqueta,E-commerce,64,10899.32,5600.70,1,170.30,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Verão 2026,Shorts,Loja,13,4557.76,1968.40,1,350.60,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Verão 2026,Shorts,E-commerce,67,23694.40,11215.89,5,1768.24,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Verão 2026,Vestido,Loja,37,5024.53,2855.10,3,407.39,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Verão 2026,Vestido,E-commerce,50,16489.54,8569.70,3,989.37,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Acessório,Loja,54,8671.83,3780.56,6,963.54,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Acessório,E-commerce,13,1631.29,691.94,1,125.48,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Inverno 2026,Blusa,Loja,54,19347.92,7952.80,2,716.59,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Inverno 2026,Blusa,E-commerce,59,7359.42,4026.93,5,623.68,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Inverno 2026,Calça,Loja,58,13192.10,5536.28,3,682.35,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Calça,E-commerce,37,6670.74,3019.92,4,721.16,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Inverno 2026,Calçado,Loja,69,22297.32,9144.31,2,646.30,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Inverno 2026,Calçado,E-commerce,30,5075.47,3400.48,3,507.55,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Inverno 2026,Camisa,Loja,29,5895.05,2608.26,3,609.83,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Inverno 2026,Camisa,E-commerce,45,4235.74,2050.56,5,470.64,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Camiseta,Loja,97,32501.86,13774.98,11,3685.78,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Inverno 2026,Camiseta,E-commerce,71,23603.07,10050.84,2,664.88,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Jaqueta,Loja,80,17090.92,7007.52,9,1922.73,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Jaqueta,E-commerce,20,5638.63,3489.65,0,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Inverno 2026,Shorts,Loja,34,10319.77,5839.77,2,607.05,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Inverno 2026,Shorts,E-commerce,17,5615.39,2992.61,1,330.32,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Inverno 2026,Vestido,Loja,82,17905.25,8900.53,8,1746.85,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Inverno 2026,Vestido,E-commerce,72,18899.88,8364.46,2,525.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Acessório,Loja,54,7436.87,3795.96,6,826.32,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Acessório,E-commerce,38,9862.51,5955.62,1,259.54,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Básicos,Blusa,Loja,54,15937.43,7782.69,6,1770.83,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Blusa,E-commerce,68,23926.72,15962.70,7,2463.04,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Básicos,Calça,Loja,45,14426.08,6601.62,3,961.74,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Calça,E-commerce,9,1584.44,903.31,0,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Calçado,Loja,61,21408.88,10944.64,5,1754.83,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Básicos,Calçado,E-commerce,16,4707.34,2170.54,1,294.21,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Básicos,Camisa,Loja,38,10927.10,5344.63,4,1150.22,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Camisa,E-commerce,43,13868.71,5802.62,4,1290.11,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Básicos,Camiseta,Loja,34,5071.13,2335.44,1,149.15,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Básicos,Camiseta,E-commerce,57,11009.44,7145.95,6,1158.89,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Jaqueta,Loja,25,6863.31,4078.02,2,549.06,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Básicos,Jaqueta,E-commerce,62,7878.90,4184.27,5,635.39,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Básicos,Shorts,Loja,60,13050.08,5739.42,7,1522.51,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Básicos,Shorts,E-commerce,64,20135.00,8851.03,4,1258.44,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Básicos,Vestido,Loja,54,9669.02,6572.05,1,179.06,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Básicos,Vestido,E-commerce,55,18164.33,12121.93,6,1981.56,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Cápsula Urbana,Acessório,Loja,64,14396.53,6424.11,7,1574.62,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Acessório,E-commerce,38,8990.16,4115.10,3,709.75,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Blusa,Loja,32,7586.83,4383.47,1,237.09,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Cápsula Urbana,Blusa,E-commerce,40,3525.77,2096.28,2,176.29,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Cápsula Urbana,Calça,Loja,30,4993.42,2586.12,3,499.34,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Calça,E-commerce,34,7268.18,4355.67,1,213.77,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Cápsula Urbana,Calçado,Loja,38,3945.26,1620.73,1,103.82,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Calçado,E-commerce,28,9216.58,5170.73,2,658.33,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Camisa,Loja,15,2695.45,1306.04,1,179.70,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Camisa,E-commerce,54,8353.19,5210.64,3,464.07,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Camiseta,Loja,41,11381.28,6819.38,4,1110.37,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Camiseta,E-commerce,12,2765.56,1197.80,0,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Jaqueta,Loja,61,19859.38,8367.07,5,1627.82,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Cápsula Urbana,Jaqueta,E-commerce,32,9257.09,5731.57,1,289.28,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Cápsula Urbana,Shorts,Loja,47,8719.56,4343.89,2,371.05,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Cápsula Urbana,Shorts,E-commerce,32,11248.23,5695.40,3,1054.52,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Cápsula Urbana,Vestido,Loja,38,3957.73,1878.88,0,0.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Cápsula Urbana,Vestido,E-commerce,62,16686.75,9627.04,3,807.42,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Verão 2026,Acessório,Loja,60,10711.35,5515.01,4,714.09,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Acessório,E-commerce,22,1780.94,755.38,2,161.90,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Verão 2026,Blusa,Loja,47,5531.17,2981.48,1,117.68,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Verão 2026,Blusa,E-commerce,68,12564.39,7091.00,8,1478.16,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Calça,Loja,15,1602.22,1025.46,2,213.63,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Verão 2026,Calça,E-commerce,54,16449.53,8378.77,4,1218.48,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Verão 2026,Calçado,Loja,30,8996.85,3738.19,2,599.79,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Verão 2026,Calçado,E-commerce,47,3996.63,2482.70,2,170.07,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Camisa,Loja,56,13937.35,5906.78,5,1244.41,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Camisa,E-commerce,10,1108.94,502.25,1,110.89,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Verão 2026,Camiseta,Loja,61,17736.75,11798.73,2,581.53,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Camiseta,E-commerce,46,10898.06,4935.40,5,1184.57,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Jaqueta,Loja,58,5134.93,3047.52,2,177.07,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Verão 2026,Jaqueta,E-commerce,65,11175.59,6537.89,3,515.80,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Shorts,Loja,15,4604.63,2607.59,0,0.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Verão 2026,Shorts,E-commerce,46,8638.92,4849.04,2,375.61,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Verão 2026,Vestido,Loja,68,19733.06,10523.13,7,2031.34,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Verão 2026,Vestido,E-commerce,60,6939.06,3441.65,4,462.60,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Acessório,Loja,20,7013.66,4263.58,2,701.37,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Inverno 2026,Acessório,E-commerce,86,22462.29,11795.22,4,1044.76,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Inverno 2026,Blusa,Loja,61,18243.08,10858.15,3,897.20,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Blusa,E-commerce,31,8321.59,5230.22,3,805.32,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Calça,Loja,30,3738.24,1786.80,3,373.82,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Inverno 2026,Calça,E-commerce,53,5543.70,3700.72,6,627.59,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Inverno 2026,Calçado,Loja,19,1569.12,872.01,2,165.17,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Inverno 2026,Calçado,E-commerce,70,17783.67,10281.67,4,1016.21,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Camisa,Loja,93,26624.45,12434.53,11,3149.13,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Inverno 2026,Camisa,E-commerce,37,5853.31,3486.69,4,632.79,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Inverno 2026,Camiseta,Loja,65,21409.61,13646.19,7,2305.65,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Camiseta,E-commerce,73,21641.36,13426.50,9,2668.11,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Inverno 2026,Jaqueta,Loja,28,3889.99,1740.05,2,277.86,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Jaqueta,E-commerce,73,23396.80,13672.20,6,1923.02,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Inverno 2026,Shorts,Loja,22,3024.59,1987.53,1,137.48,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Inverno 2026,Shorts,E-commerce,44,11354.51,7563.97,3,774.17,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Inverno 2026,Vestido,Loja,40,9458.53,6123.35,4,945.85,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Inverno 2026,Vestido,E-commerce,83,26738.50,17883.71,11,3543.66,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Acessório,Loja,63,18969.38,9062.18,8,2408.81,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Acessório,E-commerce,38,9161.69,3962.23,2,482.19,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Blusa,Loja,26,4986.11,2349.86,2,383.55,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Básicos,Blusa,E-commerce,68,24467.74,15653.30,3,1079.46,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Básicos,Calça,Loja,36,10939.27,4903.96,4,1215.47,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Básicos,Calça,E-commerce,21,5976.58,3678.54,1,284.60,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Básicos,Calçado,Loja,61,17938.62,12047.92,2,588.15,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Básicos,Calçado,E-commerce,69,18424.28,12376.27,6,1602.11,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Camisa,Loja,38,3052.53,1621.66,3,240.99,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Camisa,E-commerce,47,8211.79,3681.53,6,1048.31,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Básicos,Camiseta,Loja,13,3400.72,2094.34,1,261.59,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Básicos,Camiseta,E-commerce,68,19797.62,10170.63,6,1746.85,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Jaqueta,Loja,11,2133.53,1095.87,1,193.96,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Jaqueta,E-commerce,41,7393.31,4445.59,1,180.32,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Básicos,Shorts,Loja,59,15380.77,7707.03,1,260.69,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Básicos,Shorts,E-commerce,32,9948.87,5454.86,4,1243.61,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Vestido,Loja,8,663.18,392.08,0,0.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Básicos,Vestido,E-commerce,59,17083.04,10864.44,1,289.54,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Acessório,Loja,58,12525.94,7734.51,4,863.86,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Acessório,E-commerce,54,10592.27,6353.31,6,1176.92,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Blusa,Loja,21,1874.88,1170.22,2,178.56,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Blusa,E-commerce,10,3498.57,2271.39,0,0.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Calça,Loja,24,2938.29,1747.31,1,122.43,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Calça,E-commerce,26,5270.53,2712.33,2,405.43,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Cápsula Urbana,Calçado,Loja,33,3156.57,1682.25,1,95.65,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Cápsula Urbana,Calçado,E-commerce,58,11019.18,5770.30,4,759.94,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Camisa,Loja,30,4698.17,2896.68,2,313.21,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Cápsula Urbana,Camisa,E-commerce,14,5031.88,2395.20,1,359.42,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Cápsula Urbana,Camiseta,Loja,8,2698.90,1110.06,0,0.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Cápsula Urbana,Camiseta,E-commerce,54,5191.77,2712.65,2,192.29,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Cápsula Urbana,Jaqueta,Loja,69,9828.42,4527.73,8,1139.53,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Cápsula Urbana,Jaqueta,E-commerce,49,16318.57,8105.23,6,1998.19,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Cápsula Urbana,Shorts,Loja,67,9485.41,3821.01,8,1132.59,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Cápsula Urbana,Shorts,E-commerce,69,14397.99,8884.67,3,626.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Cápsula Urbana,Vestido,Loja,53,7569.20,3211.10,4,571.26,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Cápsula Urbana,Vestido,E-commerce,48,7457.54,3817.66,3,466.10,Dobra Moda

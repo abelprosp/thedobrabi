@@ -22,3 +22,12 @@ Carregue o CSV em **Dados** e ative o painel correspondente em **Loja**.
 | `redorai-advocacia-processos.csv` | Carteira processual |
 | `redorai-advocacia-prazos.csv` | Prazos e riscos jurídicos |
 | `redorai-advocacia-financeiro.csv` | Financeiro do escritório |
+| `redorai-moda-vendas.csv` | Vendas da loja de roupas |
+| `redorai-moda-estoque.csv` | Estoque e ruptura de moda |
+| `redorai-moda-colecoes.csv` | Coleções e margem |
+| `redorai-eletronicos-vendas.csv` | Vendas de eletrônicos |
+| `redorai-eletronicos-estoque.csv` | Giro e estoque de eletrônicos |
+| `redorai-eletronicos-posvenda.csv` | Garantia e pós-venda |
+| `redorai-oficinas-ordens.csv` | Ordens de serviço |
+| `redorai-oficinas-pecas.csv` | Peças e mão de obra |
+| `redorai-oficinas-agenda.csv` | Agenda e produtividade |

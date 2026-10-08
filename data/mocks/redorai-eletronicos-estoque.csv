@@ -1,0 +1,257 @@
+data,mes,ano,loja,categoria,marca,produto,status,estoque,dias_estoque,giro,valor_estoque,empresa
+2026-01-01,Janeiro,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,6,32,0.92,9343.08,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Celular,Samsung,Galaxy A55,Disponível,14,30,0.97,21800.52,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Baixo,2,32,0.93,7050.36,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,10,44,0.68,35251.80,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Celular,Apple,iPhone 15,Disponível,12,25,1.16,54110.16,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,19,40,0.75,85674.42,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,7,32,0.93,8604.26,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Celular,Motorola,Moto G84,Disponível,6,28,1.05,7375.08,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Disponível,17,30,0.97,18108.06,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,18,44,0.68,19173.24,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,17,8,3.63,54352.06,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,8,17,1.75,25577.44,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,20,7,4.12,26223.60,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Disponível,4,9,3.07,5244.72,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Disponível,49,4,6.01,88355.82,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,15,6,4.46,27047.70,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Parado,74,61,0.49,90959.32,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Parado,55,56,0.53,67604.90,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Parado,77,88,0.34,15721.86,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Fone,JBL,Fone Tune 510,Disponível,21,6,4.42,4287.78,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,50,5,5.49,53259.00,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Fone,Apple,AirPods 4,Parado,68,93,0.32,72432.24,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Disponível,46,5,5.67,3357.08,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Parado,62,90,0.33,4524.76,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Parado,55,65,0.46,15739.90,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Parado,77,200,0.12,22035.86,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Capa,Baseus,Capa silicone,Ruptura,0,14,2.07,0.00,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Capa,Baseus,Capa silicone,Parado,63,75,0.40,2531.34,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Película,Baseus,Película vidro,Disponível,7,6,4.87,166.46,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Película,Baseus,Película vidro,Parado,79,65,0.46,1878.62,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Disponível,16,5,5.67,2610.88,Dobra Tech
+2026-01-01,Janeiro,2026,Loja Barra,Power bank,Anker,Power bank 20k,Disponível,24,7,4.15,3916.32,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,21,39,0.76,32700.78,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Celular,Samsung,Galaxy A55,Baixo,3,26,1.13,4671.54,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Baixo,3,29,1.02,10575.54,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,11,32,0.91,38776.98,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Celular,Apple,iPhone 15,Disponível,18,69,0.43,81165.24,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,8,26,1.12,36073.44,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,12,55,0.54,14750.16,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Celular,Motorola,Moto G84,Disponível,9,28,1.05,11062.62,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Disponível,8,41,0.73,8521.44,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,5,57,0.52,5325.90,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Tablet,Apple,iPad 10,Baixo,3,8,3.39,9591.54,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,13,8,3.48,41563.34,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,20,5,5.44,26223.60,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Disponível,19,12,2.48,24912.42,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Disponível,45,18,1.59,81143.10,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,19,10,2.87,34260.42,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Disponível,16,8,3.35,19666.88,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Disponível,41,11,2.63,50396.38,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Parado,68,125,0.24,13884.24,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Fone,JBL,Fone Tune 510,Disponível,30,17,1.67,6125.40,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Fone,Apple,AirPods 4,Parado,63,52,0.57,67106.34,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Fone,Apple,AirPods 4,Parado,76,57,0.52,80953.68,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Disponível,8,6,4.83,583.84,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Disponível,20,17,1.71,1459.60,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Disponível,36,7,4.10,10302.48,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Disponível,24,5,5.24,6868.32,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Capa,Baseus,Capa silicone,Disponível,44,18,1.65,1767.92,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Capa,Baseus,Capa silicone,Disponível,35,9,3.28,1406.30,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Película,Baseus,Película vidro,Parado,76,56,0.53,1807.28,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Película,Baseus,Película vidro,Disponível,23,7,4.03,546.94,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Parado,74,55,0.54,12075.32,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Barra,Power bank,Anker,Power bank 20k,Parado,77,200,0.11,12564.86,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,8,48,0.62,12457.44,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Celular,Samsung,Galaxy A55,Disponível,9,26,1.14,14014.62,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Disponível,6,63,0.47,21151.08,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,19,73,0.41,66978.42,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Celular,Apple,iPhone 15,Disponível,15,62,0.48,67637.70,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,17,55,0.54,76656.06,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,21,45,0.66,25812.78,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Celular,Motorola,Moto G84,Disponível,22,50,0.59,27041.96,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Disponível,4,29,1.01,4260.72,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,15,38,0.78,15977.70,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,20,11,2.53,63943.60,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,13,9,3.21,41563.34,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,8,8,3.65,10489.44,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Baixo,2,8,3.63,2622.36,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Parado,56,52,0.57,100978.08,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,43,9,3.03,77536.74,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Parado,71,125,0.24,87271.78,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Disponível,12,12,2.32,14750.16,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Disponível,49,8,3.47,10004.82,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Fone,JBL,Fone Tune 510,Disponível,13,9,3.13,2654.34,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,31,6,4.36,33020.58,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Fone,Apple,AirPods 4,Parado,73,187,0.16,77758.14,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Disponível,34,12,2.31,2481.32,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Disponível,6,5,5.64,437.88,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Disponível,8,9,3.16,2289.44,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Disponível,12,12,2.46,3434.16,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Capa,Baseus,Capa silicone,Disponível,32,5,5.64,1285.76,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Capa,Baseus,Capa silicone,Disponível,28,6,4.65,1125.04,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Película,Baseus,Película vidro,Parado,72,166,0.18,1712.16,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Película,Baseus,Película vidro,Parado,79,81,0.37,1878.62,Dobra Tech
+2026-03-01,Março,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Parado,78,111,0.27,12728.04,Dobra Tech
+2026-03-01,Março,2026,Loja Barra,Power bank,Anker,Power bank 20k,Disponível,23,5,5.95,3753.14,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,14,38,0.78,21800.52,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Celular,Samsung,Galaxy A55,Disponível,6,31,0.96,9343.08,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Disponível,18,65,0.46,63453.24,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,4,34,0.88,14100.72,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Celular,Apple,iPhone 15,Disponível,19,27,1.09,85674.42,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,7,39,0.76,31564.26,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Celular,Motorola,Moto G84,Baixo,3,31,0.95,3687.54,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Celular,Motorola,Moto G84,Baixo,3,57,0.52,3687.54,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Disponível,14,44,0.68,14912.52,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,7,35,0.85,7456.26,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,11,9,3.01,35168.98,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,21,4,6.09,67140.78,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,9,5,5.49,11800.62,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Baixo,2,5,5.43,2622.36,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Disponível,11,8,3.55,19834.98,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,23,4,6.41,41473.14,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Disponível,4,5,5.65,4916.72,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Disponível,50,5,5.77,61459.00,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Disponível,41,6,4.45,8371.38,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Fone,JBL,Fone Tune 510,Disponível,5,21,1.42,1020.90,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,35,5,5.65,37281.30,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Fone,Apple,AirPods 4,Disponível,24,8,3.41,25564.32,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Disponível,27,8,3.40,1970.46,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Disponível,37,11,2.68,2700.26,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Disponível,20,5,5.22,5723.60,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Parado,72,96,0.31,20604.96,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Capa,Baseus,Capa silicone,Disponível,11,11,2.69,441.98,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Capa,Baseus,Capa silicone,Disponível,20,6,4.92,803.60,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Película,Baseus,Película vidro,Ruptura,0,6,4.62,0.00,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Película,Baseus,Película vidro,Parado,59,166,0.18,1403.02,Dobra Tech
+2026-04-01,Abril,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Parado,56,85,0.35,9138.08,Dobra Tech
+2026-04-01,Abril,2026,Loja Barra,Power bank,Anker,Power bank 20k,Disponível,40,13,2.20,6527.20,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,16,68,0.44,24914.88,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Celular,Samsung,Galaxy A55,Disponível,20,37,0.81,31143.60,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Disponível,14,26,1.14,49352.52,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,10,32,0.93,35251.80,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Celular,Apple,iPhone 15,Baixo,3,66,0.45,13527.54,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,6,54,0.55,27055.08,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,11,52,0.57,13520.98,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Celular,Motorola,Moto G84,Ruptura,0,69,0.43,0.00,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Baixo,1,26,1.12,1065.18,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,21,40,0.74,22368.78,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,20,4,6.37,63943.60,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,10,7,4.02,31971.80,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,13,6,4.69,17045.34,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Disponível,15,4,6.15,19667.70,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Disponível,42,10,2.85,75733.56,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,47,7,4.21,84749.46,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Disponível,15,7,3.85,18437.70,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Parado,70,51,0.58,86042.60,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Baixo,3,11,2.63,612.54,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Fone,JBL,Fone Tune 510,Disponível,35,5,5.50,7146.30,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,27,11,2.52,28759.86,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Fone,Apple,AirPods 4,Disponível,36,5,5.58,38346.48,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Disponível,45,6,4.71,3284.10,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Parado,52,83,0.36,3794.96,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Disponível,8,9,3.10,2289.44,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Parado,52,111,0.27,14881.36,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Capa,Baseus,Capa silicone,Parado,59,150,0.20,2370.62,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Capa,Baseus,Capa silicone,Disponível,8,5,5.57,321.44,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Película,Baseus,Película vidro,Parado,65,61,0.49,1545.70,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Película,Baseus,Película vidro,Parado,63,68,0.44,1498.14,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Disponível,45,6,4.99,7343.10,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Power bank,Anker,Power bank 20k,Parado,72,76,0.39,11748.96,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,10,29,1.03,15571.80,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Celular,Samsung,Galaxy A55,Ruptura,0,69,0.43,0.00,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Disponível,20,26,1.14,70503.60,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,7,31,0.96,24676.26,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Celular,Apple,iPhone 15,Disponível,14,30,1.00,63128.52,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,4,54,0.55,18036.72,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,12,30,0.99,14750.16,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Celular,Motorola,Moto G84,Disponível,16,49,0.61,19666.88,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Disponível,4,63,0.47,4260.72,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,18,56,0.53,19173.24,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,4,9,3.06,12788.72,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,8,9,3.13,25577.44,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,15,4,6.08,19667.70,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Disponível,20,9,3.28,26223.60,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Disponível,25,8,3.71,45079.50,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,16,11,2.57,28850.88,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Disponível,50,8,3.51,61459.00,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Disponível,34,17,1.76,41792.12,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Disponível,18,4,6.17,3675.24,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Fone,JBL,Fone Tune 510,Disponível,39,12,2.49,7963.02,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,23,6,4.56,24499.14,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Fone,Apple,AirPods 4,Parado,60,200,0.14,63910.80,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Parado,62,75,0.40,4524.76,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Disponível,18,14,2.02,1313.64,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Parado,79,107,0.28,22608.22,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Disponível,19,10,2.99,5437.42,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Capa,Baseus,Capa silicone,Disponível,24,6,4.49,964.32,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Disponível,21,6,4.50,843.78,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Película,Baseus,Película vidro,Disponível,47,19,1.57,1117.66,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Película,Baseus,Película vidro,Disponível,39,6,4.30,927.42,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Disponível,17,7,4.24,2774.06,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Power bank,Anker,Power bank 20k,Baixo,3,8,3.75,489.54,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,13,31,0.94,20243.34,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Celular,Samsung,Galaxy A55,Disponível,21,34,0.87,32700.78,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Disponível,10,53,0.56,35251.80,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Celular,Samsung,Galaxy S24,Baixo,1,26,1.14,3525.18,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Celular,Apple,iPhone 15,Disponível,14,36,0.83,63128.52,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Celular,Apple,iPhone 15,Disponível,6,32,0.93,27055.08,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,21,46,0.64,25812.78,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Celular,Motorola,Moto G84,Disponível,15,41,0.72,18437.70,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Disponível,21,33,0.90,22368.78,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Baixo,1,25,1.16,1065.18,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,14,7,3.98,44760.52,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,9,10,2.95,28774.62,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,13,4,6.40,17045.34,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Disponível,12,6,4.50,15734.16,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Parado,71,53,0.56,128025.78,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Smartwatch,Apple,Watch SE,Ruptura,0,6,4.87,0.00,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Parado,72,142,0.21,88500.96,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Parado,52,55,0.54,63917.36,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Disponível,45,4,6.02,9188.10,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Fone,JBL,Fone Tune 510,Baixo,2,7,4.10,408.36,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,42,6,4.35,44737.56,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Fone,Apple,AirPods 4,Disponível,42,5,5.41,44737.56,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Parado,54,88,0.34,3940.92,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Disponível,23,9,3.32,1678.54,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Parado,72,176,0.17,20604.96,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Disponível,18,9,3.07,5151.24,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Capa,Baseus,Capa silicone,Disponível,20,7,3.89,803.60,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Capa,Baseus,Capa silicone,Parado,80,65,0.46,3214.40,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Película,Baseus,Película vidro,Parado,52,58,0.51,1236.56,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Película,Baseus,Película vidro,Parado,77,88,0.34,1831.06,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Disponível,7,5,5.11,1142.26,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Power bank,Anker,Power bank 20k,Disponível,34,7,3.78,5548.12,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Disponível,6,29,1.02,9343.08,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Celular,Samsung,Galaxy A55,Disponível,21,50,0.59,32700.78,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Disponível,20,50,0.60,70503.60,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Celular,Samsung,Galaxy S24,Disponível,13,41,0.73,45827.34,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Celular,Apple,iPhone 15,Baixo,3,68,0.44,13527.54,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Celular,Apple,iPhone 15,Baixo,3,26,1.15,13527.54,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Celular,Motorola,Moto G84,Disponível,9,34,0.88,11062.62,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Celular,Motorola,Moto G84,Disponível,12,63,0.47,14750.16,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Baixo,1,25,1.18,1065.18,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Disponível,16,41,0.72,17042.88,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Tablet,Apple,iPad 10,Disponível,16,5,5.55,51154.88,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Tablet,Apple,iPad 10,Disponível,12,5,5.26,38366.16,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Disponível,16,6,4.95,20978.88,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Disponível,15,4,6.21,19667.70,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Parado,78,125,0.24,140648.04,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Smartwatch,Apple,Watch SE,Disponível,32,6,4.48,57701.76,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Disponível,32,5,5.94,39333.76,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Disponível,31,6,4.87,38104.58,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Parado,79,83,0.36,16130.22,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Fone,JBL,Fone Tune 510,Parado,54,115,0.26,11025.72,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Fone,Apple,AirPods 4,Disponível,11,11,2.57,11716.98,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Fone,Apple,AirPods 4,Disponível,38,10,2.79,40476.84,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Parado,71,142,0.21,5181.58,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Disponível,30,5,5.83,2189.40,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Parado,69,200,0.11,19746.42,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Disponível,50,6,4.35,14309.00,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Capa,Baseus,Capa silicone,Disponível,24,10,2.77,964.32,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Capa,Baseus,Capa silicone,Parado,53,60,0.50,2129.54,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Película,Baseus,Película vidro,Disponível,26,7,3.92,618.28,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Película,Baseus,Película vidro,Parado,63,61,0.49,1498.14,Dobra Tech
+2026-08-01,Agosto,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Parado,80,78,0.38,13054.40,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Power bank,Anker,Power bank 20k,Ruptura,0,16,1.86,0.00,Dobra Tech

@@ -1,0 +1,337 @@
+data,mes,ano,loja,categoria,colecao,produto,tamanho,cor,status,estoque,estoque_minimo,dias_estoque,valor_estoque,empresa
+2026-01-01,Janeiro,2026,Loja Centro,Camiseta,Verão 2026,Camiseta básica,PP,Vermelho,Baixo,1,6,50,48.95,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Camiseta,Verão 2026,Camiseta básica,P,Preto,Disponível,21,6,24,1027.95,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Camiseta,Verão 2026,Camiseta básica,M,Bege,Disponível,32,6,16,1566.40,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Camisa,Básicos,Camisa linho,M,Branco,Disponível,25,6,25,2598.75,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Camisa,Inverno 2026,Camisa linho,P,Bege,Disponível,10,6,11,1039.50,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Camisa,Verão 2026,Camisa linho,GG,Bege,Disponível,13,6,7,1351.35,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Calça,Verão 2026,Calça jeans,P,Branco,Parado,40,6,60,5038.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Calça,Cápsula Urbana,Calça jeans,PP,Branco,Disponível,11,6,16,1385.45,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Calça,Cápsula Urbana,Calça jeans,G,Azul,Parado,44,6,138,5541.80,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Calça,Básicos,Calça alfaiataria,P,Bege,Disponível,18,6,4,2762.10,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Calça,Básicos,Calça alfaiataria,G,Azul,Baixo,5,6,138,767.25,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Calça,Básicos,Calça alfaiataria,M,Bege,Parado,42,6,111,6444.90,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Vestido,Cápsula Urbana,Vestido midi,G,Branco,Disponível,24,6,21,3286.80,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Vestido,Básicos,Vestido midi,M,Azul,Parado,41,6,73,5614.95,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Vestido,Verão 2026,Vestido midi,PP,Azul,Disponível,16,6,14,2191.20,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Jaqueta,Cápsula Urbana,Jaqueta jeans,G,Azul,Parado,42,6,140,7599.90,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Jaqueta,Básicos,Jaqueta jeans,GG,Verde,Disponível,12,6,25,2171.40,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Jaqueta,Inverno 2026,Jaqueta jeans,M,Vermelho,Disponível,18,6,21,3257.10,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Jaqueta,Inverno 2026,Blazer,M,Bege,Disponível,26,6,19,5705.70,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Jaqueta,Básicos,Blazer,G,Branco,Disponível,19,6,20,4169.55,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Jaqueta,Cápsula Urbana,Blazer,GG,Bege,Baixo,1,6,119,219.45,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Calçado,Inverno 2026,Tênis casual,M,Vermelho,Disponível,9,6,11,1727.55,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Calçado,Básicos,Tênis casual,G,Azul,Disponível,17,6,10,3263.15,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Calçado,Básicos,Tênis casual,PP,Verde,Disponível,13,6,23,2495.35,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Calçado,Básicos,Tênis corrida,PP,Vermelho,Disponível,10,6,5,2359.50,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Calçado,Básicos,Tênis corrida,M,Bege,Baixo,5,6,103,1179.75,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Calçado,Cápsula Urbana,Tênis corrida,GG,Branco,Ruptura,0,6,0,0.00,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Shorts,Cápsula Urbana,Shorts linho,M,Bege,Disponível,36,6,5,3148.20,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Shorts,Inverno 2026,Shorts linho,P,Verde,Parado,47,6,97,4110.15,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Shorts,Básicos,Shorts linho,GG,Vermelho,Disponível,17,6,24,1486.65,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Blusa,Inverno 2026,Blusa tricô,PP,Azul,Baixo,4,6,88,393.80,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Blusa,Básicos,Blusa tricô,P,Preto,Disponível,22,6,7,2165.90,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Blusa,Verão 2026,Blusa tricô,M,Azul,Disponível,8,6,26,787.60,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Acessório,Básicos,Cinto couro,M,Branco,Disponível,35,10,7,2290.75,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Acessório,Inverno 2026,Cinto couro,PP,Bege,Disponível,14,10,6,916.30,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Acessório,Inverno 2026,Cinto couro,GG,Branco,Disponível,16,10,28,1047.20,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Acessório,Verão 2026,Bolsa transversal,G,Preto,Parado,46,10,127,6552.70,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Acessório,Básicos,Bolsa transversal,M,Verde,Disponível,15,10,25,2136.75,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Acessório,Cápsula Urbana,Bolsa transversal,PP,Azul,Disponível,17,10,9,2421.65,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Centro,Acessório,Cápsula Urbana,Meia kit,P,Branco,Disponível,35,10,17,750.75,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Outlet,Acessório,Verão 2026,Meia kit,G,Verde,Disponível,22,10,7,471.90,Dobra Moda
+2026-01-01,Janeiro,2026,Loja Shopping,Acessório,Inverno 2026,Meia kit,GG,Verde,Disponível,31,10,11,664.95,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Camiseta,Cápsula Urbana,Camiseta básica,M,Preto,Baixo,5,6,68,244.75,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Camiseta,Inverno 2026,Camiseta básica,GG,Azul,Parado,40,6,45,1958.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Camiseta,Básicos,Camiseta básica,P,Azul,Baixo,5,6,96,244.75,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Camisa,Verão 2026,Camisa linho,M,Bege,Parado,44,6,93,4573.80,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Camisa,Verão 2026,Camisa linho,GG,Bege,Disponível,30,6,9,3118.50,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Camisa,Cápsula Urbana,Camisa linho,G,Azul,Disponível,12,6,11,1247.40,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Calça,Cápsula Urbana,Calça jeans,G,Azul,Parado,42,6,75,5289.90,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Calça,Inverno 2026,Calça jeans,PP,Bege,Parado,46,6,127,5793.70,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Calça,Cápsula Urbana,Calça jeans,GG,Preto,Disponível,6,6,9,755.70,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Calça,Cápsula Urbana,Calça alfaiataria,GG,Bege,Disponível,32,6,24,4910.40,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Calça,Verão 2026,Calça alfaiataria,M,Bege,Ruptura,0,6,0,0.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Calça,Cápsula Urbana,Calça alfaiataria,G,Branco,Disponível,14,6,6,2148.30,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Vestido,Cápsula Urbana,Vestido midi,PP,Vermelho,Disponível,21,6,6,2875.95,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Vestido,Básicos,Vestido midi,P,Preto,Baixo,3,6,74,410.85,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Vestido,Inverno 2026,Vestido midi,M,Branco,Disponível,21,6,27,2875.95,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Jaqueta,Inverno 2026,Jaqueta jeans,G,Azul,Disponível,6,6,9,1085.70,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Jaqueta,Verão 2026,Jaqueta jeans,GG,Azul,Disponível,33,6,21,5971.35,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Jaqueta,Básicos,Jaqueta jeans,PP,Vermelho,Disponível,22,6,6,3980.90,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Jaqueta,Inverno 2026,Blazer,P,Bege,Parado,38,6,139,8339.10,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Jaqueta,Inverno 2026,Blazer,PP,Verde,Disponível,23,6,5,5047.35,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,G,Branco,Parado,46,6,65,10094.70,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Calçado,Cápsula Urbana,Tênis casual,M,Branco,Disponível,14,6,16,2687.30,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Calçado,Básicos,Tênis casual,P,Azul,Baixo,2,6,49,383.90,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Calçado,Básicos,Tênis casual,G,Branco,Disponível,9,6,24,1727.55,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Calçado,Básicos,Tênis corrida,PP,Branco,Disponível,13,6,23,3067.35,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Calçado,Cápsula Urbana,Tênis corrida,P,Bege,Baixo,5,6,120,1179.75,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Calçado,Verão 2026,Tênis corrida,M,Bege,Baixo,3,6,76,707.85,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Shorts,Cápsula Urbana,Shorts linho,P,Azul,Parado,38,6,51,3323.10,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Shorts,Inverno 2026,Shorts linho,PP,Verde,Disponível,28,6,10,2448.60,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Shorts,Verão 2026,Shorts linho,M,Vermelho,Disponível,27,6,8,2361.15,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Blusa,Verão 2026,Blusa tricô,PP,Verde,Disponível,9,6,9,886.05,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Blusa,Verão 2026,Blusa tricô,G,Azul,Disponível,15,6,16,1476.75,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Blusa,Cápsula Urbana,Blusa tricô,GG,Bege,Disponível,13,6,25,1279.85,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Acessório,Cápsula Urbana,Cinto couro,G,Bege,Baixo,8,10,107,523.60,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Acessório,Básicos,Cinto couro,PP,Azul,Disponível,28,10,24,1832.60,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Acessório,Verão 2026,Cinto couro,GG,Azul,Parado,47,10,114,3076.15,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Acessório,Verão 2026,Bolsa transversal,P,Branco,Disponível,20,10,5,2849.00,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Acessório,Cápsula Urbana,Bolsa transversal,PP,Vermelho,Baixo,8,10,134,1139.60,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Acessório,Cápsula Urbana,Bolsa transversal,GG,Verde,Disponível,15,10,21,2136.75,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Outlet,Acessório,Básicos,Meia kit,GG,Preto,Disponível,19,10,24,407.55,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Centro,Acessório,Cápsula Urbana,Meia kit,PP,Bege,Parado,38,10,75,815.10,Dobra Moda
+2026-02-01,Fevereiro,2026,Loja Shopping,Acessório,Verão 2026,Meia kit,G,Azul,Baixo,3,10,65,64.35,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Camiseta,Cápsula Urbana,Camiseta básica,PP,Vermelho,Parado,43,6,123,2104.85,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Camiseta,Verão 2026,Camiseta básica,P,Verde,Disponível,19,6,24,930.05,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Camiseta,Inverno 2026,Camiseta básica,G,Bege,Parado,46,6,53,2251.70,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Camisa,Inverno 2026,Camisa linho,GG,Bege,Disponível,15,6,21,1559.25,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Camisa,Básicos,Camisa linho,PP,Preto,Baixo,4,6,41,415.80,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Camisa,Cápsula Urbana,Camisa linho,G,Preto,Disponível,15,6,12,1559.25,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Calça,Inverno 2026,Calça jeans,PP,Verde,Ruptura,0,6,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Calça,Básicos,Calça jeans,M,Branco,Disponível,35,6,9,4408.25,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Calça,Inverno 2026,Calça jeans,GG,Vermelho,Baixo,2,6,133,251.90,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Calça,Cápsula Urbana,Calça alfaiataria,PP,Branco,Parado,46,6,134,7058.70,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Calça,Verão 2026,Calça alfaiataria,G,Vermelho,Ruptura,0,6,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Calça,Cápsula Urbana,Calça alfaiataria,M,Verde,Disponível,30,6,11,4603.50,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Vestido,Básicos,Vestido midi,PP,Vermelho,Parado,37,6,125,5067.15,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Vestido,Inverno 2026,Vestido midi,G,Preto,Disponível,27,6,19,3697.65,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Vestido,Inverno 2026,Vestido midi,M,Preto,Baixo,1,6,80,136.95,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Jaqueta,Verão 2026,Jaqueta jeans,M,Bege,Ruptura,0,6,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Jaqueta,Básicos,Jaqueta jeans,PP,Preto,Disponível,17,6,21,3076.15,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Jaqueta,Básicos,Jaqueta jeans,G,Preto,Parado,42,6,103,7599.90,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,P,Preto,Disponível,33,6,15,7241.85,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Jaqueta,Básicos,Blazer,GG,Vermelho,Parado,48,6,45,10533.60,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Jaqueta,Básicos,Blazer,G,Bege,Disponível,23,6,12,5047.35,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Calçado,Cápsula Urbana,Tênis casual,GG,Preto,Disponível,11,6,14,2111.45,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Calçado,Cápsula Urbana,Tênis casual,G,Preto,Disponível,14,6,17,2687.30,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Calçado,Verão 2026,Tênis casual,PP,Vermelho,Disponível,14,6,27,2687.30,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Calçado,Cápsula Urbana,Tênis corrida,GG,Preto,Disponível,18,6,15,4247.10,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Calçado,Cápsula Urbana,Tênis corrida,G,Bege,Disponível,12,6,28,2831.40,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Calçado,Básicos,Tênis corrida,PP,Bege,Ruptura,0,6,0,0.00,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Shorts,Cápsula Urbana,Shorts linho,P,Vermelho,Disponível,34,6,20,2973.30,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Shorts,Inverno 2026,Shorts linho,G,Branco,Baixo,2,6,56,174.90,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Shorts,Básicos,Shorts linho,PP,Vermelho,Parado,41,6,126,3585.45,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Blusa,Inverno 2026,Blusa tricô,G,Bege,Disponível,25,6,16,2461.25,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Blusa,Inverno 2026,Blusa tricô,PP,Preto,Disponível,13,6,27,1279.85,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Blusa,Verão 2026,Blusa tricô,P,Bege,Parado,43,6,49,4233.35,Dobra Moda
+2026-03-01,Março,2026,Loja Shopping,Acessório,Verão 2026,Cinto couro,G,Azul,Disponível,11,10,24,719.95,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Acessório,Inverno 2026,Cinto couro,PP,Preto,Disponível,18,10,20,1178.10,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Acessório,Cápsula Urbana,Cinto couro,M,Branco,Disponível,25,10,21,1636.25,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Acessório,Básicos,Bolsa transversal,G,Bege,Disponível,16,10,16,2279.20,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Acessório,Cápsula Urbana,Bolsa transversal,M,Preto,Disponível,36,10,16,5128.20,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Acessório,Inverno 2026,Bolsa transversal,P,Preto,Disponível,24,10,21,3418.80,Dobra Moda
+2026-03-01,Março,2026,Loja Centro,Acessório,Inverno 2026,Meia kit,PP,Bege,Disponível,31,10,25,664.95,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Acessório,Verão 2026,Meia kit,M,Azul,Disponível,14,10,26,300.30,Dobra Moda
+2026-03-01,Março,2026,Loja Outlet,Acessório,Inverno 2026,Meia kit,G,Vermelho,Disponível,11,10,27,235.95,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Camiseta,Verão 2026,Camiseta básica,GG,Bege,Disponível,10,6,19,489.50,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Camiseta,Básicos,Camiseta básica,PP,Preto,Parado,38,6,63,1860.10,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Camiseta,Cápsula Urbana,Camiseta básica,M,Vermelho,Disponível,16,6,5,783.20,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Camisa,Inverno 2026,Camisa linho,P,Verde,Disponível,28,6,9,2910.60,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Camisa,Verão 2026,Camisa linho,PP,Verde,Disponível,17,6,19,1767.15,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Camisa,Verão 2026,Camisa linho,G,Bege,Baixo,1,6,46,103.95,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Calça,Cápsula Urbana,Calça jeans,GG,Verde,Disponível,30,6,14,3778.50,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Calça,Básicos,Calça jeans,G,Verde,Parado,46,6,136,5793.70,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Calça,Cápsula Urbana,Calça jeans,M,Verde,Disponível,18,6,22,2267.10,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Calça,Cápsula Urbana,Calça alfaiataria,GG,Preto,Disponível,8,6,7,1227.60,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Calça,Cápsula Urbana,Calça alfaiataria,PP,Azul,Disponível,17,6,21,2608.65,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Calça,Verão 2026,Calça alfaiataria,P,Verde,Disponível,22,6,20,3375.90,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Vestido,Inverno 2026,Vestido midi,GG,Vermelho,Baixo,4,6,98,547.80,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Vestido,Cápsula Urbana,Vestido midi,PP,Branco,Parado,45,6,75,6162.75,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Vestido,Verão 2026,Vestido midi,G,Branco,Disponível,26,6,10,3560.70,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Jaqueta,Cápsula Urbana,Jaqueta jeans,GG,Preto,Disponível,28,6,9,5066.60,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Jaqueta,Cápsula Urbana,Jaqueta jeans,G,Branco,Parado,38,6,74,6876.10,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Jaqueta,Verão 2026,Jaqueta jeans,P,Preto,Disponível,35,6,20,6333.25,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Jaqueta,Verão 2026,Blazer,GG,Bege,Parado,45,6,110,9875.25,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Jaqueta,Verão 2026,Blazer,P,Preto,Disponível,10,6,26,2194.50,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,M,Bege,Parado,41,6,140,8997.45,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Calçado,Cápsula Urbana,Tênis casual,PP,Branco,Baixo,5,6,49,959.75,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Calçado,Inverno 2026,Tênis casual,G,Preto,Disponível,13,6,7,2495.35,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Calçado,Básicos,Tênis casual,P,Verde,Disponível,16,6,14,3071.20,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Calçado,Cápsula Urbana,Tênis corrida,PP,Vermelho,Baixo,1,6,66,235.95,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Calçado,Básicos,Tênis corrida,GG,Azul,Disponível,11,6,27,2595.45,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Calçado,Básicos,Tênis corrida,P,Vermelho,Disponível,16,6,11,3775.20,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Shorts,Verão 2026,Shorts linho,G,Branco,Parado,37,6,105,3235.65,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Shorts,Inverno 2026,Shorts linho,P,Verde,Disponível,17,6,27,1486.65,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Shorts,Básicos,Shorts linho,M,Azul,Disponível,9,6,8,787.05,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Blusa,Inverno 2026,Blusa tricô,PP,Azul,Parado,38,6,124,3741.10,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Blusa,Básicos,Blusa tricô,G,Bege,Baixo,4,6,115,393.80,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Blusa,Inverno 2026,Blusa tricô,P,Vermelho,Disponível,11,6,7,1082.95,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Acessório,Cápsula Urbana,Cinto couro,P,Branco,Parado,44,10,104,2879.80,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Acessório,Básicos,Cinto couro,G,Azul,Parado,38,10,68,2487.10,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Acessório,Básicos,Cinto couro,PP,Azul,Disponível,13,10,27,850.85,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Acessório,Verão 2026,Bolsa transversal,P,Verde,Disponível,13,10,28,1851.85,Dobra Moda
+2026-04-01,Abril,2026,Loja Centro,Acessório,Cápsula Urbana,Bolsa transversal,PP,Verde,Ruptura,0,10,0,0.00,Dobra Moda
+2026-04-01,Abril,2026,Loja Shopping,Acessório,Básicos,Bolsa transversal,GG,Verde,Disponível,33,10,25,4700.85,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Acessório,Cápsula Urbana,Meia kit,PP,Branco,Disponível,19,10,15,407.55,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Acessório,Verão 2026,Meia kit,G,Verde,Disponível,17,10,27,364.65,Dobra Moda
+2026-04-01,Abril,2026,Loja Outlet,Acessório,Inverno 2026,Meia kit,M,Vermelho,Parado,39,10,112,836.55,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Camiseta,Verão 2026,Camiseta básica,PP,Bege,Disponível,12,6,14,587.40,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Camiseta,Verão 2026,Camiseta básica,G,Branco,Disponível,32,6,6,1566.40,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Camiseta,Inverno 2026,Camiseta básica,P,Bege,Parado,39,6,95,1909.05,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Camisa,Cápsula Urbana,Camisa linho,G,Vermelho,Disponível,8,6,7,831.60,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Camisa,Verão 2026,Camisa linho,PP,Vermelho,Parado,45,6,72,4677.75,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Camisa,Inverno 2026,Camisa linho,P,Vermelho,Disponível,19,6,8,1975.05,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Calça,Inverno 2026,Calça jeans,P,Preto,Parado,39,6,102,4912.05,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Calça,Inverno 2026,Calça jeans,M,Vermelho,Parado,43,6,66,5415.85,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Calça,Básicos,Calça jeans,PP,Preto,Disponível,27,6,14,3400.65,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Calça,Inverno 2026,Calça alfaiataria,PP,Azul,Disponível,18,6,12,2762.10,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Calça,Verão 2026,Calça alfaiataria,GG,Branco,Disponível,17,6,8,2608.65,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Calça,Básicos,Calça alfaiataria,M,Preto,Disponível,17,6,11,2608.65,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Vestido,Verão 2026,Vestido midi,GG,Preto,Disponível,22,6,26,3012.90,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Vestido,Cápsula Urbana,Vestido midi,M,Vermelho,Parado,47,6,100,6436.65,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Vestido,Básicos,Vestido midi,P,Preto,Disponível,21,6,17,2875.95,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Jaqueta,Inverno 2026,Jaqueta jeans,GG,Verde,Disponível,31,6,15,5609.45,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Jaqueta,Verão 2026,Jaqueta jeans,M,Branco,Parado,39,6,125,7057.05,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Jaqueta,Básicos,Jaqueta jeans,PP,Vermelho,Baixo,2,6,75,361.90,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,P,Verde,Parado,43,6,116,9436.35,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,M,Preto,Disponível,24,6,6,5266.80,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Jaqueta,Cápsula Urbana,Blazer,GG,Azul,Disponível,12,6,14,2633.40,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Calçado,Verão 2026,Tênis casual,GG,Vermelho,Disponível,18,6,9,3455.10,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Calçado,Cápsula Urbana,Tênis casual,M,Bege,Disponível,15,6,16,2879.25,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Calçado,Inverno 2026,Tênis casual,PP,Branco,Disponível,13,6,23,2495.35,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Calçado,Básicos,Tênis corrida,GG,Preto,Disponível,12,6,6,2831.40,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Calçado,Inverno 2026,Tênis corrida,M,Verde,Disponível,17,6,28,4011.15,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Calçado,Inverno 2026,Tênis corrida,PP,Azul,Disponível,7,6,13,1651.65,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Shorts,Inverno 2026,Shorts linho,P,Verde,Disponível,27,6,25,2361.15,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Shorts,Cápsula Urbana,Shorts linho,M,Branco,Disponível,12,6,12,1049.40,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Shorts,Inverno 2026,Shorts linho,PP,Branco,Disponível,19,6,25,1661.55,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Blusa,Cápsula Urbana,Blusa tricô,M,Bege,Disponível,6,6,27,590.70,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Blusa,Verão 2026,Blusa tricô,P,Verde,Disponível,16,6,27,1575.20,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Blusa,Inverno 2026,Blusa tricô,G,Azul,Disponível,23,6,13,2264.35,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Acessório,Básicos,Cinto couro,P,Azul,Baixo,8,10,105,523.60,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Acessório,Inverno 2026,Cinto couro,GG,Azul,Disponível,28,10,12,1832.60,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Acessório,Inverno 2026,Cinto couro,G,Verde,Disponível,36,10,15,2356.20,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Acessório,Verão 2026,Bolsa transversal,GG,Branco,Disponível,30,10,24,4273.50,Dobra Moda
+2026-05-01,Maio,2026,Loja Outlet,Acessório,Cápsula Urbana,Bolsa transversal,M,Azul,Disponível,27,10,23,3846.15,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Acessório,Verão 2026,Bolsa transversal,G,Bege,Disponível,13,10,14,1851.85,Dobra Moda
+2026-05-01,Maio,2026,Loja Shopping,Acessório,Inverno 2026,Meia kit,G,Preto,Disponível,29,10,7,622.05,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Acessório,Básicos,Meia kit,M,Azul,Parado,48,10,110,1029.60,Dobra Moda
+2026-05-01,Maio,2026,Loja Centro,Acessório,Cápsula Urbana,Meia kit,PP,Branco,Disponível,35,10,20,750.75,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Camiseta,Cápsula Urbana,Camiseta básica,M,Vermelho,Parado,39,6,117,1909.05,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Camiseta,Cápsula Urbana,Camiseta básica,GG,Bege,Disponível,33,6,17,1615.35,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Camiseta,Básicos,Camiseta básica,G,Bege,Disponível,34,6,23,1664.30,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Camisa,Verão 2026,Camisa linho,PP,Bege,Disponível,29,6,26,3014.55,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Camisa,Básicos,Camisa linho,G,Verde,Baixo,3,6,45,311.85,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Camisa,Verão 2026,Camisa linho,M,Branco,Baixo,5,6,45,519.75,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calça,Cápsula Urbana,Calça jeans,GG,Bege,Disponível,6,6,14,755.70,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calça,Básicos,Calça jeans,M,Preto,Disponível,26,6,17,3274.70,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Calça,Cápsula Urbana,Calça jeans,G,Preto,Disponível,21,6,6,2644.95,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Calça,Inverno 2026,Calça alfaiataria,PP,Branco,Disponível,18,6,12,2762.10,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calça,Básicos,Calça alfaiataria,G,Verde,Parado,44,6,61,6751.80,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Calça,Básicos,Calça alfaiataria,P,Preto,Disponível,27,6,22,4143.15,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Vestido,Cápsula Urbana,Vestido midi,M,Vermelho,Disponível,21,6,17,2875.95,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Vestido,Básicos,Vestido midi,GG,Azul,Disponível,14,6,19,1917.30,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Vestido,Básicos,Vestido midi,PP,Branco,Disponível,8,6,26,1095.60,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Jaqueta,Inverno 2026,Jaqueta jeans,GG,Azul,Parado,44,6,103,7961.80,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Jaqueta,Verão 2026,Jaqueta jeans,G,Branco,Disponível,7,6,13,1266.65,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Jaqueta,Inverno 2026,Jaqueta jeans,PP,Verde,Baixo,3,6,122,542.85,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Jaqueta,Cápsula Urbana,Blazer,M,Azul,Disponível,11,6,28,2413.95,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Jaqueta,Cápsula Urbana,Blazer,G,Branco,Baixo,4,6,115,877.80,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Jaqueta,Inverno 2026,Blazer,P,Vermelho,Parado,41,6,71,8997.45,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calçado,Básicos,Tênis casual,G,Branco,Disponível,10,6,20,1919.50,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Calçado,Verão 2026,Tênis casual,PP,Branco,Baixo,2,6,37,383.90,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calçado,Básicos,Tênis casual,M,Preto,Disponível,18,6,16,3455.10,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calçado,Inverno 2026,Tênis corrida,GG,Vermelho,Disponível,16,6,15,3775.20,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Calçado,Cápsula Urbana,Tênis corrida,P,Bege,Disponível,11,6,20,2595.45,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Calçado,Cápsula Urbana,Tênis corrida,PP,Branco,Disponível,12,6,14,2831.40,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Shorts,Básicos,Shorts linho,PP,Vermelho,Disponível,13,6,12,1136.85,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Shorts,Básicos,Shorts linho,P,Bege,Disponível,13,6,24,1136.85,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Shorts,Inverno 2026,Shorts linho,M,Branco,Parado,38,6,83,3323.10,Dobra Moda
+2026-06-01,Junho,2026,Loja Centro,Blusa,Básicos,Blusa tricô,PP,Bege,Disponível,12,6,11,1181.40,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Blusa,Cápsula Urbana,Blusa tricô,GG,Vermelho,Disponível,26,6,6,2559.70,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Blusa,Inverno 2026,Blusa tricô,M,Preto,Baixo,3,6,92,295.35,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Acessório,Cápsula Urbana,Cinto couro,G,Branco,Disponível,29,10,18,1898.05,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Acessório,Cápsula Urbana,Cinto couro,M,Branco,Disponível,26,10,8,1701.70,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Acessório,Básicos,Cinto couro,P,Vermelho,Disponível,28,10,21,1832.60,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Acessório,Básicos,Bolsa transversal,PP,Verde,Disponível,31,10,28,4415.95,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Acessório,Inverno 2026,Bolsa transversal,G,Azul,Parado,43,10,71,6125.35,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Acessório,Inverno 2026,Bolsa transversal,P,Verde,Parado,45,10,77,6410.25,Dobra Moda
+2026-06-01,Junho,2026,Loja Outlet,Acessório,Verão 2026,Meia kit,M,Branco,Disponível,29,10,12,622.05,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Acessório,Cápsula Urbana,Meia kit,P,Verde,Disponível,24,10,18,514.80,Dobra Moda
+2026-06-01,Junho,2026,Loja Shopping,Acessório,Básicos,Meia kit,G,Branco,Disponível,18,10,4,386.10,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Camiseta,Básicos,Camiseta básica,PP,Verde,Disponível,22,6,6,1076.90,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Camiseta,Básicos,Camiseta básica,G,Preto,Disponível,22,6,10,1076.90,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Camiseta,Cápsula Urbana,Camiseta básica,P,Branco,Disponível,20,6,28,979.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Camisa,Verão 2026,Camisa linho,P,Vermelho,Baixo,3,6,135,311.85,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Camisa,Básicos,Camisa linho,PP,Vermelho,Baixo,2,6,108,207.90,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Camisa,Cápsula Urbana,Camisa linho,M,Azul,Disponível,26,6,15,2702.70,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Calça,Básicos,Calça jeans,GG,Azul,Disponível,18,6,27,2267.10,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calça,Cápsula Urbana,Calça jeans,P,Azul,Disponível,33,6,14,4156.35,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calça,Inverno 2026,Calça jeans,PP,Vermelho,Disponível,21,6,9,2644.95,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calça,Verão 2026,Calça alfaiataria,P,Preto,Parado,40,6,122,6138.00,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Calça,Verão 2026,Calça alfaiataria,G,Preto,Disponível,29,6,4,4450.05,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calça,Básicos,Calça alfaiataria,GG,Verde,Parado,47,6,66,7212.15,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Vestido,Cápsula Urbana,Vestido midi,M,Azul,Parado,38,6,123,5204.10,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Vestido,Verão 2026,Vestido midi,G,Vermelho,Baixo,5,6,105,684.75,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Vestido,Cápsula Urbana,Vestido midi,PP,Azul,Disponível,32,6,10,4382.40,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Jaqueta,Cápsula Urbana,Jaqueta jeans,G,Bege,Parado,46,6,74,8323.70,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Jaqueta,Cápsula Urbana,Jaqueta jeans,GG,Verde,Baixo,5,6,100,904.75,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Jaqueta,Básicos,Jaqueta jeans,PP,Vermelho,Parado,42,6,35,7599.90,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Jaqueta,Cápsula Urbana,Blazer,G,Verde,Parado,41,6,135,8997.45,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,GG,Vermelho,Parado,45,6,113,9875.25,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Jaqueta,Básicos,Blazer,P,Bege,Parado,45,6,52,9875.25,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Calçado,Inverno 2026,Tênis casual,M,Vermelho,Baixo,2,6,70,383.90,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calçado,Inverno 2026,Tênis casual,GG,Verde,Disponível,7,6,4,1343.65,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Calçado,Básicos,Tênis casual,PP,Preto,Disponível,15,6,17,2879.25,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Calçado,Inverno 2026,Tênis corrida,M,Branco,Disponível,17,6,17,4011.15,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calçado,Verão 2026,Tênis corrida,GG,Branco,Baixo,1,6,80,235.95,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Calçado,Verão 2026,Tênis corrida,P,Azul,Disponível,12,6,16,2831.40,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Shorts,Verão 2026,Shorts linho,G,Azul,Disponível,13,6,21,1136.85,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Shorts,Básicos,Shorts linho,M,Branco,Parado,46,6,129,4022.70,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Shorts,Básicos,Shorts linho,P,Branco,Disponível,29,6,13,2536.05,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Blusa,Verão 2026,Blusa tricô,PP,Preto,Disponível,16,6,13,1575.20,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Blusa,Inverno 2026,Blusa tricô,P,Verde,Parado,43,6,56,4233.35,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Blusa,Básicos,Blusa tricô,G,Preto,Parado,41,6,63,4036.45,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Acessório,Básicos,Cinto couro,GG,Preto,Disponível,31,10,19,2028.95,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Acessório,Básicos,Cinto couro,G,Preto,Baixo,5,10,61,327.25,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Acessório,Verão 2026,Cinto couro,P,Branco,Parado,43,10,59,2814.35,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Acessório,Básicos,Bolsa transversal,M,Verde,Disponível,26,10,28,3703.70,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Acessório,Básicos,Bolsa transversal,GG,Vermelho,Disponível,22,10,10,3133.90,Dobra Moda
+2026-07-01,Julho,2026,Loja Centro,Acessório,Cápsula Urbana,Bolsa transversal,PP,Verde,Parado,44,10,50,6267.80,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Acessório,Básicos,Meia kit,GG,Vermelho,Parado,39,10,42,836.55,Dobra Moda
+2026-07-01,Julho,2026,Loja Outlet,Acessório,Cápsula Urbana,Meia kit,M,Azul,Baixo,4,10,56,85.80,Dobra Moda
+2026-07-01,Julho,2026,Loja Shopping,Acessório,Cápsula Urbana,Meia kit,P,Bege,Disponível,33,10,7,707.85,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Camiseta,Inverno 2026,Camiseta básica,M,Azul,Disponível,13,6,7,636.35,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Camiseta,Verão 2026,Camiseta básica,P,Verde,Parado,48,6,108,2349.60,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Camiseta,Verão 2026,Camiseta básica,PP,Branco,Parado,48,6,40,2349.60,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Camisa,Inverno 2026,Camisa linho,GG,Vermelho,Disponível,12,6,12,1247.40,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Camisa,Inverno 2026,Camisa linho,PP,Preto,Disponível,11,6,13,1143.45,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Camisa,Cápsula Urbana,Camisa linho,P,Vermelho,Parado,38,6,82,3950.10,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Calça,Verão 2026,Calça jeans,P,Verde,Disponível,6,6,9,755.70,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Calça,Inverno 2026,Calça jeans,PP,Azul,Disponível,9,6,19,1133.55,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Calça,Cápsula Urbana,Calça jeans,M,Preto,Baixo,5,6,72,629.75,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Calça,Básicos,Calça alfaiataria,P,Branco,Parado,41,6,80,6291.45,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Calça,Inverno 2026,Calça alfaiataria,GG,Preto,Baixo,4,6,76,613.80,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Calça,Básicos,Calça alfaiataria,PP,Azul,Baixo,3,6,138,460.35,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Vestido,Verão 2026,Vestido midi,PP,Preto,Baixo,5,6,120,684.75,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Vestido,Básicos,Vestido midi,G,Verde,Parado,47,6,87,6436.65,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Vestido,Básicos,Vestido midi,P,Azul,Disponível,19,6,25,2602.05,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Jaqueta,Básicos,Jaqueta jeans,G,Azul,Disponível,27,6,11,4885.65,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Jaqueta,Inverno 2026,Jaqueta jeans,GG,Verde,Disponível,7,6,21,1266.65,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Jaqueta,Cápsula Urbana,Jaqueta jeans,M,Verde,Disponível,6,6,8,1085.70,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Jaqueta,Básicos,Blazer,GG,Vermelho,Baixo,3,6,88,658.35,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Jaqueta,Verão 2026,Blazer,M,Preto,Parado,39,6,128,8558.55,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Jaqueta,Cápsula Urbana,Blazer,P,Vermelho,Disponível,6,6,26,1316.70,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Calçado,Inverno 2026,Tênis casual,G,Branco,Disponível,16,6,24,3071.20,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Calçado,Verão 2026,Tênis casual,PP,Bege,Baixo,4,6,137,767.80,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Calçado,Inverno 2026,Tênis casual,GG,Branco,Disponível,13,6,20,2495.35,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Calçado,Cápsula Urbana,Tênis corrida,PP,Verde,Baixo,5,6,118,1179.75,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Calçado,Inverno 2026,Tênis corrida,G,Vermelho,Baixo,4,6,38,943.80,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Calçado,Verão 2026,Tênis corrida,P,Vermelho,Disponível,18,6,26,4247.10,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Shorts,Básicos,Shorts linho,PP,Bege,Disponível,14,6,8,1224.30,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Shorts,Cápsula Urbana,Shorts linho,GG,Preto,Parado,48,6,51,4197.60,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Shorts,Inverno 2026,Shorts linho,P,Preto,Disponível,12,6,9,1049.40,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Blusa,Cápsula Urbana,Blusa tricô,PP,Vermelho,Disponível,21,6,23,2067.45,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Blusa,Cápsula Urbana,Blusa tricô,G,Preto,Disponível,16,6,10,1575.20,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Blusa,Verão 2026,Blusa tricô,P,Azul,Parado,39,6,79,3839.55,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Acessório,Verão 2026,Cinto couro,M,Vermelho,Disponível,21,10,25,1374.45,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Acessório,Cápsula Urbana,Cinto couro,P,Preto,Parado,40,10,101,2618.00,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Acessório,Verão 2026,Cinto couro,GG,Branco,Baixo,2,10,71,130.90,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Acessório,Cápsula Urbana,Bolsa transversal,P,Azul,Disponível,22,10,13,3133.90,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Acessório,Básicos,Bolsa transversal,M,Preto,Disponível,25,10,26,3561.25,Dobra Moda
+2026-08-01,Agosto,2026,Loja Outlet,Acessório,Básicos,Bolsa transversal,PP,Preto,Parado,37,10,37,5270.65,Dobra Moda
+2026-08-01,Agosto,2026,Loja Shopping,Acessório,Inverno 2026,Meia kit,GG,Preto,Parado,44,10,68,943.80,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Acessório,Básicos,Meia kit,M,Bege,Disponível,24,10,14,514.80,Dobra Moda
+2026-08-01,Agosto,2026,Loja Centro,Acessório,Cápsula Urbana,Meia kit,P,Verde,Disponível,14,10,20,300.30,Dobra Moda

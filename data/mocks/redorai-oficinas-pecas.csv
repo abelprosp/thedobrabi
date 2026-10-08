@@ -1,0 +1,241 @@
+data,mes,ano,oficina,tipo_veiculo,servico,peca,quantidade,valor_mao_obra,valor_pecas,custo_pecas,empresa
+2025-11-01,Novembro,2025,Mecânica Norte,Carro,Revisão,Kit revisão,17,1803.75,3565.34,2440.40,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Carro,Freios,Disco de freio,2,276.22,809.37,460.31,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Carro,Motor,Velas,9,475.41,1714.99,909.41,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Carro,Suspensão,Amortecedor,7,473.84,3956.86,2653.57,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Carro,Elétrica,Bateria,12,2520.76,8040.38,5018.37,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Carro,Pneus,Alinhamento,12,1309.98,1653.87,1156.48,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Carro,Troca de óleo,Óleo 5W30,11,847.04,2261.63,1298.86,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Carro,Embreagem,Atuador,2,126.13,553.60,340.26,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Moto,Revisão,Filtro de óleo,9,657.74,464.08,280.32,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Moto,Freios,Disco de freio,3,481.07,1095.67,683.99,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Moto,Motor,Junta do cabeçote,6,439.40,2919.25,1569.18,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Moto,Suspensão,Amortecedor,9,255.15,4649.78,3227.13,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Moto,Elétrica,Alternador,2,360.84,2385.79,1148.87,Dobra Auto
+2025-11-01,Novembro,2025,Box Moto Sul,Moto,Pneus,Alinhamento,1,88.07,152.46,97.86,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Moto,Troca de óleo,Óleo 5W30,4,317.10,789.27,561.92,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Moto,Embreagem,Atuador,9,671.03,2862.46,1586.19,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Caminhonete,Revisão,Kit revisão,8,1314.20,1916.21,904.91,Dobra Auto
+2025-11-01,Novembro,2025,Box Moto Sul,Caminhonete,Freios,Fluido de freio,3,339.47,153.41,100.09,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Caminhonete,Motor,Velas,4,660.11,831.25,415.84,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Caminhonete,Suspensão,Bieleta,11,930.18,1080.16,735.70,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Caminhonete,Elétrica,Alternador,14,1742.89,16333.69,9167.08,Dobra Auto
+2025-11-01,Novembro,2025,Box Moto Sul,Caminhonete,Pneus,Pneu aro 17,8,1315.34,6303.12,3515.18,Dobra Auto
+2025-11-01,Novembro,2025,Oficina Centro,Caminhonete,Troca de óleo,Filtro de óleo,13,742.68,711.11,474.12,Dobra Auto
+2025-11-01,Novembro,2025,Mecânica Norte,Caminhonete,Embreagem,Atuador,5,420.24,1397.33,963.88,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Carro,Revisão,Filtro de óleo,16,2383.02,881.05,535.30,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Carro,Freios,Fluido de freio,3,147.57,151.54,92.99,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Carro,Motor,Correia dentada,18,820.72,6439.46,3654.15,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Carro,Suspensão,Amortecedor,12,1237.55,7303.02,3602.41,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Carro,Elétrica,Bateria,2,402.05,1168.49,806.67,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Carro,Pneus,Pneu aro 17,18,1893.22,13190.43,8453.58,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Carro,Troca de óleo,Óleo 5W30,16,1743.56,3657.91,1966.74,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Carro,Embreagem,Kit embreagem,13,957.98,13675.51,6702.86,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Moto,Revisão,Kit revisão,3,88.38,710.03,356.53,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Moto,Freios,Fluido de freio,10,1222.20,546.42,349.63,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Moto,Motor,Velas,2,111.42,424.53,231.91,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Moto,Suspensão,Bieleta,7,676.58,737.81,496.38,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Moto,Elétrica,Lâmpada,2,185.55,84.93,55.71,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Moto,Pneus,Pneu aro 17,9,1531.56,7495.93,4695.92,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Moto,Troca de óleo,Óleo 5W30,5,261.01,989.13,688.84,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Moto,Embreagem,Atuador,9,1364.31,2541.64,1740.48,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Caminhonete,Revisão,Filtro de óleo,7,1132.56,340.28,235.07,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Caminhonete,Freios,Disco de freio,2,73.56,722.42,451.10,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Caminhonete,Motor,Junta do cabeçote,2,152.54,1112.36,624.59,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Caminhonete,Suspensão,Bieleta,16,3127.70,1531.24,1051.48,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Caminhonete,Elétrica,Lâmpada,9,1339.05,370.11,207.42,Dobra Auto
+2025-12-01,Dezembro,2025,Oficina Centro,Caminhonete,Pneus,Alinhamento,16,1191.35,2381.42,1542.14,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Caminhonete,Troca de óleo,Óleo 5W30,18,1708.43,3812.53,2454.46,Dobra Auto
+2025-12-01,Dezembro,2025,Mecânica Norte,Caminhonete,Embreagem,Kit embreagem,12,1627.23,11529.20,7529.00,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Carro,Revisão,Filtro de óleo,2,56.72,114.07,65.36,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Carro,Freios,Fluido de freio,7,577.62,417.56,270.30,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Carro,Motor,Correia dentada,15,1550.63,5511.86,3221.36,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Carro,Suspensão,Amortecedor,12,1126.30,6601.02,4477.27,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Carro,Elétrica,Lâmpada,16,3048.47,601.07,369.63,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Carro,Pneus,Alinhamento,12,1152.49,1571.41,1004.46,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Carro,Troca de óleo,Filtro de óleo,9,1643.51,438.76,267.01,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Carro,Embreagem,Kit embreagem,13,959.96,12522.88,7603.54,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Moto,Revisão,Filtro de ar,1,66.07,73.29,49.87,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Moto,Freios,Pastilha dianteira,2,157.68,521.27,302.02,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Moto,Motor,Junta do cabeçote,10,757.43,5053.86,3190.30,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Moto,Suspensão,Amortecedor,6,438.30,3597.69,2305.70,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Moto,Elétrica,Alternador,7,1078.93,7681.84,4428.80,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Moto,Pneus,Pneu aro 15,3,376.86,1481.77,1028.83,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Moto,Troca de óleo,Óleo 5W30,2,80.34,461.54,245.84,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Moto,Embreagem,Kit embreagem,9,636.03,8503.07,4924.05,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Caminhonete,Revisão,Filtro de óleo,18,2334.42,888.20,565.42,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Caminhonete,Freios,Fluido de freio,15,1169.91,845.05,473.29,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Caminhonete,Motor,Velas,14,2039.10,2532.56,1555.87,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Caminhonete,Suspensão,Amortecedor,17,1132.63,8761.89,6122.98,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Caminhonete,Elétrica,Bateria,17,1772.16,10251.66,5890.65,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Caminhonete,Pneus,Pneu aro 15,6,496.48,2957.92,1976.65,Dobra Auto
+2026-01-01,Janeiro,2026,Oficina Centro,Caminhonete,Troca de óleo,Óleo 5W30,15,422.67,3324.94,1714.75,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Caminhonete,Embreagem,Kit embreagem,15,1710.82,15214.20,8171.81,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Carro,Revisão,Filtro de ar,9,1837.48,601.98,350.28,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Carro,Freios,Pastilha dianteira,17,2662.90,4894.38,2862.73,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Carro,Motor,Correia dentada,12,1058.79,4247.80,2204.76,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Carro,Suspensão,Bieleta,16,539.98,1868.20,1090.52,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Carro,Elétrica,Alternador,14,1028.56,15976.69,8656.00,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Carro,Pneus,Pneu aro 17,3,342.46,2595.01,1543.06,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Carro,Troca de óleo,Filtro de óleo,4,118.79,238.29,119.28,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Carro,Embreagem,Kit embreagem,15,1901.45,12803.41,7885.18,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Moto,Revisão,Filtro de ar,4,308.78,303.20,169.14,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Moto,Freios,Pastilha dianteira,7,361.24,2039.52,1162.30,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Moto,Motor,Velas,8,740.20,1602.01,1021.12,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Moto,Suspensão,Amortecedor,3,572.04,1814.88,1039.20,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Moto,Elétrica,Lâmpada,9,1143.02,363.20,240.73,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Moto,Pneus,Pneu aro 17,10,798.39,7632.70,5564.15,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Moto,Troca de óleo,Filtro de óleo,3,508.41,180.81,109.68,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Moto,Embreagem,Kit embreagem,2,357.88,2078.59,1091.80,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Caminhonete,Revisão,Filtro de óleo,6,928.56,323.60,199.97,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Caminhonete,Freios,Disco de freio,9,447.32,3871.72,2036.68,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Caminhonete,Motor,Junta do cabeçote,16,3051.82,8968.58,4872.40,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Caminhonete,Suspensão,Bandeja,3,260.78,1019.48,529.61,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Caminhonete,Elétrica,Lâmpada,14,1755.66,648.79,374.30,Dobra Auto
+2026-02-01,Fevereiro,2026,Mecânica Norte,Caminhonete,Pneus,Pneu aro 15,11,1286.48,5952.99,2959.36,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Caminhonete,Troca de óleo,Óleo 5W30,2,301.68,439.81,225.52,Dobra Auto
+2026-02-01,Fevereiro,2026,Oficina Centro,Caminhonete,Embreagem,Kit embreagem,9,475.64,8710.53,4445.10,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Carro,Revisão,Filtro de ar,13,1718.58,1078.53,581.27,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Carro,Freios,Pastilha dianteira,11,936.12,2592.86,1750.01,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Carro,Motor,Junta do cabeçote,4,400.32,2191.70,1163.12,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Carro,Suspensão,Bieleta,13,822.10,1351.45,934.18,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Carro,Elétrica,Bateria,11,492.44,6461.15,3780.43,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Carro,Pneus,Alinhamento,2,74.93,298.97,168.69,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Carro,Troca de óleo,Filtro de óleo,11,1572.43,658.29,330.53,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Carro,Embreagem,Atuador,2,234.20,534.14,368.87,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Moto,Revisão,Filtro de óleo,2,130.46,115.94,67.27,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Moto,Freios,Pastilha dianteira,9,1392.41,2231.08,1258.78,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Moto,Motor,Correia dentada,8,1035.67,2658.25,1673.57,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Moto,Suspensão,Bandeja,1,139.55,346.87,193.53,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Moto,Elétrica,Bateria,7,748.10,4024.57,2743.64,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Moto,Pneus,Pneu aro 15,3,102.48,1494.24,888.91,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Moto,Troca de óleo,Óleo 5W30,5,669.29,955.83,690.97,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Moto,Embreagem,Kit embreagem,8,733.53,7520.04,4622.92,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Caminhonete,Revisão,Kit revisão,8,1245.78,1780.58,1071.45,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Caminhonete,Freios,Pastilha dianteira,18,1020.41,4487.21,2693.23,Dobra Auto
+2026-03-01,Março,2026,Mecânica Norte,Caminhonete,Motor,Junta do cabeçote,9,1121.94,5006.02,3085.84,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Caminhonete,Suspensão,Amortecedor,18,2152.97,11167.82,5642.92,Dobra Auto
+2026-03-01,Março,2026,Box Moto Sul,Caminhonete,Elétrica,Alternador,5,498.74,5638.37,3039.95,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Caminhonete,Pneus,Pneu aro 17,17,1214.69,13587.27,9519.46,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Caminhonete,Troca de óleo,Óleo 5W30,4,568.28,852.33,586.95,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Caminhonete,Embreagem,Kit embreagem,11,1082.51,9857.05,6722.06,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Carro,Revisão,Filtro de ar,5,531.05,360.79,245.48,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Carro,Freios,Pastilha dianteira,2,251.44,484.64,341.96,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Carro,Motor,Junta do cabeçote,13,1395.41,7078.92,4354.68,Dobra Auto
+2026-04-01,Abril,2026,Mecânica Norte,Carro,Suspensão,Amortecedor,13,1309.61,6786.44,4019.34,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Carro,Elétrica,Bateria,15,580.49,9626.92,5137.52,Dobra Auto
+2026-04-01,Abril,2026,Mecânica Norte,Carro,Pneus,Pneu aro 17,8,882.92,6717.21,3610.75,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Carro,Troca de óleo,Filtro de óleo,11,1617.51,637.58,373.78,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Carro,Embreagem,Atuador,12,2246.43,3090.28,1897.59,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Moto,Revisão,Filtro de óleo,9,315.66,529.65,290.95,Dobra Auto
+2026-04-01,Abril,2026,Mecânica Norte,Moto,Freios,Pastilha dianteira,2,126.76,547.93,300.12,Dobra Auto
+2026-04-01,Abril,2026,Mecânica Norte,Moto,Motor,Correia dentada,10,777.86,3255.51,2131.63,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Moto,Suspensão,Bieleta,7,336.04,711.15,412.75,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Moto,Elétrica,Lâmpada,3,403.06,124.32,81.21,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Moto,Pneus,Pneu aro 15,7,783.01,3091.89,2133.23,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Moto,Troca de óleo,Óleo 5W30,6,748.87,1428.15,688.75,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Moto,Embreagem,Atuador,8,626.20,2026.91,1240.54,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Caminhonete,Revisão,Kit revisão,13,663.86,3124.79,1644.67,Dobra Auto
+2026-04-01,Abril,2026,Mecânica Norte,Caminhonete,Freios,Fluido de freio,16,2726.14,989.84,581.58,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Caminhonete,Motor,Junta do cabeçote,10,1927.36,5663.46,2801.06,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Caminhonete,Suspensão,Bandeja,13,1001.43,3932.79,2326.90,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Caminhonete,Elétrica,Lâmpada,14,915.22,581.82,339.35,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Caminhonete,Pneus,Pneu aro 17,17,676.94,12610.65,9557.96,Dobra Auto
+2026-04-01,Abril,2026,Oficina Centro,Caminhonete,Troca de óleo,Filtro de óleo,2,86.69,116.15,70.06,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Caminhonete,Embreagem,Atuador,15,1305.62,3980.68,2779.74,Dobra Auto
+2026-05-01,Maio,2026,Box Moto Sul,Carro,Revisão,Filtro de ar,5,365.01,413.92,244.14,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Carro,Freios,Pastilha dianteira,12,995.90,3465.16,1744.43,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Carro,Motor,Velas,18,1503.56,3793.79,1826.09,Dobra Auto
+2026-05-01,Maio,2026,Oficina Centro,Carro,Suspensão,Bieleta,14,1462.37,1650.97,809.28,Dobra Auto
+2026-05-01,Maio,2026,Box Moto Sul,Carro,Elétrica,Bateria,14,1809.96,8125.03,5392.88,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Carro,Pneus,Alinhamento,3,438.91,390.92,242.58,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Carro,Troca de óleo,Filtro de óleo,16,964.12,901.74,534.06,Dobra Auto
+2026-05-01,Maio,2026,Oficina Centro,Carro,Embreagem,Atuador,16,1535.26,5103.46,2405.59,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Moto,Revisão,Filtro de ar,10,658.57,663.88,436.50,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Moto,Freios,Fluido de freio,4,397.54,240.17,119.75,Dobra Auto
+2026-05-01,Maio,2026,Oficina Centro,Moto,Motor,Velas,8,1235.07,1551.04,1011.08,Dobra Auto
+2026-05-01,Maio,2026,Box Moto Sul,Moto,Suspensão,Amortecedor,8,950.07,4496.56,2648.23,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Moto,Elétrica,Alternador,3,290.28,3006.66,1894.09,Dobra Auto
+2026-05-01,Maio,2026,Box Moto Sul,Moto,Pneus,Pneu aro 15,10,969.81,4491.65,3202.94,Dobra Auto
+2026-05-01,Maio,2026,Oficina Centro,Moto,Troca de óleo,Filtro de óleo,1,157.81,60.67,28.94,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Moto,Embreagem,Kit embreagem,2,208.23,1791.28,987.68,Dobra Auto
+2026-05-01,Maio,2026,Box Moto Sul,Caminhonete,Revisão,Filtro de óleo,10,1321.58,494.02,280.60,Dobra Auto
+2026-05-01,Maio,2026,Oficina Centro,Caminhonete,Freios,Disco de freio,11,1939.99,4647.95,3020.57,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Caminhonete,Motor,Velas,4,524.44,734.60,450.58,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Caminhonete,Suspensão,Bieleta,8,849.59,836.72,541.54,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Caminhonete,Elétrica,Lâmpada,4,422.89,151.96,109.10,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Caminhonete,Pneus,Pneu aro 15,18,1925.17,9546.38,5786.61,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Caminhonete,Troca de óleo,Óleo 5W30,10,723.31,2210.84,1440.97,Dobra Auto
+2026-05-01,Maio,2026,Box Moto Sul,Caminhonete,Embreagem,Atuador,3,283.75,903.39,557.28,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Carro,Revisão,Filtro de óleo,10,1529.05,539.26,360.70,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Carro,Freios,Fluido de freio,4,424.07,241.10,142.93,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Carro,Motor,Correia dentada,18,2419.99,5936.04,3975.44,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Carro,Suspensão,Bieleta,4,312.30,467.92,287.46,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Carro,Elétrica,Lâmpada,15,792.16,612.48,416.96,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Carro,Pneus,Alinhamento,10,1337.04,1260.71,783.17,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Carro,Troca de óleo,Óleo 5W30,12,924.87,2750.14,1659.04,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Carro,Embreagem,Kit embreagem,10,1804.84,9312.31,5808.00,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Moto,Revisão,Filtro de ar,8,251.75,669.37,325.04,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Moto,Freios,Disco de freio,2,180.39,820.06,523.11,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Moto,Motor,Junta do cabeçote,10,1271.16,5384.20,2969.57,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Moto,Suspensão,Bandeja,7,1118.03,2435.00,1224.48,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Moto,Elétrica,Alternador,9,837.28,8845.80,6459.59,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Moto,Pneus,Pneu aro 15,1,84.53,549.51,271.85,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Moto,Troca de óleo,Óleo 5W30,3,331.68,688.81,382.65,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Moto,Embreagem,Atuador,10,858.17,3008.88,1634.85,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Caminhonete,Revisão,Kit revisão,13,1888.60,2642.27,1797.77,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Caminhonete,Freios,Pastilha dianteira,4,217.46,1091.27,588.02,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Caminhonete,Motor,Velas,17,965.06,3081.59,1906.94,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Caminhonete,Suspensão,Amortecedor,8,829.07,4910.76,2858.93,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Caminhonete,Elétrica,Bateria,7,708.99,4045.62,2916.12,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Caminhonete,Pneus,Alinhamento,17,2441.84,2425.26,1363.62,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Caminhonete,Troca de óleo,Óleo 5W30,6,280.00,1215.36,729.81,Dobra Auto
+2026-06-01,Junho,2026,Box Moto Sul,Caminhonete,Embreagem,Atuador,17,1182.07,5368.28,3175.55,Dobra Auto
+2026-07-01,Julho,2026,Box Moto Sul,Carro,Revisão,Filtro de óleo,17,656.73,854.36,504.48,Dobra Auto
+2026-07-01,Julho,2026,Box Moto Sul,Carro,Freios,Fluido de freio,12,534.37,729.29,445.97,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Carro,Motor,Correia dentada,11,1219.05,4026.72,1935.27,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Carro,Suspensão,Bandeja,13,1813.26,4307.98,2448.18,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Carro,Elétrica,Bateria,15,2470.00,8557.91,6203.57,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Carro,Pneus,Alinhamento,8,587.86,1158.79,668.26,Dobra Auto
+2026-07-01,Julho,2026,Oficina Centro,Carro,Troca de óleo,Óleo 5W30,15,2689.21,2999.32,1751.55,Dobra Auto
+2026-07-01,Julho,2026,Oficina Centro,Carro,Embreagem,Atuador,13,1263.00,3335.45,2464.29,Dobra Auto
+2026-07-01,Julho,2026,Oficina Centro,Moto,Revisão,Filtro de ar,1,93.21,69.10,50.69,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Moto,Freios,Disco de freio,8,756.04,3131.37,1945.78,Dobra Auto
+2026-07-01,Julho,2026,Box Moto Sul,Moto,Motor,Junta do cabeçote,7,607.84,3517.02,1947.19,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Moto,Suspensão,Bieleta,9,1888.66,978.08,578.75,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Moto,Elétrica,Alternador,4,625.71,4314.32,2567.38,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Moto,Pneus,Pneu aro 15,3,534.66,1616.56,946.19,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Moto,Troca de óleo,Filtro de óleo,8,500.54,417.29,272.73,Dobra Auto
+2026-07-01,Julho,2026,Box Moto Sul,Moto,Embreagem,Atuador,5,347.86,1379.58,937.54,Dobra Auto
+2026-07-01,Julho,2026,Oficina Centro,Caminhonete,Revisão,Filtro de óleo,7,1375.77,381.94,204.95,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Caminhonete,Freios,Disco de freio,10,578.77,4385.98,2568.09,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Caminhonete,Motor,Velas,5,262.02,853.65,529.55,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Caminhonete,Suspensão,Bandeja,3,321.48,920.21,626.47,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Caminhonete,Elétrica,Lâmpada,10,788.70,371.38,240.79,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Caminhonete,Pneus,Alinhamento,6,333.33,771.25,535.15,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Caminhonete,Troca de óleo,Filtro de óleo,2,224.78,99.51,61.31,Dobra Auto
+2026-07-01,Julho,2026,Box Moto Sul,Caminhonete,Embreagem,Kit embreagem,3,373.66,2913.95,1565.68,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Carro,Revisão,Filtro de ar,15,527.39,1064.66,746.40,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Carro,Freios,Disco de freio,4,504.08,1558.19,881.33,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Carro,Motor,Junta do cabeçote,2,424.50,1119.70,634.60,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Carro,Suspensão,Amortecedor,18,519.33,11364.35,5475.32,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Carro,Elétrica,Lâmpada,7,765.23,272.27,196.69,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Carro,Pneus,Pneu aro 17,18,3399.26,15463.47,7773.29,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Carro,Troca de óleo,Filtro de óleo,10,625.31,584.91,297.85,Dobra Auto
+2026-08-01,Agosto,2026,Box Moto Sul,Carro,Embreagem,Kit embreagem,15,1959.23,14790.99,9263.79,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Moto,Revisão,Filtro de óleo,9,1712.10,452.42,314.39,Dobra Auto
+2026-08-01,Agosto,2026,Box Moto Sul,Moto,Freios,Fluido de freio,9,1125.34,493.05,272.58,Dobra Auto
+2026-08-01,Agosto,2026,Box Moto Sul,Moto,Motor,Correia dentada,10,1103.89,3418.80,2286.69,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Moto,Suspensão,Bandeja,3,357.09,847.44,501.89,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Moto,Elétrica,Lâmpada,8,445.69,307.96,189.24,Dobra Auto
+2026-08-01,Agosto,2026,Box Moto Sul,Moto,Pneus,Pneu aro 15,2,235.69,979.38,547.59,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Moto,Troca de óleo,Óleo 5W30,4,194.58,904.18,454.65,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Moto,Embreagem,Kit embreagem,8,572.13,6583.75,4850.42,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Caminhonete,Revisão,Filtro de ar,12,1860.95,904.27,539.53,Dobra Auto
+2026-08-01,Agosto,2026,Box Moto Sul,Caminhonete,Freios,Pastilha dianteira,2,135.47,465.21,309.28,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Caminhonete,Motor,Velas,7,910.55,1206.05,890.81,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Caminhonete,Suspensão,Bandeja,9,1648.74,2486.85,1496.13,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Caminhonete,Elétrica,Lâmpada,7,553.90,261.99,189.03,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Caminhonete,Pneus,Pneu aro 15,2,279.92,1048.95,533.43,Dobra Auto
+2026-08-01,Agosto,2026,Box Moto Sul,Caminhonete,Troca de óleo,Óleo 5W30,11,1774.41,2593.15,1229.53,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Caminhonete,Embreagem,Kit embreagem,9,1146.42,7446.51,5498.01,Dobra Auto

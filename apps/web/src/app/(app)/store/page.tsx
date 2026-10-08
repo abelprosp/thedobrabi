@@ -18,14 +18,17 @@ import {
   Repeat,
   Search,
   Scale,
+  Shirt,
   ShoppingBag,
   ShoppingCart,
+  Smartphone,
   Store,
   Target,
   TrendingUp,
   Truck,
   Users,
   Wallet,
+  Wrench,
   X,
   Zap,
 } from "lucide-react";
@@ -61,6 +64,9 @@ const ICONS: Record<StoreIcon, typeof Wallet> = {
   home: Home,
   key: KeyRound,
   scale: Scale,
+  shirt: Shirt,
+  smartphone: Smartphone,
+  wrench: Wrench,
 };
 
 export default function StorePage() {
@@ -145,7 +151,7 @@ export default function StorePage() {
             </p>
             <h1 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">Painéis prontos que ativa em minutos</h1>
             <p className="mt-2 max-w-xl text-sm text-white/80">
-              Não construa do zero. Escolha o rito da área — financeiro, comercial, RH, e-commerce — ligue o conjunto e o dashboard já nasce com as suas colunas.
+              Não construa do zero. Escolha o rito da área — financeiro, comercial, moda, eletrônicos ou oficinas — ligue o conjunto e o dashboard já nasce com as suas colunas.
             </p>
             <div className="mt-5 grid max-w-md grid-cols-2 gap-2">
               <div className="rounded-2xl border border-white/15 bg-white/5 px-4 py-3">

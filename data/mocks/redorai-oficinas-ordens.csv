@@ -1,0 +1,381 @@
+data,mes,ano,oficina,mecanico,cliente,tipo_veiculo,marca,servico,os,status,horas,valor_mao_obra,valor_pecas,valor,empresa
+2026-01-29,Janeiro,2026,Mecânica Norte,Diego Alves,Serra Café,Carro,Toyota,Motor,OS-18000,Entregue,7.3,1014.65,422.52,1437.18,Dobra Auto
+2026-02-18,Fevereiro,2026,Oficina Centro,Paulo Ribeiro,Rio Branco,Carro,Volkswagen,Freios,OS-18001,Aguardando peça,3.7,414.28,1880.17,2294.45,Dobra Auto
+2026-05-21,Maio,2026,Box Moto Sul,Diego Alves,Terra Nova,Utilitário,Fiat,Motor,OS-18002,Entregue,4.6,419.91,2080.51,2500.43,Dobra Auto
+2026-07-22,Julho,2026,Oficina Centro,Carla Souza,Verde Agro,Caminhonete,Chevrolet,Elétrica,OS-18003,Em execução,6.8,1020.50,647.58,1668.09,Dobra Auto
+2026-02-22,Fevereiro,2026,Box Moto Sul,Carla Souza,Verde Agro,Caminhonete,Chevrolet,Revisão,OS-18004,Entregue,2.3,226.67,1580.79,1807.46,Dobra Auto
+2026-06-09,Junho,2026,Oficina Centro,Fábio Nunes,Aurora Moda,Carro,Toyota,Motor,OS-18005,Aberta,4.7,576.48,727.21,1303.69,Dobra Auto
+2026-05-13,Maio,2026,Mecânica Norte,Carla Souza,Forge Engenharia,Carro,Fiat,Pneus,OS-18006,Entregue,1.1,181.92,1409.13,1591.04,Dobra Auto
+2026-05-15,Maio,2026,Box Moto Sul,Paulo Ribeiro,Delta Log,Moto,Yamaha,Troca de óleo,OS-18007,Em execução,6.5,814.21,137.81,952.02,Dobra Auto
+2025-11-10,Novembro,2025,Box Moto Sul,Carla Souza,Orbit Educação,Moto,Yamaha,Embreagem,OS-18008,Entregue,2.6,310.77,291.64,602.41,Dobra Auto
+2026-03-23,Março,2026,Box Moto Sul,Rafael Pinto,Orbit Educação,Carro,Fiat,Revisão,OS-18009,Aguardando peça,3.8,556.26,1218.69,1774.95,Dobra Auto
+2026-06-09,Junho,2026,Mecânica Norte,Rafael Pinto,Pampa Alimentos,Carro,Chevrolet,Motor,OS-18010,Entregue,7.8,894.21,1977.33,2871.54,Dobra Auto
+2026-03-11,Março,2026,Box Moto Sul,Rafael Pinto,Terra Nova,Caminhonete,Fiat,Revisão,OS-18011,Aberta,4.2,680.50,1427.24,2107.73,Dobra Auto
+2026-05-11,Maio,2026,Oficina Centro,Carla Souza,Maré Energia,Carro,Toyota,Suspensão,OS-18012,Entregue,5.8,535.33,787.48,1322.81,Dobra Auto
+2025-12-19,Dezembro,2025,Oficina Centro,Diego Alves,Céu Soft,Carro,Hyundai,Pneus,OS-18013,Em execução,2.4,264.03,470.27,734.31,Dobra Auto
+2026-04-12,Abril,2026,Box Moto Sul,Fábio Nunes,Pulse Varejo,Carro,Volkswagen,Freios,OS-18014,Entregue,1.9,328.17,1911.35,2239.52,Dobra Auto
+2025-11-03,Novembro,2025,Mecânica Norte,Rafael Pinto,Nimbus SA,Caminhonete,Fiat,Motor,OS-18015,Concluída,4.6,691.99,1225.57,1917.56,Dobra Auto
+2026-08-28,Agosto,2026,Oficina Centro,Rafael Pinto,Maré Energia,Caminhonete,Fiat,Pneus,OS-18016,Entregue,1.6,265.64,1925.55,2191.19,Dobra Auto
+2026-06-09,Junho,2026,Mecânica Norte,Rafael Pinto,Costa Farma,Carro,Honda,Revisão,OS-18017,Aguardando peça,7.3,1155.82,1070.81,2226.63,Dobra Auto
+2025-12-03,Dezembro,2025,Box Moto Sul,Paulo Ribeiro,Pulse Varejo,Carro,Toyota,Elétrica,OS-18018,Entregue,2.4,269.37,2122.70,2392.07,Dobra Auto
+2026-03-09,Março,2026,Box Moto Sul,Rafael Pinto,Rio Branco,Moto,Suzuki,Motor,OS-18019,Entregue,6.8,606.96,333.29,940.25,Dobra Auto
+2026-05-21,Maio,2026,Box Moto Sul,Fábio Nunes,Atlas Ltda,Carro,Volkswagen,Suspensão,OS-18020,Entregue,5.3,759.32,373.42,1132.74,Dobra Auto
+2026-02-24,Fevereiro,2026,Oficina Centro,Rafael Pinto,Boa Vista,Utilitário,Peugeot,Troca de óleo,OS-18021,Concluída,5.6,917.85,131.75,1049.60,Dobra Auto
+2025-11-24,Novembro,2025,Mecânica Norte,Carla Souza,Helix Saúde,Carro,Chevrolet,Revisão,OS-18022,Entregue,3.2,304.48,1832.53,2137.01,Dobra Auto
+2026-08-27,Agosto,2026,Oficina Centro,Paulo Ribeiro,Terra Nova,Carro,Fiat,Pneus,OS-18023,Concluída,1.4,141.78,496.63,638.41,Dobra Auto
+2026-07-06,Julho,2026,Box Moto Sul,Paulo Ribeiro,Rio Branco,Carro,Chevrolet,Elétrica,OS-18024,Entregue,4.3,654.37,1266.88,1921.25,Dobra Auto
+2025-11-06,Novembro,2025,Mecânica Norte,Carla Souza,Aurora Moda,Carro,Honda,Elétrica,OS-18025,Entregue,3.4,467.53,1961.68,2429.20,Dobra Auto
+2026-07-08,Julho,2026,Box Moto Sul,Rafael Pinto,Verde Agro,Moto,Yamaha,Embreagem,OS-18026,Concluída,2.9,266.87,531.50,798.38,Dobra Auto
+2026-05-13,Maio,2026,Box Moto Sul,Fábio Nunes,Atlas Ltda,Moto,Honda,Elétrica,OS-18027,Em execução,7.3,943.41,377.43,1320.85,Dobra Auto
+2026-06-12,Junho,2026,Mecânica Norte,Fábio Nunes,Delta Log,Carro,Fiat,Suspensão,OS-18028,Em execução,4.5,467.31,1854.82,2322.13,Dobra Auto
+2026-04-06,Abril,2026,Mecânica Norte,Diego Alves,Rio Branco,Carro,Toyota,Suspensão,OS-18029,Concluída,6.7,673.53,79.34,752.87,Dobra Auto
+2026-05-11,Maio,2026,Mecânica Norte,Paulo Ribeiro,Maré Energia,Carro,Volkswagen,Troca de óleo,OS-18030,Aberta,3.8,441.07,180.61,621.67,Dobra Auto
+2026-05-24,Maio,2026,Oficina Centro,Diego Alves,Verde Agro,Carro,Toyota,Freios,OS-18031,Entregue,4.2,434.50,1841.93,2276.43,Dobra Auto
+2026-05-17,Maio,2026,Oficina Centro,Paulo Ribeiro,Lumen Tech,Caminhonete,Fiat,Motor,OS-18032,Entregue,5.4,913.29,1152.71,2065.99,Dobra Auto
+2026-05-03,Maio,2026,Mecânica Norte,Fábio Nunes,Pampa Alimentos,Carro,Volkswagen,Pneus,OS-18033,Aberta,1.6,244.54,1874.41,2118.95,Dobra Auto
+2026-02-01,Fevereiro,2026,Box Moto Sul,Fábio Nunes,Rio Branco,Moto,Suzuki,Embreagem,OS-18034,Em execução,7.5,696.75,1183.31,1880.06,Dobra Auto
+2026-04-05,Abril,2026,Box Moto Sul,Paulo Ribeiro,Costa Farma,Carro,Hyundai,Pneus,OS-18035,Entregue,2.7,361.93,1491.44,1853.37,Dobra Auto
+2025-11-21,Novembro,2025,Box Moto Sul,Diego Alves,Boa Vista,Carro,Toyota,Troca de óleo,OS-18036,Entregue,4.2,403.65,135.81,539.45,Dobra Auto
+2026-06-19,Junho,2026,Box Moto Sul,Paulo Ribeiro,Aurora Moda,Carro,Toyota,Troca de óleo,OS-18037,Entregue,1.3,225.75,199.40,425.15,Dobra Auto
+2026-02-14,Fevereiro,2026,Mecânica Norte,Paulo Ribeiro,Delta Log,Caminhonete,Toyota,Troca de óleo,OS-18038,Entregue,4.8,798.73,184.50,983.23,Dobra Auto
+2026-07-13,Julho,2026,Mecânica Norte,Rafael Pinto,Helix Saúde,Utilitário,Peugeot,Pneus,OS-18039,Aberta,3.9,575.33,1963.28,2538.61,Dobra Auto
+2026-07-16,Julho,2026,Mecânica Norte,Paulo Ribeiro,Serra Café,Moto,Yamaha,Embreagem,OS-18040,Concluída,5.8,752.46,932.01,1684.48,Dobra Auto
+2026-07-18,Julho,2026,Mecânica Norte,Diego Alves,Céu Soft,Carro,Hyundai,Suspensão,OS-18041,Aberta,3.8,447.41,191.51,638.92,Dobra Auto
+2026-06-03,Junho,2026,Mecânica Norte,Paulo Ribeiro,Sul Minas,Carro,Volkswagen,Freios,OS-18042,Entregue,8.0,997.23,1787.91,2785.13,Dobra Auto
+2026-08-28,Agosto,2026,Mecânica Norte,Diego Alves,Pulse Varejo,Caminhonete,Chevrolet,Motor,OS-18043,Entregue,7.3,1155.10,1387.39,2542.49,Dobra Auto
+2026-08-23,Agosto,2026,Mecânica Norte,Diego Alves,Sul Minas,Utilitário,Renault,Freios,OS-18044,Aguardando peça,5.5,695.15,1418.46,2113.61,Dobra Auto
+2026-05-08,Maio,2026,Oficina Centro,Paulo Ribeiro,Casa Norte,Carro,Chevrolet,Suspensão,OS-18045,Entregue,1.0,161.53,503.33,664.86,Dobra Auto
+2026-05-08,Maio,2026,Box Moto Sul,Diego Alves,Sul Minas,Carro,Honda,Embreagem,OS-18046,Entregue,0.7,114.76,980.05,1094.81,Dobra Auto
+2025-12-19,Dezembro,2025,Box Moto Sul,Diego Alves,Maré Energia,Carro,Fiat,Elétrica,OS-18047,Aberta,0.5,47.66,1625.95,1673.61,Dobra Auto
+2026-01-16,Janeiro,2026,Mecânica Norte,Carla Souza,Pulse Varejo,Carro,Hyundai,Freios,OS-18048,Aberta,0.9,115.25,2133.02,2248.27,Dobra Auto
+2026-05-30,Maio,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Carro,Volkswagen,Motor,OS-18049,Concluída,1.9,267.07,1469.32,1736.39,Dobra Auto
+2026-03-17,Março,2026,Oficina Centro,Fábio Nunes,Rio Branco,Carro,Honda,Embreagem,OS-18050,Entregue,5.1,799.05,362.28,1161.33,Dobra Auto
+2026-02-08,Fevereiro,2026,Box Moto Sul,Fábio Nunes,Céu Soft,Caminhonete,Fiat,Troca de óleo,OS-18051,Concluída,5.5,929.14,258.52,1187.66,Dobra Auto
+2026-03-05,Março,2026,Mecânica Norte,Rafael Pinto,Pampa Alimentos,Utilitário,Peugeot,Embreagem,OS-18052,Concluída,7.8,1341.00,1853.34,3194.34,Dobra Auto
+2025-11-29,Novembro,2025,Oficina Centro,Carla Souza,Delta Log,Moto,Honda,Embreagem,OS-18053,Concluída,4.2,471.21,286.00,757.21,Dobra Auto
+2025-11-11,Novembro,2025,Oficina Centro,Paulo Ribeiro,Maré Energia,Carro,Honda,Motor,OS-18054,Aguardando peça,3.3,580.37,167.16,747.53,Dobra Auto
+2026-05-23,Maio,2026,Oficina Centro,Carla Souza,Boa Vista,Caminhonete,Fiat,Embreagem,OS-18055,Concluída,3.3,439.65,2199.27,2638.92,Dobra Auto
+2026-06-28,Junho,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Carro,Volkswagen,Troca de óleo,OS-18056,Entregue,2.2,387.58,81.67,469.25,Dobra Auto
+2026-08-19,Agosto,2026,Box Moto Sul,Carla Souza,Serra Café,Moto,Honda,Revisão,OS-18057,Em execução,6.0,523.00,758.36,1281.36,Dobra Auto
+2026-01-25,Janeiro,2026,Box Moto Sul,Rafael Pinto,Boa Vista,Caminhonete,Toyota,Embreagem,OS-18058,Entregue,0.8,125.15,713.94,839.10,Dobra Auto
+2026-04-13,Abril,2026,Box Moto Sul,Carla Souza,Céu Soft,Carro,Hyundai,Troca de óleo,OS-18059,Aberta,2.7,360.25,140.38,500.63,Dobra Auto
+2026-01-20,Janeiro,2026,Oficina Centro,Diego Alves,Pampa Alimentos,Utilitário,Fiat,Revisão,OS-18060,Entregue,6.0,775.35,86.32,861.67,Dobra Auto
+2026-02-03,Fevereiro,2026,Oficina Centro,Paulo Ribeiro,Orbit Educação,Carro,Volkswagen,Freios,OS-18061,Entregue,2.4,222.37,1387.48,1609.85,Dobra Auto
+2025-11-29,Novembro,2025,Oficina Centro,Diego Alves,Verde Agro,Caminhonete,Fiat,Troca de óleo,OS-18062,Aguardando peça,3.6,465.08,254.63,719.70,Dobra Auto
+2026-01-31,Janeiro,2026,Oficina Centro,Rafael Pinto,Casa Norte,Carro,Honda,Freios,OS-18063,Aguardando peça,6.0,762.41,1260.82,2023.24,Dobra Auto
+2026-06-11,Junho,2026,Mecânica Norte,Paulo Ribeiro,Aurora Moda,Caminhonete,Chevrolet,Embreagem,OS-18064,Aberta,4.9,446.30,1236.68,1682.99,Dobra Auto
+2026-02-23,Fevereiro,2026,Mecânica Norte,Fábio Nunes,Serra Café,Carro,Chevrolet,Suspensão,OS-18065,Entregue,3.5,569.03,1891.68,2460.71,Dobra Auto
+2026-05-02,Maio,2026,Mecânica Norte,Diego Alves,Pampa Alimentos,Carro,Toyota,Pneus,OS-18066,Concluída,1.6,159.87,297.35,457.22,Dobra Auto
+2025-11-05,Novembro,2025,Box Moto Sul,Diego Alves,Forge Engenharia,Carro,Volkswagen,Motor,OS-18067,Entregue,5.5,679.87,1254.20,1934.07,Dobra Auto
+2026-02-06,Fevereiro,2026,Oficina Centro,Carla Souza,Verde Agro,Carro,Chevrolet,Troca de óleo,OS-18068,Concluída,5.7,991.51,137.23,1128.75,Dobra Auto
+2026-06-09,Junho,2026,Box Moto Sul,Fábio Nunes,Céu Soft,Carro,Honda,Troca de óleo,OS-18069,Concluída,5.7,684.71,142.25,826.97,Dobra Auto
+2026-05-05,Maio,2026,Oficina Centro,Carla Souza,Lumen Tech,Carro,Chevrolet,Suspensão,OS-18070,Em execução,4.3,588.62,1310.00,1898.62,Dobra Auto
+2026-03-09,Março,2026,Box Moto Sul,Rafael Pinto,Helix Saúde,Caminhonete,Toyota,Pneus,OS-18071,Entregue,4.7,431.42,182.86,614.27,Dobra Auto
+2026-03-18,Março,2026,Mecânica Norte,Carla Souza,Aurora Moda,Carro,Volkswagen,Freios,OS-18072,Em execução,3.7,560.52,206.20,766.72,Dobra Auto
+2026-01-17,Janeiro,2026,Oficina Centro,Fábio Nunes,Helix Saúde,Caminhonete,Toyota,Motor,OS-18073,Entregue,7.3,1176.60,1990.37,3166.97,Dobra Auto
+2025-12-25,Dezembro,2025,Box Moto Sul,Paulo Ribeiro,Sul Minas,Carro,Hyundai,Freios,OS-18074,Entregue,1.8,278.73,196.17,474.90,Dobra Auto
+2026-03-09,Março,2026,Mecânica Norte,Paulo Ribeiro,Orbit Educação,Carro,Toyota,Elétrica,OS-18075,Entregue,4.9,778.06,1907.39,2685.45,Dobra Auto
+2026-07-22,Julho,2026,Mecânica Norte,Fábio Nunes,Terra Nova,Carro,Fiat,Suspensão,OS-18076,Concluída,0.6,54.77,1879.62,1934.39,Dobra Auto
+2026-04-18,Abril,2026,Oficina Centro,Diego Alves,Nimbus SA,Caminhonete,Fiat,Revisão,OS-18077,Aguardando peça,4.9,559.09,455.99,1015.08,Dobra Auto
+2025-12-28,Dezembro,2025,Box Moto Sul,Carla Souza,Boa Vista,Moto,Suzuki,Revisão,OS-18078,Concluída,3.2,456.41,975.90,1432.31,Dobra Auto
+2025-11-20,Novembro,2025,Box Moto Sul,Carla Souza,Atlas Ltda,Moto,Honda,Freios,OS-18079,Entregue,6.7,964.63,154.99,1119.62,Dobra Auto
+2025-12-09,Dezembro,2025,Oficina Centro,Fábio Nunes,Helix Saúde,Carro,Volkswagen,Elétrica,OS-18080,Entregue,7.7,1360.21,1831.63,3191.85,Dobra Auto
+2026-04-27,Abril,2026,Mecânica Norte,Fábio Nunes,Sul Minas,Carro,Chevrolet,Suspensão,OS-18081,Entregue,3.7,385.84,1027.20,1413.04,Dobra Auto
+2026-08-27,Agosto,2026,Oficina Centro,Paulo Ribeiro,Verde Agro,Caminhonete,Toyota,Pneus,OS-18082,Entregue,5.3,881.13,879.79,1760.92,Dobra Auto
+2025-12-11,Dezembro,2025,Oficina Centro,Carla Souza,Serra Café,Moto,Yamaha,Elétrica,OS-18083,Concluída,6.5,640.90,1321.97,1962.87,Dobra Auto
+2026-07-10,Julho,2026,Oficina Centro,Diego Alves,Verde Agro,Caminhonete,Fiat,Freios,OS-18084,Concluída,2.2,254.51,1281.35,1535.86,Dobra Auto
+2026-08-19,Agosto,2026,Box Moto Sul,Fábio Nunes,Aurora Moda,Moto,Honda,Troca de óleo,OS-18085,Aberta,2.8,221.85,79.81,301.65,Dobra Auto
+2026-01-06,Janeiro,2026,Mecânica Norte,Carla Souza,Serra Café,Moto,Yamaha,Suspensão,OS-18086,Entregue,0.7,100.61,1354.92,1455.52,Dobra Auto
+2025-12-19,Dezembro,2025,Box Moto Sul,Carla Souza,Costa Farma,Caminhonete,Chevrolet,Troca de óleo,OS-18087,Concluída,1.3,142.46,235.95,378.41,Dobra Auto
+2026-08-06,Agosto,2026,Oficina Centro,Fábio Nunes,Verde Agro,Carro,Chevrolet,Revisão,OS-18088,Aguardando peça,6.0,1001.83,472.17,1474.00,Dobra Auto
+2026-03-19,Março,2026,Box Moto Sul,Fábio Nunes,Helix Saúde,Moto,Suzuki,Elétrica,OS-18089,Entregue,7.2,868.49,659.35,1527.84,Dobra Auto
+2026-01-28,Janeiro,2026,Mecânica Norte,Carla Souza,Orbit Educação,Carro,Toyota,Troca de óleo,OS-18090,Entregue,3.5,508.17,112.00,620.17,Dobra Auto
+2026-06-12,Junho,2026,Box Moto Sul,Diego Alves,Helix Saúde,Moto,Suzuki,Motor,OS-18091,Em execução,2.4,265.92,135.83,401.75,Dobra Auto
+2026-02-14,Fevereiro,2026,Oficina Centro,Rafael Pinto,Orbit Educação,Moto,Suzuki,Pneus,OS-18092,Entregue,8.2,965.17,654.63,1619.80,Dobra Auto
+2025-11-10,Novembro,2025,Box Moto Sul,Diego Alves,Atlas Ltda,Carro,Volkswagen,Embreagem,OS-18093,Em execução,4.5,679.57,97.75,777.32,Dobra Auto
+2026-05-17,Maio,2026,Box Moto Sul,Diego Alves,Verde Agro,Moto,Suzuki,Elétrica,OS-18094,Em execução,2.6,228.98,513.28,742.26,Dobra Auto
+2025-12-08,Dezembro,2025,Box Moto Sul,Carla Souza,Céu Soft,Carro,Hyundai,Suspensão,OS-18095,Entregue,2.0,222.90,1552.48,1775.38,Dobra Auto
+2025-11-26,Novembro,2025,Mecânica Norte,Rafael Pinto,Nimbus SA,Caminhonete,Fiat,Troca de óleo,OS-18096,Concluída,5.6,987.69,126.26,1113.95,Dobra Auto
+2025-12-20,Dezembro,2025,Box Moto Sul,Fábio Nunes,Pulse Varejo,Carro,Toyota,Revisão,OS-18097,Aguardando peça,2.9,404.89,1140.08,1544.97,Dobra Auto
+2025-11-10,Novembro,2025,Box Moto Sul,Diego Alves,Orbit Educação,Moto,Honda,Embreagem,OS-18098,Concluída,4.3,456.87,856.27,1313.14,Dobra Auto
+2026-04-16,Abril,2026,Box Moto Sul,Carla Souza,Céu Soft,Carro,Volkswagen,Suspensão,OS-18099,Concluída,8.0,813.36,609.54,1422.91,Dobra Auto
+2026-06-22,Junho,2026,Mecânica Norte,Fábio Nunes,Pampa Alimentos,Carro,Volkswagen,Pneus,OS-18100,Em execução,4.1,494.12,396.09,890.21,Dobra Auto
+2025-12-18,Dezembro,2025,Oficina Centro,Fábio Nunes,Verde Agro,Carro,Hyundai,Elétrica,OS-18101,Entregue,4.7,605.73,115.27,720.99,Dobra Auto
+2026-05-22,Maio,2026,Box Moto Sul,Diego Alves,Céu Soft,Moto,Yamaha,Embreagem,OS-18102,Entregue,4.8,520.30,423.52,943.82,Dobra Auto
+2026-08-28,Agosto,2026,Box Moto Sul,Carla Souza,Boa Vista,Moto,Suzuki,Suspensão,OS-18103,Concluída,3.4,367.93,820.36,1188.29,Dobra Auto
+2026-03-06,Março,2026,Box Moto Sul,Diego Alves,Maré Energia,Moto,Honda,Motor,OS-18104,Aberta,4.7,420.07,888.87,1308.94,Dobra Auto
+2026-06-03,Junho,2026,Box Moto Sul,Paulo Ribeiro,Casa Norte,Moto,Suzuki,Embreagem,OS-18105,Concluída,5.2,482.91,1024.02,1506.92,Dobra Auto
+2026-07-23,Julho,2026,Box Moto Sul,Fábio Nunes,Delta Log,Moto,Suzuki,Suspensão,OS-18106,Aguardando peça,6.2,779.54,129.83,909.38,Dobra Auto
+2026-04-17,Abril,2026,Box Moto Sul,Rafael Pinto,Verde Agro,Utilitário,Peugeot,Motor,OS-18107,Concluída,6.1,584.49,1578.66,2163.15,Dobra Auto
+2026-04-20,Abril,2026,Box Moto Sul,Rafael Pinto,Serra Café,Utilitário,Peugeot,Revisão,OS-18108,Concluída,1.2,138.32,501.73,640.06,Dobra Auto
+2026-02-09,Fevereiro,2026,Mecânica Norte,Carla Souza,Céu Soft,Carro,Hyundai,Troca de óleo,OS-18109,Entregue,7.6,925.51,217.84,1143.35,Dobra Auto
+2025-12-14,Dezembro,2025,Box Moto Sul,Paulo Ribeiro,Atlas Ltda,Moto,Honda,Motor,OS-18110,Entregue,7.0,904.33,52.02,956.35,Dobra Auto
+2026-03-11,Março,2026,Box Moto Sul,Carla Souza,Aurora Moda,Carro,Hyundai,Troca de óleo,OS-18111,Aguardando peça,5.8,833.19,151.12,984.31,Dobra Auto
+2026-04-24,Abril,2026,Mecânica Norte,Paulo Ribeiro,Casa Norte,Carro,Fiat,Revisão,OS-18112,Entregue,5.0,628.89,252.01,880.91,Dobra Auto
+2025-11-01,Novembro,2025,Box Moto Sul,Diego Alves,Boa Vista,Moto,Yamaha,Pneus,OS-18113,Em execução,4.6,491.42,270.40,761.82,Dobra Auto
+2026-06-05,Junho,2026,Box Moto Sul,Paulo Ribeiro,Céu Soft,Carro,Fiat,Motor,OS-18114,Aberta,5.5,898.98,468.49,1367.47,Dobra Auto
+2026-08-28,Agosto,2026,Oficina Centro,Diego Alves,Verde Agro,Carro,Toyota,Pneus,OS-18115,Aguardando peça,1.0,148.73,1907.63,2056.36,Dobra Auto
+2026-06-26,Junho,2026,Oficina Centro,Carla Souza,Aurora Moda,Carro,Hyundai,Embreagem,OS-18116,Entregue,5.9,795.28,499.38,1294.66,Dobra Auto
+2026-07-05,Julho,2026,Mecânica Norte,Paulo Ribeiro,Costa Farma,Carro,Fiat,Suspensão,OS-18117,Entregue,5.8,526.74,1571.14,2097.87,Dobra Auto
+2026-06-29,Junho,2026,Box Moto Sul,Paulo Ribeiro,Boa Vista,Caminhonete,Fiat,Freios,OS-18118,Entregue,5.5,834.43,433.83,1268.26,Dobra Auto
+2025-11-19,Novembro,2025,Box Moto Sul,Diego Alves,Rio Branco,Carro,Volkswagen,Elétrica,OS-18119,Concluída,8.5,1065.67,1569.24,2634.91,Dobra Auto
+2025-12-17,Dezembro,2025,Oficina Centro,Paulo Ribeiro,Lumen Tech,Carro,Volkswagen,Motor,OS-18120,Entregue,2.8,310.03,882.50,1192.53,Dobra Auto
+2026-04-28,Abril,2026,Box Moto Sul,Fábio Nunes,Céu Soft,Moto,Suzuki,Troca de óleo,OS-18121,Entregue,7.9,1050.90,113.53,1164.42,Dobra Auto
+2026-05-14,Maio,2026,Oficina Centro,Carla Souza,Pulse Varejo,Carro,Hyundai,Pneus,OS-18122,Em execução,6.3,836.07,1250.11,2086.18,Dobra Auto
+2026-02-23,Fevereiro,2026,Oficina Centro,Rafael Pinto,Serra Café,Moto,Honda,Elétrica,OS-18123,Entregue,7.0,927.93,383.75,1311.68,Dobra Auto
+2026-03-14,Março,2026,Box Moto Sul,Carla Souza,Aurora Moda,Moto,Yamaha,Suspensão,OS-18124,Entregue,5.8,697.47,341.57,1039.03,Dobra Auto
+2026-04-02,Abril,2026,Box Moto Sul,Rafael Pinto,Atlas Ltda,Carro,Fiat,Revisão,OS-18125,Concluída,5.2,497.78,1347.14,1844.92,Dobra Auto
+2026-05-21,Maio,2026,Oficina Centro,Carla Souza,Costa Farma,Carro,Fiat,Motor,OS-18126,Concluída,6.2,623.91,2179.68,2803.59,Dobra Auto
+2026-06-17,Junho,2026,Mecânica Norte,Diego Alves,Lumen Tech,Carro,Honda,Revisão,OS-18127,Em execução,7.5,1241.51,1123.09,2364.60,Dobra Auto
+2026-07-02,Julho,2026,Mecânica Norte,Diego Alves,Boa Vista,Moto,Suzuki,Suspensão,OS-18128,Entregue,5.3,520.84,239.19,760.04,Dobra Auto
+2026-08-06,Agosto,2026,Mecânica Norte,Paulo Ribeiro,Rio Branco,Carro,Fiat,Embreagem,OS-18129,Entregue,4.3,410.68,818.77,1229.45,Dobra Auto
+2026-02-02,Fevereiro,2026,Box Moto Sul,Carla Souza,Atlas Ltda,Moto,Honda,Troca de óleo,OS-18130,Aguardando peça,5.4,622.59,60.32,682.92,Dobra Auto
+2026-01-05,Janeiro,2026,Mecânica Norte,Fábio Nunes,Lumen Tech,Carro,Toyota,Suspensão,OS-18131,Em execução,6.7,1100.70,498.23,1598.93,Dobra Auto
+2026-03-15,Março,2026,Oficina Centro,Diego Alves,Rio Branco,Carro,Toyota,Motor,OS-18132,Entregue,1.0,129.11,1217.25,1346.36,Dobra Auto
+2025-12-13,Dezembro,2025,Box Moto Sul,Carla Souza,Forge Engenharia,Moto,Yamaha,Freios,OS-18133,Concluída,4.7,396.87,862.34,1259.21,Dobra Auto
+2026-06-12,Junho,2026,Box Moto Sul,Rafael Pinto,Sul Minas,Moto,Yamaha,Pneus,OS-18134,Entregue,3.2,368.65,232.56,601.21,Dobra Auto
+2026-08-12,Agosto,2026,Oficina Centro,Rafael Pinto,Sul Minas,Carro,Honda,Revisão,OS-18135,Entregue,7.5,1281.32,461.11,1742.43,Dobra Auto
+2026-01-30,Janeiro,2026,Box Moto Sul,Carla Souza,Helix Saúde,Moto,Yamaha,Suspensão,OS-18136,Entregue,6.9,674.07,217.27,891.33,Dobra Auto
+2026-02-08,Fevereiro,2026,Mecânica Norte,Carla Souza,Costa Farma,Carro,Toyota,Troca de óleo,OS-18137,Entregue,2.9,507.18,153.90,661.08,Dobra Auto
+2026-03-22,Março,2026,Oficina Centro,Fábio Nunes,Pampa Alimentos,Moto,Suzuki,Pneus,OS-18138,Aguardando peça,0.8,97.02,1225.88,1322.91,Dobra Auto
+2025-11-26,Novembro,2025,Box Moto Sul,Paulo Ribeiro,Aurora Moda,Carro,Hyundai,Revisão,OS-18139,Aguardando peça,8.0,1065.73,910.74,1976.47,Dobra Auto
+2025-12-27,Dezembro,2025,Box Moto Sul,Carla Souza,Terra Nova,Moto,Yamaha,Pneus,OS-18140,Entregue,4.7,375.24,777.45,1152.69,Dobra Auto
+2026-03-14,Março,2026,Mecânica Norte,Carla Souza,Serra Café,Carro,Volkswagen,Troca de óleo,OS-18141,Entregue,1.1,120.00,175.65,295.65,Dobra Auto
+2026-05-16,Maio,2026,Box Moto Sul,Diego Alves,Boa Vista,Moto,Yamaha,Elétrica,OS-18142,Aguardando peça,3.6,344.86,1278.32,1623.19,Dobra Auto
+2026-02-26,Fevereiro,2026,Mecânica Norte,Carla Souza,Pulse Varejo,Carro,Hyundai,Embreagem,OS-18143,Entregue,5.1,854.02,377.43,1231.45,Dobra Auto
+2025-12-29,Dezembro,2025,Box Moto Sul,Rafael Pinto,Delta Log,Moto,Yamaha,Freios,OS-18144,Em execução,3.3,280.68,674.21,954.89,Dobra Auto
+2025-11-26,Novembro,2025,Box Moto Sul,Carla Souza,Orbit Educação,Carro,Toyota,Motor,OS-18145,Entregue,1.4,162.51,730.10,892.61,Dobra Auto
+2025-11-14,Novembro,2025,Box Moto Sul,Carla Souza,Serra Café,Moto,Honda,Troca de óleo,OS-18146,Entregue,1.8,139.45,89.26,228.72,Dobra Auto
+2026-08-20,Agosto,2026,Box Moto Sul,Rafael Pinto,Serra Café,Carro,Toyota,Pneus,OS-18147,Entregue,5.1,737.38,241.17,978.55,Dobra Auto
+2026-05-06,Maio,2026,Mecânica Norte,Fábio Nunes,Pampa Alimentos,Carro,Honda,Embreagem,OS-18148,Entregue,5.7,783.43,1171.78,1955.21,Dobra Auto
+2026-05-05,Maio,2026,Box Moto Sul,Fábio Nunes,Serra Café,Carro,Fiat,Suspensão,OS-18149,Entregue,1.4,205.60,1196.08,1401.68,Dobra Auto
+2026-06-11,Junho,2026,Oficina Centro,Carla Souza,Pulse Varejo,Carro,Fiat,Pneus,OS-18150,Concluída,1.9,252.89,1071.34,1324.23,Dobra Auto
+2026-01-12,Janeiro,2026,Mecânica Norte,Paulo Ribeiro,Sul Minas,Carro,Hyundai,Elétrica,OS-18151,Entregue,4.6,597.97,868.33,1466.31,Dobra Auto
+2026-07-24,Julho,2026,Oficina Centro,Rafael Pinto,Terra Nova,Carro,Fiat,Pneus,OS-18152,Entregue,4.4,740.71,1201.79,1942.50,Dobra Auto
+2025-11-15,Novembro,2025,Oficina Centro,Carla Souza,Aurora Moda,Caminhonete,Fiat,Pneus,OS-18153,Em execução,5.2,617.61,797.47,1415.08,Dobra Auto
+2026-05-06,Maio,2026,Oficina Centro,Diego Alves,Maré Energia,Carro,Volkswagen,Pneus,OS-18154,Aguardando peça,6.3,605.08,524.09,1129.17,Dobra Auto
+2026-06-29,Junho,2026,Box Moto Sul,Diego Alves,Verde Agro,Carro,Volkswagen,Motor,OS-18155,Entregue,2.0,222.17,2065.51,2287.68,Dobra Auto
+2026-05-10,Maio,2026,Mecânica Norte,Fábio Nunes,Atlas Ltda,Caminhonete,Fiat,Suspensão,OS-18156,Aguardando peça,7.5,923.69,2080.96,3004.65,Dobra Auto
+2026-05-22,Maio,2026,Oficina Centro,Fábio Nunes,Rio Branco,Utilitário,Peugeot,Motor,OS-18157,Concluída,4.5,700.75,299.28,1000.03,Dobra Auto
+2026-07-09,Julho,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Moto,Yamaha,Pneus,OS-18158,Em execução,5.6,606.51,1175.93,1782.44,Dobra Auto
+2026-03-07,Março,2026,Box Moto Sul,Carla Souza,Maré Energia,Carro,Fiat,Embreagem,OS-18159,Entregue,4.1,583.41,1795.98,2379.39,Dobra Auto
+2026-08-19,Agosto,2026,Oficina Centro,Diego Alves,Costa Farma,Carro,Chevrolet,Embreagem,OS-18160,Aberta,4.5,536.99,763.55,1300.54,Dobra Auto
+2025-11-24,Novembro,2025,Mecânica Norte,Paulo Ribeiro,Forge Engenharia,Carro,Fiat,Motor,OS-18161,Entregue,5.3,551.93,1357.16,1909.09,Dobra Auto
+2026-06-15,Junho,2026,Box Moto Sul,Diego Alves,Serra Café,Moto,Honda,Motor,OS-18162,Concluída,6.0,495.75,501.14,996.89,Dobra Auto
+2025-11-09,Novembro,2025,Box Moto Sul,Carla Souza,Aurora Moda,Carro,Volkswagen,Elétrica,OS-18163,Em execução,5.9,922.79,958.77,1881.56,Dobra Auto
+2026-08-27,Agosto,2026,Mecânica Norte,Fábio Nunes,Céu Soft,Carro,Honda,Embreagem,OS-18164,Em execução,1.8,291.85,721.98,1013.83,Dobra Auto
+2025-11-18,Novembro,2025,Mecânica Norte,Paulo Ribeiro,Pampa Alimentos,Utilitário,Fiat,Elétrica,OS-18165,Em execução,0.6,71.78,721.31,793.10,Dobra Auto
+2026-05-20,Maio,2026,Oficina Centro,Carla Souza,Atlas Ltda,Carro,Chevrolet,Embreagem,OS-18166,Entregue,1.6,219.11,1920.12,2139.23,Dobra Auto
+2025-12-13,Dezembro,2025,Box Moto Sul,Diego Alves,Serra Café,Moto,Suzuki,Revisão,OS-18167,Entregue,3.8,387.26,268.10,655.35,Dobra Auto
+2026-03-05,Março,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Carro,Hyundai,Revisão,OS-18168,Entregue,7.1,756.04,1908.51,2664.55,Dobra Auto
+2026-08-13,Agosto,2026,Box Moto Sul,Paulo Ribeiro,Rio Branco,Moto,Honda,Freios,OS-18169,Aguardando peça,2.8,395.22,792.84,1188.05,Dobra Auto
+2025-11-02,Novembro,2025,Mecânica Norte,Rafael Pinto,Nimbus SA,Caminhonete,Chevrolet,Troca de óleo,OS-18170,Entregue,6.0,845.83,229.20,1075.03,Dobra Auto
+2026-08-14,Agosto,2026,Oficina Centro,Carla Souza,Céu Soft,Carro,Volkswagen,Suspensão,OS-18171,Entregue,8.3,1064.51,2056.16,3120.68,Dobra Auto
+2026-02-10,Fevereiro,2026,Box Moto Sul,Diego Alves,Boa Vista,Carro,Chevrolet,Troca de óleo,OS-18172,Concluída,3.2,407.16,248.18,655.34,Dobra Auto
+2026-06-18,Junho,2026,Box Moto Sul,Carla Souza,Rio Branco,Moto,Suzuki,Pneus,OS-18173,Entregue,2.8,365.07,451.27,816.34,Dobra Auto
+2026-01-06,Janeiro,2026,Mecânica Norte,Fábio Nunes,Casa Norte,Carro,Hyundai,Revisão,OS-18174,Entregue,2.8,297.07,1527.04,1824.11,Dobra Auto
+2025-12-04,Dezembro,2025,Mecânica Norte,Diego Alves,Pampa Alimentos,Carro,Toyota,Pneus,OS-18175,Concluída,6.9,949.26,366.70,1315.96,Dobra Auto
+2026-01-16,Janeiro,2026,Box Moto Sul,Paulo Ribeiro,Céu Soft,Carro,Honda,Revisão,OS-18176,Aguardando peça,1.7,297.00,75.46,372.46,Dobra Auto
+2026-04-05,Abril,2026,Mecânica Norte,Paulo Ribeiro,Forge Engenharia,Carro,Chevrolet,Freios,OS-18177,Concluída,3.7,337.59,1489.61,1827.20,Dobra Auto
+2026-05-07,Maio,2026,Box Moto Sul,Diego Alves,Nimbus SA,Moto,Honda,Troca de óleo,OS-18178,Aguardando peça,1.2,142.38,51.46,193.84,Dobra Auto
+2025-11-22,Novembro,2025,Oficina Centro,Rafael Pinto,Rio Branco,Caminhonete,Toyota,Elétrica,OS-18179,Entregue,3.2,374.65,2089.76,2464.41,Dobra Auto
+2026-05-27,Maio,2026,Oficina Centro,Diego Alves,Maré Energia,Caminhonete,Fiat,Revisão,OS-18180,Aguardando peça,7.9,984.33,1351.08,2335.41,Dobra Auto
+2026-04-28,Abril,2026,Box Moto Sul,Diego Alves,Rio Branco,Moto,Honda,Revisão,OS-18181,Em execução,7.9,696.93,902.53,1599.46,Dobra Auto
+2026-01-24,Janeiro,2026,Mecânica Norte,Rafael Pinto,Verde Agro,Carro,Chevrolet,Pneus,OS-18182,Aberta,6.7,1155.53,250.12,1405.65,Dobra Auto
+2025-12-04,Dezembro,2025,Mecânica Norte,Carla Souza,Serra Café,Moto,Suzuki,Elétrica,OS-18183,Entregue,7.5,900.66,373.84,1274.50,Dobra Auto
+2026-03-07,Março,2026,Mecânica Norte,Fábio Nunes,Atlas Ltda,Moto,Yamaha,Revisão,OS-18184,Em execução,6.7,834.37,372.79,1207.17,Dobra Auto
+2026-08-09,Agosto,2026,Mecânica Norte,Fábio Nunes,Serra Café,Caminhonete,Toyota,Troca de óleo,OS-18185,Aguardando peça,4.5,472.12,136.91,609.03,Dobra Auto
+2026-06-13,Junho,2026,Oficina Centro,Carla Souza,Maré Energia,Carro,Hyundai,Embreagem,OS-18186,Entregue,2.2,296.57,70.05,366.62,Dobra Auto
+2026-08-15,Agosto,2026,Mecânica Norte,Rafael Pinto,Sul Minas,Carro,Fiat,Revisão,OS-18187,Entregue,2.3,336.73,675.16,1011.89,Dobra Auto
+2026-05-06,Maio,2026,Box Moto Sul,Carla Souza,Verde Agro,Carro,Fiat,Troca de óleo,OS-18188,Entregue,2.5,283.75,153.59,437.34,Dobra Auto
+2026-01-19,Janeiro,2026,Box Moto Sul,Rafael Pinto,Pulse Varejo,Caminhonete,Fiat,Suspensão,OS-18189,Entregue,3.9,395.66,909.26,1304.92,Dobra Auto
+2026-05-01,Maio,2026,Mecânica Norte,Fábio Nunes,Terra Nova,Utilitário,Renault,Elétrica,OS-18190,Entregue,4.4,540.09,1239.61,1779.69,Dobra Auto
+2026-01-01,Janeiro,2026,Box Moto Sul,Paulo Ribeiro,Costa Farma,Carro,Volkswagen,Suspensão,OS-18191,Concluída,5.7,558.94,767.60,1326.54,Dobra Auto
+2026-05-15,Maio,2026,Box Moto Sul,Diego Alves,Nimbus SA,Utilitário,Renault,Freios,OS-18192,Em execução,2.6,446.53,585.34,1031.87,Dobra Auto
+2026-03-15,Março,2026,Box Moto Sul,Rafael Pinto,Terra Nova,Moto,Yamaha,Pneus,OS-18193,Entregue,2.0,181.62,1321.88,1503.49,Dobra Auto
+2026-03-27,Março,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Moto,Suzuki,Pneus,OS-18194,Entregue,2.6,310.73,1148.76,1459.49,Dobra Auto
+2025-11-23,Novembro,2025,Oficina Centro,Carla Souza,Verde Agro,Carro,Hyundai,Embreagem,OS-18195,Entregue,7.1,725.29,1342.35,2067.64,Dobra Auto
+2026-05-20,Maio,2026,Mecânica Norte,Carla Souza,Delta Log,Utilitário,Peugeot,Motor,OS-18196,Concluída,3.0,316.88,1066.48,1383.36,Dobra Auto
+2026-01-01,Janeiro,2026,Mecânica Norte,Paulo Ribeiro,Lumen Tech,Carro,Chevrolet,Elétrica,OS-18197,Em execução,7.3,1244.06,47.35,1291.41,Dobra Auto
+2026-02-06,Fevereiro,2026,Box Moto Sul,Rafael Pinto,Forge Engenharia,Carro,Volkswagen,Pneus,OS-18198,Em execução,3.3,411.46,1243.09,1654.55,Dobra Auto
+2026-08-01,Agosto,2026,Mecânica Norte,Diego Alves,Costa Farma,Carro,Volkswagen,Freios,OS-18199,Aberta,7.4,905.82,196.37,1102.19,Dobra Auto
+2026-05-05,Maio,2026,Box Moto Sul,Diego Alves,Casa Norte,Moto,Honda,Embreagem,OS-18200,Entregue,3.2,315.14,1233.58,1548.72,Dobra Auto
+2025-11-07,Novembro,2025,Mecânica Norte,Rafael Pinto,Terra Nova,Carro,Volkswagen,Embreagem,OS-18201,Aberta,1.1,137.74,483.93,621.67,Dobra Auto
+2026-07-09,Julho,2026,Oficina Centro,Rafael Pinto,Orbit Educação,Carro,Toyota,Freios,OS-18202,Em execução,6.4,718.98,918.49,1637.47,Dobra Auto
+2026-01-04,Janeiro,2026,Mecânica Norte,Paulo Ribeiro,Boa Vista,Carro,Honda,Troca de óleo,OS-18203,Entregue,4.0,516.39,190.59,706.98,Dobra Auto
+2026-03-30,Março,2026,Box Moto Sul,Diego Alves,Terra Nova,Moto,Suzuki,Embreagem,OS-18204,Entregue,5.6,587.79,418.82,1006.61,Dobra Auto
+2026-02-08,Fevereiro,2026,Mecânica Norte,Carla Souza,Maré Energia,Moto,Suzuki,Suspensão,OS-18205,Em execução,3.8,368.42,1209.76,1578.18,Dobra Auto
+2026-03-14,Março,2026,Box Moto Sul,Fábio Nunes,Lumen Tech,Moto,Honda,Revisão,OS-18206,Concluída,7.8,747.12,566.29,1313.40,Dobra Auto
+2025-11-17,Novembro,2025,Box Moto Sul,Carla Souza,Terra Nova,Carro,Fiat,Troca de óleo,OS-18207,Entregue,1.5,231.28,219.87,451.14,Dobra Auto
+2026-04-24,Abril,2026,Oficina Centro,Diego Alves,Helix Saúde,Carro,Hyundai,Revisão,OS-18208,Em execução,7.8,1091.31,1193.47,2284.78,Dobra Auto
+2025-11-09,Novembro,2025,Mecânica Norte,Paulo Ribeiro,Helix Saúde,Carro,Hyundai,Troca de óleo,OS-18209,Concluída,2.7,441.73,108.35,550.08,Dobra Auto
+2026-02-22,Fevereiro,2026,Mecânica Norte,Rafael Pinto,Boa Vista,Carro,Toyota,Pneus,OS-18210,Entregue,8.1,781.46,803.80,1585.26,Dobra Auto
+2026-08-06,Agosto,2026,Oficina Centro,Paulo Ribeiro,Serra Café,Caminhonete,Chevrolet,Pneus,OS-18211,Aguardando peça,4.4,499.00,227.03,726.02,Dobra Auto
+2025-11-07,Novembro,2025,Oficina Centro,Carla Souza,Pulse Varejo,Carro,Volkswagen,Motor,OS-18212,Concluída,2.4,298.09,168.75,466.84,Dobra Auto
+2026-04-09,Abril,2026,Box Moto Sul,Paulo Ribeiro,Sul Minas,Caminhonete,Fiat,Embreagem,OS-18213,Entregue,4.9,707.86,352.35,1060.21,Dobra Auto
+2026-01-14,Janeiro,2026,Oficina Centro,Carla Souza,Orbit Educação,Caminhonete,Toyota,Troca de óleo,OS-18214,Aguardando peça,8.2,811.28,222.57,1033.86,Dobra Auto
+2025-12-01,Dezembro,2025,Box Moto Sul,Paulo Ribeiro,Serra Café,Carro,Volkswagen,Revisão,OS-18215,Entregue,1.1,184.78,1863.80,2048.58,Dobra Auto
+2026-07-27,Julho,2026,Box Moto Sul,Diego Alves,Nimbus SA,Carro,Hyundai,Embreagem,OS-18216,Entregue,5.6,596.70,2104.99,2701.70,Dobra Auto
+2026-02-18,Fevereiro,2026,Oficina Centro,Diego Alves,Nimbus SA,Carro,Toyota,Freios,OS-18217,Entregue,6.6,924.95,1788.57,2713.52,Dobra Auto
+2026-02-24,Fevereiro,2026,Oficina Centro,Fábio Nunes,Atlas Ltda,Carro,Volkswagen,Suspensão,OS-18218,Entregue,0.9,136.56,1019.29,1155.85,Dobra Auto
+2025-11-06,Novembro,2025,Box Moto Sul,Carla Souza,Nimbus SA,Moto,Yamaha,Motor,OS-18219,Entregue,0.7,53.02,1157.12,1210.14,Dobra Auto
+2025-11-04,Novembro,2025,Box Moto Sul,Fábio Nunes,Casa Norte,Moto,Suzuki,Elétrica,OS-18220,Entregue,4.4,479.53,461.87,941.40,Dobra Auto
+2026-01-27,Janeiro,2026,Oficina Centro,Fábio Nunes,Lumen Tech,Carro,Volkswagen,Motor,OS-18221,Entregue,4.2,579.45,1961.88,2541.33,Dobra Auto
+2026-01-09,Janeiro,2026,Mecânica Norte,Rafael Pinto,Sul Minas,Carro,Honda,Motor,OS-18222,Aguardando peça,8.2,980.04,120.29,1100.34,Dobra Auto
+2026-04-01,Abril,2026,Box Moto Sul,Diego Alves,Terra Nova,Carro,Chevrolet,Pneus,OS-18223,Concluída,2.8,413.50,1132.66,1546.16,Dobra Auto
+2026-06-21,Junho,2026,Box Moto Sul,Carla Souza,Lumen Tech,Carro,Toyota,Revisão,OS-18224,Em execução,4.3,630.49,1833.16,2463.65,Dobra Auto
+2026-05-30,Maio,2026,Mecânica Norte,Paulo Ribeiro,Costa Farma,Utilitário,Renault,Suspensão,OS-18225,Entregue,4.3,522.60,2152.63,2675.23,Dobra Auto
+2026-08-06,Agosto,2026,Oficina Centro,Fábio Nunes,Boa Vista,Carro,Fiat,Embreagem,OS-18226,Entregue,3.4,310.16,1642.04,1952.20,Dobra Auto
+2026-02-05,Fevereiro,2026,Mecânica Norte,Fábio Nunes,Atlas Ltda,Carro,Chevrolet,Motor,OS-18227,Entregue,1.3,219.82,1754.18,1974.00,Dobra Auto
+2026-02-07,Fevereiro,2026,Oficina Centro,Paulo Ribeiro,Nimbus SA,Carro,Fiat,Freios,OS-18228,Concluída,6.9,853.73,948.53,1802.26,Dobra Auto
+2026-04-09,Abril,2026,Box Moto Sul,Rafael Pinto,Atlas Ltda,Carro,Toyota,Freios,OS-18229,Entregue,7.6,1147.19,2176.20,3323.39,Dobra Auto
+2026-01-25,Janeiro,2026,Box Moto Sul,Rafael Pinto,Serra Café,Utilitário,Renault,Troca de óleo,OS-18230,Concluída,0.9,126.93,93.91,220.84,Dobra Auto
+2026-02-25,Fevereiro,2026,Oficina Centro,Paulo Ribeiro,Forge Engenharia,Carro,Toyota,Troca de óleo,OS-18231,Em execução,1.3,123.14,178.95,302.09,Dobra Auto
+2025-12-14,Dezembro,2025,Box Moto Sul,Diego Alves,Helix Saúde,Moto,Suzuki,Freios,OS-18232,Entregue,5.3,603.72,448.57,1052.29,Dobra Auto
+2026-08-21,Agosto,2026,Box Moto Sul,Carla Souza,Céu Soft,Carro,Volkswagen,Freios,OS-18233,Entregue,5.3,815.55,52.27,867.82,Dobra Auto
+2026-05-03,Maio,2026,Box Moto Sul,Rafael Pinto,Pampa Alimentos,Carro,Volkswagen,Troca de óleo,OS-18234,Concluída,8.5,1044.07,146.43,1190.51,Dobra Auto
+2026-03-16,Março,2026,Box Moto Sul,Carla Souza,Helix Saúde,Carro,Fiat,Revisão,OS-18235,Entregue,1.7,181.42,2045.46,2226.88,Dobra Auto
+2026-05-23,Maio,2026,Box Moto Sul,Carla Souza,Céu Soft,Carro,Chevrolet,Troca de óleo,OS-18236,Em execução,0.7,81.58,110.17,191.75,Dobra Auto
+2025-12-12,Dezembro,2025,Mecânica Norte,Fábio Nunes,Terra Nova,Moto,Yamaha,Revisão,OS-18237,Em execução,3.4,265.72,476.29,742.00,Dobra Auto
+2026-04-28,Abril,2026,Mecânica Norte,Fábio Nunes,Helix Saúde,Carro,Toyota,Freios,OS-18238,Entregue,3.0,395.44,2011.40,2406.84,Dobra Auto
+2026-08-11,Agosto,2026,Oficina Centro,Diego Alves,Pulse Varejo,Caminhonete,Fiat,Freios,OS-18239,Em execução,4.3,427.98,1910.06,2338.04,Dobra Auto
+2026-03-15,Março,2026,Box Moto Sul,Carla Souza,Lumen Tech,Carro,Fiat,Elétrica,OS-18240,Entregue,6.1,823.91,2187.04,3010.95,Dobra Auto
+2026-02-13,Fevereiro,2026,Oficina Centro,Carla Souza,Serra Café,Carro,Hyundai,Embreagem,OS-18241,Entregue,7.7,1306.15,609.59,1915.74,Dobra Auto
+2026-04-14,Abril,2026,Oficina Centro,Diego Alves,Atlas Ltda,Carro,Fiat,Pneus,OS-18242,Entregue,5.7,791.43,1067.27,1858.70,Dobra Auto
+2025-12-17,Dezembro,2025,Mecânica Norte,Paulo Ribeiro,Helix Saúde,Utilitário,Fiat,Troca de óleo,OS-18243,Em execução,7.6,745.11,85.21,830.31,Dobra Auto
+2026-01-04,Janeiro,2026,Oficina Centro,Carla Souza,Pulse Varejo,Carro,Fiat,Suspensão,OS-18244,Entregue,7.4,1108.67,1168.27,2276.94,Dobra Auto
+2026-03-06,Março,2026,Oficina Centro,Paulo Ribeiro,Boa Vista,Utilitário,Fiat,Embreagem,OS-18245,Aguardando peça,5.2,635.38,1851.34,2486.72,Dobra Auto
+2026-04-12,Abril,2026,Mecânica Norte,Rafael Pinto,Delta Log,Carro,Fiat,Motor,OS-18246,Entregue,6.7,1038.85,1572.75,2611.60,Dobra Auto
+2026-01-02,Janeiro,2026,Mecânica Norte,Paulo Ribeiro,Helix Saúde,Carro,Chevrolet,Elétrica,OS-18247,Entregue,2.1,333.08,412.66,745.74,Dobra Auto
+2026-07-01,Julho,2026,Mecânica Norte,Rafael Pinto,Orbit Educação,Carro,Volkswagen,Elétrica,OS-18248,Entregue,5.8,1014.05,352.11,1366.16,Dobra Auto
+2025-12-02,Dezembro,2025,Box Moto Sul,Paulo Ribeiro,Verde Agro,Moto,Suzuki,Elétrica,OS-18249,Entregue,1.5,115.91,130.91,246.83,Dobra Auto
+2026-04-28,Abril,2026,Box Moto Sul,Rafael Pinto,Forge Engenharia,Carro,Toyota,Pneus,OS-18250,Concluída,5.4,601.70,2025.80,2627.50,Dobra Auto
+2026-03-27,Março,2026,Box Moto Sul,Fábio Nunes,Aurora Moda,Carro,Fiat,Pneus,OS-18251,Concluída,2.0,346.58,252.87,599.44,Dobra Auto
+2026-06-09,Junho,2026,Box Moto Sul,Paulo Ribeiro,Verde Agro,Carro,Honda,Pneus,OS-18252,Entregue,5.7,660.74,247.64,908.38,Dobra Auto
+2026-03-29,Março,2026,Box Moto Sul,Paulo Ribeiro,Rio Branco,Moto,Suzuki,Suspensão,OS-18253,Concluída,5.6,708.39,40.71,749.10,Dobra Auto
+2026-06-08,Junho,2026,Mecânica Norte,Rafael Pinto,Atlas Ltda,Carro,Chevrolet,Pneus,OS-18254,Entregue,4.1,507.65,280.79,788.44,Dobra Auto
+2025-12-25,Dezembro,2025,Oficina Centro,Rafael Pinto,Costa Farma,Moto,Suzuki,Pneus,OS-18255,Concluída,5.6,793.06,880.18,1673.24,Dobra Auto
+2026-02-23,Fevereiro,2026,Box Moto Sul,Fábio Nunes,Pampa Alimentos,Carro,Volkswagen,Embreagem,OS-18256,Em execução,2.5,395.79,1072.08,1467.87,Dobra Auto
+2026-05-05,Maio,2026,Oficina Centro,Diego Alves,Atlas Ltda,Caminhonete,Fiat,Freios,OS-18257,Entregue,5.8,961.38,1084.76,2046.15,Dobra Auto
+2026-02-18,Fevereiro,2026,Mecânica Norte,Carla Souza,Costa Farma,Carro,Honda,Freios,OS-18258,Concluída,7.8,783.13,747.34,1530.48,Dobra Auto
+2025-11-10,Novembro,2025,Box Moto Sul,Fábio Nunes,Pampa Alimentos,Moto,Yamaha,Pneus,OS-18259,Entregue,1.9,139.71,994.73,1134.44,Dobra Auto
+2026-08-20,Agosto,2026,Oficina Centro,Carla Souza,Lumen Tech,Carro,Honda,Freios,OS-18260,Concluída,4.7,612.04,371.17,983.21,Dobra Auto
+2026-01-28,Janeiro,2026,Oficina Centro,Carla Souza,Pulse Varejo,Carro,Honda,Troca de óleo,OS-18261,Entregue,8.0,788.29,187.43,975.72,Dobra Auto
+2026-07-08,Julho,2026,Box Moto Sul,Fábio Nunes,Lumen Tech,Carro,Fiat,Revisão,OS-18262,Entregue,4.6,634.55,1629.13,2263.68,Dobra Auto
+2026-01-02,Janeiro,2026,Oficina Centro,Rafael Pinto,Lumen Tech,Carro,Volkswagen,Freios,OS-18263,Entregue,4.2,598.21,1341.78,1939.99,Dobra Auto
+2025-12-12,Dezembro,2025,Oficina Centro,Fábio Nunes,Pampa Alimentos,Carro,Toyota,Troca de óleo,OS-18264,Entregue,4.4,450.25,80.42,530.67,Dobra Auto
+2026-01-03,Janeiro,2026,Oficina Centro,Carla Souza,Rio Branco,Carro,Volkswagen,Embreagem,OS-18265,Em execução,6.1,1074.93,604.20,1679.13,Dobra Auto
+2026-01-13,Janeiro,2026,Oficina Centro,Diego Alves,Orbit Educação,Carro,Fiat,Embreagem,OS-18266,Entregue,2.4,321.86,589.46,911.32,Dobra Auto
+2026-03-10,Março,2026,Mecânica Norte,Carla Souza,Forge Engenharia,Carro,Hyundai,Embreagem,OS-18267,Concluída,5.3,904.57,603.55,1508.13,Dobra Auto
+2026-03-28,Março,2026,Box Moto Sul,Rafael Pinto,Atlas Ltda,Carro,Hyundai,Revisão,OS-18268,Em execução,8.3,1241.90,2192.17,3434.07,Dobra Auto
+2026-05-06,Maio,2026,Box Moto Sul,Rafael Pinto,Rio Branco,Carro,Volkswagen,Embreagem,OS-18269,Aguardando peça,4.5,729.29,1565.25,2294.54,Dobra Auto
+2026-06-24,Junho,2026,Box Moto Sul,Paulo Ribeiro,Orbit Educação,Moto,Suzuki,Embreagem,OS-18270,Concluída,1.7,186.12,864.26,1050.38,Dobra Auto
+2026-01-16,Janeiro,2026,Oficina Centro,Paulo Ribeiro,Helix Saúde,Carro,Fiat,Pneus,OS-18271,Aguardando peça,1.3,194.19,1415.15,1609.33,Dobra Auto
+2026-07-02,Julho,2026,Mecânica Norte,Diego Alves,Casa Norte,Carro,Chevrolet,Pneus,OS-18272,Aguardando peça,8.1,1222.09,424.74,1646.83,Dobra Auto
+2025-12-24,Dezembro,2025,Oficina Centro,Fábio Nunes,Rio Branco,Carro,Volkswagen,Motor,OS-18273,Em execução,7.1,719.58,532.80,1252.38,Dobra Auto
+2026-07-27,Julho,2026,Box Moto Sul,Paulo Ribeiro,Verde Agro,Moto,Yamaha,Embreagem,OS-18274,Entregue,1.0,127.31,1048.12,1175.43,Dobra Auto
+2025-11-07,Novembro,2025,Oficina Centro,Paulo Ribeiro,Verde Agro,Utilitário,Fiat,Pneus,OS-18275,Concluída,5.0,647.82,1161.43,1809.25,Dobra Auto
+2026-06-06,Junho,2026,Mecânica Norte,Rafael Pinto,Céu Soft,Caminhonete,Toyota,Motor,OS-18276,Entregue,1.6,237.53,1154.27,1391.80,Dobra Auto
+2026-05-10,Maio,2026,Mecânica Norte,Fábio Nunes,Sul Minas,Carro,Volkswagen,Suspensão,OS-18277,Aguardando peça,1.1,143.46,1213.87,1357.33,Dobra Auto
+2026-08-04,Agosto,2026,Oficina Centro,Fábio Nunes,Helix Saúde,Carro,Fiat,Embreagem,OS-18278,Entregue,5.6,1000.24,985.37,1985.61,Dobra Auto
+2026-02-23,Fevereiro,2026,Box Moto Sul,Diego Alves,Atlas Ltda,Moto,Yamaha,Embreagem,OS-18279,Em execução,1.0,90.01,381.81,471.82,Dobra Auto
+2026-07-08,Julho,2026,Mecânica Norte,Fábio Nunes,Orbit Educação,Caminhonete,Toyota,Revisão,OS-18280,Concluída,0.6,103.34,2023.35,2126.69,Dobra Auto
+2026-03-16,Março,2026,Oficina Centro,Fábio Nunes,Verde Agro,Carro,Hyundai,Freios,OS-18281,Entregue,5.8,928.67,99.26,1027.92,Dobra Auto
+2026-04-14,Abril,2026,Mecânica Norte,Rafael Pinto,Aurora Moda,Carro,Hyundai,Motor,OS-18282,Entregue,6.3,870.31,1103.05,1973.37,Dobra Auto
+2026-07-07,Julho,2026,Box Moto Sul,Rafael Pinto,Lumen Tech,Moto,Suzuki,Suspensão,OS-18283,Aguardando peça,4.2,602.41,595.52,1197.94,Dobra Auto
+2025-11-18,Novembro,2025,Mecânica Norte,Carla Souza,Lumen Tech,Carro,Volkswagen,Revisão,OS-18284,Aberta,3.6,458.81,1966.08,2424.89,Dobra Auto
+2025-12-17,Dezembro,2025,Mecânica Norte,Diego Alves,Aurora Moda,Carro,Honda,Freios,OS-18285,Entregue,6.2,946.90,2197.62,3144.53,Dobra Auto
+2026-02-21,Fevereiro,2026,Oficina Centro,Rafael Pinto,Rio Branco,Carro,Toyota,Suspensão,OS-18286,Aguardando peça,4.4,683.65,1856.61,2540.26,Dobra Auto
+2025-12-10,Dezembro,2025,Oficina Centro,Carla Souza,Helix Saúde,Utilitário,Peugeot,Revisão,OS-18287,Entregue,6.7,732.59,1276.03,2008.62,Dobra Auto
+2026-08-25,Agosto,2026,Oficina Centro,Carla Souza,Orbit Educação,Carro,Fiat,Revisão,OS-18288,Entregue,7.7,891.75,2026.21,2917.96,Dobra Auto
+2026-05-20,Maio,2026,Box Moto Sul,Carla Souza,Verde Agro,Carro,Volkswagen,Elétrica,OS-18289,Concluída,4.1,624.63,314.27,938.91,Dobra Auto
+2026-05-04,Maio,2026,Mecânica Norte,Fábio Nunes,Atlas Ltda,Caminhonete,Chevrolet,Pneus,OS-18290,Em execução,1.0,128.21,749.51,877.72,Dobra Auto
+2026-02-21,Fevereiro,2026,Oficina Centro,Paulo Ribeiro,Terra Nova,Carro,Chevrolet,Embreagem,OS-18291,Concluída,5.5,554.23,92.33,646.56,Dobra Auto
+2026-07-03,Julho,2026,Mecânica Norte,Paulo Ribeiro,Boa Vista,Carro,Hyundai,Revisão,OS-18292,Concluída,7.3,863.15,2146.66,3009.81,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Fábio Nunes,Forge Engenharia,Carro,Honda,Elétrica,OS-18293,Concluída,2.7,348.81,2095.16,2443.97,Dobra Auto
+2026-06-17,Junho,2026,Box Moto Sul,Paulo Ribeiro,Pampa Alimentos,Carro,Honda,Motor,OS-18294,Entregue,0.8,94.65,159.95,254.60,Dobra Auto
+2026-04-16,Abril,2026,Mecânica Norte,Carla Souza,Aurora Moda,Carro,Hyundai,Elétrica,OS-18295,Entregue,0.6,96.50,144.77,241.27,Dobra Auto
+2026-03-05,Março,2026,Oficina Centro,Diego Alves,Sul Minas,Carro,Fiat,Revisão,OS-18296,Aberta,1.1,186.54,1906.45,2092.99,Dobra Auto
+2026-05-18,Maio,2026,Box Moto Sul,Diego Alves,Casa Norte,Moto,Yamaha,Revisão,OS-18297,Aguardando peça,5.1,676.71,1073.97,1750.68,Dobra Auto
+2025-11-03,Novembro,2025,Box Moto Sul,Diego Alves,Costa Farma,Utilitário,Peugeot,Revisão,OS-18298,Entregue,0.8,93.15,88.60,181.75,Dobra Auto
+2026-06-25,Junho,2026,Box Moto Sul,Carla Souza,Atlas Ltda,Carro,Chevrolet,Suspensão,OS-18299,Concluída,2.9,513.59,1789.01,2302.60,Dobra Auto
+2026-08-10,Agosto,2026,Box Moto Sul,Rafael Pinto,Casa Norte,Moto,Honda,Motor,OS-18300,Concluída,7.4,743.96,204.99,948.95,Dobra Auto
+2026-06-29,Junho,2026,Box Moto Sul,Diego Alves,Pulse Varejo,Moto,Suzuki,Freios,OS-18301,Entregue,1.2,130.22,253.32,383.54,Dobra Auto
+2026-05-10,Maio,2026,Box Moto Sul,Paulo Ribeiro,Céu Soft,Carro,Fiat,Freios,OS-18302,Aguardando peça,3.4,406.95,88.59,495.54,Dobra Auto
+2026-07-13,Julho,2026,Mecânica Norte,Carla Souza,Lumen Tech,Carro,Fiat,Troca de óleo,OS-18303,Entregue,6.0,799.75,224.71,1024.47,Dobra Auto
+2025-11-21,Novembro,2025,Box Moto Sul,Paulo Ribeiro,Pulse Varejo,Moto,Yamaha,Suspensão,OS-18304,Entregue,6.7,557.80,356.26,914.06,Dobra Auto
+2026-04-07,Abril,2026,Box Moto Sul,Diego Alves,Pampa Alimentos,Utilitário,Peugeot,Freios,OS-18305,Concluída,3.8,428.86,671.85,1100.71,Dobra Auto
+2026-07-17,Julho,2026,Box Moto Sul,Paulo Ribeiro,Forge Engenharia,Moto,Honda,Motor,OS-18306,Entregue,2.5,235.50,1285.62,1521.12,Dobra Auto
+2026-06-16,Junho,2026,Mecânica Norte,Rafael Pinto,Boa Vista,Moto,Yamaha,Elétrica,OS-18307,Concluída,8.0,969.32,398.50,1367.82,Dobra Auto
+2026-04-16,Abril,2026,Mecânica Norte,Diego Alves,Atlas Ltda,Utilitário,Fiat,Freios,OS-18308,Entregue,6.2,706.51,1842.35,2548.87,Dobra Auto
+2026-08-22,Agosto,2026,Box Moto Sul,Fábio Nunes,Orbit Educação,Moto,Suzuki,Troca de óleo,OS-18309,Entregue,3.2,405.67,110.36,516.03,Dobra Auto
+2026-03-29,Março,2026,Box Moto Sul,Carla Souza,Maré Energia,Carro,Chevrolet,Embreagem,OS-18310,Aguardando peça,5.0,739.81,1069.44,1809.25,Dobra Auto
+2026-08-20,Agosto,2026,Box Moto Sul,Paulo Ribeiro,Boa Vista,Carro,Fiat,Suspensão,OS-18311,Entregue,4.1,385.71,576.18,961.89,Dobra Auto
+2026-08-03,Agosto,2026,Box Moto Sul,Carla Souza,Maré Energia,Carro,Honda,Troca de óleo,OS-18312,Concluída,1.5,207.66,160.35,368.01,Dobra Auto
+2026-05-24,Maio,2026,Oficina Centro,Diego Alves,Boa Vista,Moto,Suzuki,Freios,OS-18313,Em execução,5.2,599.56,1222.22,1821.78,Dobra Auto
+2026-02-16,Fevereiro,2026,Box Moto Sul,Carla Souza,Céu Soft,Carro,Chevrolet,Troca de óleo,OS-18314,Aberta,7.4,996.48,247.10,1243.58,Dobra Auto
+2026-08-22,Agosto,2026,Mecânica Norte,Fábio Nunes,Maré Energia,Carro,Toyota,Pneus,OS-18315,Entregue,7.3,943.50,1738.27,2681.77,Dobra Auto
+2025-11-24,Novembro,2025,Box Moto Sul,Paulo Ribeiro,Pampa Alimentos,Moto,Yamaha,Elétrica,OS-18316,Entregue,6.8,723.37,669.38,1392.75,Dobra Auto
+2026-06-28,Junho,2026,Oficina Centro,Diego Alves,Pampa Alimentos,Utilitário,Renault,Revisão,OS-18317,Aberta,1.6,196.59,2095.54,2292.12,Dobra Auto
+2026-03-12,Março,2026,Box Moto Sul,Diego Alves,Orbit Educação,Moto,Yamaha,Revisão,OS-18318,Entregue,5.6,719.41,951.49,1670.89,Dobra Auto
+2026-05-19,Maio,2026,Box Moto Sul,Diego Alves,Aurora Moda,Utilitário,Peugeot,Suspensão,OS-18319,Entregue,4.4,772.11,616.97,1389.08,Dobra Auto
+2026-04-22,Abril,2026,Box Moto Sul,Diego Alves,Costa Farma,Moto,Honda,Embreagem,OS-18320,Concluída,3.6,475.23,1033.00,1508.23,Dobra Auto
+2025-11-02,Novembro,2025,Box Moto Sul,Carla Souza,Pulse Varejo,Moto,Yamaha,Pneus,OS-18321,Em execução,0.7,78.89,482.08,560.98,Dobra Auto
+2026-06-29,Junho,2026,Box Moto Sul,Paulo Ribeiro,Sul Minas,Carro,Hyundai,Motor,OS-18322,Entregue,4.3,608.28,1492.06,2100.34,Dobra Auto
+2026-03-20,Março,2026,Oficina Centro,Carla Souza,Maré Energia,Caminhonete,Fiat,Motor,OS-18323,Concluída,6.4,947.59,960.98,1908.56,Dobra Auto
+2026-08-04,Agosto,2026,Oficina Centro,Fábio Nunes,Delta Log,Carro,Volkswagen,Motor,OS-18324,Aguardando peça,6.7,865.41,1930.30,2795.72,Dobra Auto
+2026-05-04,Maio,2026,Box Moto Sul,Carla Souza,Céu Soft,Carro,Honda,Embreagem,OS-18325,Concluída,5.3,666.90,261.64,928.53,Dobra Auto
+2026-07-28,Julho,2026,Mecânica Norte,Paulo Ribeiro,Serra Café,Carro,Volkswagen,Elétrica,OS-18326,Entregue,4.4,562.35,661.92,1224.27,Dobra Auto
+2026-06-08,Junho,2026,Box Moto Sul,Paulo Ribeiro,Helix Saúde,Moto,Yamaha,Revisão,OS-18327,Concluída,7.3,886.47,1099.93,1986.41,Dobra Auto
+2025-12-08,Dezembro,2025,Box Moto Sul,Paulo Ribeiro,Atlas Ltda,Carro,Hyundai,Embreagem,OS-18328,Em execução,4.7,626.19,1140.79,1766.98,Dobra Auto
+2025-12-03,Dezembro,2025,Box Moto Sul,Diego Alves,Verde Agro,Carro,Volkswagen,Elétrica,OS-18329,Entregue,7.1,1009.31,345.47,1354.78,Dobra Auto
+2026-06-10,Junho,2026,Oficina Centro,Carla Souza,Boa Vista,Carro,Honda,Motor,OS-18330,Entregue,6.6,759.55,647.84,1407.39,Dobra Auto
+2026-04-30,Abril,2026,Box Moto Sul,Paulo Ribeiro,Verde Agro,Caminhonete,Toyota,Freios,OS-18331,Aguardando peça,1.4,213.48,1276.30,1489.78,Dobra Auto
+2025-12-25,Dezembro,2025,Mecânica Norte,Diego Alves,Helix Saúde,Carro,Fiat,Embreagem,OS-18332,Entregue,8.4,1440.69,608.44,2049.14,Dobra Auto
+2026-01-14,Janeiro,2026,Box Moto Sul,Fábio Nunes,Serra Café,Carro,Toyota,Suspensão,OS-18333,Entregue,7.1,998.68,1996.81,2995.49,Dobra Auto
+2026-06-10,Junho,2026,Box Moto Sul,Rafael Pinto,Rio Branco,Moto,Yamaha,Elétrica,OS-18334,Entregue,1.7,192.65,1266.48,1459.13,Dobra Auto
+2026-03-27,Março,2026,Mecânica Norte,Diego Alves,Nimbus SA,Caminhonete,Fiat,Elétrica,OS-18335,Aguardando peça,3.6,477.59,1075.38,1552.97,Dobra Auto
+2026-03-05,Março,2026,Box Moto Sul,Fábio Nunes,Lumen Tech,Carro,Fiat,Motor,OS-18336,Entregue,7.5,995.56,335.15,1330.70,Dobra Auto
+2026-05-25,Maio,2026,Mecânica Norte,Fábio Nunes,Orbit Educação,Carro,Chevrolet,Revisão,OS-18337,Concluída,8.1,969.57,467.39,1436.97,Dobra Auto
+2026-04-06,Abril,2026,Box Moto Sul,Fábio Nunes,Verde Agro,Moto,Suzuki,Suspensão,OS-18338,Entregue,6.0,494.03,1302.62,1796.65,Dobra Auto
+2026-07-20,Julho,2026,Box Moto Sul,Carla Souza,Pulse Varejo,Caminhonete,Fiat,Elétrica,OS-18339,Entregue,7.4,718.79,410.37,1129.15,Dobra Auto
+2026-07-08,Julho,2026,Oficina Centro,Carla Souza,Serra Café,Carro,Honda,Embreagem,OS-18340,Aberta,6.8,846.73,1371.81,2218.54,Dobra Auto
+2026-01-24,Janeiro,2026,Box Moto Sul,Paulo Ribeiro,Casa Norte,Moto,Honda,Troca de óleo,OS-18341,Entregue,3.0,396.33,81.04,477.37,Dobra Auto
+2026-01-12,Janeiro,2026,Mecânica Norte,Paulo Ribeiro,Orbit Educação,Carro,Hyundai,Revisão,OS-18342,Entregue,2.6,398.82,57.18,456.00,Dobra Auto
+2026-03-24,Março,2026,Mecânica Norte,Paulo Ribeiro,Delta Log,Carro,Hyundai,Suspensão,OS-18343,Concluída,4.2,751.61,428.87,1180.48,Dobra Auto
+2026-05-22,Maio,2026,Oficina Centro,Paulo Ribeiro,Atlas Ltda,Carro,Fiat,Pneus,OS-18344,Em execução,3.0,291.32,492.55,783.86,Dobra Auto
+2026-04-15,Abril,2026,Oficina Centro,Carla Souza,Nimbus SA,Carro,Honda,Pneus,OS-18345,Em execução,3.7,613.83,2101.49,2715.32,Dobra Auto
+2025-11-24,Novembro,2025,Box Moto Sul,Diego Alves,Maré Energia,Moto,Honda,Freios,OS-18346,Em execução,8.4,1023.96,393.39,1417.35,Dobra Auto
+2026-07-14,Julho,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Utilitário,Fiat,Revisão,OS-18347,Entregue,2.0,198.66,2055.80,2254.45,Dobra Auto
+2026-03-01,Março,2026,Oficina Centro,Paulo Ribeiro,Delta Log,Caminhonete,Fiat,Embreagem,OS-18348,Entregue,7.0,1045.15,220.20,1265.35,Dobra Auto
+2026-01-27,Janeiro,2026,Oficina Centro,Diego Alves,Atlas Ltda,Carro,Fiat,Freios,OS-18349,Em execução,7.1,1264.90,1371.81,2636.71,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Rafael Pinto,Aurora Moda,Carro,Fiat,Troca de óleo,OS-18350,Entregue,3.2,531.79,186.84,718.63,Dobra Auto
+2026-03-19,Março,2026,Mecânica Norte,Paulo Ribeiro,Nimbus SA,Carro,Chevrolet,Revisão,OS-18351,Entregue,7.2,1184.98,220.27,1405.25,Dobra Auto
+2026-04-23,Abril,2026,Box Moto Sul,Fábio Nunes,Maré Energia,Carro,Fiat,Pneus,OS-18352,Entregue,6.5,1124.79,1568.70,2693.49,Dobra Auto
+2026-01-17,Janeiro,2026,Box Moto Sul,Carla Souza,Terra Nova,Carro,Toyota,Suspensão,OS-18353,Entregue,6.9,1057.43,631.91,1689.33,Dobra Auto
+2026-06-02,Junho,2026,Box Moto Sul,Carla Souza,Pampa Alimentos,Carro,Fiat,Pneus,OS-18354,Concluída,2.6,351.57,1964.45,2316.02,Dobra Auto
+2026-03-20,Março,2026,Box Moto Sul,Fábio Nunes,Maré Energia,Carro,Fiat,Elétrica,OS-18355,Entregue,3.7,419.89,162.90,582.79,Dobra Auto
+2026-07-10,Julho,2026,Oficina Centro,Paulo Ribeiro,Delta Log,Carro,Hyundai,Elétrica,OS-18356,Entregue,7.5,1173.64,384.22,1557.86,Dobra Auto
+2026-08-13,Agosto,2026,Mecânica Norte,Carla Souza,Aurora Moda,Caminhonete,Chevrolet,Freios,OS-18357,Entregue,3.6,443.59,1241.69,1685.28,Dobra Auto
+2026-07-09,Julho,2026,Oficina Centro,Diego Alves,Costa Farma,Carro,Honda,Motor,OS-18358,Entregue,3.7,578.76,863.86,1442.62,Dobra Auto
+2026-03-29,Março,2026,Box Moto Sul,Rafael Pinto,Serra Café,Carro,Toyota,Elétrica,OS-18359,Entregue,7.7,886.34,336.78,1223.12,Dobra Auto
+2025-11-10,Novembro,2025,Oficina Centro,Carla Souza,Casa Norte,Carro,Honda,Revisão,OS-18360,Entregue,6.1,1014.58,179.96,1194.54,Dobra Auto
+2026-06-01,Junho,2026,Oficina Centro,Diego Alves,Orbit Educação,Utilitário,Renault,Motor,OS-18361,Entregue,3.8,428.21,1373.64,1801.84,Dobra Auto
+2025-12-03,Dezembro,2025,Box Moto Sul,Fábio Nunes,Forge Engenharia,Carro,Toyota,Freios,OS-18362,Concluída,2.9,489.14,2042.12,2531.26,Dobra Auto
+2025-11-06,Novembro,2025,Mecânica Norte,Rafael Pinto,Terra Nova,Carro,Honda,Freios,OS-18363,Concluída,7.7,845.43,817.49,1662.92,Dobra Auto
+2026-06-28,Junho,2026,Oficina Centro,Diego Alves,Nimbus SA,Carro,Fiat,Freios,OS-18364,Concluída,6.0,708.96,302.44,1011.40,Dobra Auto
+2026-07-12,Julho,2026,Mecânica Norte,Fábio Nunes,Atlas Ltda,Carro,Fiat,Freios,OS-18365,Entregue,6.0,1010.18,791.38,1801.57,Dobra Auto
+2026-06-18,Junho,2026,Oficina Centro,Fábio Nunes,Maré Energia,Caminhonete,Chevrolet,Elétrica,OS-18366,Concluída,1.9,219.56,834.28,1053.84,Dobra Auto
+2026-07-05,Julho,2026,Oficina Centro,Fábio Nunes,Verde Agro,Moto,Yamaha,Troca de óleo,OS-18367,Entregue,3.9,317.65,59.91,377.55,Dobra Auto
+2026-08-28,Agosto,2026,Box Moto Sul,Rafael Pinto,Céu Soft,Caminhonete,Toyota,Elétrica,OS-18368,Em execução,2.1,368.68,1318.44,1687.12,Dobra Auto
+2026-05-06,Maio,2026,Oficina Centro,Fábio Nunes,Boa Vista,Moto,Honda,Suspensão,OS-18369,Entregue,2.1,295.40,646.01,941.42,Dobra Auto
+2026-01-27,Janeiro,2026,Box Moto Sul,Carla Souza,Boa Vista,Moto,Suzuki,Revisão,OS-18370,Aguardando peça,3.3,376.36,383.18,759.53,Dobra Auto
+2026-08-01,Agosto,2026,Oficina Centro,Paulo Ribeiro,Sul Minas,Utilitário,Fiat,Revisão,OS-18371,Entregue,1.2,180.49,396.77,577.26,Dobra Auto
+2026-06-01,Junho,2026,Mecânica Norte,Paulo Ribeiro,Forge Engenharia,Carro,Toyota,Revisão,OS-18372,Concluída,7.4,1025.45,361.24,1386.69,Dobra Auto
+2026-01-26,Janeiro,2026,Box Moto Sul,Diego Alves,Terra Nova,Moto,Honda,Troca de óleo,OS-18373,Concluída,6.2,650.71,74.88,725.58,Dobra Auto
+2026-04-12,Abril,2026,Mecânica Norte,Carla Souza,Pampa Alimentos,Carro,Hyundai,Embreagem,OS-18374,Concluída,7.7,1215.02,980.88,2195.90,Dobra Auto
+2026-05-23,Maio,2026,Box Moto Sul,Fábio Nunes,Rio Branco,Utilitário,Fiat,Suspensão,OS-18375,Concluída,3.6,643.75,326.75,970.50,Dobra Auto
+2026-01-13,Janeiro,2026,Oficina Centro,Carla Souza,Terra Nova,Caminhonete,Chevrolet,Motor,OS-18376,Entregue,1.9,320.30,816.71,1137.01,Dobra Auto
+2025-11-10,Novembro,2025,Box Moto Sul,Paulo Ribeiro,Sul Minas,Moto,Honda,Embreagem,OS-18377,Entregue,7.1,931.59,1238.13,2169.72,Dobra Auto
+2026-03-28,Março,2026,Box Moto Sul,Fábio Nunes,Delta Log,Caminhonete,Toyota,Revisão,OS-18378,Concluída,8.4,1239.63,983.96,2223.59,Dobra Auto
+2026-08-16,Agosto,2026,Box Moto Sul,Carla Souza,Atlas Ltda,Carro,Honda,Revisão,OS-18379,Entregue,6.6,758.33,173.87,932.20,Dobra Auto

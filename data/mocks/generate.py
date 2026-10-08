@@ -764,6 +764,378 @@ def advocacia_financeiro() -> tuple[list[str], list[dict]]:
     return headers, rows
 
 
+LOJAS_MODA = ["Loja Centro", "Loja Shopping", "Loja Outlet"]
+COLECOES = ["Verão 2026", "Inverno 2026", "Básicos", "Cápsula Urbana"]
+TAMANHOS = ["PP", "P", "M", "G", "GG"]
+CORES = ["Preto", "Branco", "Azul", "Bege", "Verde", "Vermelho"]
+CANAIS_LOJA = ["Loja", "E-commerce", "WhatsApp", "Marketplace"]
+PECAS_MODA = [
+    ("Camiseta básica", "Camiseta", 89),
+    ("Camisa linho", "Camisa", 189),
+    ("Calça jeans", "Calça", 229),
+    ("Calça alfaiataria", "Calça", 279),
+    ("Vestido midi", "Vestido", 249),
+    ("Jaqueta jeans", "Jaqueta", 329),
+    ("Blazer", "Jaqueta", 399),
+    ("Tênis casual", "Calçado", 349),
+    ("Tênis corrida", "Calçado", 429),
+    ("Shorts linho", "Shorts", 159),
+    ("Blusa tricô", "Blusa", 179),
+    ("Cinto couro", "Acessório", 119),
+    ("Bolsa transversal", "Acessório", 259),
+    ("Meia kit", "Acessório", 39),
+]
+VENDEDORES_LOJA = ["Ana Costa", "Bruno Lima", "Carla Souza", "Diego Alves", "Eva Martins"]
+
+LOJAS_TECH = ["Loja Paulista", "Loja Barra", "Loja Online"]
+ITENS_TECH = [
+    ("Galaxy A55", "Celular", "Samsung", 1899),
+    ("Galaxy S24", "Celular", "Samsung", 4299),
+    ("iPhone 15", "Celular", "Apple", 5499),
+    ("Moto G84", "Celular", "Motorola", 1499),
+    ("Redmi Note 13", "Celular", "Xiaomi", 1299),
+    ("iPad 10", "Tablet", "Apple", 3899),
+    ("Galaxy Tab A9", "Tablet", "Samsung", 1599),
+    ("Watch SE", "Smartwatch", "Apple", 2199),
+    ("Galaxy Watch 6", "Smartwatch", "Samsung", 1499),
+    ("Fone Tune 510", "Fone", "JBL", 249),
+    ("AirPods 4", "Fone", "Apple", 1299),
+    ("Carregador 30W", "Carregador", "Baseus", 89),
+    ("Carregador MagSafe", "Carregador", "Apple", 349),
+    ("Capa silicone", "Capa", "Baseus", 49),
+    ("Película vidro", "Película", "Baseus", 29),
+    ("Power bank 20k", "Power bank", "Anker", 199),
+]
+
+OFICINAS = ["Oficina Centro", "Box Moto Sul", "Mecânica Norte"]
+MECANICOS = ["Paulo Ribeiro", "Rafael Pinto", "Diego Alves", "Carla Souza", "Fábio Nunes"]
+SERVICOS_AUTO = ["Revisão", "Freios", "Motor", "Suspensão", "Elétrica", "Pneus", "Troca de óleo", "Embreagem"]
+PECAS_AUTO = {
+    "Revisão": [("Filtro de óleo", 45), ("Filtro de ar", 62), ("Kit revisão", 180)],
+    "Freios": [("Pastilha dianteira", 220), ("Disco de freio", 340), ("Fluido de freio", 48)],
+    "Motor": [("Correia dentada", 280), ("Velas", 160), ("Junta do cabeçote", 420)],
+    "Suspensão": [("Amortecedor", 480), ("Bandeja", 260), ("Bieleta", 90)],
+    "Elétrica": [("Bateria", 520), ("Alternador", 890), ("Lâmpada", 35)],
+    "Pneus": [("Pneu aro 15", 420), ("Pneu aro 17", 690), ("Alinhamento", 120)],
+    "Troca de óleo": [("Óleo 5W30", 180), ("Filtro de óleo", 45)],
+    "Embreagem": [("Kit embreagem", 780), ("Atuador", 240)],
+}
+MARCAS_AUTO = {
+    "Carro": ["Fiat", "Volkswagen", "Chevrolet", "Toyota", "Hyundai", "Honda"],
+    "Moto": ["Honda", "Yamaha", "Suzuki"],
+    "Caminhonete": ["Toyota", "Chevrolet", "Fiat"],
+    "Utilitário": ["Fiat", "Renault", "Peugeot"],
+}
+
+
+def moda_vendas() -> tuple[list[str], list[dict]]:
+    rows = []
+    start, end = date(2025, 9, 1), date(2026, 8, 28)
+    for _ in range(560):
+        dt = random_day(start, end)
+        produto, cat, preco = random.choice(PECAS_MODA)
+        qty = random.choices([1, 2, 3], weights=[70, 22, 8])[0]
+        bruto = preco * qty
+        desconto = bruto * random.uniform(0.05, 0.25) if random.random() < 0.32 else 0
+        valor = bruto - desconto
+        custo = valor * random.uniform(0.38, 0.62)
+        rows.append({
+            "data": dt.isoformat(),
+            "mes": MESES[dt.month],
+            "ano": dt.year,
+            "loja": random.choice(LOJAS_MODA),
+            "vendedor": random.choice(VENDEDORES_LOJA),
+            "cliente": random.choice(CLIENTES),
+            "categoria": cat,
+            "colecao": random.choice(COLECOES),
+            "produto": produto,
+            "tamanho": random.choice(TAMANHOS),
+            "cor": random.choice(CORES),
+            "canal": random.choices(CANAIS_LOJA, weights=[48, 28, 14, 10])[0],
+            "quantidade": qty,
+            "valor": money(valor),
+            "custo": money(custo),
+            "desconto": money(desconto),
+            "empresa": "Dobra Moda",
+        })
+    headers = ["data", "mes", "ano", "loja", "vendedor", "cliente", "categoria", "colecao", "produto", "tamanho", "cor", "canal", "quantidade", "valor", "custo", "desconto", "empresa"]
+    return headers, rows
+
+
+def moda_estoque() -> tuple[list[str], list[dict]]:
+    rows = []
+    for dt in month_starts(8):
+        for produto, cat, preco in PECAS_MODA:
+            for tamanho in random.sample(TAMANHOS, 3):
+                loja = random.choice(LOJAS_MODA)
+                qty = random.randint(0, 48)
+                if cat == "Calçado":
+                    qty = random.randint(0, 18)
+                minimo = 6 if cat != "Acessório" else 10
+                if qty == 0:
+                    st = "Ruptura"
+                elif qty < minimo:
+                    st = "Baixo"
+                elif qty > 36:
+                    st = "Parado"
+                else:
+                    st = "Disponível"
+                dias = random.randint(4, 28) if st == "Disponível" else random.randint(35, 140)
+                rows.append({
+                    "data": dt.isoformat(),
+                    "mes": MESES[dt.month],
+                    "ano": dt.year,
+                    "loja": loja,
+                    "categoria": cat,
+                    "colecao": random.choice(COLECOES),
+                    "produto": produto,
+                    "tamanho": tamanho,
+                    "cor": random.choice(CORES),
+                    "status": st,
+                    "estoque": qty,
+                    "estoque_minimo": minimo,
+                    "dias_estoque": dias if qty else 0,
+                    "valor_estoque": money(qty * preco * 0.55),
+                    "empresa": "Dobra Moda",
+                })
+    headers = ["data", "mes", "ano", "loja", "categoria", "colecao", "produto", "tamanho", "cor", "status", "estoque", "estoque_minimo", "dias_estoque", "valor_estoque", "empresa"]
+    return headers, rows
+
+
+def moda_colecoes() -> tuple[list[str], list[dict]]:
+    rows = []
+    categorias = sorted({c for _, c, _ in PECAS_MODA})
+    for dt in month_starts(12):
+        for colecao in COLECOES:
+            peso = 1.35 if colecao == "Verão 2026" and dt.month in (1, 2, 11, 12) else 1
+            if colecao == "Inverno 2026" and dt.month in (5, 6, 7, 8):
+                peso = 1.4
+            for cat in categorias:
+                for canal in ["Loja", "E-commerce"]:
+                    qty = int(random.uniform(8, 70) * peso)
+                    preco = random.uniform(79, 360)
+                    valor = qty * preco
+                    custo = valor * random.uniform(0.4, 0.68)
+                    dev_q = int(qty * random.uniform(0.02, 0.14))
+                    rows.append({
+                        "data": dt.isoformat(),
+                        "mes": MESES[dt.month],
+                        "ano": dt.year,
+                        "loja": random.choice(LOJAS_MODA),
+                        "colecao": colecao,
+                        "categoria": cat,
+                        "canal": canal,
+                        "quantidade": qty,
+                        "valor": money(valor),
+                        "custo": money(custo),
+                        "devolucoes": dev_q,
+                        "valor_devolvido": money(dev_q * preco),
+                        "empresa": "Dobra Moda",
+                    })
+    headers = ["data", "mes", "ano", "loja", "colecao", "categoria", "canal", "quantidade", "valor", "custo", "devolucoes", "valor_devolvido", "empresa"]
+    return headers, rows
+
+
+def eletronicos_vendas() -> tuple[list[str], list[dict]]:
+    rows = []
+    start, end = date(2025, 9, 1), date(2026, 8, 28)
+    for _ in range(520):
+        dt = random_day(start, end)
+        produto, cat, marca, preco = random.choice(ITENS_TECH)
+        qty = 1 if cat in ("Celular", "Tablet", "Smartwatch") else random.choices([1, 2, 3], weights=[60, 30, 10])[0]
+        valor = preco * qty * random.uniform(0.92, 1.05)
+        margem = 0.08 if cat == "Celular" else random.uniform(0.22, 0.48)
+        rows.append({
+            "data": dt.isoformat(),
+            "mes": MESES[dt.month],
+            "ano": dt.year,
+            "loja": random.choice(LOJAS_TECH),
+            "vendedor": random.choice(VENDEDORES_LOJA),
+            "cliente": random.choice(CLIENTES),
+            "categoria": cat,
+            "marca": marca,
+            "produto": produto,
+            "canal": random.choices(["Loja", "E-commerce", "Marketplace", "WhatsApp"], weights=[42, 30, 18, 10])[0],
+            "quantidade": qty,
+            "valor": money(valor),
+            "custo": money(valor * (1 - margem)),
+            "empresa": "Dobra Tech",
+        })
+    headers = ["data", "mes", "ano", "loja", "vendedor", "cliente", "categoria", "marca", "produto", "canal", "quantidade", "valor", "custo", "empresa"]
+    return headers, rows
+
+
+def eletronicos_estoque() -> tuple[list[str], list[dict]]:
+    rows = []
+    for dt in month_starts(8):
+        for produto, cat, marca, preco in ITENS_TECH:
+            for loja in LOJAS_TECH[:2]:
+                if cat in ("Celular", "Tablet"):
+                    qty = random.randint(0, 22)
+                else:
+                    qty = random.randint(0, 80)
+                if qty == 0:
+                    st = "Ruptura"
+                elif qty < 4:
+                    st = "Baixo"
+                elif qty > 50:
+                    st = "Parado"
+                else:
+                    st = "Disponível"
+                giro = round(random.uniform(0.4, 1.2) if cat == "Celular" else random.uniform(1.4, 6.5), 2)
+                if st == "Parado":
+                    giro = round(random.uniform(0.1, 0.6), 2)
+                dias = int(30 / max(giro, 0.15))
+                rows.append({
+                    "data": dt.isoformat(),
+                    "mes": MESES[dt.month],
+                    "ano": dt.year,
+                    "loja": loja,
+                    "categoria": cat,
+                    "marca": marca,
+                    "produto": produto,
+                    "status": st,
+                    "estoque": qty,
+                    "dias_estoque": dias,
+                    "giro": f"{giro:.2f}",
+                    "valor_estoque": money(qty * preco * 0.82),
+                    "empresa": "Dobra Tech",
+                })
+    headers = ["data", "mes", "ano", "loja", "categoria", "marca", "produto", "status", "estoque", "dias_estoque", "giro", "valor_estoque", "empresa"]
+    return headers, rows
+
+
+def eletronicos_posvenda() -> tuple[list[str], list[dict]]:
+    tipos = ["Garantia", "Troca", "Devolução", "Assistência"]
+    statuses = ["Aberto", "Em análise", "Concluído", "Recusado"]
+    rows = []
+    start, end = date(2026, 1, 6), date(2026, 8, 28)
+    for i in range(280):
+        dt = random_day(start, end)
+        produto, cat, marca, preco = random.choice(ITENS_TECH)
+        tipo = random.choices(tipos, weights=[46, 18, 14, 22])[0]
+        status = random.choices(statuses, weights=[14, 18, 58, 10])[0]
+        custo = 0 if tipo == "Devolução" else preco * random.uniform(0.04, 0.28)
+        if cat in ("Capa", "Película", "Carregador"):
+            custo *= 0.35
+        rows.append({
+            "data": dt.isoformat(),
+            "mes": MESES[dt.month],
+            "ano": dt.year,
+            "loja": random.choice(LOJAS_TECH),
+            "categoria": cat,
+            "marca": marca,
+            "produto": produto,
+            "tipo": tipo,
+            "status": status,
+            "cliente": random.choice(CLIENTES),
+            "chamado": f"OS-{24000 + i}",
+            "valor": money(preco),
+            "custo_reparo": money(custo),
+            "empresa": "Dobra Tech",
+        })
+    headers = ["data", "mes", "ano", "loja", "categoria", "marca", "produto", "tipo", "status", "cliente", "chamado", "valor", "custo_reparo", "empresa"]
+    return headers, rows
+
+
+def oficinas_ordens() -> tuple[list[str], list[dict]]:
+    statuses = ["Aberta", "Em execução", "Aguardando peça", "Concluída", "Entregue"]
+    rows = []
+    start, end = date(2025, 11, 1), date(2026, 8, 28)
+    for i in range(380):
+        dt = random_day(start, end)
+        tipo = random.choices(["Carro", "Moto", "Caminhonete", "Utilitário"], weights=[58, 22, 12, 8])[0]
+        servico = random.choice(SERVICOS_AUTO)
+        horas = round(random.uniform(0.5, 8.5), 1)
+        mao = horas * random.uniform(90, 180)
+        pecas = random.uniform(40, 2200) if servico != "Troca de óleo" else random.uniform(80, 260)
+        if tipo == "Moto":
+            pecas *= 0.62
+            mao *= 0.8
+        status = random.choices(statuses, weights=[8, 14, 10, 18, 50])[0]
+        rows.append({
+            "data": dt.isoformat(),
+            "mes": MESES[dt.month],
+            "ano": dt.year,
+            "oficina": "Box Moto Sul" if tipo == "Moto" and random.random() < 0.7 else random.choice(OFICINAS),
+            "mecanico": random.choice(MECANICOS),
+            "cliente": random.choice(CLIENTES),
+            "tipo_veiculo": tipo,
+            "marca": random.choice(MARCAS_AUTO[tipo]),
+            "servico": servico,
+            "os": f"OS-{18000 + i}",
+            "status": status,
+            "horas": f"{horas:.1f}",
+            "valor_mao_obra": money(mao),
+            "valor_pecas": money(pecas),
+            "valor": money(mao + pecas),
+            "empresa": "Dobra Auto",
+        })
+    headers = ["data", "mes", "ano", "oficina", "mecanico", "cliente", "tipo_veiculo", "marca", "servico", "os", "status", "horas", "valor_mao_obra", "valor_pecas", "valor", "empresa"]
+    return headers, rows
+
+
+def oficinas_pecas() -> tuple[list[str], list[dict]]:
+    rows = []
+    for dt in month_starts(10):
+        for tipo in ["Carro", "Moto", "Caminhonete"]:
+            for servico, pecas in PECAS_AUTO.items():
+                peca, preco = random.choice(pecas)
+                qty = random.randint(2, 18) if tipo != "Moto" else random.randint(1, 10)
+                custo = preco * qty * random.uniform(0.62, 0.82)
+                venda = preco * qty * random.uniform(1.05, 1.35)
+                horas = random.uniform(1, 6) * qty / 4
+                rows.append({
+                    "data": dt.isoformat(),
+                    "mes": MESES[dt.month],
+                    "ano": dt.year,
+                    "oficina": random.choice(OFICINAS),
+                    "tipo_veiculo": tipo,
+                    "servico": servico,
+                    "peca": peca,
+                    "quantidade": qty,
+                    "valor_mao_obra": money(horas * random.uniform(95, 160)),
+                    "valor_pecas": money(venda),
+                    "custo_pecas": money(custo),
+                    "empresa": "Dobra Auto",
+                })
+    headers = ["data", "mes", "ano", "oficina", "tipo_veiculo", "servico", "peca", "quantidade", "valor_mao_obra", "valor_pecas", "custo_pecas", "empresa"]
+    return headers, rows
+
+
+def oficinas_agenda() -> tuple[list[str], list[dict]]:
+    statuses = ["No prazo", "Em execução", "Atrasada", "Entregue"]
+    rows = []
+    start, end = date(2026, 6, 1), date(2026, 8, 28)
+    d = start
+    while d <= end:
+        if d.weekday() < 6:
+            for mecanico in MECANICOS:
+                tipo = random.choices(["Carro", "Moto", "Caminhonete", "Utilitário"], weights=[55, 25, 12, 8])[0]
+                previstas = round(random.uniform(4, 8), 1)
+                realizadas = round(previstas * random.uniform(0.55, 1.15), 1)
+                status = random.choices(statuses, weights=[28, 22, 14, 36])[0]
+                if status == "Atrasada":
+                    realizadas = round(previstas * random.uniform(0.4, 0.75), 1)
+                rows.append({
+                    "data": d.isoformat(),
+                    "mes": MESES[d.month],
+                    "ano": d.year,
+                    "oficina": "Box Moto Sul" if tipo == "Moto" else random.choice(OFICINAS),
+                    "mecanico": mecanico,
+                    "tipo_veiculo": tipo,
+                    "status": status,
+                    "horas_previstas": f"{previstas:.1f}",
+                    "horas_realizadas": f"{realizadas:.1f}",
+                    "atraso_dias": random.randint(1, 5) if status == "Atrasada" else 0,
+                    "valor": money(realizadas * random.uniform(110, 190)),
+                    "empresa": "Dobra Auto",
+                })
+        d += timedelta(days=1)
+    headers = ["data", "mes", "ano", "oficina", "mecanico", "tipo_veiculo", "status", "horas_previstas", "horas_realizadas", "atraso_dias", "valor", "empresa"]
+    return headers, rows
+
+
 DATASETS = [
     ("redorai-financeiro-dre.csv", "P&L sob controlo", financeiro_dre),
     ("redorai-financeiro-inadimplencia.csv", "Inadimplência sob controlo", financeiro_inadimplencia),
@@ -783,6 +1155,15 @@ DATASETS = [
     ("redorai-advocacia-processos.csv", "Carteira processual", advocacia_processos),
     ("redorai-advocacia-prazos.csv", "Prazos e riscos jurídicos", advocacia_prazos),
     ("redorai-advocacia-financeiro.csv", "Financeiro do escritório", advocacia_financeiro),
+    ("redorai-moda-vendas.csv", "Vendas da loja de roupas", moda_vendas),
+    ("redorai-moda-estoque.csv", "Estoque e ruptura de moda", moda_estoque),
+    ("redorai-moda-colecoes.csv", "Coleções e margem", moda_colecoes),
+    ("redorai-eletronicos-vendas.csv", "Vendas de eletrônicos", eletronicos_vendas),
+    ("redorai-eletronicos-estoque.csv", "Giro e estoque de eletrônicos", eletronicos_estoque),
+    ("redorai-eletronicos-posvenda.csv", "Garantia e pós-venda", eletronicos_posvenda),
+    ("redorai-oficinas-ordens.csv", "Ordens de serviço", oficinas_ordens),
+    ("redorai-oficinas-pecas.csv", "Peças e mão de obra", oficinas_pecas),
+    ("redorai-oficinas-agenda.csv", "Agenda e produtividade", oficinas_agenda),
 ]
 
 

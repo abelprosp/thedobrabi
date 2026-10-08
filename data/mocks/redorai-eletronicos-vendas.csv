@@ -1,0 +1,521 @@
+data,mes,ano,loja,vendedor,cliente,categoria,marca,produto,canal,quantidade,valor,custo,empresa
+2025-11-04,Novembro,2025,Loja Online,Eva Martins,Atlas Ltda,Fone,Apple,AirPods 4,Loja,2,2457.74,1431.35,Dobra Tech
+2026-03-03,Março,2026,Loja Barra,Eva Martins,Lumen Tech,Tablet,Samsung,Galaxy Tab A9,Loja,1,1554.11,838.79,Dobra Tech
+2026-05-11,Maio,2026,Loja Online,Carla Souza,Serra Café,Capa,Baseus,Capa silicone,Loja,1,51.40,38.36,Dobra Tech
+2026-05-25,Maio,2026,Loja Paulista,Diego Alves,Pulse Varejo,Smartwatch,Apple,Watch SE,Loja,1,2156.11,1179.92,Dobra Tech
+2026-06-24,Junho,2026,Loja Paulista,Diego Alves,Nimbus SA,Tablet,Samsung,Galaxy Tab A9,Loja,1,1492.28,1073.55,Dobra Tech
+2026-08-21,Agosto,2026,Loja Paulista,Bruno Lima,Céu Soft,Fone,JBL,Fone Tune 510,Loja,1,235.80,126.56,Dobra Tech
+2025-12-11,Dezembro,2025,Loja Online,Ana Costa,Sul Minas,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1519.56,884.33,Dobra Tech
+2026-05-22,Maio,2026,Loja Online,Ana Costa,Orbit Educação,Tablet,Samsung,Galaxy Tab A9,Loja,1,1581.95,1082.92,Dobra Tech
+2026-05-08,Maio,2026,Loja Paulista,Diego Alves,Helix Saúde,Celular,Samsung,Galaxy A55,E-commerce,1,1813.58,1668.50,Dobra Tech
+2026-07-26,Julho,2026,Loja Barra,Eva Martins,Serra Café,Carregador,Baseus,Carregador 30W,E-commerce,2,179.66,134.82,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Bruno Lima,Helix Saúde,Carregador,Apple,Carregador MagSafe,Loja,1,359.38,247.00,Dobra Tech
+2026-08-07,Agosto,2026,Loja Barra,Carla Souza,Atlas Ltda,Smartwatch,Apple,Watch SE,Loja,1,2155.60,1306.58,Dobra Tech
+2025-11-14,Novembro,2025,Loja Barra,Eva Martins,Casa Norte,Película,Baseus,Película vidro,Loja,1,30.34,16.02,Dobra Tech
+2025-12-14,Dezembro,2025,Loja Online,Bruno Lima,Boa Vista,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1520.52,1133.51,Dobra Tech
+2026-07-06,Julho,2026,Loja Online,Eva Martins,Lumen Tech,Película,Baseus,Película vidro,E-commerce,2,57.94,31.43,Dobra Tech
+2025-10-12,Outubro,2025,Loja Barra,Eva Martins,Maré Energia,Carregador,Baseus,Carregador 30W,WhatsApp,1,83.79,52.42,Dobra Tech
+2026-03-05,Março,2026,Loja Online,Ana Costa,Orbit Educação,Celular,Apple,iPhone 15,Loja,1,5545.86,5102.19,Dobra Tech
+2026-03-22,Março,2026,Loja Barra,Ana Costa,Serra Café,Capa,Baseus,Capa silicone,E-commerce,1,50.89,31.10,Dobra Tech
+2025-12-24,Dezembro,2025,Loja Online,Eva Martins,Sul Minas,Fone,JBL,Fone Tune 510,E-commerce,1,244.33,135.26,Dobra Tech
+2025-11-12,Novembro,2025,Loja Paulista,Eva Martins,Aurora Moda,Carregador,Baseus,Carregador 30W,Loja,2,165.82,97.84,Dobra Tech
+2025-11-15,Novembro,2025,Loja Online,Diego Alves,Verde Agro,Power bank,Anker,Power bank 20k,WhatsApp,1,187.03,130.07,Dobra Tech
+2026-04-15,Abril,2026,Loja Online,Eva Martins,Costa Farma,Fone,JBL,Fone Tune 510,E-commerce,1,250.98,168.71,Dobra Tech
+2026-07-03,Julho,2026,Loja Online,Carla Souza,Maré Energia,Fone,JBL,Fone Tune 510,Loja,1,247.09,170.38,Dobra Tech
+2026-08-06,Agosto,2026,Loja Paulista,Ana Costa,Nimbus SA,Carregador,Baseus,Carregador 30W,Loja,1,87.32,56.45,Dobra Tech
+2025-10-17,Outubro,2025,Loja Online,Diego Alves,Lumen Tech,Celular,Samsung,Galaxy A55,Loja,1,1910.55,1757.71,Dobra Tech
+2026-03-12,Março,2026,Loja Barra,Diego Alves,Céu Soft,Smartwatch,Apple,Watch SE,Loja,1,2218.30,1169.10,Dobra Tech
+2026-08-27,Agosto,2026,Loja Barra,Eva Martins,Céu Soft,Tablet,Apple,iPad 10,Loja,1,3673.25,2168.23,Dobra Tech
+2025-12-19,Dezembro,2025,Loja Barra,Ana Costa,Helix Saúde,Celular,Apple,iPhone 15,E-commerce,1,5363.68,4934.58,Dobra Tech
+2025-09-18,Setembro,2025,Loja Online,Diego Alves,Serra Café,Celular,Samsung,Galaxy A55,E-commerce,1,1821.72,1675.99,Dobra Tech
+2025-09-12,Setembro,2025,Loja Barra,Carla Souza,Céu Soft,Película,Baseus,Película vidro,Marketplace,1,29.92,22.14,Dobra Tech
+2026-06-13,Junho,2026,Loja Online,Carla Souza,Costa Farma,Tablet,Samsung,Galaxy Tab A9,Loja,1,1609.20,1040.08,Dobra Tech
+2026-04-09,Abril,2026,Loja Online,Ana Costa,Terra Nova,Celular,Samsung,Galaxy S24,Loja,1,4394.85,4043.26,Dobra Tech
+2025-10-20,Outubro,2025,Loja Online,Carla Souza,Sul Minas,Capa,Baseus,Capa silicone,Loja,1,51.05,30.43,Dobra Tech
+2026-01-25,Janeiro,2026,Loja Barra,Diego Alves,Boa Vista,Carregador,Baseus,Carregador 30W,Marketplace,2,182.61,108.45,Dobra Tech
+2026-01-09,Janeiro,2026,Loja Online,Diego Alves,Sul Minas,Power bank,Anker,Power bank 20k,Marketplace,2,401.79,212.22,Dobra Tech
+2026-02-14,Fevereiro,2026,Loja Online,Ana Costa,Aurora Moda,Celular,Xiaomi,Redmi Note 13,Loja,1,1279.71,1177.34,Dobra Tech
+2026-02-24,Fevereiro,2026,Loja Barra,Eva Martins,Delta Log,Celular,Apple,iPhone 15,Marketplace,1,5454.49,5018.13,Dobra Tech
+2026-04-15,Abril,2026,Loja Online,Eva Martins,Verde Agro,Celular,Apple,iPhone 15,WhatsApp,1,5483.29,5044.63,Dobra Tech
+2026-01-19,Janeiro,2026,Loja Online,Diego Alves,Casa Norte,Smartwatch,Apple,Watch SE,Loja,1,2256.15,1551.69,Dobra Tech
+2025-12-19,Dezembro,2025,Loja Online,Carla Souza,Nimbus SA,Celular,Samsung,Galaxy S24,Loja,1,4175.87,3841.80,Dobra Tech
+2025-09-24,Setembro,2025,Loja Paulista,Carla Souza,Verde Agro,Carregador,Apple,Carregador MagSafe,Loja,1,357.48,190.32,Dobra Tech
+2025-12-28,Dezembro,2025,Loja Paulista,Bruno Lima,Helix Saúde,Carregador,Baseus,Carregador 30W,E-commerce,1,86.57,60.10,Dobra Tech
+2026-03-19,Março,2026,Loja Online,Diego Alves,Forge Engenharia,Celular,Samsung,Galaxy S24,Loja,1,4414.78,4061.59,Dobra Tech
+2026-06-07,Junho,2026,Loja Barra,Diego Alves,Terra Nova,Celular,Samsung,Galaxy S24,Loja,1,4072.21,3746.43,Dobra Tech
+2026-04-07,Abril,2026,Loja Online,Ana Costa,Lumen Tech,Celular,Samsung,Galaxy A55,E-commerce,1,1970.43,1812.79,Dobra Tech
+2026-01-11,Janeiro,2026,Loja Paulista,Ana Costa,Maré Energia,Película,Baseus,Película vidro,Loja,1,28.30,15.35,Dobra Tech
+2025-11-30,Novembro,2025,Loja Paulista,Bruno Lima,Boa Vista,Celular,Motorola,Moto G84,Marketplace,1,1537.41,1414.42,Dobra Tech
+2026-03-27,Março,2026,Loja Online,Ana Costa,Boa Vista,Fone,Apple,AirPods 4,WhatsApp,3,3864.51,2603.59,Dobra Tech
+2025-09-23,Setembro,2025,Loja Barra,Ana Costa,Aurora Moda,Celular,Samsung,Galaxy S24,E-commerce,1,4395.37,4043.74,Dobra Tech
+2025-12-23,Dezembro,2025,Loja Online,Diego Alves,Serra Café,Tablet,Samsung,Galaxy Tab A9,Loja,1,1516.12,1130.93,Dobra Tech
+2025-12-24,Dezembro,2025,Loja Paulista,Eva Martins,Aurora Moda,Fone,Apple,AirPods 4,Marketplace,1,1195.13,664.16,Dobra Tech
+2026-05-05,Maio,2026,Loja Paulista,Ana Costa,Pulse Varejo,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1635.26,1270.59,Dobra Tech
+2026-03-01,Março,2026,Loja Online,Ana Costa,Serra Café,Película,Baseus,Película vidro,Marketplace,1,28.72,15.60,Dobra Tech
+2026-08-01,Agosto,2026,Loja Online,Eva Martins,Boa Vista,Celular,Apple,iPhone 15,Loja,1,5486.38,5047.47,Dobra Tech
+2026-03-25,Março,2026,Loja Paulista,Eva Martins,Verde Agro,Carregador,Baseus,Carregador 30W,Marketplace,1,86.00,64.38,Dobra Tech
+2026-06-23,Junho,2026,Loja Online,Diego Alves,Forge Engenharia,Capa,Baseus,Capa silicone,E-commerce,1,45.60,30.43,Dobra Tech
+2026-06-02,Junho,2026,Loja Online,Bruno Lima,Terra Nova,Celular,Samsung,Galaxy A55,Marketplace,1,1905.57,1753.13,Dobra Tech
+2025-11-23,Novembro,2025,Loja Online,Diego Alves,Forge Engenharia,Carregador,Baseus,Carregador 30W,Loja,1,92.51,55.27,Dobra Tech
+2026-06-30,Junho,2026,Loja Paulista,Carla Souza,Boa Vista,Smartwatch,Apple,Watch SE,Loja,1,2082.41,1548.21,Dobra Tech
+2025-11-09,Novembro,2025,Loja Barra,Ana Costa,Nimbus SA,Celular,Samsung,Galaxy S24,WhatsApp,1,4269.47,3927.91,Dobra Tech
+2025-12-19,Dezembro,2025,Loja Barra,Carla Souza,Casa Norte,Power bank,Anker,Power bank 20k,E-commerce,2,369.94,199.21,Dobra Tech
+2026-03-17,Março,2026,Loja Barra,Eva Martins,Atlas Ltda,Celular,Xiaomi,Redmi Note 13,Loja,1,1316.05,1210.77,Dobra Tech
+2025-10-25,Outubro,2025,Loja Paulista,Diego Alves,Orbit Educação,Celular,Apple,iPhone 15,Marketplace,1,5552.70,5108.49,Dobra Tech
+2026-07-30,Julho,2026,Loja Online,Carla Souza,Forge Engenharia,Smartwatch,Apple,Watch SE,E-commerce,1,2285.18,1191.46,Dobra Tech
+2026-05-10,Maio,2026,Loja Paulista,Eva Martins,Maré Energia,Celular,Apple,iPhone 15,Loja,1,5179.19,4764.86,Dobra Tech
+2026-07-27,Julho,2026,Loja Paulista,Bruno Lima,Verde Agro,Celular,Apple,iPhone 15,Marketplace,1,5446.57,5010.84,Dobra Tech
+2026-07-12,Julho,2026,Loja Barra,Eva Martins,Casa Norte,Smartwatch,Apple,Watch SE,Marketplace,1,2079.02,1523.19,Dobra Tech
+2026-06-25,Junho,2026,Loja Paulista,Bruno Lima,Helix Saúde,Celular,Xiaomi,Redmi Note 13,Marketplace,1,1205.14,1108.73,Dobra Tech
+2026-08-06,Agosto,2026,Loja Online,Eva Martins,Helix Saúde,Fone,Apple,AirPods 4,Marketplace,2,2577.60,1549.76,Dobra Tech
+2026-06-26,Junho,2026,Loja Online,Ana Costa,Delta Log,Carregador,Apple,Carregador MagSafe,Loja,2,693.95,468.29,Dobra Tech
+2026-02-24,Fevereiro,2026,Loja Paulista,Bruno Lima,Maré Energia,Tablet,Apple,iPad 10,Loja,1,3632.22,2699.99,Dobra Tech
+2025-11-02,Novembro,2025,Loja Online,Ana Costa,Costa Farma,Carregador,Apple,Carregador MagSafe,Loja,2,712.57,381.39,Dobra Tech
+2026-03-28,Março,2026,Loja Online,Ana Costa,Terra Nova,Celular,Samsung,Galaxy S24,E-commerce,1,4444.90,4089.31,Dobra Tech
+2025-10-23,Outubro,2025,Loja Paulista,Carla Souza,Maré Energia,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1386.51,802.31,Dobra Tech
+2026-01-13,Janeiro,2026,Loja Barra,Ana Costa,Boa Vista,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1489.38,1025.26,Dobra Tech
+2026-02-18,Fevereiro,2026,Loja Paulista,Diego Alves,Costa Farma,Celular,Samsung,Galaxy S24,Loja,1,4186.44,3851.52,Dobra Tech
+2026-04-10,Abril,2026,Loja Barra,Eva Martins,Nimbus SA,Smartwatch,Apple,Watch SE,E-commerce,1,2218.69,1362.73,Dobra Tech
+2025-11-12,Novembro,2025,Loja Online,Ana Costa,Delta Log,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1394.31,1035.70,Dobra Tech
+2026-04-21,Abril,2026,Loja Online,Eva Martins,Delta Log,Película,Baseus,Película vidro,E-commerce,3,82.07,45.92,Dobra Tech
+2026-03-19,Março,2026,Loja Barra,Bruno Lima,Nimbus SA,Celular,Apple,iPhone 15,Loja,1,5686.83,5231.89,Dobra Tech
+2026-01-25,Janeiro,2026,Loja Barra,Carla Souza,Serra Café,Power bank,Anker,Power bank 20k,Marketplace,1,208.44,140.86,Dobra Tech
+2026-02-11,Fevereiro,2026,Loja Online,Diego Alves,Orbit Educação,Celular,Samsung,Galaxy A55,E-commerce,1,1780.35,1637.92,Dobra Tech
+2026-04-17,Abril,2026,Loja Online,Eva Martins,Serra Café,Carregador,Apple,Carregador MagSafe,E-commerce,1,355.50,241.52,Dobra Tech
+2025-12-07,Dezembro,2025,Loja Barra,Eva Martins,Terra Nova,Fone,JBL,Fone Tune 510,WhatsApp,1,233.21,132.91,Dobra Tech
+2026-08-12,Agosto,2026,Loja Barra,Bruno Lima,Rio Branco,Capa,Baseus,Capa silicone,Marketplace,1,45.37,30.72,Dobra Tech
+2026-08-17,Agosto,2026,Loja Barra,Bruno Lima,Lumen Tech,Fone,JBL,Fone Tune 510,Loja,1,231.12,158.40,Dobra Tech
+2025-11-15,Novembro,2025,Loja Paulista,Carla Souza,Serra Café,Fone,Apple,AirPods 4,Marketplace,1,1225.36,891.08,Dobra Tech
+2025-09-01,Setembro,2025,Loja Online,Diego Alves,Forge Engenharia,Fone,Apple,AirPods 4,E-commerce,2,2566.62,1588.69,Dobra Tech
+2025-10-26,Outubro,2025,Loja Paulista,Carla Souza,Verde Agro,Carregador,Baseus,Carregador 30W,Loja,3,247.60,143.39,Dobra Tech
+2025-10-15,Outubro,2025,Loja Barra,Diego Alves,Atlas Ltda,Tablet,Samsung,Galaxy Tab A9,Loja,1,1620.54,1047.01,Dobra Tech
+2026-07-17,Julho,2026,Loja Paulista,Bruno Lima,Helix Saúde,Smartwatch,Apple,Watch SE,Loja,1,2105.45,1560.46,Dobra Tech
+2025-10-14,Outubro,2025,Loja Online,Carla Souza,Costa Farma,Celular,Xiaomi,Redmi Note 13,Marketplace,1,1350.67,1242.62,Dobra Tech
+2025-12-25,Dezembro,2025,Loja Barra,Ana Costa,Costa Farma,Celular,Motorola,Moto G84,Marketplace,1,1533.58,1410.89,Dobra Tech
+2026-06-03,Junho,2026,Loja Paulista,Diego Alves,Rio Branco,Power bank,Anker,Power bank 20k,E-commerce,1,189.94,103.37,Dobra Tech
+2026-06-06,Junho,2026,Loja Barra,Ana Costa,Orbit Educação,Celular,Xiaomi,Redmi Note 13,Loja,1,1311.46,1206.54,Dobra Tech
+2025-10-29,Outubro,2025,Loja Barra,Eva Martins,Boa Vista,Capa,Baseus,Capa silicone,Marketplace,3,138.05,104.35,Dobra Tech
+2026-05-23,Maio,2026,Loja Online,Ana Costa,Nimbus SA,Celular,Apple,iPhone 15,Marketplace,1,5418.12,4984.67,Dobra Tech
+2026-06-18,Junho,2026,Loja Barra,Diego Alves,Casa Norte,Carregador,Apple,Carregador MagSafe,Marketplace,1,335.18,176.61,Dobra Tech
+2026-04-11,Abril,2026,Loja Barra,Diego Alves,Delta Log,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1612.28,1105.99,Dobra Tech
+2026-02-25,Fevereiro,2026,Loja Online,Carla Souza,Casa Norte,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1265.50,1164.26,Dobra Tech
+2026-05-31,Maio,2026,Loja Barra,Bruno Lima,Aurora Moda,Celular,Xiaomi,Redmi Note 13,Loja,1,1228.08,1129.83,Dobra Tech
+2025-12-05,Dezembro,2025,Loja Paulista,Carla Souza,Helix Saúde,Celular,Xiaomi,Redmi Note 13,Loja,1,1303.05,1198.81,Dobra Tech
+2026-04-27,Abril,2026,Loja Paulista,Carla Souza,Aurora Moda,Tablet,Apple,iPad 10,Loja,1,3867.65,2683.80,Dobra Tech
+2026-06-11,Junho,2026,Loja Paulista,Carla Souza,Céu Soft,Tablet,Apple,iPad 10,Loja,1,3845.98,2528.16,Dobra Tech
+2026-04-11,Abril,2026,Loja Online,Eva Martins,Rio Branco,Carregador,Apple,Carregador MagSafe,Loja,3,1059.69,679.90,Dobra Tech
+2026-08-28,Agosto,2026,Loja Barra,Carla Souza,Lumen Tech,Película,Baseus,Película vidro,Loja,1,29.19,22.34,Dobra Tech
+2025-12-20,Dezembro,2025,Loja Online,Bruno Lima,Serra Café,Carregador,Apple,Carregador MagSafe,Loja,1,348.49,262.52,Dobra Tech
+2026-08-03,Agosto,2026,Loja Barra,Ana Costa,Costa Farma,Celular,Samsung,Galaxy S24,Marketplace,1,4223.76,3885.86,Dobra Tech
+2026-01-13,Janeiro,2026,Loja Paulista,Diego Alves,Forge Engenharia,Smartwatch,Apple,Watch SE,Loja,1,2024.16,1147.80,Dobra Tech
+2026-01-25,Janeiro,2026,Loja Barra,Carla Souza,Céu Soft,Carregador,Baseus,Carregador 30W,Loja,1,91.00,56.84,Dobra Tech
+2025-12-14,Dezembro,2025,Loja Barra,Ana Costa,Helix Saúde,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1485.45,851.34,Dobra Tech
+2026-03-05,Março,2026,Loja Barra,Eva Martins,Céu Soft,Smartwatch,Apple,Watch SE,Loja,1,2088.00,1496.70,Dobra Tech
+2026-04-10,Abril,2026,Loja Paulista,Carla Souza,Verde Agro,Película,Baseus,Película vidro,Loja,1,26.77,20.57,Dobra Tech
+2026-07-05,Julho,2026,Loja Online,Diego Alves,Forge Engenharia,Power bank,Anker,Power bank 20k,Marketplace,1,201.48,120.43,Dobra Tech
+2026-05-27,Maio,2026,Loja Barra,Eva Martins,Serra Café,Celular,Apple,iPhone 15,Loja,1,5658.05,5205.40,Dobra Tech
+2025-11-06,Novembro,2025,Loja Online,Bruno Lima,Rio Branco,Celular,Motorola,Moto G84,E-commerce,1,1450.47,1334.43,Dobra Tech
+2025-12-21,Dezembro,2025,Loja Barra,Carla Souza,Boa Vista,Película,Baseus,Película vidro,Marketplace,1,30.14,19.48,Dobra Tech
+2025-12-17,Dezembro,2025,Loja Paulista,Eva Martins,Aurora Moda,Tablet,Samsung,Galaxy Tab A9,Loja,1,1495.51,1101.42,Dobra Tech
+2025-09-21,Setembro,2025,Loja Barra,Eva Martins,Lumen Tech,Película,Baseus,Película vidro,Marketplace,1,28.38,17.08,Dobra Tech
+2026-06-12,Junho,2026,Loja Barra,Ana Costa,Céu Soft,Película,Baseus,Película vidro,Loja,1,28.46,15.85,Dobra Tech
+2026-03-26,Março,2026,Loja Barra,Ana Costa,Atlas Ltda,Carregador,Apple,Carregador MagSafe,E-commerce,1,366.36,213.15,Dobra Tech
+2026-04-19,Abril,2026,Loja Online,Bruno Lima,Helix Saúde,Carregador,Apple,Carregador MagSafe,Marketplace,3,982.19,547.82,Dobra Tech
+2025-12-02,Dezembro,2025,Loja Paulista,Eva Martins,Maré Energia,Celular,Xiaomi,Redmi Note 13,Marketplace,1,1215.50,1118.26,Dobra Tech
+2026-06-03,Junho,2026,Loja Barra,Bruno Lima,Maré Energia,Tablet,Apple,iPad 10,Loja,1,3830.76,2201.02,Dobra Tech
+2025-12-20,Dezembro,2025,Loja Barra,Carla Souza,Boa Vista,Tablet,Samsung,Galaxy Tab A9,WhatsApp,1,1512.15,1175.11,Dobra Tech
+2026-04-09,Abril,2026,Loja Barra,Diego Alves,Serra Café,Tablet,Apple,iPad 10,Loja,1,3922.76,3022.34,Dobra Tech
+2026-01-18,Janeiro,2026,Loja Online,Carla Souza,Lumen Tech,Carregador,Baseus,Carregador 30W,WhatsApp,3,248.92,181.06,Dobra Tech
+2026-05-25,Maio,2026,Loja Paulista,Ana Costa,Casa Norte,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1491.77,775.85,Dobra Tech
+2026-04-10,Abril,2026,Loja Paulista,Diego Alves,Verde Agro,Carregador,Baseus,Carregador 30W,E-commerce,1,93.07,68.20,Dobra Tech
+2026-08-16,Agosto,2026,Loja Online,Ana Costa,Delta Log,Celular,Apple,iPhone 15,E-commerce,1,5397.81,4965.99,Dobra Tech
+2025-12-25,Dezembro,2025,Loja Online,Diego Alves,Aurora Moda,Carregador,Apple,Carregador MagSafe,E-commerce,1,364.17,275.07,Dobra Tech
+2026-03-05,Março,2026,Loja Paulista,Diego Alves,Boa Vista,Carregador,Baseus,Carregador 30W,Marketplace,1,84.87,64.58,Dobra Tech
+2025-10-24,Outubro,2025,Loja Online,Diego Alves,Aurora Moda,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1629.70,1097.39,Dobra Tech
+2025-11-30,Novembro,2025,Loja Barra,Carla Souza,Boa Vista,Power bank,Anker,Power bank 20k,Loja,1,194.14,126.58,Dobra Tech
+2026-06-14,Junho,2026,Loja Barra,Carla Souza,Terra Nova,Capa,Baseus,Capa silicone,Loja,1,50.39,35.26,Dobra Tech
+2026-02-25,Fevereiro,2026,Loja Paulista,Eva Martins,Sul Minas,Smartwatch,Apple,Watch SE,Marketplace,1,2244.47,1169.53,Dobra Tech
+2025-12-01,Dezembro,2025,Loja Online,Eva Martins,Atlas Ltda,Capa,Baseus,Capa silicone,E-commerce,2,101.05,73.78,Dobra Tech
+2026-05-09,Maio,2026,Loja Paulista,Ana Costa,Verde Agro,Carregador,Apple,Carregador MagSafe,E-commerce,1,360.37,277.98,Dobra Tech
+2026-02-19,Fevereiro,2026,Loja Online,Bruno Lima,Maré Energia,Fone,JBL,Fone Tune 510,WhatsApp,1,229.09,161.83,Dobra Tech
+2026-05-14,Maio,2026,Loja Online,Eva Martins,Atlas Ltda,Tablet,Apple,iPad 10,Loja,1,3971.36,2827.60,Dobra Tech
+2026-05-27,Maio,2026,Loja Barra,Diego Alves,Terra Nova,Carregador,Apple,Carregador MagSafe,Loja,1,363.45,210.03,Dobra Tech
+2026-07-19,Julho,2026,Loja Barra,Bruno Lima,Casa Norte,Celular,Apple,iPhone 15,E-commerce,1,5304.01,4879.69,Dobra Tech
+2025-09-14,Setembro,2025,Loja Online,Bruno Lima,Serra Café,Carregador,Apple,Carregador MagSafe,E-commerce,1,363.66,247.64,Dobra Tech
+2025-09-19,Setembro,2025,Loja Barra,Bruno Lima,Maré Energia,Carregador,Apple,Carregador MagSafe,Loja,1,357.42,208.01,Dobra Tech
+2026-08-12,Agosto,2026,Loja Barra,Eva Martins,Boa Vista,Tablet,Apple,iPad 10,E-commerce,1,3616.04,2342.04,Dobra Tech
+2025-11-21,Novembro,2025,Loja Barra,Ana Costa,Pampa Alimentos,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1556.64,963.07,Dobra Tech
+2026-08-16,Agosto,2026,Loja Barra,Ana Costa,Helix Saúde,Película,Baseus,Película vidro,Loja,2,54.54,30.11,Dobra Tech
+2026-02-19,Fevereiro,2026,Loja Online,Diego Alves,Lumen Tech,Fone,JBL,Fone Tune 510,E-commerce,2,464.37,245.69,Dobra Tech
+2025-12-03,Dezembro,2025,Loja Barra,Diego Alves,Casa Norte,Capa,Baseus,Capa silicone,E-commerce,1,51.24,34.32,Dobra Tech
+2026-06-02,Junho,2026,Loja Barra,Eva Martins,Rio Branco,Capa,Baseus,Capa silicone,Loja,2,90.61,52.86,Dobra Tech
+2026-02-25,Fevereiro,2026,Loja Online,Carla Souza,Lumen Tech,Carregador,Apple,Carregador MagSafe,WhatsApp,3,1028.42,580.24,Dobra Tech
+2025-12-09,Dezembro,2025,Loja Barra,Bruno Lima,Orbit Educação,Capa,Baseus,Capa silicone,E-commerce,1,50.71,38.88,Dobra Tech
+2026-05-11,Maio,2026,Loja Barra,Carla Souza,Aurora Moda,Capa,Baseus,Capa silicone,E-commerce,2,99.91,68.82,Dobra Tech
+2026-08-02,Agosto,2026,Loja Barra,Diego Alves,Forge Engenharia,Carregador,Apple,Carregador MagSafe,Loja,1,332.84,209.13,Dobra Tech
+2026-07-19,Julho,2026,Loja Barra,Carla Souza,Nimbus SA,Smartwatch,Apple,Watch SE,E-commerce,1,2101.72,1397.07,Dobra Tech
+2025-11-06,Novembro,2025,Loja Barra,Diego Alves,Pulse Varejo,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1383.66,948.11,Dobra Tech
+2025-09-03,Setembro,2025,Loja Online,Diego Alves,Aurora Moda,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1511.44,884.96,Dobra Tech
+2026-07-26,Julho,2026,Loja Barra,Carla Souza,Costa Farma,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1443.93,1116.13,Dobra Tech
+2025-09-17,Setembro,2025,Loja Paulista,Eva Martins,Pampa Alimentos,Power bank,Anker,Power bank 20k,WhatsApp,1,192.77,123.69,Dobra Tech
+2026-06-25,Junho,2026,Loja Paulista,Diego Alves,Terra Nova,Tablet,Samsung,Galaxy Tab A9,Loja,1,1509.85,939.34,Dobra Tech
+2026-05-27,Maio,2026,Loja Barra,Ana Costa,Rio Branco,Celular,Samsung,Galaxy S24,Loja,1,4344.40,3996.85,Dobra Tech
+2025-12-17,Dezembro,2025,Loja Barra,Ana Costa,Pampa Alimentos,Celular,Samsung,Galaxy S24,Loja,1,4495.84,4136.17,Dobra Tech
+2026-03-17,Março,2026,Loja Barra,Ana Costa,Aurora Moda,Tablet,Samsung,Galaxy Tab A9,Loja,1,1507.81,788.20,Dobra Tech
+2025-11-12,Novembro,2025,Loja Online,Eva Martins,Maré Energia,Capa,Baseus,Capa silicone,Loja,1,46.55,29.86,Dobra Tech
+2026-01-28,Janeiro,2026,Loja Barra,Diego Alves,Nimbus SA,Carregador,Apple,Carregador MagSafe,Loja,1,350.47,249.08,Dobra Tech
+2025-11-09,Novembro,2025,Loja Barra,Ana Costa,Aurora Moda,Power bank,Anker,Power bank 20k,E-commerce,1,203.36,125.87,Dobra Tech
+2025-09-28,Setembro,2025,Loja Paulista,Bruno Lima,Rio Branco,Fone,JBL,Fone Tune 510,E-commerce,2,462.68,255.37,Dobra Tech
+2026-05-06,Maio,2026,Loja Online,Carla Souza,Helix Saúde,Celular,Motorola,Moto G84,Loja,1,1511.99,1391.03,Dobra Tech
+2026-05-24,Maio,2026,Loja Online,Diego Alves,Lumen Tech,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1494.42,986.34,Dobra Tech
+2025-12-30,Dezembro,2025,Loja Barra,Carla Souza,Lumen Tech,Celular,Samsung,Galaxy A55,Marketplace,1,1852.52,1704.32,Dobra Tech
+2026-04-17,Abril,2026,Loja Paulista,Carla Souza,Atlas Ltda,Carregador,Baseus,Carregador 30W,WhatsApp,1,92.83,59.66,Dobra Tech
+2026-02-24,Fevereiro,2026,Loja Barra,Ana Costa,Serra Café,Tablet,Apple,iPad 10,Marketplace,1,3794.84,2776.73,Dobra Tech
+2026-04-29,Abril,2026,Loja Online,Eva Martins,Helix Saúde,Fone,Apple,AirPods 4,WhatsApp,1,1274.52,834.77,Dobra Tech
+2026-07-05,Julho,2026,Loja Paulista,Bruno Lima,Boa Vista,Tablet,Apple,iPad 10,Loja,1,3708.30,2199.46,Dobra Tech
+2025-12-06,Dezembro,2025,Loja Online,Carla Souza,Helix Saúde,Power bank,Anker,Power bank 20k,E-commerce,1,192.49,117.88,Dobra Tech
+2025-12-16,Dezembro,2025,Loja Barra,Ana Costa,Aurora Moda,Smartwatch,Apple,Watch SE,WhatsApp,1,2165.51,1162.56,Dobra Tech
+2026-05-17,Maio,2026,Loja Paulista,Ana Costa,Serra Café,Celular,Samsung,Galaxy A55,Marketplace,1,1867.87,1718.44,Dobra Tech
+2026-03-06,Março,2026,Loja Barra,Carla Souza,Nimbus SA,Celular,Motorola,Moto G84,E-commerce,1,1551.82,1427.68,Dobra Tech
+2026-04-21,Abril,2026,Loja Barra,Diego Alves,Casa Norte,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1629.34,982.51,Dobra Tech
+2026-05-21,Maio,2026,Loja Online,Carla Souza,Céu Soft,Tablet,Samsung,Galaxy Tab A9,Loja,1,1638.53,1180.92,Dobra Tech
+2026-02-16,Fevereiro,2026,Loja Barra,Eva Martins,Orbit Educação,Fone,JBL,Fone Tune 510,E-commerce,2,458.63,323.02,Dobra Tech
+2026-05-22,Maio,2026,Loja Paulista,Ana Costa,Céu Soft,Celular,Samsung,Galaxy S24,E-commerce,1,4298.42,3954.54,Dobra Tech
+2026-05-18,Maio,2026,Loja Barra,Bruno Lima,Forge Engenharia,Smartwatch,Apple,Watch SE,E-commerce,1,2249.45,1294.95,Dobra Tech
+2026-05-24,Maio,2026,Loja Barra,Carla Souza,Nimbus SA,Fone,Apple,AirPods 4,E-commerce,2,2559.90,1819.03,Dobra Tech
+2026-08-04,Agosto,2026,Loja Paulista,Ana Costa,Céu Soft,Fone,Apple,AirPods 4,E-commerce,3,3882.94,3004.51,Dobra Tech
+2026-03-10,Março,2026,Loja Barra,Eva Martins,Terra Nova,Capa,Baseus,Capa silicone,Marketplace,1,49.62,34.29,Dobra Tech
+2025-11-03,Novembro,2025,Loja Paulista,Eva Martins,Terra Nova,Carregador,Baseus,Carregador 30W,E-commerce,1,91.52,55.94,Dobra Tech
+2026-03-25,Março,2026,Loja Paulista,Bruno Lima,Pampa Alimentos,Carregador,Apple,Carregador MagSafe,Marketplace,1,322.05,200.92,Dobra Tech
+2026-03-24,Março,2026,Loja Barra,Eva Martins,Boa Vista,Carregador,Baseus,Carregador 30W,Loja,1,81.92,58.68,Dobra Tech
+2026-02-28,Fevereiro,2026,Loja Paulista,Diego Alves,Lumen Tech,Smartwatch,Samsung,Galaxy Watch 6,WhatsApp,1,1535.97,861.97,Dobra Tech
+2025-09-14,Setembro,2025,Loja Online,Eva Martins,Pampa Alimentos,Celular,Motorola,Moto G84,Loja,1,1407.53,1294.92,Dobra Tech
+2026-06-13,Junho,2026,Loja Online,Eva Martins,Orbit Educação,Fone,Apple,AirPods 4,E-commerce,1,1244.42,905.79,Dobra Tech
+2026-08-21,Agosto,2026,Loja Barra,Eva Martins,Helix Saúde,Carregador,Apple,Carregador MagSafe,Marketplace,3,980.43,533.13,Dobra Tech
+2025-09-17,Setembro,2025,Loja Barra,Carla Souza,Casa Norte,Smartwatch,Apple,Watch SE,Loja,1,2283.24,1747.73,Dobra Tech
+2026-04-18,Abril,2026,Loja Barra,Eva Martins,Céu Soft,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1661.33,1140.80,Dobra Tech
+2026-06-28,Junho,2026,Loja Online,Carla Souza,Aurora Moda,Celular,Xiaomi,Redmi Note 13,Loja,1,1240.83,1141.56,Dobra Tech
+2025-10-24,Outubro,2025,Loja Online,Bruno Lima,Casa Norte,Carregador,Baseus,Carregador 30W,Marketplace,2,176.16,115.14,Dobra Tech
+2026-04-12,Abril,2026,Loja Paulista,Eva Martins,Aurora Moda,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1545.10,969.41,Dobra Tech
+2026-03-05,Março,2026,Loja Online,Ana Costa,Aurora Moda,Carregador,Baseus,Carregador 30W,WhatsApp,2,179.62,103.96,Dobra Tech
+2026-06-30,Junho,2026,Loja Online,Ana Costa,Boa Vista,Celular,Samsung,Galaxy S24,E-commerce,1,4091.26,3763.96,Dobra Tech
+2026-07-15,Julho,2026,Loja Barra,Ana Costa,Aurora Moda,Fone,Apple,AirPods 4,Loja,2,2478.58,1609.91,Dobra Tech
+2026-01-29,Janeiro,2026,Loja Barra,Ana Costa,Casa Norte,Fone,JBL,Fone Tune 510,E-commerce,1,232.81,138.43,Dobra Tech
+2026-08-02,Agosto,2026,Loja Paulista,Bruno Lima,Aurora Moda,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1435.22,853.84,Dobra Tech
+2026-03-31,Março,2026,Loja Paulista,Carla Souza,Aurora Moda,Carregador,Baseus,Carregador 30W,E-commerce,1,85.96,51.45,Dobra Tech
+2025-10-10,Outubro,2025,Loja Online,Bruno Lima,Orbit Educação,Celular,Samsung,Galaxy S24,E-commerce,1,4238.87,3899.76,Dobra Tech
+2026-02-16,Fevereiro,2026,Loja Barra,Carla Souza,Pampa Alimentos,Fone,JBL,Fone Tune 510,E-commerce,1,256.15,158.00,Dobra Tech
+2025-12-02,Dezembro,2025,Loja Online,Diego Alves,Orbit Educação,Carregador,Baseus,Carregador 30W,Marketplace,1,90.07,67.30,Dobra Tech
+2026-06-28,Junho,2026,Loja Paulista,Ana Costa,Rio Branco,Smartwatch,Apple,Watch SE,Loja,1,2161.02,1421.55,Dobra Tech
+2026-01-24,Janeiro,2026,Loja Barra,Eva Martins,Maré Energia,Fone,Apple,AirPods 4,E-commerce,2,2592.75,1830.76,Dobra Tech
+2026-01-14,Janeiro,2026,Loja Paulista,Bruno Lima,Boa Vista,Celular,Motorola,Moto G84,Loja,1,1464.12,1346.99,Dobra Tech
+2026-04-04,Abril,2026,Loja Barra,Ana Costa,Pulse Varejo,Power bank,Anker,Power bank 20k,Marketplace,1,191.61,120.26,Dobra Tech
+2026-04-09,Abril,2026,Loja Barra,Ana Costa,Orbit Educação,Película,Baseus,Película vidro,WhatsApp,1,29.45,22.81,Dobra Tech
+2025-11-18,Novembro,2025,Loja Paulista,Carla Souza,Pampa Alimentos,Power bank,Anker,Power bank 20k,WhatsApp,1,195.57,134.21,Dobra Tech
+2026-08-22,Agosto,2026,Loja Online,Ana Costa,Nimbus SA,Tablet,Samsung,Galaxy Tab A9,Loja,1,1528.52,994.95,Dobra Tech
+2026-03-06,Março,2026,Loja Online,Carla Souza,Pampa Alimentos,Fone,Apple,AirPods 4,WhatsApp,1,1328.54,914.26,Dobra Tech
+2025-12-05,Dezembro,2025,Loja Online,Bruno Lima,Lumen Tech,Celular,Motorola,Moto G84,Loja,1,1461.70,1344.76,Dobra Tech
+2026-08-03,Agosto,2026,Loja Online,Ana Costa,Sul Minas,Power bank,Anker,Power bank 20k,Marketplace,2,410.69,276.07,Dobra Tech
+2026-07-11,Julho,2026,Loja Online,Ana Costa,Atlas Ltda,Carregador,Baseus,Carregador 30W,E-commerce,2,170.74,97.50,Dobra Tech
+2025-09-27,Setembro,2025,Loja Barra,Diego Alves,Sul Minas,Fone,JBL,Fone Tune 510,Loja,1,244.41,167.09,Dobra Tech
+2025-11-21,Novembro,2025,Loja Online,Diego Alves,Boa Vista,Celular,Apple,iPhone 15,Loja,1,5506.41,5065.90,Dobra Tech
+2026-03-20,Março,2026,Loja Paulista,Ana Costa,Maré Energia,Carregador,Apple,Carregador MagSafe,Loja,2,712.80,441.81,Dobra Tech
+2026-06-22,Junho,2026,Loja Barra,Carla Souza,Sul Minas,Carregador,Baseus,Carregador 30W,Loja,2,164.33,124.41,Dobra Tech
+2025-10-11,Outubro,2025,Loja Paulista,Bruno Lima,Nimbus SA,Celular,Apple,iPhone 15,Loja,1,5136.31,4725.40,Dobra Tech
+2026-01-24,Janeiro,2026,Loja Online,Bruno Lima,Verde Agro,Celular,Samsung,Galaxy S24,E-commerce,1,3973.51,3655.63,Dobra Tech
+2026-06-20,Junho,2026,Loja Paulista,Bruno Lima,Sul Minas,Capa,Baseus,Capa silicone,E-commerce,1,48.82,35.73,Dobra Tech
+2026-04-18,Abril,2026,Loja Paulista,Eva Martins,Sul Minas,Tablet,Apple,iPad 10,E-commerce,1,4065.38,2120.04,Dobra Tech
+2026-05-29,Maio,2026,Loja Barra,Diego Alves,Maré Energia,Fone,JBL,Fone Tune 510,Loja,1,259.48,167.33,Dobra Tech
+2026-01-18,Janeiro,2026,Loja Online,Bruno Lima,Delta Log,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1319.90,1214.31,Dobra Tech
+2025-10-18,Outubro,2025,Loja Barra,Diego Alves,Delta Log,Tablet,Apple,iPad 10,E-commerce,1,3736.07,2192.54,Dobra Tech
+2025-11-16,Novembro,2025,Loja Online,Eva Martins,Lumen Tech,Capa,Baseus,Capa silicone,Marketplace,1,50.48,35.99,Dobra Tech
+2025-11-25,Novembro,2025,Loja Online,Carla Souza,Casa Norte,Power bank,Anker,Power bank 20k,Loja,1,194.31,139.46,Dobra Tech
+2026-08-21,Agosto,2026,Loja Online,Bruno Lima,Delta Log,Power bank,Anker,Power bank 20k,Loja,1,205.19,145.51,Dobra Tech
+2026-04-17,Abril,2026,Loja Barra,Diego Alves,Terra Nova,Celular,Apple,iPhone 15,Loja,1,5277.80,4855.57,Dobra Tech
+2026-06-19,Junho,2026,Loja Barra,Diego Alves,Delta Log,Fone,Apple,AirPods 4,E-commerce,1,1331.93,924.53,Dobra Tech
+2025-12-10,Dezembro,2025,Loja Barra,Eva Martins,Atlas Ltda,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1381.07,1022.44,Dobra Tech
+2026-06-17,Junho,2026,Loja Barra,Eva Martins,Forge Engenharia,Carregador,Apple,Carregador MagSafe,WhatsApp,1,364.42,247.42,Dobra Tech
+2025-11-02,Novembro,2025,Loja Paulista,Bruno Lima,Orbit Educação,Tablet,Apple,iPad 10,Loja,1,4012.74,2528.43,Dobra Tech
+2026-06-14,Junho,2026,Loja Paulista,Bruno Lima,Rio Branco,Power bank,Anker,Power bank 20k,E-commerce,1,206.45,148.87,Dobra Tech
+2026-01-17,Janeiro,2026,Loja Online,Ana Costa,Lumen Tech,Celular,Samsung,Galaxy S24,E-commerce,1,4503.47,4143.19,Dobra Tech
+2026-05-10,Maio,2026,Loja Barra,Eva Martins,Verde Agro,Fone,JBL,Fone Tune 510,Loja,2,522.21,276.48,Dobra Tech
+2026-01-14,Janeiro,2026,Loja Barra,Diego Alves,Serra Café,Fone,Apple,AirPods 4,E-commerce,1,1260.10,720.75,Dobra Tech
+2026-08-08,Agosto,2026,Loja Online,Ana Costa,Nimbus SA,Carregador,Baseus,Carregador 30W,Marketplace,2,174.41,118.57,Dobra Tech
+2026-02-20,Fevereiro,2026,Loja Paulista,Diego Alves,Rio Branco,Celular,Apple,iPhone 15,E-commerce,1,5666.53,5213.20,Dobra Tech
+2026-01-12,Janeiro,2026,Loja Barra,Bruno Lima,Pulse Varejo,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1562.38,1111.43,Dobra Tech
+2026-03-08,Março,2026,Loja Barra,Carla Souza,Pulse Varejo,Capa,Baseus,Capa silicone,Loja,1,51.21,35.21,Dobra Tech
+2026-01-28,Janeiro,2026,Loja Online,Eva Martins,Maré Energia,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1209.90,1113.11,Dobra Tech
+2026-04-22,Abril,2026,Loja Paulista,Ana Costa,Verde Agro,Celular,Motorola,Moto G84,Loja,1,1547.73,1423.91,Dobra Tech
+2026-07-21,Julho,2026,Loja Online,Carla Souza,Atlas Ltda,Celular,Apple,iPhone 15,Marketplace,1,5467.73,5030.32,Dobra Tech
+2026-03-29,Março,2026,Loja Online,Carla Souza,Nimbus SA,Carregador,Baseus,Carregador 30W,E-commerce,2,169.21,118.05,Dobra Tech
+2026-07-18,Julho,2026,Loja Paulista,Eva Martins,Casa Norte,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1571.79,853.11,Dobra Tech
+2026-05-02,Maio,2026,Loja Barra,Eva Martins,Nimbus SA,Capa,Baseus,Capa silicone,Marketplace,1,51.42,37.62,Dobra Tech
+2025-11-05,Novembro,2025,Loja Barra,Ana Costa,Casa Norte,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1513.58,1142.90,Dobra Tech
+2025-10-10,Outubro,2025,Loja Paulista,Eva Martins,Costa Farma,Power bank,Anker,Power bank 20k,Loja,1,192.49,143.79,Dobra Tech
+2026-08-02,Agosto,2026,Loja Online,Ana Costa,Aurora Moda,Fone,JBL,Fone Tune 510,Marketplace,1,253.90,174.15,Dobra Tech
+2026-05-01,Maio,2026,Loja Barra,Eva Martins,Terra Nova,Celular,Samsung,Galaxy A55,E-commerce,1,1920.70,1767.05,Dobra Tech
+2025-10-28,Outubro,2025,Loja Paulista,Ana Costa,Delta Log,Fone,JBL,Fone Tune 510,WhatsApp,1,258.33,167.66,Dobra Tech
+2025-09-04,Setembro,2025,Loja Paulista,Bruno Lima,Nimbus SA,Power bank,Anker,Power bank 20k,E-commerce,1,206.28,122.31,Dobra Tech
+2025-09-06,Setembro,2025,Loja Paulista,Ana Costa,Serra Café,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1346.58,1238.85,Dobra Tech
+2026-04-22,Abril,2026,Loja Paulista,Carla Souza,Céu Soft,Fone,JBL,Fone Tune 510,Loja,1,259.37,146.80,Dobra Tech
+2025-11-19,Novembro,2025,Loja Paulista,Eva Martins,Orbit Educação,Celular,Samsung,Galaxy S24,E-commerce,1,4113.47,3784.40,Dobra Tech
+2026-01-06,Janeiro,2026,Loja Barra,Diego Alves,Pampa Alimentos,Celular,Apple,iPhone 15,Loja,1,5187.48,4772.48,Dobra Tech
+2025-09-23,Setembro,2025,Loja Barra,Carla Souza,Aurora Moda,Tablet,Apple,iPad 10,E-commerce,1,3699.43,2499.18,Dobra Tech
+2026-04-03,Abril,2026,Loja Barra,Carla Souza,Aurora Moda,Celular,Xiaomi,Redmi Note 13,Loja,1,1237.39,1138.40,Dobra Tech
+2026-04-22,Abril,2026,Loja Online,Bruno Lima,Serra Café,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1346.09,1238.40,Dobra Tech
+2026-05-01,Maio,2026,Loja Online,Carla Souza,Helix Saúde,Celular,Samsung,Galaxy S24,Loja,1,4035.54,3712.70,Dobra Tech
+2026-03-02,Março,2026,Loja Barra,Diego Alves,Forge Engenharia,Capa,Baseus,Capa silicone,Marketplace,1,45.35,28.54,Dobra Tech
+2025-12-01,Dezembro,2025,Loja Paulista,Diego Alves,Céu Soft,Celular,Apple,iPhone 15,Marketplace,1,5557.93,5113.30,Dobra Tech
+2026-07-04,Julho,2026,Loja Barra,Bruno Lima,Boa Vista,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1639.49,864.54,Dobra Tech
+2026-08-23,Agosto,2026,Loja Barra,Eva Martins,Delta Log,Smartwatch,Apple,Watch SE,Marketplace,1,2027.85,1125.64,Dobra Tech
+2026-08-25,Agosto,2026,Loja Barra,Ana Costa,Céu Soft,Fone,Apple,AirPods 4,E-commerce,3,4026.43,2702.39,Dobra Tech
+2025-12-06,Dezembro,2025,Loja Online,Eva Martins,Verde Agro,Celular,Xiaomi,Redmi Note 13,Loja,1,1340.42,1233.19,Dobra Tech
+2026-01-17,Janeiro,2026,Loja Online,Eva Martins,Aurora Moda,Tablet,Apple,iPad 10,E-commerce,1,3787.77,2693.42,Dobra Tech
+2026-08-17,Agosto,2026,Loja Paulista,Carla Souza,Forge Engenharia,Fone,Apple,AirPods 4,Marketplace,2,2583.87,1919.56,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Eva Martins,Casa Norte,Celular,Apple,iPhone 15,Loja,1,5289.98,4866.78,Dobra Tech
+2026-02-09,Fevereiro,2026,Loja Paulista,Bruno Lima,Delta Log,Celular,Motorola,Moto G84,Loja,1,1388.80,1277.70,Dobra Tech
+2026-03-06,Março,2026,Loja Paulista,Ana Costa,Aurora Moda,Smartwatch,Apple,Watch SE,E-commerce,1,2087.19,1401.91,Dobra Tech
+2026-03-08,Março,2026,Loja Online,Eva Martins,Delta Log,Fone,JBL,Fone Tune 510,Loja,1,251.76,192.91,Dobra Tech
+2026-01-13,Janeiro,2026,Loja Online,Bruno Lima,Helix Saúde,Smartwatch,Apple,Watch SE,Marketplace,1,2151.96,1427.32,Dobra Tech
+2025-09-06,Setembro,2025,Loja Paulista,Carla Souza,Terra Nova,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1464.99,1100.29,Dobra Tech
+2026-08-15,Agosto,2026,Loja Online,Eva Martins,Rio Branco,Smartwatch,Apple,Watch SE,Loja,1,2269.67,1227.19,Dobra Tech
+2026-07-26,Julho,2026,Loja Barra,Carla Souza,Nimbus SA,Carregador,Baseus,Carregador 30W,Loja,1,83.13,56.66,Dobra Tech
+2025-10-19,Outubro,2025,Loja Online,Bruno Lima,Atlas Ltda,Power bank,Anker,Power bank 20k,Marketplace,3,567.61,340.99,Dobra Tech
+2025-10-06,Outubro,2025,Loja Online,Carla Souza,Boa Vista,Celular,Samsung,Galaxy S24,Loja,1,4338.26,3991.20,Dobra Tech
+2026-03-13,Março,2026,Loja Barra,Eva Martins,Lumen Tech,Tablet,Samsung,Galaxy Tab A9,WhatsApp,1,1522.50,930.06,Dobra Tech
+2026-03-12,Março,2026,Loja Barra,Carla Souza,Nimbus SA,Fone,JBL,Fone Tune 510,Loja,2,459.97,286.76,Dobra Tech
+2026-08-27,Agosto,2026,Loja Online,Carla Souza,Boa Vista,Fone,JBL,Fone Tune 510,Loja,3,771.74,435.81,Dobra Tech
+2026-03-08,Março,2026,Loja Barra,Carla Souza,Atlas Ltda,Película,Baseus,Película vidro,E-commerce,1,28.56,15.29,Dobra Tech
+2026-03-20,Março,2026,Loja Online,Carla Souza,Maré Energia,Tablet,Apple,iPad 10,Loja,1,4027.73,2650.51,Dobra Tech
+2025-12-03,Dezembro,2025,Loja Paulista,Bruno Lima,Serra Café,Película,Baseus,Película vidro,Marketplace,1,29.17,21.54,Dobra Tech
+2025-10-04,Outubro,2025,Loja Online,Ana Costa,Helix Saúde,Celular,Motorola,Moto G84,Loja,1,1488.42,1369.35,Dobra Tech
+2026-07-08,Julho,2026,Loja Online,Ana Costa,Boa Vista,Smartwatch,Apple,Watch SE,Loja,1,2147.72,1673.42,Dobra Tech
+2026-06-20,Junho,2026,Loja Paulista,Diego Alves,Nimbus SA,Celular,Samsung,Galaxy A55,Loja,1,1948.18,1792.32,Dobra Tech
+2025-12-10,Dezembro,2025,Loja Barra,Bruno Lima,Casa Norte,Celular,Xiaomi,Redmi Note 13,Loja,1,1279.45,1177.09,Dobra Tech
+2026-08-09,Agosto,2026,Loja Paulista,Ana Costa,Costa Farma,Película,Baseus,Película vidro,E-commerce,1,28.53,18.58,Dobra Tech
+2026-04-26,Abril,2026,Loja Online,Bruno Lima,Helix Saúde,Celular,Xiaomi,Redmi Note 13,Loja,1,1312.89,1207.86,Dobra Tech
+2026-02-19,Fevereiro,2026,Loja Barra,Carla Souza,Maré Energia,Capa,Baseus,Capa silicone,Loja,2,100.01,62.41,Dobra Tech
+2026-05-10,Maio,2026,Loja Barra,Eva Martins,Helix Saúde,Película,Baseus,Película vidro,WhatsApp,1,27.88,17.44,Dobra Tech
+2025-11-25,Novembro,2025,Loja Paulista,Bruno Lima,Pampa Alimentos,Celular,Xiaomi,Redmi Note 13,Loja,1,1201.31,1105.21,Dobra Tech
+2026-06-19,Junho,2026,Loja Online,Bruno Lima,Pampa Alimentos,Película,Baseus,Película vidro,Loja,2,58.87,33.94,Dobra Tech
+2026-05-12,Maio,2026,Loja Online,Eva Martins,Maré Energia,Carregador,Baseus,Carregador 30W,E-commerce,1,87.28,62.05,Dobra Tech
+2025-12-06,Dezembro,2025,Loja Barra,Diego Alves,Costa Farma,Carregador,Baseus,Carregador 30W,E-commerce,1,88.26,52.07,Dobra Tech
+2026-01-23,Janeiro,2026,Loja Online,Eva Martins,Aurora Moda,Power bank,Anker,Power bank 20k,E-commerce,1,189.26,105.14,Dobra Tech
+2026-02-05,Fevereiro,2026,Loja Online,Eva Martins,Boa Vista,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1582.72,1081.09,Dobra Tech
+2025-11-03,Novembro,2025,Loja Paulista,Eva Martins,Lumen Tech,Tablet,Apple,iPad 10,Loja,1,3764.82,2179.89,Dobra Tech
+2026-03-14,Março,2026,Loja Paulista,Diego Alves,Rio Branco,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1462.05,920.71,Dobra Tech
+2025-10-16,Outubro,2025,Loja Paulista,Ana Costa,Lumen Tech,Capa,Baseus,Capa silicone,E-commerce,3,146.23,106.05,Dobra Tech
+2026-01-04,Janeiro,2026,Loja Online,Bruno Lima,Casa Norte,Power bank,Anker,Power bank 20k,Marketplace,1,184.10,112.90,Dobra Tech
+2026-05-03,Maio,2026,Loja Barra,Bruno Lima,Nimbus SA,Carregador,Baseus,Carregador 30W,Loja,1,85.69,59.45,Dobra Tech
+2026-08-12,Agosto,2026,Loja Barra,Diego Alves,Casa Norte,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1530.21,813.17,Dobra Tech
+2025-12-05,Dezembro,2025,Loja Online,Bruno Lima,Delta Log,Tablet,Apple,iPad 10,Marketplace,1,3791.47,2115.00,Dobra Tech
+2025-11-02,Novembro,2025,Loja Paulista,Eva Martins,Verde Agro,Película,Baseus,Película vidro,Loja,1,30.35,17.36,Dobra Tech
+2026-07-28,Julho,2026,Loja Paulista,Eva Martins,Costa Farma,Película,Baseus,Película vidro,E-commerce,1,27.95,15.02,Dobra Tech
+2026-04-13,Abril,2026,Loja Barra,Diego Alves,Rio Branco,Carregador,Baseus,Carregador 30W,Marketplace,2,178.67,136.78,Dobra Tech
+2026-06-16,Junho,2026,Loja Paulista,Ana Costa,Orbit Educação,Celular,Apple,iPhone 15,E-commerce,1,5386.98,4956.02,Dobra Tech
+2025-12-18,Dezembro,2025,Loja Online,Ana Costa,Forge Engenharia,Fone,JBL,Fone Tune 510,E-commerce,2,471.52,337.43,Dobra Tech
+2026-05-12,Maio,2026,Loja Barra,Bruno Lima,Nimbus SA,Carregador,Baseus,Carregador 30W,E-commerce,1,88.68,48.42,Dobra Tech
+2026-05-22,Maio,2026,Loja Paulista,Diego Alves,Boa Vista,Celular,Samsung,Galaxy S24,E-commerce,1,4364.77,4015.59,Dobra Tech
+2026-03-11,Março,2026,Loja Online,Carla Souza,Lumen Tech,Película,Baseus,Película vidro,Loja,2,60.84,44.50,Dobra Tech
+2025-10-22,Outubro,2025,Loja Paulista,Eva Martins,Sul Minas,Capa,Baseus,Capa silicone,Loja,1,50.75,29.15,Dobra Tech
+2025-09-09,Setembro,2025,Loja Online,Carla Souza,Costa Farma,Carregador,Apple,Carregador MagSafe,Marketplace,1,333.43,192.98,Dobra Tech
+2025-10-01,Outubro,2025,Loja Paulista,Diego Alves,Boa Vista,Celular,Apple,iPhone 15,E-commerce,1,5070.26,4664.64,Dobra Tech
+2026-07-16,Julho,2026,Loja Paulista,Ana Costa,Atlas Ltda,Tablet,Samsung,Galaxy Tab A9,Loja,1,1543.59,866.28,Dobra Tech
+2026-05-27,Maio,2026,Loja Online,Eva Martins,Maré Energia,Celular,Apple,iPhone 15,E-commerce,1,5420.04,4986.44,Dobra Tech
+2026-07-16,Julho,2026,Loja Paulista,Eva Martins,Verde Agro,Celular,Motorola,Moto G84,Loja,1,1420.81,1307.14,Dobra Tech
+2026-02-12,Fevereiro,2026,Loja Online,Ana Costa,Helix Saúde,Tablet,Samsung,Galaxy Tab A9,Loja,1,1580.97,905.73,Dobra Tech
+2026-05-14,Maio,2026,Loja Barra,Diego Alves,Pampa Alimentos,Celular,Samsung,Galaxy S24,Loja,1,4432.96,4078.33,Dobra Tech
+2026-07-27,Julho,2026,Loja Barra,Carla Souza,Pulse Varejo,Celular,Apple,iPhone 15,Loja,1,5681.48,5226.96,Dobra Tech
+2026-02-02,Fevereiro,2026,Loja Paulista,Bruno Lima,Helix Saúde,Fone,Apple,AirPods 4,Marketplace,3,3729.03,1949.62,Dobra Tech
+2026-02-22,Fevereiro,2026,Loja Online,Bruno Lima,Orbit Educação,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1533.62,947.82,Dobra Tech
+2026-06-19,Junho,2026,Loja Barra,Bruno Lima,Delta Log,Fone,JBL,Fone Tune 510,Loja,1,256.16,194.25,Dobra Tech
+2026-03-17,Março,2026,Loja Barra,Carla Souza,Rio Branco,Carregador,Apple,Carregador MagSafe,E-commerce,3,1088.23,622.06,Dobra Tech
+2026-08-05,Agosto,2026,Loja Paulista,Eva Martins,Casa Norte,Celular,Samsung,Galaxy S24,Marketplace,1,4188.20,3853.14,Dobra Tech
+2025-10-10,Outubro,2025,Loja Barra,Ana Costa,Serra Café,Celular,Samsung,Galaxy S24,Loja,1,4201.82,3865.67,Dobra Tech
+2025-11-08,Novembro,2025,Loja Online,Ana Costa,Pulse Varejo,Celular,Apple,iPhone 15,Loja,1,5244.77,4825.19,Dobra Tech
+2025-11-27,Novembro,2025,Loja Barra,Diego Alves,Forge Engenharia,Tablet,Apple,iPad 10,Loja,1,3734.61,2809.40,Dobra Tech
+2025-09-22,Setembro,2025,Loja Online,Carla Souza,Costa Farma,Fone,Apple,AirPods 4,Loja,1,1307.29,990.49,Dobra Tech
+2025-12-21,Dezembro,2025,Loja Paulista,Bruno Lima,Casa Norte,Tablet,Samsung,Galaxy Tab A9,Loja,1,1561.45,1071.92,Dobra Tech
+2026-07-03,Julho,2026,Loja Barra,Carla Souza,Sul Minas,Celular,Apple,iPhone 15,Loja,1,5294.09,4870.56,Dobra Tech
+2026-07-29,Julho,2026,Loja Online,Diego Alves,Sul Minas,Celular,Motorola,Moto G84,Loja,1,1509.05,1388.33,Dobra Tech
+2025-10-01,Outubro,2025,Loja Paulista,Ana Costa,Boa Vista,Fone,Apple,AirPods 4,Marketplace,1,1330.68,832.89,Dobra Tech
+2026-07-27,Julho,2026,Loja Paulista,Eva Martins,Boa Vista,Celular,Motorola,Moto G84,WhatsApp,1,1505.83,1385.36,Dobra Tech
+2026-01-17,Janeiro,2026,Loja Barra,Ana Costa,Forge Engenharia,Celular,Motorola,Moto G84,Loja,1,1435.63,1320.78,Dobra Tech
+2026-05-21,Maio,2026,Loja Paulista,Eva Martins,Helix Saúde,Carregador,Baseus,Carregador 30W,Loja,2,172.94,108.94,Dobra Tech
+2025-11-26,Novembro,2025,Loja Paulista,Ana Costa,Helix Saúde,Capa,Baseus,Capa silicone,E-commerce,1,45.12,33.77,Dobra Tech
+2025-09-22,Setembro,2025,Loja Online,Carla Souza,Delta Log,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1203.80,1107.50,Dobra Tech
+2026-05-16,Maio,2026,Loja Online,Eva Martins,Orbit Educação,Carregador,Apple,Carregador MagSafe,E-commerce,1,349.40,223.14,Dobra Tech
+2026-07-05,Julho,2026,Loja Barra,Diego Alves,Aurora Moda,Celular,Motorola,Moto G84,WhatsApp,1,1427.27,1313.09,Dobra Tech
+2025-10-23,Outubro,2025,Loja Paulista,Carla Souza,Lumen Tech,Capa,Baseus,Capa silicone,Marketplace,1,46.82,28.74,Dobra Tech
+2025-10-29,Outubro,2025,Loja Paulista,Bruno Lima,Nimbus SA,Celular,Samsung,Galaxy A55,E-commerce,1,1967.39,1810.00,Dobra Tech
+2025-11-10,Novembro,2025,Loja Online,Bruno Lima,Verde Agro,Tablet,Samsung,Galaxy Tab A9,Loja,1,1492.35,1007.81,Dobra Tech
+2026-06-06,Junho,2026,Loja Online,Bruno Lima,Orbit Educação,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1561.11,822.80,Dobra Tech
+2026-01-07,Janeiro,2026,Loja Online,Bruno Lima,Pulse Varejo,Carregador,Apple,Carregador MagSafe,Loja,1,338.91,190.89,Dobra Tech
+2025-11-11,Novembro,2025,Loja Barra,Bruno Lima,Verde Agro,Fone,Apple,AirPods 4,E-commerce,1,1336.09,778.98,Dobra Tech
+2026-04-14,Abril,2026,Loja Barra,Diego Alves,Atlas Ltda,Celular,Samsung,Galaxy S24,Loja,1,4409.74,4056.96,Dobra Tech
+2025-11-08,Novembro,2025,Loja Online,Eva Martins,Sul Minas,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1606.57,988.10,Dobra Tech
+2026-08-28,Agosto,2026,Loja Online,Diego Alves,Rio Branco,Capa,Baseus,Capa silicone,Marketplace,2,101.75,71.37,Dobra Tech
+2025-10-09,Outubro,2025,Loja Barra,Bruno Lima,Delta Log,Celular,Samsung,Galaxy S24,Marketplace,1,4205.91,3869.44,Dobra Tech
+2025-09-27,Setembro,2025,Loja Paulista,Ana Costa,Pampa Alimentos,Celular,Samsung,Galaxy A55,Marketplace,1,1806.60,1662.07,Dobra Tech
+2025-09-10,Setembro,2025,Loja Paulista,Carla Souza,Costa Farma,Power bank,Anker,Power bank 20k,Loja,3,560.47,320.84,Dobra Tech
+2026-02-25,Fevereiro,2026,Loja Online,Eva Martins,Lumen Tech,Fone,JBL,Fone Tune 510,E-commerce,2,486.44,276.88,Dobra Tech
+2026-05-07,Maio,2026,Loja Paulista,Eva Martins,Sul Minas,Capa,Baseus,Capa silicone,Loja,2,102.31,60.93,Dobra Tech
+2025-12-04,Dezembro,2025,Loja Online,Bruno Lima,Casa Norte,Smartwatch,Apple,Watch SE,E-commerce,1,2181.90,1643.22,Dobra Tech
+2026-03-15,Março,2026,Loja Barra,Eva Martins,Maré Energia,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1672.77,1032.25,Dobra Tech
+2026-05-03,Maio,2026,Loja Online,Bruno Lima,Pampa Alimentos,Celular,Samsung,Galaxy S24,WhatsApp,1,4108.32,3779.65,Dobra Tech
+2026-04-22,Abril,2026,Loja Barra,Eva Martins,Verde Agro,Smartwatch,Apple,Watch SE,Loja,1,2045.68,1268.96,Dobra Tech
+2025-10-12,Outubro,2025,Loja Online,Bruno Lima,Aurora Moda,Capa,Baseus,Capa silicone,Loja,2,97.72,59.08,Dobra Tech
+2026-04-28,Abril,2026,Loja Barra,Ana Costa,Rio Branco,Celular,Samsung,Galaxy S24,E-commerce,1,4148.55,3816.67,Dobra Tech
+2025-09-04,Setembro,2025,Loja Barra,Bruno Lima,Pampa Alimentos,Fone,JBL,Fone Tune 510,E-commerce,1,250.40,155.64,Dobra Tech
+2026-05-17,Maio,2026,Loja Paulista,Eva Martins,Atlas Ltda,Capa,Baseus,Capa silicone,Marketplace,2,95.44,55.37,Dobra Tech
+2026-06-24,Junho,2026,Loja Barra,Carla Souza,Costa Farma,Carregador,Baseus,Carregador 30W,Marketplace,1,90.92,64.84,Dobra Tech
+2025-11-23,Novembro,2025,Loja Paulista,Ana Costa,Aurora Moda,Carregador,Baseus,Carregador 30W,E-commerce,1,85.78,62.53,Dobra Tech
+2026-02-27,Fevereiro,2026,Loja Barra,Ana Costa,Helix Saúde,Fone,JBL,Fone Tune 510,Loja,1,242.46,147.55,Dobra Tech
+2026-03-30,Março,2026,Loja Barra,Bruno Lima,Serra Café,Power bank,Anker,Power bank 20k,Marketplace,1,185.85,133.83,Dobra Tech
+2026-07-07,Julho,2026,Loja Barra,Ana Costa,Costa Farma,Celular,Samsung,Galaxy A55,Loja,1,1979.82,1821.44,Dobra Tech
+2025-12-31,Dezembro,2025,Loja Barra,Bruno Lima,Maré Energia,Power bank,Anker,Power bank 20k,Marketplace,2,413.02,307.05,Dobra Tech
+2026-05-08,Maio,2026,Loja Paulista,Bruno Lima,Lumen Tech,Película,Baseus,Película vidro,E-commerce,2,60.58,31.61,Dobra Tech
+2026-06-07,Junho,2026,Loja Paulista,Diego Alves,Forge Engenharia,Celular,Motorola,Moto G84,Marketplace,1,1406.35,1293.84,Dobra Tech
+2026-05-28,Maio,2026,Loja Online,Diego Alves,Aurora Moda,Smartwatch,Apple,Watch SE,Marketplace,1,2124.08,1181.44,Dobra Tech
+2025-11-01,Novembro,2025,Loja Barra,Carla Souza,Boa Vista,Celular,Apple,iPhone 15,E-commerce,1,5704.72,5248.34,Dobra Tech
+2026-05-13,Maio,2026,Loja Paulista,Bruno Lima,Helix Saúde,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1485.70,1040.72,Dobra Tech
+2026-06-01,Junho,2026,Loja Online,Carla Souza,Boa Vista,Carregador,Apple,Carregador MagSafe,Marketplace,1,332.00,188.49,Dobra Tech
+2026-08-11,Agosto,2026,Loja Online,Ana Costa,Casa Norte,Celular,Samsung,Galaxy A55,Marketplace,1,1753.68,1613.39,Dobra Tech
+2026-01-03,Janeiro,2026,Loja Online,Ana Costa,Nimbus SA,Capa,Baseus,Capa silicone,Loja,1,51.14,30.38,Dobra Tech
+2026-05-15,Maio,2026,Loja Online,Carla Souza,Atlas Ltda,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1246.51,1146.79,Dobra Tech
+2026-04-18,Abril,2026,Loja Barra,Diego Alves,Forge Engenharia,Celular,Samsung,Galaxy S24,E-commerce,1,4030.37,3707.94,Dobra Tech
+2026-06-09,Junho,2026,Loja Paulista,Ana Costa,Delta Log,Power bank,Anker,Power bank 20k,E-commerce,1,199.68,122.92,Dobra Tech
+2026-06-21,Junho,2026,Loja Paulista,Ana Costa,Costa Farma,Power bank,Anker,Power bank 20k,Loja,2,410.35,297.71,Dobra Tech
+2026-02-07,Fevereiro,2026,Loja Paulista,Ana Costa,Nimbus SA,Power bank,Anker,Power bank 20k,Loja,1,201.82,141.32,Dobra Tech
+2025-10-04,Outubro,2025,Loja Barra,Diego Alves,Atlas Ltda,Celular,Samsung,Galaxy S24,Loja,1,4404.85,4052.46,Dobra Tech
+2026-07-20,Julho,2026,Loja Barra,Diego Alves,Boa Vista,Fone,JBL,Fone Tune 510,Loja,1,233.03,161.39,Dobra Tech
+2025-09-25,Setembro,2025,Loja Paulista,Bruno Lima,Terra Nova,Power bank,Anker,Power bank 20k,WhatsApp,2,417.82,251.53,Dobra Tech
+2026-04-05,Abril,2026,Loja Paulista,Eva Martins,Terra Nova,Película,Baseus,Película vidro,Marketplace,1,27.00,18.41,Dobra Tech
+2026-06-14,Junho,2026,Loja Barra,Diego Alves,Rio Branco,Power bank,Anker,Power bank 20k,Marketplace,2,413.05,233.78,Dobra Tech
+2026-03-09,Março,2026,Loja Barra,Diego Alves,Forge Engenharia,Celular,Apple,iPhone 15,Loja,1,5214.73,4797.56,Dobra Tech
+2025-12-19,Dezembro,2025,Loja Online,Bruno Lima,Terra Nova,Celular,Apple,iPhone 15,E-commerce,1,5440.13,5004.92,Dobra Tech
+2026-07-23,Julho,2026,Loja Paulista,Ana Costa,Costa Farma,Tablet,Apple,iPad 10,Loja,1,3608.23,2339.08,Dobra Tech
+2026-06-28,Junho,2026,Loja Barra,Eva Martins,Forge Engenharia,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1441.26,847.16,Dobra Tech
+2026-04-22,Abril,2026,Loja Online,Ana Costa,Rio Branco,Smartwatch,Apple,Watch SE,WhatsApp,1,2103.28,1346.05,Dobra Tech
+2026-06-24,Junho,2026,Loja Online,Ana Costa,Pampa Alimentos,Carregador,Apple,Carregador MagSafe,Marketplace,2,708.21,545.03,Dobra Tech
+2026-02-11,Fevereiro,2026,Loja Online,Carla Souza,Verde Agro,Fone,Apple,AirPods 4,E-commerce,2,2696.55,2028.96,Dobra Tech
+2025-11-11,Novembro,2025,Loja Barra,Carla Souza,Terra Nova,Celular,Samsung,Galaxy S24,Loja,1,4157.22,3824.64,Dobra Tech
+2025-12-30,Dezembro,2025,Loja Barra,Carla Souza,Atlas Ltda,Tablet,Apple,iPad 10,WhatsApp,1,3814.19,2306.40,Dobra Tech
+2025-12-26,Dezembro,2025,Loja Paulista,Diego Alves,Forge Engenharia,Fone,Apple,AirPods 4,Marketplace,2,2692.91,2094.57,Dobra Tech
+2025-12-10,Dezembro,2025,Loja Barra,Carla Souza,Pampa Alimentos,Película,Baseus,Película vidro,E-commerce,1,27.73,21.23,Dobra Tech
+2025-12-22,Dezembro,2025,Loja Barra,Eva Martins,Boa Vista,Fone,Apple,AirPods 4,E-commerce,1,1353.31,756.70,Dobra Tech
+2026-04-22,Abril,2026,Loja Online,Bruno Lima,Orbit Educação,Película,Baseus,Película vidro,WhatsApp,2,57.16,36.77,Dobra Tech
+2025-10-25,Outubro,2025,Loja Barra,Bruno Lima,Atlas Ltda,Celular,Samsung,Galaxy S24,WhatsApp,1,4368.79,4019.29,Dobra Tech
+2025-09-12,Setembro,2025,Loja Paulista,Carla Souza,Serra Café,Fone,JBL,Fone Tune 510,Loja,1,260.48,136.32,Dobra Tech
+2026-04-16,Abril,2026,Loja Barra,Ana Costa,Atlas Ltda,Carregador,Baseus,Carregador 30W,WhatsApp,2,176.20,136.72,Dobra Tech
+2026-02-07,Fevereiro,2026,Loja Barra,Bruno Lima,Maré Energia,Capa,Baseus,Capa silicone,Loja,1,45.60,30.61,Dobra Tech
+2026-01-28,Janeiro,2026,Loja Barra,Eva Martins,Sul Minas,Fone,JBL,Fone Tune 510,Loja,2,520.39,397.88,Dobra Tech
+2025-10-13,Outubro,2025,Loja Paulista,Eva Martins,Céu Soft,Celular,Motorola,Moto G84,E-commerce,1,1535.99,1413.11,Dobra Tech
+2025-09-08,Setembro,2025,Loja Paulista,Carla Souza,Delta Log,Smartwatch,Apple,Watch SE,Loja,1,2092.31,1454.50,Dobra Tech
+2025-09-15,Setembro,2025,Loja Barra,Eva Martins,Boa Vista,Película,Baseus,Película vidro,WhatsApp,1,27.84,18.99,Dobra Tech
+2026-05-06,Maio,2026,Loja Paulista,Bruno Lima,Nimbus SA,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1496.14,851.56,Dobra Tech
+2025-12-26,Dezembro,2025,Loja Barra,Eva Martins,Terra Nova,Celular,Motorola,Moto G84,Marketplace,1,1535.52,1412.68,Dobra Tech
+2026-05-15,Maio,2026,Loja Online,Bruno Lima,Delta Log,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1239.18,1140.04,Dobra Tech
+2026-01-23,Janeiro,2026,Loja Online,Bruno Lima,Nimbus SA,Celular,Motorola,Moto G84,Loja,1,1399.60,1287.63,Dobra Tech
+2026-04-07,Abril,2026,Loja Barra,Diego Alves,Pampa Alimentos,Fone,JBL,Fone Tune 510,Loja,1,237.09,134.75,Dobra Tech
+2025-11-03,Novembro,2025,Loja Barra,Ana Costa,Atlas Ltda,Tablet,Apple,iPad 10,Loja,1,3822.12,2390.29,Dobra Tech
+2026-01-02,Janeiro,2026,Loja Barra,Diego Alves,Delta Log,Película,Baseus,Película vidro,Loja,1,29.43,21.77,Dobra Tech
+2026-08-19,Agosto,2026,Loja Online,Bruno Lima,Lumen Tech,Fone,Apple,AirPods 4,Loja,1,1218.40,921.39,Dobra Tech
+2026-02-20,Fevereiro,2026,Loja Online,Ana Costa,Orbit Educação,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1400.36,1068.09,Dobra Tech
+2025-09-06,Setembro,2025,Loja Paulista,Ana Costa,Nimbus SA,Power bank,Anker,Power bank 20k,Loja,1,202.15,123.53,Dobra Tech
+2025-11-05,Novembro,2025,Loja Barra,Bruno Lima,Maré Energia,Tablet,Apple,iPad 10,Marketplace,1,3625.29,2191.59,Dobra Tech
+2026-04-13,Abril,2026,Loja Paulista,Eva Martins,Costa Farma,Smartwatch,Apple,Watch SE,E-commerce,1,2236.99,1532.25,Dobra Tech
+2026-02-09,Fevereiro,2026,Loja Online,Carla Souza,Terra Nova,Capa,Baseus,Capa silicone,E-commerce,1,50.38,37.88,Dobra Tech
+2026-07-10,Julho,2026,Loja Paulista,Eva Martins,Costa Farma,Fone,JBL,Fone Tune 510,Marketplace,1,233.67,134.14,Dobra Tech
+2026-02-16,Fevereiro,2026,Loja Barra,Eva Martins,Orbit Educação,Fone,Apple,AirPods 4,Loja,1,1323.96,689.57,Dobra Tech
+2025-11-05,Novembro,2025,Loja Online,Carla Souza,Nimbus SA,Carregador,Baseus,Carregador 30W,Loja,1,83.11,46.43,Dobra Tech
+2025-12-08,Dezembro,2025,Loja Online,Carla Souza,Boa Vista,Celular,Xiaomi,Redmi Note 13,Loja,1,1227.98,1129.75,Dobra Tech
+2026-02-26,Fevereiro,2026,Loja Online,Carla Souza,Pulse Varejo,Celular,Samsung,Galaxy S24,E-commerce,1,4342.75,3995.33,Dobra Tech
+2025-09-16,Setembro,2025,Loja Barra,Eva Martins,Forge Engenharia,Fone,Apple,AirPods 4,E-commerce,1,1331.17,928.89,Dobra Tech
+2026-07-20,Julho,2026,Loja Barra,Bruno Lima,Pampa Alimentos,Película,Baseus,Película vidro,Loja,2,56.08,32.25,Dobra Tech
+2026-08-27,Agosto,2026,Loja Barra,Eva Martins,Serra Café,Power bank,Anker,Power bank 20k,Loja,1,195.56,138.03,Dobra Tech
+2026-06-28,Junho,2026,Loja Paulista,Ana Costa,Maré Energia,Smartwatch,Apple,Watch SE,Loja,1,2032.78,1359.81,Dobra Tech
+2026-06-18,Junho,2026,Loja Online,Diego Alves,Orbit Educação,Celular,Xiaomi,Redmi Note 13,WhatsApp,1,1260.97,1160.09,Dobra Tech
+2026-08-10,Agosto,2026,Loja Barra,Eva Martins,Verde Agro,Película,Baseus,Película vidro,Marketplace,1,28.06,20.37,Dobra Tech
+2026-06-15,Junho,2026,Loja Barra,Ana Costa,Boa Vista,Carregador,Baseus,Carregador 30W,Loja,3,275.68,168.21,Dobra Tech
+2025-11-02,Novembro,2025,Loja Barra,Ana Costa,Céu Soft,Celular,Samsung,Galaxy A55,Loja,1,1965.80,1808.53,Dobra Tech
+2026-03-04,Março,2026,Loja Paulista,Eva Martins,Maré Energia,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1536.89,1057.23,Dobra Tech
+2026-04-11,Abril,2026,Loja Online,Bruno Lima,Orbit Educação,Celular,Samsung,Galaxy S24,Marketplace,1,4275.59,3933.55,Dobra Tech
+2026-01-08,Janeiro,2026,Loja Paulista,Carla Souza,Helix Saúde,Película,Baseus,Película vidro,E-commerce,1,28.81,19.49,Dobra Tech
+2026-01-30,Janeiro,2026,Loja Paulista,Bruno Lima,Orbit Educação,Tablet,Samsung,Galaxy Tab A9,Loja,1,1496.93,1014.17,Dobra Tech
+2026-07-30,Julho,2026,Loja Online,Carla Souza,Verde Agro,Smartwatch,Apple,Watch SE,E-commerce,1,2237.35,1175.91,Dobra Tech
+2026-07-03,Julho,2026,Loja Barra,Eva Martins,Boa Vista,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1563.77,838.43,Dobra Tech
+2026-08-18,Agosto,2026,Loja Barra,Eva Martins,Costa Farma,Smartwatch,Apple,Watch SE,E-commerce,1,2145.26,1234.69,Dobra Tech
+2026-01-13,Janeiro,2026,Loja Barra,Eva Martins,Pampa Alimentos,Fone,Apple,AirPods 4,Marketplace,3,3740.41,2238.08,Dobra Tech
+2026-05-18,Maio,2026,Loja Online,Bruno Lima,Helix Saúde,Celular,Motorola,Moto G84,E-commerce,1,1412.85,1299.82,Dobra Tech
+2026-01-26,Janeiro,2026,Loja Paulista,Eva Martins,Verde Agro,Celular,Xiaomi,Redmi Note 13,Loja,1,1269.29,1167.75,Dobra Tech
+2025-11-14,Novembro,2025,Loja Online,Bruno Lima,Serra Café,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1554.90,1147.57,Dobra Tech
+2025-11-06,Novembro,2025,Loja Barra,Ana Costa,Costa Farma,Power bank,Anker,Power bank 20k,WhatsApp,1,195.02,105.56,Dobra Tech
+2026-01-21,Janeiro,2026,Loja Online,Diego Alves,Verde Agro,Carregador,Apple,Carregador MagSafe,E-commerce,1,337.71,256.32,Dobra Tech
+2025-11-02,Novembro,2025,Loja Paulista,Bruno Lima,Sul Minas,Celular,Samsung,Galaxy A55,E-commerce,1,1833.54,1686.85,Dobra Tech
+2025-11-22,Novembro,2025,Loja Online,Carla Souza,Aurora Moda,Celular,Samsung,Galaxy S24,E-commerce,1,4221.56,3883.84,Dobra Tech
+2025-11-26,Novembro,2025,Loja Barra,Diego Alves,Rio Branco,Celular,Xiaomi,Redmi Note 13,Marketplace,1,1269.78,1168.20,Dobra Tech
+2025-12-03,Dezembro,2025,Loja Barra,Bruno Lima,Verde Agro,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1600.99,1116.26,Dobra Tech
+2026-04-22,Abril,2026,Loja Barra,Eva Martins,Lumen Tech,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1623.12,1209.82,Dobra Tech
+2026-06-24,Junho,2026,Loja Paulista,Ana Costa,Atlas Ltda,Tablet,Apple,iPad 10,Loja,1,3627.53,1925.44,Dobra Tech
+2025-09-01,Setembro,2025,Loja Online,Carla Souza,Casa Norte,Power bank,Anker,Power bank 20k,Loja,1,187.35,133.59,Dobra Tech
+2026-06-19,Junho,2026,Loja Barra,Ana Costa,Pampa Alimentos,Carregador,Apple,Carregador MagSafe,WhatsApp,3,1089.34,752.46,Dobra Tech
+2026-05-02,Maio,2026,Loja Paulista,Ana Costa,Sul Minas,Smartwatch,Apple,Watch SE,E-commerce,1,2054.93,1588.77,Dobra Tech
+2025-12-09,Dezembro,2025,Loja Paulista,Ana Costa,Boa Vista,Celular,Apple,iPhone 15,WhatsApp,1,5456.63,5020.10,Dobra Tech
+2025-09-27,Setembro,2025,Loja Paulista,Ana Costa,Orbit Educação,Power bank,Anker,Power bank 20k,E-commerce,2,409.69,269.81,Dobra Tech
+2025-12-08,Dezembro,2025,Loja Online,Carla Souza,Nimbus SA,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1562.52,917.29,Dobra Tech
+2025-11-21,Novembro,2025,Loja Online,Ana Costa,Casa Norte,Película,Baseus,Película vidro,Loja,2,60.88,37.89,Dobra Tech
+2026-06-06,Junho,2026,Loja Paulista,Diego Alves,Orbit Educação,Celular,Samsung,Galaxy A55,Loja,1,1747.14,1607.37,Dobra Tech
+2026-06-15,Junho,2026,Loja Online,Eva Martins,Costa Farma,Power bank,Anker,Power bank 20k,Loja,1,187.13,109.32,Dobra Tech
+2026-01-04,Janeiro,2026,Loja Paulista,Ana Costa,Aurora Moda,Fone,Apple,AirPods 4,Marketplace,1,1325.52,988.62,Dobra Tech
+2026-07-17,Julho,2026,Loja Online,Ana Costa,Lumen Tech,Película,Baseus,Película vidro,Loja,3,81.34,55.82,Dobra Tech
+2025-09-08,Setembro,2025,Loja Paulista,Eva Martins,Delta Log,Celular,Samsung,Galaxy S24,WhatsApp,1,4399.03,4047.10,Dobra Tech
+2026-04-27,Abril,2026,Loja Paulista,Bruno Lima,Atlas Ltda,Fone,Apple,AirPods 4,Loja,1,1356.31,799.00,Dobra Tech
+2026-05-21,Maio,2026,Loja Barra,Carla Souza,Aurora Moda,Capa,Baseus,Capa silicone,E-commerce,1,47.31,28.28,Dobra Tech
+2026-02-21,Fevereiro,2026,Loja Online,Ana Costa,Delta Log,Celular,Samsung,Galaxy A55,Loja,1,1892.17,1740.79,Dobra Tech
+2026-01-30,Janeiro,2026,Loja Barra,Diego Alves,Orbit Educação,Película,Baseus,Película vidro,E-commerce,1,27.62,18.58,Dobra Tech
+2026-05-15,Maio,2026,Loja Barra,Bruno Lima,Nimbus SA,Capa,Baseus,Capa silicone,Loja,3,137.23,74.53,Dobra Tech
+2025-12-25,Dezembro,2025,Loja Paulista,Carla Souza,Serra Café,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1528.24,1063.31,Dobra Tech
+2026-05-08,Maio,2026,Loja Paulista,Eva Martins,Delta Log,Carregador,Apple,Carregador MagSafe,Loja,1,329.85,231.91,Dobra Tech
+2026-03-13,Março,2026,Loja Online,Eva Martins,Maré Energia,Película,Baseus,Película vidro,E-commerce,1,26.81,17.03,Dobra Tech
+2026-08-23,Agosto,2026,Loja Paulista,Ana Costa,Serra Café,Carregador,Baseus,Carregador 30W,E-commerce,1,87.05,53.85,Dobra Tech
+2026-04-12,Abril,2026,Loja Paulista,Eva Martins,Céu Soft,Película,Baseus,Película vidro,E-commerce,2,60.74,42.80,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Ana Costa,Forge Engenharia,Película,Baseus,Película vidro,WhatsApp,1,30.05,21.74,Dobra Tech
+2026-01-21,Janeiro,2026,Loja Online,Carla Souza,Pampa Alimentos,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1653.76,1242.84,Dobra Tech
+2026-07-03,Julho,2026,Loja Barra,Bruno Lima,Céu Soft,Celular,Xiaomi,Redmi Note 13,E-commerce,1,1351.50,1243.38,Dobra Tech
+2026-01-17,Janeiro,2026,Loja Paulista,Diego Alves,Pampa Alimentos,Película,Baseus,Película vidro,Loja,1,26.83,16.54,Dobra Tech
+2026-05-19,Maio,2026,Loja Barra,Eva Martins,Orbit Educação,Película,Baseus,Película vidro,Marketplace,1,29.64,21.75,Dobra Tech
+2025-12-22,Dezembro,2025,Loja Barra,Diego Alves,Helix Saúde,Tablet,Apple,iPad 10,Loja,1,3825.12,2776.39,Dobra Tech
+2026-03-19,Março,2026,Loja Paulista,Ana Costa,Atlas Ltda,Power bank,Anker,Power bank 20k,E-commerce,3,626.00,463.16,Dobra Tech
+2026-02-22,Fevereiro,2026,Loja Online,Ana Costa,Pampa Alimentos,Película,Baseus,Película vidro,Loja,2,59.86,41.26,Dobra Tech
+2026-08-28,Agosto,2026,Loja Paulista,Eva Martins,Sul Minas,Fone,JBL,Fone Tune 510,Marketplace,1,254.19,173.11,Dobra Tech
+2025-09-01,Setembro,2025,Loja Online,Eva Martins,Nimbus SA,Fone,Apple,AirPods 4,E-commerce,3,3996.20,2895.88,Dobra Tech
+2025-12-15,Dezembro,2025,Loja Barra,Ana Costa,Verde Agro,Celular,Samsung,Galaxy A55,Marketplace,1,1796.99,1653.23,Dobra Tech
+2026-03-27,Março,2026,Loja Barra,Eva Martins,Costa Farma,Fone,Apple,AirPods 4,E-commerce,2,2432.38,1571.19,Dobra Tech
+2026-08-14,Agosto,2026,Loja Paulista,Diego Alves,Nimbus SA,Película,Baseus,Película vidro,E-commerce,2,59.41,33.73,Dobra Tech
+2025-09-13,Setembro,2025,Loja Paulista,Bruno Lima,Céu Soft,Power bank,Anker,Power bank 20k,Loja,1,192.84,108.72,Dobra Tech
+2025-09-27,Setembro,2025,Loja Online,Diego Alves,Delta Log,Smartwatch,Samsung,Galaxy Watch 6,Marketplace,1,1521.97,1155.74,Dobra Tech
+2026-01-24,Janeiro,2026,Loja Online,Diego Alves,Verde Agro,Tablet,Samsung,Galaxy Tab A9,E-commerce,1,1551.63,1033.70,Dobra Tech
+2026-08-26,Agosto,2026,Loja Barra,Diego Alves,Delta Log,Película,Baseus,Película vidro,Marketplace,1,29.98,16.32,Dobra Tech
+2026-02-14,Fevereiro,2026,Loja Barra,Diego Alves,Helix Saúde,Smartwatch,Samsung,Galaxy Watch 6,E-commerce,1,1568.54,883.61,Dobra Tech
+2026-01-27,Janeiro,2026,Loja Barra,Bruno Lima,Forge Engenharia,Power bank,Anker,Power bank 20k,Loja,1,190.17,124.15,Dobra Tech
+2026-07-07,Julho,2026,Loja Online,Bruno Lima,Forge Engenharia,Power bank,Anker,Power bank 20k,E-commerce,1,188.44,134.33,Dobra Tech
+2025-11-09,Novembro,2025,Loja Online,Eva Martins,Pulse Varejo,Tablet,Samsung,Galaxy Tab A9,Loja,1,1619.45,1020.54,Dobra Tech
+2026-06-16,Junho,2026,Loja Online,Ana Costa,Lumen Tech,Celular,Samsung,Galaxy A55,Marketplace,1,1750.61,1610.56,Dobra Tech
+2025-11-10,Novembro,2025,Loja Barra,Eva Martins,Costa Farma,Celular,Samsung,Galaxy A55,WhatsApp,1,1818.54,1673.06,Dobra Tech
+2026-02-27,Fevereiro,2026,Loja Online,Carla Souza,Helix Saúde,Capa,Baseus,Capa silicone,Marketplace,1,50.14,38.19,Dobra Tech
+2026-04-26,Abril,2026,Loja Online,Bruno Lima,Boa Vista,Carregador,Apple,Carregador MagSafe,Loja,1,334.54,224.61,Dobra Tech
+2025-10-21,Outubro,2025,Loja Online,Diego Alves,Rio Branco,Carregador,Apple,Carregador MagSafe,WhatsApp,2,709.18,484.83,Dobra Tech
+2026-08-08,Agosto,2026,Loja Barra,Diego Alves,Serra Café,Película,Baseus,Película vidro,Loja,2,56.37,38.51,Dobra Tech
+2026-01-07,Janeiro,2026,Loja Paulista,Eva Martins,Aurora Moda,Power bank,Anker,Power bank 20k,Marketplace,3,552.88,380.53,Dobra Tech
+2025-11-11,Novembro,2025,Loja Paulista,Diego Alves,Pampa Alimentos,Capa,Baseus,Capa silicone,Loja,1,50.69,27.33,Dobra Tech
+2026-06-21,Junho,2026,Loja Paulista,Diego Alves,Pampa Alimentos,Power bank,Anker,Power bank 20k,Loja,1,198.43,128.91,Dobra Tech
+2026-01-20,Janeiro,2026,Loja Barra,Ana Costa,Sul Minas,Celular,Xiaomi,Redmi Note 13,Loja,1,1223.22,1125.36,Dobra Tech
+2025-09-21,Setembro,2025,Loja Barra,Bruno Lima,Casa Norte,Capa,Baseus,Capa silicone,E-commerce,2,92.33,52.17,Dobra Tech
+2026-08-18,Agosto,2026,Loja Barra,Bruno Lima,Delta Log,Smartwatch,Samsung,Galaxy Watch 6,Loja,1,1385.84,944.07,Dobra Tech
+2026-04-10,Abril,2026,Loja Paulista,Carla Souza,Verde Agro,Tablet,Samsung,Galaxy Tab A9,Loja,1,1592.51,1140.40,Dobra Tech
+2025-10-16,Outubro,2025,Loja Paulista,Bruno Lima,Atlas Ltda,Tablet,Samsung,Galaxy Tab A9,Marketplace,1,1678.91,951.28,Dobra Tech
+2025-10-26,Outubro,2025,Loja Online,Carla Souza,Atlas Ltda,Celular,Motorola,Moto G84,Loja,1,1535.17,1412.35,Dobra Tech
+2026-01-07,Janeiro,2026,Loja Online,Carla Souza,Pampa Alimentos,Fone,Apple,AirPods 4,Loja,1,1279.20,874.21,Dobra Tech
+2026-03-21,Março,2026,Loja Barra,Bruno Lima,Maré Energia,Celular,Motorola,Moto G84,E-commerce,1,1446.04,1330.35,Dobra Tech
+2026-01-08,Janeiro,2026,Loja Paulista,Diego Alves,Boa Vista,Carregador,Baseus,Carregador 30W,Marketplace,1,92.91,67.37,Dobra Tech

@@ -1,0 +1,281 @@
+data,mes,ano,loja,categoria,marca,produto,tipo,status,cliente,chamado,valor,custo_reparo,empresa
+2026-06-27,Junho,2026,Loja Paulista,Tablet,Apple,iPad 10,Garantia,Concluído,Helix Saúde,OS-24000,3899.00,227.81,Dobra Tech
+2026-05-14,Maio,2026,Loja Online,Carregador,Baseus,Carregador 30W,Garantia,Aberto,Helix Saúde,OS-24001,89.00,2.39,Dobra Tech
+2026-04-09,Abril,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Garantia,Recusado,Lumen Tech,OS-24002,1299.00,127.52,Dobra Tech
+2026-06-28,Junho,2026,Loja Paulista,Celular,Apple,iPhone 15,Garantia,Aberto,Pulse Varejo,OS-24003,5499.00,950.20,Dobra Tech
+2026-05-10,Maio,2026,Loja Barra,Celular,Samsung,Galaxy S24,Garantia,Aberto,Rio Branco,OS-24004,4299.00,785.66,Dobra Tech
+2026-02-22,Fevereiro,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Assistência,Em análise,Verde Agro,OS-24005,4299.00,530.69,Dobra Tech
+2026-01-31,Janeiro,2026,Loja Online,Película,Baseus,Película vidro,Troca,Concluído,Atlas Ltda,OS-24006,29.00,2.61,Dobra Tech
+2026-01-07,Janeiro,2026,Loja Online,Celular,Samsung,Galaxy A55,Devolução,Concluído,Forge Engenharia,OS-24007,1899.00,0.00,Dobra Tech
+2026-05-04,Maio,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Assistência,Concluído,Delta Log,OS-24008,349.00,30.79,Dobra Tech
+2026-08-11,Agosto,2026,Loja Online,Fone,JBL,Fone Tune 510,Troca,Em análise,Rio Branco,OS-24009,249.00,23.03,Dobra Tech
+2026-02-04,Fevereiro,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Assistência,Em análise,Maré Energia,OS-24010,89.00,6.62,Dobra Tech
+2026-06-13,Junho,2026,Loja Online,Celular,Motorola,Moto G84,Garantia,Recusado,Sul Minas,OS-24011,1499.00,81.04,Dobra Tech
+2026-05-01,Maio,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Garantia,Em análise,Costa Farma,OS-24012,1899.00,516.85,Dobra Tech
+2026-01-19,Janeiro,2026,Loja Online,Celular,Samsung,Galaxy S24,Troca,Concluído,Atlas Ltda,OS-24013,4299.00,928.01,Dobra Tech
+2026-08-14,Agosto,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Lumen Tech,OS-24014,1599.00,310.15,Dobra Tech
+2026-02-17,Fevereiro,2026,Loja Online,Celular,Motorola,Moto G84,Garantia,Concluído,Lumen Tech,OS-24015,1499.00,68.96,Dobra Tech
+2026-02-20,Fevereiro,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Devolução,Concluído,Pampa Alimentos,OS-24016,1499.00,0.00,Dobra Tech
+2026-02-22,Fevereiro,2026,Loja Paulista,Película,Baseus,Película vidro,Garantia,Concluído,Pulse Varejo,OS-24017,29.00,2.00,Dobra Tech
+2026-01-28,Janeiro,2026,Loja Online,Smartwatch,Apple,Watch SE,Garantia,Concluído,Delta Log,OS-24018,2199.00,385.62,Dobra Tech
+2026-02-17,Fevereiro,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Forge Engenharia,OS-24019,1599.00,324.78,Dobra Tech
+2026-04-18,Abril,2026,Loja Barra,Película,Baseus,Película vidro,Troca,Aberto,Sul Minas,OS-24020,29.00,1.46,Dobra Tech
+2026-04-21,Abril,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Assistência,Aberto,Lumen Tech,OS-24021,1299.00,151.68,Dobra Tech
+2026-05-15,Maio,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Assistência,Concluído,Atlas Ltda,OS-24022,349.00,17.56,Dobra Tech
+2026-02-18,Fevereiro,2026,Loja Online,Tablet,Apple,iPad 10,Garantia,Concluído,Aurora Moda,OS-24023,3899.00,234.25,Dobra Tech
+2026-02-28,Fevereiro,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Garantia,Concluído,Forge Engenharia,OS-24024,1899.00,240.50,Dobra Tech
+2026-06-10,Junho,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Devolução,Aberto,Atlas Ltda,OS-24025,1499.00,0.00,Dobra Tech
+2026-04-30,Abril,2026,Loja Barra,Fone,Apple,AirPods 4,Assistência,Aberto,Pulse Varejo,OS-24026,1299.00,132.85,Dobra Tech
+2026-05-26,Maio,2026,Loja Barra,Fone,JBL,Fone Tune 510,Garantia,Concluído,Casa Norte,OS-24027,249.00,13.68,Dobra Tech
+2026-03-11,Março,2026,Loja Online,Capa,Baseus,Capa silicone,Garantia,Concluído,Verde Agro,OS-24028,49.00,3.71,Dobra Tech
+2026-01-12,Janeiro,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Concluído,Casa Norte,OS-24029,29.00,2.43,Dobra Tech
+2026-03-06,Março,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Concluído,Céu Soft,OS-24030,1299.00,78.21,Dobra Tech
+2026-02-17,Fevereiro,2026,Loja Paulista,Película,Baseus,Película vidro,Devolução,Recusado,Orbit Educação,OS-24031,29.00,0.00,Dobra Tech
+2026-05-26,Maio,2026,Loja Paulista,Tablet,Apple,iPad 10,Troca,Aberto,Orbit Educação,OS-24032,3899.00,801.26,Dobra Tech
+2026-01-08,Janeiro,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Costa Farma,OS-24033,89.00,1.72,Dobra Tech
+2026-01-13,Janeiro,2026,Loja Paulista,Capa,Baseus,Capa silicone,Assistência,Concluído,Terra Nova,OS-24034,49.00,2.88,Dobra Tech
+2026-06-07,Junho,2026,Loja Barra,Celular,Samsung,Galaxy S24,Garantia,Em análise,Forge Engenharia,OS-24035,4299.00,214.73,Dobra Tech
+2026-01-22,Janeiro,2026,Loja Barra,Power bank,Anker,Power bank 20k,Troca,Concluído,Forge Engenharia,OS-24036,199.00,48.84,Dobra Tech
+2026-07-09,Julho,2026,Loja Barra,Celular,Apple,iPhone 15,Troca,Concluído,Céu Soft,OS-24037,5499.00,578.30,Dobra Tech
+2026-05-31,Maio,2026,Loja Online,Capa,Baseus,Capa silicone,Assistência,Concluído,Forge Engenharia,OS-24038,49.00,4.60,Dobra Tech
+2026-02-16,Fevereiro,2026,Loja Paulista,Smartwatch,Samsung,Galaxy Watch 6,Assistência,Concluído,Delta Log,OS-24039,1499.00,297.49,Dobra Tech
+2026-06-17,Junho,2026,Loja Online,Fone,JBL,Fone Tune 510,Troca,Aberto,Casa Norte,OS-24040,249.00,24.69,Dobra Tech
+2026-02-05,Fevereiro,2026,Loja Barra,Celular,Samsung,Galaxy S24,Assistência,Aberto,Aurora Moda,OS-24041,4299.00,948.94,Dobra Tech
+2026-07-03,Julho,2026,Loja Barra,Capa,Baseus,Capa silicone,Troca,Concluído,Forge Engenharia,OS-24042,49.00,2.60,Dobra Tech
+2026-06-04,Junho,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Concluído,Rio Branco,OS-24043,1299.00,281.97,Dobra Tech
+2026-01-15,Janeiro,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Assistência,Concluído,Rio Branco,OS-24044,1299.00,147.49,Dobra Tech
+2026-08-16,Agosto,2026,Loja Paulista,Película,Baseus,Película vidro,Devolução,Aberto,Lumen Tech,OS-24045,29.00,0.00,Dobra Tech
+2026-05-28,Maio,2026,Loja Barra,Celular,Samsung,Galaxy A55,Garantia,Recusado,Céu Soft,OS-24046,1899.00,512.24,Dobra Tech
+2026-05-15,Maio,2026,Loja Paulista,Tablet,Apple,iPad 10,Garantia,Concluído,Orbit Educação,OS-24047,3899.00,457.83,Dobra Tech
+2026-01-21,Janeiro,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Troca,Concluído,Casa Norte,OS-24048,89.00,2.61,Dobra Tech
+2026-05-30,Maio,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Assistência,Concluído,Céu Soft,OS-24049,199.00,31.94,Dobra Tech
+2026-02-18,Fevereiro,2026,Loja Online,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Atlas Ltda,OS-24050,1599.00,332.82,Dobra Tech
+2026-02-16,Fevereiro,2026,Loja Online,Smartwatch,Samsung,Galaxy Watch 6,Garantia,Concluído,Serra Café,OS-24051,1499.00,147.27,Dobra Tech
+2026-06-25,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Garantia,Concluído,Delta Log,OS-24052,49.00,2.86,Dobra Tech
+2026-05-22,Maio,2026,Loja Online,Fone,JBL,Fone Tune 510,Garantia,Concluído,Verde Agro,OS-24053,249.00,24.81,Dobra Tech
+2026-03-28,Março,2026,Loja Online,Carregador,Apple,Carregador MagSafe,Assistência,Concluído,Forge Engenharia,OS-24054,349.00,25.70,Dobra Tech
+2026-05-27,Maio,2026,Loja Paulista,Capa,Baseus,Capa silicone,Devolução,Concluído,Rio Branco,OS-24055,49.00,0.00,Dobra Tech
+2026-03-10,Março,2026,Loja Barra,Fone,Apple,AirPods 4,Assistência,Concluído,Atlas Ltda,OS-24056,1299.00,310.86,Dobra Tech
+2026-04-15,Abril,2026,Loja Paulista,Tablet,Apple,iPad 10,Garantia,Aberto,Costa Farma,OS-24057,3899.00,552.84,Dobra Tech
+2026-07-24,Julho,2026,Loja Barra,Celular,Samsung,Galaxy S24,Garantia,Concluído,Serra Café,OS-24058,4299.00,309.38,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Lumen Tech,OS-24059,1599.00,195.73,Dobra Tech
+2026-04-18,Abril,2026,Loja Paulista,Tablet,Apple,iPad 10,Assistência,Concluído,Lumen Tech,OS-24060,3899.00,548.60,Dobra Tech
+2026-04-09,Abril,2026,Loja Online,Película,Baseus,Película vidro,Garantia,Em análise,Helix Saúde,OS-24061,29.00,1.29,Dobra Tech
+2026-07-14,Julho,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Garantia,Concluído,Forge Engenharia,OS-24062,249.00,65.78,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Online,Película,Baseus,Película vidro,Garantia,Concluído,Aurora Moda,OS-24063,29.00,1.05,Dobra Tech
+2026-05-08,Maio,2026,Loja Online,Fone,JBL,Fone Tune 510,Garantia,Concluído,Delta Log,OS-24064,249.00,47.71,Dobra Tech
+2026-02-20,Fevereiro,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Garantia,Concluído,Pulse Varejo,OS-24065,249.00,63.70,Dobra Tech
+2026-06-14,Junho,2026,Loja Barra,Celular,Motorola,Moto G84,Garantia,Recusado,Terra Nova,OS-24066,1499.00,158.21,Dobra Tech
+2026-02-19,Fevereiro,2026,Loja Online,Smartwatch,Samsung,Galaxy Watch 6,Devolução,Em análise,Terra Nova,OS-24067,1499.00,0.00,Dobra Tech
+2026-08-18,Agosto,2026,Loja Paulista,Película,Baseus,Película vidro,Garantia,Concluído,Terra Nova,OS-24068,29.00,0.90,Dobra Tech
+2026-06-13,Junho,2026,Loja Barra,Power bank,Anker,Power bank 20k,Garantia,Concluído,Verde Agro,OS-24069,199.00,46.74,Dobra Tech
+2026-08-12,Agosto,2026,Loja Barra,Celular,Samsung,Galaxy A55,Garantia,Em análise,Forge Engenharia,OS-24070,1899.00,130.30,Dobra Tech
+2026-07-29,Julho,2026,Loja Online,Smartwatch,Apple,Watch SE,Assistência,Concluído,Verde Agro,OS-24071,2199.00,388.17,Dobra Tech
+2026-01-18,Janeiro,2026,Loja Barra,Fone,Apple,AirPods 4,Assistência,Concluído,Aurora Moda,OS-24072,1299.00,225.83,Dobra Tech
+2026-07-14,Julho,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Assistência,Aberto,Costa Farma,OS-24073,1599.00,257.06,Dobra Tech
+2026-04-19,Abril,2026,Loja Online,Fone,JBL,Fone Tune 510,Assistência,Em análise,Serra Café,OS-24074,249.00,38.55,Dobra Tech
+2026-02-18,Fevereiro,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Garantia,Aberto,Costa Farma,OS-24075,249.00,58.84,Dobra Tech
+2026-06-16,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Garantia,Concluído,Helix Saúde,OS-24076,49.00,3.75,Dobra Tech
+2026-07-10,Julho,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Garantia,Concluído,Céu Soft,OS-24077,1899.00,361.56,Dobra Tech
+2026-08-27,Agosto,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Troca,Concluído,Casa Norte,OS-24078,249.00,18.75,Dobra Tech
+2026-08-27,Agosto,2026,Loja Barra,Power bank,Anker,Power bank 20k,Troca,Concluído,Atlas Ltda,OS-24079,199.00,9.73,Dobra Tech
+2026-04-24,Abril,2026,Loja Online,Celular,Apple,iPhone 15,Assistência,Em análise,Atlas Ltda,OS-24080,5499.00,330.19,Dobra Tech
+2026-02-01,Fevereiro,2026,Loja Paulista,Celular,Motorola,Moto G84,Assistência,Em análise,Forge Engenharia,OS-24081,1499.00,109.89,Dobra Tech
+2026-04-22,Abril,2026,Loja Barra,Celular,Samsung,Galaxy S24,Garantia,Em análise,Pulse Varejo,OS-24082,4299.00,226.34,Dobra Tech
+2026-05-28,Maio,2026,Loja Paulista,Capa,Baseus,Capa silicone,Assistência,Recusado,Orbit Educação,OS-24083,49.00,2.79,Dobra Tech
+2026-02-03,Fevereiro,2026,Loja Online,Tablet,Apple,iPad 10,Garantia,Concluído,Terra Nova,OS-24084,3899.00,230.77,Dobra Tech
+2026-05-26,Maio,2026,Loja Barra,Fone,JBL,Fone Tune 510,Garantia,Aberto,Serra Café,OS-24085,249.00,37.57,Dobra Tech
+2026-06-13,Junho,2026,Loja Paulista,Película,Baseus,Película vidro,Troca,Em análise,Forge Engenharia,OS-24086,29.00,0.48,Dobra Tech
+2026-03-20,Março,2026,Loja Paulista,Celular,Apple,iPhone 15,Garantia,Em análise,Rio Branco,OS-24087,5499.00,559.65,Dobra Tech
+2026-03-04,Março,2026,Loja Barra,Power bank,Anker,Power bank 20k,Garantia,Concluído,Forge Engenharia,OS-24088,199.00,33.43,Dobra Tech
+2026-07-08,Julho,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Troca,Em análise,Terra Nova,OS-24089,89.00,6.51,Dobra Tech
+2026-07-06,Julho,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Garantia,Concluído,Lumen Tech,OS-24090,1499.00,229.24,Dobra Tech
+2026-08-23,Agosto,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Devolução,Concluído,Boa Vista,OS-24091,199.00,0.00,Dobra Tech
+2026-03-05,Março,2026,Loja Online,Celular,Samsung,Galaxy A55,Garantia,Concluído,Terra Nova,OS-24092,1899.00,337.92,Dobra Tech
+2026-06-19,Junho,2026,Loja Online,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Helix Saúde,OS-24093,1599.00,243.96,Dobra Tech
+2026-01-16,Janeiro,2026,Loja Online,Carregador,Baseus,Carregador 30W,Troca,Concluído,Helix Saúde,OS-24094,89.00,6.70,Dobra Tech
+2026-03-28,Março,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Devolução,Concluído,Boa Vista,OS-24095,1899.00,0.00,Dobra Tech
+2026-01-20,Janeiro,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Garantia,Concluído,Casa Norte,OS-24096,2199.00,479.60,Dobra Tech
+2026-04-07,Abril,2026,Loja Paulista,Capa,Baseus,Capa silicone,Troca,Recusado,Terra Nova,OS-24097,49.00,2.44,Dobra Tech
+2026-04-23,Abril,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Atlas Ltda,OS-24098,1599.00,412.11,Dobra Tech
+2026-08-26,Agosto,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Garantia,Aberto,Forge Engenharia,OS-24099,199.00,16.15,Dobra Tech
+2026-05-14,Maio,2026,Loja Barra,Fone,JBL,Fone Tune 510,Garantia,Em análise,Delta Log,OS-24100,249.00,18.13,Dobra Tech
+2026-08-28,Agosto,2026,Loja Barra,Celular,Motorola,Moto G84,Troca,Concluído,Pampa Alimentos,OS-24101,1499.00,106.96,Dobra Tech
+2026-06-04,Junho,2026,Loja Online,Fone,JBL,Fone Tune 510,Garantia,Concluído,Verde Agro,OS-24102,249.00,56.94,Dobra Tech
+2026-03-29,Março,2026,Loja Online,Carregador,Apple,Carregador MagSafe,Garantia,Concluído,Verde Agro,OS-24103,349.00,28.37,Dobra Tech
+2026-05-06,Maio,2026,Loja Barra,Película,Baseus,Película vidro,Devolução,Recusado,Nimbus SA,OS-24104,29.00,0.00,Dobra Tech
+2026-08-04,Agosto,2026,Loja Online,Película,Baseus,Película vidro,Devolução,Concluído,Pampa Alimentos,OS-24105,29.00,0.00,Dobra Tech
+2026-07-23,Julho,2026,Loja Barra,Fone,Apple,AirPods 4,Garantia,Em análise,Sul Minas,OS-24106,1299.00,324.90,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Devolução,Concluído,Forge Engenharia,OS-24107,89.00,0.00,Dobra Tech
+2026-02-18,Fevereiro,2026,Loja Barra,Tablet,Apple,iPad 10,Assistência,Recusado,Maré Energia,OS-24108,3899.00,852.61,Dobra Tech
+2026-05-03,Maio,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Garantia,Concluído,Pulse Varejo,OS-24109,4299.00,506.89,Dobra Tech
+2026-08-12,Agosto,2026,Loja Barra,Power bank,Anker,Power bank 20k,Troca,Concluído,Boa Vista,OS-24110,199.00,16.33,Dobra Tech
+2026-06-30,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Garantia,Em análise,Rio Branco,OS-24111,49.00,3.92,Dobra Tech
+2026-03-12,Março,2026,Loja Barra,Celular,Samsung,Galaxy S24,Garantia,Concluído,Costa Farma,OS-24112,4299.00,857.85,Dobra Tech
+2026-01-15,Janeiro,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Concluído,Boa Vista,OS-24113,29.00,2.26,Dobra Tech
+2026-07-07,Julho,2026,Loja Online,Celular,Apple,iPhone 15,Assistência,Em análise,Aurora Moda,OS-24114,5499.00,767.46,Dobra Tech
+2026-05-06,Maio,2026,Loja Online,Fone,Apple,AirPods 4,Garantia,Concluído,Lumen Tech,OS-24115,1299.00,158.18,Dobra Tech
+2026-06-27,Junho,2026,Loja Barra,Power bank,Anker,Power bank 20k,Garantia,Em análise,Maré Energia,OS-24116,199.00,15.65,Dobra Tech
+2026-01-24,Janeiro,2026,Loja Barra,Fone,JBL,Fone Tune 510,Garantia,Concluído,Nimbus SA,OS-24117,249.00,19.97,Dobra Tech
+2026-05-16,Maio,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Maré Energia,OS-24118,89.00,3.09,Dobra Tech
+2026-01-25,Janeiro,2026,Loja Barra,Celular,Apple,iPhone 15,Troca,Concluído,Orbit Educação,OS-24119,5499.00,874.60,Dobra Tech
+2026-05-19,Maio,2026,Loja Online,Tablet,Apple,iPad 10,Devolução,Recusado,Lumen Tech,OS-24120,3899.00,0.00,Dobra Tech
+2026-06-23,Junho,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Devolução,Aberto,Terra Nova,OS-24121,1599.00,0.00,Dobra Tech
+2026-01-22,Janeiro,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Garantia,Concluído,Lumen Tech,OS-24122,199.00,26.33,Dobra Tech
+2026-08-06,Agosto,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Garantia,Concluído,Casa Norte,OS-24123,2199.00,242.00,Dobra Tech
+2026-06-21,Junho,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Garantia,Concluído,Pulse Varejo,OS-24124,249.00,61.65,Dobra Tech
+2026-06-28,Junho,2026,Loja Barra,Celular,Samsung,Galaxy A55,Troca,Recusado,Sul Minas,OS-24125,1899.00,115.68,Dobra Tech
+2026-05-24,Maio,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Devolução,Concluído,Nimbus SA,OS-24126,4299.00,0.00,Dobra Tech
+2026-06-03,Junho,2026,Loja Barra,Smartwatch,Apple,Watch SE,Assistência,Concluído,Rio Branco,OS-24127,2199.00,603.29,Dobra Tech
+2026-05-03,Maio,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Concluído,Serra Café,OS-24128,29.00,1.24,Dobra Tech
+2026-03-26,Março,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Costa Farma,OS-24129,89.00,7.87,Dobra Tech
+2026-08-24,Agosto,2026,Loja Paulista,Celular,Motorola,Moto G84,Troca,Concluído,Pampa Alimentos,OS-24130,1499.00,310.28,Dobra Tech
+2026-07-22,Julho,2026,Loja Paulista,Celular,Motorola,Moto G84,Garantia,Aberto,Boa Vista,OS-24131,1499.00,197.32,Dobra Tech
+2026-03-27,Março,2026,Loja Online,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Orbit Educação,OS-24132,89.00,5.26,Dobra Tech
+2026-02-24,Fevereiro,2026,Loja Barra,Smartwatch,Apple,Watch SE,Garantia,Recusado,Forge Engenharia,OS-24133,2199.00,131.37,Dobra Tech
+2026-03-26,Março,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Concluído,Serra Café,OS-24134,1299.00,196.78,Dobra Tech
+2026-03-11,Março,2026,Loja Barra,Celular,Samsung,Galaxy A55,Garantia,Concluído,Céu Soft,OS-24135,1899.00,268.56,Dobra Tech
+2026-03-19,Março,2026,Loja Barra,Celular,Motorola,Moto G84,Garantia,Recusado,Delta Log,OS-24136,1499.00,328.47,Dobra Tech
+2026-08-02,Agosto,2026,Loja Barra,Power bank,Anker,Power bank 20k,Garantia,Aberto,Delta Log,OS-24137,199.00,52.68,Dobra Tech
+2026-05-29,Maio,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Devolução,Em análise,Céu Soft,OS-24138,2199.00,0.00,Dobra Tech
+2026-07-03,Julho,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Em análise,Boa Vista,OS-24139,29.00,1.09,Dobra Tech
+2026-03-30,Março,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Assistência,Concluído,Verde Agro,OS-24140,199.00,39.80,Dobra Tech
+2026-07-14,Julho,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Troca,Em análise,Pulse Varejo,OS-24141,89.00,4.70,Dobra Tech
+2026-04-11,Abril,2026,Loja Online,Tablet,Apple,iPad 10,Troca,Concluído,Forge Engenharia,OS-24142,3899.00,873.23,Dobra Tech
+2026-06-06,Junho,2026,Loja Online,Fone,JBL,Fone Tune 510,Assistência,Concluído,Aurora Moda,OS-24143,249.00,14.89,Dobra Tech
+2026-06-14,Junho,2026,Loja Barra,Celular,Apple,iPhone 15,Devolução,Concluído,Aurora Moda,OS-24144,5499.00,0.00,Dobra Tech
+2026-08-08,Agosto,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Devolução,Em análise,Maré Energia,OS-24145,349.00,0.00,Dobra Tech
+2026-03-11,Março,2026,Loja Barra,Fone,Apple,AirPods 4,Garantia,Concluído,Forge Engenharia,OS-24146,1299.00,53.80,Dobra Tech
+2026-04-10,Abril,2026,Loja Online,Tablet,Apple,iPad 10,Garantia,Em análise,Casa Norte,OS-24147,3899.00,975.73,Dobra Tech
+2026-04-12,Abril,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Troca,Concluído,Forge Engenharia,OS-24148,199.00,31.54,Dobra Tech
+2026-05-14,Maio,2026,Loja Barra,Power bank,Anker,Power bank 20k,Devolução,Concluído,Nimbus SA,OS-24149,199.00,0.00,Dobra Tech
+2026-02-06,Fevereiro,2026,Loja Online,Fone,JBL,Fone Tune 510,Garantia,Recusado,Verde Agro,OS-24150,249.00,54.70,Dobra Tech
+2026-04-24,Abril,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Garantia,Concluído,Orbit Educação,OS-24151,199.00,24.38,Dobra Tech
+2026-08-26,Agosto,2026,Loja Barra,Celular,Samsung,Galaxy A55,Garantia,Concluído,Rio Branco,OS-24152,1899.00,379.51,Dobra Tech
+2026-08-24,Agosto,2026,Loja Barra,Celular,Samsung,Galaxy S24,Assistência,Concluído,Nimbus SA,OS-24153,4299.00,450.38,Dobra Tech
+2026-06-27,Junho,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Garantia,Aberto,Rio Branco,OS-24154,2199.00,438.19,Dobra Tech
+2026-06-05,Junho,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Assistência,Concluído,Pampa Alimentos,OS-24155,1299.00,172.09,Dobra Tech
+2026-05-09,Maio,2026,Loja Paulista,Fone,Apple,AirPods 4,Assistência,Concluído,Casa Norte,OS-24156,1299.00,141.93,Dobra Tech
+2026-07-07,Julho,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Assistência,Concluído,Casa Norte,OS-24157,1599.00,353.49,Dobra Tech
+2026-04-02,Abril,2026,Loja Barra,Celular,Apple,iPhone 15,Assistência,Concluído,Casa Norte,OS-24158,5499.00,778.09,Dobra Tech
+2026-05-16,Maio,2026,Loja Barra,Celular,Apple,iPhone 15,Garantia,Concluído,Pampa Alimentos,OS-24159,5499.00,364.88,Dobra Tech
+2026-08-07,Agosto,2026,Loja Barra,Capa,Baseus,Capa silicone,Devolução,Aberto,Maré Energia,OS-24160,49.00,0.00,Dobra Tech
+2026-05-29,Maio,2026,Loja Online,Fone,JBL,Fone Tune 510,Assistência,Concluído,Verde Agro,OS-24161,249.00,35.09,Dobra Tech
+2026-04-15,Abril,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Garantia,Aberto,Aurora Moda,OS-24162,1499.00,264.55,Dobra Tech
+2026-02-05,Fevereiro,2026,Loja Online,Capa,Baseus,Capa silicone,Garantia,Recusado,Aurora Moda,OS-24163,49.00,1.59,Dobra Tech
+2026-04-22,Abril,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Garantia,Em análise,Casa Norte,OS-24164,1599.00,206.51,Dobra Tech
+2026-02-13,Fevereiro,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Orbit Educação,OS-24165,89.00,5.68,Dobra Tech
+2026-06-19,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Assistência,Concluído,Sul Minas,OS-24166,49.00,3.73,Dobra Tech
+2026-08-08,Agosto,2026,Loja Online,Carregador,Apple,Carregador MagSafe,Troca,Concluído,Casa Norte,OS-24167,349.00,20.29,Dobra Tech
+2026-06-15,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Devolução,Aberto,Verde Agro,OS-24168,49.00,0.00,Dobra Tech
+2026-01-20,Janeiro,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Serra Café,OS-24169,89.00,3.19,Dobra Tech
+2026-06-01,Junho,2026,Loja Paulista,Tablet,Apple,iPad 10,Garantia,Concluído,Maré Energia,OS-24170,3899.00,683.17,Dobra Tech
+2026-03-11,Março,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Garantia,Recusado,Serra Café,OS-24171,1299.00,93.78,Dobra Tech
+2026-06-05,Junho,2026,Loja Online,Celular,Samsung,Galaxy A55,Garantia,Concluído,Forge Engenharia,OS-24172,1899.00,519.43,Dobra Tech
+2026-06-01,Junho,2026,Loja Online,Capa,Baseus,Capa silicone,Garantia,Recusado,Pampa Alimentos,OS-24173,49.00,3.37,Dobra Tech
+2026-06-25,Junho,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Pulse Varejo,OS-24174,89.00,4.39,Dobra Tech
+2026-02-24,Fevereiro,2026,Loja Online,Celular,Samsung,Galaxy A55,Garantia,Concluído,Pampa Alimentos,OS-24175,1899.00,290.37,Dobra Tech
+2026-05-11,Maio,2026,Loja Online,Película,Baseus,Película vidro,Garantia,Concluído,Casa Norte,OS-24176,29.00,1.11,Dobra Tech
+2026-03-26,Março,2026,Loja Online,Celular,Apple,iPhone 15,Garantia,Em análise,Nimbus SA,OS-24177,5499.00,231.05,Dobra Tech
+2026-03-02,Março,2026,Loja Barra,Tablet,Apple,iPad 10,Troca,Aberto,Casa Norte,OS-24178,3899.00,860.02,Dobra Tech
+2026-02-19,Fevereiro,2026,Loja Online,Película,Baseus,Película vidro,Garantia,Concluído,Aurora Moda,OS-24179,29.00,1.33,Dobra Tech
+2026-02-07,Fevereiro,2026,Loja Online,Smartwatch,Apple,Watch SE,Assistência,Concluído,Casa Norte,OS-24180,2199.00,130.64,Dobra Tech
+2026-07-01,Julho,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Garantia,Em análise,Maré Energia,OS-24181,1299.00,356.11,Dobra Tech
+2026-08-13,Agosto,2026,Loja Online,Fone,Apple,AirPods 4,Troca,Recusado,Forge Engenharia,OS-24182,1299.00,353.30,Dobra Tech
+2026-05-29,Maio,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Concluído,Helix Saúde,OS-24183,1299.00,259.16,Dobra Tech
+2026-01-30,Janeiro,2026,Loja Online,Tablet,Apple,iPad 10,Troca,Aberto,Atlas Ltda,OS-24184,3899.00,609.27,Dobra Tech
+2026-08-01,Agosto,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Troca,Concluído,Terra Nova,OS-24185,1599.00,214.87,Dobra Tech
+2026-03-24,Março,2026,Loja Barra,Power bank,Anker,Power bank 20k,Garantia,Aberto,Aurora Moda,OS-24186,199.00,19.72,Dobra Tech
+2026-06-03,Junho,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Garantia,Em análise,Terra Nova,OS-24187,1499.00,411.51,Dobra Tech
+2026-01-18,Janeiro,2026,Loja Paulista,Tablet,Apple,iPad 10,Devolução,Concluído,Verde Agro,OS-24188,3899.00,0.00,Dobra Tech
+2026-05-11,Maio,2026,Loja Online,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Helix Saúde,OS-24189,89.00,2.73,Dobra Tech
+2026-06-23,Junho,2026,Loja Online,Tablet,Samsung,Galaxy Tab A9,Garantia,Em análise,Céu Soft,OS-24190,1599.00,195.57,Dobra Tech
+2026-07-01,Julho,2026,Loja Barra,Fone,Apple,AirPods 4,Garantia,Concluído,Nimbus SA,OS-24191,1299.00,233.42,Dobra Tech
+2026-08-02,Agosto,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Garantia,Concluído,Céu Soft,OS-24192,2199.00,327.97,Dobra Tech
+2026-07-27,Julho,2026,Loja Paulista,Celular,Apple,iPhone 15,Garantia,Concluído,Delta Log,OS-24193,5499.00,745.25,Dobra Tech
+2026-08-11,Agosto,2026,Loja Paulista,Fone,JBL,Fone Tune 510,Assistência,Concluído,Terra Nova,OS-24194,249.00,39.87,Dobra Tech
+2026-05-15,Maio,2026,Loja Online,Smartwatch,Apple,Watch SE,Troca,Concluído,Forge Engenharia,OS-24195,2199.00,567.86,Dobra Tech
+2026-03-30,Março,2026,Loja Barra,Celular,Motorola,Moto G84,Garantia,Concluído,Boa Vista,OS-24196,1499.00,238.64,Dobra Tech
+2026-01-28,Janeiro,2026,Loja Barra,Smartwatch,Apple,Watch SE,Garantia,Aberto,Maré Energia,OS-24197,2199.00,540.31,Dobra Tech
+2026-08-08,Agosto,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Garantia,Recusado,Serra Café,OS-24198,89.00,2.49,Dobra Tech
+2026-02-02,Fevereiro,2026,Loja Online,Fone,Apple,AirPods 4,Devolução,Concluído,Atlas Ltda,OS-24199,1299.00,0.00,Dobra Tech
+2026-08-21,Agosto,2026,Loja Barra,Celular,Xiaomi,Redmi Note 13,Troca,Concluído,Lumen Tech,OS-24200,1299.00,134.12,Dobra Tech
+2026-06-26,Junho,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Devolução,Em análise,Maré Energia,OS-24201,1499.00,0.00,Dobra Tech
+2026-08-15,Agosto,2026,Loja Online,Carregador,Apple,Carregador MagSafe,Garantia,Concluído,Maré Energia,OS-24202,349.00,31.81,Dobra Tech
+2026-04-03,Abril,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Concluído,Boa Vista,OS-24203,1299.00,326.80,Dobra Tech
+2026-08-11,Agosto,2026,Loja Online,Celular,Apple,iPhone 15,Devolução,Concluído,Serra Café,OS-24204,5499.00,0.00,Dobra Tech
+2026-07-15,Julho,2026,Loja Online,Película,Baseus,Película vidro,Troca,Em análise,Pampa Alimentos,OS-24205,29.00,0.91,Dobra Tech
+2026-07-18,Julho,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Garantia,Aberto,Forge Engenharia,OS-24206,1599.00,108.87,Dobra Tech
+2026-02-14,Fevereiro,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Concluído,Verde Agro,OS-24207,29.00,1.77,Dobra Tech
+2026-04-20,Abril,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Devolução,Concluído,Céu Soft,OS-24208,4299.00,0.00,Dobra Tech
+2026-02-09,Fevereiro,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Devolução,Aberto,Lumen Tech,OS-24209,1899.00,0.00,Dobra Tech
+2026-05-26,Maio,2026,Loja Online,Celular,Motorola,Moto G84,Assistência,Em análise,Terra Nova,OS-24210,1499.00,332.78,Dobra Tech
+2026-04-25,Abril,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Assistência,Concluído,Atlas Ltda,OS-24211,349.00,11.33,Dobra Tech
+2026-02-26,Fevereiro,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Concluído,Pampa Alimentos,OS-24212,29.00,1.63,Dobra Tech
+2026-04-23,Abril,2026,Loja Online,Power bank,Anker,Power bank 20k,Garantia,Concluído,Atlas Ltda,OS-24213,199.00,35.63,Dobra Tech
+2026-04-04,Abril,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Devolução,Concluído,Lumen Tech,OS-24214,349.00,0.00,Dobra Tech
+2026-06-05,Junho,2026,Loja Barra,Capa,Baseus,Capa silicone,Troca,Aberto,Lumen Tech,OS-24215,49.00,1.76,Dobra Tech
+2026-06-08,Junho,2026,Loja Online,Smartwatch,Apple,Watch SE,Garantia,Em análise,Aurora Moda,OS-24216,2199.00,403.03,Dobra Tech
+2026-03-16,Março,2026,Loja Paulista,Capa,Baseus,Capa silicone,Assistência,Concluído,Nimbus SA,OS-24217,49.00,2.72,Dobra Tech
+2026-07-18,Julho,2026,Loja Paulista,Carregador,Baseus,Carregador 30W,Troca,Concluído,Pulse Varejo,OS-24218,89.00,5.24,Dobra Tech
+2026-03-31,Março,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Assistência,Aberto,Maré Energia,OS-24219,1599.00,290.30,Dobra Tech
+2026-08-08,Agosto,2026,Loja Online,Capa,Baseus,Capa silicone,Garantia,Em análise,Nimbus SA,OS-24220,49.00,2.72,Dobra Tech
+2026-06-30,Junho,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Troca,Concluído,Delta Log,OS-24221,4299.00,487.53,Dobra Tech
+2026-04-14,Abril,2026,Loja Online,Celular,Motorola,Moto G84,Assistência,Concluído,Atlas Ltda,OS-24222,1499.00,227.91,Dobra Tech
+2026-01-16,Janeiro,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Garantia,Concluído,Céu Soft,OS-24223,1899.00,101.30,Dobra Tech
+2026-02-28,Fevereiro,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Concluído,Delta Log,OS-24224,1299.00,288.36,Dobra Tech
+2026-07-11,Julho,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Garantia,Concluído,Boa Vista,OS-24225,199.00,43.93,Dobra Tech
+2026-06-17,Junho,2026,Loja Online,Celular,Samsung,Galaxy S24,Troca,Em análise,Casa Norte,OS-24226,4299.00,389.32,Dobra Tech
+2026-03-28,Março,2026,Loja Paulista,Carregador,Apple,Carregador MagSafe,Troca,Concluído,Atlas Ltda,OS-24227,349.00,9.09,Dobra Tech
+2026-04-05,Abril,2026,Loja Online,Fone,JBL,Fone Tune 510,Garantia,Concluído,Pulse Varejo,OS-24228,249.00,48.05,Dobra Tech
+2026-04-07,Abril,2026,Loja Paulista,Celular,Apple,iPhone 15,Garantia,Recusado,Lumen Tech,OS-24229,5499.00,989.28,Dobra Tech
+2026-07-18,Julho,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Troca,Concluído,Pulse Varejo,OS-24230,89.00,1.35,Dobra Tech
+2026-06-24,Junho,2026,Loja Online,Fone,JBL,Fone Tune 510,Garantia,Em análise,Terra Nova,OS-24231,249.00,43.71,Dobra Tech
+2026-07-14,Julho,2026,Loja Paulista,Celular,Samsung,Galaxy S24,Devolução,Em análise,Verde Agro,OS-24232,4299.00,0.00,Dobra Tech
+2026-05-28,Maio,2026,Loja Barra,Película,Baseus,Película vidro,Devolução,Recusado,Maré Energia,OS-24233,29.00,0.00,Dobra Tech
+2026-01-15,Janeiro,2026,Loja Barra,Carregador,Apple,Carregador MagSafe,Assistência,Concluído,Forge Engenharia,OS-24234,349.00,20.24,Dobra Tech
+2026-08-22,Agosto,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Assistência,Concluído,Boa Vista,OS-24235,1599.00,70.37,Dobra Tech
+2026-06-11,Junho,2026,Loja Online,Power bank,Anker,Power bank 20k,Troca,Concluído,Lumen Tech,OS-24236,199.00,21.66,Dobra Tech
+2026-01-11,Janeiro,2026,Loja Online,Celular,Motorola,Moto G84,Troca,Concluído,Lumen Tech,OS-24237,1499.00,117.91,Dobra Tech
+2026-06-17,Junho,2026,Loja Barra,Película,Baseus,Película vidro,Devolução,Em análise,Verde Agro,OS-24238,29.00,0.00,Dobra Tech
+2026-05-16,Maio,2026,Loja Barra,Tablet,Apple,iPad 10,Assistência,Concluído,Sul Minas,OS-24239,3899.00,481.84,Dobra Tech
+2026-01-26,Janeiro,2026,Loja Paulista,Fone,Apple,AirPods 4,Garantia,Em análise,Rio Branco,OS-24240,1299.00,322.29,Dobra Tech
+2026-05-16,Maio,2026,Loja Barra,Capa,Baseus,Capa silicone,Garantia,Concluído,Rio Branco,OS-24241,49.00,2.53,Dobra Tech
+2026-01-24,Janeiro,2026,Loja Online,Celular,Xiaomi,Redmi Note 13,Assistência,Concluído,Sul Minas,OS-24242,1299.00,305.36,Dobra Tech
+2026-06-10,Junho,2026,Loja Paulista,Celular,Xiaomi,Redmi Note 13,Devolução,Concluído,Orbit Educação,OS-24243,1299.00,0.00,Dobra Tech
+2026-05-21,Maio,2026,Loja Online,Película,Baseus,Película vidro,Garantia,Concluído,Terra Nova,OS-24244,29.00,0.49,Dobra Tech
+2026-07-17,Julho,2026,Loja Paulista,Tablet,Apple,iPad 10,Garantia,Concluído,Serra Café,OS-24245,3899.00,351.73,Dobra Tech
+2026-04-28,Abril,2026,Loja Paulista,Power bank,Anker,Power bank 20k,Troca,Aberto,Costa Farma,OS-24246,199.00,49.60,Dobra Tech
+2026-07-19,Julho,2026,Loja Barra,Power bank,Anker,Power bank 20k,Devolução,Em análise,Aurora Moda,OS-24247,199.00,0.00,Dobra Tech
+2026-07-17,Julho,2026,Loja Barra,Película,Baseus,Película vidro,Garantia,Recusado,Rio Branco,OS-24248,29.00,1.09,Dobra Tech
+2026-03-13,Março,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Pampa Alimentos,OS-24249,89.00,3.61,Dobra Tech
+2026-07-20,Julho,2026,Loja Barra,Tablet,Apple,iPad 10,Garantia,Concluído,Casa Norte,OS-24250,3899.00,1066.04,Dobra Tech
+2026-05-22,Maio,2026,Loja Online,Celular,Xiaomi,Redmi Note 13,Assistência,Concluído,Terra Nova,OS-24251,1299.00,276.52,Dobra Tech
+2026-06-01,Junho,2026,Loja Barra,Celular,Samsung,Galaxy S24,Devolução,Concluído,Helix Saúde,OS-24252,4299.00,0.00,Dobra Tech
+2026-07-20,Julho,2026,Loja Paulista,Celular,Motorola,Moto G84,Assistência,Em análise,Verde Agro,OS-24253,1499.00,215.66,Dobra Tech
+2026-05-25,Maio,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Rio Branco,OS-24254,89.00,3.39,Dobra Tech
+2026-01-15,Janeiro,2026,Loja Online,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Atlas Ltda,OS-24255,89.00,7.72,Dobra Tech
+2026-06-10,Junho,2026,Loja Online,Tablet,Samsung,Galaxy Tab A9,Troca,Em análise,Verde Agro,OS-24256,1599.00,89.94,Dobra Tech
+2026-03-13,Março,2026,Loja Barra,Capa,Baseus,Capa silicone,Garantia,Aberto,Casa Norte,OS-24257,49.00,3.81,Dobra Tech
+2026-04-25,Abril,2026,Loja Barra,Celular,Samsung,Galaxy S24,Garantia,Concluído,Serra Café,OS-24258,4299.00,942.22,Dobra Tech
+2026-02-26,Fevereiro,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Assistência,Concluído,Delta Log,OS-24259,2199.00,393.05,Dobra Tech
+2026-06-14,Junho,2026,Loja Barra,Carregador,Baseus,Carregador 30W,Garantia,Concluído,Forge Engenharia,OS-24260,89.00,4.63,Dobra Tech
+2026-03-28,Março,2026,Loja Online,Fone,Apple,AirPods 4,Devolução,Concluído,Orbit Educação,OS-24261,1299.00,0.00,Dobra Tech
+2026-04-19,Abril,2026,Loja Paulista,Tablet,Samsung,Galaxy Tab A9,Troca,Aberto,Costa Farma,OS-24262,1599.00,309.50,Dobra Tech
+2026-06-28,Junho,2026,Loja Online,Celular,Xiaomi,Redmi Note 13,Troca,Concluído,Serra Café,OS-24263,1299.00,259.31,Dobra Tech
+2026-07-22,Julho,2026,Loja Online,Tablet,Apple,iPad 10,Devolução,Concluído,Serra Café,OS-24264,3899.00,0.00,Dobra Tech
+2026-06-03,Junho,2026,Loja Paulista,Película,Baseus,Película vidro,Assistência,Em análise,Lumen Tech,OS-24265,29.00,1.42,Dobra Tech
+2026-06-16,Junho,2026,Loja Barra,Power bank,Anker,Power bank 20k,Garantia,Concluído,Rio Branco,OS-24266,199.00,24.42,Dobra Tech
+2026-05-29,Maio,2026,Loja Barra,Película,Baseus,Película vidro,Devolução,Concluído,Casa Norte,OS-24267,29.00,0.00,Dobra Tech
+2026-01-30,Janeiro,2026,Loja Online,Tablet,Samsung,Galaxy Tab A9,Assistência,Concluído,Boa Vista,OS-24268,1599.00,123.45,Dobra Tech
+2026-03-18,Março,2026,Loja Paulista,Celular,Apple,iPhone 15,Devolução,Concluído,Verde Agro,OS-24269,5499.00,0.00,Dobra Tech
+2026-02-10,Fevereiro,2026,Loja Paulista,Celular,Samsung,Galaxy A55,Assistência,Concluído,Pampa Alimentos,OS-24270,1899.00,465.77,Dobra Tech
+2026-03-08,Março,2026,Loja Barra,Smartwatch,Samsung,Galaxy Watch 6,Assistência,Aberto,Aurora Moda,OS-24271,1499.00,240.49,Dobra Tech
+2026-04-10,Abril,2026,Loja Online,Smartwatch,Samsung,Galaxy Watch 6,Garantia,Concluído,Casa Norte,OS-24272,1499.00,119.03,Dobra Tech
+2026-08-21,Agosto,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Garantia,Concluído,Pampa Alimentos,OS-24273,2199.00,114.96,Dobra Tech
+2026-04-18,Abril,2026,Loja Paulista,Smartwatch,Apple,Watch SE,Garantia,Recusado,Maré Energia,OS-24274,2199.00,171.62,Dobra Tech
+2026-05-07,Maio,2026,Loja Barra,Tablet,Samsung,Galaxy Tab A9,Garantia,Em análise,Céu Soft,OS-24275,1599.00,298.96,Dobra Tech
+2026-06-03,Junho,2026,Loja Online,Carregador,Apple,Carregador MagSafe,Garantia,Aberto,Boa Vista,OS-24276,349.00,29.17,Dobra Tech
+2026-07-07,Julho,2026,Loja Paulista,Capa,Baseus,Capa silicone,Devolução,Aberto,Pampa Alimentos,OS-24277,49.00,0.00,Dobra Tech
+2026-01-21,Janeiro,2026,Loja Barra,Capa,Baseus,Capa silicone,Garantia,Concluído,Serra Café,OS-24278,49.00,4.42,Dobra Tech
+2026-03-21,Março,2026,Loja Online,Tablet,Samsung,Galaxy Tab A9,Garantia,Concluído,Sul Minas,OS-24279,1599.00,326.92,Dobra Tech
