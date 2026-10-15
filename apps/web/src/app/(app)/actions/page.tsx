@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, normalizeArray } from "@/lib/api";
+import { api } from "@/lib/api";
+import { loadActions, reviewAction } from "@/lib/manage-client";
 import { Badge, Button, Card, EmptyState, ErrorState, PageHeader, PageSkeleton, Textarea } from "@/components/ui";
 import { ActionDialog } from "@/components/manage/action-dialog";
 import type { ActionReview, ManageAction } from "@/components/manage/types";
@@ -13,7 +14,7 @@ export default function ActionsPage() {
   const qc = useQueryClient();
   const q = useQuery({
     queryKey: ["manage-actions"],
-    queryFn: () => api<ManageAction[]>("/api/v1/manage/actions"),
+    queryFn: loadActions,
   });
   const items = normalizeArray<ManageAction>(q.data);
   const [open, setOpen] = useState(false);
@@ -22,11 +23,7 @@ export default function ActionsPage() {
   const [history, setHistory] = useState<Record<string, ActionReview[]>>({});
 
   const review = useMutation({
-    mutationFn: (id: string) =>
-      api<ActionReview>(`/api/v1/manage/actions/${id}/review`, {
-        method: "POST",
-        body: JSON.stringify({ executed_note: note }),
-      }),
+    mutationFn: (id: string) => reviewAction(id, note),
     onSuccess: () => {
       toast.success("Revisão registada. A evolução do indicador ficou separada do efeito da acção.");
       setReviewing(null);
@@ -56,7 +53,7 @@ export default function ActionsPage() {
       />
       {q.isLoading && <PageSkeleton cards={3} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {items.length === 0 && !q.isLoading && (
+      {items.length === 0 && !q.isLoading && !q.isError && (
         <EmptyState
           icon={ListChecks}
           title="Ainda sem acções acompanhadas"

@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
+import { createAction } from "@/lib/manage-client";
 import { Button, FieldLabel, Input, Select, Textarea } from "@/components/ui";
 import { toast } from "sonner";
 import type { Member } from "./types";
@@ -75,9 +76,7 @@ export function ActionDialog({
 
   const create = useMutation({
     mutationFn: () =>
-      api("/api/v1/manage/actions", {
-        method: "POST",
-        body: JSON.stringify({
+      createAction({
           discovery_id: preset?.discoveryId || "",
           dataset_id: datasetId,
           owner_id: ownerId,
@@ -89,7 +88,6 @@ export function ActionDialog({
           due_at: dueAt,
           review_at: reviewAt,
         }),
-      }),
     onSuccess: () => {
       toast.success("Acção criada. A revisão fica agendada.");
       qc.invalidateQueries({ queryKey: ["manage-actions"] });

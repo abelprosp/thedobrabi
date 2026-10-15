@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, normalizeArray } from "@/lib/api";
+import { loadRadar, sendRadarFeedback } from "@/lib/manage-client";
 import { Badge, Button, EmptyState, ErrorState, PageHeader, PageSkeleton, Table, TableWrap, Td, Th } from "@/components/ui";
 import { ActionDialog, type ActionPreset } from "@/components/manage/action-dialog";
 import type { Discovery } from "@/components/manage/types";
@@ -14,7 +14,7 @@ export default function RadarPage() {
   const qc = useQueryClient();
   const q = useQuery({
     queryKey: ["manage-radar"],
-    queryFn: () => api<Discovery[]>("/api/v1/manage/radar"),
+    queryFn: loadRadar,
   });
   const items = normalizeArray<Discovery>(q.data);
   const material = items.filter((d) => d.kind !== "stable");
@@ -23,11 +23,7 @@ export default function RadarPage() {
   const [open, setOpen] = useState(false);
 
   const feedback = useMutation({
-    mutationFn: ({ id, value }: { id: string; value: string }) =>
-      api(`/api/v1/manage/radar/${id}/feedback`, {
-        method: "POST",
-        body: JSON.stringify({ feedback: value }),
-      }),
+    mutationFn: ({ id, value }: { id: string; value: string }) => sendRadarFeedback(id, value),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["manage-radar"] });
       qc.invalidateQueries({ queryKey: ["overview"] });
@@ -43,7 +39,7 @@ export default function RadarPage() {
       />
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {!q.isLoading && material.length === 0 && (
+      {!q.isLoading && !q.isError && material.length === 0 && (
         <EmptyState
           icon={Radar}
           title={quiet?.title || "Nenhuma mudança relevante"}

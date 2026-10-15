@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
+import { loadActions, loadRadar, loadReviews, saveReview } from "@/lib/manage-client";
 import { Button, Card, ErrorState, Input, PageHeader, PageSkeleton, Select, Textarea } from "@/components/ui";
 import { copyWithToast } from "@/lib/clipboard";
 import type { Discovery, ManageAction, Member, WeeklyReview } from "@/components/manage/types";
@@ -19,10 +20,10 @@ const STEPS = [
 export default function ReviewPage() {
   const qc = useQueryClient();
   const home = useQuery({ queryKey: ["overview"], queryFn: () => api<any>("/api/v1/overview") });
-  const actions = useQuery({ queryKey: ["manage-actions"], queryFn: () => api<ManageAction[]>("/api/v1/manage/actions") });
-  const radar = useQuery({ queryKey: ["manage-radar"], queryFn: () => api<Discovery[]>("/api/v1/manage/radar") });
+  const actions = useQuery({ queryKey: ["manage-actions"], queryFn: loadActions });
+  const radar = useQuery({ queryKey: ["manage-radar"], queryFn: loadRadar });
   const members = useQuery({ queryKey: ["members"], queryFn: () => api<Member[]>("/api/v1/members") });
-  const past = useQuery({ queryKey: ["manage-reviews"], queryFn: () => api<WeeklyReview[]>("/api/v1/manage/reviews") });
+  const past = useQuery({ queryKey: ["manage-reviews"], queryFn: loadReviews });
   const people = normalizeArray<Member>(members.data);
   const discoveries = normalizeArray<Discovery>(radar.data).filter((d) => d.kind !== "stable").slice(0, 5);
   const prior = normalizeArray<ManageAction>(actions.data).slice(0, 8);
@@ -53,16 +54,13 @@ export default function ReviewPage() {
 
   const save = useMutation({
     mutationFn: () =>
-      api<WeeklyReview>("/api/v1/manage/reviews", {
-        method: "POST",
-        body: JSON.stringify({
+      saveReview({
           results,
           prior_actions: prior.map((a) => ({ id: a.id, title: a.title, status: a.status })),
           priorities: picked.filter((p) => p.title.trim()),
           notes,
           next_review_at: nextAt,
         }),
-      }),
     onSuccess: (rev) => {
       setDone(rev);
       qc.invalidateQueries({ queryKey: ["manage-reviews"] });

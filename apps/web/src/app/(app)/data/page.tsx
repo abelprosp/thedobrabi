@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api, normalizeArray } from "@/lib/api";
+import { api, apiStatus, normalizeArray } from "@/lib/api";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Database, Plug, Trash2, Upload } from "lucide-react";
@@ -47,7 +47,10 @@ function HealthBadge({ datasetId }: { datasetId: string }) {
         freshness: string;
         quality_score?: number;
         checks?: { ok: boolean }[];
-      }>(`/api/v1/datasets/${datasetId}/health`),
+      }>(`/api/v1/datasets/${datasetId}/health`).catch((err) => {
+        if (apiStatus(err) === 404) return { freshness: "unknown", checks: [] as { ok: boolean }[] };
+        throw err;
+      }),
     staleTime: 60_000,
   });
   if (health.isLoading || !health.data)

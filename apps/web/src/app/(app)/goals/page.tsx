@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, normalizeArray } from "@/lib/api";
+import { createGoal, loadGoals } from "@/lib/manage-client";
 import { Badge, Button, Card, EmptyState, ErrorState, FieldLabel, Input, PageHeader, PageSkeleton, Select } from "@/components/ui";
 import { ActionDialog, type ActionPreset } from "@/components/manage/action-dialog";
 import { money, type GoalPace } from "@/components/manage/types";
@@ -14,7 +15,7 @@ export default function GoalsPage() {
   const qc = useQueryClient();
   const q = useQuery({
     queryKey: ["manage-goals"],
-    queryFn: () => api<GoalPace[]>("/api/v1/manage/goals"),
+    queryFn: loadGoals,
   });
   const datasets = useQuery({ queryKey: ["datasets"], queryFn: () => api<any>("/api/v1/datasets") });
   const semantic = useQuery({ queryKey: ["semantic"], queryFn: () => api<any>("/api/v1/semantic-models") });
@@ -32,13 +33,10 @@ export default function GoalsPage() {
 
   const create = useMutation({
     mutationFn: () =>
-      api("/api/v1/manage/goals", {
-        method: "POST",
-        body: JSON.stringify({
+      createGoal({
           ...form,
           target_value: Number(String(form.target_value).replace(",", ".")),
         }),
-      }),
     onSuccess: () => {
       toast.success("Meta criada. O ritmo necessário é calculado pelo sistema.");
       qc.invalidateQueries({ queryKey: ["manage-goals"] });
@@ -55,7 +53,7 @@ export default function GoalsPage() {
       />
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && <ErrorState message={(q.error as Error).message} onRetry={() => q.refetch()} />}
-      {goals.length === 0 && !q.isLoading && (
+      {goals.length === 0 && !q.isLoading && !q.isError && (
         <EmptyState
           icon={Target}
           title="Ainda sem metas"

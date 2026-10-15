@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { createMemory, loadMemories } from "@/lib/manage-client";
 import { toast } from "sonner";
 import { Button, ErrorState, PageSkeleton, Select, cn } from "@/components/ui";
 import { OnboardingChecklist } from "@/components/onboarding";
@@ -248,10 +249,7 @@ function MemoryBox({ onSaved }: { onSaved: () => void }) {
   const [occurred, setOccurred] = useState(() => new Date().toISOString().slice(0, 10));
   const save = useMutation({
     mutationFn: () =>
-      api("/api/v1/manage/memories", {
-        method: "POST",
-        body: JSON.stringify({ note, occurred_on: occurred }),
-      }),
+      createMemory({ note, occurred_on: occurred }),
     onSuccess: () => {
       toast.success("Memória registada. Vai aparecer nas comparações e revisões.");
       setNote("");
@@ -261,7 +259,7 @@ function MemoryBox({ onSaved }: { onSaved: () => void }) {
   });
   const memories = useQuery({
     queryKey: ["manage-memories"],
-    queryFn: () => api<any[]>("/api/v1/manage/memories"),
+    queryFn: loadMemories,
   });
   return (
     <Panel title="Memória de gestão">
