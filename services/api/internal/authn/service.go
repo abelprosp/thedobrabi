@@ -46,6 +46,7 @@ type Principal struct {
 	MFAEnabled          bool      `json:"mfa_enabled"`
 	OnboardingStep      string    `json:"onboarding_step"`
 	OnboardingCompleted bool      `json:"onboarding_completed"`
+	OnboardingDismissed bool      `json:"onboarding_dismissed"`
 }
 
 type TokenPair struct {
@@ -131,7 +132,7 @@ func (s *Service) Login(ctx context.Context, email, password string) (Principal,
 	var hash string
 	err := s.pg.QueryRow(ctx, `
 		SELECT u.id, u.email, u.name, u.password_hash, o.id, o.name, o.plan, om.role, w.id,
-		       o.onboarding_step, o.onboarding_completed_at IS NOT NULL
+		       u.onboarding_step, u.onboarding_completed_at IS NOT NULL, u.onboarding_dismissed_at IS NOT NULL
 		FROM users u
 		JOIN organization_members om ON om.user_id = u.id
 		JOIN organizations o ON o.id = om.org_id
@@ -139,7 +140,7 @@ func (s *Service) Login(ctx context.Context, email, password string) (Principal,
 		WHERE u.email = $1
 		ORDER BY om.created_at ASC, w.created_at ASC
 		LIMIT 1
-	`, email).Scan(&p.UserID, &p.Email, &p.Name, &hash, &p.OrgID, &p.OrgName, &p.Plan, &p.Role, &p.WorkspaceID, &p.OnboardingStep, &p.OnboardingCompleted)
+	`, email).Scan(&p.UserID, &p.Email, &p.Name, &hash, &p.OrgID, &p.OrgName, &p.Plan, &p.Role, &p.WorkspaceID, &p.OnboardingStep, &p.OnboardingCompleted, &p.OnboardingDismissed)
 	if err != nil {
 		if err == pgx.ErrNoRows {
 			return Principal{}, TokenPair{}, fmt.Errorf("credenciais inválidas")
@@ -303,7 +304,7 @@ func (s *Service) resolvePrincipal(ctx context.Context, userID, orgID, workspace
 	var p Principal
 	q := `
 		SELECT u.id, u.email, u.name, o.id, o.name, o.plan, om.role, w.id, COALESCE(u.mfa_enabled, FALSE),
-		       o.onboarding_step, o.onboarding_completed_at IS NOT NULL
+		       u.onboarding_step, u.onboarding_completed_at IS NOT NULL, u.onboarding_dismissed_at IS NOT NULL
 		FROM users u
 		JOIN organization_members om ON om.user_id = u.id
 		JOIN organizations o ON o.id = om.org_id
@@ -322,7 +323,7 @@ func (s *Service) resolvePrincipal(ctx context.Context, userID, orgID, workspace
 		args = append(args, workspaceID)
 	}
 	q += ` ORDER BY om.created_at ASC, w.created_at ASC LIMIT 1`
-	err := s.pg.QueryRow(ctx, q, args...).Scan(&p.UserID, &p.Email, &p.Name, &p.OrgID, &p.OrgName, &p.Plan, &p.Role, &p.WorkspaceID, &p.MFAEnabled, &p.OnboardingStep, &p.OnboardingCompleted)
+	err := s.pg.QueryRow(ctx, q, args...).Scan(&p.UserID, &p.Email, &p.Name, &p.OrgID, &p.OrgName, &p.Plan, &p.Role, &p.WorkspaceID, &p.MFAEnabled, &p.OnboardingStep, &p.OnboardingCompleted, &p.OnboardingDismissed)
 	return p, err
 }
 

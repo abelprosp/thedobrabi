@@ -5,6 +5,8 @@ import { api, normalizeArray } from "@/lib/api";
 import { copyToClipboard } from "@/lib/clipboard";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useOnboarding } from "@/components/onboarding/useOnboarding";
 import { PageHeader, PageSkeleton } from "@/components/ui";
 import { ROLE_LABELS, planLabel, roleLabel } from "@/lib/labels";
 import { ThemeSegmented } from "@/components/theme-toggle";
@@ -25,6 +27,8 @@ const inputCls = "w-full rounded-lg border border-line bg-surface px-3 py-2 text
 const selectCls = "rounded-lg border border-line bg-surface px-2 text-sm text-ink outline-none";
 
 export default function SettingsPage() {
+  const router = useRouter();
+  const onboarding = useOnboarding();
   const { theme, setTheme } = useSystemTheme();
   const dashboardTheme = useDashboardThemePreference();
   const me = useQuery({ queryKey: ["me"], queryFn: () => api<any>("/api/v1/auth/me") });
@@ -135,6 +139,22 @@ export default function SettingsPage() {
         <Row k="Função" v={roleLabel(me.data?.role)} />
         <Row k="Organização" v={org.data?.name} />
         <Row k="Plano" v={planLabel(org.data?.plan)} />
+        <div className="mt-3 flex items-center justify-between gap-3 border-t border-line pt-3">
+          <p className="text-[13px] text-mute">Quer rever a configuração guiada (dados, painel, IA, equipa)?</p>
+          <button
+            onClick={async () => {
+              try {
+                await onboarding.reset();
+                router.push("/welcome");
+              } catch (e) {
+                toast.error((e as Error).message);
+              }
+            }}
+            className="shrink-0 rounded-lg border border-line px-3 py-1.5 text-[13px] text-ink hover:bg-surface-2"
+          >
+            Rever o guia
+          </button>
+        </div>
       </Box>
       <div id="marca"><BrandBox org={org} /></div>
 

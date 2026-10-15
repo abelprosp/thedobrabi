@@ -3,94 +3,82 @@ package authn
 import (
 	"context"
 	"fmt"
-	"time"
 
 	"github.com/google/uuid"
 )
 
 var onboardingSteps = []string{
 	"welcome",
-	"connect_data",
-	"create_metric",
-	"build_dashboard",
-	"ask_ai",
-	"invite_team",
+	"data",
+	"dashboard",
+	"ask",
+	"team",
 	"done",
 }
 
-func (s *Service) NextOnboardingStep(ctx context.Context, orgID uuid.UUID, step string) (string, error) {
-	if step == "" {
-		var current string
-		err := s.pg.QueryRow(ctx, `SELECT onboarding_step FROM organizations WHERE id=$1`, orgID).Scan(&current)
-		if err != nil {
-			return "", err
-		}
-		step = current
-	}
-	next := nextStep(step)
-	_, err := s.pg.Exec(ctx, `
-		UPDATE organizations SET onboarding_step=$2, onboarding_seen=TRUE, updated_at=now()
-		WHERE id=$1 AND onboarding_completed_at IS NULL
-	`, orgID, next)
-	return next, err
+type OnboardingState struct {
+	Step      string `json:"onboarding_step"`
+	Completed bool   `json:"onboarding_completed"`
+	Dismissed bool   `json:"onboarding_dismissed"`
 }
 
-func (s *Service) CompleteOnboarding(ctx context.Context, orgID uuid.UUID) error {
-	_, err := s.pg.Exec(ctx, `
-		UPDATE organizations SET onboarding_step='done', onboarding_completed_at=now(), onboarding_seen=TRUE, updated_at=now()
-		WHERE id=$1
-	`, orgID)
-	return err
-}
-
-func (s *Service) ResetOnboarding(ctx context.Context, orgID uuid.UUID) error {
-	_, err := s.pg.Exec(ctx, `
-		UPDATE organizations SET onboarding_step='welcome', onboarding_completed_at=NULL, onboarding_seen=FALSE, updated_at=now()
-		WHERE id=$1
-	`, orgID)
-	return err
-}
-
-func (s *Service) GetOnboardingStep(ctx context.Context, orgID uuid.UUID) (string, bool, bool, error) {
-	var step string
-	var completedAt *time.Time
-	var seen bool
+func (s *Service) GetOnboarding(ctx context.Context, userID uuid.UUID) (OnboardingState, error) {
+	var st OnboardingState
 	err := s.pg.QueryRow(ctx, `
-		SELECT onboarding_step, onboarding_completed_at, onboarding_seen
-		FROM organizations WHERE id=$1
-	`, orgID).Scan(&step, &completedAt, &seen)
-	if err != nil {
-		return "", false, false, err
-	}
-	return step, completedAt != nil, seen, nil
+		SELECT onboarding_step, onboarding_completed_at IS NOT NULL, onboarding_dismissed_at IS NOT NULL
+		FROM users WHERE id=$1
+	`, userID).Scan(&st.Step, &st.Completed, &st.Dismissed)
+	return st, err
 }
 
-func nextStep(current string) string {
-	for i, s := range onboardingSteps {
-		if s == current && i+1 < len(onboardingSteps) {
-			return onboardingSteps[i+1]
-		}
-	}
-	if current == "" {
-		return onboardingSteps[0]
-	}
-	return current
-}
-
-func (s *Service) UpdateOnboardingStep(ctx context.Context, orgID uuid.UUID, step string) error {
-	valid := false
-	for _, s := range onboardingSteps {
-		if s == step {
-			valid = true
-			break
-		}
-	}
-	if !valid {
+// SetOnboardingStep guarda o passo atual do assistente; marca também como visto.
+func (s *Service) SetOnboardingStep(ctx context.Context, userID uuid.UUID, step string) error {
+	if !validOnboardingStep(step) {
 		return fmt.Errorf("passo de onboarding inválido")
 	}
+	if step == "done" {
+		return s.CompleteOnboarding(ctx, userID)
+	}
 	_, err := s.pg.Exec(ctx, `
-		UPDATE organizations SET onboarding_step=$2, onboarding_seen=TRUE, updated_at=now()
-		WHERE id=$1
-	`, orgID, step)
+		UPDATE users SET onboarding_step=$2, onboarding_dismissed_at=COALESCE(onboarding_dismissed_at, now()), updated_at=now()
+		WHERE id=$1 AND onboarding_completed_at IS NULL
+	`, userID, step)
 	return err
+}
+
+// DismissOnboarding impede que o assistente volte a abrir sozinho; o guia na visão geral continua.
+func (s *Service) DismissOnboarding(ctx context.Context, userID uuid.UUID) error {
+	_, err := s.pg.Exec(ctx, `
+		UPDATE users SET onboarding_dismissed_at=COALESCE(onboarding_dismissed_at, now()), updated_at=now()
+		WHERE id=$1
+	`, userID)
+	return err
+}
+
+func (s *Service) CompleteOnboarding(ctx context.Context, userID uuid.UUID) error {
+	_, err := s.pg.Exec(ctx, `
+		UPDATE users SET onboarding_step='done',
+			onboarding_completed_at=COALESCE(onboarding_completed_at, now()),
+			onboarding_dismissed_at=COALESCE(onboarding_dismissed_at, now()),
+			updated_at=now()
+		WHERE id=$1
+	`, userID)
+	return err
+}
+
+func (s *Service) ResetOnboarding(ctx context.Context, userID uuid.UUID) error {
+	_, err := s.pg.Exec(ctx, `
+		UPDATE users SET onboarding_step='welcome', onboarding_completed_at=NULL, onboarding_dismissed_at=NULL, updated_at=now()
+		WHERE id=$1
+	`, userID)
+	return err
+}
+
+func validOnboardingStep(step string) bool {
+	for _, s := range onboardingSteps {
+		if s == step {
+			return true
+		}
+	}
+	return false
 }

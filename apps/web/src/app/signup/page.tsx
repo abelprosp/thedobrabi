@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { api, setTokens, type Tokens } from "@/lib/api";
 import { toast } from "sonner";
 import { AuthFormShell, Field, PrimaryButton } from "@/components/auth";
+import { postLoginPath, type OnboardingUser } from "@/components/onboarding/useOnboarding";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -18,16 +19,12 @@ export default function SignupPage() {
     e.preventDefault();
     setBusy(true);
     try {
-      const res = await api<{ tokens: Tokens; user?: { onboarding_step?: string; onboarding_completed?: boolean } }>("/api/v1/auth/register", {
+      const res = await api<{ tokens: Tokens; user?: OnboardingUser }>("/api/v1/auth/register", {
         method: "POST",
         body: JSON.stringify({ name, email, password, organization: org }),
       });
       setTokens(res.tokens);
-      if (res.user?.onboarding_completed) {
-        router.replace("/overview");
-      } else {
-        router.replace("/welcome");
-      }
+      router.replace(postLoginPath(res.user));
     } catch (err: any) {
       toast.error(err.message);
     } finally {

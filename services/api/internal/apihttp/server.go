@@ -139,7 +139,9 @@ func New(deps *platform.Deps) http.Handler {
 		r.Group(func(r chi.Router) {
 			r.Use(s.authMw)
 			r.Get("/auth/me", s.me)
-			r.Post("/onboarding/next", s.onboardingNext)
+			r.Get("/onboarding", s.onboardingGet)
+			r.Post("/onboarding/step", s.onboardingStep)
+			r.Post("/onboarding/dismiss", s.onboardingDismiss)
 			r.Post("/onboarding/complete", s.onboardingComplete)
 			r.Post("/onboarding/reset", s.onboardingReset)
 			r.Post("/auth/mfa/enroll", s.mfaEnroll)

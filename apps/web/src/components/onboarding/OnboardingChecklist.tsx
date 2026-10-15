@@ -1,77 +1,89 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { useOnboarding, CHECKLIST_TASKS, stepIndex } from "./useOnboarding";
-import { Button, Card, CardTitle } from "@/components/ui";
-import { CheckCircle2, Circle, PartyPopper } from "lucide-react";
+import { useOnboarding, CHECKLIST_TASKS } from "./useOnboarding";
+import { Button, Card } from "@/components/ui";
+import { CheckCircle2, Circle, PartyPopper, X } from "lucide-react";
 
 export function OnboardingChecklist() {
-  const { step, completed, taskCompleted, complete } = useOnboarding();
+  const { isLoading, completed, justCompleted, tasks, doneCount, complete, isBusy } = useOnboarding();
+  const [hidden, setHidden] = useState(false);
 
-  if (completed || step === "done") {
+  if (isLoading || hidden) return null;
+
+  if (completed) {
+    if (!justCompleted) return null;
     return (
       <Card className="flex items-center gap-3 border-emerald-200 bg-emerald-50/60 py-4">
         <PartyPopper className="text-ok" size={22} />
-        <div className="text-sm font-medium text-ok">Tudo pronto! A configuração inicial da TheDobra foi concluída.</div>
+        <div className="flex-1 text-sm font-medium text-ok">Tudo pronto! A configuração inicial foi concluída e este guia não volta a aparecer.</div>
+        <button onClick={() => setHidden(true)} className="text-ok/70 hover:text-ok" aria-label="Fechar">
+          <X size={16} />
+        </button>
       </Card>
     );
   }
 
-  const currentStepIdx = stepIndex(step);
-  // Map onboarding step to the current checklist task index (connect_data=1 -> task 0, ...)
-  const currentTaskIdx = Math.max(0, currentStepIdx - 1);
-  const total = CHECKLIST_TASKS.length;
-  const completedCount = CHECKLIST_TASKS.filter((t) => taskCompleted(t.id)).length;
-  const progress = Math.round((completedCount / total) * 100);
+  if (tasks.length === 0) return null;
+
+  const total = tasks.length;
+  const progress = Math.round((doneCount / total) * 100);
+  const nextId = tasks.find((t) => !t.done)?.id;
 
   return (
     <Card>
-      <CardTitle>Configure a TheDobra</CardTitle>
-      <div className="mb-3 flex items-center gap-3">
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <div>
+          <h2 className="text-sm font-semibold text-ink">Primeiros passos</h2>
+          <p className="mt-0.5 text-[12px] text-mute">Cada passo marca-se sozinho quando o fizer.</p>
+        </div>
+        <Button size="sm" variant="ghost" onClick={() => complete()} busy={isBusy}>
+          Ocultar guia
+        </Button>
+      </div>
+      <div className="mb-4 flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-surface-2">
           <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${progress}%` }} />
         </div>
         <span className="text-[12px] text-mute">
-          {completedCount}/{total}
+          {doneCount}/{total}
         </span>
       </div>
-      <div className="space-y-2">
-        {CHECKLIST_TASKS.map((t, i) => {
-          const done = taskCompleted(t.id);
-          const active = i === currentTaskIdx;
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {tasks.map((t) => {
+          const meta = CHECKLIST_TASKS[t.id];
+          if (!meta) return null;
+          const active = t.id === nextId;
           return (
             <div
               key={t.id}
-              className={`flex items-center justify-between rounded-xl border px-3 py-2 transition ${
-                done
-                  ? "border-emerald-200 bg-emerald-50/40"
-                  : active
-                    ? "border-primary/30 bg-primary/5"
-                    : "border-line bg-surface"
+              className={`flex flex-col justify-between gap-3 rounded-xl border p-3 transition ${
+                t.done ? "border-emerald-200 bg-emerald-50/40" : active ? "border-primary/30 bg-primary/5" : "border-line bg-surface"
               }`}
             >
-              <div className="flex items-center gap-2.5">
-                {done ? <CheckCircle2 size={16} className="text-ok" /> : <Circle size={16} className={active ? "text-primary" : "text-mute/40"} />}
-                <span className={`text-sm ${done ? "text-ok line-through" : active ? "font-medium text-ink" : "text-mute"}`}>{t.label}</span>
+              <div className="flex items-start gap-2.5">
+                {t.done ? (
+                  <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-ok" />
+                ) : (
+                  <Circle size={16} className={`mt-0.5 shrink-0 ${active ? "text-primary" : "text-mute/40"}`} />
+                )}
+                <div>
+                  <div className={`text-sm ${t.done ? "text-ok line-through" : "font-medium text-ink"}`}>{meta.label}</div>
+                  {!t.done && <div className="mt-0.5 text-[12px] text-mute">{meta.description}</div>}
+                </div>
               </div>
-              <Link
-                href={t.href}
-              >
-                <Button size="sm" variant={active ? "primary" : "secondary"}>
-                  {done ? "Feito" : active ? "Começar" : "Ver"}
-                </Button>
-              </Link>
+              {!t.done && (
+                <Link href={meta.href} className="self-end">
+                  <Button size="sm" variant={active ? "primary" : "secondary"}>
+                    {meta.cta}
+                  </Button>
+                </Link>
+              )}
             </div>
           );
         })}
       </div>
-      {completedCount === total - 1 && (
-        <div className="mt-4 text-right">
-          <Button size="sm" onClick={complete}>
-            Concluir onboarding
-          </Button>
-        </div>
-      )}
     </Card>
   );
 }

@@ -47,11 +47,6 @@ const OnboardingModal = lazy(() =>
     default: m.OnboardingModal,
   })),
 );
-const OnboardingSpotlight = lazy(() =>
-  import("@/components/onboarding").then((m) => ({
-    default: m.OnboardingSpotlight,
-  })),
-);
 
 const SIDEBAR_COLLAPSED_KEY = "thedobra.sidebar-collapsed";
 const NAV_GROUPS_KEY = "thedobra.nav-groups";
@@ -634,7 +629,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <CommandPalette open={open} onClose={() => setOpen(false)} />
       <Suspense fallback={null}>
         <OnboardingModal />
-        <OnboardingSpotlight />
       </Suspense>
     </div>
   );

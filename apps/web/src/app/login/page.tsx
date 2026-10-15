@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { api, setTokens, type Tokens } from "@/lib/api";
 import { toast } from "sonner";
 import { AuthFormShell, Field, PrimaryButton } from "@/components/auth";
+import { postLoginPath, type OnboardingUser } from "@/components/onboarding/useOnboarding";
 
 export default function LoginPage() {
   return (
@@ -45,19 +46,15 @@ function LoginInner() {
     setBusy(true);
     try {
       if (mfaToken) {
-        const res = await api<{ tokens: Tokens; user?: { onboarding_step?: string; onboarding_completed?: boolean } }>("/api/v1/auth/mfa/verify", {
+        const res = await api<{ tokens: Tokens; user?: OnboardingUser }>("/api/v1/auth/mfa/verify", {
           method: "POST",
           body: JSON.stringify({ mfa_token: mfaToken, code: mfaCode }),
         });
         setTokens(res.tokens);
-        if (res.user?.onboarding_completed) {
-          router.replace("/overview");
-        } else {
-          router.replace("/welcome");
-        }
+        router.replace(postLoginPath(res.user));
         return;
       }
-      const res = await api<{ tokens?: Tokens; mfa_required?: boolean; mfa_token?: string; user?: { onboarding_step?: string; onboarding_completed?: boolean } }>("/api/v1/auth/login", {
+      const res = await api<{ tokens?: Tokens; mfa_required?: boolean; mfa_token?: string; user?: OnboardingUser }>("/api/v1/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
@@ -68,11 +65,7 @@ function LoginInner() {
       }
       if (res.tokens) {
         setTokens(res.tokens);
-        if (res.user?.onboarding_completed) {
-          router.replace("/overview");
-        } else {
-          router.replace("/welcome");
-        }
+        router.replace(postLoginPath(res.user));
       }
     } catch (err: any) {
       toast.error(err.message);
