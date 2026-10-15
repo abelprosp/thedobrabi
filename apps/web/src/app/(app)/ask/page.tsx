@@ -156,6 +156,7 @@ export default function AskPage() {
     if (!msgs.length && !busy) return;
     const container = chatScroll.current;
     if (!container) return;
+    setShowLatest(false);
     requestAnimationFrame(() => {
       container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
     });
@@ -263,74 +264,68 @@ export default function AskPage() {
     );
   }
 
+  const chatting = msgs.length > 0 || busy;
+
   return (
-    <div className="mx-auto flex h-[calc(100dvh-12rem)] min-h-[34rem] max-w-5xl flex-col lg:h-[calc(100dvh-9rem)]">
-      <div className="card-float mb-4 overflow-hidden p-5 sm:p-6">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-start gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.9)]">
-              <Sparkles size={20} />
-            </div>
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl font-bold tracking-[-0.035em] text-ink sm:text-2xl">Analisar com IA</h1>
-                <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700">Dados verificados</span>
-              </div>
-              <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-mute">
-                Faça perguntas em linguagem natural. A DobraAI encontra métricas, explica variações e mostra de onde veio cada número.
-              </p>
-            </div>
+    <div className="mx-auto flex h-[calc(100dvh-10.5rem)] min-h-[28rem] max-w-5xl flex-col lg:h-[calc(100dvh-7.5rem)]">
+      <header className="mb-3 shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-white">
+            <Sparkles size={16} />
           </div>
-          <div className="flex w-full gap-2 lg:w-auto">
-          {datasetList.length > 0 && (
-            <Select
-              aria-label="Conjunto"
-              value={activeId}
-              onChange={(e) => {
-                setDatasetId(e.target.value);
-                setConversationId("");
-                setMsgs([]);
-              }}
-              className="min-w-0 flex-1 sm:w-[220px]"
-            >
-              {datasetList.map((d) => (
-                <option key={d.id} value={d.id}>
-                  {d.name}
-                </option>
-              ))}
-            </Select>
-          )}
-          {msgs.length > 0 && (
-            <Button
-              variant="ghost"
-              size="icon"
-              aria-label="Nova conversa"
-              title="Nova conversa"
-              onClick={() => {
-                setConversationId("");
-                setMsgs([]);
-              }}
-            >
-              <RotateCcw size={15} />
-            </Button>
-          )}
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-lg font-bold tracking-[-0.035em] text-ink sm:text-xl">Analisar com IA</h1>
+              <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-400/10">Dados verificados</span>
+            </div>
+            {!chatting && (
+              <p className="mt-0.5 truncate text-[13px] text-mute">Pergunte em português. A DobraAI usa as métricas oficiais do conjunto e mostra de onde veio o número.</p>
+            )}
+          </div>
+          <div className="flex shrink-0 items-center gap-2">
+            {datasetList.length > 0 && (
+              <Select
+                aria-label="Conjunto"
+                value={activeId}
+                onChange={(e) => {
+                  setDatasetId(e.target.value);
+                  setConversationId("");
+                  setMsgs([]);
+                }}
+                className="min-h-10 w-[9.5rem] sm:w-[200px]"
+              >
+                {datasetList.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.name}
+                  </option>
+                ))}
+              </Select>
+            )}
+            {chatting && (
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Nova conversa"
+                title="Nova conversa"
+                onClick={() => {
+                  setConversationId("");
+                  setMsgs([]);
+                  setShowLatest(false);
+                }}
+              >
+                <RotateCcw size={15} />
+              </Button>
+            )}
           </div>
         </div>
-        <div className="mt-5 grid grid-cols-1 gap-2 border-t border-primary/10 pt-4 sm:grid-cols-3">
-          <Capability icon={BarChart3} title="Explore" text="Veja tendências e comparações" />
-          <Capability icon={Calculator} title="Calcule" text="Crie métricas sem SQL" />
-          <Capability icon={Lightbulb} title="Decida" text="Encontre os próximos passos" />
-        </div>
-      </div>
-      <div className="card-float mb-4 flex items-center gap-2 rounded-full px-4 py-2.5 text-[11px] text-mute">
-        <CheckCircle2 size={13} className="text-emerald-600" />
-        <span>
-          Respostas calculadas com métricas oficiais e evidências do conjunto
-          selecionado.
-        </span>
-        <span className="hidden text-line sm:inline">·</span>
-        <span>Faça perguntas de continuação como “e por região?”</span>
-      </div>
+        {!chatting && (
+          <div className="mt-3 grid grid-cols-1 gap-1 sm:grid-cols-3">
+            <Capability icon={BarChart3} title="Explore" text="Tendências e comparações" />
+            <Capability icon={Calculator} title="Calcule" text="Métricas sem SQL" />
+            <Capability icon={Lightbulb} title="Decida" text="Próximos passos" />
+          </div>
+        )}
+      </header>
 
       <div className="relative min-h-0 flex-1">
       <div
@@ -338,10 +333,10 @@ export default function AskPage() {
         onScroll={(event) => {
           const el = event.currentTarget;
           const distance = el.scrollHeight - el.scrollTop - el.clientHeight;
-          setShowLatest(distance > 180);
+          setShowLatest(distance > 320);
         }}
         aria-label="Histórico da conversa"
-        className="h-full space-y-4 overflow-y-auto overscroll-contain scroll-smooth px-0.5 pb-5 pt-2 pr-1 [scrollbar-gutter:stable]"
+        className="h-full space-y-4 overflow-y-auto overscroll-contain scroll-smooth px-0.5 pb-3 pt-1 pr-1 [scrollbar-gutter:stable]"
       >
         {msgs.length === 0 && (
           <div className="flex min-h-full flex-col items-center justify-center px-2 py-8 text-center">
@@ -505,16 +500,19 @@ export default function AskPage() {
         )}
         <div ref={bottom} />
       </div>
+      </div>
       {showLatest && (
         <button
           type="button"
-          onClick={() => chatScroll.current?.scrollTo({ top: chatScroll.current.scrollHeight, behavior: "smooth" })}
-          className="absolute bottom-3 left-1/2 z-10 inline-flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-primary/20 bg-surface px-3 py-2 text-[11px] font-medium text-primary shadow-lg shadow-slate-900/10 transition hover:-translate-y-px"
+          onClick={() => {
+            chatScroll.current?.scrollTo({ top: chatScroll.current.scrollHeight, behavior: "smooth" });
+            setShowLatest(false);
+          }}
+          className="mx-auto mt-2 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1.5 text-[11px] font-medium text-primary"
         >
-          <ArrowUp size={13} className="rotate-180" /> Ver mensagens recentes
+          <ArrowUp size={13} className="rotate-180" /> Ir para a resposta
         </button>
       )}
-      </div>
 
       <form
         onSubmit={(e) => {
