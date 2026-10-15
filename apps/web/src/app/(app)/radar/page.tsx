@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { normalizeArray } from "@/lib/api";
 import { loadRadar, sendRadarFeedback } from "@/lib/manage-client";
 import { Badge, Button, EmptyState, ErrorState, PageHeader, PageSkeleton, Table, TableWrap, Td, Th } from "@/components/ui";
 import { ActionDialog, type ActionPreset } from "@/components/manage/action-dialog";
