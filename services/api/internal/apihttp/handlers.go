@@ -20,22 +20,6 @@ import (
 	"github.com/thedobra/thedobra/services/api/internal/semantic"
 )
 
-func (s *Server) overview(w http.ResponseWriter, r *http.Request) {
-	uid, org, ws, role := principal(r)
-	var datasets int
-	_ = s.deps.PG.QueryRow(r.Context(), `SELECT COUNT(*) FROM datasets WHERE org_id=$1 AND workspace_id=$2 AND status='ready'`, org, ws).Scan(&datasets)
-	var dsID uuid.UUID
-	err := s.deps.PG.QueryRow(r.Context(), `SELECT id FROM datasets WHERE org_id=$1 AND workspace_id=$2 AND status='ready' ORDER BY updated_at DESC LIMIT 1`, org, ws).Scan(&dsID)
-	out := map[string]any{"datasets": datasets, "brief": nil}
-	if err == nil {
-		brief, err := s.intel.AnalyzeDataset(r.Context(), org, ws, uid, dsID, role)
-		if err == nil {
-			out["brief"] = brief
-		}
-	}
-	httpx.JSON(w, 200, out)
-}
-
 func (s *Server) listSources(w http.ResponseWriter, r *http.Request) {
 	_, org, ws, _ := principal(r)
 	rows, err := s.deps.PG.Query(r.Context(), `
@@ -902,6 +886,7 @@ func (s *Server) refreshInsights(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "intel_failed", err.Error())
 		return
 	}
+	_ = s.manage.SyncFromBrief(r.Context(), org, ws, id, brief)
 	httpx.JSON(w, 200, brief)
 }
 

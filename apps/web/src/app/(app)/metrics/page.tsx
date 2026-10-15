@@ -30,7 +30,12 @@ export default function MetricsPage() {
     <div className="mx-auto max-w-4xl space-y-4">
       <PageHeader
         title="Métricas"
-        description="A camada semântica é a fonte da verdade. A TheDobra nunca inventa uma fórmula."
+        description="A camada semântica é a fonte da verdade. A TheDobra nunca inventa uma fórmula. O ritmo das metas vive em Metas."
+        actions={
+          <Link href="/goals">
+            <Button variant="secondary">Ver metas e ritmo</Button>
+          </Link>
+        }
       />
       {q.isLoading && <PageSkeleton cards={2} />}
       {q.isError && (

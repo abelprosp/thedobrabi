@@ -17,6 +17,10 @@ import {
   AlertTriangle,
   FileText,
   BarChart3,
+  Radar,
+  ListChecks,
+  CalendarCheck,
+  Target,
   LogOut,
   GitBranch,
   Menu,
@@ -75,6 +79,16 @@ const mobilePrimaryNav: NavItem[] = [
 ];
 
 const navGroups: NavGroup[] = [
+  {
+    id: "gerir",
+    label: "Gerir o negócio",
+    items: [
+      { href: "/radar", label: "Radar", icon: Radar },
+      { href: "/actions", label: "Acções", icon: ListChecks },
+      { href: "/review", label: "Revisão", icon: CalendarCheck },
+      { href: "/goals", label: "Metas", icon: Target },
+    ],
+  },
   {
     id: "analise",
     label: "Criar e analisar",
@@ -139,7 +153,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [menu, setMenu] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
-  const [openGroups, setOpenGroups] = useState<string[]>(["analise"]);
+  const [openGroups, setOpenGroups] = useState<string[]>(["gerir", "analise"]);
   const menuRef = useRef<HTMLDivElement>(null);
   const prevPathRef = useRef<string | null>(null);
   const activeGroupId = useMemo(() => groupIdForPath(path), [path]);

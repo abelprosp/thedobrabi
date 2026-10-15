@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 
 const items = [
   { href: "/overview", label: "Visão geral" },
+  { href: "/radar", label: "Radar" },
+  { href: "/actions", label: "Acções" },
+  { href: "/review", label: "Revisão da semana" },
+  { href: "/goals", label: "Metas" },
   { href: "/dashboards", label: "Dashboards" },
   { href: "/store", label: "Loja de painéis" },
   { href: "/apps", label: "Apps" },

@@ -25,6 +25,7 @@ import (
 	"github.com/thedobra/thedobra/services/api/internal/ingest"
 	"github.com/thedobra/thedobra/services/api/internal/intelligence"
 	"github.com/thedobra/thedobra/services/api/internal/lineage"
+	"github.com/thedobra/thedobra/services/api/internal/manage"
 	"github.com/thedobra/thedobra/services/api/internal/notify"
 	"github.com/thedobra/thedobra/services/api/internal/platform"
 	"github.com/thedobra/thedobra/services/api/internal/queryeng"
@@ -55,6 +56,7 @@ type Server struct {
 	rls      *rls.Store
 	sched    *scheduler.Store
 	schedRun *scheduler.Runner
+	manage   *manage.Service
 }
 
 func New(deps *platform.Deps) http.Handler {
@@ -82,6 +84,7 @@ func New(deps *platform.Deps) http.Handler {
 		apps:    apps.NewStore(deps.PG),
 		gateway: gateway.NewStore(deps.PG),
 		rls:     rls.NewStore(deps.PG),
+		manage:  manage.New(deps.PG, intel, q),
 	}
 	s.sched = scheduler.NewStore(deps.PG)
 	s.schedRun = scheduler.NewRunner(s.sched, deps.Log, scheduler.Jobs{
@@ -123,6 +126,7 @@ func New(deps *platform.Deps) http.Handler {
 		r.Post("/public/dashboards/{token}/queries", s.publicDashboardQuery)
 		r.Post("/public/dashboards/{token}/analyze", s.publicDashboardAnalyze)
 		r.Get("/public/embed/{token}", s.publicEmbed)
+		r.Get("/public/week-review/{token}", s.publicWeekReview)
 		r.Post("/public/embed/{token}/queries", s.publicEmbedQuery)
 		r.Post("/public/embed/{token}/analyze", s.publicEmbedAnalyze)
 		r.Post("/auth/refresh", s.refresh)
@@ -236,6 +240,24 @@ func New(deps *platform.Deps) http.Handler {
 
 			r.Get("/insights", s.insights)
 			r.Post("/insights/refresh", s.refreshInsights)
+
+			r.Get("/manage/brief", s.manageHome)
+			r.Patch("/manage/cadence", s.patchManageCadence)
+			r.Get("/manage/radar", s.manageRadar)
+			r.Post("/manage/radar/{id}/feedback", s.manageRadarFeedback)
+			r.Get("/manage/actions", s.manageListActions)
+			r.Post("/manage/actions", s.manageCreateAction)
+			r.Get("/manage/actions/{id}", s.manageGetAction)
+			r.Patch("/manage/actions/{id}", s.managePatchAction)
+			r.Post("/manage/actions/{id}/review", s.manageReviewAction)
+			r.Get("/manage/reviews", s.manageListReviews)
+			r.Post("/manage/reviews", s.manageCreateReview)
+			r.Get("/manage/reviews/{id}", s.manageGetReview)
+			r.Get("/manage/memories", s.manageListMemories)
+			r.Post("/manage/memories", s.manageCreateMemory)
+			r.Delete("/manage/memories/{id}", s.manageDeleteMemory)
+			r.Get("/manage/goals", s.manageListGoals)
+			r.Post("/manage/goals", s.manageCreateGoal)
 
 			r.Get("/alerts", s.listAlerts)
 			r.Post("/alerts", s.createAlert)
