@@ -141,6 +141,17 @@ export default function AskPage() {
     ];
   }, [activeName]);
 
+  const autoAsked = useRef(false);
+  useEffect(() => {
+    if (autoAsked.current || datasets.isLoading) return;
+    const initial = new URLSearchParams(window.location.search).get("q");
+    if (!initial) return;
+    autoAsked.current = true;
+    window.history.replaceState({}, "", "/ask");
+    ask(initial);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [datasets.isLoading]);
+
   useEffect(() => {
     if (!msgs.length && !busy) return;
     const container = chatScroll.current;
