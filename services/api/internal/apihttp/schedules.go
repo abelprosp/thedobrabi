@@ -73,6 +73,12 @@ func (s *Server) upsertSchedule(w http.ResponseWriter, r *http.Request) {
 		httpx.Error(w, 400, "invalid_target", err.Error())
 		return
 	}
+	if body.Kind == "report" {
+		if err := s.ent.Check(r.Context(), org, "report"); err != nil {
+			httpx.Error(w, 402, "quota", err.Error())
+			return
+		}
+	}
 	sc, err := s.sched.Upsert(r.Context(), org, ws, uid, body)
 	if err != nil {
 		httpx.Error(w, 400, "save_failed", err.Error())

@@ -270,6 +270,10 @@ func (s *Server) uploadDataset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer file.Close()
+	if err := s.ent.CheckStorage(r.Context(), org, hdr.Size); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
 	name := r.FormValue("name")
 	if name == "" {
 		name = hdr.Filename
@@ -298,6 +302,10 @@ func (s *Server) demoDataset(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if err := s.ent.Check(r.Context(), org, "dataset"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
+	}
+	if err := s.ent.CheckStorage(r.Context(), org, 0); err != nil {
 		httpx.Error(w, 402, "quota", err.Error())
 		return
 	}
@@ -1050,6 +1058,10 @@ func (s *Server) createReport(w http.ResponseWriter, r *http.Request) {
 	}
 	if body.Cadence == "" {
 		body.Cadence = "weekly"
+	}
+	if err := s.ent.Check(r.Context(), org, "report"); err != nil {
+		httpx.Error(w, 402, "quota", err.Error())
+		return
 	}
 	if len(body.Pages) == 0 {
 		body.Pages = []byte(`[{"name":"Página 1","widgets":[]}]`)

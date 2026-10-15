@@ -12,13 +12,17 @@ import (
 )
 
 const (
-	PlanEssencial = "essencial"
+	PlanGratis    = "gratis"
+	PlanEssencial = "essencial" // Starter (pago)
 	PlanPro       = "pro"
 	PlanCompleto  = "completo"
 
 	TierBasic = "basic"
 	TierPlus  = "plus"
 	TierAll   = "all"
+
+	MB int64 = 1024 * 1024
+	GB int64 = 1024 * 1024 * 1024
 )
 
 var platformEmails = map[string]bool{
@@ -37,6 +41,8 @@ type Limits struct {
 	AI            int
 	Dashboards    int
 	Connectors    int
+	StorageBytes  int64
+	Reports       int
 	ConnectorTier string
 	Whitelabel    bool
 	Plan          string
@@ -58,6 +64,8 @@ type PlanDef struct {
 	AI            int      `json:"ai"`
 	Dashboards    int      `json:"dashboards"`
 	Connectors    int      `json:"connectors"`
+	StorageBytes  int64    `json:"storage_bytes"`
+	Reports       int      `json:"reports"`
 	ConnectorTier string   `json:"connector_tier"`
 	Whitelabel    bool     `json:"whitelabel"`
 	Highlights    []string `json:"highlights"`
@@ -66,34 +74,71 @@ type PlanDef struct {
 func Catalog() []PlanDef {
 	return []PlanDef{
 		{
-			ID: PlanEssencial, Name: "Essencial", PriceBRL: 97, Period: "mês",
-			Users: 3, Datasets: 10, Queries: 20000, AI: 0, Dashboards: 5, Connectors: 5,
-			ConnectorTier: TierBasic, Whitelabel: false,
-			Highlights: []string{"5 dashboards", "5 conectores básicos (CSV, Excel, JSON, Postgres, MySQL)", "Sem créditos de IA", "Até 3 utilizadores"},
+			ID: PlanGratis, Name: "Grátis", PriceBRL: 0, Period: "mês",
+			Users: 1, Datasets: 2, Queries: 2000, AI: 10, Dashboards: 2, Connectors: 0,
+			StorageBytes: 10 * MB, Reports: 0, ConnectorTier: TierBasic, Whitelabel: false,
+			Highlights: []string{
+				"10 créditos de IA / mês",
+				"2 dashboards",
+				"2 bases de dados",
+				"10 MB de armazenamento",
+				"Ficheiros CSV, Excel e JSON",
+			},
 		},
 		{
-			ID: PlanPro, Name: "Pro", PriceBRL: 129, Period: "mês",
-			Users: 10, Datasets: 40, Queries: 100000, AI: 1500, Dashboards: 25, Connectors: 15,
-			ConnectorTier: TierPlus, Whitelabel: false,
-			Highlights: []string{"25 dashboards", "15 conectores (básicos + ERPs, APIs e Google Sheets)", "1.500 créditos de IA / mês", "Até 10 utilizadores"},
+			ID: PlanEssencial, Name: "Starter", PriceBRL: 97, Period: "mês",
+			Users: 5, Datasets: 20, Queries: 20000, AI: 150, Dashboards: -1, Connectors: 4,
+			StorageBytes: 5 * GB / 2, Reports: -1, ConnectorTier: TierPlus, Whitelabel: false,
+			Highlights: []string{
+				"150 créditos de IA / mês",
+				"Dashboards ilimitados",
+				"20 bases de dados",
+				"2,5 GB de armazenamento",
+				"4 conectores externos",
+				"Relatórios agendados",
+			},
 		},
 		{
-			ID: PlanCompleto, Name: "Completo", PriceBRL: 297, Period: "mês",
+			ID: PlanPro, Name: "Pro", PriceBRL: 197, Period: "mês",
+			Users: 25, Datasets: 160, Queries: 200000, AI: 1500, Dashboards: -1, Connectors: 32,
+			StorageBytes: 25 * GB, Reports: -1, ConnectorTier: TierPlus, Whitelabel: false,
+			Highlights: []string{
+				"1.500 créditos de IA / mês",
+				"Dashboards ilimitados",
+				"160 bases de dados",
+				"25 GB de armazenamento",
+				"32 conectores externos",
+				"Relatórios agendados",
+			},
+		},
+		{
+			ID: PlanCompleto, Name: "Completo", PriceBRL: 397, Period: "mês",
 			Users: -1, Datasets: -1, Queries: -1, AI: -1, Dashboards: -1, Connectors: -1,
-			ConnectorTier: TierAll, Whitelabel: true,
-			Highlights: []string{"Dashboards e conectores ilimitados", "IA ilimitada", "White-label (logo e nome)", "Todos os conectores"},
+			StorageBytes: -1, Reports: -1, ConnectorTier: TierAll, Whitelabel: true,
+			Highlights: []string{
+				"Créditos de IA ilimitados",
+				"Dashboards, bases e conectores ilimitados",
+				"Armazenamento ilimitado",
+				"Relatórios agendados",
+				"White-label (logo e nome)",
+				"Todos os conectores",
+			},
 		},
 	}
 }
 
 func NormalizePlan(plan string) string {
 	switch strings.ToLower(strings.TrimSpace(plan)) {
+	case PlanGratis, "free", "trial":
+		return PlanGratis
 	case PlanPro, "growth":
 		return PlanPro
 	case PlanCompleto, "business", "enterprise":
 		return PlanCompleto
 	case PlanEssencial, "starter":
 		return PlanEssencial
+	case "":
+		return PlanGratis
 	default:
 		return PlanEssencial
 	}
@@ -113,8 +158,37 @@ func ForPlan(plan string) Limits {
 	d := DefFor(plan)
 	return Limits{
 		Users: d.Users, Datasets: d.Datasets, Queries: d.Queries, AI: d.AI,
-		Dashboards: d.Dashboards, Connectors: d.Connectors, ConnectorTier: d.ConnectorTier,
+		Dashboards: d.Dashboards, Connectors: d.Connectors, StorageBytes: d.StorageBytes,
+		Reports: d.Reports, ConnectorTier: d.ConnectorTier,
 		Whitelabel: d.Whitelabel, Plan: d.ID, Name: d.Name, PriceBRL: d.PriceBRL,
+	}
+}
+
+func FormatBytes(n int64) string {
+	if n < 0 {
+		return "ilimitado"
+	}
+	if n < MB {
+		return fmt.Sprintf("%d B", n)
+	}
+	if n < GB {
+		if n%MB == 0 {
+			return fmt.Sprintf("%d MB", n/MB)
+		}
+		return fmt.Sprintf("%.1f MB", float64(n)/float64(MB))
+	}
+	if n%GB == 0 {
+		return fmt.Sprintf("%d GB", n/GB)
+	}
+	return fmt.Sprintf("%.1f GB", float64(n)/float64(GB))
+}
+
+func IsExternalConnector(typ string) bool {
+	switch strings.ToLower(strings.TrimSpace(typ)) {
+	case "csv", "xlsx", "json", "pdf", "manual", "":
+		return false
+	default:
+		return true
 	}
 }
 
@@ -252,14 +326,37 @@ func (s *Service) Check(ctx context.Context, orgID uuid.UUID, kind string) error
 	case "connector":
 		if lim.Connectors >= 0 {
 			var n int
-			_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM data_sources WHERE org_id=$1`, orgID).Scan(&n)
+			_ = s.pg.QueryRow(ctx, `
+				SELECT COUNT(*) FROM data_sources
+				WHERE org_id=$1 AND lower(type) NOT IN ('csv','xlsx','json','pdf','manual')
+			`, orgID).Scan(&n)
 			if n >= lim.Connectors {
-				return fmt.Errorf("o plano %s inclui %d conectores. Peça um upgrade para ligar mais fontes", lim.Name, lim.Connectors)
+				if lim.Connectors == 0 {
+					return fmt.Errorf("o plano %s não inclui conectores externos. Faça upgrade para o Starter", lim.Name)
+				}
+				return fmt.Errorf("o plano %s inclui %d conectores externos. Peça um upgrade para ligar mais fontes", lim.Name, lim.Connectors)
 			}
+		}
+	case "storage":
+		return s.CheckStorage(ctx, orgID, 0)
+	case "report":
+		if lim.Reports == 0 {
+			return fmt.Errorf("relatórios agendados estão no plano Starter. Faça upgrade para programar envios")
+		}
+		if lim.Reports < 0 {
+			return nil
+		}
+		var n int
+		_ = s.pg.QueryRow(ctx, `
+			SELECT COUNT(*) FROM reports
+			WHERE org_id=$1 AND lower(cadence) NOT IN ('','once','manual','none')
+		`, orgID).Scan(&n)
+		if n >= lim.Reports {
+			return fmt.Errorf("o plano %s inclui %d relatórios agendados", lim.Name, lim.Reports)
 		}
 	case "ai":
 		if lim.AI == 0 {
-			return fmt.Errorf("o plano %s não inclui créditos de IA. O plano Pro (R$ 129) já traz créditos", lim.Name)
+			return fmt.Errorf("o plano %s não inclui créditos de IA. O Starter já traz 150 créditos por mês", lim.Name)
 		}
 		if lim.AI < 0 {
 			return nil
@@ -284,8 +381,21 @@ func (s *Service) Check(ctx context.Context, orgID uuid.UUID, kind string) error
 		}
 	case "whitelabel":
 		if !lim.Whitelabel {
-			return fmt.Errorf("white-label está no plano Completo (R$ 297)")
+			return fmt.Errorf("white-label está no plano Completo")
 		}
+	}
+	return nil
+}
+
+func (s *Service) CheckStorage(ctx context.Context, orgID uuid.UUID, extra int64) error {
+	lim := s.Limits(ctx, orgID)
+	if lim.StorageBytes < 0 {
+		return nil
+	}
+	var used int64
+	_ = s.pg.QueryRow(ctx, `SELECT COALESCE(SUM(size_bytes), 0) FROM datasets WHERE org_id=$1`, orgID).Scan(&used)
+	if used+extra > lim.StorageBytes {
+		return fmt.Errorf("o plano %s inclui %s de armazenamento (já usa %s). Faça upgrade ou apague conjuntos", lim.Name, FormatBytes(lim.StorageBytes), FormatBytes(used))
 	}
 	return nil
 }
@@ -293,23 +403,35 @@ func (s *Service) Check(ctx context.Context, orgID uuid.UUID, kind string) error
 func (s *Service) CheckConnector(ctx context.Context, orgID uuid.UUID, typ string) error {
 	lim := s.Limits(ctx, orgID)
 	if !ConnectorAllowed(lim.ConnectorTier, typ) {
-		return fmt.Errorf("o conector «%s» não está no plano %s. No Essencial só CSV, Excel, JSON, Postgres e MySQL", typ, lim.Name)
+		return fmt.Errorf("o conector «%s» não está no plano %s", typ, lim.Name)
+	}
+	if !IsExternalConnector(typ) {
+		return nil
 	}
 	return s.Check(ctx, orgID, "connector")
 }
 
 func (s *Service) Snapshot(ctx context.Context, orgID, wsID uuid.UUID) map[string]any {
 	lim := s.Limits(ctx, orgID)
-	var queries, datasets, ai, users, dashboards, connectors int
+	var queries, datasets, ai, users, dashboards, connectors, reports int
+	var storage int64
 	_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM query_history WHERE org_id=$1 AND created_at > date_trunc('month', now())`, orgID).Scan(&queries)
 	_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM datasets WHERE org_id=$1`, orgID).Scan(&datasets)
+	_ = s.pg.QueryRow(ctx, `SELECT COALESCE(SUM(size_bytes), 0) FROM datasets WHERE org_id=$1`, orgID).Scan(&storage)
 	_ = s.pg.QueryRow(ctx, `
 		SELECT COUNT(*) FROM ai_messages m JOIN ai_conversations c ON c.id=m.conversation_id
 		WHERE c.org_id=$1 AND m.created_at > date_trunc('month', now())
 	`, orgID).Scan(&ai)
 	_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM organization_members WHERE org_id=$1`, orgID).Scan(&users)
 	_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM dashboards WHERE org_id=$1`, orgID).Scan(&dashboards)
-	_ = s.pg.QueryRow(ctx, `SELECT COUNT(*) FROM data_sources WHERE org_id=$1`, orgID).Scan(&connectors)
+	_ = s.pg.QueryRow(ctx, `
+		SELECT COUNT(*) FROM data_sources
+		WHERE org_id=$1 AND lower(type) NOT IN ('csv','xlsx','json','pdf','manual')
+	`, orgID).Scan(&connectors)
+	_ = s.pg.QueryRow(ctx, `
+		SELECT COUNT(*) FROM reports
+		WHERE org_id=$1 AND lower(cadence) NOT IN ('','once','manual','none')
+	`, orgID).Scan(&reports)
 	_ = wsID
 	out := map[string]any{
 		"plan":            lim.Plan,
@@ -321,13 +443,16 @@ func (s *Service) Snapshot(ctx context.Context, orgID, wsID uuid.UUID) map[strin
 		"connector_tier":  lim.ConnectorTier,
 		"queries":         queries,
 		"datasets":        datasets,
+		"storage_bytes":   storage,
 		"ai_messages":     ai,
 		"users":           users,
 		"dashboards":      dashboards,
 		"connectors":      connectors,
-		"limits": map[string]int{
+		"reports":         reports,
+		"limits": map[string]any{
 			"users": lim.Users, "datasets": lim.Datasets, "queries": lim.Queries, "ai": lim.AI,
 			"dashboards": lim.Dashboards, "connectors": lim.Connectors,
+			"storage_bytes": lim.StorageBytes, "reports": lim.Reports,
 		},
 	}
 	if lim.TrialEndsAt != nil {

@@ -121,7 +121,7 @@ func (s *Service) Register(ctx context.Context, name, email, password, orgName s
 		return Principal{}, TokenPair{}, err
 	}
 
-	p := Principal{UserID: userID, OrgID: orgID, WorkspaceID: wsID, Role: "owner", Email: email, Name: name, Plan: "starter", OrgName: org, OnboardingStep: "welcome", OnboardingCompleted: false}
+	p := Principal{UserID: userID, OrgID: orgID, WorkspaceID: wsID, Role: "owner", Email: email, Name: name, Plan: "gratis", OrgName: org, OnboardingStep: "welcome", OnboardingCompleted: false}
 	pair, err := s.issue(ctx, p)
 	return p, pair, err
 }

@@ -10,11 +10,13 @@ export const ROLE_LABELS: Record<string, string> = {
 };
 
 export const PLAN_LABELS: Record<string, string> = {
-  essencial: "Essencial",
+  gratis: "Grátis",
+  free: "Grátis",
+  essencial: "Starter",
+  starter: "Starter",
   pro: "Pro",
-  completo: "Completo",
-  starter: "Essencial",
   growth: "Pro",
+  completo: "Completo",
   business: "Completo",
   enterprise: "Completo",
 };

@@ -37,9 +37,11 @@ func (s *Service) PublicConfig() map[string]any {
 	plans := make([]map[string]any, 0, len(catalog))
 	for _, p := range catalog {
 		plans = append(plans, map[string]any{
-			"id": p.ID, "name": p.Name, "price_brl": p.PriceBRL,
+			"id": p.ID, "name": p.Name, "price_brl": p.PriceBRL, "period": p.Period,
 			"users": p.Users, "datasets": p.Datasets, "queries": p.Queries,
 			"ai": p.AI, "dashboards": p.Dashboards, "connectors": p.Connectors,
+			"storage_bytes": p.StorageBytes, "reports": p.Reports,
+			"highlights": p.Highlights, "whitelabel": p.Whitelabel,
 		})
 	}
 	return map[string]any{
@@ -53,6 +55,9 @@ func (s *Service) Checkout(_ context.Context, orgID uuid.UUID, email, plan strin
 		return "", fmt.Errorf("Stripe não está configurado (STRIPE_SECRET_KEY)")
 	}
 	plan = entitlements.NormalizePlan(plan)
+	if plan == entitlements.PlanGratis {
+		return "", fmt.Errorf("o plano Grátis não precisa de checkout")
+	}
 	price := s.priceFor(plan)
 	if price == "" {
 		return "", fmt.Errorf("este plano ainda não tem price ID no Stripe")
@@ -190,7 +195,7 @@ func (s *Service) applyWebhookEvent(ctx context.Context, tx pgx.Tx, event stripe
 		if _, err := tx.Exec(ctx, `
 			UPDATE organizations SET plan=$2, updated_at=now()
 			WHERE id IN (SELECT org_id FROM stripe_customers WHERE stripe_sub_id=$1)
-		`, sub.ID, entitlements.PlanEssencial); err != nil {
+		`, sub.ID, entitlements.PlanGratis); err != nil {
 			return err
 		}
 	case "customer.subscription.updated", "invoice.paid":
