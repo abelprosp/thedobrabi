@@ -303,11 +303,11 @@ export function WidgetView({
     : null;
 
   if (w.type === "text") {
-    return <div className="h-full overflow-auto rounded-2xl border border-line bg-surface p-4 text-sm text-ink shadow-sm">{w.text || w.title}</div>;
+    return <div className="h-full overflow-auto card-float p-4 text-sm text-ink shadow-sm">{w.text || w.title}</div>;
   }
   if (w.type === "image") {
     return (
-      <div className="flex h-full items-center justify-center rounded-2xl border border-line bg-surface p-4 shadow-sm">
+      <div className="flex h-full items-center justify-center card-float p-4 shadow-sm">
         {cfg.imageUrl ? (
           <img src={cfg.imageUrl} alt={w.title} className="max-h-full max-w-full object-contain" />
         ) : (
@@ -321,7 +321,7 @@ export function WidgetView({
   }
   if (w.type === "markdown") {
     return (
-      <div className="h-full overflow-auto rounded-2xl border border-line bg-surface p-4 text-sm text-ink shadow-sm">
+      <div className="h-full overflow-auto card-float p-4 text-sm text-ink shadow-sm">
         <div className="prose prose-sm max-w-none" dangerouslySetInnerHTML={{ __html: renderMarkdown(cfg.markdown || w.text || "") }} />
       </div>
     );
@@ -346,14 +346,14 @@ export function WidgetView({
 
   if (w.query && !w.query.dataset_id) {
     return (
-      <div className="flex h-full items-center rounded-2xl border border-line bg-surface p-4 text-xs text-mute shadow-sm">
+      <div className="flex h-full items-center card-float p-4 text-xs text-mute shadow-sm">
         Este visual não tem conjunto. Escolha um conjunto no inspector.
       </div>
     );
   }
 
   if (q.isLoading) {
-    return <div className="flex h-full items-center justify-center rounded-2xl border border-line bg-surface p-4 shadow-sm text-xs text-mute">A carregar…</div>;
+    return <div className="flex h-full items-center justify-center card-float p-4 shadow-sm text-xs text-mute">A carregar…</div>;
   }
   if (q.isError) {
     const msg = (q.error as Error).message || "";
@@ -362,7 +362,7 @@ export function WidgetView({
       : /dataset not found/i.test(msg)
         ? "O conjunto deste visual foi excluído. Escolha outro conjunto no inspector."
         : msg;
-    return <div className="flex h-full items-center rounded-2xl border border-line bg-surface p-4 text-xs text-danger shadow-sm">{friendly}</div>;
+    return <div className="flex h-full items-center card-float p-4 text-xs text-danger shadow-sm">{friendly}</div>;
   }
 
   if (w.type === "slicer") {
@@ -590,7 +590,7 @@ function ChartCard({
   children: ReactNode;
 }) {
   return (
-    <div className="relative flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-line bg-surface p-3 shadow-sm">
+    <div className="relative flex h-full min-h-0 flex-col overflow-hidden card-float p-3 shadow-sm">
       {showTitle && (
         <div className={cn("mb-1 flex shrink-0 items-center justify-between text-[13px] text-mute", titleAlignClass(align))}>
           <span className="font-medium">{title}</span>
@@ -669,7 +669,7 @@ function BigTableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; c
     : null;
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden card-float shadow-sm">
       <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2">
         {cfg.showTitle !== false ? <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-ink">{w.title}</span> : <span className="flex-1" />}
         <input
@@ -788,7 +788,7 @@ function TableView({ w, rows, columns, onDrill }: { w: Widget; rows: any[]; colu
     : null;
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden card-float shadow-sm">
       {(cfg.showTitle !== false || rows.length > 0) && (
         <div className={cn("flex items-center justify-between border-b border-line px-3 py-2", titleAlignClass(cfg.titleAlign))}>
           {cfg.showTitle !== false ? <span className="text-[13px] font-medium text-ink">{w.title}</span> : <span />}
@@ -910,7 +910,7 @@ function SlicerView({
     );
 
   return (
-    <div className="flex h-full flex-col rounded-2xl border border-line bg-surface p-4 shadow-sm">
+    <div className="flex h-full flex-col card-float p-4 shadow-sm">
       {cfg.showTitle !== false && <div className={cn("mb-2 text-[13px] font-medium text-ink", titleAlignClass(cfg.titleAlign))}>{w.title}</div>}
       {cfg.slicerSearch !== false && (
         <input

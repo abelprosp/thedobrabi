@@ -28,11 +28,11 @@ export function AuthFormShell({
           <Logo variant="light" size={32} />
         </Link>
         <div className="mx-auto flex w-full max-w-[400px] flex-1 flex-col justify-center py-10">
-          <h1 className="text-center text-[28px] font-semibold tracking-tight text-ink">Bem-vindo à TheDobra</h1>
+          <h1 className="text-center text-[30px] font-bold tracking-[-0.035em] text-ink">Bem-vindo à TheDobra</h1>
           <p className="mt-2 text-center text-[13px] leading-relaxed text-mute">
             Comece a sua experiência na TheDobra — entre ou crie uma conta.
           </p>
-          <div className="mx-auto mt-6 mb-7 inline-flex rounded-full border border-line bg-surface-2/80 p-1">
+          <div className="mx-auto mt-6 mb-7 inline-flex rounded-full bg-surface-2 p-1">
             <Link
               href="/login"
               className={`rounded-full px-5 py-1.5 text-[13px] font-medium transition ${
@@ -60,7 +60,7 @@ export function AuthFormShell({
 export function AuthCard({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-bg px-4">
-      <div className="w-full max-w-sm rounded-2xl border border-line bg-surface p-6 shadow-sm">
+      <div className="card-float w-full max-w-sm p-7">
         <Link href="/login" className="mb-6 inline-flex">
           <Logo variant="light" size={28} />
         </Link>
@@ -122,9 +122,9 @@ export function Field({
           minLength={minLength}
           autoComplete={autoComplete}
           aria-invalid={error ? true : undefined}
-          className={`min-h-11 w-full rounded-xl border bg-surface py-2.5 text-sm text-ink outline-none placeholder:text-mute focus:ring-2 focus:ring-accent/15 ${
-            error ? "border-danger focus:border-danger" : "border-line focus:border-accent/50"
-          } ${Icon ? "pl-10" : "px-3.5"} ${isPassword ? "pr-11" : "pr-3.5"}`}
+          className={`min-h-12 w-full rounded-2xl border bg-surface-2 py-2.5 text-sm text-ink outline-none placeholder:text-mute focus:bg-surface focus:ring-4 focus:ring-primary/10 ${
+            error ? "border-danger focus:border-danger" : "border-transparent focus:border-primary/40"
+          } ${Icon ? "pl-11" : "px-4"} ${isPassword ? "pr-11" : "pr-4"}`}
         />
         {isPassword && (
           <button
@@ -155,7 +155,7 @@ export function PrimaryButton({
     <button
       type="submit"
       disabled={busy || disabled}
-      className="w-full min-h-11 rounded-xl bg-accent py-3 text-sm font-medium text-white transition hover:bg-accent-2 disabled:opacity-60"
+      className="min-h-12 w-full rounded-full bg-primary py-3 text-sm font-medium text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.9)] transition hover:bg-primary-600 disabled:opacity-60"
     >
       {children}
     </button>

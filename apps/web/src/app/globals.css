@@ -5,11 +5,11 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Superfícies (tema claro) */
-  --color-bg: #f6f8fc;
+  /* Superfícies (tema claro) — tela neutra, cartões brancos a flutuar */
+  --color-bg: #eceff4;
   --color-surface: #ffffff;
-  --color-surface-2: #f0f3f9;
-  --color-line: #dfe5ef;
+  --color-surface-2: #f3f5f9;
+  --color-line: #e3e8f0;
 
   /* Texto */
   --color-ink: #0f172a;
@@ -36,18 +36,17 @@
   --color-danger: #be123c;
   --color-ok: #059669;
 
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.03), 0 8px 24px rgba(15, 23, 42, 0.055);
+  --radius-sm: 12px;
+  --radius-md: 18px;
+  --radius-lg: 28px;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.02), 0 10px 30px -12px rgba(15, 23, 42, 0.12);
+  --shadow-float: 0 20px 50px -20px rgba(15, 23, 42, 0.22);
 }
 
 :root {
   --brand-gradient: linear-gradient(135deg, #4f46e5, #2563eb, #0ea5e9);
   --brand-gradient-dark: linear-gradient(135deg, #1e1b4b 0%, #111a3f 45%, #0b1226 100%);
-  --app-background:
-    radial-gradient(circle at 75% -10%, rgba(37, 99, 235, 0.08), transparent 30rem),
-    var(--color-bg);
+  --app-background: var(--color-bg);
   color-scheme: light;
 }
 
@@ -65,18 +64,17 @@
   --color-warn: #fbbf24;
   --color-danger: #fb7185;
   --color-ok: #34d399;
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 30px rgba(0, 0, 0, 0.18);
-  --app-background:
-    radial-gradient(circle at 75% -10%, rgba(37, 99, 235, 0.13), transparent 32rem),
-    var(--color-bg);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 12px 30px -12px rgba(0, 0, 0, 0.5);
+  --shadow-float: 0 20px 50px -20px rgba(0, 0, 0, 0.6);
+  --app-background: var(--color-bg);
 }
 
 .light {
   color-scheme: light;
-  --color-bg: #f6f8fc;
+  --color-bg: #eceff4;
   --color-surface: #ffffff;
-  --color-surface-2: #f0f3f9;
-  --color-line: #dfe5ef;
+  --color-surface-2: #f3f5f9;
+  --color-line: #e3e8f0;
   --color-ink: #0f172a;
   --color-mute: #647084;
   --color-accent-soft: #eff6ff;
@@ -85,10 +83,9 @@
   --color-warn: #b45309;
   --color-danger: #be123c;
   --color-ok: #059669;
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.03), 0 8px 24px rgba(15, 23, 42, 0.055);
-  --app-background:
-    radial-gradient(circle at 75% -10%, rgba(37, 99, 235, 0.08), transparent 30rem),
-    var(--color-bg);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.02), 0 10px 30px -12px rgba(15, 23, 42, 0.12);
+  --shadow-float: 0 20px 50px -20px rgba(15, 23, 42, 0.22);
+  --app-background: var(--color-bg);
 }
 
 .dark .react-grid-item.react-grid-placeholder {
@@ -161,6 +158,26 @@ button:disabled {
 
 .brand-gradient {
   background: var(--brand-gradient);
+}
+
+/* Cartão "flutuante": sem borda, sombra suave, cantos largos */
+.card-float {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.dark .card-float {
+  box-shadow: var(--shadow-card), inset 0 0 0 1px var(--color-line);
+}
+
+/* Cartões antigos (borda visível + fundo branco) passam a flutuar como o resto da UI. */
+.rounded-2xl.border.border-line.bg-surface,
+.rounded-3xl.border.border-line.bg-surface,
+.rounded-xl.border.border-line.bg-surface:not(button):not(a):not(label),
+.rounded-\[1\.125rem\].border.bg-surface {
+  border-color: transparent;
+  box-shadow: var(--shadow-card);
 }
 
 .brand-gradient-text {

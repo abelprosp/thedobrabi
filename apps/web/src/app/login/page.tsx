@@ -129,7 +129,7 @@ function LoginInner() {
                 href={p.href}
                 title={p.label}
                 aria-label={`Continuar com ${p.label}`}
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-line bg-white shadow-sm transition hover:border-accent/40 hover:shadow"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-surface shadow-[var(--shadow-card)] transition hover:shadow-[var(--shadow-float)]"
               >
                 <p.icon />
               </a>

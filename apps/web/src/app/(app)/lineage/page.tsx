@@ -72,7 +72,7 @@ export default function LineagePage() {
         </div>
       )}
       {!g.isLoading && nodes.length > 0 && (
-      <div className="relative min-h-[320px] overflow-x-auto rounded-2xl border border-line bg-surface p-6 shadow-sm">
+      <div className="card-float relative min-h-[320px] overflow-x-auto p-6">
         <svg className="absolute inset-0 h-full w-full" aria-hidden>
           {edges.map((e, i) => {
             const a = nodes.find((n) => n.id === e.from);
@@ -129,7 +129,7 @@ export default function LineagePage() {
 
 function EducationalCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-white p-4 shadow-sm">
+    <div className="card-float p-5">
       <div className="text-sm font-medium text-ink">{title}</div>
       <p className="mt-1 text-[12px] text-mute">{body}</p>
     </div>

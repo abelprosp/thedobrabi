@@ -157,7 +157,7 @@ export default function InsightsPage() {
 
 function EducationalCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
+    <div className="card-float p-5">
       <div className="text-sm font-medium text-ink">{title}</div>
       <p className="mt-1 text-[12px] text-mute">{body}</p>
     </div>

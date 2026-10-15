@@ -45,7 +45,7 @@ export default function BillingPage() {
         <Kpi label="Utilizadores" value={fmtUsage(u?.users, u?.limits?.users)} />
       </div>
       {u?.limits && (
-        <div className="space-y-2 rounded-2xl border border-line bg-surface p-5 text-[12px] text-mute shadow-sm">
+        <div className="card-float space-y-2 p-5 text-[12px] text-mute">
           <Quota label="Consultas" used={u.queries} max={u.limits.queries} />
           <Quota label="Conjuntos" used={u.datasets} max={u.limits.datasets} />
           <Quota label="IA" used={u.ai_messages} max={u.limits.ai} />
@@ -54,7 +54,7 @@ export default function BillingPage() {
       )}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {plans.map((p: any) => (
-          <div key={p.id} className="rounded-2xl border border-line bg-surface p-5 shadow-sm">
+          <div key={p.id} className="card-float p-6">
             <div className="text-sm font-medium text-ink">{p.name}</div>
             <div className="mt-2 text-[12px] text-mute">
               {p.users < 0 ? "Ilimitado" : `${p.users} utilizadores`} · {p.queries < 0 ? "consultas ilimitadas" : `${p.queries.toLocaleString("pt-BR")} consultas`}

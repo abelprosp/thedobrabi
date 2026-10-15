@@ -54,7 +54,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
         role="dialog"
         aria-modal="true"
         aria-label="Procurar"
-        className="mx-auto max-w-lg overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl"
+        className="card-float mx-auto max-w-lg overflow-hidden rounded-3xl shadow-[var(--shadow-float)]"
         onClick={(e) => e.stopPropagation()}
       >
         <input
@@ -82,7 +82,7 @@ export function CommandPalette({ open, onClose }: { open: boolean; onClose: () =
           {filtered.map((it, i) => (
             <button
               key={it.href}
-              className={`block min-h-10 w-full px-4 py-2.5 text-left text-sm ${i === active ? "bg-accent/10 text-accent" : "text-ink hover:bg-bg"}`}
+              className={`mx-1.5 block min-h-10 w-[calc(100%-0.75rem)] rounded-2xl px-3.5 py-2.5 text-left text-sm ${i === active ? "bg-primary text-white" : "text-ink hover:bg-surface-2"}`}
               onMouseEnter={() => setActive(i)}
               onClick={() => go(it.href)}
             >

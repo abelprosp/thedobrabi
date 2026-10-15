@@ -236,7 +236,7 @@ export default function AskPage() {
     return (
       <div className="mx-auto max-w-3xl space-y-5">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-ink">
+          <h1 className="text-[1.75rem] font-bold tracking-[-0.035em] text-ink sm:text-[2.25rem]">
             Analisar com IA
           </h1>
           <p className="mt-1.5 text-sm text-mute">
@@ -265,15 +265,15 @@ export default function AskPage() {
 
   return (
     <div className="mx-auto flex h-[calc(100dvh-12rem)] min-h-[34rem] max-w-5xl flex-col lg:h-[calc(100dvh-9rem)]">
-      <div className="mb-4 overflow-hidden rounded-3xl border border-primary/15 bg-gradient-to-br from-primary/[0.08] via-surface to-accent/[0.06] p-5 shadow-sm sm:p-6">
+      <div className="card-float mb-4 overflow-hidden p-5 sm:p-6">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-3">
-            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-[0_10px_24px_-10px_rgba(37,99,235,0.9)]">
               <Sparkles size={20} />
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="text-xl font-semibold tracking-tight text-ink sm:text-2xl">Analisar com IA</h1>
+                <h1 className="text-xl font-bold tracking-[-0.035em] text-ink sm:text-2xl">Analisar com IA</h1>
                 <span className="rounded-full border border-emerald-200 bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700">Dados verificados</span>
               </div>
               <p className="mt-1 max-w-xl text-[13px] leading-relaxed text-mute">
@@ -322,7 +322,7 @@ export default function AskPage() {
           <Capability icon={Lightbulb} title="Decida" text="Encontre os próximos passos" />
         </div>
       </div>
-      <div className="mb-4 flex items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 text-[11px] text-mute shadow-sm">
+      <div className="card-float mb-4 flex items-center gap-2 rounded-full px-4 py-2.5 text-[11px] text-mute">
         <CheckCircle2 size={13} className="text-emerald-600" />
         <span>
           Respostas calculadas com métricas oficiais e evidências do conjunto
@@ -521,7 +521,7 @@ export default function AskPage() {
           e.preventDefault();
           ask(q);
         }}
-        className="mt-3 shrink-0 rounded-2xl border border-line bg-surface p-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] shadow-[var(--shadow-card)]"
+        className="card-float mt-3 shrink-0 p-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
       >
         <textarea
           ref={inputRef}
@@ -582,7 +582,7 @@ export default function AskPage() {
 function Capability({ icon: Icon, title, text }: { icon: typeof BarChart3; title: string; text: string }) {
   return (
     <div className="flex items-center gap-2.5 rounded-xl px-2 py-1.5">
-      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary"><Icon size={15} /></div>
+      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary"><Icon size={15} /></div>
       <div><p className="text-[12px] font-medium text-ink">{title}</p><p className="text-[11px] text-mute">{text}</p></div>
     </div>
   );

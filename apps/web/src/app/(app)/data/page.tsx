@@ -277,7 +277,7 @@ export default function DataPage() {
       )}
 
       {lakeList.length > 0 && (
-        <details className="rounded-[1.125rem] border border-line bg-surface px-5 py-4 text-sm shadow-[var(--shadow-card)]">
+        <details className="card-float px-5 py-4 text-sm">
           <summary className="cursor-pointer font-medium text-ink">
             Armazenamento avançado
           </summary>
@@ -303,7 +303,7 @@ export default function DataPage() {
 
 function EducationalCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
+    <div className="card-float p-5">
       <div className="text-sm font-medium text-ink">{title}</div>
       <p className="mt-1 text-[12px] text-mute">{body}</p>
     </div>

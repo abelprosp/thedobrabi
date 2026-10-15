@@ -21,7 +21,7 @@ export function OnboardingModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4">
       <div className="absolute inset-0 bg-ink/40 backdrop-blur-sm" onClick={dismiss} />
-      <div className="relative w-full max-w-md overflow-hidden rounded-t-3xl border border-line bg-surface shadow-2xl sm:rounded-3xl">
+      <div className="card-float relative w-full max-w-md overflow-hidden rounded-t-3xl sm:rounded-3xl">
         <div className="brand-gradient p-6 text-white">
           <div className="flex items-start justify-between">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20">

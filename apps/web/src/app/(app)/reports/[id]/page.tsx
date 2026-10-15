@@ -310,7 +310,7 @@ export default function ReportEditorPage() {
   return (
     <div className="flex h-[calc(100dvh-7rem)] min-h-0 flex-col gap-3 md:flex-row">
       {edit && (
-        <aside className="hidden w-56 min-h-0 flex-col gap-3 overflow-y-auto rounded-2xl border border-line bg-surface p-3 shadow-sm print:hidden md:flex">
+        <aside className="card-float hidden w-56 min-h-0 flex-col gap-3 overflow-y-auto p-3 print:hidden md:flex">
           <div className="flex items-center justify-between">
             <span className="text-[12px] font-semibold uppercase text-mute">Componentes</span>
             <Button variant="ghost" size="icon" onClick={() => setEdit(false)} title="Fechar painel"><EyeOff size={16} /></Button>
@@ -370,7 +370,7 @@ export default function ReportEditorPage() {
         </div>
 
         {edit && (
-          <div className="flex shrink-0 items-center gap-1.5 overflow-x-auto rounded-2xl border border-line bg-surface px-3 py-2 print:hidden md:hidden">
+          <div className="card-float flex shrink-0 items-center gap-1.5 overflow-x-auto px-3 py-2 print:hidden md:hidden">
             <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-mute">Adicionar</span>
             {WIDGET_CATALOG.map((t) => {
               const Icon = t.icon;
@@ -426,7 +426,7 @@ export default function ReportEditorPage() {
           </div>
         </Card>
 
-        <div ref={canvasRef} className="relative min-h-0 flex-1 overflow-auto rounded-2xl border border-line bg-surface p-3 pb-8 shadow-sm sm:p-4 print:overflow-visible print:shadow-none">
+        <div ref={canvasRef} className="card-float relative min-h-0 flex-1 overflow-auto p-3 pb-8 sm:p-4 print:overflow-visible print:shadow-none">
           <h2 className="mb-3 hidden text-lg font-semibold text-ink print:block">{name} — {currentPage.name}</h2>
           {widgets.length === 0 ? (
             <EmptyState

@@ -19,8 +19,9 @@ type Brief = {
 };
 type Item = { title: string; body: string; kind: string; severity: string };
 
-const YELLOW = "#f5c518";
-const VIOLET = "#6d3df5";
+// Cores da marca: ciano para oportunidades, índigo para pontos de atenção.
+const CYAN = "#0ea5e9";
+const INDIGO = "#4f46e5";
 
 const QUICK_ACTIONS = [
   { href: "/dashboards", icon: LayoutDashboard, title: "Criar dashboard", description: "Monte um painel para acompanhar o que importa." },
@@ -101,7 +102,7 @@ export default function OverviewPage() {
                 </ol>
               )}
             </div>
-            <div className="rounded-3xl bg-surface p-4 shadow-[0_12px_40px_rgba(15,23,42,0.10)] ring-1 ring-line/70">
+            <div className="rounded-3xl bg-surface p-4 shadow-[var(--shadow-float)] ring-1 ring-line/70">
               <p className="text-[11px] text-mute">Acesso rápido</p>
               <h3 className="mt-0.5 text-[17px] font-semibold tracking-tight text-ink">O que quer fazer agora?</h3>
               <div className="mt-3 space-y-1.5">
@@ -110,7 +111,7 @@ export default function OverviewPage() {
                     key={a.href}
                     href={a.href}
                     title={a.description}
-                    className="group flex items-center gap-2.5 rounded-full border border-line/80 bg-bg px-3 py-1.5 text-[12px] text-ink transition hover:border-violet-400 hover:bg-surface"
+                    className="group flex items-center gap-2.5 rounded-full bg-surface-2 px-3 py-1.5 text-[12px] text-ink transition hover:bg-primary/10 hover:text-primary-600"
                   >
                     <a.icon size={13} className="text-mute group-hover:text-ink" />
                     <span className="truncate">{a.title}</span>
@@ -145,7 +146,7 @@ export default function OverviewPage() {
               <li key={a} className="flex gap-3 rounded-2xl bg-bg p-4">
                 <span
                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold"
-                  style={idx === 0 ? { background: YELLOW, color: "#1a1a1a" } : { background: VIOLET, color: "#fff" }}
+                  style={{ background: idx === 0 ? CYAN : INDIGO, color: "#fff" }}
                 >
                   {idx + 1}
                 </span>
@@ -180,7 +181,7 @@ function AskPill() {
         const query = text.trim();
         router.push(query ? `/ask?q=${encodeURIComponent(query)}` : "/ask");
       }}
-      className="flex h-11 w-full items-center gap-2 rounded-full bg-surface px-4 shadow-[var(--shadow-card)] ring-1 ring-line/70 lg:w-80"
+      className="flex h-11 w-full items-center gap-2 rounded-full bg-surface px-4 shadow-[var(--shadow-card)] ring-1 ring-line/60 lg:w-80"
     >
       <Search size={15} className="shrink-0 text-mute" />
       <input
@@ -211,7 +212,7 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className={cn("rounded-[1.75rem] bg-surface p-5 shadow-[var(--shadow-card)] ring-1 ring-line/60 sm:p-6", className)}>
+    <section className={cn("card-float p-5 sm:p-6", className)}>
       <div className="mb-4 flex items-start justify-between gap-3">
         <div>
           {eyebrow && <p className="text-[11px] text-mute">{eyebrow}</p>}
@@ -235,8 +236,8 @@ function Panel({
 function ImpactBars({ risks, opportunities }: { risks: number; opportunities: number }) {
   const total = risks + opportunities;
   const bars = [
-    { label: "Oportunidades", value: opportunities, color: YELLOW },
-    { label: "Pontos de atenção", value: risks, color: VIOLET },
+    { label: "Oportunidades", value: opportunities, color: CYAN },
+    { label: "Pontos de atenção", value: risks, color: INDIGO },
   ];
   return (
     <div>
@@ -274,6 +275,6 @@ function ImpactBars({ risks, opportunities }: { risks: number; opportunities: nu
 
 function severityColor(severity: string) {
   if (/high|critical|alta/i.test(severity)) return "#e2552b";
-  if (/medium|warn|média/i.test(severity)) return YELLOW;
-  return VIOLET;
+  if (/medium|warn|média/i.test(severity)) return CYAN;
+  return INDIGO;
 }

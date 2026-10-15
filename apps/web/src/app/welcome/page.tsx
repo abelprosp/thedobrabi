@@ -420,7 +420,7 @@ function Choice({
       <div className="mt-0.5 text-[12px] text-mute">{description}</div>
     </>
   );
-  const cls = "block rounded-2xl border border-line bg-surface p-4 text-left transition hover:border-primary/40 hover:shadow-sm disabled:cursor-not-allowed disabled:opacity-50";
+  const cls = "card-float block p-4 text-left transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)] disabled:cursor-not-allowed disabled:opacity-50";
   if (href) {
     return (
       <Link href={href} className={cls}>

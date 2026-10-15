@@ -204,7 +204,7 @@ function DashboardsPageInner() {
         />
       )}
       {dashboards.length > 0 && (
-        <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface p-3 shadow-[var(--shadow-card)] sm:flex-row sm:items-center">
+        <div className="card-float flex flex-col gap-3 p-3 sm:flex-row sm:items-center">
           <div className="relative min-w-0 flex-1">
             <Search
               size={15}
@@ -445,7 +445,7 @@ function DashboardsPageInner() {
 
 function EducationalCard({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface p-4 shadow-[var(--shadow-card)]">
+    <div className="card-float p-5">
       <div className="text-sm font-medium text-ink">{title}</div>
       <p className="mt-1 text-[12px] text-mute">{body}</p>
     </div>

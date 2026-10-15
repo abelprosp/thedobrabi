@@ -23,8 +23,8 @@ import {
   Workflow,
 } from "lucide-react";
 
-const inputCls = "w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink outline-none focus:border-accent/50";
-const selectCls = "rounded-lg border border-line bg-surface px-2 text-sm text-ink outline-none";
+const inputCls = "w-full min-h-11 rounded-2xl border border-transparent bg-surface-2 px-4 py-2 text-sm text-ink outline-none focus:border-primary/40 focus:bg-surface focus:ring-4 focus:ring-primary/10";
+const selectCls = "min-h-11 rounded-2xl border border-transparent bg-surface-2 px-3 text-sm text-ink outline-none focus:border-primary/40 focus:bg-surface";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -402,11 +402,11 @@ function AccountOverview({ me, org }: { me?: any; org?: any }) {
     .slice(0, 2)
     .toUpperCase();
   return (
-    <div className="overflow-hidden rounded-3xl border border-line bg-surface shadow-[var(--shadow-card)]">
-      <div className="h-20 bg-gradient-to-r from-primary/15 via-accent/10 to-transparent" />
-      <div className="-mt-7 flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end sm:justify-between sm:px-7">
+    <div className="card-float overflow-hidden">
+      <div className="brand-gradient h-24 opacity-90" />
+      <div className="-mt-8 flex flex-col gap-4 px-5 pb-5 sm:flex-row sm:items-end sm:justify-between sm:px-7">
         <div className="flex min-w-0 items-end gap-3">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border-4 border-surface bg-primary text-lg font-semibold text-white shadow-md">
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-4 border-surface bg-primary text-lg font-semibold text-white shadow-md">
             {initials || <UserRound size={22} />}
           </div>
           <div className="min-w-0 pb-0.5">
@@ -446,7 +446,7 @@ function SettingsNav({ mobile = false }: { mobile?: boolean }) {
       {!mobile && <p className="px-3 pb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-mute">Nesta página</p>}
       <div className={mobile ? "flex gap-1 pb-1" : "space-y-1"}>
         {links.map(({ href, label, icon: Icon }) => (
-          <a key={href} href={href} className="group flex items-center justify-between rounded-xl border border-line bg-surface px-3 py-2.5 text-[13px] text-mute shadow-sm transition hover:bg-surface-2 hover:text-ink lg:border-transparent lg:bg-transparent lg:shadow-none">
+          <a key={href} href={href} className="group flex items-center justify-between rounded-full bg-surface px-3.5 py-2.5 text-[13px] text-mute shadow-[var(--shadow-card)] transition hover:text-ink lg:rounded-2xl lg:bg-transparent lg:shadow-none lg:hover:bg-surface">
             <span className="flex items-center gap-2.5"><Icon size={15} />{label}</span>
             <ArrowRight size={14} className="opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" />
           </a>
@@ -520,11 +520,11 @@ function Box({
   children: React.ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-5 space-y-2 rounded-2xl border border-line bg-surface p-5 text-sm shadow-sm sm:p-6">
+    <section id={id} className="card-float scroll-mt-5 space-y-2 p-5 text-sm sm:p-6">
       <div className="mb-4 flex items-start gap-3">
-        {Icon && <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon size={17} /></div>}
+        {Icon && <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Icon size={17} /></div>}
         <div>
-          <h2 className="text-sm font-semibold tracking-tight text-ink">{title}</h2>
+          <h2 className="text-[16px] font-semibold tracking-tight text-ink">{title}</h2>
           {description && <p className="mt-1 text-[12px] leading-relaxed text-mute">{description}</p>}
         </div>
       </div>

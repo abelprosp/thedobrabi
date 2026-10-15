@@ -198,7 +198,7 @@ export default function StorePage() {
       </section>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-xl border border-line bg-surface px-3 py-2 shadow-sm">
+        <div className="card-float flex min-w-0 flex-1 items-center gap-2 rounded-full px-4 py-2.5">
           <Search size={16} className="shrink-0 text-mute" />
           <input
             value={q}
@@ -218,7 +218,7 @@ export default function StorePage() {
             type="button"
             onClick={() => setCategory(c.id)}
             className={`rounded-full px-3.5 py-1.5 text-[13px] font-medium transition ${
-              category === c.id ? "bg-primary text-white shadow-sm" : "border border-line bg-surface text-mute hover:border-primary/40 hover:text-ink"
+              category === c.id ? "bg-primary text-white shadow-[0_8px_20px_-8px_rgba(37,99,235,0.6)]" : "bg-surface text-mute shadow-[var(--shadow-card)] hover:text-ink"
             }`}
           >
             {c.label}
@@ -238,11 +238,11 @@ export default function StorePage() {
           return (
             <Card
               key={t.id}
-              className="group flex h-full cursor-pointer flex-col gap-3 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md"
+              className="group flex h-full cursor-pointer flex-col gap-3 transition hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
               onClick={() => router.push(`/store/${t.id}`)}
             >
               <div className="flex items-start gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <Icon size={18} />
                 </span>
                 <div className="min-w-0 flex-1">

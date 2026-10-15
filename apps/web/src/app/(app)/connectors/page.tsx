@@ -218,7 +218,7 @@ export default function ConnectorsPage() {
                     key={it.id}
                     type="button"
                     onClick={() => setPicked(it)}
-                    className="group rounded-[1.125rem] border border-line/90 bg-surface p-4 text-left shadow-[var(--shadow-card)] transition-all hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-lg"
+                    className="card-float group p-5 text-left transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-float)]"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <ConnectorIcon src={connectorIconSrc(it)} />
@@ -370,7 +370,7 @@ function ConnectWizard({ item, onClose, onSaved }: { item: CatalogItem; onClose:
         aria-modal="true"
         aria-labelledby="connect-title"
         className={cn(
-          "max-h-[90vh] w-full overflow-y-auto rounded-2xl border border-line bg-surface p-5 shadow-2xl",
+          "card-float max-h-[90vh] w-full overflow-y-auto p-6 shadow-[var(--shadow-float)]",
           picking || isManualType(item.id) ? "max-w-2xl" : "max-w-lg",
         )}
         onClick={(e) => e.stopPropagation()}
