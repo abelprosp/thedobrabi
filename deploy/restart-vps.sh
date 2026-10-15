@@ -249,6 +249,29 @@ build_next_atomic() {
   )
 }
 
+build_api_binary() {
+  echo "==> a compilar API → $API_BIN"
+  mkdir -p "$(dirname "$API_BIN")"
+  if command -v go >/dev/null 2>&1; then
+    (cd "$ROOT/services/api" && go build -o "$API_BIN" ./cmd/api)
+  elif command -v docker >/dev/null 2>&1; then
+    echo "go não está no PATH — a compilar com Docker (golang:1.25)"
+    docker run --rm -v "$ROOT/services/api:/src" -w /src golang:1.25 \
+      go build -o /src/thedobra-api.bin ./cmd/api
+    install -m 755 "$ROOT/services/api/thedobra-api.bin" "$API_BIN"
+    rm -f "$ROOT/services/api/thedobra-api.bin"
+  else
+    echo "sem go nem docker para recompilar a API" >&2
+    if [[ ! -x "$API_BIN" ]]; then
+      echo "falta $API_BIN" >&2
+      exit 1
+    fi
+    echo "AVISO: a manter o binário antigo em $API_BIN (rotas novas não entram)" >&2
+    return 0
+  fi
+  chmod +x "$API_BIN"
+}
+
 echo "==> Docker Compose"
 docker compose -f "$ROOT/docker-compose.yml" up -d
 docker compose -f "$ROOT/docker-compose.yml" ps
@@ -265,6 +288,8 @@ for i in $(seq 1 40); do
   sleep 1
 done
 sleep 2
+
+build_api_binary
 
 if systemctl list-unit-files | grep -q '^thedobra-api.service'; then
   echo "==> systemctl restart thedobra-api"
